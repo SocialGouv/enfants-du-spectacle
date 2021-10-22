@@ -2,7 +2,7 @@ import { Title } from "@dataesr/react-dsfr";
 import type { NextPage } from "next";
 import React from "react";
 
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
   return (

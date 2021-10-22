@@ -9,9 +9,11 @@ import {
 import type { ReactElement } from "react";
 import React from "react";
 
+import styles from "./Footer.module.css";
+
 export default function Footer(): ReactElement {
   return (
-    <FooterDSE>
+    <FooterDSE className={styles.footer}>
       <FooterBody description="Simplifier la démarche de demande d’autorisation d’emplois d’enfants du spectacle tout en garantissant une plus grande protection des mineurs de moins de 16 ans travaillant dans ce secteur">
         <Logo>Préfet de la région Île-de-France</Logo>
         {/* <FooterBodyItem>
