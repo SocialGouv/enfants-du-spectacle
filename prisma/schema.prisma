@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Commission {
+  id              Int      @id @default(autoincrement())
+  departement     String
+  date            DateTime
+  dateLimiteDepot DateTime
+  projets         Projet[]
+}
+
+model SocieteProduction {
+  id          Int         @id @default(autoincrement())
+  nom         String
+  siret       String?
+  departement String
+  demandeurs  Demandeur[]
+  projets     Projet[]
+}
+
+model Demandeur {
+  id                  Int               @id @default(autoincrement())
+  email               String            @unique
+  nom                 String
+  prenom              String
+  societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
+  societeProductionId Int
+  dossiersDS          DossierDS[]
+}
+
+model DossierDS {
+  numero      Int       @id
+  demandeur   Demandeur @relation(fields: [demandeurId], references: [id])
+  demandeurId Int
+  projets     Projet[]
+}
+
+model Projet {
+  id                  Int               @id @default(autoincrement())
+  nom                 String
+  commissionId        Int
+  commission          Commission        @relation(fields: [commissionId], references: [id])
+  societeProductionId Int
+  societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
+  dossierDSNumero     Int
+  dossierDS           DossierDS         @relation(fields: [dossierDSNumero], references: [numero])
+  enfants             Enfant[]
+  agentId             Int?
+  agent               Agent?            @relation(fields: [agentId], references: [id])
+}
+
+model Enfant {
+  id       Int    @id @default(autoincrement())
+  role     String
+  prenom   String
+  nom      String
+  projetId Int
+  projet   Projet @relation(fields: [projetId], references: [id])
+}
+
+model Agent {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  projets Projet[]
+}

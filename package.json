@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@dataesr/react-dsfr": "0.6.8",
+    "@prisma/client": "^3.3.0",
     "next": "11.1.2",
     "next-auth": "4.0.0-beta.4",
     "react": "17.0.2",
@@ -19,11 +20,21 @@
     "@socialgouv/eslint-config-react": "^1.97.0",
     "@socialgouv/eslint-config-recommended": "^1.97.0",
     "@socialgouv/eslint-config-typescript": "^1.97.0",
+    "@types/faker": "^5.5.9",
     "@types/react": "17.0.30",
+    "csv-parse": "^4.16.3",
+    "csv-stringify": "^5.6.5",
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.2",
+    "faker": "^5.5.3",
     "jest": "^27.3.1",
     "prettier": "^2.4.1",
+    "prisma": "^3.3.0",
+    "slugify": "^1.6.1",
+    "ts-node": "^10.3.0",
     "typescript": "4.4.4"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
