@@ -19,7 +19,7 @@ export default function Page({
   return (
     <Layout>
       <h1>Demandes</h1>
-      {commissions.map((commission: Commission) => (
+      {commissions.map((commission: typeof commissions[0]) => (
         <CommissionBloc
           key={commission.date.toString()}
           commission={commission}
@@ -31,13 +31,21 @@ export default function Page({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const props: { commissions: Commission[]; session: typeof session } = {
-    commissions: [],
-    session,
-  };
   if (session) {
     const prisma = new PrismaClient();
-    props.commissions = await prisma.commission.findMany({ take: 3 });
+    const commissions = await prisma.commission.findMany({
+      include: {
+        projets: {
+          include: {
+            _count: { select: { enfants: true } },
+            agent: true,
+            societeProduction: true,
+          },
+        },
+      },
+      take: 3,
+    });
+    return { props: { commissions, session } };
   }
-  return { props };
+  return { props: { session } };
 };
