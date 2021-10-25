@@ -1,0 +1,32 @@
+.commission {
+  padding: 2rem;
+  margin-bottom: 2rem;
+  background-color: white;
+}
+
+table.projets{
+  width: 100%;
+
+  thead {
+    color: #3366cc;
+    text-align: left;
+    font-variant-caps: all-petite-caps;
+  }
+
+  // border-collapse: separate;
+  // border-spacing: 0 .4em;
+  td {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+.projetTitle {
+  font-size: 1.5rem;
+  margin-bottom: .6rem;
+}
+
+p.tagProjet {
+  background-color: #FDDCD1;
+  color: #634D41;
+}

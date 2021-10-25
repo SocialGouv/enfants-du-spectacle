@@ -1,8 +1,8 @@
-import { Table } from "@dataesr/react-dsfr";
+import { Table, Tag, Title } from "@dataesr/react-dsfr";
 import type { ReactElement } from "react";
 import React from "react";
 
-import styles from "./CommissionBloc.module.css";
+import styles from "./CommissionBloc.module.scss";
 import type {
   Agent,
   Commission,
@@ -32,17 +32,19 @@ export default function CommissionBloc({
   return (
     <div className={styles.commission}>
       <div>
-        Commission du{" "}
-        <b>
-          {commission.date.toLocaleDateString("fr-FR", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </b>{" "}
-        du <b>{commission.departement}</b>
+        <div className={styles.projetTitle}>
+          Commission du{" "}
+          <b>
+            {commission.date.toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </b>{" "}
+          du <b>{commission.departement}</b>
+        </div>
       </div>
-      <div>
+      <div style={{ marginBottom: "2rem" }}>
         <b>{projetsCount}</b> projets - <b>{enfantsCount}</b> enfants
       </div>
       <table className={styles.projets}>
@@ -58,11 +60,13 @@ export default function CommissionBloc({
         <tbody>
           {commission.projets.map((projet) => (
             <tr key={projet.id}>
-              <td>En cours</td>
+              <td>
+                <Tag className={styles.tagProjet}>En cours</Tag>
+              </td>
               <td>{projet.nom}</td>
               <td>{projet.societeProduction.nom}</td>
               <td>
-                <b>{projet._count?.enfants} enfants</b>
+                <b>{projet._count?.enfants}</b> enfants
               </td>
               <td>{projet.agent?.email}</td>
             </tr>
