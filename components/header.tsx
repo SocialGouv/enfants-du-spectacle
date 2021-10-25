@@ -15,8 +15,13 @@ import type { ReactElement } from "react";
 import React from "react";
 
 import logoEds from "../public/logo.png";
+import styles from "./Header.module.scss";
 
-export default function Header(): ReactElement {
+interface Props {
+  children?: React.ReactNode;
+}
+
+const Header: React.FC<Props> = ({ children }) => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -70,6 +75,9 @@ export default function Header(): ReactElement {
           </ToolItemGroup>
         </Tool>
       </HeaderBody>
+      {children && <div className={styles.searchBar}>{children}</div>}
     </HeaderSDE>
   );
-}
+};
+
+export default Header;

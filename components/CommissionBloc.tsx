@@ -20,6 +20,10 @@ type CommissionPayload = Commission & {
   })[];
 };
 
+function shortAgentName(agent: Agent): string {
+  return `${agent.prenom} ${agent.nom[0]}.`;
+}
+
 export default function CommissionBloc({
   commission,
 }: {
@@ -61,14 +65,20 @@ export default function CommissionBloc({
           {commission.projets.map((projet) => (
             <tr key={projet.id}>
               <td>
-                <Tag className={styles.tagProjet}>En cours</Tag>
+                <Tag className={styles.tagProjet}>En&nbsp;cours</Tag>
               </td>
-              <td>{projet.nom}</td>
+              <td className={styles.nomProjet} title={projet.nom}>
+                {projet.nom}
+              </td>
               <td>{projet.societeProduction.nom}</td>
               <td>
-                <b>{projet._count?.enfants}</b> enfants
+                <b>{projet._count?.enfants}</b>&nbsp;enfants
               </td>
-              <td>{projet.agent?.email}</td>
+              <td>
+                <span className={styles.nomAgent}>
+                  {projet.agent && shortAgentName(projet.agent)}
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>

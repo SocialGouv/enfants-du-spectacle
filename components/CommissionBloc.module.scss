@@ -17,6 +17,17 @@ table.projets{
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
   }
+
+  .nomProjet {
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .nomAgent {
+    text-transform: capitalize;
+  }
 }
 
 .projetTitle {

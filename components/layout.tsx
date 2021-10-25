@@ -6,14 +6,15 @@ import Footer from "./Footer";
 import Header from "./Header";
 import styles from "./Layout.module.css";
 
-export default function Layout({
-  children,
-}: {
-  children: ReactNode;
-}): ReactElement {
+interface Props {
+  children: React.ReactNode;
+  headerChildren?: React.ReactNode;
+}
+
+const Layout: React.FC<Props> = ({ children, headerChildren }) => {
   return (
     <div className={styles.container}>
-      <Header />
+      <Header children={headerChildren} />
       <main style={{ minHeight: 600 }}>
         <Container spacing="m-4w">
           <Row>
@@ -24,4 +25,6 @@ export default function Layout({
       <Footer />
     </div>
   );
-}
+};
+
+export default Layout;

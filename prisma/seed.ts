@@ -1,3 +1,4 @@
+import type { Agent, Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import parse from "csv-parse/lib/sync";
 import faker from "faker";
@@ -5,12 +6,46 @@ import fs from "fs";
 import slugify from "slugify";
 
 const prisma = new PrismaClient();
+interface AgentCSV {
+  email: string;
+  nom: string;
+  prenom: string;
+}
+interface CommissionCSV {
+  departement: string;
+  date: Date;
+  dateLimiteDepot: Date;
+}
+interface SocieteCSV {
+  nom: string;
+  departement: string;
+  siret: string;
+}
+interface EnfantCSV {
+  prenom: string;
+  nom: string;
+  role: string;
+}
+interface ProjetCSV {
+  nom: string;
+  nombreEnfants: number;
+  agentEmail: string;
+}
 
-const readCsv = (name: string) =>
-  fs.readFileSync(`${__dirname}/seeds/${name}.csv`);
+function readCsv<Type>(name: string): Type[] {
+  return parse(fs.readFileSync(`${__dirname}/seeds/${name}.csv`), {
+    columns: true,
+  }) as Type[];
+}
 
 function randomItem<Type>(items: Type[]) {
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function getAgentByEmail(agents: Agent[], email: string): Agent {
+  const agent = agents.find((a) => a.email === email);
+  if (!agent) throw Error("not found");
+  return agent;
 }
 
 async function main() {
@@ -22,26 +57,30 @@ async function main() {
   await prisma.societeProduction.deleteMany();
   await prisma.commission.deleteMany();
 
-  for (const agent of parse(readCsv("agents"), { columns: true })) {
-    await prisma.agent.create({ data: agent });
+  const agents = await Promise.all(
+    readCsv<AgentCSV>("agents").map(async (agent) =>
+      prisma.agent.create({ data: agent })
+    )
+  );
+
+  for (const commission of readCsv<CommissionCSV>("commissions")) {
+    await prisma.commission.create({
+      data: {
+        date: new Date(commission.date),
+        dateLimiteDepot: new Date(commission.dateLimiteDepot),
+        departement: commission.departement,
+      },
+    });
   }
 
-  for (const commission of parse(readCsv("commissions"), { columns: true })) {
-    commission.date = new Date(commission.date as string);
-    commission.dateLimiteDepot = new Date(commission.dateLimiteDepot as string);
-    await prisma.commission.create({ data: commission });
-  }
-
-  for (const societeProduction of parse(readCsv("societes"), {
-    columns: true,
-  })) {
+  for (const societeProduction of readCsv<SocieteCSV>("societes")) {
     await prisma.societeProduction.create({ data: societeProduction });
   }
 
-  const enfantsSeeds = parse(readCsv("enfants"), { columns: true });
-  enfantsSeeds.forEach((e: any) => (e.role = "role"));
+  const enfantsSeeds = readCsv<EnfantCSV>("enfants");
+  enfantsSeeds.forEach((e) => (e.role = "role"));
 
-  const projetsSeeds = parse(readCsv("projets"), { columns: true });
+  const projetsSeeds = readCsv<ProjetCSV>("projets");
 
   const commission = await prisma.commission.findFirst();
   const societeProductions = await prisma.societeProduction.findMany();
@@ -62,16 +101,19 @@ async function main() {
     const dossierDS = await prisma.dossierDS.create({
       data: { demandeurId: demandeur.id, numero: 14001 + i },
     });
-    const projet = projetsSeeds.pop();
-    await prisma.projet.create({
-      data: {
-        commissionId: commission.id,
-        dossierDSNumero: dossierDS.numero,
-        enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
-        nom: projet.nom,
-        societeProductionId: societeProduction.id,
-      },
-    });
+    const projet = projetsSeeds.shift();
+    if (!projet) throw Error("no more projets");
+    const data: Prisma.ProjetUncheckedCreateInput = {
+      commissionId: commission.id,
+      dossierDSNumero: dossierDS.numero,
+      enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
+      nom: projet.nom,
+      societeProductionId: societeProduction.id,
+    };
+    if (projet.agentEmail) {
+      data.agentId = getAgentByEmail(agents, projet.agentEmail).id;
+    }
+    await prisma.projet.create({ data });
   }
 }
 

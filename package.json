@@ -15,7 +15,8 @@
     "next-auth": "4.0.0-beta.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "sass": "^1.43.3"
+    "sass": "^1.43.3",
+    "use-debounce": "^7.0.0"
   },
   "devDependencies": {
     "@socialgouv/eslint-config-react": "^1.97.0",
