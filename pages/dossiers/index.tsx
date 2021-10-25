@@ -1,15 +1,14 @@
 import { Title } from "@dataesr/react-dsfr";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
-import CommissionBloc from "../components/CommissionBloc";
-import Layout from "../components/Layout";
-import type { CommissionData } from "../lib/queries";
-import { getCommissions } from "../lib/queries";
+import CommissionBloc from "../../components/CommissionBloc";
+import Layout from "../../components/Layout";
+import type { CommissionData } from "../../lib/queries";
+import { getCommissions } from "../../lib/queries";
 import styles from "./dossiers.module.scss";
-import type { Projet } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
 
 interface Props {

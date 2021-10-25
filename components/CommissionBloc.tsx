@@ -1,7 +1,8 @@
-import { Table, Tag, Title } from "@dataesr/react-dsfr";
-import type { ReactElement } from "react";
+import { Tag } from "@dataesr/react-dsfr";
+import Link from "next/link";
 import React from "react";
 
+import { frenchDateText, shortAgentName } from "../lib/helpers";
 import styles from "./CommissionBloc.module.scss";
 import type {
   Agent,
@@ -20,15 +21,11 @@ type CommissionPayload = Commission & {
   })[];
 };
 
-function shortAgentName(agent: Agent): string {
-  return `${agent.prenom} ${agent.nom[0]}.`;
+interface Props {
+  commission: CommissionPayload;
 }
 
-export default function CommissionBloc({
-  commission,
-}: {
-  commission: CommissionPayload;
-}): ReactElement {
+const CommissionBloc: React.FC<Props> = ({ commission }) => {
   const projetsCount = commission.projets.length;
   const enfantsCount = commission.projets
     .map((p) => p._count?.enfants ?? 0)
@@ -37,15 +34,8 @@ export default function CommissionBloc({
     <div className={styles.commission}>
       <div>
         <div className={styles.projetTitle}>
-          Commission du{" "}
-          <b>
-            {commission.date.toLocaleDateString("fr-FR", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </b>{" "}
-          du <b>{commission.departement}</b>
+          Commission du <b>{frenchDateText(commission.date)}</b> du{" "}
+          <b>{commission.departement}</b>
         </div>
       </div>
       <div style={{ marginBottom: "2rem" }}>
@@ -68,7 +58,7 @@ export default function CommissionBloc({
                 <Tag className={styles.tagProjet}>En&nbsp;cours</Tag>
               </td>
               <td className={styles.nomProjet} title={projet.nom}>
-                {projet.nom}
+                <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>
               </td>
               <td>{projet.societeProduction.nom}</td>
               <td>
@@ -85,4 +75,5 @@ export default function CommissionBloc({
       </table>
     </div>
   );
-}
+};
+export default CommissionBloc;
