@@ -4,7 +4,7 @@ const fs = require("fs")
 
 faker.locale = "fr"
 
-enfants = Array.from(Array(100)).map(() => (
+enfants = Array.from(Array(2000)).map(() => (
   {
     prenom: faker.name.firstName(),
     nom: faker.name.firstName()

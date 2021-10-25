@@ -41,6 +41,8 @@ async function main() {
   const enfantsSeeds = parse(readCsv("enfants"), { columns: true });
   enfantsSeeds.forEach((e: any) => (e.role = "role"));
 
+  const projetsSeeds = parse(readCsv("projets"), { columns: true });
+
   const commission = await prisma.commission.findFirst();
   const societeProductions = await prisma.societeProduction.findMany();
   if (!commission) throw Error();
@@ -60,12 +62,13 @@ async function main() {
     const dossierDS = await prisma.dossierDS.create({
       data: { demandeurId: demandeur.id, numero: 14001 + i },
     });
+    const projet = projetsSeeds.pop();
     await prisma.projet.create({
       data: {
         commissionId: commission.id,
         dossierDSNumero: dossierDS.numero,
-        enfants: { create: enfantsSeeds.splice(0, 10) },
-        nom: "Le non-film",
+        enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
+        nom: projet.nom,
         societeProductionId: societeProduction.id,
       },
     });
