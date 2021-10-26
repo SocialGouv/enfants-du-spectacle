@@ -1,5 +1,4 @@
 import { Col, Container, Row } from "@dataesr/react-dsfr";
-import type { ReactElement, ReactNode } from "react";
 import React from "react";
 
 import Footer from "./Footer";
