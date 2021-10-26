@@ -4,6 +4,8 @@
 
 Ce service numérique public est porté par la DRIEETS d’Île-de-France. Il fait partie du programme [beta.gouv.fr](https://beta.gouv.fr) et est développé au sein de [la Fabrique Numérique des Ministères Sociaux](https://fabrique.social.gouv.fr).
 
+![lint workflow](https://github.com/SocialGouv/enfants-du-spectacle/actions/workflows/lint.yml/badge.svg)
+
 # Développement
 
 Stack:
