@@ -3,26 +3,11 @@ import Link from "next/link";
 import React from "react";
 
 import { frenchDateText, shortAgentName } from "../lib/helpers";
+import type { CommissionData } from "../lib/queries";
 import styles from "./CommissionBloc.module.scss";
-import type {
-  Agent,
-  Commission,
-  Projet,
-  SocieteProduction,
-} from ".prisma/client";
-
-type CommissionPayload = Commission & {
-  projets: (Projet & {
-    agent: Agent | null;
-    societeProduction: SocieteProduction;
-    _count: {
-      enfants: number;
-    } | null;
-  })[];
-};
 
 interface Props {
-  commission: CommissionPayload;
+  commission: CommissionData;
 }
 
 const CommissionBloc: React.FC<Props> = ({ commission }) => {
