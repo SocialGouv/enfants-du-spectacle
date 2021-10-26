@@ -8,13 +8,14 @@ import styles from "./Layout.module.css";
 
 interface Props {
   children: React.ReactNode;
-  headerChildren?: React.ReactNode;
+  headerMiddle?: React.ReactNode;
+  headerBottom?: React.ReactNode;
 }
 
-const Layout: React.FC<Props> = ({ children, headerChildren }) => {
+const Layout: React.FC<Props> = ({ children, headerMiddle, headerBottom }) => {
   return (
     <div className={styles.container}>
-      <Header children={headerChildren} />
+      <Header childrenMiddle={headerMiddle} childrenBottom={headerBottom} />
       <main style={{ minHeight: 600 }}>
         <Container spacing="m-4w">
           <Row>

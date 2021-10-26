@@ -11,17 +11,17 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
-import type { ReactElement } from "react";
 import React from "react";
 
 import logoEds from "../public/logo.png";
 import styles from "./Header.module.scss";
 
 interface Props {
-  children?: React.ReactNode;
+  childrenMiddle?: React.ReactNode;
+  childrenBottom?: React.ReactNode;
 }
 
-const Header: React.FC<Props> = ({ children }) => {
+const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -75,7 +75,12 @@ const Header: React.FC<Props> = ({ children }) => {
           </ToolItemGroup>
         </Tool>
       </HeaderBody>
-      {children && <div className={styles.searchBar}>{children}</div>}
+      {childrenMiddle && (
+        <div className={styles.headerMiddle}>{childrenMiddle}</div>
+      )}
+      {childrenBottom && (
+        <div className={styles.headerBottom}>{childrenBottom}</div>
+      )}
     </HeaderSDE>
   );
 };

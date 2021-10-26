@@ -1,6 +1,7 @@
 {
   "extends": [
     "next/core-web-vitals",
+    "prettier",
     "@socialgouv/eslint-config-react",
     "@socialgouv/eslint-config-typescript"
   ],

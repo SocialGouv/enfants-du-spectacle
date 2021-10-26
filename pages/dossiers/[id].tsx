@@ -24,8 +24,13 @@ interface Props {
 }
 
 const Page: React.FC<Props> = ({ projet }) => {
+  const title = (
+    <>
+      <Title as="h1">{projet.nom}</Title>
+    </>
+  );
   return (
-    <Layout>
+    <Layout headerMiddle={title}>
       <div className={styles.title}>
         <Title as="h1">Le Projet</Title>
         <Tag className={styles.tagProjet}>En&nbsp;cours</Tag>

@@ -78,7 +78,7 @@ const Page: React.FC<Props> = (props) => {
   );
 
   return (
-    <Layout headerChildren={searchNode}>
+    <Layout headerMiddle={searchNode}>
       {loading && <div>chargement...</div>}
       {!loading &&
         commissions.map((commission: CommissionData) => (
