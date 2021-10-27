@@ -9,9 +9,14 @@
   padding: 0 1rem;
 }
 
-.summary {
+.bloc {
   background-color: white;
   padding: 2rem;
+  margin: 2rem 0;
+}
+
+.summaryBloc {
+  @extend .bloc;
   display: flex;
   &>div{
     margin-left: 2rem;

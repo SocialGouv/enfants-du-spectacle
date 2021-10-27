@@ -12,6 +12,21 @@ const names = {
   REFUSE: "Refusé",
 };
 
+const events = {
+  passerAccepte: "Passer en accepté",
+  passerAjourne: "Marquer comme ajourné",
+  passerDefavorable: "Marquer comme avis défavorable de la commission",
+  passerFavorable: "Marquer comme avis favorable de la commission",
+  passerFavorableSousReserve:
+    "Marquer comme avis favorable sous réserve de la commission",
+  passerInstruction: "Passer en instruction",
+  passerPret: "Marquer prêt pour la commission",
+  passerRefuse: "Passer en refusé",
+  repasserConstruction: "Repasser en construction",
+  repasserInstruction: "Repasser en instruction",
+};
+type TransitionEvent = keyof typeof events;
+
 type StatutProjetStr =
   | "ACCEPTE"
   | "AVIS_AJOURNE"
@@ -23,36 +38,56 @@ type StatutProjetStr =
   | "PRET"
   | "REFUSE";
 
-const statutProjetFSMFactory = StateMachine.factory({
-  init: "CONSTRUCTION",
-  transitions: [
-    { from: "CONSTRUCTION", name: "passerInstruction", to: "INSTRUCTION" },
-    { from: "INSTRUCTION", name: "repasserConstruction", to: "CONSTRUCTION" },
-    { from: "INSTRUCTION", name: "passerPret", to: "PRET" },
-    { from: "PRET", name: "repasserInstruction", to: "INSTRUCTION" },
-    { from: "PRET", name: "passerAjourne", to: "AVIS_AJOURNE" },
-    { from: "PRET", name: "passerFavorable", to: "AVIS_FAVORABLE" },
-    {
-      from: "PRET",
-      name: "passerFavorableSousReserve",
-      to: "AVIS_FAVORABLE_SOUS_RESERVE",
-    },
-    { from: "PRET", name: "passerDefavorable", to: "AVIS_DEFAVORABLE" },
-    { from: "AVIS_AJOURNE", name: "passerFavorable", to: "AVIS_FAVORABLE" },
-    {
-      from: "AVIS_AJOURNE",
-      name: "passerFavorableSousReserve",
-      to: "AVIS_FAVORABLE_SOUS_RESERVE",
-    },
-    { from: "AVIS_AJOURNE", name: "passerDefavorable", to: "AVIS_DEFAVORABLE" },
-    { from: "AVIS_FAVORABLE", name: "passerAccepte", to: "ACCEPTE" },
-    { from: "AVIS_FAVORABLE", name: "passerRefuse", to: "REFUSE" },
-    { from: "AVIS_DEFAVORABLE", name: "passerAccepte", to: "ACCEPTE" },
-    { from: "AVIS_DEFAVORABLE", name: "passerRefuse", to: "REFUSE" },
-  ],
-});
+interface StatutProjetStateMachine {
+  state: StatutProjetStateMachine;
+  transitions: () => TransitionEvent[];
+}
+
+const transitions = [
+  { from: "CONSTRUCTION", name: "passerInstruction", to: "INSTRUCTION" },
+  { from: "INSTRUCTION", name: "repasserConstruction", to: "CONSTRUCTION" },
+  { from: "INSTRUCTION", name: "passerPret", to: "PRET" },
+  { from: "PRET", name: "repasserInstruction", to: "INSTRUCTION" },
+  { from: "PRET", name: "passerAjourne", to: "AVIS_AJOURNE" },
+  {
+    from: ["PRET", "AVIS_AJOURNE"],
+    name: "passerFavorable",
+    to: "AVIS_FAVORABLE",
+  },
+  {
+    from: "PRET",
+    name: "passerFavorableSousReserve",
+    to: "AVIS_FAVORABLE_SOUS_RESERVE",
+  },
+  {
+    from: ["PRET", "AVIS_AJOURNE"],
+    name: "passerDefavorable",
+    to: "AVIS_DEFAVORABLE",
+  },
+  {
+    from: "AVIS_AJOURNE",
+    name: "passerFavorableSousReserve",
+    to: "AVIS_FAVORABLE_SOUS_RESERVE",
+  },
+  {
+    from: ["AVIS_FAVORABLE", "AVIS_DEFAVORABLE"],
+    name: "passerAccepte",
+    to: "ACCEPTE",
+  },
+  {
+    from: ["AVIS_FAVORABLE", "AVIS_DEFAVORABLE"],
+    name: "passerRefuse",
+    to: "REFUSE",
+  },
+];
+
+const factory = (init = "CONSTRUCTION"): StatutProjetStateMachine => {
+  return new StateMachine({ init, transitions }) as StatutProjetStateMachine;
+};
 
 const statutProjetToFrench = (state: StatutProjetStr): string => names[state];
+const statutProjetEventToFrench = (event: TransitionEvent): string =>
+  events[event];
 
-export { statutProjetFSMFactory, statutProjetToFrench };
-export type { StatutProjetStr };
+export { factory, statutProjetEventToFrench, statutProjetToFrench };
+export type { StatutProjetStr, TransitionEvent };
