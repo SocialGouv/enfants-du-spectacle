@@ -3,7 +3,7 @@ import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
-import CommissionBloc from "../../components/CommissionBloc";
+import CommissionBloc from "../../components/Commission";
 import Layout from "../../components/Layout";
 import SearchBar from "../../components/SearchBar";
 import type { CommissionData } from "../../lib/queries";

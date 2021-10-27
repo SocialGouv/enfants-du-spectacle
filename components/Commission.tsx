@@ -6,13 +6,13 @@ import { frenchDateText, shortAgentName } from "../lib/helpers";
 import type { CommissionData } from "../lib/queries";
 import type { StatutProjetStr } from "../lib/statutProjet";
 import { statutProjetToFrench } from "../lib/statutProjet";
-import styles from "./CommissionBloc.module.scss";
+import styles from "./Commission.module.scss";
 
 interface Props {
   commission: CommissionData;
 }
 
-const CommissionBloc: React.FC<Props> = ({ commission }) => {
+const Commission: React.FC<Props> = ({ commission }) => {
   const projetsCount = commission.projets.length;
   const enfantsCount = commission.projets
     .map((p) => p._count?.enfants ?? 0)
@@ -65,4 +65,4 @@ const CommissionBloc: React.FC<Props> = ({ commission }) => {
     </div>
   );
 };
-export default CommissionBloc;
+export default Commission;
