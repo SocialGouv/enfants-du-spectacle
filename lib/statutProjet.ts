@@ -23,10 +23,6 @@ type StatutProjetStr =
   | "PRET"
   | "REFUSE";
 
-interface StatutProjetFSM {
-  state: StatutProjetStr;
-}
-
 const statutProjetFSMFactory = StateMachine.factory({
   init: "CONSTRUCTION",
   transitions: [

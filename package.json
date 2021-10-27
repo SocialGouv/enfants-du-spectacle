@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint components pages lib",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@dataesr/react-dsfr": "0.7.4",
@@ -34,7 +35,9 @@
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.2",
     "faker": "^5.5.3",
+    "husky": "^7.0.4",
     "jest": "^27.3.1",
+    "lint-staged": "^11.2.6",
     "maildev": "^1.1.0",
     "prettier": "^2.4.1",
     "prisma": "^3.3.0",
@@ -44,5 +47,10 @@
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "lint-staged": {
+    "lib/**": "npx eslint --cache",
+    "pages/**": "npx eslint --cache",
+    "components/**": "npx eslint --cache"
   }
 }
