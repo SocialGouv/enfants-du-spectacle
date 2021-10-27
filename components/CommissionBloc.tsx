@@ -4,6 +4,8 @@ import React from "react";
 
 import { frenchDateText, shortAgentName } from "../lib/helpers";
 import type { CommissionData } from "../lib/queries";
+import type { StatutProjetStr } from "../lib/statutProjet";
+import { statutProjetToFrench } from "../lib/statutProjet";
 import styles from "./CommissionBloc.module.scss";
 
 interface Props {
@@ -40,7 +42,9 @@ const CommissionBloc: React.FC<Props> = ({ commission }) => {
           {commission.projets.map((projet) => (
             <tr key={projet.id}>
               <td>
-                <Tag className={styles.tagProjet}>En&nbsp;cours</Tag>
+                <Tag className={styles.tagProjet}>
+                  {statutProjetToFrench(projet.statut as StatutProjetStr)}
+                </Tag>
               </td>
               <td className={styles.nomProjet} title={projet.nom}>
                 <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>

@@ -5,6 +5,7 @@ import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
 
 const prisma = new PrismaClient();
+
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   callbacks: {

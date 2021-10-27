@@ -42,9 +42,22 @@ model DossierDS {
   projets     Projet[]
 }
 
+enum StatutProjet {
+  CONSTRUCTION
+  INSTRUCTION
+  PRET
+  AVIS_AJOURNE
+  AVIS_FAVORABLE
+  AVIS_FAVORABLE_SOUS_RESERVE
+  AVIS_DEFAVORABLE
+  ACCEPTE
+  REFUSE
+}
+
 model Projet {
   id                  Int               @id @default(autoincrement())
   nom                 String
+  statut              StatutProjet      @default(CONSTRUCTION)
   commissionId        Int
   commission          Commission        @relation(fields: [commissionId], references: [id])
   societeProductionId Int

@@ -15,6 +15,31 @@ Stack:
 - [Prisma](https://www.prisma.io/docs)
 - [@dataesr/react-dsfr - Composants React pour le Système de Design de l'État.](https://github.com/dataesr/react-dsfr)
 
+## Local environment
+
+Vous pouvez utiliser les fichiers d'exemples :
+
+```sh
+cp .env.local.example .env.local
+cp .env.example .env
+```
+
+Le fichier `.env.local` est lu par NextJS et `.env` par Prisma.
+
+Les configurations de serveurs mail dans ce fichier permettent d'utiliser le faux serveur SMTP de test en local `maildev`:
+
+```
+EMAIL_SERVER_HOST=localhost
+EMAIL_SERVER_PORT=1025
+NODE_TLS_REJECT_UNAUTHORIZED=0
+```
+
+La dernière variable est nécessaire pour éviter une erreur TLS de nodemailer.
+
+Il faut bien lancer en parallèle de votre serveur next le processus maildev: `npx maildev`
+
+Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
+
 ## Seeds
 
 Les seeds permettent de restaurer simplement des bases de données avec des données réalistes. C'est très utile en développement local ou bien sur les environnements de review apps ou de staging. On a fait le choix d'avoir ici des seeds déterministes et non aléatoires, pour pouvoir reproduire des environnements prévisibles.
