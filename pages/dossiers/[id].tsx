@@ -1,7 +1,8 @@
 import { Button, Table, Tag, Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import React from "react";
+import React, { useState } from "react";
+import { parse as superJSONParse } from "superjson";
 
 import Layout from "../../components/Layout";
 import { frenchDateText, shortAgentName } from "../../lib/helpers";
@@ -31,8 +32,25 @@ interface Props {
   projet: ProjetData;
 }
 
-const Page: React.FC<Props> = ({ projet }) => {
+const Page: React.FC<Props> = (props) => {
+  const [projet, setProjet] = useState(props.projet);
+
   const statutProjetFSM = statutProjetFSMFactory(projet.statut as string);
+  const onChangeStatut = (transitionEvent: string) => {
+    window
+      .fetch(`/api/dossiers/${projet.id}`, {
+        body: JSON.stringify({ transitionEvent }),
+        method: "PUT",
+      })
+      .then(async (r) => r.text())
+      .then((rawJson) => {
+        const updatedProjet = superJSONParse<ProjetData>(rawJson);
+        setProjet(updatedProjet);
+      })
+      .catch((e) => {
+        throw e;
+      });
+  };
   const title = (
     <>
       <Title as="h1">{projet.nom}</Title>
@@ -50,7 +68,13 @@ const Page: React.FC<Props> = ({ projet }) => {
       <div className={styles.bloc}>
         Changer de statut:{" "}
         {statutProjetFSM.transitions().map((transitionEvent) => (
-          <Button key={transitionEvent}>
+          <Button
+            key={transitionEvent}
+            onClick={() => {
+              onChangeStatut(transitionEvent);
+            }}
+            className={styles.transitionButton}
+          >
             {statutProjetEventToFrench(transitionEvent)}
           </Button>
         ))}

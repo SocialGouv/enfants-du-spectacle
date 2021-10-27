@@ -1,5 +1,6 @@
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import superjson from "superjson";
 
 import { getCommissions } from "../../lib/queries";
 import { PrismaClient } from ".prisma/client";
@@ -13,12 +14,12 @@ const handler: NextApiHandler = async (req, res) => {
         prisma,
         req.query.search as string
       );
-      res.status(200).json(commissions);
+      res.status(200).json(superjson.stringify(commissions));
     } else {
-      res.status(401);
+      res.status(401).end();
     }
   } else {
-    res.status(405);
+    res.status(405).end();
   }
 };
 

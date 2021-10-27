@@ -1,5 +1,7 @@
 import StateMachine from "javascript-state-machine";
 
+import type { StatutProjet } from ".prisma/client";
+
 const names = {
   ACCEPTE: "Accepté",
   AVIS_AJOURNE: "Avis ajourné",
@@ -39,7 +41,7 @@ type StatutProjetStr =
   | "REFUSE";
 
 interface StatutProjetStateMachine {
-  state: StatutProjetStateMachine;
+  state: StatutProjet;
   transitions: () => TransitionEvent[];
 }
 

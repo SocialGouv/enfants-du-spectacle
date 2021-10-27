@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 import CommissionBloc from "../../components/Commission";
@@ -13,11 +14,6 @@ import { PrismaClient } from ".prisma/client";
 interface Props {
   commissions: CommissionData[];
 }
-
-type CommissionJSON = CommissionData & {
-  date: string;
-  dateLimiteDepot: string;
-};
 
 const Page: React.FC<Props> = (props) => {
   const { data: session } = useSession();
@@ -42,15 +38,9 @@ const Page: React.FC<Props> = (props) => {
           search: debouncedSearch,
         })}`
       )
-      .then(async (res) => res.json())
-      .then((data: CommissionJSON[]) => {
-        const commissionsData: CommissionData[] = data.map(
-          (commissionJson) => ({
-            ...commissionJson,
-            date: new Date(commissionJson.date),
-            dateLimiteDepot: new Date(commissionJson.dateLimiteDepot),
-          })
-        );
+      .then(async (res) => res.text())
+      .then((rawJSON: string) => {
+        const commissionsData = superJSONParse<CommissionData[]>(rawJSON);
         setCommissions(commissionsData);
         setLoading(false);
       })
