@@ -2,7 +2,7 @@ import { Tag } from "@dataesr/react-dsfr";
 import Link from "next/link";
 import React from "react";
 
-import { frenchDateText, shortAgentName } from "../lib/helpers";
+import { frenchDateText, shortUserName } from "../lib/helpers";
 import type { CommissionData } from "../lib/queries";
 import type { StatutProjetStr } from "../lib/statutProjet";
 import { statutProjetToFrench } from "../lib/statutProjet";
@@ -54,8 +54,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
                 <b>{projet._count?.enfants}</b>&nbsp;enfants
               </td>
               <td>
-                <span className={styles.nomAgent}>
-                  {projet.agent && shortAgentName(projet.agent)}
+                <span className={styles.nomUser}>
+                  {projet.user && shortUserName(projet.user)}
                 </span>
               </td>
             </tr>

@@ -1,4 +1,4 @@
-import type { Agent, Prisma } from "@prisma/client";
+import type { Prisma, User } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import parse from "csv-parse/lib/sync";
 import faker from "faker";
@@ -6,7 +6,7 @@ import fs from "fs";
 import slugify from "slugify";
 
 const prisma = new PrismaClient();
-interface AgentCSV {
+interface UserCSV {
   email: string;
   nom: string;
   prenom: string;
@@ -29,7 +29,7 @@ interface EnfantCSV {
 interface ProjetCSV {
   nom: string;
   nombreEnfants: number;
-  agentEmail: string;
+  userEmail: string;
 }
 
 function readCsv<Type>(name: string): Type[] {
@@ -42,24 +42,24 @@ function randomItem<Type>(items: Type[]) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function getAgentByEmail(agents: Agent[], email: string): Agent {
-  const agent = agents.find((a) => a.email === email);
-  if (!agent) throw Error("not found");
-  return agent;
+function getUserByEmail(users: User[], email: string): User {
+  const user = users.find((a) => a.email === email);
+  if (!user) throw Error(`user not found for email ${email}`);
+  return user;
 }
 
 async function main() {
   await prisma.enfant.deleteMany();
   await prisma.projet.deleteMany();
   await prisma.dossierDS.deleteMany();
-  await prisma.agent.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.demandeur.deleteMany();
   await prisma.societeProduction.deleteMany();
   await prisma.commission.deleteMany();
 
-  const agents = await Promise.all(
-    readCsv<AgentCSV>("agents").map(async (agent) =>
-      prisma.agent.create({ data: agent })
+  const users = await Promise.all(
+    readCsv<UserCSV>("users").map(async (user) =>
+      prisma.user.create({ data: user })
     )
   );
 
@@ -110,8 +110,8 @@ async function main() {
       nom: projet.nom,
       societeProductionId: societeProduction.id,
     };
-    if (projet.agentEmail) {
-      data.agentId = getAgentByEmail(agents, projet.agentEmail).id;
+    if (projet.userEmail) {
+      data.userId = getUserByEmail(users, projet.userEmail).id;
     }
     await prisma.projet.create({ data });
   }

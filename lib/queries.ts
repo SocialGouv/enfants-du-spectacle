@@ -1,16 +1,16 @@
 import type { Prisma } from "@prisma/client";
 
 import type {
-  Agent,
   Commission,
   PrismaClient,
   Projet,
   SocieteProduction,
+  User,
 } from ".prisma/client";
 
 type CommissionData = Commission & {
   projets: (Projet & {
-    agent: Agent | null;
+    user: User | null;
     societeProduction: SocieteProduction;
     _count: {
       enfants: number;
@@ -25,8 +25,8 @@ const getCommissions = async (
   const projetsQuery: Prisma.ProjetFindManyArgs = {
     include: {
       _count: { select: { enfants: true } },
-      agent: true,
       societeProduction: true,
+      user: true,
     },
   };
   if (search) projetsQuery.where = { nom: { search } };

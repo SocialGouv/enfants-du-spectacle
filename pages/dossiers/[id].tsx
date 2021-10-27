@@ -1,11 +1,11 @@
-import { Button, Table, Tag, Title } from "@dataesr/react-dsfr";
+import { Button, Select, Table, Tag, Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import React, { useState } from "react";
 import { parse as superJSONParse } from "superjson";
 
 import Layout from "../../components/Layout";
-import { frenchDateText, shortAgentName } from "../../lib/helpers";
+import { frenchDateText, shortUserName } from "../../lib/helpers";
 import type { StatutProjetStr } from "../../lib/statutProjet";
 import {
   factory as statutProjetFSMFactory,
@@ -14,43 +14,68 @@ import {
 } from "../../lib/statutProjet";
 import styles from "./dossiers.module.scss";
 import type {
-  Agent,
   Commission,
   Enfant,
   Projet,
   SocieteProduction,
+  User,
 } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
 
 type ProjetData = Projet & {
-  agent: Agent | null;
+  user: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];
 };
 interface Props {
   projet: ProjetData;
+  users: User[];
+}
+
+function updateProjet(
+  projet: Projet,
+  updates: Record<string, unknown>,
+  callback: (updatedProjet: ProjetData) => void
+) {
+  window
+    .fetch(`/api/dossiers/${projet.id}`, {
+      body: JSON.stringify(updates),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .then(async (r) => r.text())
+    .then((rawJson) => {
+      const updatedProjet = superJSONParse<ProjetData>(rawJson);
+      callback(updatedProjet);
+    })
+    .catch((e) => {
+      throw e;
+    });
 }
 
 const Page: React.FC<Props> = (props) => {
+  const { users } = props;
   const [projet, setProjet] = useState(props.projet);
+  const [assignedUserId] = useState(projet.userId);
 
   const statutProjetFSM = statutProjetFSMFactory(projet.statut as string);
   const onChangeStatut = (transitionEvent: string) => {
-    window
-      .fetch(`/api/dossiers/${projet.id}`, {
-        body: JSON.stringify({ transitionEvent }),
-        method: "PUT",
-      })
-      .then(async (r) => r.text())
-      .then((rawJson) => {
-        const updatedProjet = superJSONParse<ProjetData>(rawJson);
-        setProjet(updatedProjet);
-      })
-      .catch((e) => {
-        throw e;
-      });
+    updateProjet(projet, { transitionEvent }, setProjet);
   };
+
+  const onAssignUserId: React.ChangeEventHandler<HTMLOptionElement> = (
+    event
+  ) => {
+    const userId = event.target.value;
+    updateProjet(projet, { userId: userId }, setProjet);
+  };
+
   const title = (
     <>
       <Title as="h1">{projet.nom}</Title>
@@ -85,7 +110,7 @@ const Page: React.FC<Props> = (props) => {
           <div>
             <b>Suivi par</b>
           </div>
-          <div>{projet.agent && shortAgentName(projet.agent)}</div>
+          <div>{projet.user && shortUserName(projet.user)}</div>
 
           <div>
             <b>Date de commission</b>
@@ -108,6 +133,17 @@ const Page: React.FC<Props> = (props) => {
           <div>{projet.societeProduction.departement}</div>
           <div>{projet.societeProduction.siret}</div>
         </div>
+      </div>
+
+      <div className={styles.bloc}>
+        Assigner à
+        <Select
+          selected={assignedUserId}
+          options={[{}].concat(
+            users.map((u) => ({ label: u.email, value: u.id }))
+          )}
+          onChange={onAssignUserId}
+        />
       </div>
 
       <div className={styles.bloc}>
@@ -139,14 +175,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const prisma = new PrismaClient();
     const projet = await prisma.projet.findUnique({
       include: {
-        agent: true,
         commission: true,
         enfants: true,
         societeProduction: true,
+        user: true,
       },
       where: { id },
     });
-    return { props: { projet } };
+    const users = await prisma.user.findMany();
+    return { props: { projet, users } };
   }
   return { props: { session } };
 };

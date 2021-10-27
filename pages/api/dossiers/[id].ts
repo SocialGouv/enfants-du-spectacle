@@ -1,3 +1,4 @@
+import type { StatutProjet } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import superjson from "superjson";
@@ -30,35 +31,47 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const parsed = JSON.parse(req.body);
-  if (!parsed || typeof parsed.transitionEvent !== "string") {
+  if (!parsed) {
     res.status(400).end();
     return;
   }
-  const transition = parsed.transitionEvent;
 
   const prisma = new PrismaClient();
-  const projet = await prisma.projet.findUnique({ where: { id: projetId } });
-  if (!projet) {
-    res.status(404).end();
-    return;
+  const updates: { statut?: StatutProjet; userId: number } = {};
+
+  if (typeof parsed.transitionEvent === "string") {
+    const transition = parsed.transitionEvent;
+
+    const projet = await prisma.projet.findUnique({ where: { id: projetId } });
+    if (!projet) {
+      res.status(404).end();
+      return;
+    }
+
+    const stateMachine = statutProjetStateMachineFactory(
+      projet.statut as string
+    );
+    if (!stateMachine.transitions().includes(transition as TransitionEvent)) {
+      res.status(400).end();
+      return;
+    }
+
+    eval(`stateMachine.${transition}()`);
+    updates.statut = stateMachine.state;
   }
 
-  const stateMachine = statutProjetStateMachineFactory(projet.statut as string);
-  if (!stateMachine.transitions().includes(transition as TransitionEvent)) {
-    res.status(400).end();
-    return;
+  if (typeof parsed.userId === "string") {
+    const userId = parseInt(parsed.userId as string, 10);
+    updates.userId = userId;
   }
-
-  eval(`stateMachine.${transition}()`);
-  const targetState = stateMachine.state;
 
   const updatedProjet = await prisma.projet.update({
-    data: { statut: targetState },
+    data: updates,
     include: {
-      agent: true,
       commission: true,
       enfants: true,
       societeProduction: true,
+      user: true,
     },
     where: { id: projetId },
   });

@@ -1,7 +1,7 @@
-import type { Agent } from "@prisma/client";
+import type { User } from "@prisma/client";
 
-function shortAgentName(agent: Agent): string {
-  return `${agent.prenom} ${agent.nom[0]}.`;
+function shortUserName(user: User): string {
+  return `${user.prenom} ${user.nom ? user.nom[0] : ""}.`;
 }
 
 function frenchDateText(date: Date): string {
@@ -12,4 +12,4 @@ function frenchDateText(date: Date): string {
   });
 }
 
-export { frenchDateText, shortAgentName };
+export { frenchDateText, shortUserName };
