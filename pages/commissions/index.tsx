@@ -1,4 +1,3 @@
-import { Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -6,9 +5,9 @@ import { useDebounce } from "use-debounce";
 
 import CommissionBloc from "../../components/CommissionBloc";
 import Layout from "../../components/Layout";
+import SearchBar from "../../components/SearchBar";
 import type { CommissionData } from "../../lib/queries";
 import { getCommissions } from "../../lib/queries";
-import styles from "./dossiers.module.scss";
 import { PrismaClient } from ".prisma/client";
 
 interface Props {
@@ -64,21 +63,10 @@ const Page: React.FC<Props> = (props) => {
     return <Layout>Veuillez vous connecter</Layout>;
   }
 
-  const searchNode = (
-    <>
-      <Title as="h1">Demandes |</Title>
-      <input
-        value={searchValue}
-        type="text"
-        placeholder="🔍 Rechercher un numéro de dossier, un projet, une société, un enfant"
-        className={styles.searchInput}
-        onChange={onSearchChange}
-      />
-    </>
-  );
-
   return (
-    <Layout headerMiddle={searchNode}>
+    <Layout
+      headerMiddle={<SearchBar value={searchValue} onChange={onSearchChange} />}
+    >
       {loading && <div>chargement...</div>}
       {!loading &&
         commissions.map((commission: CommissionData) => (

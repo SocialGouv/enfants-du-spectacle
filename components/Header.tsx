@@ -62,8 +62,8 @@ const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
                   </span>
                 </ToolItem>
                 <ToolItem
-                  link="/dossiers"
-                  onClick={async () => router.push("/dossiers")}
+                  link="/commissions"
+                  onClick={async () => router.push("/commissions")}
                 >
                   Dossiers
                 </ToolItem>
