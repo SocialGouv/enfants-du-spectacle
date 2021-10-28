@@ -28,6 +28,7 @@ const getCommissions = async (
       societeProduction: true,
       user: true,
     },
+    orderBy: { id: "desc" },
   };
   if (search) projetsQuery.where = { nom: { search } };
   const query: Prisma.CommissionFindManyArgs = {

@@ -1,12 +1,12 @@
 import { Select, Table, Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { parse as superJSONParse } from "superjson";
 
 import ChangeStatutProjetButton from "../../components/ChangeStatutProjetButton";
 import Layout from "../../components/Layout";
-import { frenchDateText, shortUserName } from "../../lib/helpers";
+import { frenchDateText } from "../../lib/helpers";
 import styles from "./dossiers.module.scss";
 import type {
   Commission,
@@ -57,7 +57,11 @@ function updateProjet(
 const Page: React.FC<Props> = (props) => {
   const { users } = props;
   const [projet, setProjet] = useState(props.projet);
-  const [assignedUserId] = useState(projet.userId);
+  const [assignedUserId, setAssignedUserId] = useState(projet.userId);
+
+  useEffect(() => {
+    setAssignedUserId(projet.userId);
+  }, [projet.userId]);
 
   const onChangeStatut = (transitionEvent: string) => {
     updateProjet(projet, { transitionEvent }, setProjet);
@@ -87,7 +91,15 @@ const Page: React.FC<Props> = (props) => {
           <div>
             <b>Suivi par</b>
           </div>
-          <div>{projet.user && shortUserName(projet.user)}</div>
+          <div>
+            <Select
+              selected={assignedUserId}
+              options={[{}].concat(
+                users.map((u) => ({ label: u.email, value: u.id }))
+              )}
+              onChange={onAssignUserId}
+            />
+          </div>
 
           <div>
             <b>Date de commission</b>
@@ -110,17 +122,6 @@ const Page: React.FC<Props> = (props) => {
           <div>{projet.societeProduction.departement}</div>
           <div>{projet.societeProduction.siret}</div>
         </div>
-      </div>
-
-      <div className={styles.bloc}>
-        Assigner à
-        <Select
-          selected={assignedUserId}
-          options={[{}].concat(
-            users.map((u) => ({ label: u.email, value: u.id }))
-          )}
-          onChange={onAssignUserId}
-        />
       </div>
 
       <div className={styles.bloc}>
