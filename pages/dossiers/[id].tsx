@@ -1,17 +1,12 @@
-import { Button, Select, Table, Tag, Title } from "@dataesr/react-dsfr";
+import { Select, Table, Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import React, { useState } from "react";
 import { parse as superJSONParse } from "superjson";
 
+import ChangeStatutProjetButton from "../../components/ChangeStatutProjetButton";
 import Layout from "../../components/Layout";
 import { frenchDateText, shortUserName } from "../../lib/helpers";
-import type { StatutProjetStr } from "../../lib/statutProjet";
-import {
-  factory as statutProjetFSMFactory,
-  statutProjetEventToFrench,
-  statutProjetToFrench,
-} from "../../lib/statutProjet";
 import styles from "./dossiers.module.scss";
 import type {
   Commission,
@@ -64,7 +59,6 @@ const Page: React.FC<Props> = (props) => {
   const [projet, setProjet] = useState(props.projet);
   const [assignedUserId] = useState(projet.userId);
 
-  const statutProjetFSM = statutProjetFSMFactory(projet.statut as string);
   const onChangeStatut = (transitionEvent: string) => {
     updateProjet(projet, { transitionEvent }, setProjet);
   };
@@ -85,24 +79,7 @@ const Page: React.FC<Props> = (props) => {
     <Layout headerMiddle={title}>
       <div className={styles.title}>
         <Title as="h1">Le Projet</Title>
-        <Tag className={styles.tagProjet}>
-          {statutProjetToFrench(projet.statut as StatutProjetStr)}
-        </Tag>
-      </div>
-
-      <div className={styles.bloc}>
-        Changer de statut:{" "}
-        {statutProjetFSM.transitions().map((transitionEvent) => (
-          <Button
-            key={transitionEvent}
-            onClick={() => {
-              onChangeStatut(transitionEvent);
-            }}
-            className={styles.transitionButton}
-          >
-            {statutProjetEventToFrench(transitionEvent)}
-          </Button>
-        ))}
+        <ChangeStatutProjetButton projet={projet} onChange={onChangeStatut} />
       </div>
 
       <div className={styles.summaryBloc}>

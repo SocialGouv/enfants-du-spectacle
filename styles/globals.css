@@ -1,0 +1,28 @@
+
+.state-accepte{
+  background-color: #42c7b0 !important;
+}
+.state-avisAjourne{
+  background-color: #dee92c !important;
+}
+.state-avisDefavorable{
+  background-color: #ec3c53 !important;
+}
+.state-favorable{
+  background-color: #42c7b0 !important;
+}
+.state-favorableSousReserve{
+  background-color: #5e8f82 !important;
+}
+.state-construction{
+  background-color: #dee92c !important;
+}
+.state-instruction{
+  background-color: #c26e0f !important;
+}
+.state-pret{
+  background-color: #42c7b0 !important;
+}
+.state-refuse{
+  background-color: #ec3c53 !important;
+}

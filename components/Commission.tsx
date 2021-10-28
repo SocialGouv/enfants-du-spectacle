@@ -3,10 +3,39 @@ import Link from "next/link";
 import React from "react";
 
 import { frenchDateText, shortUserName } from "../lib/helpers";
-import type { CommissionData } from "../lib/queries";
-import type { StatutProjetStr } from "../lib/statutProjet";
-import { statutProjetToFrench } from "../lib/statutProjet";
+import type { CommissionData, ProjetData } from "../lib/queries";
+import { factory as statutProjetStateMachineFactory } from "../lib/statutProjetStateMachine";
 import styles from "./Commission.module.scss";
+
+interface ProjetProps {
+  projet: ProjetData;
+}
+
+const ProjetRow: React.FC<ProjetProps> = ({ projet }) => {
+  const stateMachine = statutProjetStateMachineFactory(projet.statut);
+  const stateClass = stateMachine.stateClassName();
+  return (
+    <tr key={projet.id}>
+      <td>
+        <Tag className={`${styles.tagProjet} ${stateClass}`}>
+          {stateMachine.stateLabel()}
+        </Tag>
+      </td>
+      <td className={styles.nomProjet} title={projet.nom}>
+        <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>
+      </td>
+      <td>{projet.societeProduction.nom}</td>
+      <td>
+        <b>{projet._count?.enfants}</b>&nbsp;enfants
+      </td>
+      <td>
+        <span className={styles.nomUser}>
+          {projet.user && shortUserName(projet.user)}
+        </span>
+      </td>
+    </tr>
+  );
+};
 
 interface Props {
   commission: CommissionData;
@@ -40,25 +69,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
         </thead>
         <tbody>
           {commission.projets.map((projet) => (
-            <tr key={projet.id}>
-              <td>
-                <Tag className={styles.tagProjet}>
-                  {statutProjetToFrench(projet.statut as StatutProjetStr)}
-                </Tag>
-              </td>
-              <td className={styles.nomProjet} title={projet.nom}>
-                <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>
-              </td>
-              <td>{projet.societeProduction.nom}</td>
-              <td>
-                <b>{projet._count?.enfants}</b>&nbsp;enfants
-              </td>
-              <td>
-                <span className={styles.nomUser}>
-                  {projet.user && shortUserName(projet.user)}
-                </span>
-              </td>
-            </tr>
+            <ProjetRow key={projet.id} projet={projet} />
           ))}
         </tbody>
       </table>

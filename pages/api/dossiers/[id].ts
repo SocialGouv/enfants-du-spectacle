@@ -3,8 +3,8 @@ import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import superjson from "superjson";
 
-import type { TransitionEvent } from "../../../lib/statutProjet";
-import { factory as statutProjetStateMachineFactory } from "../../../lib/statutProjet";
+import type { TransitionEvent } from "../../../lib/statutProjetStateMachine";
+import { factory as statutProjetStateMachineFactory } from "../../../lib/statutProjetStateMachine";
 import { PrismaClient } from ".prisma/client";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -37,7 +37,7 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const prisma = new PrismaClient();
-  const updates: { statut?: StatutProjet; userId: number } = {};
+  const updates: { statut?: StatutProjet; userId?: number } = {};
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
@@ -48,9 +48,7 @@ const handler: NextApiHandler = async (req, res) => {
       return;
     }
 
-    const stateMachine = statutProjetStateMachineFactory(
-      projet.statut as string
-    );
+    const stateMachine = statutProjetStateMachineFactory(projet.statut);
     if (!stateMachine.transitions().includes(transition as TransitionEvent)) {
       res.status(400).end();
       return;

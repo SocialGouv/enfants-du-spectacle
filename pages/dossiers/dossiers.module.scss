@@ -12,16 +12,10 @@
   }
 }
 
-p.tagProjet {
-  background-color: #FDDCD1;
-  color: #634D41;
-  height: .5rem;
-  align-self: center;
-  margin-left: 1rem
-}
-
 div.title {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button.transitionButton {

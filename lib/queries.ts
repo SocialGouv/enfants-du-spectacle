@@ -8,15 +8,15 @@ import type {
   User,
 } from ".prisma/client";
 
-type CommissionData = Commission & {
-  projets: (Projet & {
-    user: User | null;
-    societeProduction: SocieteProduction;
-    _count: {
-      enfants: number;
-    } | null;
-  })[];
+type ProjetData = Projet & {
+  user: User | null;
+  societeProduction: SocieteProduction;
+  _count: {
+    enfants: number;
+  } | null;
 };
+
+type CommissionData = Commission & { projets: ProjetData[] };
 
 const getCommissions = async (
   prismaClient: PrismaClient,
@@ -39,5 +39,5 @@ const getCommissions = async (
   return prismaClient.commission.findMany(query);
 };
 
-export type { CommissionData };
+export type { CommissionData, ProjetData };
 export { getCommissions };

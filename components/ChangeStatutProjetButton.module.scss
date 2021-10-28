@@ -1,0 +1,63 @@
+button.currentStatut {
+  color: #000;
+  height: .5rem;
+  align-self: center;
+  margin-left: 1rem;
+  border: 1px solid #ccc
+}
+button.currentStatut::after{
+  content: "↓";
+  font-size: 1rem;
+  margin-left: 10px
+}
+button.currentStatut:hover, button.currentStatut:focus, button.currentStatut:active {
+  background-color: inherit;
+  color: inherit;
+  filter: invert(100%);
+}
+
+div.container {
+  position: relative;
+}
+
+div.dropdown{
+  position: absolute;
+  top: 100%;
+  right: 0;
+
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 300px;
+}
+button.row {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  background-color: white;
+  padding: 1rem;
+  margin: 0;
+  font-size: initial;
+  text-align: left;
+}
+button.row:last-child {
+  border-bottom: none;
+}
+button.row:hover, button.row:focus{
+  background-color: #eee;
+}
+
+p.event{
+  font-weight: bold;
+  margin: 0 0 .5rem 0;
+  padding: 0;
+}
+p.description{
+  color: #666;
+  margin: 0;
+  padding: 0;
+}
+
+span.icon {
+  display: block;
+  margin-right: 1rem;
+}
