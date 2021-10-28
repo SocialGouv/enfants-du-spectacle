@@ -1,0 +1,29 @@
+version: "3.6"
+services:
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: eds
+      POSTGRES_PASSWORD: pwd123
+      POSTGRES_DB: eds
+
+  app:
+    build:
+      context: .
+      shm_size: 512M
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.development
+    environment:
+      - DATABASE_URL=postgres://eds:pwd123@db:5432/eds
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  db_data:

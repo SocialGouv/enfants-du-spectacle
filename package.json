@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build --no-lint",
+    "start": "npx prisma migrate deploy && npx prisma generate && next start",
     "lint": "eslint components pages lib",
     "prepare": "husky install"
   },
