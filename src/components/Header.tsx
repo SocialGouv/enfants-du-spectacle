@@ -12,9 +12,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
-
-import logoEds from "../public/logo.png";
-import styles from "./Header.module.scss";
+import styles from "src/components/Header.module.scss";
+import logoEds from "src/images/logo.png";
 
 interface Props {
   childrenMiddle?: React.ReactNode;

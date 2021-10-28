@@ -5,6 +5,16 @@
     "@socialgouv/eslint-config-react",
     "@socialgouv/eslint-config-typescript"
   ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": [
+          "node_modules",
+          "."
+        ]
+      }
+    }
+  },
   "rules": {
     "@typescript-eslint/naming-convention": "off" // TS linter suggests camelCase for React Components
   }

@@ -1,14 +1,14 @@
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import CommissionBloc from "src/components/Commission";
+import Layout from "src/components/Layout";
+import SearchBar from "src/components/SearchBar";
+import type { CommissionData } from "src/lib/queries";
+import { getCommissions } from "src/lib/queries";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
-import CommissionBloc from "../../components/Commission";
-import Layout from "../../components/Layout";
-import SearchBar from "../../components/SearchBar";
-import type { CommissionData } from "../../lib/queries";
-import { getCommissions } from "../../lib/queries";
 import { PrismaClient } from ".prisma/client";
 
 interface Props {

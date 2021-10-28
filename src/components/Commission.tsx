@@ -1,10 +1,10 @@
 import { Tag } from "@dataesr/react-dsfr";
 import Link from "next/link";
 import React from "react";
+import { frenchDateText, shortUserName } from "src/lib/helpers";
+import type { CommissionData, ProjetData } from "src/lib/queries";
+import { factory as statutProjetStateMachineFactory } from "src/lib/statutProjetStateMachine";
 
-import { frenchDateText, shortUserName } from "../lib/helpers";
-import type { CommissionData, ProjetData } from "../lib/queries";
-import { factory as statutProjetStateMachineFactory } from "../lib/statutProjetStateMachine";
 import styles from "./Commission.module.scss";
 
 interface ProjetProps {

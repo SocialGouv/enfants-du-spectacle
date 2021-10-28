@@ -1,10 +1,10 @@
 import { Button } from "@dataesr/react-dsfr";
 import React, { useState } from "react";
-
 import {
   factory as statutProjetFSMFactory,
   statutProjetEventToFrench,
-} from "../lib/statutProjetStateMachine";
+} from "src/lib/statutProjetStateMachine";
+
 import styles from "./ChangeStatutProjetButton.module.scss";
 import type { Projet } from ".prisma/client";
 

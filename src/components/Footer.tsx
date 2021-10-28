@@ -8,8 +8,7 @@ import {
 } from "@dataesr/react-dsfr";
 import type { ReactElement } from "react";
 import React from "react";
-
-import styles from "./Footer.module.css";
+import styles from "src/components/Footer.module.css";
 
 export default function Footer(): ReactElement {
   return (

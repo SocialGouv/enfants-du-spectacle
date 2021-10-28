@@ -1,9 +1,8 @@
 import { Col, Container, Row } from "@dataesr/react-dsfr";
 import React from "react";
-
-import Footer from "./Footer";
-import Header from "./Header";
-import styles from "./Layout.module.css";
+import Footer from "src/components/Footer";
+import Header from "src/components/Header";
+import styles from "src/components/Layout.module.css";
 
 interface Props {
   children: React.ReactNode;

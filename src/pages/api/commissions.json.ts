@@ -1,8 +1,8 @@
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { getCommissions } from "src/lib/queries";
 import superjson from "superjson";
 
-import { getCommissions } from "../../lib/queries";
 import { PrismaClient } from ".prisma/client";
 
 const handler: NextApiHandler = async (req, res) => {

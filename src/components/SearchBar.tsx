@@ -1,7 +1,6 @@
 import { Title } from "@dataesr/react-dsfr";
 import React from "react";
-
-import styles from "./SearchBar.module.scss";
+import styles from "src/components/SearchBar.module.scss";
 
 interface Props {
   value: string;

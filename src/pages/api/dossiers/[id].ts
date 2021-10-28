@@ -1,10 +1,10 @@
 import type { StatutProjet } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import type { TransitionEvent } from "src/lib/statutProjetStateMachine";
+import { factory as statutProjetStateMachineFactory } from "src/lib/statutProjetStateMachine";
 import superjson from "superjson";
 
-import type { TransitionEvent } from "../../../lib/statutProjetStateMachine";
-import { factory as statutProjetStateMachineFactory } from "../../../lib/statutProjetStateMachine";
 import { PrismaClient } from ".prisma/client";
 
 const handler: NextApiHandler = async (req, res) => {

@@ -1,13 +1,13 @@
 import { Select, Table, Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import ChangeStatutProjetButton from "src/components/ChangeStatutProjetButton";
+import Layout from "src/components/Layout";
+import { frenchDateText } from "src/lib/helpers";
+import styles from "src/styles/dossiers.module.scss";
 import { parse as superJSONParse } from "superjson";
 
-import ChangeStatutProjetButton from "../../components/ChangeStatutProjetButton";
-import Layout from "../../components/Layout";
-import { frenchDateText } from "../../lib/helpers";
-import styles from "./dossiers.module.scss";
 import type {
   Commission,
   Enfant,
@@ -23,8 +23,9 @@ type ProjetData = Projet & {
   societeProduction: SocieteProduction;
   enfants: Enfant[];
 };
+
 interface Props {
-  projet: ProjetData;
+  projet?: ProjetData;
   users: User[];
 }
 
@@ -55,13 +56,19 @@ function updateProjet(
 }
 
 const Page: React.FC<Props> = (props) => {
+  const { data: session } = useSession();
+
   const { users } = props;
   const [projet, setProjet] = useState(props.projet);
-  const [assignedUserId, setAssignedUserId] = useState(projet.userId);
+  const [assignedUserId, setAssignedUserId] = useState(projet?.userId);
 
   useEffect(() => {
-    setAssignedUserId(projet.userId);
-  }, [projet.userId]);
+    setAssignedUserId(projet?.userId);
+  }, [projet?.userId]);
+
+  if (!session) {
+    return <Layout>Veuillez vous connecter</Layout>;
+  }
 
   const onChangeStatut = (transitionEvent: string) => {
     updateProjet(projet, { transitionEvent }, setProjet);
