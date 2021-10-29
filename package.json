@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --no-lint",
-    "start": "npx prisma migrate deploy && npx prisma generate && next start",
+    "start": "npx prisma migrate deploy && next start",
     "lint": "eslint components pages lib",
     "prepare": "husky install"
   },

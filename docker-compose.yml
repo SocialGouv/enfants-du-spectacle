@@ -5,6 +5,7 @@ services:
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
+    container_name: db
     environment:
       POSTGRES_USER: eds
       POSTGRES_PASSWORD: pwd123
