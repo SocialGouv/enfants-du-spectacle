@@ -1,4 +1,5 @@
 import { Title } from "@dataesr/react-dsfr";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "src/components/SearchResults.module.scss";
 import StatutProjetTag from "src/components/StatutProjetTag";
@@ -12,8 +13,12 @@ interface EnfantProps {
 }
 
 const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
+  const router = useRouter();
   return (
-    <tr className={styles.row}>
+    <tr
+      className={styles.row}
+      onClick={async () => router.push(`/dossiers/${enfant.projet.id}`)}
+    >
       <td>
         <StatutProjetTag projet={enfant.projet} />
       </td>
@@ -37,8 +42,12 @@ interface ProjetProps {
 }
 
 const ProjetRow: React.FC<ProjetProps> = ({ projet }) => {
+  const router = useRouter();
   return (
-    <tr className={styles.row}>
+    <tr
+      className={styles.row}
+      onClick={async () => router.push(`/dossiers/${projet.id}`)}
+    >
       <td>
         <StatutProjetTag projet={projet} />
       </td>
