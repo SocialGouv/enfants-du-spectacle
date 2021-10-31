@@ -1,16 +1,18 @@
 
-table.projets{
+.projetGrid {
+  grid-template-columns: 10rem 1.3fr 1.3fr .4fr 1fr;
+}
 
-  .nomProjet {
-    max-width: 300px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
 
-  .nomUser {
-    text-transform: capitalize;
-  }
+.nomProjet {
+  max-width: 300px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.nomUser {
+  text-transform: capitalize;
 }
 
 .projetTitle {

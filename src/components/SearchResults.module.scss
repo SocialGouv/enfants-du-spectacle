@@ -1,8 +1,13 @@
 .nom {
   font-weight: bold;
 }
-.row:hover, .row:focus, .row:active {
-  background-color: #eee;
-  border-color: #eee;
-  cursor: pointer;
+
+
+.enfantGrid {
+  grid-template-columns: 10rem 1fr 1fr 1fr;
+}
+
+
+.projetGrid {
+  grid-template-columns: 10rem 1.3fr 1.3fr .4fr 1fr;
 }

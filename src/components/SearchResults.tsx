@@ -1,9 +1,9 @@
 import { Title } from "@dataesr/react-dsfr";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import React from "react";
+import AssignedAgent from "src/components/AssignedAgent";
 import styles from "src/components/SearchResults.module.scss";
 import StatutProjetTag from "src/components/StatutProjetTag";
-import { shortUserName } from "src/lib/helpers";
 import type { SearchResultsType } from "src/lib/queries";
 
 import type { Enfant, Projet, SocieteProduction, User } from ".prisma/client";
@@ -13,21 +13,21 @@ interface EnfantProps {
 }
 
 const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
-  const router = useRouter();
   return (
-    <tr
-      className={styles.row}
-      onClick={async () => router.push(`/dossiers/${enfant.projet.id}`)}
-    >
-      <td>
+    <div className={`${styles.enfantGrid} itemGrid`}>
+      <div>
         <StatutProjetTag projet={enfant.projet} />
-      </td>
-      <td className={styles.nom}>
+      </div>
+      <div className={styles.nom}>
         {enfant.prenom} {enfant.nom}
-      </td>
-      <td>{enfant.projet.nom}</td>
-      <td>{enfant.projet.user && shortUserName(enfant.projet.user)}</td>
-    </tr>
+      </div>
+      <div>
+        <Link href={`/dossiers/${enfant.projet.id}`}>{enfant.projet.nom}</Link>
+      </div>
+      <div>
+        <AssignedAgent projet={enfant.projet} />
+      </div>
+    </div>
   );
 };
 
@@ -42,22 +42,22 @@ interface ProjetProps {
 }
 
 const ProjetRow: React.FC<ProjetProps> = ({ projet }) => {
-  const router = useRouter();
   return (
-    <tr
-      className={styles.row}
-      onClick={async () => router.push(`/dossiers/${projet.id}`)}
-    >
-      <td>
+    <div className={`${styles.projetGrid} itemGrid`}>
+      <div>
         <StatutProjetTag projet={projet} />
-      </td>
-      <td className={styles.nom}>{projet.nom}</td>
-      <td>{projet.societeProduction.nom}</td>
-      <td>
+      </div>
+      <div className={styles.nom}>
+        <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>
+      </div>
+      <div>{projet.societeProduction.nom}</div>
+      <div>
         <b>{projet._count?.enfants}</b>&nbsp;enfants
-      </td>
-      <td>{projet.user && shortUserName(projet.user)}</td>
-    </tr>
+      </div>
+      <div>
+        <AssignedAgent projet={projet} />
+      </div>
+    </div>
   );
 };
 
@@ -70,19 +70,6 @@ const SearchResults: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <Title as="h3">Enfants</Title>
-      <div className="card">
-        {enfants.length == 0 && <span>aucun enfant trouvé</span>}
-        {enfants.length > 0 && (
-          <table className="cardTable">
-            <tbody>
-              {enfants.map((enfant) => (
-                <EnfantRow key={enfant.id} enfant={enfant} />
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
       <Title as="h3">Projets</Title>
       <div className="card">
         {projets.length == 0 && <span>aucun projet trouvé</span>}
@@ -94,6 +81,17 @@ const SearchResults: React.FC<Props> = ({
               ))}
             </tbody>
           </table>
+        )}
+      </div>
+      <Title as="h3">Enfants</Title>
+      <div className="card">
+        {enfants.length == 0 && <span>aucun enfant trouvé</span>}
+        {enfants.length > 0 && (
+          <div className="enfantsContainer">
+            {enfants.map((enfant) => (
+              <EnfantRow key={enfant.id} enfant={enfant} />
+            ))}
+          </div>
         )}
       </div>
     </>

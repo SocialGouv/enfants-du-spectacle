@@ -4,49 +4,46 @@
   background-color: white;
 }
 
-.cardTable{
-  width: 100%;
-
-  td {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-  }
-
-  tr:last-child td {
-    border-bottom: none;
-  }
-
-  thead {
-    color: #3366cc;
-    text-align: left;
-    font-variant-caps: all-petite-caps;
-  }
+.itemGrid {
+  display: grid;
+  padding: .7rem 0;
+  border-bottom: 1px solid #eee;
 }
+.itemGrid:last-child {
+  border-bottom: none;
+}
+.headGrid{
+  color: #3366cc;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-bottom: none;
+}
+
 
 .state-accepte{
-  background-color: #42c7b0 !important;
+  background-color: #D4F4E1 !important;
 }
 .state-avisAjourne{
-  background-color: #dee92c !important;
+  background-color: #FDEDD1 !important;
 }
 .state-avisDefavorable{
-  background-color: #ec3c53 !important;
+  background-color: #FDEDD1 !important;
 }
 .state-favorable{
-  background-color: #42c7b0 !important;
+  background-color: #D4F4E1 !important;
 }
 .state-favorableSousReserve{
   background-color: #5e8f82 !important;
 }
 .state-construction{
-  background-color: #dee92c !important;
+  background-color: #FDEDD1 !important;
 }
 .state-instruction{
-  background-color: #c26e0f !important;
+  background-color: #FDEDD1 !important;
 }
 .state-pret{
-  background-color: #42c7b0 !important;
+  background-color: #D4F4E1 !important;
 }
 .state-refuse{
-  background-color: #ec3c53 !important;
+  background-color: #FDEDD1 !important;
 }
