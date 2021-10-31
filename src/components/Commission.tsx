@@ -49,7 +49,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
         </div>
       </div>
       <div style={{ marginBottom: "2rem" }}>
-        <b>{projetsCount}</b> projets - <b>{enfantsCount}</b> enfants
+        <b>{projetsCount}</b> dossiers - <b>{enfantsCount}</b> enfants
       </div>
 
       <div className={`${styles.projetGrid} itemGrid headGrid`}>
