@@ -40,7 +40,7 @@ const searchEnfants = async (
   search: string
 ): Promise<(Enfant & { projet: Projet & { user: User | null } })[]> => {
   return prismaClient.enfant.findMany({
-    include: { projet: { include: { user: true } } },
+    include: { projet: { include: { societeProduction: true, user: true } } },
     where: { OR: [{ nom: { search } }, { prenom: { search } }] },
   });
 };
@@ -68,7 +68,12 @@ const searchProjets = async (
 };
 
 interface SearchResultsType {
-  enfants: (Enfant & { projet: Projet & { user?: User | null } })[];
+  enfants: (Enfant & {
+    projet: Projet & {
+      user?: User | null;
+      societeProduction: SocieteProduction;
+    };
+  })[];
   projets: (Projet & {
     societeProduction: SocieteProduction;
     user: User | null;
@@ -78,5 +83,10 @@ interface SearchResultsType {
   })[];
 }
 
-export type { CommissionData, ProjetData, SearchResultsType };
+interface DossiersFilters {
+  userId?: number;
+  societeProductionId?: number;
+}
+
+export type { CommissionData, DossiersFilters, ProjetData, SearchResultsType };
 export { getCommissions, searchEnfants, searchProjets };

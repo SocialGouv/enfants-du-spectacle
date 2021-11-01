@@ -8,12 +8,21 @@ import FilterBarText from "src/components/FilterBarText";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
-import type { CommissionData, SearchResultsType } from "src/lib/queries";
+import {
+  filterCommissions,
+  filterSearchResults,
+  getFilterableSocietesProductions,
+} from "src/lib/helpers";
+import type {
+  CommissionData,
+  DossiersFilters,
+  SearchResultsType,
+} from "src/lib/queries";
 import { getCommissions, searchEnfants, searchProjets } from "src/lib/queries";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
-import type { User } from ".prisma/client";
+import type { SocieteProduction, User } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
 
 interface Props {
@@ -21,15 +30,14 @@ interface Props {
   searchResults?: SearchResultsType;
   searchValue?: string;
   allUsers: User[];
-}
-interface Filters {
-  userId?: number;
+  filters?: DossiersFilters;
 }
 
 const Page: React.FC<Props> = ({
   searchValue: initialSearchValue,
   commissions: initialCommissions,
   searchResults: initialSearchResults,
+  filters: initialFilters,
   allUsers,
 }) => {
   const { data: session } = useSession();
@@ -43,8 +51,12 @@ const Page: React.FC<Props> = ({
   const [commissions] = useState(initialCommissions);
   const [filteredCommissions, setFilteredCommissions] =
     useState<CommissionData[]>();
+  const [filterableSocieteProductions, setFilterableSocietesProductions] =
+    useState<SocieteProduction[]>(
+      getFilterableSocietesProductions(searchResults, commissions)
+    );
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<DossiersFilters>(initialFilters ?? {});
   const router = useRouter();
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -58,30 +70,14 @@ const Page: React.FC<Props> = ({
     setFilters({ ...filters, [name]: value });
   }
 
+  // Apply filters to displayed dossiers (client-side)
   useEffect(() => {
-    if (!filters.userId) {
-      setFilteredCommissions(commissions);
-      setFilteredSearchResults(searchResults);
-      return;
-    }
-    setFilteredCommissions(
-      commissions.map((commission) => ({
-        ...commission,
-        projets: commission.projets.filter((p) => p.userId == filters.userId),
-      }))
-    );
-    if (searchResults) {
-      setFilteredSearchResults({
-        enfants: searchResults.enfants.filter(
-          (e) => e.projet.userId == filters.userId
-        ),
-        projets: searchResults.projets.filter(
-          (p) => p.userId == filters.userId
-        ),
-      });
-    }
-  }, [filters, searchResults, initialCommissions]);
+    setFilteredCommissions(filterCommissions(commissions, filters));
+    if (!searchResults) return;
+    setFilteredSearchResults(filterSearchResults(searchResults, filters));
+  }, [filters, searchResults, commissions]);
 
+  // Trigger search for word (server-side)
   useEffect(() => {
     if (!debouncedSearch) {
       setSearchResults(null);
@@ -104,11 +100,32 @@ const Page: React.FC<Props> = ({
       });
   }, [debouncedSearch]);
 
+  // Refresh filterable societe productions
+  useEffect(() => {
+    const societes = getFilterableSocietesProductions(
+      searchResults,
+      commissions
+    );
+    setFilterableSocietesProductions(societes);
+    if (
+      filters.societeProductionId &&
+      !societes.find((s) => s.id == filters.societeProductionId)
+    ) {
+      setFilters({ ...filters, societeProductionId: undefined });
+    }
+  }, [searchResults, commissions, filters]);
+
+  // synchronize URL querystring
   useEffect(() => {
     const searchParams = new URLSearchParams();
     if (loading) return;
     if (debouncedSearch) searchParams.append("search", debouncedSearch);
     if (filters.userId) searchParams.append("userId", String(filters.userId));
+    if (filters.societeProductionId)
+      searchParams.append(
+        "societeProductionId",
+        String(filters.societeProductionId)
+      );
 
     const p = async () =>
       router.push(
@@ -138,7 +155,8 @@ const Page: React.FC<Props> = ({
           }
           allUsers={allUsers}
           onChangeFilter={onChangeFilter}
-          filteredUserId={filters.userId}
+          allSocieteProductions={filterableSocieteProductions}
+          filters={filters}
         />
       }
     >
@@ -165,6 +183,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const prisma = new PrismaClient();
     const commissions = await getCommissions(prisma);
     const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
+    const filters = {
+      societeProductionId: query.societeProductionId,
+      userId: query.userId,
+    };
     if (query.search) {
       const searchResults = {
         enfants: await searchEnfants(prisma, query.search as string),
@@ -174,13 +196,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
           allUsers,
           commissions,
+          filters,
           searchResults,
           searchValue: query.search,
           session,
         },
       };
     }
-    return { props: { allUsers, commissions, session } };
+    return { props: { allUsers, commissions, filters, session } };
   }
   return { props: { session } };
 };

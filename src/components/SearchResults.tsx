@@ -74,13 +74,11 @@ const SearchResults: React.FC<Props> = ({
       <div className="card">
         {projets.length == 0 && <span>aucun projet trouvé</span>}
         {projets.length > 0 && (
-          <table className="cardTable">
-            <tbody>
-              {projets.map((projet) => (
-                <ProjetRow key={projet.id} projet={projet} />
-              ))}
-            </tbody>
-          </table>
+          <div className="projetsContainer">
+            {projets.map((projet) => (
+              <ProjetRow key={projet.id} projet={projet} />
+            ))}
+          </div>
         )}
       </div>
       <Title as="h3">Enfants</Title>

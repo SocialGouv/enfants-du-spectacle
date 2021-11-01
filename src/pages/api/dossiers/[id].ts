@@ -58,9 +58,8 @@ const handler: NextApiHandler = async (req, res) => {
     updates.statut = stateMachine.state;
   }
 
-  if (typeof parsed.userId === "string") {
-    const userId = parseInt(parsed.userId as string, 10);
-    updates.userId = userId;
+  if (typeof parsed.userId === "number" || parsed.userId === null) {
+    updates.userId = parsed.userId;
   }
 
   const updatedProjet = await prisma.projet.update({

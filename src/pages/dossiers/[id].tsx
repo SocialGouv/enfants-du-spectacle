@@ -25,7 +25,7 @@ type ProjetData = Projet & {
 };
 
 interface Props {
-  projet?: ProjetData;
+  projet: ProjetData;
   users: User[];
 }
 
@@ -60,11 +60,11 @@ const Page: React.FC<Props> = (props) => {
 
   const { users } = props;
   const [projet, setProjet] = useState(props.projet);
-  const [assignedUserId, setAssignedUserId] = useState(projet?.userId);
+  const [assignedUserId, setAssignedUserId] = useState(projet.userId);
 
   useEffect(() => {
-    setAssignedUserId(projet?.userId);
-  }, [projet?.userId]);
+    setAssignedUserId(projet.userId);
+  }, [projet.userId]);
 
   if (!session) {
     return <Layout>Veuillez vous connecter</Layout>;
@@ -78,7 +78,7 @@ const Page: React.FC<Props> = (props) => {
     event
   ) => {
     const userId = event.target.value;
-    updateProjet(projet, { userId: userId }, setProjet);
+    updateProjet(projet, { userId: userId ? Number(userId) : null }, setProjet);
   };
 
   const title = (
@@ -89,7 +89,7 @@ const Page: React.FC<Props> = (props) => {
   return (
     <Layout headerMiddle={title}>
       <div className={styles.title}>
-        <Title as="h1">Le Projet</Title>
+        <Title as="h1">Le Dossier</Title>
         <ChangeStatutProjetButton projet={projet} onChange={onChangeStatut} />
       </div>
 
@@ -100,9 +100,12 @@ const Page: React.FC<Props> = (props) => {
           </div>
           <div>
             <Select
-              selected={assignedUserId}
-              options={[{}].concat(
-                users.map((u) => ({ label: u.email, value: u.id }))
+              selected={assignedUserId ? String(assignedUserId) : ""}
+              options={[{ label: "", value: "" }].concat(
+                users.map((u) => ({
+                  label: u.email ?? "",
+                  value: String(u.id),
+                }))
               )}
               onChange={onAssignUserId}
             />
