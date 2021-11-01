@@ -1,7 +1,7 @@
 import { Select } from "@dataesr/react-dsfr";
 import React from "react";
-import type { DossiersFilters } from "src";
 import styles from "src/components/FilterBar.module.scss";
+import { grandesCategoriesOptions } from "src/lib/categories";
 
 import type { SocieteProduction, User } from ".prisma/client";
 
@@ -34,6 +34,12 @@ const FilterBar: React.FC<Props> = ({
     (event) => {
       onChangeFilter("societeProductionId", Number(event.target.value));
     };
+
+  const onChangeGrandeCategorie: React.ChangeEventHandler<HTMLOptionElement> = (
+    event
+  ) => {
+    onChangeFilter("grandeCategorie", event.target.value);
+  };
 
   const defaultUserOption: Option = {
     label: "Instructeur responsable",
@@ -68,6 +74,16 @@ const FilterBar: React.FC<Props> = ({
             }))
           )}
           onChange={onChangeSocieteProductionId}
+        />
+      </span>
+      <span className={styles.filterContainer}>
+        <Select
+          id="grandeCategorie"
+          selected={filters.grandeCategorie || ""}
+          options={[{ label: "Catégorie", value: "" }].concat(
+            grandesCategoriesOptions
+          )}
+          onChange={onChangeGrandeCategorie}
         />
       </span>
     </div>

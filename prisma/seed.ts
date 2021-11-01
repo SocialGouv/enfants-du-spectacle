@@ -1,4 +1,9 @@
-import type { Prisma, User } from "@prisma/client";
+import type {
+  CategorieProjet,
+  Prisma,
+  StatutProjet,
+  User,
+} from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import parse from "csv-parse/lib/sync";
 import faker from "faker";
@@ -30,6 +35,8 @@ interface ProjetCSV {
   nom: string;
   nombreEnfants: number;
   userEmail: string;
+  categorie: CategorieProjet;
+  statut: StatutProjet;
 }
 
 function readCsv<Type>(name: string): Type[] {
@@ -104,11 +111,13 @@ async function main() {
     const projet = projetsSeeds.shift();
     if (!projet) throw Error("no more projets");
     const data: Prisma.ProjetUncheckedCreateInput = {
+      categorie: projet.categorie,
       commissionId: commission.id,
       dossierDSNumero: dossierDS.numero,
       enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
       nom: projet.nom,
       societeProductionId: societeProduction.id,
+      statut: projet.statut,
     };
     if (projet.userEmail) {
       data.userId = getUserByEmail(users, projet.userEmail).id;

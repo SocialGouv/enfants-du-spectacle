@@ -4,6 +4,10 @@ import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import ChangeStatutProjetButton from "src/components/ChangeStatutProjetButton";
 import Layout from "src/components/Layout";
+import {
+  categorieToGrandeCategorieLabel,
+  categorieToLabel,
+} from "src/lib/categories";
 import { frenchDateText } from "src/lib/helpers";
 import styles from "src/styles/dossiers.module.scss";
 import { parse as superJSONParse } from "superjson";
@@ -118,12 +122,12 @@ const Page: React.FC<Props> = (props) => {
         </div>
         <div>
           <div>
-            <b>Type de projet</b>
+            <b>Type de dossier</b>
           </div>
           <div>
-            Cinéma
+            {categorieToGrandeCategorieLabel(projet.categorie)}
             <br />
-            Long-Métrage
+            {categorieToLabel(projet.categorie)}
           </div>
         </div>
         <div>

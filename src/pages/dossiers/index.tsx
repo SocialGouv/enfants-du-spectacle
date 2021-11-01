@@ -121,6 +121,8 @@ const Page: React.FC<Props> = ({
     if (loading) return;
     if (debouncedSearch) searchParams.append("search", debouncedSearch);
     if (filters.userId) searchParams.append("userId", String(filters.userId));
+    if (filters.grandeCategorie)
+      searchParams.append("grandeCategorie", filters.grandeCategorie);
     if (filters.societeProductionId)
       searchParams.append(
         "societeProductionId",
@@ -184,6 +186,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const commissions = await getCommissions(prisma);
     const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
     const filters = {
+      grandeCategorie: query.grandeCategorie,
       societeProductionId: query.societeProductionId,
       userId: query.userId,
     };

@@ -1,4 +1,5 @@
 import type { Projet, SocieteProduction, User } from "@prisma/client";
+import { grandeCategorieToCategorieValues } from "src/lib/categories";
 import type {
   CommissionData,
   DossiersFilters,
@@ -42,7 +43,11 @@ function filterProjectFn(filters: DossiersFilters): FilterProjectFn {
     return (
       (!filters.userId || projet.userId == filters.userId) &&
       (!filters.societeProductionId ||
-        projet.societeProductionId == filters.societeProductionId)
+        projet.societeProductionId == filters.societeProductionId) &&
+      (!filters.grandeCategorie ||
+        grandeCategorieToCategorieValues(filters.grandeCategorie).includes(
+          projet.categorie
+        ))
     );
   };
 }

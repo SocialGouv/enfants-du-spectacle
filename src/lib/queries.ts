@@ -1,3 +1,5 @@
+import type { GrandeCategorieValue } from "src/lib/categories";
+
 import type {
   Commission,
   Enfant,
@@ -86,6 +88,7 @@ interface SearchResultsType {
 interface DossiersFilters {
   userId?: number;
   societeProductionId?: number;
+  grandeCategorie?: GrandeCategorieValue;
 }
 
 export type { CommissionData, DossiersFilters, ProjetData, SearchResultsType };

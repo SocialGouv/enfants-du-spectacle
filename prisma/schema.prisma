@@ -54,10 +54,35 @@ enum StatutProjet {
   REFUSE
 }
 
+enum CategorieProjet {
+  LONG_METRAGE
+  COURT_METRAGE
+  TELEFILM
+  SERIE
+  EMISSION_TV
+  CLIP
+  THEATRE
+  DOUBLAGE
+  MUSIQUE_STUDIO
+  COMEDIE_MUSICALE
+  CONCERT
+  OPERA
+  BALLET
+  DANSE
+  CIRQUE
+  RADIO
+  PHOTO
+  FILM_INSTITUTIONNEL
+  JEU_VIDEO
+  VIDEO_EN_LIGNE
+  AUTRE
+}
+
 model Projet {
   id                  Int               @id @default(autoincrement())
   nom                 String
   statut              StatutProjet      @default(CONSTRUCTION)
+  categorie           CategorieProjet
   commissionId        Int
   commission          Commission        @relation(fields: [commissionId], references: [id])
   societeProductionId Int
