@@ -1,17 +1,18 @@
 import type { GrandeCategorieValue } from "src/lib/categories";
-import type { ProjetData, ProjetDataLight } from "src/lib/types";
+import type {
+  CommissionData,
+  ProjetData,
+  ProjetDataLight,
+} from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 
 import type {
-  Commission,
   Enfant,
   PrismaClient,
   Projet,
   SocieteProduction,
   User,
 } from ".prisma/client";
-
-type CommissionData = Commission & { projets: ProjetDataLight[] };
 
 const getCommissions = async (
   prismaClient: PrismaClient
@@ -27,7 +28,7 @@ const getCommissions = async (
         orderBy: { id: "desc" },
       },
     },
-    take: 3,
+    where: { projets: { some: {} } },
   });
 };
 

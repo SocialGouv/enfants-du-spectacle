@@ -1,4 +1,5 @@
 import type { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -163,14 +164,19 @@ const Page: React.FC<Props> = ({
       }
     >
       {loading && <div>chargement...</div>}
-      {!loading &&
-        !debouncedSearch &&
-        filteredCommissions?.map((commission: CommissionData) => (
-          <CommissionBloc
-            key={commission.date.toString()}
-            commission={commission}
-          />
-        ))}
+      {!loading && !debouncedSearch && (
+        <>
+          {filteredCommissions?.map((commission: CommissionData) => (
+            <CommissionBloc
+              key={commission.date.toString()}
+              commission={commission}
+            />
+          ))}
+          <div>
+            <Link href="/commissions">Commissions passées</Link>
+          </div>
+        </>
+      )}
       {!loading && debouncedSearch && filteredSearchResults && (
         <SearchResults searchResults={filteredSearchResults} />
       )}

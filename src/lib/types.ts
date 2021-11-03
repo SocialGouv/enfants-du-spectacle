@@ -21,4 +21,6 @@ type ProjetData = Projet & {
   enfants: Enfant[];
 };
 
-export type { ProjetData, ProjetDataLight };
+type CommissionData = Commission & { projets: ProjetDataLight[] };
+
+export type { CommissionData, ProjetData, ProjetDataLight };

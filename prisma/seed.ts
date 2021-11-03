@@ -10,6 +10,12 @@ import faker from "faker";
 import fs from "fs";
 import slugify from "slugify";
 
+const NOMBRE_PROJETS = [12, 13, 5, 10, 23, 4, 12, 17, 23, 12, 20, 16];
+const projetsCount = NOMBRE_PROJETS.reduce((i, y) => i + y, 0);
+const NUMEROS_DOSSIERS_DS: number[] = Array.from(Array(projetsCount)).map(
+  (i, y) => 14000 + y
+);
+
 const prisma = new PrismaClient();
 interface UserCSV {
   email: string;
@@ -70,14 +76,16 @@ async function main() {
     )
   );
 
-  for (const commission of readCsv<CommissionCSV>("commissions")) {
-    await prisma.commission.create({
-      data: {
-        date: new Date(commission.date),
-        dateLimiteDepot: new Date(commission.dateLimiteDepot),
-        departement: commission.departement,
-      },
-    });
+  for (const filename of ["commissions-2021", "commissions-2022"]) {
+    for (const commission of readCsv<CommissionCSV>(filename)) {
+      await prisma.commission.create({
+        data: {
+          date: new Date(commission.date),
+          dateLimiteDepot: new Date(commission.dateLimiteDepot),
+          departement: commission.departement,
+        },
+      });
+    }
   }
 
   for (const societeProduction of readCsv<SocieteCSV>("societes")) {
@@ -89,40 +97,46 @@ async function main() {
 
   const projetsSeeds = readCsv<ProjetCSV>("projets");
 
-  const commission = await prisma.commission.findFirst();
-  const societeProductions = await prisma.societeProduction.findMany();
-  if (!commission) throw Error();
-
-  for await (const [i, y] of Array.from(Array(50)).entries()) {
-    const societeProduction = randomItem(societeProductions);
-    const nom = faker.name.firstName();
-    const prenom = faker.name.firstName();
-    const email = faker.internet.email(
-      prenom,
-      nom,
-      `${slugify(societeProduction.nom, { lower: true })}.fr`
-    );
-    const demandeur = await prisma.demandeur.create({
-      data: { email, nom, prenom, societeProductionId: societeProduction.id },
-    });
-    const dossierDS = await prisma.dossierDS.create({
-      data: { demandeurId: demandeur.id, numero: 14001 + i },
-    });
-    const projet = projetsSeeds.shift();
-    if (!projet) throw Error("no more projets");
-    const data: Prisma.ProjetUncheckedCreateInput = {
-      categorie: projet.categorie,
-      commissionId: commission.id,
-      dossierDSNumero: dossierDS.numero,
-      enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
-      nom: projet.nom,
-      societeProductionId: societeProduction.id,
-      statut: projet.statut,
-    };
-    if (projet.userEmail) {
-      data.userId = getUserByEmail(users, projet.userEmail).id;
+  for (const commission of await prisma.commission.findMany({
+    take: NOMBRE_PROJETS.length,
+  })) {
+    const societesProductions = await prisma.societeProduction.findMany();
+    for await (const _y of Array.from(
+      Array(NOMBRE_PROJETS.shift())
+    ).entries()) {
+      const societeProduction = randomItem(societesProductions);
+      const nom = faker.name.firstName();
+      const prenom = faker.name.firstName();
+      const email = faker.internet.email(
+        prenom,
+        nom,
+        `${slugify(societeProduction.nom, { lower: true })}.fr`
+      );
+      const demandeur = await prisma.demandeur.create({
+        data: { email, nom, prenom, societeProductionId: societeProduction.id },
+      });
+      const dossierDS = await prisma.dossierDS.create({
+        data: {
+          demandeurId: demandeur.id,
+          numero: NUMEROS_DOSSIERS_DS.shift() ?? 0,
+        },
+      });
+      const projet = projetsSeeds.shift();
+      if (!projet) throw Error("no more projets");
+      const data: Prisma.ProjetUncheckedCreateInput = {
+        categorie: projet.categorie,
+        commissionId: commission.id,
+        dossierDSNumero: dossierDS.numero,
+        enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
+        nom: projet.nom,
+        societeProductionId: societeProduction.id,
+        statut: projet.statut,
+      };
+      if (projet.userEmail) {
+        data.userId = getUserByEmail(users, projet.userEmail).id;
+      }
+      await prisma.projet.create({ data });
     }
-    await prisma.projet.create({ data });
   }
 }
 

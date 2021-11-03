@@ -1,0 +1,19 @@
+.row{
+  display: grid;
+  grid-template-columns: 1fr 10em 10em 1fr;
+}
+.row>div:last-child{
+  text-align: right;
+}
+
+.seeProjects{
+  border-radius: 15px;
+  border: 1px #3366cc solid;
+  color: #3366cc;
+  padding: 4px 10px;
+  text-decoration: none;
+}
+.seeProjects:hover {
+  background-color: #3366cc;
+  color: white;
+}
