@@ -1,68 +1,24 @@
-import { Select, Table, Title } from "@dataesr/react-dsfr";
+import { Title } from "@dataesr/react-dsfr";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import ChangeStatutProjetButton from "src/components/ChangeStatutProjetButton";
+import Dossier from "src/components/Dossier";
 import Layout from "src/components/Layout";
-import {
-  categorieToGrandeCategorieLabel,
-  categorieToLabel,
-} from "src/lib/categories";
-import { frenchDateText } from "src/lib/helpers";
-import styles from "src/styles/dossiers.module.scss";
-import { parse as superJSONParse } from "superjson";
+import { updateProjet } from "src/lib/queries";
+import type { ProjetData } from "src/lib/types";
 
-import type {
-  Commission,
-  Enfant,
-  Projet,
-  SocieteProduction,
-  User,
-} from ".prisma/client";
+import type { User } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
-
-type ProjetData = Projet & {
-  user: User | null;
-  commission: Commission;
-  societeProduction: SocieteProduction;
-  enfants: Enfant[];
-};
 
 interface Props {
   projet: ProjetData;
-  users: User[];
-}
-
-function updateProjet(
-  projet: Projet,
-  updates: Record<string, unknown>,
-  callback: (updatedProjet: ProjetData) => void
-) {
-  window
-    .fetch(`/api/dossiers/${projet.id}`, {
-      body: JSON.stringify(updates),
-      method: "PUT",
-    })
-    .then((r) => {
-      if (!r.ok) {
-        throw Error(`got status ${r.status}`);
-      }
-      return r;
-    })
-    .then(async (r) => r.text())
-    .then((rawJson) => {
-      const updatedProjet = superJSONParse<ProjetData>(rawJson);
-      callback(updatedProjet);
-    })
-    .catch((e) => {
-      throw e;
-    });
+  allUsers: User[];
 }
 
 const Page: React.FC<Props> = (props) => {
   const { data: session } = useSession();
 
-  const { users } = props;
+  const { allUsers } = props;
   const [projet, setProjet] = useState(props.projet);
   const [assignedUserId, setAssignedUserId] = useState(projet.userId);
 
@@ -74,15 +30,23 @@ const Page: React.FC<Props> = (props) => {
     return <Layout>Veuillez vous connecter</Layout>;
   }
 
+  function updateProjetAndReload(updates: {
+    transitionEvent?: string;
+    userId?: number;
+  }): void {
+    updateProjet(projet, updates, (p) => {
+      setProjet(p);
+    });
+  }
+
   const onChangeStatut = (transitionEvent: string) => {
-    updateProjet(projet, { transitionEvent }, setProjet);
+    updateProjetAndReload({ transitionEvent });
   };
 
-  const onAssignUserId: React.ChangeEventHandler<HTMLOptionElement> = (
-    event
-  ) => {
-    const userId = event.target.value;
-    updateProjet(projet, { userId: userId ? Number(userId) : null }, setProjet);
+  const onAssignUserId = (userId: number | null) => {
+    updateProjet(projet, { userId }, (p) => {
+      setProjet(p);
+    });
   };
 
   const title = (
@@ -92,67 +56,13 @@ const Page: React.FC<Props> = (props) => {
   );
   return (
     <Layout headerMiddle={title}>
-      <div className={styles.title}>
-        <Title as="h1">Le Dossier</Title>
-        <ChangeStatutProjetButton projet={projet} onChange={onChangeStatut} />
-      </div>
-
-      <div className={styles.summaryBloc}>
-        <div>
-          <div>
-            <b>Suivi par</b>
-          </div>
-          <div>
-            <Select
-              selected={assignedUserId ? String(assignedUserId) : ""}
-              options={[{ label: "", value: "" }].concat(
-                users.map((u) => ({
-                  label: u.email ?? "",
-                  value: String(u.id),
-                }))
-              )}
-              onChange={onAssignUserId}
-            />
-          </div>
-
-          <div>
-            <b>Date de commission</b>
-          </div>
-          <div>{frenchDateText(projet.commission.date)}</div>
-        </div>
-        <div>
-          <div>
-            <b>Type de dossier</b>
-          </div>
-          <div>
-            {categorieToGrandeCategorieLabel(projet.categorie)}
-            <br />
-            {categorieToLabel(projet.categorie)}
-          </div>
-        </div>
-        <div>
-          <b>Société</b>
-          <div>{projet.societeProduction.nom}</div>
-          <div>{projet.societeProduction.departement}</div>
-          <div>{projet.societeProduction.siret}</div>
-        </div>
-      </div>
-
-      <div className={styles.bloc}>
-        <Title as="h3">Enfants</Title>
-        {projet.enfants.length == 0 && <span>Aucun enfant</span>}
-        {projet.enfants.length > 0 && (
-          <Table
-            columns={[
-              { label: "Prénom", name: "prenom" },
-              { label: "Nom", name: "nom" },
-              { label: "Rôle", name: "role" },
-            ]}
-            data={projet.enfants}
-            rowKey="id"
-          />
-        )}
-      </div>
+      <Dossier
+        assignedUserId={assignedUserId}
+        projet={projet}
+        onAssignUserId={onAssignUserId}
+        onChangeStatut={onChangeStatut}
+        allUsers={allUsers}
+      />
     </Layout>
   );
 };
@@ -174,8 +84,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
       where: { id },
     });
-    const users = await prisma.user.findMany();
-    return { props: { projet, users } };
+    const allUsers = await prisma.user.findMany();
+    return { props: { allUsers, projet } };
   }
   return { props: { session } };
 };

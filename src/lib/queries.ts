@@ -1,4 +1,6 @@
 import type { GrandeCategorieValue } from "src/lib/categories";
+import type { ProjetData, ProjetDataLight } from "src/lib/types";
+import { parse as superJSONParse } from "superjson";
 
 import type {
   Commission,
@@ -9,15 +11,7 @@ import type {
   User,
 } from ".prisma/client";
 
-type ProjetData = Projet & {
-  user: User | null;
-  societeProduction: SocieteProduction;
-  _count: {
-    enfants: number;
-  } | null;
-};
-
-type CommissionData = Commission & { projets: ProjetData[] };
+type CommissionData = Commission & { projets: ProjetDataLight[] };
 
 const getCommissions = async (
   prismaClient: PrismaClient
@@ -69,6 +63,32 @@ const searchProjets = async (
   });
 };
 
+function updateProjet(
+  projet: Projet,
+  updates: Record<string, unknown>,
+  callback: (updatedProjet: ProjetData) => void
+): void {
+  window
+    .fetch(`/api/dossiers/${projet.id}`, {
+      body: JSON.stringify(updates),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .then(async (r) => r.text())
+    .then((rawJson) => {
+      const updatedProjet = superJSONParse<ProjetData>(rawJson);
+      callback(updatedProjet);
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
 interface SearchResultsType {
   enfants: (Enfant & {
     projet: Projet & {
@@ -91,5 +111,10 @@ interface DossiersFilters {
   grandeCategorie?: GrandeCategorieValue;
 }
 
-export type { CommissionData, DossiersFilters, ProjetData, SearchResultsType };
-export { getCommissions, searchEnfants, searchProjets };
+export type {
+  CommissionData,
+  DossiersFilters,
+  ProjetDataLight,
+  SearchResultsType,
+};
+export { getCommissions, searchEnfants, searchProjets, updateProjet };
