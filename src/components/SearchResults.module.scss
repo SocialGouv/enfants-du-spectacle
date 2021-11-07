@@ -2,12 +2,16 @@
   font-weight: bold;
 }
 
-
 .enfantGrid {
   grid-template-columns: 10rem 1fr 1fr 1fr;
+  align-items: center;
 }
-
 
 .projetGrid {
   grid-template-columns: 10rem 1.3fr 1.3fr .4fr 1fr;
+}
+
+.discret {
+  color: #666;
+  font-size: 0.8rem;
 }

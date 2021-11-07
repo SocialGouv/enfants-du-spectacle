@@ -14,8 +14,8 @@ const Layout: React.FC<Props> = ({ children, headerMiddle, headerBottom }) => {
   return (
     <div className={styles.container}>
       <Header childrenMiddle={headerMiddle} childrenBottom={headerBottom} />
-      <main style={{ minHeight: 600 }}>
-        <Container spacing="m-4w">
+      <main style={{ minHeight: 600, paddingTop: "2rem" }}>
+        <Container>
           <Row>
             <Col>{children}</Col>
           </Row>

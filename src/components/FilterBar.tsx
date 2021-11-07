@@ -2,6 +2,7 @@ import { Select } from "@dataesr/react-dsfr";
 import React from "react";
 import styles from "src/components/FilterBar.module.scss";
 import { grandesCategoriesOptions } from "src/lib/categories";
+import type { DossiersFilters } from "src/lib/queries";
 
 import type { SocieteProduction, User } from ".prisma/client";
 
@@ -10,7 +11,7 @@ interface Props {
   allUsers: User[];
   allSocieteProductions: SocieteProduction[];
   filters: DossiersFilters;
-  onChangeFilter: (name: string, value: number | string) => void;
+  onChangeFilters: (updates: Record<string, number | string>) => void;
 }
 interface Option {
   label: string | null;
@@ -22,23 +23,23 @@ const FilterBar: React.FC<Props> = ({
   allUsers,
   filters,
   allSocieteProductions,
-  onChangeFilter,
+  onChangeFilters,
 }) => {
   const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilter("userId", Number(event.target.value));
+    onChangeFilters({ userId: Number(event.target.value) });
   };
 
   const onChangeSocieteProductionId: React.ChangeEventHandler<HTMLOptionElement> =
     (event) => {
-      onChangeFilter("societeProductionId", Number(event.target.value));
+      onChangeFilters({ societeProductionId: Number(event.target.value) });
     };
 
   const onChangeGrandeCategorie: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilter("grandeCategorie", event.target.value);
+    onChangeFilters({ grandeCategorie: event.target.value });
   };
 
   const defaultUserOption: Option = {
@@ -51,42 +52,59 @@ const FilterBar: React.FC<Props> = ({
   };
 
   return (
-    <div>
-      {text}{" "}
-      <span className={styles.filterContainer || ""}>
-        <Select
-          id="userId"
-          selected={String(filters.userId)}
-          options={[defaultUserOption].concat(
-            allUsers.map((u) => ({ label: u.email, value: String(u.id) }))
-          )}
-          onChange={onChangeUserId}
-        />
-      </span>
-      <span className={styles.filterContainer}>
-        <Select
-          id="userId"
-          selected={String(filters.societeProductionId) || ""}
-          options={[defaultSocieteProductionOption].concat(
-            allSocieteProductions.map((s) => ({
-              label: s.nom,
-              value: String(s.id),
-            }))
-          )}
-          onChange={onChangeSocieteProductionId}
-        />
-      </span>
-      <span className={styles.filterContainer}>
-        <Select
-          id="grandeCategorie"
-          selected={filters.grandeCategorie || ""}
-          options={[{ label: "Catégorie", value: "" }].concat(
-            grandesCategoriesOptions
-          )}
-          onChange={onChangeGrandeCategorie}
-        />
-      </span>
-    </div>
+    <>
+      <div>
+        {text}{" "}
+        <span className={styles.filterContainer || ""}>
+          <Select
+            id="userId"
+            selected={String(filters.userId)}
+            options={[defaultUserOption].concat(
+              allUsers.map((u) => ({ label: u.email, value: String(u.id) }))
+            )}
+            onChange={onChangeUserId}
+          />
+        </span>
+        <span className={styles.filterContainer}>
+          <Select
+            id="userId"
+            selected={String(filters.societeProductionId) || ""}
+            options={[defaultSocieteProductionOption].concat(
+              allSocieteProductions.map((s) => ({
+                label: s.nom,
+                value: String(s.id),
+              }))
+            )}
+            onChange={onChangeSocieteProductionId}
+          />
+        </span>
+        <span className={styles.filterContainer}>
+          <Select
+            id="grandeCategorie"
+            selected={filters.grandeCategorie ?? ""}
+            options={[{ label: "Catégorie", value: "" }].concat(
+              grandesCategoriesOptions
+            )}
+            onChange={onChangeGrandeCategorie}
+          />
+        </span>
+        {Object.values(filters).some((f) => f) && (
+          <span className={styles.filterContainer}>
+            <button
+              onClick={() => {
+                onChangeFilters({
+                  grandeCategorie: "",
+                  societeProductionId: "",
+                  userId: "",
+                });
+              }}
+            >
+              effacer
+            </button>
+          </span>
+        )}
+      </div>
+    </>
   );
 };
 

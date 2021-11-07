@@ -1,8 +1,10 @@
 import {
+  Container,
   Header as HeaderSDE,
   HeaderBody,
   HeaderOperator,
   Logo,
+  Row,
   Service,
   Tool,
   ToolItem,
@@ -75,10 +77,18 @@ const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
         </Tool>
       </HeaderBody>
       {childrenMiddle && (
-        <div className={styles.headerMiddle}>{childrenMiddle}</div>
+        <div className={styles.middle}>
+          <Container>
+            <Row>{childrenMiddle}</Row>
+          </Container>
+        </div>
       )}
       {childrenBottom && (
-        <div className={styles.headerBottom}>{childrenBottom}</div>
+        <div className={styles.bottom}>
+          <Container>
+            <Row>{childrenBottom}</Row>
+          </Container>
+        </div>
       )}
     </HeaderSDE>
   );

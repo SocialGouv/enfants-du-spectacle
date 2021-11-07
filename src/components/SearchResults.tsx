@@ -9,7 +9,12 @@ import type { SearchResultsType } from "src/lib/queries";
 import type { Enfant, Projet, SocieteProduction, User } from ".prisma/client";
 
 interface EnfantProps {
-  enfant: Enfant & { projet: Projet & { user?: User | null } };
+  enfant: Enfant & {
+    projet: Projet & {
+      user?: User | null;
+      societeProduction: SocieteProduction;
+    };
+  };
 }
 
 const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
@@ -23,6 +28,9 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
       </div>
       <div>
         <Link href={`/dossiers/${enfant.projet.id}`}>{enfant.projet.nom}</Link>
+        <div className={styles.discret}>
+          {enfant.projet.societeProduction.nom}
+        </div>
       </div>
       <div>
         <AssignedAgent projet={enfant.projet} />

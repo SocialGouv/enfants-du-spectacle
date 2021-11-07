@@ -67,8 +67,8 @@ const Page: React.FC<Props> = ({
     setSearchValue(event.target.value);
   };
 
-  function onChangeFilter(name: string, value: number | string): void {
-    setFilters({ ...filters, [name]: value });
+  function onChangeFilters(updates: Record<string, number | string>): void {
+    setFilters({ ...filters, ...updates });
   }
 
   // Apply filters to displayed dossiers (client-side)
@@ -157,7 +157,7 @@ const Page: React.FC<Props> = ({
             />
           }
           allUsers={allUsers}
-          onChangeFilter={onChangeFilter}
+          onChangeFilters={onChangeFilters}
           allSocieteProductions={filterableSocieteProductions}
           filters={filters}
         />
@@ -172,8 +172,8 @@ const Page: React.FC<Props> = ({
               commission={commission}
             />
           ))}
-          <div>
-            <Link href="/commissions">Commissions passées</Link>
+          <div style={{ fontSize: "1.5rem", padding: "2rem 0 3rem 0" }}>
+            <Link href="/commissions">Commissions passées…</Link>
           </div>
         </>
       )}

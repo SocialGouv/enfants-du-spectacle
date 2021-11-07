@@ -11,7 +11,20 @@ import type { ProjetData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
 
-interface DossierProps {
+interface InfoProps {
+  title: string;
+}
+
+const Info: React.FC<InfoProps> = ({ title, children }) => {
+  return (
+    <div className={styles.info}>
+      <div className={styles.infoTitle}>{title}</div>
+      <div className={styles.infoContent}>{children}</div>
+    </div>
+  );
+};
+
+interface Props {
   projet: ProjetData;
   assignedUserId: number | null;
   onAssignUserId: (userId: number | null) => void;
@@ -19,7 +32,7 @@ interface DossierProps {
   allUsers: User[];
 }
 
-const Dossier: React.FC<DossierProps> = ({
+const Dossier: React.FC<Props> = ({
   projet,
   assignedUserId,
   onChangeStatut,
@@ -35,10 +48,7 @@ const Dossier: React.FC<DossierProps> = ({
 
       <div className={styles.summaryBloc}>
         <div>
-          <div>
-            <b>Suivi par</b>
-          </div>
-          <div>
+          <Info title="Suivi par">
             <Select
               selected={assignedUserId ? String(assignedUserId) : ""}
               options={[{ label: "", value: "" }].concat(
@@ -52,29 +62,21 @@ const Dossier: React.FC<DossierProps> = ({
                 onAssignUserId(userId ? Number(userId) : null);
               }}
             />
-          </div>
-
-          <div>
-            <b>Date de commission</b>
-          </div>
-          <div>{frenchDateText(projet.commission.date)}</div>
+          </Info>
+          <Info title="Date de commission">
+            {frenchDateText(projet.commission.date)}
+          </Info>
         </div>
-        <div>
-          <div>
-            <b>Type de dossier</b>
-          </div>
-          <div>
-            {categorieToGrandeCategorieLabel(projet.categorie)}
-            <br />
-            {categorieToLabel(projet.categorie)}
-          </div>
-        </div>
-        <div>
-          <b>Société</b>
+        <Info title="Type de dossier">
+          {categorieToGrandeCategorieLabel(projet.categorie)}
+          <br />
+          {categorieToLabel(projet.categorie)}
+        </Info>
+        <Info title="Société">
           <div>{projet.societeProduction.nom}</div>
           <div>{projet.societeProduction.departement}</div>
           <div>{projet.societeProduction.siret}</div>
-        </div>
+        </Info>
       </div>
 
       <div className={styles.bloc}>
