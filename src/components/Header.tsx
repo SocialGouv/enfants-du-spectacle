@@ -12,7 +12,7 @@ import {
 } from "@dataesr/react-dsfr";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React from "react";
 import styles from "src/components/Header.module.scss";
 import logoEds from "src/images/logo.png";
@@ -40,44 +40,37 @@ const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
             />
           </HeaderOperator>
           <Service title="Enfants du Spectacle" description="" />
-          <Tool>
-            <ToolItemGroup>
-              {!session && (
-                <ToolItem link="/api/auth/signin" onClick={signIn}>
-                  Connexion
+          {session && (
+            <Tool>
+              <ToolItemGroup>
+                <ToolItem>
+                  {session.user?.image && (
+                    <span
+                      style={{
+                        backgroundImage: `url(${session.user.image})`,
+                      }}
+                    />
+                  )}
+                  <span>
+                    <span>Connecté en tant que </span>
+                    <strong>
+                      {session.user?.email?.split("@")?.at(0) ??
+                        session.user?.name}
+                    </strong>
+                  </span>
                 </ToolItem>
-              )}
-              {session && (
-                <>
-                  <ToolItem>
-                    {session.user?.image && (
-                      <span
-                        style={{
-                          backgroundImage: `url(${session.user.image})`,
-                        }}
-                      />
-                    )}
-                    <span>
-                      <span>Connecté en tant que </span>
-                      <strong>
-                        {session.user?.email?.split("@")?.at(0) ??
-                          session.user?.name}
-                      </strong>
-                    </span>
-                  </ToolItem>
-                  <ToolItem
-                    link="/dossiers"
-                    onClick={async () => router.push("/dossiers")}
-                  >
-                    Dossiers
-                  </ToolItem>
-                  <ToolItem link="/api/auth/signout" onClick={signOut}>
-                    Déconnexion
-                  </ToolItem>
-                </>
-              )}
-            </ToolItemGroup>
-          </Tool>
+                <ToolItem
+                  link="/dossiers"
+                  onClick={async () => router.push("/dossiers")}
+                >
+                  Dossiers
+                </ToolItem>
+                <ToolItem link="/api/auth/signout" onClick={signOut}>
+                  Déconnexion
+                </ToolItem>
+              </ToolItemGroup>
+            </Tool>
+          )}
         </HeaderBody>
       </HeaderSDE>
 

@@ -22,6 +22,9 @@ export default NextAuth({
       // Or you can return a URL to redirect to: return '/unauthorized'
     },
   },
+  pages: {
+    verifyRequest: "/verifyRequest",
+  },
   providers: [
     EmailAuthProvider({
       from: process.env.EMAIL_FROM,

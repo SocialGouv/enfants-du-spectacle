@@ -187,34 +187,39 @@ const Page: React.FC<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const session = await getSession(context);
-  if (session) {
-    const prisma = new PrismaClient();
-    const commissions = await getCommissions(prisma);
-    const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
-    const filters = {
-      grandeCategorie: query.grandeCategorie,
-      societeProductionId: query.societeProductionId,
-      userId: query.userId,
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     };
-    if (query.search) {
-      const searchResults = {
-        enfants: await searchEnfants(prisma, query.search as string),
-        projets: await searchProjets(prisma, query.search as string),
-      };
-      return {
-        props: {
-          allUsers,
-          commissions,
-          filters,
-          searchResults,
-          searchValue: query.search,
-          session,
-        },
-      };
-    }
-    return { props: { allUsers, commissions, filters, session } };
   }
-  return { props: { session } };
+  const prisma = new PrismaClient();
+  const commissions = await getCommissions(prisma);
+  const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
+  const filters = {
+    grandeCategorie: query.grandeCategorie,
+    societeProductionId: query.societeProductionId,
+    userId: query.userId,
+  };
+  if (query.search) {
+    const searchResults = {
+      enfants: await searchEnfants(prisma, query.search as string),
+      projets: await searchProjets(prisma, query.search as string),
+    };
+    return {
+      props: {
+        allUsers,
+        commissions,
+        filters,
+        searchResults,
+        searchValue: query.search,
+        session,
+      },
+    };
+  }
+  return { props: { allUsers, commissions, filters, session } };
 };
 
 export default Page;
