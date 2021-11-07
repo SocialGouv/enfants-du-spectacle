@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getSession, useSession } from "next-auth/react";
 import React from "react";
 import Layout from "src/components/Layout";
-import { frenchDateText } from "src/lib/helpers";
+import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import styles from "src/styles/commissions.module.scss";
 
 import type { Commission, Projet } from ".prisma/client";
@@ -33,7 +33,8 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
         <span role="img" aria-label="hammer">
           🔨
         </span>{" "}
-        <b>{frenchDateText(commission.date)}</b> - {commission.departement}
+        <b>{frenchDateText(commission.date)}</b> -{" "}
+        {frenchDepartementName(commission.departement)}
       </div>
       <div>
         <b>{projetsCount}</b> dossiers

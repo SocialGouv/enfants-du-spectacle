@@ -6,7 +6,7 @@ import {
   categorieToGrandeCategorieLabel,
   categorieToLabel,
 } from "src/lib/categories";
-import { frenchDateText } from "src/lib/helpers";
+import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { ProjetData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
@@ -63,8 +63,9 @@ const Dossier: React.FC<Props> = ({
               }}
             />
           </Info>
-          <Info title="Date de commission">
-            {frenchDateText(projet.commission.date)}
+          <Info title="Commission">
+            {frenchDateText(projet.commission.date)} -{" "}
+            {frenchDepartementName(projet.commission.departement)}
           </Info>
         </div>
         <Info title="Type de dossier">

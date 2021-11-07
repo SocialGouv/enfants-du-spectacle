@@ -87,10 +87,26 @@ function getFilterableSocietesProductions(
   }
 }
 
+function frenchDepartementName(departementNumber: string): string {
+  return (
+    {
+      "75": "Paris",
+      "77": "Seine?",
+      "78": "Yvelines",
+      "91": "Essone",
+      "92": "Hauts-de-Seine",
+      "93": "Seine-Saint-Denis",
+      "94": "Seine et Marne",
+      "95": "Val d'Oise",
+    }[departementNumber] ?? "Hors Île-de-France"
+  );
+}
+
 export {
   filterCommissions,
   filterSearchResults,
   frenchDateText,
+  frenchDepartementName,
   getFilterableSocietesProductions,
   searchResultsToSocieteProductions,
   shortUserName,

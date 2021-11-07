@@ -115,6 +115,7 @@ interface DossiersFilters {
 export type {
   CommissionData,
   DossiersFilters,
+  ProjetData,
   ProjetDataLight,
   SearchResultsType,
 };

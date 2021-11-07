@@ -22,17 +22,50 @@ const statesDetails: Record<string, StateDetail> = {
 };
 
 const events = {
-  passerAccepte: "Passer en accepté",
-  passerAjourne: "Marquer comme ajourné",
-  passerDefavorable: "Marquer comme avis défavorable de la commission",
-  passerFavorable: "Marquer comme avis favorable de la commission",
-  passerFavorableSousReserve:
-    "Marquer comme avis favorable sous réserve de la commission",
-  passerInstruction: "Passer en instruction",
-  passerPret: "Marquer prêt pour la commission",
-  passerRefuse: "Passer en refusé",
-  repasserConstruction: "Repasser en construction",
-  repasserInstruction: "Repasser en instruction",
+  passerAccepte: {
+    description:
+      "Une notification et les documents seronts envoyés au demandeur",
+    label: "Accepter",
+  },
+  passerAjourne: {
+    description: "La décision sera prise à une commission ultérieure",
+    label: "Marquer comme ajourné",
+  },
+  passerDefavorable: {
+    description:
+      "La commission s'est prononcée négativement. Le rejet n'est pas encore définitif.",
+    label: "Avis défavorable",
+  },
+  passerFavorable: {
+    description:
+      "La commission s'est prononcée positivement. L'acceptation n'est pas encore effective.",
+    label: "Avis favorable",
+  },
+  passerFavorableSousReserve: {
+    description: "Par exemple, si certains documents sont manquants",
+    label: "Avis favorable sous réserve",
+  },
+  passerInstruction: {
+    description: "Le dossier ne pourra plus être modifié",
+    label: "Passer en instruction",
+  },
+  passerPret: {
+    description: "Le dossier peut passer en commission",
+    label: "Prêt pour la commission",
+  },
+  passerRefuse: {
+    description:
+      "La notification de rejet doit être envoyée et justifiée manuellement",
+    label: "Refuser",
+  },
+  repasserConstruction: {
+    description: "Le dossier redeviendra modifiable",
+    label: "Repasser en construction",
+  },
+  repasserInstruction: {
+    description: "Le dossier n'est pas prêt à passer en commission",
+    label: "Repasser en instruction",
+  },
 };
 type TransitionEvent = keyof typeof events;
 
@@ -121,7 +154,14 @@ const factory = (init = "CONSTRUCTION"): StatutProjetStateMachine => {
 };
 
 const statutProjetEventToFrench = (event: TransitionEvent): string =>
-  events[event];
+  events[event].label;
 
-export { factory, statutProjetEventToFrench };
+const statutProjetEventToFrenchDescription = (event: TransitionEvent): string =>
+  events[event].description;
+
+export {
+  factory,
+  statutProjetEventToFrench,
+  statutProjetEventToFrenchDescription,
+};
 export type { StatutProjetStr, TransitionEvent };

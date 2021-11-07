@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   factory as statutProjetFSMFactory,
   statutProjetEventToFrench,
+  statutProjetEventToFrenchDescription,
 } from "src/lib/statutProjetStateMachine";
 
 import styles from "./ChangeStatutProjetButton.module.scss";
@@ -48,7 +49,9 @@ const ChangeStatutProjetButton: React.FC<Props> = ({ projet, onChange }) => {
               <p className={styles.event}>
                 {statutProjetEventToFrench(transition.name)}
               </p>
-              <p className={styles.description}>Lusager blah blah blah</p>
+              <p className={styles.description}>
+                {statutProjetEventToFrenchDescription(transition.name)}
+              </p>
             </div>
           </button>
         ))}

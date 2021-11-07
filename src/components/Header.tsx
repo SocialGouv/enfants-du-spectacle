@@ -27,55 +27,60 @@ const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
   const router = useRouter();
 
   return (
-    <HeaderSDE>
-      <HeaderBody>
-        <Logo>Préfet de la région Île-de-France</Logo>
-        <HeaderOperator>
-          <Image
-            src={logoEds}
-            alt="Enfants du Spectacle"
-            width={629 / 7}
-            height={710 / 7}
-          />
-        </HeaderOperator>
-        <Service title="Enfants du Spectacle" description="" />
-        <Tool>
-          <ToolItemGroup>
-            {!session && (
-              <ToolItem link="/api/auth/signin" onClick={signIn}>
-                Connexion
-              </ToolItem>
-            )}
-            {session && (
-              <>
-                <ToolItem>
-                  {session.user?.image && (
-                    <span
-                      style={{ backgroundImage: `url(${session.user.image})` }}
-                    />
-                  )}
-                  <span>
-                    <span>Connecté en tant que </span>
-                    <strong>
-                      {session.user?.email?.split("@")?.at(0) ??
-                        session.user?.name}
-                    </strong>
-                  </span>
+    <div className={styles.wrapper}>
+      <HeaderSDE className={styles.headerSDE}>
+        <HeaderBody>
+          <Logo>Préfet de la région Île-de-France</Logo>
+          <HeaderOperator>
+            <Image
+              src={logoEds}
+              alt="Enfants du Spectacle"
+              width={629 / 7}
+              height={710 / 7}
+            />
+          </HeaderOperator>
+          <Service title="Enfants du Spectacle" description="" />
+          <Tool>
+            <ToolItemGroup>
+              {!session && (
+                <ToolItem link="/api/auth/signin" onClick={signIn}>
+                  Connexion
                 </ToolItem>
-                <ToolItem
-                  link="/dossiers"
-                  onClick={async () => router.push("/dossiers")}
-                >
-                  Dossiers
-                </ToolItem>
-                <ToolItem link="/api/auth/signout" onClick={signOut}>
-                  Déconnexion
-                </ToolItem>
-              </>
-            )}
-          </ToolItemGroup>
-        </Tool>
-      </HeaderBody>
+              )}
+              {session && (
+                <>
+                  <ToolItem>
+                    {session.user?.image && (
+                      <span
+                        style={{
+                          backgroundImage: `url(${session.user.image})`,
+                        }}
+                      />
+                    )}
+                    <span>
+                      <span>Connecté en tant que </span>
+                      <strong>
+                        {session.user?.email?.split("@")?.at(0) ??
+                          session.user?.name}
+                      </strong>
+                    </span>
+                  </ToolItem>
+                  <ToolItem
+                    link="/dossiers"
+                    onClick={async () => router.push("/dossiers")}
+                  >
+                    Dossiers
+                  </ToolItem>
+                  <ToolItem link="/api/auth/signout" onClick={signOut}>
+                    Déconnexion
+                  </ToolItem>
+                </>
+              )}
+            </ToolItemGroup>
+          </Tool>
+        </HeaderBody>
+      </HeaderSDE>
+
       {childrenMiddle && (
         <div className={styles.middle}>
           <Container>
@@ -90,7 +95,7 @@ const Header: React.FC<Props> = ({ childrenMiddle, childrenBottom }) => {
           </Container>
         </div>
       )}
-    </HeaderSDE>
+    </div>
   );
 };
 

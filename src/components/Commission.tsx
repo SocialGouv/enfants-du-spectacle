@@ -2,13 +2,13 @@ import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import StatutProjetTag from "src/components/StatutProjetTag";
-import { frenchDateText } from "src/lib/helpers";
-import type { CommissionData, ProjetData } from "src/lib/queries";
+import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import type { CommissionData, ProjetDataLight } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
 interface ProjetProps {
-  projet: ProjetData;
+  projet: ProjetDataLight;
 }
 
 const Projet: React.FC<ProjetProps> = ({ projet }) => {
@@ -44,8 +44,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
     <div className="card">
       <div>
         <div className={styles.projetTitle}>
-          Commission du <b>{frenchDateText(commission.date)}</b> du{" "}
-          <b>{commission.departement}</b>
+          Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
+          {frenchDepartementName(commission.departement)}
         </div>
       </div>
       <div style={{ marginBottom: "2rem" }}>

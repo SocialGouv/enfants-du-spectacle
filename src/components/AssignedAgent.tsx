@@ -12,7 +12,9 @@ const AssignedAgent: React.FC<Props> = ({ projet }) => {
   return (
     <>
       {!projet.user && <span className={styles.na}>aucun instructeur</span>}
-      {projet.user && shortUserName(projet.user)}
+      {projet.user && (
+        <span className={styles.nomUser}>{shortUserName(projet.user)}</span>
+      )}
     </>
   );
 };
