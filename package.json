@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@dataesr/react-dsfr": "^0.7.7",
-    "@next-auth/prisma-adapter": "^0.5.2-next.19",
+    "@next-auth/prisma-adapter": "^0.5.4",
     "@prisma/client": "^3.3.0",
     "email-addresses": "^5.0.0",
     "javascript-state-machine": "^3.1.0",
