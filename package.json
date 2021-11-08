@@ -17,7 +17,7 @@
     "email-addresses": "^5.0.0",
     "javascript-state-machine": "^3.1.0",
     "next": "12.0.3",
-    "next-auth": "4.0.0-beta.4",
+    "next-auth": "4.0.0-next.26",
     "nodemailer": "^6.7.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
