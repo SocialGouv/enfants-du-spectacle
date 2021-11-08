@@ -40,7 +40,7 @@ Il faut bien lancer en parallèle de votre serveur next le processus maildev: `n
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
 
-Vous pouvez aussi installer [overmind](https://github.com/DarthSim/overmind) et lancer les deux processus en parallèle avec `OVERMIND_NO_PORT=1 overmind start -f Procfile.dev`
+Vous pouvez aussi installer [overmind](https://github.com/DarthSim/overmind) et lancer les deux processus en parallèle avec `npm run dev-procfile`.
 
 ## Seeds
 

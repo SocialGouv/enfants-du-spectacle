@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build --no-lint",
     "start": "npx prisma migrate deploy && next start",
     "lint": "eslint components pages lib",
