@@ -4,6 +4,7 @@ import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import Dossier from "src/components/Dossier";
 import Layout from "src/components/Layout";
+import authMiddleware from "src/lib/authMiddleware";
 import { updateProjet } from "src/lib/queries";
 import type { ProjetData } from "src/lib/types";
 
@@ -26,9 +27,7 @@ const Page: React.FC<Props> = (props) => {
     setAssignedUserId(projet.userId);
   }, [projet.userId]);
 
-  if (!session) {
-    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
-  }
+  if (!session) throw Error("no session on protected page");
 
   function updateProjetAndReload(updates: {
     transitionEvent?: string;
@@ -69,25 +68,25 @@ const Page: React.FC<Props> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (session) {
-    if (!context.params || !context.params.id) {
-      throw Error("nono");
-    }
-    const id = parseInt(context.params.id as string, 10);
-    const prisma = new PrismaClient();
-    const projet = await prisma.projet.findUnique({
-      include: {
-        commission: true,
-        enfants: true,
-        societeProduction: true,
-        user: true,
-      },
-      where: { id },
-    });
-    const allUsers = await prisma.user.findMany();
-    return { props: { allUsers, projet } };
+  const redirectTo = authMiddleware(session);
+  if (redirectTo) return redirectTo;
+
+  if (!context.params || !context.params.id) {
+    throw Error("nono");
   }
-  return { props: { session } };
+  const id = parseInt(context.params.id as string, 10);
+  const prisma = new PrismaClient();
+  const projet = await prisma.projet.findUnique({
+    include: {
+      commission: true,
+      enfants: true,
+      societeProduction: true,
+      user: true,
+    },
+    where: { id },
+  });
+  const allUsers = await prisma.user.findMany();
+  return { props: { allUsers, projet, session } };
 };
 
 export default Page;

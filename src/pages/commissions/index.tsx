@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getSession, useSession } from "next-auth/react";
 import React from "react";
 import Layout from "src/components/Layout";
+import authMiddleware from "src/lib/authMiddleware";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import styles from "src/styles/commissions.module.scss";
 
@@ -63,9 +64,7 @@ interface Props {
 const Page: React.FC<Props> = ({ commissions }) => {
   const { data: session } = useSession();
 
-  if (!session) {
-    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
-  }
+  if (!session) throw Error("no session on protected page");
 
   return (
     <Layout
@@ -81,22 +80,22 @@ const Page: React.FC<Props> = ({ commissions }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (session) {
-    const prisma = new PrismaClient();
-    const commissions = await prisma.commission.findMany({
-      include: {
-        projets: {
-          include: {
-            _count: { select: { enfants: true } },
-          },
+  const redirectTo = authMiddleware(session);
+  if (redirectTo) return redirectTo;
+
+  const prisma = new PrismaClient();
+  const commissions = await prisma.commission.findMany({
+    include: {
+      projets: {
+        include: {
+          _count: { select: { enfants: true } },
         },
       },
-      orderBy: { date: "desc" },
-      where: { date: { lt: new Date() }, projets: { some: {} } },
-    });
-    return { props: { commissions, session } };
-  }
-  return { props: { session } };
+    },
+    orderBy: { date: "desc" },
+    where: { date: { lt: new Date() }, projets: { some: {} } },
+  });
+  return { props: { commissions, session } };
 };
 
 export default Page;

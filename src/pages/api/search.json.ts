@@ -15,14 +15,15 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
   const session = await getSession({ req });
-  if (session) {
-    const prisma = new PrismaClient();
-    const enfants = await searchEnfants(prisma, req.query.search);
-    const projets = await searchProjets(prisma, req.query.search);
-    res.status(200).json(superjson.stringify({ enfants, projets }));
-  } else {
+  if (!session) {
     res.status(401).end();
+    return;
   }
+
+  const prisma = new PrismaClient();
+  const enfants = await searchEnfants(prisma, req.query.search);
+  const projets = await searchProjets(prisma, req.query.search);
+  res.status(200).json(superjson.stringify({ enfants, projets }));
 };
 
 export default handler;

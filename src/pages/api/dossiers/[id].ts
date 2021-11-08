@@ -25,6 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
     res.status(401).end();
     return;
   }
+
   if (typeof req.body !== "string") {
     res.status(400).end();
     return;

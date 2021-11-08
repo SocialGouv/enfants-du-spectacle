@@ -8,14 +8,15 @@ import Layout from "src/components/Layout";
 
 interface Props {
   csrfToken: string | undefined;
+  signinRequired: boolean;
 }
 
-const Home: React.FC<Props> = ({ csrfToken }) => {
+const Home: React.FC<Props> = ({ csrfToken, signinRequired }) => {
   return (
     <Layout windowTitle="">
       <div className="card">
         <Title as="h2">Connexion</Title>
-        <ConnexionForm csrfToken={csrfToken} />
+        <ConnexionForm csrfToken={csrfToken} signinRequired={signinRequired} />
         <Callout>
           <CalloutTitle as="h3">Interface agents</CalloutTitle>
           <CalloutText>
@@ -45,8 +46,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   const csrfToken = await getCsrfToken(context);
+  const signinRequired = context.query.signinRequired == "true";
   return {
-    props: { csrfToken },
+    props: { csrfToken, signinRequired },
   };
 };
 

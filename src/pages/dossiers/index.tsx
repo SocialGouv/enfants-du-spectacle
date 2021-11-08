@@ -9,6 +9,7 @@ import FilterBarText from "src/components/FilterBarText";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
+import authMiddleware from "src/lib/authMiddleware";
 import {
   filterCommissions,
   filterSearchResults,
@@ -141,9 +142,7 @@ const Page: React.FC<Props> = ({
     });
   }, [debouncedSearch, filters, loading]);
 
-  if (!session) {
-    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
-  }
+  if (!session) throw Error("no session on protected page");
 
   return (
     <Layout
@@ -188,14 +187,8 @@ const Page: React.FC<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+  const redirectTo = authMiddleware(session);
+  if (redirectTo) return redirectTo;
   const prisma = new PrismaClient();
   const commissions = await getCommissions(prisma);
   const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
