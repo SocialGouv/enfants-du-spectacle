@@ -23,6 +23,7 @@ export default NextAuth({
     },
   },
   pages: {
+    signIn: "/",
     verifyRequest: "/verifyRequest",
   },
   providers: [

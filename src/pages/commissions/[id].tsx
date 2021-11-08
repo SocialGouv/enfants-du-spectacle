@@ -16,11 +16,14 @@ const Page: React.FC<Props> = ({ commission }) => {
   const { data: session } = useSession();
 
   if (!session) {
-    return <Layout>Veuillez vous connecter</Layout>;
+    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
   }
 
   return (
-    <Layout headerMiddle={<Title as="h1">Commission </Title>}>
+    <Layout
+      windowTitle="Commission"
+      headerMiddle={<Title as="h1">Commission </Title>}
+    >
       <CommissionBloc commission={commission} />
     </Layout>
   );

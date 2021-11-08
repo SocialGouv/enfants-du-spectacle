@@ -7,7 +7,7 @@ import Layout from "src/components/Layout";
 
 const Home: React.FC = () => {
   return (
-    <Layout>
+    <Layout windowTitle="Vérifiez votre boîte mail">
       <div className="card">
         <Title as="h1">Vérifiez votre boîte mail</Title>
         <p>Nous vous avons envoyé un email contenant un lien de connexion.</p>

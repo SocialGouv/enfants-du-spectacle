@@ -27,7 +27,7 @@ const Page: React.FC<Props> = (props) => {
   }, [projet.userId]);
 
   if (!session) {
-    return <Layout>Veuillez vous connecter</Layout>;
+    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
   }
 
   function updateProjetAndReload(updates: {
@@ -55,7 +55,7 @@ const Page: React.FC<Props> = (props) => {
     </>
   );
   return (
-    <Layout headerMiddle={title}>
+    <Layout headerMiddle={title} windowTitle={projet.nom}>
       <Dossier
         assignedUserId={assignedUserId}
         projet={projet}

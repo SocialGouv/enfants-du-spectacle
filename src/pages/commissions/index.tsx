@@ -64,11 +64,14 @@ const Page: React.FC<Props> = ({ commissions }) => {
   const { data: session } = useSession();
 
   if (!session) {
-    return <Layout>Veuillez vous connecter</Layout>;
+    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
   }
 
   return (
-    <Layout headerMiddle={<Title as="h1">Commissions passées</Title>}>
+    <Layout
+      windowTitle="Commissions passées"
+      headerMiddle={<Title as="h1">Commissions passées</Title>}
+    >
       {commissions.map((commission) => (
         <CommissionRow key={commission.id} commission={commission} />
       ))}

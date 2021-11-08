@@ -12,7 +12,7 @@ interface Props {
 
 const Home: React.FC<Props> = ({ csrfToken }) => {
   return (
-    <Layout>
+    <Layout windowTitle="">
       <div className="card">
         <Title as="h2">Connexion</Title>
         <ConnexionForm csrfToken={csrfToken} />

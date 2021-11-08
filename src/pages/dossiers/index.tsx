@@ -142,7 +142,7 @@ const Page: React.FC<Props> = ({
   }, [debouncedSearch, filters, loading]);
 
   if (!session) {
-    return <Layout>Veuillez vous connecter</Layout>;
+    return <Layout windowTitle="Accès refusé">Veuillez vous connecter</Layout>;
   }
 
   return (
@@ -162,6 +162,7 @@ const Page: React.FC<Props> = ({
           filters={filters}
         />
       }
+      windowTitle="Dossiers"
     >
       {loading && <div>chargement...</div>}
       {!loading && !debouncedSearch && (
