@@ -40,6 +40,8 @@ Il faut bien lancer en parallèle de votre serveur next le processus maildev: `n
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
 
+Vous pouvez aussi installer [overmind](https://github.com/DarthSim/overmind) et lancer les deux processus en parallèle avec `OVERMIND_NO_PORT=1 overmind start -f Procfile.dev`
+
 ## Seeds
 
 Les seeds permettent de restaurer simplement des bases de données avec des données réalistes. C'est très utile en développement local ou bien sur les environnements de review apps ou de staging. On a fait le choix d'avoir ici des seeds déterministes et non aléatoires, pour pouvoir reproduire des environnements prévisibles.
