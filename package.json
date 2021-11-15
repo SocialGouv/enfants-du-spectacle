@@ -27,9 +27,9 @@
     "use-debounce": "^7.0.1"
   },
   "devDependencies": {
-    "@socialgouv/eslint-config-react": "^1.97.1",
-    "@socialgouv/eslint-config-recommended": "^1.97.1",
-    "@socialgouv/eslint-config-typescript": "^1.97.1",
+    "@socialgouv/eslint-config-react": "^1.99.0",
+    "@socialgouv/eslint-config-recommended": "^1.99.0",
+    "@socialgouv/eslint-config-typescript": "^1.99.0",
     "@types/faker": "^5.5.9",
     "@types/react": "17.0.34",
     "babel-plugin-superjson-next": "^0.4.2",
