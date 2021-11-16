@@ -2,18 +2,18 @@ import React from "react";
 import { shortUserName } from "src/lib/helpers";
 
 import styles from "./AssignedAgent.module.scss";
-import type { Projet, User } from ".prisma/client";
+import type { Dossier, User } from ".prisma/client";
 
 interface Props {
-  projet: Projet & { user?: User | null };
+  dossier: Dossier & { user?: User | null };
 }
 
-const AssignedAgent: React.FC<Props> = ({ projet }) => {
+const AssignedAgent: React.FC<Props> = ({ dossier }) => {
   return (
     <>
-      {!projet.user && <span className={styles.na}>aucun instructeur</span>}
-      {projet.user && (
-        <span className={styles.nomUser}>{shortUserName(projet.user)}</span>
+      {!dossier.user && <span className={styles.na}>aucun instructeur</span>}
+      {dossier.user && (
+        <span className={styles.nomUser}>{shortUserName(dossier.user)}</span>
       )}
     </>
   );

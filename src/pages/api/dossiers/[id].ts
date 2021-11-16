@@ -1,19 +1,19 @@
-import type { StatutProjet } from "@prisma/client";
+import type { StatutDossier } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import type { TransitionEvent } from "src/lib/statutProjetStateMachine";
-import { factory as statutProjetStateMachineFactory } from "src/lib/statutProjetStateMachine";
+import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
+import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
 
 import { PrismaClient } from ".prisma/client";
 
 const handler: NextApiHandler = async (req, res) => {
-  const { id: projetIdStr } = req.query;
-  if (typeof projetIdStr !== "string") {
-    res.status(404).send(`${projetIdStr} is not a valid projet id`);
+  const { id: dossierIdStr } = req.query;
+  if (typeof dossierIdStr !== "string") {
+    res.status(404).send(`${dossierIdStr} is not a valid dossier id`);
     return;
   }
-  const projetId = parseInt(projetIdStr, 10);
+  const dossierId = parseInt(dossierIdStr, 10);
 
   if (req.method !== "PUT") {
     res.status(405).end();
@@ -38,18 +38,20 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const prisma = new PrismaClient();
-  const updates: { statut?: StatutProjet; userId?: number } = {};
+  const updates: { statut?: StatutDossier; userId?: number } = {};
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
 
-    const projet = await prisma.projet.findUnique({ where: { id: projetId } });
-    if (!projet) {
+    const dossier = await prisma.dossier.findUnique({
+      where: { id: dossierId },
+    });
+    if (!dossier) {
       res.status(404).end();
       return;
     }
 
-    const stateMachine = statutProjetStateMachineFactory(projet.statut);
+    const stateMachine = statutDossierStateMachineFactory(dossier.statut);
     if (!stateMachine.transitions().includes(transition as TransitionEvent)) {
       res.status(400).end();
       return;
@@ -63,7 +65,7 @@ const handler: NextApiHandler = async (req, res) => {
     updates.userId = parsed.userId;
   }
 
-  const updatedProjet = await prisma.projet.update({
+  const updatedDossier = await prisma.dossier.update({
     data: updates,
     include: {
       commission: true,
@@ -71,10 +73,10 @@ const handler: NextApiHandler = async (req, res) => {
       societeProduction: true,
       user: true,
     },
-    where: { id: projetId },
+    where: { id: dossierId },
   });
 
-  res.status(200).json(superjson.stringify(updatedProjet));
+  res.status(200).json(superjson.stringify(updatedDossier));
 };
 
 export default handler;

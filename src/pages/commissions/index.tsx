@@ -8,11 +8,11 @@ import authMiddleware from "src/lib/authMiddleware";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import styles from "src/styles/commissions.module.scss";
 
-import type { Commission, Projet } from ".prisma/client";
+import type { Commission, Dossier } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
 
 type CommissionWithCounts = Commission & {
-  projets: (Projet & {
+  dossiers: (Dossier & {
     _count: {
       enfants: number;
     } | null;
@@ -24,8 +24,8 @@ interface RowProps {
 }
 
 const CommissionRow: React.FC<RowProps> = ({ commission }) => {
-  const projetsCount = commission.projets.length;
-  const enfantsCount = commission.projets
+  const dossiersCount = commission.dossiers.length;
+  const enfantsCount = commission.dossiers
     .map((p) => p._count?.enfants ?? 0)
     .reduce((i, b) => i + b, 0);
   return (
@@ -38,7 +38,7 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
         {frenchDepartementName(commission.departement)}
       </div>
       <div>
-        <b>{projetsCount}</b> dossiers
+        <b>{dossiersCount}</b> dossiers
       </div>
       <div>
         <b>{enfantsCount}</b> enfants
@@ -47,9 +47,9 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
         <Link href={`/commissions/${commission.id}`}>
           <a
             href={`/commissions/${commission.id}`}
-            className={styles.seeProjects}
+            className={styles.seeDossiers}
           >
-            Voir le détail des projets
+            Voir le détail des dossiers
           </a>
         </Link>
       </div>
@@ -86,14 +86,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const prisma = new PrismaClient();
   const commissions = await prisma.commission.findMany({
     include: {
-      projets: {
+      dossiers: {
         include: {
           _count: { select: { enfants: true } },
         },
       },
     },
     orderBy: { date: "desc" },
-    where: { date: { lt: new Date() }, projets: { some: {} } },
+    where: { date: { lt: new Date() }, dossiers: { some: {} } },
   });
   return { props: { commissions, session } };
 };

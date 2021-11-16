@@ -1,12 +1,12 @@
 import type {
   Commission,
+  Dossier,
   Enfant,
-  Projet,
   SocieteProduction,
   User,
 } from ".prisma/client";
 
-type ProjetDataLight = Projet & {
+type DossierDataLight = Dossier & {
   user: User | null;
   societeProduction: SocieteProduction;
   _count: {
@@ -14,13 +14,13 @@ type ProjetDataLight = Projet & {
   } | null;
 };
 
-type ProjetData = Projet & {
+type DossierData = Dossier & {
   user: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];
 };
 
-type CommissionData = Commission & { projets: ProjetDataLight[] };
+type CommissionData = Commission & { dossiers: DossierDataLight[] };
 
-export type { CommissionData, ProjetData, ProjetDataLight };
+export type { CommissionData, DossierData, DossierDataLight };

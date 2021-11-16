@@ -1,4 +1,4 @@
-import type { Projet, SocieteProduction, User } from "@prisma/client";
+import type { Dossier, SocieteProduction, User } from "@prisma/client";
 import { grandeCategorieToCategorieValues } from "src/lib/categories";
 import type {
   CommissionData,
@@ -30,23 +30,23 @@ function searchResultsToSocieteProductions(
   searchResults: SearchResultsType
 ): SocieteProduction[] {
   return uniqueById(
-    searchResults.projets
+    searchResults.dossiers
       .map((p) => p.societeProduction)
-      .concat(searchResults.enfants.map((e) => e.projet.societeProduction))
+      .concat(searchResults.enfants.map((e) => e.dossier.societeProduction))
   );
 }
 
-type FilterProjectFn = (projet: Projet) => boolean;
+type FilterDossierFn = (dossier: Dossier) => boolean;
 
-function filterProjectFn(filters: DossiersFilters): FilterProjectFn {
-  return function (projet: Projet) {
+function filterDossierFn(filters: DossiersFilters): FilterDossierFn {
+  return function (dossier: Dossier) {
     return (
-      (!filters.userId || projet.userId == filters.userId) &&
+      (!filters.userId || dossier.userId == filters.userId) &&
       (!filters.societeProductionId ||
-        projet.societeProductionId == filters.societeProductionId) &&
+        dossier.societeProductionId == filters.societeProductionId) &&
       (!filters.grandeCategorie ||
         grandeCategorieToCategorieValues(filters.grandeCategorie).includes(
-          projet.categorie
+          dossier.categorie
         ))
     );
   };
@@ -56,10 +56,10 @@ function filterCommissions(
   commissions: CommissionData[],
   filters: DossiersFilters
 ): CommissionData[] {
-  const filterFn = filterProjectFn(filters);
+  const filterFn = filterDossierFn(filters);
   return commissions.map((commission) => ({
     ...commission,
-    projets: commission.projets.filter(filterFn),
+    dossiers: commission.dossiers.filter(filterFn),
   }));
 }
 
@@ -67,10 +67,10 @@ function filterSearchResults(
   searchResults: SearchResultsType,
   filters: DossiersFilters
 ): SearchResultsType {
-  const filterFn = filterProjectFn(filters);
+  const filterFn = filterDossierFn(filters);
   return {
-    enfants: searchResults.enfants.filter((enfant) => filterFn(enfant.projet)),
-    projets: searchResults.projets.filter(filterFn),
+    dossiers: searchResults.dossiers.filter(filterFn),
+    enfants: searchResults.enfants.filter((enfant) => filterFn(enfant.dossier)),
   };
 }
 
@@ -82,7 +82,7 @@ function getFilterableSocietesProductions(
     return searchResultsToSocieteProductions(searchResults);
   } else {
     return uniqueById(
-      commissions.flatMap((c) => c.projets.map((p) => p.societeProduction))
+      commissions.flatMap((c) => c.dossiers.map((p) => p.societeProduction))
     );
   }
 }

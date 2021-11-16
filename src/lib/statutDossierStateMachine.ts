@@ -1,6 +1,6 @@
 import StateMachine from "javascript-state-machine";
 
-import type { StatutProjet } from ".prisma/client";
+import type { StatutDossier } from ".prisma/client";
 
 interface StateDetail {
   key: string;
@@ -69,7 +69,7 @@ const events = {
 };
 type TransitionEvent = keyof typeof events;
 
-type StatutProjetStr =
+type StatutDossierStr =
   | "ACCEPTE"
   | "AVIS_AJOURNE"
   | "AVIS_DEFAVORABLE"
@@ -81,13 +81,13 @@ type StatutProjetStr =
   | "REFUSE";
 
 interface TransitionObject {
-  from: StatutProjetStr[];
+  from: StatutDossierStr[];
   name: TransitionEvent;
-  to: StatutProjetStr;
+  to: StatutDossierStr;
 }
 
-interface StatutProjetStateMachine {
-  state: StatutProjet;
+interface StatutDossierStateMachine {
+  state: StatutDossier;
   transitions: () => TransitionEvent[];
   transitionObjects: () => TransitionObject[];
   stateDetails: () => StateDetail;
@@ -133,11 +133,11 @@ const transitions: TransitionObject[] = [
   },
 ];
 
-const factory = (init = "CONSTRUCTION"): StatutProjetStateMachine => {
+const factory = (init = "CONSTRUCTION"): StatutDossierStateMachine => {
   const fsm = new StateMachine({
     init,
     transitions,
-  }) as StatutProjetStateMachine;
+  }) as StatutDossierStateMachine;
   fsm.transitionObjects = function () {
     return transitions.filter((t) => t.from.includes(this.state));
   };
@@ -153,15 +153,16 @@ const factory = (init = "CONSTRUCTION"): StatutProjetStateMachine => {
   return fsm;
 };
 
-const statutProjetEventToFrench = (event: TransitionEvent): string =>
+const statutDossierEventToFrench = (event: TransitionEvent): string =>
   events[event].label;
 
-const statutProjetEventToFrenchDescription = (event: TransitionEvent): string =>
-  events[event].description;
+const statutDossierEventToFrenchDescription = (
+  event: TransitionEvent
+): string => events[event].description;
 
 export {
   factory,
-  statutProjetEventToFrench,
-  statutProjetEventToFrenchDescription,
+  statutDossierEventToFrench,
+  statutDossierEventToFrenchDescription,
 };
-export type { StatutProjetStr, TransitionEvent };
+export type { StatutDossierStr, TransitionEvent };

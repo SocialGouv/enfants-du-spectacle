@@ -3,14 +3,14 @@ import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import styles from "src/components/SearchResults.module.scss";
-import StatutProjetTag from "src/components/StatutProjetTag";
+import StatutDossierTag from "src/components/StatutDossierTag";
 import type { SearchResultsType } from "src/lib/queries";
 
-import type { Enfant, Projet, SocieteProduction, User } from ".prisma/client";
+import type { Dossier, Enfant, SocieteProduction, User } from ".prisma/client";
 
 interface EnfantProps {
   enfant: Enfant & {
-    projet: Projet & {
+    dossier: Dossier & {
       user?: User | null;
       societeProduction: SocieteProduction;
     };
@@ -21,26 +21,28 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
   return (
     <div className={`${styles.enfantGrid} itemGrid`}>
       <div>
-        <StatutProjetTag projet={enfant.projet} />
+        <StatutDossierTag dossier={enfant.dossier} />
       </div>
       <div className={styles.nom}>
         {enfant.prenom} {enfant.nom}
       </div>
       <div>
-        <Link href={`/dossiers/${enfant.projet.id}`}>{enfant.projet.nom}</Link>
+        <Link href={`/dossiers/${enfant.dossier.id}`}>
+          {enfant.dossier.nom}
+        </Link>
         <div className={styles.discret}>
-          {enfant.projet.societeProduction.nom}
+          {enfant.dossier.societeProduction.nom}
         </div>
       </div>
       <div>
-        <AssignedAgent projet={enfant.projet} />
+        <AssignedAgent dossier={enfant.dossier} />
       </div>
     </div>
   );
 };
 
-interface ProjetProps {
-  projet: Projet & {
+interface DossierProps {
+  dossier: Dossier & {
     societeProduction: SocieteProduction;
     user: User | null;
     _count: {
@@ -49,21 +51,21 @@ interface ProjetProps {
   };
 }
 
-const ProjetRow: React.FC<ProjetProps> = ({ projet }) => {
+const DossierRow: React.FC<DossierProps> = ({ dossier }) => {
   return (
-    <div className={`${styles.projetGrid} itemGrid`}>
+    <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
-        <StatutProjetTag projet={projet} />
+        <StatutDossierTag dossier={dossier} />
       </div>
       <div className={styles.nom}>
-        <Link href={`/dossiers/${projet.id}`}>{projet.nom}</Link>
+        <Link href={`/dossiers/${dossier.id}`}>{dossier.nom}</Link>
       </div>
-      <div>{projet.societeProduction.nom}</div>
+      <div>{dossier.societeProduction.nom}</div>
       <div>
-        <b>{projet._count?.enfants}</b>&nbsp;enfants
+        <b>{dossier._count?.enfants}</b>&nbsp;enfants
       </div>
       <div>
-        <AssignedAgent projet={projet} />
+        <AssignedAgent dossier={dossier} />
       </div>
     </div>
   );
@@ -74,17 +76,17 @@ interface Props {
 }
 
 const SearchResults: React.FC<Props> = ({
-  searchResults: { enfants, projets },
+  searchResults: { enfants, dossiers },
 }) => {
   return (
     <>
-      <Title as="h3">Projets</Title>
+      <Title as="h3">Dossiers</Title>
       <div className="card">
-        {projets.length == 0 && <span>aucun projet trouvé</span>}
-        {projets.length > 0 && (
-          <div className="projetsContainer">
-            {projets.map((projet) => (
-              <ProjetRow key={projet.id} projet={projet} />
+        {dossiers.length == 0 && <span>aucun dossier trouvé</span>}
+        {dossiers.length > 0 && (
+          <div className="dossiersContainer">
+            {dossiers.map((dossier) => (
+              <DossierRow key={dossier.id} dossier={dossier} />
             ))}
           </div>
         )}

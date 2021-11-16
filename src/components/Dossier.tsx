@@ -1,13 +1,13 @@
 import { Select, Table, Title } from "@dataesr/react-dsfr";
 import React from "react";
-import ChangeStatutProjetButton from "src/components/ChangeStatutProjetButton";
+import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
 import {
   categorieToGrandeCategorieLabel,
   categorieToLabel,
 } from "src/lib/categories";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import type { ProjetData } from "src/lib/types";
+import type { DossierData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
 
@@ -25,7 +25,7 @@ const Info: React.FC<InfoProps> = ({ title, children }) => {
 };
 
 interface Props {
-  projet: ProjetData;
+  dossier: DossierData;
   assignedUserId: number | null;
   onAssignUserId: (userId: number | null) => void;
   onChangeStatut: (statut: string) => void;
@@ -33,7 +33,7 @@ interface Props {
 }
 
 const Dossier: React.FC<Props> = ({
-  projet,
+  dossier,
   assignedUserId,
   onChangeStatut,
   onAssignUserId,
@@ -43,7 +43,10 @@ const Dossier: React.FC<Props> = ({
     <>
       <div className={styles.title}>
         <Title as="h1">Le Dossier</Title>
-        <ChangeStatutProjetButton projet={projet} onChange={onChangeStatut} />
+        <ChangeStatutDossierButton
+          dossier={dossier}
+          onChange={onChangeStatut}
+        />
       </div>
 
       <div className={styles.summaryBloc}>
@@ -64,33 +67,33 @@ const Dossier: React.FC<Props> = ({
             />
           </Info>
           <Info title="Commission">
-            {frenchDateText(projet.commission.date)} -{" "}
-            {frenchDepartementName(projet.commission.departement)}
+            {frenchDateText(dossier.commission.date)} -{" "}
+            {frenchDepartementName(dossier.commission.departement)}
           </Info>
         </div>
         <Info title="Type de dossier">
-          {categorieToGrandeCategorieLabel(projet.categorie)}
+          {categorieToGrandeCategorieLabel(dossier.categorie)}
           <br />
-          {categorieToLabel(projet.categorie)}
+          {categorieToLabel(dossier.categorie)}
         </Info>
         <Info title="Société">
-          <div>{projet.societeProduction.nom}</div>
-          <div>{projet.societeProduction.departement}</div>
-          <div>{projet.societeProduction.siret}</div>
+          <div>{dossier.societeProduction.nom}</div>
+          <div>{dossier.societeProduction.departement}</div>
+          <div>{dossier.societeProduction.siret}</div>
         </Info>
       </div>
 
       <div className={styles.bloc}>
         <Title as="h3">Enfants</Title>
-        {projet.enfants.length == 0 && <span>Aucun enfant</span>}
-        {projet.enfants.length > 0 && (
+        {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
+        {dossier.enfants.length > 0 && (
           <Table
             columns={[
               { label: "Prénom", name: "prenom" },
               { label: "Nom", name: "nom" },
               { label: "Rôle", name: "role" },
             ]}
-            data={projet.enfants}
+            data={dossier.enfants}
             rowKey="id"
           />
         )}

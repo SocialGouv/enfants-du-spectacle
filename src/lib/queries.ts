@@ -1,15 +1,15 @@
 import type { GrandeCategorieValue } from "src/lib/categories";
 import type {
   CommissionData,
-  ProjetData,
-  ProjetDataLight,
+  DossierData,
+  DossierDataLight,
 } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 
 import type {
+  Dossier,
   Enfant,
   PrismaClient,
-  Projet,
   SocieteProduction,
   User,
 } from ".prisma/client";
@@ -19,7 +19,7 @@ const getCommissions = async (
 ): Promise<CommissionData[]> => {
   return prismaClient.commission.findMany({
     include: {
-      projets: {
+      dossiers: {
         include: {
           _count: { select: { enfants: true } },
           societeProduction: true,
@@ -28,25 +28,25 @@ const getCommissions = async (
         orderBy: { id: "desc" },
       },
     },
-    where: { date: { gte: new Date() }, projets: { some: {} } },
+    where: { date: { gte: new Date() }, dossiers: { some: {} } },
   });
 };
 
 const searchEnfants = async (
   prismaClient: PrismaClient,
   search: string
-): Promise<(Enfant & { projet: Projet & { user: User | null } })[]> => {
+): Promise<(Enfant & { dossier: Dossier & { user: User | null } })[]> => {
   return prismaClient.enfant.findMany({
-    include: { projet: { include: { societeProduction: true, user: true } } },
+    include: { dossier: { include: { societeProduction: true, user: true } } },
     where: { OR: [{ nom: { search } }, { prenom: { search } }] },
   });
 };
 
-const searchProjets = async (
+const searchDossiers = async (
   prismaClient: PrismaClient,
   search: string
 ): Promise<
-  (Projet & {
+  (Dossier & {
     societeProduction: SocieteProduction;
     user: User | null;
     _count: {
@@ -54,7 +54,7 @@ const searchProjets = async (
     } | null;
   })[]
 > => {
-  return prismaClient.projet.findMany({
+  return prismaClient.dossier.findMany({
     include: {
       _count: { select: { enfants: true } },
       societeProduction: true,
@@ -64,13 +64,13 @@ const searchProjets = async (
   });
 };
 
-function updateProjet(
-  projet: Projet,
+function updateDossier(
+  dossier: Dossier,
   updates: Record<string, unknown>,
-  callback: (updatedProjet: ProjetData) => void
+  callback: (updatedDossier: DossierData) => void
 ): void {
   window
-    .fetch(`/api/dossiers/${projet.id}`, {
+    .fetch(`/api/dossiers/${dossier.id}`, {
       body: JSON.stringify(updates),
       method: "PUT",
     })
@@ -82,8 +82,8 @@ function updateProjet(
     })
     .then(async (r) => r.text())
     .then((rawJson) => {
-      const updatedProjet = superJSONParse<ProjetData>(rawJson);
-      callback(updatedProjet);
+      const updatedDossier = superJSONParse<DossierData>(rawJson);
+      callback(updatedDossier);
     })
     .catch((e) => {
       throw e;
@@ -92,12 +92,12 @@ function updateProjet(
 
 interface SearchResultsType {
   enfants: (Enfant & {
-    projet: Projet & {
+    dossier: Dossier & {
       user?: User | null;
       societeProduction: SocieteProduction;
     };
   })[];
-  projets: (Projet & {
+  dossiers: (Dossier & {
     societeProduction: SocieteProduction;
     user: User | null;
     _count: {
@@ -114,9 +114,9 @@ interface DossiersFilters {
 
 export type {
   CommissionData,
+  DossierData,
+  DossierDataLight,
   DossiersFilters,
-  ProjetData,
-  ProjetDataLight,
   SearchResultsType,
 };
-export { getCommissions, searchEnfants, searchProjets, updateProjet };
+export { getCommissions, searchDossiers, searchEnfants, updateDossier };

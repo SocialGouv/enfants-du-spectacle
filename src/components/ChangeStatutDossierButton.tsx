@@ -1,23 +1,23 @@
 import { Button } from "@dataesr/react-dsfr";
 import React, { useState } from "react";
 import {
-  factory as statutProjetFSMFactory,
-  statutProjetEventToFrench,
-  statutProjetEventToFrenchDescription,
-} from "src/lib/statutProjetStateMachine";
+  factory as statutDossierFSMFactory,
+  statutDossierEventToFrench,
+  statutDossierEventToFrenchDescription,
+} from "src/lib/statutDossierStateMachine";
 
-import styles from "./ChangeStatutProjetButton.module.scss";
-import type { Projet } from ".prisma/client";
+import styles from "./ChangeStatutDossierButton.module.scss";
+import type { Dossier } from ".prisma/client";
 
 interface Props {
-  projet: Projet;
+  dossier: Dossier;
   onChange: (transitionEvent: string) => void;
 }
 
-const ChangeStatutProjetButton: React.FC<Props> = ({ projet, onChange }) => {
+const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, onChange }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const statutProjetFSM = statutProjetFSMFactory(projet.statut as string);
-  const className = statutProjetFSM.stateClassName();
+  const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
+  const className = statutDossierFSM.stateClassName();
 
   return (
     <div className={styles.container}>
@@ -27,13 +27,13 @@ const ChangeStatutProjetButton: React.FC<Props> = ({ projet, onChange }) => {
           setDropdownVisible(!dropdownVisible);
         }}
       >
-        {statutProjetFSM.stateLabel()}
+        {statutDossierFSM.stateLabel()}
       </Button>
       <div
         className={styles.dropdown}
         style={{ visibility: dropdownVisible ? "visible" : "hidden" }}
       >
-        {statutProjetFSM.transitionObjects().map((transition) => (
+        {statutDossierFSM.transitionObjects().map((transition) => (
           <button
             key={transition.name}
             className={styles.row}
@@ -47,10 +47,10 @@ const ChangeStatutProjetButton: React.FC<Props> = ({ projet, onChange }) => {
             </span>
             <div>
               <p className={styles.event}>
-                {statutProjetEventToFrench(transition.name)}
+                {statutDossierEventToFrench(transition.name)}
               </p>
               <p className={styles.description}>
-                {statutProjetEventToFrenchDescription(transition.name)}
+                {statutDossierEventToFrenchDescription(transition.name)}
               </p>
             </div>
           </button>
@@ -60,4 +60,4 @@ const ChangeStatutProjetButton: React.FC<Props> = ({ projet, onChange }) => {
   );
 };
 
-export default ChangeStatutProjetButton;
+export default ChangeStatutDossierButton;

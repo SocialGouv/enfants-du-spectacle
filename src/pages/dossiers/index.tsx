@@ -20,7 +20,7 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import { getCommissions, searchEnfants, searchProjets } from "src/lib/queries";
+import { getCommissions, searchDossiers, searchEnfants } from "src/lib/queries";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
@@ -199,8 +199,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
   if (query.search) {
     const searchResults = {
+      dossiers: await searchDossiers(prisma, query.search as string),
       enfants: await searchEnfants(prisma, query.search as string),
-      projets: await searchProjets(prisma, query.search as string),
     };
     return {
       props: {

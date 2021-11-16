@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const prisma = new PrismaClient();
   const commission = await prisma.commission.findUnique({
     include: {
-      projets: {
+      dossiers: {
         include: {
           _count: { select: { enfants: true } },
           societeProduction: true,

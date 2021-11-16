@@ -13,7 +13,7 @@ const FilterBarText: React.FC<Props> = ({ searchResults, commissions }) => {
       <>
         Filtrer les{" "}
         <span className={styles.count}>
-          {searchResults.projets.length} dossiers
+          {searchResults.dossiers.length} dossiers
         </span>{" "}
         et{" "}
         <span className={styles.count}>
@@ -26,7 +26,7 @@ const FilterBarText: React.FC<Props> = ({ searchResults, commissions }) => {
       <>
         Filtrer les{" "}
         <span className={styles.count}>
-          {commissions.map((c) => c.projets.length).reduce((a, b) => a + b, 0)}{" "}
+          {commissions.map((c) => c.dossiers.length).reduce((a, b) => a + b, 0)}{" "}
           dossiers{" "}
         </span>
       </>

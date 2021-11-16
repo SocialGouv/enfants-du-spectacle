@@ -1,15 +1,15 @@
-import type { Commission, Prisma, StatutProjet, User } from "@prisma/client";
-import { CategorieProjet, PrismaClient } from "@prisma/client";
-import parse from "csv-parse/lib/sync";
+import type { Prisma, StatutDossier, User } from "@prisma/client";
+import { CategorieDossier, PrismaClient } from "@prisma/client";
+import { parse } from "csv-parse/sync";
 import faker from "faker";
 import fs from "fs";
 import slugify from "slugify";
 
 faker.seed(2021); // to get reproducible results
 
-const NOMBRE_PROJETS = [12, 13, 5, 10, 23, 4, 12, 17, 23, 12, 20, 16];
-const projetsCount = NOMBRE_PROJETS.reduce((i, y) => i + y, 0);
-const NUMEROS_DOSSIERS_DS: number[] = Array.from(Array(projetsCount)).map(
+const NOMBRE_DOSSIERS = [12, 13, 5, 10, 23, 4, 12, 17, 23, 12, 20, 16];
+const dossiersCount = NOMBRE_DOSSIERS.reduce((i, y) => i + y, 0);
+const NUMEROS_DOSSIERS_DS: number[] = Array.from(Array(dossiersCount)).map(
   (i, y) => 14000 + y
 );
 
@@ -34,7 +34,7 @@ interface EnfantCSV {
   nom: string;
   role: string;
 }
-interface ProjetCSV {
+interface DossierCSV {
   nom: string;
   nombreEnfants: number;
 }
@@ -50,7 +50,7 @@ function getRandomUser(users: User[], inThePast: boolean): User | null {
   return faker.random.arrayElement(values);
 }
 
-function getRandomStatut(inThePast: boolean): StatutProjet {
+function getRandomStatut(inThePast: boolean): StatutDossier {
   const values = inThePast
     ? [
       "AVIS_AJOURNE",
@@ -61,17 +61,16 @@ function getRandomStatut(inThePast: boolean): StatutProjet {
       "REFUSE",
     ]
     : ["CONSTRUCTION", "INSTRUCTION", "PRET"];
-  return faker.random.arrayElement(values) as StatutProjet;
+  return faker.random.arrayElement(values) as StatutDossier;
 }
 
-function getRandomCategorie(): CategorieProjet {
-  return faker.random.objectElement(CategorieProjet, "value");
+function getRandomCategorie(): CategorieDossier {
+  return faker.random.objectElement(CategorieDossier, "value");
 }
 
 async function main() {
   await prisma.enfant.deleteMany();
-  await prisma.projet.deleteMany();
-  await prisma.dossierDS.deleteMany();
+  await prisma.dossier.deleteMany();
   await prisma.user.deleteMany();
   await prisma.demandeur.deleteMany();
   await prisma.societeProduction.deleteMany();
@@ -102,15 +101,15 @@ async function main() {
   const enfantsSeeds = readCsv<EnfantCSV>("enfants");
   enfantsSeeds.forEach((e) => (e.role = "role"));
 
-  const projetsSeeds = readCsv<ProjetCSV>("projets");
+  const dossiersSeeds = readCsv<DossierCSV>("dossiers");
 
   for (const commission of await prisma.commission.findMany({
-    take: NOMBRE_PROJETS.length,
+    take: NOMBRE_DOSSIERS.length,
   })) {
     const inThePast = commission.date < new Date();
     const societesProductions = await prisma.societeProduction.findMany();
     for await (const _y of Array.from(
-      Array(NOMBRE_PROJETS.shift())
+      Array(NOMBRE_DOSSIERS.shift())
     ).entries()) {
       const societeProduction = faker.random.arrayElement(societesProductions);
       const nom = faker.name.firstName();
@@ -123,25 +122,20 @@ async function main() {
       const demandeur = await prisma.demandeur.create({
         data: { email, nom, prenom, societeProductionId: societeProduction.id },
       });
-      const dossierDS = await prisma.dossierDS.create({
-        data: {
-          demandeurId: demandeur.id,
-          numero: NUMEROS_DOSSIERS_DS.shift() ?? 0,
-        },
-      });
-      const projet = projetsSeeds.shift();
-      if (!projet) throw Error("no more projets");
-      const data: Prisma.ProjetUncheckedCreateInput = {
+      const dossier = dossiersSeeds.shift();
+      if (!dossier) throw Error("no more dossiers");
+      const data: Prisma.DossierUncheckedCreateInput = {
         categorie: getRandomCategorie(),
         commissionId: commission.id,
-        dossierDSNumero: dossierDS.numero,
-        enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
-        nom: projet.nom,
+        demandeurId: demandeur.id,
+        enfants: { create: enfantsSeeds.splice(0, dossier.nombreEnfants) },
+        nom: dossier.nom,
+        numeroDS: NUMEROS_DOSSIERS_DS.shift() ?? 0,
         societeProductionId: societeProduction.id,
         statut: getRandomStatut(inThePast),
         userId: getRandomUser(users, inThePast)?.id,
       };
-      await prisma.projet.create({ data });
+      await prisma.dossier.create({ data });
     }
   }
 }

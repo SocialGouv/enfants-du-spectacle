@@ -5,14 +5,14 @@ import React, { useEffect, useState } from "react";
 import Dossier from "src/components/Dossier";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
-import { updateProjet } from "src/lib/queries";
-import type { ProjetData } from "src/lib/types";
+import { updateDossier } from "src/lib/queries";
+import type { DossierData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
 import { PrismaClient } from ".prisma/client";
 
 interface Props {
-  projet: ProjetData;
+  dossier: DossierData;
   allUsers: User[];
 }
 
@@ -20,44 +20,44 @@ const Page: React.FC<Props> = (props) => {
   const { data: session } = useSession();
 
   const { allUsers } = props;
-  const [projet, setProjet] = useState(props.projet);
-  const [assignedUserId, setAssignedUserId] = useState(projet.userId);
+  const [dossier, setDossier] = useState(props.dossier);
+  const [assignedUserId, setAssignedUserId] = useState(dossier.userId);
 
   useEffect(() => {
-    setAssignedUserId(projet.userId);
-  }, [projet.userId]);
+    setAssignedUserId(dossier.userId);
+  }, [dossier.userId]);
 
   if (!session) throw Error("no session on protected page");
 
-  function updateProjetAndReload(updates: {
+  function updateDossierAndReload(updates: {
     transitionEvent?: string;
     userId?: number;
   }): void {
-    updateProjet(projet, updates, (p) => {
-      setProjet(p);
+    updateDossier(dossier, updates, (p) => {
+      setDossier(p);
     });
   }
 
   const onChangeStatut = (transitionEvent: string) => {
-    updateProjetAndReload({ transitionEvent });
+    updateDossierAndReload({ transitionEvent });
   };
 
   const onAssignUserId = (userId: number | null) => {
-    updateProjet(projet, { userId }, (p) => {
-      setProjet(p);
+    updateDossier(dossier, { userId }, (p) => {
+      setDossier(p);
     });
   };
 
   const title = (
     <>
-      <Title as="h1">{projet.nom}</Title>
+      <Title as="h1">{dossier.nom}</Title>
     </>
   );
   return (
-    <Layout headerMiddle={title} windowTitle={projet.nom}>
+    <Layout headerMiddle={title} windowTitle={dossier.nom}>
       <Dossier
         assignedUserId={assignedUserId}
-        projet={projet}
+        dossier={dossier}
         onAssignUserId={onAssignUserId}
         onChangeStatut={onChangeStatut}
         allUsers={allUsers}
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   const id = parseInt(context.params.id as string, 10);
   const prisma = new PrismaClient();
-  const projet = await prisma.projet.findUnique({
+  const dossier = await prisma.dossier.findUnique({
     include: {
       commission: true,
       enfants: true,
@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     where: { id },
   });
   const allUsers = await prisma.user.findMany();
-  return { props: { allUsers, projet, session } };
+  return { props: { allUsers, dossier, session } };
 };
 
 export default Page;

@@ -1,8 +1,8 @@
-import type { CategorieProjet } from "@prisma/client";
+import type { CategorieDossier } from "@prisma/client";
 
 interface Categorie {
   label: string;
-  value: CategorieProjet;
+  value: CategorieDossier;
 }
 type GrandeCategorieValue =
   | "CINEMA"
@@ -97,14 +97,14 @@ const grandesCategoriesOptions = grandesCategories.map((c) => ({
   value: c.value,
 }));
 
-function categorieToLabel(categorie: CategorieProjet): string | undefined {
+function categorieToLabel(categorie: CategorieDossier): string | undefined {
   return Object.values(grandesCategories)
     .flatMap((gc) => gc.categories)
     .find((c) => c.value == categorie)?.label;
 }
 
 function categorieToGrandeCategorieLabel(
-  categorie: CategorieProjet
+  categorie: CategorieDossier
 ): string | undefined {
   return grandesCategories.find((gc) =>
     gc.categories.find((c) => c.value == categorie)
@@ -113,7 +113,7 @@ function categorieToGrandeCategorieLabel(
 
 function grandeCategorieToCategorieValues(
   grandeCategorieValue: GrandeCategorieValue
-): CategorieProjet[] {
+): CategorieDossier[] {
   const grandeCategorie = grandesCategories.find(
     (gc) => gc.value == grandeCategorieValue
   );

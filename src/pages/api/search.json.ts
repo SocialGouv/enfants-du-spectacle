@@ -1,6 +1,6 @@
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { searchEnfants, searchProjets } from "src/lib/queries";
+import { searchDossiers, searchEnfants } from "src/lib/queries";
 import superjson from "superjson";
 
 import { PrismaClient } from ".prisma/client";
@@ -22,8 +22,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   const prisma = new PrismaClient();
   const enfants = await searchEnfants(prisma, req.query.search);
-  const projets = await searchProjets(prisma, req.query.search);
-  res.status(200).json(superjson.stringify({ enfants, projets }));
+  const dossiers = await searchDossiers(prisma, req.query.search);
+  res.status(200).json(superjson.stringify({ dossiers, enfants }));
 };
 
 export default handler;
