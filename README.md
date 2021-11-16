@@ -49,3 +49,11 @@ Les seeds permettent de restaurer simplement des bases de données avec des donn
 `node scripts/generate-seeds.js` permet de générer certains fichiers CSV dans le répertoire prisma/seeds. Ce script s'appuie sur la gem [`faker.js`](https://github.com/Marak/faker.js) pour générer des éléments aléatoires en masse comme des noms et prénoms. Les stocker dans des CSV rend l'ingestion des seeds déterministes. Une autre partie des CSV a été créée manuellement à partir de données plus ou moins réelles.
 
 `npx prisma db seed` restaure la base de données grace aux seeds. Il lit les fichiers CSV générés précedemment et exécute des requêtes d'insertion.
+
+## Mails
+
+Les templates de mails sont écrits en [MJML](https://mjml.io/) et doivent être convertis en HTML en cas de modification :
+
+```sh
+npx mjml src/mails/signin.mjml -o src/mails/signin.html
+```

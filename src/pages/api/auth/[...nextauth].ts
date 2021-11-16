@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import emailParser from "email-addresses";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
+import { sendVerificationRequest } from "src/lib/emailAuth";
 
 const prisma = new PrismaClient();
 
@@ -29,6 +30,7 @@ export default NextAuth({
   providers: [
     EmailAuthProvider({
       from: process.env.EMAIL_FROM,
+      sendVerificationRequest,
       server: {
         auth: {
           pass: process.env.EMAIL_SERVER_PASSWORD,
