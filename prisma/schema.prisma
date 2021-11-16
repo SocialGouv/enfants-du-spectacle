@@ -72,6 +72,14 @@ enum CategorieDossier {
   AUTRE
 }
 
+enum JustificatifDossier {
+  SYNOPSIS
+  SCENARIO
+  MESURES_SECURITE
+  PLAN_TRAVAIL
+  INFOS_COMPLEMENTAIRES
+}
+
 model Dossier {
   id                  Int               @id @default(autoincrement())
   numeroDS            Int
@@ -87,6 +95,7 @@ model Dossier {
   user                User?             @relation(fields: [userId], references: [id])
   demandeurId         Int
   demandeur           Demandeur         @relation(fields: [demandeurId], references: [id])
+  justificatifs       JustificatifDossier[]
 }
 
 model Enfant {

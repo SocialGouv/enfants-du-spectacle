@@ -1,4 +1,9 @@
-import type { Prisma, StatutDossier, User } from "@prisma/client";
+import type {
+  JustificatifDossier,
+  Prisma,
+  StatutDossier,
+  User,
+} from "@prisma/client";
 import { CategorieDossier, PrismaClient } from "@prisma/client";
 import { parse } from "csv-parse/sync";
 import faker from "faker";
@@ -52,17 +57,34 @@ function getRandomUser(users: User[], inThePast: boolean): User | null {
 }
 
 function getRandomStatut(inThePast: boolean): StatutDossier {
+  const pastValues = [
+    "AVIS_AJOURNE",
+    "AVIS_FAVORABLE",
+    "AVIS_FAVORABLE_SOUS_RESERVE",
+    "AVIS_DEFAVORABLE",
+    "ACCEPTE",
+    "REFUSE",
+  ];
   const values = inThePast
-    ? [
-      "AVIS_AJOURNE",
-      "AVIS_FAVORABLE",
-      "AVIS_FAVORABLE_SOUS_RESERVE",
-      "AVIS_DEFAVORABLE",
-      "ACCEPTE",
-      "REFUSE",
-    ]
+    ? pastValues
     : ["CONSTRUCTION", "INSTRUCTION", "PRET"];
   return faker.random.arrayElement(values) as StatutDossier;
+}
+
+function getRandomJustificatifsDossier(): JustificatifDossier[] {
+  const requiredJustificatifs = ["SCENARIO"];
+  const optionalJustificatifs = [
+    "SYNOPSIS",
+    "MESURES_SECURITE",
+    "PLAN_TRAVAIL",
+    "INFOS_COMPLEMENTAIRES",
+  ];
+  return requiredJustificatifs.concat(
+    faker.random.arrayElements(
+      optionalJustificatifs,
+      faker.datatype.number({ max: optionalJustificatifs.length, min: 0 })
+    )
+  ) as JustificatifDossier[];
 }
 
 function getRandomCategorie(): CategorieDossier {
@@ -136,6 +158,7 @@ async function main() {
         commissionId: commission.id,
         demandeurId: demandeur.id,
         enfants: { create: enfantsSeeds.splice(0, dossier.nombreEnfants) },
+        justificatifs: getRandomJustificatifsDossier(),
         nom: dossier.nom,
         numeroDS: NUMEROS_DOSSIERS_DS.shift() ?? 0,
         societeProductionId: societeProduction.id,

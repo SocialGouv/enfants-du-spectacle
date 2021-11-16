@@ -2,6 +2,7 @@ import { Select, Table, Title } from "@dataesr/react-dsfr";
 import React from "react";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
+import { JustificatifsDossier } from "src/components/Justificatifs";
 import {
   categorieToGrandeCategorieLabel,
   categorieToLabel,
@@ -98,6 +99,9 @@ const Dossier: React.FC<Props> = ({
             </div>
           </Info>
         </div>
+        <Info title="Pièces justificatives">
+          <JustificatifsDossier dossier={dossier} />
+        </Info>
       </div>
 
       <div className={styles.bloc}>
