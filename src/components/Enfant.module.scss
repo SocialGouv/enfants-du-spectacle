@@ -1,0 +1,17 @@
+div.container {
+  display: flex;
+
+  &>div{
+    margin-left: 2rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding-bottom: 1rem;
+}

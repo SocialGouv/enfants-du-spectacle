@@ -1,7 +1,10 @@
 import type {
+  Enfant,
   JustificatifDossier,
+  JustificatifEnfant,
   Prisma,
   StatutDossier,
+  TypeEmploi,
   User,
 } from "@prisma/client";
 import { CategorieDossier, PrismaClient } from "@prisma/client";
@@ -34,11 +37,6 @@ interface SocieteCSV {
   nom: string;
   departement: string;
   siret: string;
-}
-interface EnfantCSV {
-  prenom: string;
-  nom: string;
-  role: string;
 }
 interface DossierCSV {
   nom: string;
@@ -91,6 +89,71 @@ function getRandomCategorie(): CategorieDossier {
   return faker.random.objectElement(CategorieDossier, "value");
 }
 
+const TYPES_EMPLOI: TypeEmploi[] = [
+  "ROLE_1",
+  "ROLE_2",
+  "FIGURATION",
+  "SILHOUETTE",
+  "SILHOUETTE_PARLANTE",
+  "DOUBLURE",
+  "DOUBLAGE",
+  "CHANT",
+  "DANSE",
+  "JEU_VIDEO",
+  "AUTRE",
+];
+
+function getRandomJustificatifsEnfant(): JustificatifEnfant[] {
+  const requiredJustificatifs = ["CONTRAT"];
+  const optionalJustificatifs = [
+    "LIVRET_FAMILLE",
+    "AUTORISATION_PARENTALE",
+    "SITUATION_PARTICULIERE",
+    "CONTRAT",
+    "CERTIFICAT_SCOLARITE",
+    "AVIS_MEDICAL",
+  ];
+  return requiredJustificatifs.concat(
+    faker.random.arrayElements(
+      optionalJustificatifs,
+      faker.datatype.number({ max: optionalJustificatifs.length, min: 0 })
+    )
+  ) as JustificatifEnfant[];
+}
+
+function getRandomEnfant(): Omit<
+  Prisma.EnfantUncheckedCreateInput,
+  "dossierId"
+> {
+  return {
+    dateNaissance: faker.date.between(
+      new Date(2008, 1, 1),
+      new Date(2017, 1, 1)
+    ),
+    justificatifs: getRandomJustificatifsEnfant(),
+    montantCachet: faker.datatype.float({ max: 590, min: 90 }),
+    nom: faker.name.lastName(),
+    nombreCachets: faker.datatype.number({ max: 50, min: 1 }),
+    nombreJours: faker.datatype.number({ max: 30, min: 1 }),
+    prenom: faker.name.firstName(),
+    remunerationTotale: faker.datatype.float({ max: 200, min: 5000 }),
+    typeEmploi: faker.random.arrayElement(TYPES_EMPLOI),
+    // contexteTravail String?
+    // nomPersonnage String?
+    // periodeTravail String?
+    // remunerationsAdditionnelles String?
+  };
+}
+
+function getRandomEnfants(): Omit<
+  Prisma.EnfantUncheckedCreateInput,
+  "dossierId"
+>[] {
+  return Array.from(Array(faker.datatype.number({ max: 35, min: 1 }))).map(
+    getRandomEnfant
+  );
+}
+
 async function main() {
   await prisma.enfant.deleteMany();
   await prisma.dossier.deleteMany();
@@ -120,9 +183,6 @@ async function main() {
   for (const societeProduction of readCsv<SocieteCSV>("societes")) {
     await prisma.societeProduction.create({ data: societeProduction });
   }
-
-  const enfantsSeeds = readCsv<EnfantCSV>("enfants");
-  enfantsSeeds.forEach((e) => (e.role = "role"));
 
   const dossiersSeeds = readCsv<DossierCSV>("dossiers");
 
@@ -157,7 +217,7 @@ async function main() {
         categorie: getRandomCategorie(),
         commissionId: commission.id,
         demandeurId: demandeur.id,
-        enfants: { create: enfantsSeeds.splice(0, dossier.nombreEnfants) },
+        enfants: { create: getRandomEnfants() },
         justificatifs: getRandomJustificatifsDossier(),
         nom: dossier.nom,
         numeroDS: NUMEROS_DOSSIERS_DS.shift() ?? 0,

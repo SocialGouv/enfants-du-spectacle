@@ -1,7 +1,9 @@
-import { Select, Table, Title } from "@dataesr/react-dsfr";
+import { Select, Title } from "@dataesr/react-dsfr";
 import React from "react";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
+import Enfant from "src/components/Enfant";
+import Info from "src/components/Info";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import {
   categorieToGrandeCategorieLabel,
@@ -11,19 +13,6 @@ import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
-
-interface InfoProps {
-  title: string;
-}
-
-const Info: React.FC<InfoProps> = ({ title, children }) => {
-  return (
-    <div className={styles.info}>
-      <div className={styles.infoTitle}>{title}</div>
-      <div className={styles.infoContent}>{children}</div>
-    </div>
-  );
-};
 
 interface Props {
   dossier: DossierData;
@@ -104,21 +93,14 @@ const Dossier: React.FC<Props> = ({
         </Info>
       </div>
 
-      <div className={styles.bloc}>
-        <Title as="h3">Enfants</Title>
-        {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
-        {dossier.enfants.length > 0 && (
-          <Table
-            columns={[
-              { label: "Prénom", name: "prenom" },
-              { label: "Nom", name: "nom" },
-              { label: "Rôle", name: "role" },
-            ]}
-            data={dossier.enfants}
-            rowKey="id"
-          />
-        )}
-      </div>
+      {/* <div className={styles.bloc}> */}
+      <Title as="h3">Enfants</Title>
+      {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
+      {dossier.enfants.map((enfant) => (
+        <div key={enfant.id} className={styles.bloc}>
+          <Enfant enfant={enfant} />
+        </div>
+      ))}
     </>
   );
 };
