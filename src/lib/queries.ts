@@ -1,4 +1,5 @@
 import type {
+  Commission,
   Dossier,
   Enfant,
   PrismaClient,
@@ -6,6 +7,7 @@ import type {
   User,
 } from "@prisma/client";
 import type { GrandeCategorieValue } from "src/lib/categories";
+import prisma from "src/lib/prismaClient";
 import type {
   CommissionData,
   DossierData,
@@ -83,6 +85,15 @@ function updateDossier(
     });
 }
 
+async function getUpcomingCommission(): Promise<Commission> {
+  const commission = await prisma.commission.findFirst({
+    orderBy: { date: "asc" },
+    where: { date: { gte: new Date() } },
+  });
+  if (!commission) throw Error("could not find upcoming commission");
+  return commission;
+}
+
 interface SearchResultsType {
   enfants: (Enfant & {
     dossier: Dossier & {
@@ -112,4 +123,4 @@ export type {
   DossiersFilters,
   SearchResultsType,
 };
-export { searchDossiers, searchEnfants, updateDossier };
+export { getUpcomingCommission, searchDossiers, searchEnfants, updateDossier };

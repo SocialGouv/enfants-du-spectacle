@@ -1,0 +1,489 @@
+import type { Dossier as DossierDS } from "src/synchronize/demarchesSimplifiees";
+import { parseEnfants } from "src/synchronize/enfant";
+
+test("parseEnfants works", () => {
+  const dossierDS = JSON.parse(`{
+    "id": "RG9zc2llci02OTQ1NzIx",
+    "number": 6945721,
+    "archived": false,
+    "state": "en_construction",
+    "dateDerniereModification": "2021-12-01T18:28:37+01:00",
+    "datePassageEnConstruction": "2021-12-01T18:28:35+01:00",
+    "datePassageEnInstruction": null,
+    "dateTraitement": null,
+    "motivation": null,
+    "motivationAttachment": null,
+    "attestation": null,
+    "pdf": {
+      "url": "https://www.demarches-simplifiees.fr/api/v2/dossiers/pdf/BAh7CEkiCGdpZAY6BkVUSSIuZ2lkOi8vdHBzL0Rvc3NpZXIvNjk0NTcyMT9leHBpcmVzX2luPTM2MDAGOwBUSSIMcHVycG9zZQY7AFRJIgthcGlfdjIGOwBUSSIPZXhwaXJlc19hdAY7AFRJIh0yMDIxLTEyLTAxVDE4OjI4OjQ4LjgzNloGOwBU--dae5554e091399d94f26cee078dafc18b4bc4a68"
+    },
+    "instructeurs": [],
+    "groupeInstructeur": {
+      "id": "R3JvdXBlSW5zdHJ1Y3RldXItNjYzODY=",
+      "number": 66386,
+      "label": "défaut"
+    },
+    "champs": [
+      {
+        "id": "Q2hhbXAtMjAyNzg2MA==",
+        "label": "Informations liées au demandeur ",
+        "stringValue": ""
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzg2NA==",
+        "label": "Prénom",
+        "stringValue": "Henry"
+      },
+      {
+        "id": "Q2hhbXAtMjA2OTg3Mg==",
+        "label": "Nom",
+        "stringValue": "Lee"
+      },
+      {
+        "id": "Q2hhbXAtMjA2OTg3Mw==",
+        "label": "Fonctions",
+        "stringValue": "Productrice"
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzg2NQ==",
+        "label": "Mail ",
+        "stringValue": "nilinyfyg@mailinator.com"
+      },
+      {
+        "id": "Q2hhbXAtMjA2Mzg0Mw==",
+        "label": "Téléphone ",
+        "stringValue": "04 81 84 77 21"
+      },
+      {
+        "id": "Q2hhbXAtMjA2NDExNg==",
+        "label": "Convention collective applicable",
+        "stringValue": "CCN des parcs de loisirs et d'attractions 1790"
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzY4Mw==",
+        "label": "Projet",
+        "stringValue": ""
+      },
+      {
+        "id": "Q2hhbXAtMjA2NDAxNQ==",
+        "label": "Titre du projet",
+        "stringValue": "Enfant du  Destin"
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzY4NA==",
+        "label": "Catégorie",
+        "stringValue": "Spectacle de danse "
+      },
+      {
+        "id": "Q2hhbXAtMjA2OTg3OQ==",
+        "label": "Projet contenant certains types de scènes",
+        "stringValue": "Machines dangereuses, produits chimiques ou agents biologiques",
+        "values": [
+          "Machines dangereuses, produits chimiques ou agents biologiques"
+        ]
+      },
+      {
+        "id": "Q2hhbXAtMjA4Nzc4NA==",
+        "label": "Présentation globale du projet",
+        "stringValue": "Repudiandae nesciunt"
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcwNg==",
+        "label": "Synopsis",
+        "stringValue": "",
+        "file": null
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcwOA==",
+        "label": "Scenario",
+        "stringValue": "",
+        "file": {
+          "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+          "contentType": "image/png",
+          "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+          "byteSize": 125373,
+          "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/i0xep2wtr4vr8nsrqy384kuki38a?temp_url_sig=ec7e4cf83ea8f0b0eedbc09a381395d00f6f8b9f&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+        }
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcwNw==",
+        "label": "Note précisant les mesures de sécurité",
+        "stringValue": "",
+        "file": {
+          "filename": "Screenshot 2021-12-01 at 11.29.46.png",
+          "contentType": "image/png",
+          "checksum": "pdCckoowVAWdjJ/X4znHyA==",
+          "byteSize": 540022,
+          "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/bqutasb1w0qku3czf887fa6h4lgv?temp_url_sig=0d093e77262b0f6cc711633b468ee3dca398a958&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2011.29.46.png&inline"
+        }
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcwOQ==",
+        "label": "Plan de travail",
+        "stringValue": "",
+        "file": null
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcxMA==",
+        "label": "Date de commencement du projet",
+        "stringValue": "05 juin 2022"
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcxMQ==",
+        "label": "Date de fin du projet",
+        "stringValue": "17 octobre 2022"
+      },
+      {
+        "id": "Q2hhbXAtMjExODY5OA==",
+        "label": "Eléments d'information complémentaires ",
+        "stringValue": "",
+        "file": null
+      },
+      {
+        "id": "Q2hhbXAtMjAyNzcyMQ==",
+        "label": "Informations liées aux enfants",
+        "stringValue": ""
+      },
+      {
+        "id": "Q2hhbXAtMjExNTUyOA==",
+        "label": "Vous pouvez ajouter plusieurs enfants",
+        "stringValue": ""
+      },
+      {
+        "id": "Q2hhbXAtMjExODU3MA==",
+        "label": "Enfant",
+        "stringValue": "",
+        "champs": [
+          {
+            "id": "Q2hhbXAtMjExODU3MQ==",
+            "label": "Prénom(s)",
+            "stringValue": "Johan"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Mg==",
+            "label": "Nom",
+            "stringValue": "Perry"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Mw==",
+            "label": "Né(e) le",
+            "stringValue": "05 décembre 1991"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3NA==",
+            "label": "Type d'emploi",
+            "stringValue": "Joueur professionnel de jeux vidéo"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Nw==",
+            "label": "Nom du personnage incarné par l'enfant ",
+            "stringValue": "Hyde"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMA==",
+            "label": "Période de travail",
+            "stringValue": "Dignissimos aliquip "
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMg==",
+            "label": "Nombre de jours de travail",
+            "stringValue": "6"
+          },
+          {
+            "id": "Q2hhbXAtMjExOTE0MQ==",
+            "label": "Temps et lieu de travail",
+            "stringValue": "Repudiandae maxime u"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNA==",
+            "label": "Montant du cachet",
+            "stringValue": "385"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMw==",
+            "label": "Nombre de cachets",
+            "stringValue": "10"
+          },
+          {
+            "id": "Q2hhbXAtMjE2NjI0Ng==",
+            "label": "Nombre de lignes",
+            "stringValue": "20"
+          },
+          {
+            "id": "Q2hhbXAtMjExOTE1MA==",
+            "label": "Rémunérations additionnelles",
+            "stringValue": "Ipsam modi ipsam num"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNQ==",
+            "label": "Rémunération totale",
+            "stringValue": "3875"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNg==",
+            "label": "Livret de famille",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/4ostxz41mdbokywhfyymzvecxy84?temp_url_sig=4109f0e6e2a28f4ab4c5a004ddea4c12e0048b7b&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNw==",
+            "label": "Autorisation parentale",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 11.29.46.png",
+              "contentType": "image/png",
+              "checksum": "pdCckoowVAWdjJ/X4znHyA==",
+              "byteSize": 540022,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/3jwrigsls6wm0h9vawmehlf232l9?temp_url_sig=b5c36893808351cce7bdf9e5702754687c71f93e&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2011.29.46.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxOA==",
+            "label": "Situations particulières relatives à l'autorité parentale",
+            "stringValue": "",
+            "file": null
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1Mg==",
+            "label": "Projet de contrat de travail",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 10.11.17.png",
+              "contentType": "image/png",
+              "checksum": "3x6zOPp5YkKQdjfO/Jxtew==",
+              "byteSize": 288467,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/czbxthcdvh0oslfsb61bhaxgsfk4?temp_url_sig=1ad975e496cb0155ddb2395ad4f8e9160e42d393&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2010.11.17.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1NA==",
+            "label": "Certificat de scolarité ou/et avis pédagogique",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 10.11.17.png",
+              "contentType": "image/png",
+              "checksum": "3x6zOPp5YkKQdjfO/Jxtew==",
+              "byteSize": 288467,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/rzr4fkt4u70debx586udrzgyy7ig?temp_url_sig=45208083f97b910389684952bdc478f4d7ed9d5b&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2010.11.17.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1OQ==",
+            "label": "Avis médical d'aptitude",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 10.05.47.png",
+              "contentType": "image/png",
+              "checksum": "oHBQlQ3tA7qt5QpLVGATHg==",
+              "byteSize": 31457,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/mqmqk9jkejikchxyan4mt206l0es?temp_url_sig=ce7a2d98d40cced1ba0c4d6ee97dc7d35b9afbfc&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2010.05.47.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3MQ==",
+            "label": "Prénom(s)",
+            "stringValue": "Mimoun"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Mg==",
+            "label": "Nom",
+            "stringValue": "Liottey"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Mw==",
+            "label": "Né(e) le",
+            "stringValue": "01 octobre 2010"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3NA==",
+            "label": "Type d'emploi",
+            "stringValue": "Figurant"
+          },
+          {
+            "id": "Q2hhbXAtMjExODU3Nw==",
+            "label": "Nom du personnage incarné par l'enfant ",
+            "stringValue": ""
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMA==",
+            "label": "Période de travail",
+            "stringValue": "tous les days"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMg==",
+            "label": "Nombre de jours de travail",
+            "stringValue": "10"
+          },
+          {
+            "id": "Q2hhbXAtMjExOTE0MQ==",
+            "label": "Temps et lieu de travail",
+            "stringValue": "souvent"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNA==",
+            "label": "Montant du cachet",
+            "stringValue": "300"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxMw==",
+            "label": "Nombre de cachets",
+            "stringValue": "2"
+          },
+          {
+            "id": "Q2hhbXAtMjE2NjI0Ng==",
+            "label": "Nombre de lignes",
+            "stringValue": ""
+          },
+          {
+            "id": "Q2hhbXAtMjExOTE1MA==",
+            "label": "Rémunérations additionnelles",
+            "stringValue": "pas cher"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNQ==",
+            "label": "Rémunération totale",
+            "stringValue": "600"
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNg==",
+            "label": "Livret de famille",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/y71ru9ytdqt9h2s11uy8t0sf9zxg?temp_url_sig=e633b5554b81621918af23fd41cd068b92795287&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxNw==",
+            "label": "Autorisation parentale",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/21r4ool4t5ol6q0hkg2dmru6ptn2?temp_url_sig=8f1e89b64e059e7def656c7decd83102c8351c34&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODYxOA==",
+            "label": "Situations particulières relatives à l'autorité parentale",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/pc0wjmsoymk6qsf3dk10vsrdelxj?temp_url_sig=7fc2221648cc2f63314df76da4d1ab15b75e68e2&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1Mg==",
+            "label": "Projet de contrat de travail",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/qkdrdqmuytnew4vx4obt2nbp9z33?temp_url_sig=f59e0cfd09d951e5b7b2f7c504f658075eca2704&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1NA==",
+            "label": "Certificat de scolarité ou/et avis pédagogique",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/7m83nlajv3gegsfaqkql8ub2e6ym?temp_url_sig=348b3d039f9c8fb9c72e2d440e2f6e9b9396b6b1&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          },
+          {
+            "id": "Q2hhbXAtMjExODY1OQ==",
+            "label": "Avis médical d'aptitude",
+            "stringValue": "",
+            "file": {
+              "filename": "Screenshot 2021-12-01 at 12.11.40.png",
+              "contentType": "image/png",
+              "checksum": "+c4dkbGxZdgXYjfA/X9hpQ==",
+              "byteSize": 125373,
+              "url": "https://static.demarches-simplifiees.fr:443/v1/AUTH_db3cbfc79c914f87b192ff7c6bb176f0/ds_activestorage_backup/cp2lnfbxw0qebi8jbe8qkjqmj57t?temp_url_sig=0c41829a8c661ac17ca95ed65a3cf2967f2e5446&temp_url_expires=1638383328&filename=Screenshot%202021-12-01%20at%2012.11.40.png&inline"
+            }
+          }
+        ]
+      }
+    ],
+    "annotations": [],
+    "avis": [],
+    "messages": [
+      {
+        "id": "Q29tbWVudGFpcmUtMTY5MzQ5OTg=",
+        "email": "contact@demarches-simplifiees.fr",
+        "body": "[Votre dossier nº 6945721 a bien été déposé (Enfants Du Spectacle)]<br><br>",
+        "createdAt": "2021-12-01T18:28:37+01:00",
+        "attachment": null
+      }
+    ],
+    "demandeur": {
+    }
+  }
+  `) as DossierDS;
+  const parsed = parseEnfants(dossierDS);
+  expect(parsed.length).toEqual(2);
+  expect(parsed[0].prenom).toEqual("Johan");
+  expect(parsed[0].nom).toEqual("Perry");
+  expect(parsed[0].dateNaissance).toEqualYearMonthAndDate(
+    new Date(1991, 11, 5)
+  );
+  expect(parsed[0].typeEmploi).toEqual("JEU_VIDEO");
+  expect(parsed[0].nomPersonnage).toEqual("Hyde");
+  expect(parsed[0].periodeTravail).toEqual("Dignissimos aliquip ");
+  expect(parsed[0].nombreJours).toEqual(6);
+  expect(parsed[0].contexteTravail).toEqual("Repudiandae maxime u");
+  expect(parsed[0].montantCachet).toEqual(385);
+  expect(parsed[0].nombreCachets).toEqual(10);
+  // expect(parsed[0].nombreLignes).toEqual(20);
+  expect(parsed[0].remunerationsAdditionnelles).toEqual("Ipsam modi ipsam num");
+  expect(parsed[0].remunerationTotale).toEqual(3875);
+  expect(parsed[0].justificatifs).toEqual([
+    "AUTORISATION_PARENTALE",
+    "AVIS_MEDICAL",
+    "CERTIFICAT_SCOLARITE",
+    "LIVRET_FAMILLE",
+    "CONTRAT",
+  ]);
+
+  expect(parsed[1].prenom).toEqual("Mimoun");
+  expect(parsed[1].nom).toEqual("Liottey");
+  expect(parsed[1].dateNaissance).toEqualYearMonthAndDate(new Date(2010, 9, 1));
+  expect(parsed[1].typeEmploi).toEqual("FIGURATION");
+  expect(parsed[1].nomPersonnage).toEqual("");
+  expect(parsed[1].periodeTravail).toEqual("tous les days");
+  expect(parsed[1].nombreJours).toEqual(10);
+  expect(parsed[1].contexteTravail).toEqual("souvent");
+  expect(parsed[1].montantCachet).toEqual(300);
+  expect(parsed[1].nombreCachets).toEqual(2);
+  // expect(parsed[1].nombreLignes).toEqual();
+  expect(parsed[1].remunerationsAdditionnelles).toEqual("pas cher");
+  expect(parsed[1].remunerationTotale).toEqual(600);
+  expect(parsed[1].justificatifs).toEqual([
+    "AUTORISATION_PARENTALE",
+    "AVIS_MEDICAL",
+    "CERTIFICAT_SCOLARITE",
+    "LIVRET_FAMILLE",
+    "CONTRAT",
+    "SITUATION_PARTICULIERE",
+  ]);
+});
