@@ -1,5 +1,6 @@
 import type {
   Commission,
+  Demandeur,
   Dossier,
   Enfant,
   SocieteProduction,
@@ -19,6 +20,7 @@ type DossierData = Dossier & {
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];
+  demandeur: Demandeur;
 };
 
 type CommissionData = Commission & { dossiers: DossierDataLight[] };

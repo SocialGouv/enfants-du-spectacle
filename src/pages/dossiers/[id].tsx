@@ -79,6 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const dossier = await prisma.dossier.findUnique({
     include: {
       commission: true,
+      demandeur: true,
       enfants: true,
       societeProduction: true,
       user: true,

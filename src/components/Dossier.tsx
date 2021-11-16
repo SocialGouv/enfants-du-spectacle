@@ -76,11 +76,28 @@ const Dossier: React.FC<Props> = ({
           <br />
           {categorieToLabel(dossier.categorie)}
         </Info>
-        <Info title="Société">
-          <div>{dossier.societeProduction.nom}</div>
-          <div>{dossier.societeProduction.departement}</div>
-          <div>{dossier.societeProduction.siret}</div>
-        </Info>
+        <div>
+          <Info title="Société">
+            <div>{dossier.societeProduction.nom}</div>
+            <div>{dossier.societeProduction.departement}</div>
+            <div>{dossier.societeProduction.siret}</div>
+          </Info>
+          <Info title="Demandeur">
+            <div>
+              {dossier.demandeur.prenom} {dossier.demandeur.nom}
+            </div>
+            <div>
+              <a href={`mailto:${dossier.demandeur.email}`}>
+                ✉️ {dossier.demandeur.email}
+              </a>
+            </div>
+            <div>
+              <a href={`tel:${dossier.demandeur.phone}`}>
+                📞 {dossier.demandeur.phone}
+              </a>
+            </div>
+          </Info>
+        </div>
       </div>
 
       <div className={styles.bloc}>

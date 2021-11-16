@@ -5,6 +5,7 @@ import faker from "faker";
 import fs from "fs";
 import slugify from "slugify";
 
+faker.locale = "fr";
 faker.seed(2021); // to get reproducible results
 
 const NOMBRE_DOSSIERS = [12, 13, 5, 10, 23, 4, 12, 17, 23, 12, 20, 16];
@@ -120,7 +121,13 @@ async function main() {
         `${slugify(societeProduction.nom, { lower: true })}.fr`
       );
       const demandeur = await prisma.demandeur.create({
-        data: { email, nom, prenom, societeProductionId: societeProduction.id },
+        data: {
+          email,
+          nom,
+          phone: faker.phone.phoneNumber("+336########"),
+          prenom,
+          societeProductionId: societeProduction.id,
+        },
       });
       const dossier = dossiersSeeds.shift();
       if (!dossier) throw Error("no more dossiers");

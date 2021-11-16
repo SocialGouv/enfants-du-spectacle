@@ -30,6 +30,7 @@ model Demandeur {
   email               String            @unique
   nom                 String
   prenom              String
+  phone               String
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   societeProductionId Int
   dossiers          Dossier[]
