@@ -1,14 +1,11 @@
-import type {
-  CategorieProjet,
-  Prisma,
-  StatutProjet,
-  User,
-} from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import type { Commission, Prisma, StatutProjet, User } from "@prisma/client";
+import { CategorieProjet, PrismaClient } from "@prisma/client";
 import parse from "csv-parse/lib/sync";
 import faker from "faker";
 import fs from "fs";
 import slugify from "slugify";
+
+faker.seed(2021); // to get reproducible results
 
 const NOMBRE_PROJETS = [12, 13, 5, 10, 23, 4, 12, 17, 23, 12, 20, 16];
 const projetsCount = NOMBRE_PROJETS.reduce((i, y) => i + y, 0);
@@ -40,9 +37,6 @@ interface EnfantCSV {
 interface ProjetCSV {
   nom: string;
   nombreEnfants: number;
-  userEmail: string;
-  categorie: CategorieProjet;
-  statut: StatutProjet;
 }
 
 function readCsv<Type>(name: string): Type[] {
@@ -51,14 +45,27 @@ function readCsv<Type>(name: string): Type[] {
   }) as Type[];
 }
 
-function randomItem<Type>(items: Type[]) {
-  return items[Math.floor(Math.random() * items.length)];
+function getRandomUser(users: User[], inThePast: boolean): User | null {
+  const values = inThePast ? users : (users as (User | null)[]).concat([null]);
+  return faker.random.arrayElement(values);
 }
 
-function getUserByEmail(users: User[], email: string): User {
-  const user = users.find((a) => a.email === email);
-  if (!user) throw Error(`user not found for email ${email}`);
-  return user;
+function getRandomStatut(inThePast: boolean): StatutProjet {
+  const values = inThePast
+    ? [
+      "AVIS_AJOURNE",
+      "AVIS_FAVORABLE",
+      "AVIS_FAVORABLE_SOUS_RESERVE",
+      "AVIS_DEFAVORABLE",
+      "ACCEPTE",
+      "REFUSE",
+    ]
+    : ["CONSTRUCTION", "INSTRUCTION", "PRET"];
+  return faker.random.arrayElement(values) as StatutProjet;
+}
+
+function getRandomCategorie(): CategorieProjet {
+  return faker.random.objectElement(CategorieProjet, "value");
 }
 
 async function main() {
@@ -100,11 +107,12 @@ async function main() {
   for (const commission of await prisma.commission.findMany({
     take: NOMBRE_PROJETS.length,
   })) {
+    const inThePast = commission.date < new Date();
     const societesProductions = await prisma.societeProduction.findMany();
     for await (const _y of Array.from(
       Array(NOMBRE_PROJETS.shift())
     ).entries()) {
-      const societeProduction = randomItem(societesProductions);
+      const societeProduction = faker.random.arrayElement(societesProductions);
       const nom = faker.name.firstName();
       const prenom = faker.name.firstName();
       const email = faker.internet.email(
@@ -124,17 +132,15 @@ async function main() {
       const projet = projetsSeeds.shift();
       if (!projet) throw Error("no more projets");
       const data: Prisma.ProjetUncheckedCreateInput = {
-        categorie: projet.categorie,
+        categorie: getRandomCategorie(),
         commissionId: commission.id,
         dossierDSNumero: dossierDS.numero,
         enfants: { create: enfantsSeeds.splice(0, projet.nombreEnfants) },
         nom: projet.nom,
         societeProductionId: societeProduction.id,
-        statut: projet.statut,
+        statut: getRandomStatut(inThePast),
+        userId: getRandomUser(users, inThePast)?.id,
       };
-      if (projet.userEmail) {
-        data.userId = getUserByEmail(users, projet.userEmail).id;
-      }
       await prisma.projet.create({ data });
     }
   }
