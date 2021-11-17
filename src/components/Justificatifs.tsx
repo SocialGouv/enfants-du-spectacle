@@ -21,12 +21,21 @@ const Justificatif: React.FC<JustificatifProps> = ({
   label,
 }) => {
   const isPresent = subject.justificatifs.includes(value);
+  const url =
+    isPresent &&
+    (value == "SCENARIO" ? "/modele-scenario.pdf" : "/modele-piece.pdf");
   const iconName = isPresent
     ? "ri-checkbox-circle-fill"
     : "ri-checkbox-blank-circle-line";
   return (
     <>
-      <Icon name={iconName} size="1x" className={styles.span} /> {label}
+      <Icon name={iconName} size="1x" className={styles.span} />
+      {!isPresent && label}
+      {isPresent && url && (
+        <a href={url} target="_blank" rel="noreferrer">
+          {label}
+        </a>
+      )}
     </>
   );
 };
