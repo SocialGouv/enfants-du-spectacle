@@ -16,7 +16,8 @@ COPY --from=deps /app/node_modules ./node_modules
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NODE_ENV=production
 RUN npm run build
-RUN npm install --ignore-scripts
+RUN npm ci --production --ignore-scripts
+# this should remove dev node module dependencies
 RUN npx prisma generate
 
 # Production image, copy all the files and run next
