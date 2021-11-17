@@ -28,6 +28,7 @@ const getCommissions = async (
         orderBy: { id: "desc" },
       },
     },
+    orderBy: { date: "asc" },
     where: { date: { gte: new Date() }, dossiers: { some: {} } },
   });
 };
