@@ -98,11 +98,44 @@ model Dossier {
   justificatifs       JustificatifDossier[]
 }
 
+enum TypeEmploi {
+  ROLE_1
+  ROLE_2
+  FIGURATION
+  SILHOUETTE
+  SILHOUETTE_PARLANTE
+  DOUBLURE
+  DOUBLAGE
+  CHANT
+  DANSE
+  JEU_VIDEO
+  AUTRE
+}
+
+enum JustificatifEnfant {
+  LIVRET_FAMILLE
+  AUTORISATION_PARENTALE
+  SITUATION_PARTICULIERE
+  CONTRAT
+  CERTIFICAT_SCOLARITE
+  AVIS_MEDICAL
+}
+
 model Enfant {
   id       Int    @id @default(autoincrement())
-  role     String
   prenom   String
   nom      String
+  dateNaissance DateTime
+  typeEmploi TypeEmploi
+  nomPersonnage String?
+  periodeTravail String?
+  nombreJours Int
+  contexteTravail String?
+  montantCachet Float
+  nombreCachets Int
+  remunerationsAdditionnelles String?
+  remunerationTotale Float
+  justificatifs JustificatifEnfant[]
   dossierId Int
   dossier   Dossier @relation(fields: [dossierId], references: [id])
 }

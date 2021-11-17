@@ -1,4 +1,9 @@
-import type { Dossier, SocieteProduction, User } from "@prisma/client";
+import type {
+  Dossier,
+  SocieteProduction,
+  TypeEmploi,
+  User,
+} from "@prisma/client";
 import { grandeCategorieToCategorieValues } from "src/lib/categories";
 import type {
   CommissionData,
@@ -102,6 +107,25 @@ function frenchDepartementName(departementNumber: string): string {
   );
 }
 
+const TYPES_EMPLOI = [
+  { label: "Rôle 1er choix", value: "ROLE_1" },
+  { label: "Rôle 2nd choix", value: "ROLE_2" },
+  { label: "Figurant", value: "FIGURATION" },
+  { label: "Silhouette", value: "SILHOUETTE" },
+  { label: "Silhouette parlante", value: "SILHOUETTE_PARLANTE" },
+  { label: "Doublure", value: "DOUBLURE" },
+  { label: "Doublage", value: "DOUBLAGE" },
+  { label: "Chanteur", value: "CHANT" },
+  { label: "Danseur", value: "DANSE" },
+  { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
+  { label: "Autre", value: "AUTRE" },
+];
+function typeEmploiLabel(typeEmploi: TypeEmploi): string {
+  const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
+  if (!found) throw Error(`invalid type emploi ${typeEmploi}`);
+  return found.label;
+}
+
 export {
   filterCommissions,
   filterSearchResults,
@@ -110,5 +134,6 @@ export {
   getFilterableSocietesProductions,
   searchResultsToSocieteProductions,
   shortUserName,
+  typeEmploiLabel,
   uniqueById,
 };
