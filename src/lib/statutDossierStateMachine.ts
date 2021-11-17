@@ -25,45 +25,55 @@ const events = {
   passerAccepte: {
     description:
       "Une notification et les documents seronts envoyés au demandeur",
+    icon: "ri-checkbox-circle-line",
     label: "Accepter",
   },
   passerAjourne: {
     description: "La décision sera prise à une commission ultérieure",
+    icon: "ri-time-line",
     label: "Marquer comme ajourné",
   },
   passerDefavorable: {
     description:
       "La commission s'est prononcée négativement. Le rejet n'est pas encore définitif.",
+    icon: "ri-close-circle-line",
     label: "Avis défavorable",
   },
   passerFavorable: {
     description:
       "La commission s'est prononcée positivement. L'acceptation n'est pas encore effective.",
+    icon: "ri-shield-check-line",
     label: "Avis favorable",
   },
   passerFavorableSousReserve: {
     description: "Par exemple, si certains documents sont manquants",
+    icon: "ri-checkbox-blank-circle-line",
     label: "Avis favorable sous réserve",
   },
   passerInstruction: {
     description: "Le dossier ne pourra plus être modifié",
+    icon: "ri-edit-line",
     label: "Passer en instruction",
   },
   passerPret: {
     description: "Le dossier peut passer en commission",
+    icon: "ri-check-double-line",
     label: "Prêt pour la commission",
   },
   passerRefuse: {
     description:
       "La notification de rejet doit être envoyée et justifiée manuellement",
+    icon: "ri-close-circle-line",
     label: "Refuser",
   },
   repasserConstruction: {
     description: "Le dossier redeviendra modifiable",
+    icon: "ri-file-edit-line",
     label: "Repasser en construction",
   },
   repasserInstruction: {
     description: "Le dossier n'est pas prêt à passer en commission",
+    icon: "ri-edit-line",
     label: "Repasser en instruction",
   },
 };
@@ -160,9 +170,13 @@ const statutDossierEventToFrenchDescription = (
   event: TransitionEvent
 ): string => events[event].description;
 
+const statutDossierEventToIcon = (event: TransitionEvent): string =>
+  events[event].icon;
+
 export {
   factory,
   statutDossierEventToFrench,
   statutDossierEventToFrenchDescription,
+  statutDossierEventToIcon,
 };
 export type { StatutDossierStr, TransitionEvent };

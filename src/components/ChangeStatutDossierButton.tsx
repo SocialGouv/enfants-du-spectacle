@@ -1,9 +1,11 @@
-import { Button } from "@dataesr/react-dsfr";
+import { Icon } from "@dataesr/react-dsfr";
 import React, { useState } from "react";
+import StatutDossierTag from "src/components/StatutDossierTag";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
   statutDossierEventToFrenchDescription,
+  statutDossierEventToIcon,
 } from "src/lib/statutDossierStateMachine";
 
 import styles from "./ChangeStatutDossierButton.module.scss";
@@ -19,16 +21,21 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, onChange }) => {
   const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
   const className = statutDossierFSM.stateClassName();
 
+  if (statutDossierFSM.transitionObjects().length == 0) {
+    return <StatutDossierTag dossier={dossier} size="lg" />;
+  }
+
   return (
     <div className={styles.container}>
-      <Button
+      <button
         className={`${styles.currentStatut} ${className}`}
         onClick={() => {
           setDropdownVisible(!dropdownVisible);
         }}
       >
-        {statutDossierFSM.stateLabel()}
-      </Button>
+        {statutDossierFSM.stateLabel()}{" "}
+        <Icon className={`${styles.chevron} ri-arrow-down-s-fill`} />
+      </button>
       <div
         className={styles.dropdown}
         style={{ visibility: dropdownVisible ? "visible" : "hidden" }}
@@ -43,7 +50,10 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, onChange }) => {
             }}
           >
             <span role="img" className={styles.icon} aria-label="test">
-              ✏️
+              <Icon
+                className={statutDossierEventToIcon(transition.name)}
+                size="2x"
+              />
             </span>
             <div>
               <p className={styles.event}>

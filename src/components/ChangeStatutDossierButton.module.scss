@@ -1,19 +1,13 @@
 button.currentStatut {
-  color: #000;
-  height: .5rem;
-  align-self: center;
-  margin-left: 1rem;
-  border: 1px solid #ccc
-}
-button.currentStatut::after{
-  content: "↓";
-  font-size: 1rem;
-  margin-left: 10px
-}
-button.currentStatut:hover, button.currentStatut:focus, button.currentStatut:active {
-  background-color: inherit;
-  color: inherit;
-  filter: invert(100%);
+  border-radius: 20px;
+padding: .3rem .8rem .5rem 1.8rem;
+  font-size: 1.1rem;
+  border: 2px solid;
+
+  .chevron {
+    vertical-align: bottom;
+    font-size: 1.5rem;
+  }
 }
 
 div.container {

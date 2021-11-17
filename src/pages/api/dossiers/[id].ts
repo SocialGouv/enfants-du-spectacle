@@ -69,6 +69,7 @@ const handler: NextApiHandler = async (req, res) => {
     data: updates,
     include: {
       commission: true,
+      demandeur: true,
       enfants: true,
       societeProduction: true,
       user: true,

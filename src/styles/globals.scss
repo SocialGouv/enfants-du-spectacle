@@ -20,30 +20,38 @@
 }
 
 
-.state-accepte{
-  background-color: #D4F4E1 !important;
+.state-accepte, .state-favorable, .state-pret{
+  background-color: #3C8058 !important;
+  border-color: #3C8058;
+  color: white !important;
 }
-.state-avisAjourne{
+
+button.state-accepte, button.state-favorable, button.state-pret{
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #3C8058 !important;
+  }
+}
+
+.state-avisAjourne,
+.state-avisAjourne,
+.state-avisDefavorable,
+.state-favorableSousReserve,
+.state-construction,
+.state-instruction,
+.state-refuse {
   background-color: #FDEDD1 !important;
+  border-color: #FDEDD1;
 }
-.state-avisDefavorable{
-  background-color: #FDEDD1 !important;
-}
-.state-favorable{
-  background-color: #D4F4E1 !important;
-}
-.state-favorableSousReserve{
-  background-color: #5e8f82 !important;
-}
-.state-construction{
-  background-color: #FDEDD1 !important;
-}
-.state-instruction{
-  background-color: #FDEDD1 !important;
-}
-.state-pret{
-  background-color: #D4F4E1 !important;
-}
-.state-refuse{
-  background-color: #FDEDD1 !important;
+
+button.state-avisAjourne,
+button.state-avisAjourne,
+button.state-avisDefavorable,
+button.state-favorableSousReserve,
+button.state-construction,
+button.state-instruction,
+button.state-refuse {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+  }
 }
