@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-configmap
+data:
+  NODE_ENV: "production"
+  EMAIL_FROM: enfantsduspectacle@fabrique.social.gouv.fr

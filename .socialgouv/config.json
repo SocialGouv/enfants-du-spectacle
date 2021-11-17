@@ -1,0 +1,8 @@
+{
+  "name": "enfants-du-spectacle",
+  "type": "app",
+  "subdomain": "enfants-du-spectacle",
+  "azurepg": true,
+  "probesPath": "/api/healthz",
+  "registry": "ghcr"
+}
