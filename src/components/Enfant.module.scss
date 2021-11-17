@@ -1,17 +1,14 @@
-div.container {
-  display: flex;
-
-  &>div{
-    margin-left: 2rem;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
+.wrapper {
+  display: grid;
+  grid-template-columns: 15rem 1fr 1fr 15rem;
 }
 
 .name {
   font-weight: bold;
   font-size: 1.1rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.8rem;
+}
+
+.info {
+  padding-top: 2rem;
 }
