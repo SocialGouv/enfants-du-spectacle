@@ -32,20 +32,15 @@ jobs:
       uses: mikefarah/yq@v4.13.4
       id: namespace
       with:
-        cmd: |
-          DEPLOY_NAME=$(yq eval '.metadata.name' namespace-dev.yml)
-          echo DEBUG_IN_NAMESPACE
-          echo $DEPLOY_NAME
-          echo "::set-output name=value::$DEPLOY_NAME"
+        cmd: yq eval '.metadata.name' namespace-dev.yml
 
     - name: DEBUG
       run: |
         echo DEBUG_OUTSIDE
-        echo ${{ steps.namespace.outputs }}
-        echo ${{ steps.namespace.outputs.value }}
+        echo ${{ steps.namespace.outputs.result }}
         echo ${{ env.DEPLOY_URL }}
       env:
-        DEPLOY_URL: https://${{ steps.namespace.outputs.value }}.dev.fabrique.social.gouv.fr
+        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
 
     - name: Get project name
       run: |
@@ -60,7 +55,7 @@ jobs:
         dockerbuildargs: |
           DEPLOY_URL=${{ env.DEPLOY_URL }}
       env:
-        DEPLOY_URL: https://${{ steps.namespace.outputs.value }}.dev.fabrique.social.gouv.fr
+        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
 
   ##############################################################################
   ## DEPLOY APPLICATION OVER KUBERNETES
