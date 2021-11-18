@@ -29,6 +29,8 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NEXT_TELEMETRY_DISABLED 1
+ARG DEPLOY_URL
+ENV NEXTAUTH_URL=$DEPLOY_URL
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder /app/node_modules ./node_modules
