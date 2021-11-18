@@ -45,9 +45,9 @@ jobs:
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
         dockerbuildargs: |
-          DEPLOY_URL=$DEPLOY_URL
+          DEPLOY_URL=https://test2.dev.fabrique.social.gouv.fr
       env:
-        DEPLOY_URL: https://test.dev.fabrique.social.gouv.fr
+        DEPLOY_URL: https://test1.dev.fabrique.social.gouv.fr
 
   ##############################################################################
   ## DEPLOY APPLICATION OVER KUBERNETES
