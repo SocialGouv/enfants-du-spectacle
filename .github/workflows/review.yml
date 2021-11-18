@@ -25,12 +25,21 @@ jobs:
       run: |
         echo "project=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
+    - uses: socialgouv/actions/k8s-namespace@v1
+      id: namespace
+      with:
+        environment: "dev"
+
     - name: Use autodevops build and register
       uses: SocialGouv/actions/autodevops-build-register@v1
       with:
         imageName: enfants-du-spectacle/app
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        dockerbuildargs: |
+          DEPLOY_URL=$DEPLOY_URL
+      env:
+        DEPLOY_URL: https://${{ steps.namespace.outputs.value }}.dev.fabrique.social.gouv.fr
 
   ##############################################################################
   ## GENERATE KUBERNETES MANIFESTS
