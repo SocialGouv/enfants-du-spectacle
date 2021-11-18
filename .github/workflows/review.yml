@@ -31,7 +31,8 @@ jobs:
     - name: Get namespace name
       uses: mikefarah/yq@v4.13.4
       id: namespace
-      run: echo "::set-output name=value::$(yq eval '.metadata.name' namespace-dev.yml)"
+      with:
+        cmd: echo "::set-output name=value::$(yq eval '.metadata.name' namespace-dev.yml)"
 
     - name: DEBUG
       run: |
