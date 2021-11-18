@@ -1,5 +1,5 @@
 # from https://nextjs.org/docs/deployment#docker-image
-ARG APP_BASE_URL
+ARG APP_BASE_URL=https://missing_APP_BASE_URL_docker_build_arg.com
 
 # 1. Install node dependencies only when needed
 FROM node:alpine AS deps
