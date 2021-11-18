@@ -17,30 +17,16 @@ Stack:
 
 ## Local environment
 
-Vous pouvez utiliser les fichiers d'exemples :
+- `npm install`
 
-```sh
-cp .env.local.example .env.local
-cp .env.example .env
-```
+puis:
 
-Le fichier `.env.local` est lu par NextJS et `.env` par Prisma.
+- installer [overmind](https://github.com/DarthSim/overmind)
+- `npm run dev-procfile`
 
-Les configurations de serveurs mail dans ce fichier permettent d'utiliser le faux serveur SMTP de test en local `maildev`:
-
-```
-EMAIL_SERVER_HOST=localhost
-EMAIL_SERVER_PORT=1025
-NODE_TLS_REJECT_UNAUTHORIZED=0
-```
-
-La dernière variable est nécessaire pour éviter une erreur TLS de nodemailer.
-
-Il faut bien lancer en parallèle de votre serveur next le processus maildev: `npx maildev`
+- ou alors: `npm run dev & npx maildev`
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
-
-Vous pouvez aussi installer [overmind](https://github.com/DarthSim/overmind) et lancer les deux processus en parallèle avec `npm run dev-procfile`.
 
 ## Seeds
 
