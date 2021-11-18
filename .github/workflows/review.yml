@@ -45,7 +45,7 @@ jobs:
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
         dockerbuildargs: |
-          DEPLOY_URL=https://coucou.com
+          DEPLOY_URL=${DEPLOY_URL}
       env:
         DEPLOY_URL: https://${{ steps.namespace.outputs.value }}.dev.fabrique.social.gouv.fr
 
