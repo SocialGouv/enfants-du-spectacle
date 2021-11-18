@@ -32,11 +32,15 @@ jobs:
       uses: mikefarah/yq@v4.13.4
       id: namespace
       with:
-        cmd: echo "::set-output name=value::$(yq eval '.metadata.name' namespace-dev.yml)"
+        cmd: |
+          DEPLOY_NAME=$(yq eval '.metadata.name' namespace-dev.yml)
+          echo DEBUG_IN_NAMESPACE
+          echo $DEPLOY_NAME
+          echo "::set-output name=value::$DEPLOY_NAME"
 
     - name: DEBUG
       run: |
-        echo DEBUG
+        echo DEBUG_OUTSIDE
         echo ${{ steps.namespace.outputs }}
         echo ${{ steps.namespace.outputs.value }}
         echo ${{ env.DEPLOY_URL }}
