@@ -11,7 +11,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@dataesr/react-dsfr": "^0.7.7",
+    "@dataesr/react-dsfr": "^0.7.8",
     "@next-auth/prisma-adapter": "^0.5.2-next.19",
     "@prisma/client": "^3.5.0",
     "email-addresses": "^5.0.0",
