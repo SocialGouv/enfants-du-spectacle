@@ -6,15 +6,9 @@
 
 .summaryBloc {
   @extend .bloc;
-  display: flex;
-
-  &>div{
-    margin-left: 2rem;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr 15rem;
+  grid-column-gap: 1rem;
 }
 
 div.title {
@@ -25,4 +19,16 @@ div.title {
 
 button.transitionButton {
   margin: .5rem 1rem;
+}
+
+.agentSelect {
+  text-transform: capitalize;
+}
+
+.infoSelect {
+  display: inline-block;
+}
+
+.infoSuccessive {
+  margin-top: .5rem;
 }

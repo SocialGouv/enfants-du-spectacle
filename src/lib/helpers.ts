@@ -11,8 +11,13 @@ import type {
   SearchResultsType,
 } from "src/lib/queries";
 
+function capitalizeWord(str: string): string {
+  return str.replace(/^\w/, (c) => c.toUpperCase());
+}
+
 function shortUserName(user: User): string {
-  return `${user.prenom} ${user.nom ? user.nom[0] : ""}.`;
+  if (!user.prenom || !user.nom) return "";
+  return `${capitalizeWord(user.prenom)} ${user.nom[0].toUpperCase()}.`;
 }
 
 function frenchDateText(date: Date): string {
@@ -122,7 +127,7 @@ const TYPES_EMPLOI = [
 ];
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
-  if (!found) throw Error(`invalid type emploi ${typeEmploi}`);
+  if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
   return found.label;
 }
 

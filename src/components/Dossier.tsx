@@ -9,7 +9,11 @@ import {
   categorieToGrandeCategorieLabel,
   categorieToLabel,
 } from "src/lib/categories";
-import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import {
+  frenchDateText,
+  frenchDepartementName,
+  shortUserName,
+} from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
 import type { User } from ".prisma/client";
@@ -41,12 +45,12 @@ const Dossier: React.FC<Props> = ({
 
       <div className={styles.summaryBloc}>
         <div>
-          <Info title="Suivi par">
+          <Info title="Suivi par" className={styles.infoSelect}>
             <Select
               selected={assignedUserId ? String(assignedUserId) : ""}
               options={[{ label: "", value: "" }].concat(
                 allUsers.map((u) => ({
-                  label: u.email ?? "",
+                  label: shortUserName(u),
                   value: String(u.id),
                 }))
               )}
@@ -54,25 +58,25 @@ const Dossier: React.FC<Props> = ({
                 const userId = event.target.value;
                 onAssignUserId(userId ? Number(userId) : null);
               }}
+              className={styles.agentSelect}
             />
           </Info>
-          <Info title="Commission">
+          <Info title="Commission" className={styles.infoSuccessive}>
             {frenchDateText(dossier.commission.date)} -{" "}
             {frenchDepartementName(dossier.commission.departement)}
           </Info>
+          <Info title="Type de dossier" className={styles.infoSuccessive}>
+            {categorieToLabel(dossier.categorie)} (
+            {categorieToGrandeCategorieLabel(dossier.categorie)})
+          </Info>
         </div>
-        <Info title="Type de dossier">
-          {categorieToGrandeCategorieLabel(dossier.categorie)}
-          <br />
-          {categorieToLabel(dossier.categorie)}
-        </Info>
         <div>
           <Info title="Société">
             <div>{dossier.societeProduction.nom}</div>
             <div>{dossier.societeProduction.departement}</div>
             <div>{dossier.societeProduction.siret}</div>
           </Info>
-          <Info title="Demandeur">
+          <Info title="Demandeur" className={styles.infoSuccessive}>
             <div>
               {dossier.demandeur.prenom} {dossier.demandeur.nom}
             </div>

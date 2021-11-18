@@ -10,7 +10,7 @@ interface Props {
 const SearchBar: React.FC<Props> = ({ value, onChange }) => {
   return (
     <>
-      <Title as="h1">Demandes |</Title>
+      <Title as="h1">Dossiers |</Title>
       <input
         value={value}
         type="text"
