@@ -1,5 +1,4 @@
 # from https://nextjs.org/docs/deployment#docker-image
-ARG APP_BASE_URL=https://missing_APP_BASE_URL_docker_build_arg.com
 
 # 1. Install node dependencies only when needed
 FROM node:alpine AS deps
@@ -16,6 +15,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # cf https://github.com/webpack/webpack/issues/14532
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NODE_ENV=production
+ARG APP_BASE_URL=https://missing_APP_BASE_URL_docker_build_arg.com
 ENV APP_BASE_URL=$APP_BASE_URL
 RUN npm run build
 RUN npm ci --production --ignore-scripts
