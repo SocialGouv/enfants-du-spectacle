@@ -15,7 +15,7 @@ const ConnexionForm: React.FC<Props> = ({ csrfToken, signinRequired }) => {
           <input
             name="callbackUrl"
             type="hidden"
-            defaultValue={`${process.env.NEXTAUTH_URL}/dossiers`}
+            defaultValue={`${process.env.APP_BASE_URL}/dossiers`}
           />
           <label>
             <div>Adresse Email:</div>
