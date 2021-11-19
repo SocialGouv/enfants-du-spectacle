@@ -6,7 +6,7 @@ interface Props {
   signinRequired: boolean;
 }
 
-const Layout: React.FC<Props> = ({ csrfToken, signinRequired }) => {
+const ConnexionForm: React.FC<Props> = ({ csrfToken, signinRequired }) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.formWrapper}>
@@ -48,4 +48,4 @@ const Layout: React.FC<Props> = ({ csrfToken, signinRequired }) => {
   );
 };
 
-export default Layout;
+export default ConnexionForm;
