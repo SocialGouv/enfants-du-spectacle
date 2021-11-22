@@ -1,4 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
+import type { Dossier } from "@prisma/client";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
@@ -9,7 +10,6 @@ import {
 } from "src/lib/statutDossierStateMachine";
 
 import styles from "./ChangeStatutDossierButton.module.scss";
-import type { Dossier } from ".prisma/client";
 
 interface Props {
   dossier: Dossier;

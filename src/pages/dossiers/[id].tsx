@@ -1,4 +1,6 @@
 import { Title } from "@dataesr/react-dsfr";
+import type { User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -7,9 +9,6 @@ import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
 import { updateDossier } from "src/lib/queries";
 import type { DossierData } from "src/lib/types";
-
-import type { User } from ".prisma/client";
-import { PrismaClient } from ".prisma/client";
 
 interface Props {
   dossier: DossierData;

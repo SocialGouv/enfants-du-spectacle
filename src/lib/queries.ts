@@ -1,3 +1,10 @@
+import type {
+  Dossier,
+  Enfant,
+  PrismaClient,
+  SocieteProduction,
+  User,
+} from "@prisma/client";
 import type { GrandeCategorieValue } from "src/lib/categories";
 import type {
   CommissionData,
@@ -5,14 +12,6 @@ import type {
   DossierDataLight,
 } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
-
-import type {
-  Dossier,
-  Enfant,
-  PrismaClient,
-  SocieteProduction,
-  User,
-} from ".prisma/client";
 
 const getCommissions = async (
   prismaClient: PrismaClient

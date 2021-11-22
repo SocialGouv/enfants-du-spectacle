@@ -1,10 +1,9 @@
 import { Select } from "@dataesr/react-dsfr";
+import type { SocieteProduction, User } from "@prisma/client";
 import React from "react";
 import styles from "src/components/FilterBar.module.scss";
 import { grandesCategoriesOptions } from "src/lib/categories";
 import type { DossiersFilters } from "src/lib/queries";
-
-import type { SocieteProduction, User } from ".prisma/client";
 
 interface Props {
   text: React.ReactNode;

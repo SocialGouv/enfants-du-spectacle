@@ -1,4 +1,6 @@
 import { Title } from "@dataesr/react-dsfr";
+import type { Commission, Dossier } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { getSession, useSession } from "next-auth/react";
@@ -7,9 +9,6 @@ import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import styles from "src/styles/commissions.module.scss";
-
-import type { Commission, Dossier } from ".prisma/client";
-import { PrismaClient } from ".prisma/client";
 
 type CommissionWithCounts = Commission & {
   dossiers: (Dossier & {

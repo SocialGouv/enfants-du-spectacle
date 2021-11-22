@@ -1,4 +1,4 @@
-import type { Session } from ".prisma/client";
+import type { Session } from "@prisma/client";
 
 type Middleware = (
   session: Session | null

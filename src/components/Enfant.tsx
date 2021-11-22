@@ -1,10 +1,9 @@
+import type { Enfant } from "@prisma/client";
 import React from "react";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
 import { frenchDateText, typeEmploiLabel } from "src/lib/helpers";
-
-import type { Enfant } from ".prisma/client";
 
 interface Props {
   enfant: Enfant;

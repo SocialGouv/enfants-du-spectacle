@@ -1,8 +1,8 @@
+import type { Dossier, User } from "@prisma/client";
 import React from "react";
 import { shortUserName } from "src/lib/helpers";
 
 import styles from "./AssignedAgent.module.scss";
-import type { Dossier, User } from ".prisma/client";
 
 interface Props {
   dossier: Dossier & { user?: User | null };
