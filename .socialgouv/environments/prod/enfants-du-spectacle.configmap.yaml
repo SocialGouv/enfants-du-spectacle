@@ -4,4 +4,4 @@ metadata:
   name: app-configmap
 data:
   NODE_ENV: "production"
-  EMAIL_FROM: enfantsduspectacle@fabrique.social.gouv.fr
+  EMAIL_FROM: "Enfants du Spectacle <enfantsduspectacle@fabrique.social.gouv.fr>"
