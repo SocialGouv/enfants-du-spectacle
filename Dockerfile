@@ -25,6 +25,7 @@ RUN npx prisma generate
 
 # Production image, copy all the files and run next
 FROM node:alpine AS runner
+RUN apk add --no-cache postgresql-client
 WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider
