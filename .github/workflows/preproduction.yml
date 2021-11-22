@@ -48,8 +48,8 @@ jobs:
         dockerbuildargs: |
           DEPLOY_URL=${{ env.DEPLOY_URL }}
           START_SCRIPT=start-prod
-        env:
-          DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
+      env:
+        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
 
   ##############################################################################
   ## DEPLOY APPLICATION OVER KUBERNETES
