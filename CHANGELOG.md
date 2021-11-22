@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.0...v1.0.1) (2021-11-22)
+
+
+### Bug Fixes
+
+* **workflows:** Rename .socialgouv env files ([5b98aa6](https://github.com/SocialGouv/enfants-du-spectacle/commit/5b98aa6771d70c160e7c36598a020ef31347a64a))
+
 # 1.0.0 (2021-11-22)
 
 
