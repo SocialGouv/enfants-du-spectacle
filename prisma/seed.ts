@@ -1,5 +1,4 @@
 import type {
-  Enfant,
   JustificatifDossier,
   JustificatifEnfant,
   Prisma,

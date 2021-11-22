@@ -1,12 +1,11 @@
 import { Title } from "@dataesr/react-dsfr";
+import type { Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import styles from "src/components/SearchResults.module.scss";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import type { SearchResultsType } from "src/lib/queries";
-
-import type { Dossier, Enfant, SocieteProduction, User } from ".prisma/client";
 
 interface EnfantProps {
   enfant: Enfant & {

@@ -5,7 +5,7 @@ import type {
   Enfant,
   SocieteProduction,
   User,
-} from ".prisma/client";
+} from "@prisma/client";
 
 type DossierDataLight = Dossier & {
   user: User | null;

@@ -1,4 +1,5 @@
 import { Select, Title } from "@dataesr/react-dsfr";
+import type { User } from "@prisma/client";
 import React from "react";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
@@ -15,8 +16,6 @@ import {
   shortUserName,
 } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
-
-import type { User } from ".prisma/client";
 
 interface Props {
   dossier: DossierData;

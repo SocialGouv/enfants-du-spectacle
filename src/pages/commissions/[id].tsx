@@ -1,4 +1,5 @@
 import { Title } from "@dataesr/react-dsfr";
+import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React from "react";
@@ -6,8 +7,6 @@ import CommissionBloc from "src/components/Commission";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
 import type { CommissionData } from "src/lib/types";
-
-import { PrismaClient } from ".prisma/client";
 
 interface Props {
   commission: CommissionData;

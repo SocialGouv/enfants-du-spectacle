@@ -1,0 +1,22 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+concurrency:
+  cancel-in-progress: true
+  group: test-${{ github.head_ref }}
+
+jobs:
+
+  ##############################################################################
+  ## TEST APPLICATION
+  ##############################################################################
+  test:
+    name: Test application
+    runs-on: ubuntu-latest
+    steps:
+
+    - run: echo "coucou"

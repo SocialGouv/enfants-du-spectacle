@@ -1,6 +1,5 @@
+import type { StatutDossier } from "@prisma/client";
 import StateMachine from "javascript-state-machine";
-
-import type { StatutDossier } from ".prisma/client";
 
 interface StateDetail {
   key: string;

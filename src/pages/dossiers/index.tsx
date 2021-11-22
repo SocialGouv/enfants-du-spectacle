@@ -1,3 +1,5 @@
+import type { SocieteProduction, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,9 +25,6 @@ import type {
 import { getCommissions, searchDossiers, searchEnfants } from "src/lib/queries";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
-
-import type { SocieteProduction, User } from ".prisma/client";
-import { PrismaClient } from ".prisma/client";
 
 interface Props {
   commissions: CommissionData[];

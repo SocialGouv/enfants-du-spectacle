@@ -1,13 +1,12 @@
 import { Icon } from "@dataesr/react-dsfr";
-import React from "react";
-import styles from "src/components/Justificatifs.module.scss";
-
 import type {
   Dossier,
   Enfant,
   JustificatifDossier,
   JustificatifEnfant,
-} from ".prisma/client";
+} from "@prisma/client";
+import React from "react";
+import styles from "src/components/Justificatifs.module.scss";
 
 interface JustificatifProps {
   subject: Dossier | Enfant;

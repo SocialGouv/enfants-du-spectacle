@@ -1,0 +1,10 @@
+{
+  "name": "app",
+  "type": "app",
+  "project": "enfants-du-spectacle",
+  "subdomain": "enfants-du-spectacle",
+  "azurepg": true,
+  "pgHostDev": "edsdevserver.postgres.database.azure.com",
+  "probesPath": "/api/healthz",
+  "registry": "ghcr"
+}

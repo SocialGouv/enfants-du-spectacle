@@ -17,38 +17,26 @@ Stack:
 
 ## Local environment
 
-Vous pouvez utiliser les fichiers d'exemples :
+- `npm install`
 
-```sh
-cp .env.local.example .env.local
-cp .env.example .env
-```
+puis:
 
-Le fichier `.env.local` est lu par NextJS et `.env` par Prisma.
+- installer [overmind](https://github.com/DarthSim/overmind)
+- `npm run dev-procfile`
 
-Les configurations de serveurs mail dans ce fichier permettent d'utiliser le faux serveur SMTP de test en local `maildev`:
-
-```
-EMAIL_SERVER_HOST=localhost
-EMAIL_SERVER_PORT=1025
-NODE_TLS_REJECT_UNAUTHORIZED=0
-```
-
-La dernière variable est nécessaire pour éviter une erreur TLS de nodemailer.
-
-Il faut bien lancer en parallèle de votre serveur next le processus maildev: `npx maildev`
+- ou alors: `npm run dev & npx maildev`
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
-
-Vous pouvez aussi installer [overmind](https://github.com/DarthSim/overmind) et lancer les deux processus en parallèle avec `npm run dev-procfile`.
 
 ## Seeds
 
 Les seeds permettent de restaurer simplement des bases de données avec des données réalistes. C'est très utile en développement local ou bien sur les environnements de review apps ou de staging. On a fait le choix d'avoir ici des seeds déterministes et non aléatoires, pour pouvoir reproduire des environnements prévisibles.
 
-`node scripts/generate-seeds.js` permet de générer certains fichiers CSV dans le répertoire prisma/seeds. Ce script s'appuie sur la gem [`faker.js`](https://github.com/Marak/faker.js) pour générer des éléments aléatoires en masse comme des noms et prénoms. Les stocker dans des CSV rend l'ingestion des seeds déterministes. Une autre partie des CSV a été créée manuellement à partir de données plus ou moins réelles.
+Des CSV ont été créés manuellement dans `prisma/seeds/` à partir de données plus ou moins réelles pour les noms de films et de sociétés de productions.
 
-`npx prisma db seed` restaure la base de données grace aux seeds. Il lit les fichiers CSV générés précedemment et exécute des requêtes d'insertion.
+`npx prisma db seed` restaure la base de données grace aux seeds. Ce script tronque entièrement la base, lit les fichiers CSVs et insère de nouvelles lignes.
+
+Des scripts permettent de dumper et restaurer la db dans `src/scripts` au format pg_dump. Ce dump est versionné et restauré par les review apps. Cela permet de contourner l'absence des dépendences de développement sur ces environnements : `npx prisma db seed` ne peut en effet pas être lancé.
 
 ## Mails
 
