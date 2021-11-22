@@ -1,5 +1,4 @@
 import type { SocieteProduction, User } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,6 +16,7 @@ import {
   filterSearchResults,
   getFilterableSocietesProductions,
 } from "src/lib/helpers";
+import getPrismaClient from "src/lib/prismaClient";
 import type {
   CommissionData,
   DossiersFilters,
@@ -184,11 +184,11 @@ const Page: React.FC<Props> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const prisma = getPrismaClient();
   const { query } = context;
   const session = await getSession(context);
   const redirectTo = authMiddleware(session);
   if (redirectTo) return redirectTo;
-  const prisma = new PrismaClient();
   const commissions = await getCommissions(prisma);
   const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
   const filters = {
