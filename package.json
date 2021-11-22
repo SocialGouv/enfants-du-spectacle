@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
-    "build": "./src/scripts/build.sh",
+    "build": "next build --no-lint",
     "start": "next start",
     "start-prod": "NEXTAUTH_URL=`echo $APP_BASE_URL` npx prisma migrate deploy && next start",
     "start-review": "./src/scripts/restore_seeds.sh && npm run start-prod",
