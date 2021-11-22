@@ -34,14 +34,6 @@ jobs:
       with:
         cmd: yq eval '.metadata.name' namespace-dev.yml
 
-    - name: DEBUG
-      run: |
-        echo DEBUG_OUTSIDE
-        echo ${{ steps.namespace.outputs.result }}
-        echo ${{ env.DEPLOY_URL }}
-      env:
-        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
-
     - name: Get project name
       run: |
         echo "project=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV

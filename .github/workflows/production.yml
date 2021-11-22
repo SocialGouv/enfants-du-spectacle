@@ -19,6 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Use autodevops manifests generation
+      uses: SocialGouv/actions/autodevops-manifests@v1
+      with:
+        environment: prod
+        rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
+        socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
+
+    - name: Get namespace name
+      uses: mikefarah/yq@v4.13.4
+      id: namespace
+      with:
+        cmd: yq eval '.metadata.name' namespace-prod.yml
+
     - name: Get project name
       run: |
         echo "project=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
@@ -26,10 +39,14 @@ jobs:
     - name: Use autodevops build and register
       uses: SocialGouv/actions/autodevops-build-register@v1
       with:
-        environment: prod
+        imageName: enfants-du-spectacle/app
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        imageName: enfants-du-spectacle/app
+        dockerbuildargs: |
+          DEPLOY_URL=${{ env.DEPLOY_URL }}
+          START_SCRIPT=start-prod
+      env:
+        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.dev.fabrique.social.gouv.fr
 
   ##############################################################################
   ## DEPLOY PRODUCTION APPLICATION
@@ -42,13 +59,6 @@ jobs:
       name: production
       url: ${{ steps.deploy-prod.outputs.url }}
     steps:
-
-    - name: Use autodevops manifests generation
-      uses: SocialGouv/actions/autodevops-manifests@v1
-      with:
-        environment: prod
-        rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
-        socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
 
     - name: Use autodevops deployment
       uses: SocialGouv/actions/autodevops-deploy@v1
