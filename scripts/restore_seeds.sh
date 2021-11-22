@@ -9,5 +9,8 @@ then
   exit
 fi
 
-psql -d $DATABASE_URL eds1 -c 'TRUNCATE "Account", "Commission", "Demandeur", "Dossier", "Enfant", "Session", "SocieteProduction", "User";';
+echo truncating ...
+psql -d $DATABASE_URL -c 'TRUNCATE "Account", "Commission", "Demandeur", "Dossier", "Enfant", "Session", "SocieteProduction", "User";'
+echo restoring ...
 pg_restore -d $DATABASE_URL prisma/seeds/dump.pg_dump
+echo "done !"
