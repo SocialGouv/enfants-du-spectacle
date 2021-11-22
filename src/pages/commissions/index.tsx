@@ -1,6 +1,5 @@
 import { Title } from "@dataesr/react-dsfr";
 import type { Commission, Dossier } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { getSession, useSession } from "next-auth/react";
@@ -8,6 +7,7 @@ import React from "react";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import { prisma } from "src/lib/prismaClient";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -82,7 +82,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirectTo = authMiddleware(session);
   if (redirectTo) return redirectTo;
 
-  const prisma = new PrismaClient();
   const commissions = await prisma.commission.findMany({
     include: {
       dossiers: {

@@ -1,12 +1,12 @@
 import { Title } from "@dataesr/react-dsfr";
 import type { User } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import Dossier from "src/components/Dossier";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
+import { prisma } from "src/lib/prismaClient";
 import { updateDossier } from "src/lib/queries";
 import type { DossierData } from "src/lib/types";
 
@@ -74,7 +74,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     throw Error("nono");
   }
   const id = parseInt(context.params.id as string, 10);
-  const prisma = new PrismaClient();
   const dossier = await prisma.dossier.findUnique({
     include: {
       commission: true,

@@ -1,11 +1,11 @@
 import { Title } from "@dataesr/react-dsfr";
-import { PrismaClient } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React from "react";
 import CommissionBloc from "src/components/Commission";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
+import { prisma } from "src/lib/prismaClient";
 import type { CommissionData } from "src/lib/types";
 
 interface Props {
@@ -36,7 +36,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     throw Error("missing params");
   }
   const id = Number(context.params.id);
-  const prisma = new PrismaClient();
   const commission = await prisma.commission.findUnique({
     include: {
       dossiers: {

@@ -1,7 +1,7 @@
 import type { StatutDossier } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { prisma } from "src/lib/prismaClient";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
@@ -36,7 +36,6 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const prisma = new PrismaClient();
   const updates: { statut?: StatutDossier; userId?: number } = {};
 
   if (typeof parsed.transitionEvent === "string") {
