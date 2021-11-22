@@ -45,4 +45,5 @@ COPY --from=builder --chown=node:node /app/.next ./.next
 USER node
 EXPOSE 3000
 ARG START_SCRIPT=start-prod
+ENV START_SCRIPT=$START_SCRIPT
 CMD npm run $START_SCRIPT
