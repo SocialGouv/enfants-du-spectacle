@@ -2,6 +2,9 @@
   "name": "enfants-du-spectacle",
   "version": "0.1.0",
   "private": true,
+  "release": {
+    "branches": ["main", "alpha", "beta", "next"]
+  },
   "scripts": {
     "dev": "next dev",
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
