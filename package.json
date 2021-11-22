@@ -8,7 +8,7 @@
     "build": "next build --no-lint",
     "start": "next start",
     "start-prod": "npx prisma migrate deploy && next start",
-    "start-review": "source src/scripts/restore_seeds.sh && npx prisma migrate deploy && next start",
+    "start-review": "npx prisma migrate deploy && source src/scripts/restore_seeds.sh && next start",
     "lint": "eslint components pages lib",
     "prepare": "husky install"
   },
