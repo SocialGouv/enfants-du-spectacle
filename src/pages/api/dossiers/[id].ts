@@ -1,12 +1,13 @@
 import type { StatutDossier } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { prisma } from "src/lib/prismaClient";
+import getPrismaClient from "src/lib/prismaClient";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
+  const prisma = getPrismaClient();
   const { id: dossierIdStr } = req.query;
   if (typeof dossierIdStr !== "string") {
     res.status(404).send(`${dossierIdStr} is not a valid dossier id`);

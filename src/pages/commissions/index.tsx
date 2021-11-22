@@ -7,7 +7,7 @@ import React from "react";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import { prisma } from "src/lib/prismaClient";
+import getPrismaClient from "src/lib/prismaClient";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -78,6 +78,7 @@ const Page: React.FC<Props> = ({ commissions }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const prisma = getPrismaClient();
   const session = await getSession(context);
   const redirectTo = authMiddleware(session);
   if (redirectTo) return redirectTo;

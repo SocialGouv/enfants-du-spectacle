@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Dossier from "src/components/Dossier";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
-import { prisma } from "src/lib/prismaClient";
+import getPrismaClient from "src/lib/prismaClient";
 import { updateDossier } from "src/lib/queries";
 import type { DossierData } from "src/lib/types";
 
@@ -66,6 +66,7 @@ const Page: React.FC<Props> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const prisma = getPrismaClient();
   const session = await getSession(context);
   const redirectTo = authMiddleware(session);
   if (redirectTo) return redirectTo;

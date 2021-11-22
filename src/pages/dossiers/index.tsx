@@ -16,7 +16,7 @@ import {
   filterSearchResults,
   getFilterableSocietesProductions,
 } from "src/lib/helpers";
-import { prisma } from "src/lib/prismaClient";
+import getPrismaClient from "src/lib/prismaClient";
 import type {
   CommissionData,
   DossiersFilters,
@@ -184,6 +184,7 @@ const Page: React.FC<Props> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const prisma = getPrismaClient();
   const { query } = context;
   const session = await getSession(context);
   const redirectTo = authMiddleware(session);

@@ -5,7 +5,7 @@ import React from "react";
 import CommissionBloc from "src/components/Commission";
 import Layout from "src/components/Layout";
 import authMiddleware from "src/lib/authMiddleware";
-import { prisma } from "src/lib/prismaClient";
+import getPrismaClient from "src/lib/prismaClient";
 import type { CommissionData } from "src/lib/types";
 
 interface Props {
@@ -28,6 +28,7 @@ const Page: React.FC<Props> = ({ commission }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const prisma = getPrismaClient();
   const session = await getSession(context);
   const redirectTo = authMiddleware(session);
   if (redirectTo) return redirectTo;

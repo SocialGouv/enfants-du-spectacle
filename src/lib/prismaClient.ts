@@ -5,8 +5,16 @@ import { PrismaClient } from "@prisma/client";
 declare global {
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | null;
+  // function getPrismaClient(): PrismaClient;
 }
 
-export const prisma = global.prisma ?? new PrismaClient();
+const getPrismaClient = function (): PrismaClient {
+  if (process.env.NODE_ENV === "production") {
+    return new PrismaClient();
+  } else {
+    if (!global.prisma) global.prisma = new PrismaClient();
+    return global.prisma;
+  }
+};
 
-if (process.env.NODE_ENV !== "production") global.prisma = prisma;
+export default getPrismaClient;
