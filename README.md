@@ -32,9 +32,11 @@ Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qu
 
 Les seeds permettent de restaurer simplement des bases de données avec des données réalistes. C'est très utile en développement local ou bien sur les environnements de review apps ou de staging. On a fait le choix d'avoir ici des seeds déterministes et non aléatoires, pour pouvoir reproduire des environnements prévisibles.
 
-`node scripts/generate-seeds.js` permet de générer certains fichiers CSV dans le répertoire prisma/seeds. Ce script s'appuie sur la gem [`faker.js`](https://github.com/Marak/faker.js) pour générer des éléments aléatoires en masse comme des noms et prénoms. Les stocker dans des CSV rend l'ingestion des seeds déterministes. Une autre partie des CSV a été créée manuellement à partir de données plus ou moins réelles.
+Des CSV ont été créés manuellement dans `prisma/seeds/` à partir de données plus ou moins réelles pour les noms de films et de sociétés de productions.
 
-`npx prisma db seed` restaure la base de données grace aux seeds. Il lit les fichiers CSV générés précedemment et exécute des requêtes d'insertion.
+`npx prisma db seed` restaure la base de données grace aux seeds. Ce script tronque entièrement la base, lit les fichiers CSVs et insère de nouvelles lignes.
+
+Des scripts permettent de dumper et restaurer la db dans `src/scripts` au format pg_dump. Ce dump est versionné et restauré par les review apps. Cela permet de contourner l'absence des dépendences de développement sur ces environnements : `npx prisma db seed` ne peut en effet pas être lancé.
 
 ## Mails
 

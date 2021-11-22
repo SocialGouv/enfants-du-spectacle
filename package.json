@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
-    "build": "./scripts/build.sh",
+    "build": "./src/scripts/build.sh",
     "start": "next start",
     "start-prod": "NEXTAUTH_URL=`echo $APP_BASE_URL` npx prisma migrate deploy && next start",
+    "start-review": "./src/scripts/restore_seeds.sh && npm run start-prod",
     "lint": "eslint components pages lib",
     "prepare": "husky install"
   },
@@ -52,7 +53,7 @@
     "typescript": "4.5.2"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "npx eslint --cache"
