@@ -1,3 +1,8 @@
+html {
+  --dossier-statut-positive-color: #3C8058;
+  --dossier-statut-negative-color: #FDEDD1;
+}
+
 .card {
   padding: 2rem;
   margin: 2rem 0;
@@ -21,16 +26,9 @@
 
 
 .state-accepte, .state-favorable, .state-pret{
-  background-color: #3C8058 !important;
-  border-color: #3C8058;
+  background-color: var(--dossier-statut-positive-color) !important;
+  border-color: var(--dossier-statut-positive-color);
   color: white !important;
-}
-
-button.state-accepte, button.state-favorable, button.state-pret{
-  &:hover, &:active, &:focus {
-    background-color: white !important;
-    color: #3C8058 !important;
-  }
 }
 
 .state-avisAjourne,
@@ -44,14 +42,9 @@ button.state-accepte, button.state-favorable, button.state-pret{
   border-color: #FDEDD1;
 }
 
-button.state-avisAjourne,
-button.state-avisAjourne,
-button.state-avisDefavorable,
-button.state-favorableSousReserve,
-button.state-construction,
-button.state-instruction,
-button.state-refuse {
-  &:hover, &:active, &:focus {
-    background-color: white !important;
+
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
   }
 }

@@ -1,5 +1,5 @@
 import { Title } from "@dataesr/react-dsfr";
-import type { User } from "@prisma/client";
+import type { StatutDossier, User } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -15,11 +15,11 @@ interface Props {
   allUsers: User[];
 }
 
-const Page: React.FC<Props> = (props) => {
+const Page: React.FC<Props> = ({ allUsers, dossier: initialDossier }) => {
   const { data: session } = useSession();
 
-  const { allUsers } = props;
-  const [dossier, setDossier] = useState(props.dossier);
+  const [updatable, setUpdatable] = useState(true);
+  const [dossier, setDossier] = useState(initialDossier);
   const [assignedUserId, setAssignedUserId] = useState(dossier.userId);
 
   useEffect(() => {
@@ -30,21 +30,26 @@ const Page: React.FC<Props> = (props) => {
 
   function updateDossierAndReload(updates: {
     transitionEvent?: string;
-    userId?: number;
+    userId?: number | null;
   }): void {
+    setUpdatable(false);
     updateDossier(dossier, updates, (p) => {
       setDossier(p);
+      setUpdatable(true);
     });
   }
 
-  const onChangeStatut = (transitionEvent: string) => {
+  const onChangeStatut = (
+    transitionEvent: string,
+    transitionTo: StatutDossier
+  ) => {
+    setDossier({ ...dossier, statut: transitionTo });
     updateDossierAndReload({ transitionEvent });
   };
 
   const onAssignUserId = (userId: number | null) => {
-    updateDossier(dossier, { userId }, (p) => {
-      setDossier(p);
-    });
+    setDossier({ ...dossier, userId });
+    updateDossierAndReload({ userId });
   };
 
   const title = (
@@ -59,6 +64,7 @@ const Page: React.FC<Props> = (props) => {
         dossier={dossier}
         onAssignUserId={onAssignUserId}
         onChangeStatut={onChangeStatut}
+        updatable={updatable}
         allUsers={allUsers}
       />
     </Layout>
@@ -72,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (redirectTo) return redirectTo;
 
   if (!context.params || !context.params.id) {
-    throw Error("nono");
+    throw Error("invalid context.params for Dossier");
   }
   const id = parseInt(context.params.id as string, 10);
   const dossier = await prisma.dossier.findUnique({

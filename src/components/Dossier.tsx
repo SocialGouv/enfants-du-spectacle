@@ -1,6 +1,7 @@
-import { Select, Title } from "@dataesr/react-dsfr";
-import type { User } from "@prisma/client";
+import { Title } from "@dataesr/react-dsfr";
+import type { StatutDossier, User } from "@prisma/client";
 import React from "react";
+import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
 import Enfant from "src/components/Enfant";
@@ -21,8 +22,12 @@ interface Props {
   dossier: DossierData;
   assignedUserId: number | null;
   onAssignUserId: (userId: number | null) => void;
-  onChangeStatut: (statut: string) => void;
+  onChangeStatut: (
+    transitionEvent: string,
+    transitionTo: StatutDossier
+  ) => void;
   allUsers: User[];
+  updatable: boolean;
 }
 
 const Dossier: React.FC<Props> = ({
@@ -31,6 +36,7 @@ const Dossier: React.FC<Props> = ({
   onChangeStatut,
   onAssignUserId,
   allUsers,
+  updatable,
 }) => {
   return (
     <>
@@ -39,25 +45,21 @@ const Dossier: React.FC<Props> = ({
         <ChangeStatutDossierButton
           dossier={dossier}
           onChange={onChangeStatut}
+          disabled={!updatable}
         />
       </div>
 
       <div className={styles.summaryBloc}>
         <div>
           <Info title="Suivi par" className={styles.infoSelect}>
-            <Select
-              selected={assignedUserId ? String(assignedUserId) : ""}
-              options={[{ label: "", value: "" }].concat(
-                allUsers.map((u) => ({
-                  label: shortUserName(u),
-                  value: String(u.id),
-                }))
-              )}
-              onChange={(event) => {
+            <AssignedAgentSelect
+              assignedUserId={assignedUserId}
+              allUsers={allUsers}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const userId = event.target.value;
                 onAssignUserId(userId ? Number(userId) : null);
               }}
-              className={styles.agentSelect}
+              disabled={!updatable}
             />
           </Info>
           <Info title="Commission" className={styles.infoSuccessive}>

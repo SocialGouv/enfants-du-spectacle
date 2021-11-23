@@ -1,0 +1,10 @@
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+.icon {
+  display: inline-block;
+  animation: spin 4s linear infinite;
+}

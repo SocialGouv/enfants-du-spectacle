@@ -1,12 +1,37 @@
 button.currentStatut {
   border-radius: 20px;
-padding: .3rem .8rem .5rem 1.8rem;
+  padding: .3rem .8rem .5rem 1.8rem;
   font-size: 1.1rem;
   border: 2px solid;
 
-  .chevron {
+  &:disabled {
+    cursor: initial;
+  }
+
+  .icon {
+    display: inline-block;
     vertical-align: bottom;
     font-size: 1.5rem;
+  }
+
+  &:not(:disabled) {
+    &.state-accepte, &.state-favorable, &.state-pret{
+      &:hover, &:active, &:focus {
+        background-color: white !important;
+        color: var(--dossier-statut-positive-color) !important;
+      }
+    }
+    &.state-avisAjourne,
+    &.state-avisAjourne,
+    &.state-avisDefavorable,
+    &.state-favorableSousReserve,
+    &.state-construction,
+    &.state-instruction,
+    &.state-refuse {
+      &:hover, &:active, &:focus {
+        background-color: white !important;
+      }
+    }
   }
 }
 
