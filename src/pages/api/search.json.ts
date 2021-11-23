@@ -1,10 +1,12 @@
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { delay } from "src/lib/helpers";
 import getPrismaClient from "src/lib/prismaClient";
 import { searchDossiers, searchEnfants } from "src/lib/queries";
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
+  await delay(2000);
   if (req.method !== "GET") {
     res.status(405).end();
     return;

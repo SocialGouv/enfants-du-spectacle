@@ -1,12 +1,14 @@
 import type { StatutDossier } from "@prisma/client";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { delay } from "src/lib/helpers";
 import getPrismaClient from "src/lib/prismaClient";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
+  await delay(1000);
   const prisma = getPrismaClient();
   const { id: dossierIdStr } = req.query;
   if (typeof dossierIdStr !== "string") {

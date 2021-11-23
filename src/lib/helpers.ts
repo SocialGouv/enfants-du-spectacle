@@ -131,7 +131,14 @@ function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   return found.label;
 }
 
+async function delay(milliseconds: number): void {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
 export {
+  delay,
   filterCommissions,
   filterSearchResults,
   frenchDateText,
