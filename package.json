@@ -18,7 +18,8 @@
     "start-prod": "npx prisma migrate deploy && next start",
     "start-review": "npx prisma migrate deploy && source src/scripts/restore_seeds.sh && next start",
     "lint": "eslint components pages lib",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "send-test-mail": "node scripts/sendTestMail.js"
   },
   "dependencies": {
     "@dataesr/react-dsfr": "^0.7.8",
