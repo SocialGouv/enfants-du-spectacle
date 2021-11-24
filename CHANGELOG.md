@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.2...v1.1.0) (2021-11-24)
+
+
+### Features
+
+* use SWR for lighter pages and optimistic UI + improvements ([#82](https://github.com/SocialGouv/enfants-du-spectacle/issues/82)) ([672a40d](https://github.com/SocialGouv/enfants-du-spectacle/commit/672a40d08dcd3e9251d932d8e8d7b1c7e874f8f3))
+
 ## [1.0.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.1...v1.0.2) (2021-11-24)
 
 
