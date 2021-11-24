@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.1...v1.0.2) (2021-11-24)
+
+
+### Bug Fixes
+
+* new email address with diffusion ([90f6c65](https://github.com/SocialGouv/enfants-du-spectacle/commit/90f6c6572e1c5899db770b39a37dd9ec17108dd5))
+
 ## [1.0.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.0...v1.0.1) (2021-11-22)
 
 
