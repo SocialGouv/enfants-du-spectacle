@@ -1,8 +1,8 @@
+import { Icon } from "@dataesr/react-dsfr";
 import type { SocieteProduction, User } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import CommissionBloc from "src/components/Commission";
 import FilterBar from "src/components/FilterBar";
@@ -10,7 +10,6 @@ import FilterBarText from "src/components/FilterBarText";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
-import authMiddleware from "src/lib/authMiddleware";
 import {
   filterCommissions,
   filterSearchResults,
@@ -23,6 +22,7 @@ import type {
   SearchResultsType,
 } from "src/lib/queries";
 import { getCommissions, searchDossiers, searchEnfants } from "src/lib/queries";
+import useProtectedPage from "src/lib/useProtectedPage";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
@@ -30,7 +30,6 @@ interface Props {
   commissions: CommissionData[];
   searchResults?: SearchResultsType;
   searchValue?: string;
-  allUsers: User[];
   filters?: DossiersFilters;
 }
 
@@ -39,9 +38,8 @@ const Page: React.FC<Props> = ({
   commissions: initialCommissions,
   searchResults: initialSearchResults,
   filters: initialFilters,
-  allUsers,
 }) => {
-  const { data: session } = useSession();
+  const { loading: loadingSession, session } = useProtectedPage();
   const [searchValue, setSearchValue] = useState(initialSearchValue ?? "");
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [searchResults, setSearchResults] = useState<SearchResultsType | null>(
@@ -59,17 +57,6 @@ const Page: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<DossiersFilters>(initialFilters ?? {});
   const router = useRouter();
-
-  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setLoading(true);
-    setSearchValue(event.target.value);
-  };
-
-  function onChangeFilters(updates: Record<string, number | string>): void {
-    setFilters({ ...filters, ...updates });
-  }
 
   // Apply filters to displayed dossiers (client-side)
   useEffect(() => {
@@ -141,7 +128,18 @@ const Page: React.FC<Props> = ({
     });
   }, [debouncedSearch, filters, loading]);
 
-  if (!session) throw Error("no session on protected page");
+  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setLoading(true);
+    setSearchValue(event.target.value);
+  };
+
+  function onChangeFilters(updates: Record<string, number | string>): void {
+    setFilters({ ...filters, ...updates });
+  }
+
+  if (loadingSession || !session) return <Icon name="ri-loader-line" />;
 
   return (
     <Layout
@@ -154,7 +152,6 @@ const Page: React.FC<Props> = ({
               commissions={commissions}
             />
           }
-          allUsers={allUsers}
           onChangeFilters={onChangeFilters}
           allSocieteProductions={filterableSocieteProductions}
           filters={filters}
@@ -186,11 +183,7 @@ const Page: React.FC<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const prisma = getPrismaClient();
   const { query } = context;
-  const session = await getSession(context);
-  const redirectTo = authMiddleware(session);
-  if (redirectTo) return redirectTo;
   const commissions = await getCommissions(prisma);
-  const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
   const filters = {
     grandeCategorie: query.grandeCategorie,
     societeProductionId: query.societeProductionId,
@@ -203,16 +196,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
     return {
       props: {
-        allUsers,
         commissions,
         filters,
         searchResults,
         searchValue: query.search,
-        session,
       },
     };
   }
-  return { props: { allUsers, commissions, filters, session } };
+  return { props: { commissions, filters } };
 };
 
 export default Page;

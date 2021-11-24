@@ -20,7 +20,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const prisma = getPrismaClient();
-  const allUsers = await prisma.user.findMany();
+  const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
   res.status(200).json(superjson.stringify(allUsers));
 };
 

@@ -1,13 +1,13 @@
-import { Select } from "@dataesr/react-dsfr";
-import type { SocieteProduction, User } from "@prisma/client";
+import { Icon, Select } from "@dataesr/react-dsfr";
+import type { SocieteProduction } from "@prisma/client";
 import React from "react";
 import styles from "src/components/FilterBar.module.scss";
+import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
   text: React.ReactNode;
-  allUsers: User[];
   allSocieteProductions: SocieteProduction[];
   filters: DossiersFilters;
   onChangeFilters: (updates: Record<string, number | string>) => void;
@@ -19,11 +19,15 @@ interface Option {
 
 const FilterBar: React.FC<Props> = ({
   text,
-  allUsers,
   filters,
   allSocieteProductions,
   onChangeFilters,
 }) => {
+  const { allUsers, isLoading, isError } = useAllUsers();
+
+  if (isLoading) return <Icon name="ri-loader-line" />;
+  if (isError || !allUsers) return <Icon name="ri-error" />;
+
   const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
