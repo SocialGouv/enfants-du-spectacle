@@ -52,4 +52,20 @@ function useCommissions(datePeriod: DatePeriod | undefined = "upcoming") {
   };
 }
 
-export { useAllUsers, useCommissions, useDossier };
+function useCommission(id: number) {
+  const { data, error } = useSWR(
+    `/api/commissions/${id}`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<CommissionData>(await res.text());
+    }
+  );
+
+  return {
+    commission: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
+export { useAllUsers, useCommission, useCommissions, useDossier };

@@ -28,14 +28,13 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
-function getDossierId(req: NextApiRequest): number {
-  const { id: dossierIdStr } = req.query;
-  return parseInt(dossierIdStr as string, 10);
+function getId(req: NextApiRequest): number {
+  return Number(req.query.id as string);
 }
 
 const get: NextApiHandler = async (req, res) => {
   const prisma = getPrismaClient();
-  const dossierId = getDossierId(req);
+  const dossierId = getId(req);
 
   const dossier = await prisma.dossier.findUnique({
     include: {
@@ -66,7 +65,7 @@ const update: NextApiHandler = async (req, res) => {
   }
 
   const updates: { statut?: StatutDossier; userId?: number } = {};
-  const dossierId = getDossierId(req);
+  const dossierId = getId(req);
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;

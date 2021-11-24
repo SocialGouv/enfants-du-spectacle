@@ -10,7 +10,7 @@ const Page: React.FC = () => {
   const { session, loading } = useProtectedPage();
   const router = useRouter();
 
-  const dossierId = parseInt(router.query.id as string, 10);
+  const dossierId = Number(router.query.id as string);
   const { dossier, isLoading, isError } = useDossier(dossierId);
 
   if (isLoading || loading || !session) return <Icon name="ri-loader-line" />;
