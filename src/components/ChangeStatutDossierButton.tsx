@@ -2,21 +2,23 @@ import { Icon } from "@dataesr/react-dsfr";
 import type { Dossier } from "@prisma/client";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
+import { updateDossier } from "src/lib/queries";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
   statutDossierEventToFrenchDescription,
   statutDossierEventToIcon,
 } from "src/lib/statutDossierStateMachine";
+import { useSWRConfig } from "swr";
 
 import styles from "./ChangeStatutDossierButton.module.scss";
 
 interface Props {
   dossier: Dossier;
-  onChange: (transitionEvent: string) => void;
 }
 
-const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, onChange }) => {
+const ChangeStatutDossierButton: React.FC<Props> = ({ dossier }) => {
+  const { mutate } = useSWRConfig();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
   const className = statutDossierFSM.stateClassName();
@@ -46,7 +48,19 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, onChange }) => {
             className={styles.row}
             onClick={() => {
               setDropdownVisible(false);
-              onChange(transition.name);
+              const transitionEvent = transition.name;
+              mutate(
+                `/api/dossiers/${dossier.id}`,
+                { ...dossier, statut: transition.to },
+                false
+              ).catch((e) => {
+                throw e;
+              });
+              updateDossier(dossier, { transitionEvent }, () => {
+                mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
+                  throw e;
+                });
+              });
             }}
           >
             <span role="img" className={styles.icon} aria-label="test">

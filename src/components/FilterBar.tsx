@@ -1,13 +1,14 @@
-import { Select } from "@dataesr/react-dsfr";
-import type { SocieteProduction, User } from "@prisma/client";
+import { Icon, Select } from "@dataesr/react-dsfr";
+import type { SocieteProduction } from "@prisma/client";
 import React from "react";
 import styles from "src/components/FilterBar.module.scss";
+import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
+import { shortUserName, stringToNumberOrNull } from "src/lib/helpers";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
   text: React.ReactNode;
-  allUsers: User[];
   allSocieteProductions: SocieteProduction[];
   filters: DossiersFilters;
   onChangeFilters: (updates: Record<string, number | string>) => void;
@@ -19,20 +20,26 @@ interface Option {
 
 const FilterBar: React.FC<Props> = ({
   text,
-  allUsers,
   filters,
   allSocieteProductions,
   onChangeFilters,
 }) => {
+  const { allUsers, isLoading, isError } = useAllUsers();
+
+  if (isLoading) return <Icon name="ri-loader-line" />;
+  if (isError || !allUsers) return <Icon name="ri-error" />;
+
   const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilters({ userId: Number(event.target.value) });
+    onChangeFilters({ userId: stringToNumberOrNull(event.target.value) });
   };
 
   const onChangeSocieteProductionId: React.ChangeEventHandler<HTMLOptionElement> =
     (event) => {
-      onChangeFilters({ societeProductionId: Number(event.target.value) });
+      onChangeFilters({
+        societeProductionId: stringToNumberOrNull(event.target.value),
+      });
     };
 
   const onChangeGrandeCategorie: React.ChangeEventHandler<HTMLOptionElement> = (
@@ -59,7 +66,10 @@ const FilterBar: React.FC<Props> = ({
             id="userId"
             selected={String(filters.userId)}
             options={[defaultUserOption].concat(
-              allUsers.map((u) => ({ label: u.email, value: String(u.id) }))
+              allUsers.map((u) => ({
+                label: shortUserName(u),
+                value: String(u.id),
+              }))
             )}
             onChange={onChangeUserId}
           />

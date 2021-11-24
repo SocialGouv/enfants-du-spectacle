@@ -1,21 +1,20 @@
-import { Title } from "@dataesr/react-dsfr";
-import type { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { Icon, Title } from "@dataesr/react-dsfr";
+import { useRouter } from "next/router";
 import React from "react";
 import CommissionBloc from "src/components/Commission";
 import Layout from "src/components/Layout";
-import authMiddleware from "src/lib/authMiddleware";
-import getPrismaClient from "src/lib/prismaClient";
-import type { CommissionData } from "src/lib/types";
+import { useCommission } from "src/lib/api";
+import useProtectedPage from "src/lib/useProtectedPage";
 
-interface Props {
-  commission: CommissionData;
-}
+const Page: React.FC = () => {
+  const router = useRouter();
+  const { loading: loadingSession } = useProtectedPage();
+  const { commission, isLoading, isError } = useCommission(
+    typeof router.query.id == "string" ? Number(router.query.id) : null
+  );
 
-const Page: React.FC<Props> = ({ commission }) => {
-  const { data: session } = useSession();
-
-  if (!session) throw Error("no session on protected page");
+  if (isLoading || loadingSession) return <Icon name="ri-loader-line" />;
+  if (isError || !commission) return <Icon name="ri-error" />;
 
   return (
     <Layout
@@ -25,32 +24,6 @@ const Page: React.FC<Props> = ({ commission }) => {
       <CommissionBloc commission={commission} />
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const prisma = getPrismaClient();
-  const session = await getSession(context);
-  const redirectTo = authMiddleware(session);
-  if (redirectTo) return redirectTo;
-
-  if (!context.params || !context.params.id) {
-    throw Error("missing params");
-  }
-  const id = Number(context.params.id);
-  const commission = await prisma.commission.findUnique({
-    include: {
-      dossiers: {
-        include: {
-          _count: { select: { enfants: true } },
-          societeProduction: true,
-          user: true,
-        },
-        orderBy: { id: "desc" },
-      },
-    },
-    where: { id },
-  });
-  return { props: { commission, session } };
 };
 
 export default Page;

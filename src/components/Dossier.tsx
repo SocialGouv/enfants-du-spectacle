@@ -1,64 +1,39 @@
-import { Select, Title } from "@dataesr/react-dsfr";
-import type { User } from "@prisma/client";
+import { Icon, Title } from "@dataesr/react-dsfr";
 import React from "react";
+import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
 import Enfant from "src/components/Enfant";
 import Info from "src/components/Info";
 import { JustificatifsDossier } from "src/components/Justificatifs";
+import { useDossier } from "src/lib/api";
 import {
   categorieToGrandeCategorieLabel,
   categorieToLabel,
 } from "src/lib/categories";
-import {
-  frenchDateText,
-  frenchDepartementName,
-  shortUserName,
-} from "src/lib/helpers";
-import type { DossierData } from "src/lib/types";
+import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 
 interface Props {
-  dossier: DossierData;
-  assignedUserId: number | null;
-  onAssignUserId: (userId: number | null) => void;
-  onChangeStatut: (statut: string) => void;
-  allUsers: User[];
+  dossierId: number;
 }
 
-const Dossier: React.FC<Props> = ({
-  dossier,
-  assignedUserId,
-  onChangeStatut,
-  onAssignUserId,
-  allUsers,
-}) => {
+const Dossier: React.FC<Props> = ({ dossierId }) => {
+  const { dossier, isLoading, isError } = useDossier(dossierId);
+
+  if (isLoading) return <Icon name="ri-loader-line" />;
+  if (isError || !dossier) return <Icon name="ri-error" />;
+
   return (
     <>
       <div className={styles.title}>
         <Title as="h1">Le Dossier</Title>
-        <ChangeStatutDossierButton
-          dossier={dossier}
-          onChange={onChangeStatut}
-        />
+        <ChangeStatutDossierButton dossier={dossier} />
       </div>
 
       <div className={styles.summaryBloc}>
         <div>
           <Info title="Suivi par" className={styles.infoSelect}>
-            <Select
-              selected={assignedUserId ? String(assignedUserId) : ""}
-              options={[{ label: "", value: "" }].concat(
-                allUsers.map((u) => ({
-                  label: shortUserName(u),
-                  value: String(u.id),
-                }))
-              )}
-              onChange={(event) => {
-                const userId = event.target.value;
-                onAssignUserId(userId ? Number(userId) : null);
-              }}
-              className={styles.agentSelect}
-            />
+            <AssignedAgentSelect dossierId={dossierId} />
           </Info>
           <Info title="Commission" className={styles.infoSuccessive}>
             {frenchDateText(dossier.commission.date)} -{" "}
