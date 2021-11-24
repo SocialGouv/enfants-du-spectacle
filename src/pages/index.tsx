@@ -1,22 +1,28 @@
 import { Callout, CalloutText, CalloutTitle, Title } from "@dataesr/react-dsfr";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { getCsrfToken, getSession } from "next-auth/react";
-import React from "react";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import React, { useEffect } from "react";
 import ConnexionForm from "src/components/ConnexionForm";
 import Layout from "src/components/Layout";
 
-interface Props {
-  csrfToken: string | undefined;
-  signinRequired: boolean;
-}
+const Home: React.FC = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
-const Home: React.FC<Props> = ({ csrfToken, signinRequired }) => {
+  useEffect(() => {
+    if (!loading && session)
+      router.push("/dossiers").catch((e) => {
+        throw e;
+      });
+  }, [session, loading]);
+
   return (
     <Layout windowTitle="">
       <div className="card">
         <Title as="h2">Connexion</Title>
-        <ConnexionForm csrfToken={csrfToken} signinRequired={signinRequired} />
+        <ConnexionForm />
         <Callout>
           <CalloutTitle as="h3">Interface agents</CalloutTitle>
           <CalloutText>
@@ -33,23 +39,6 @@ const Home: React.FC<Props> = ({ csrfToken, signinRequired }) => {
       </div>
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/dossiers",
-        permanent: false,
-      },
-    };
-  }
-  const csrfToken = await getCsrfToken(context);
-  const signinRequired = context.query.signinRequired == "true";
-  return {
-    props: { csrfToken, signinRequired },
-  };
 };
 
 export default Home;

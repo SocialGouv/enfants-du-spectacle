@@ -11,17 +11,16 @@ export default NextAuth({
     signIn({ user }) {
       if (typeof user.email !== "string") return false;
       const parsed = emailParser.parseOneAddress(user.email);
-      const isAllowedToSignIn =
+      return !!(
         parsed &&
         "domain" in parsed &&
         (parsed.domain === "drieets.gouv.fr" ||
-          parsed.domain === "beta.gouv.fr");
-      if (isAllowedToSignIn) return true;
-      return false;
-      // Or you can return a URL to redirect to: return '/unauthorized'
+          parsed.domain === "beta.gouv.fr")
+      );
     },
   },
   pages: {
+    error: "/",
     signIn: "/",
     verifyRequest: "/verifyRequest",
   },
@@ -39,4 +38,5 @@ export default NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 });

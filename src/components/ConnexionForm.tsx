@@ -1,22 +1,31 @@
-import React from "react";
+import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
+import React, { useState } from "react";
 import styles from "src/components/ConnexionForm.module.scss";
 
-interface Props {
-  csrfToken: string | undefined;
-  signinRequired: boolean;
-}
+const ConnexionForm: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+  const { signinRequired: signinRequiredRaw, error: errorRaw } = router.query;
+  const signinRequired = signinRequiredRaw === "true";
+  const error = errorRaw as string;
 
-const ConnexionForm: React.FC<Props> = ({ csrfToken, signinRequired }) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.formWrapper}>
-        <form method="post" action="/api/auth/signin/email">
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          <input
-            name="callbackUrl"
-            type="hidden"
-            defaultValue={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/dossiers`}
-          />
+        <form
+          method="post"
+          action="#"
+          onSubmit={(e) => {
+            e.preventDefault();
+            signIn("email", {
+              callbackUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/dossiers`,
+              email,
+            }).catch((err) => {
+              throw err;
+            });
+          }}
+        >
           <label>
             <div>Adresse Email:</div>
             <div>
@@ -26,6 +35,9 @@ const ConnexionForm: React.FC<Props> = ({ csrfToken, signinRequired }) => {
                 name="email"
                 placeholder="jean.marc@drieets.gouv.fr"
                 className={styles.emailInput}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
             </div>
           </label>
@@ -36,7 +48,18 @@ const ConnexionForm: React.FC<Props> = ({ csrfToken, signinRequired }) => {
           </div>
         </form>
       </div>
-      {signinRequired && (
+      {error && (
+        <div className={styles.requiredWrapper}>
+          <span role="img" aria-label="avertissement">
+            ❌
+          </span>
+          <span>
+            {error === "AccessDenied" &&
+              "Vous devez utiliser une adresse mail en @drieets.gouv.fr pour vous connecter"}
+          </span>
+        </div>
+      )}
+      {!error && signinRequired && (
         <div className={styles.requiredWrapper}>
           <span role="img" aria-label="avertissement">
             ⚠️
