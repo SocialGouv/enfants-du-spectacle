@@ -3,9 +3,9 @@ import type { CommissionData, DossierData } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import useSWR from "swr";
 
-function useDossier(id: number) {
+function useDossier(id: number | null) {
   const { data, error } = useSWR(
-    `/api/dossiers/${id}`,
+    id ? `/api/dossiers/${id}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<DossierData>(await res.text());

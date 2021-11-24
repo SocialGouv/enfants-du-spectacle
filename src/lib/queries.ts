@@ -13,25 +13,6 @@ import type {
 } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 
-const getCommissions = async (
-  prismaClient: PrismaClient
-): Promise<CommissionData[]> => {
-  return prismaClient.commission.findMany({
-    include: {
-      dossiers: {
-        include: {
-          _count: { select: { enfants: true } },
-          societeProduction: true,
-          user: true,
-        },
-        orderBy: { id: "desc" },
-      },
-    },
-    orderBy: { date: "asc" },
-    where: { date: { gte: new Date() }, dossiers: { some: {} } },
-  });
-};
-
 const searchEnfants = async (
   prismaClient: PrismaClient,
   search: string
@@ -119,4 +100,4 @@ export type {
   DossiersFilters,
   SearchResultsType,
 };
-export { getCommissions, searchDossiers, searchEnfants, updateDossier };
+export { searchDossiers, searchEnfants, updateDossier };

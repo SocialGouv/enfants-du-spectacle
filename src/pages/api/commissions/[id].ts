@@ -1,6 +1,6 @@
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import getPrismaClient from "src/lib/prismaClient";
+import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -28,7 +28,6 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
-  const prisma = getPrismaClient();
   const id = getId(req);
   const commission = await prisma.commission.findUnique({
     include: {

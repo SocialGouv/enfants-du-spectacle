@@ -10,11 +10,14 @@ const Page: React.FC = () => {
   const { session, loading } = useProtectedPage();
   const router = useRouter();
 
-  const dossierId = Number(router.query.id as string);
+  const dossierId =
+    typeof router.query.id == "string" ? Number(router.query.id) : null;
+  console.log("routerquerid ", router.query.id);
+  console.log("dossierId ", dossierId);
   const { dossier, isLoading, isError } = useDossier(dossierId);
 
   if (isLoading || loading || !session) return <Icon name="ri-loader-line" />;
-  if (isError || !dossier) return <Icon name="ri-error" />;
+  if (isError || !dossierId || !dossier) return <Icon name="ri-error" />;
 
   const title = (
     <>

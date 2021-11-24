@@ -1,6 +1,6 @@
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import getPrismaClient from "src/lib/prismaClient";
+import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -27,7 +27,6 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const getUpcomingCommissions = async () => {
-  const prisma = getPrismaClient();
   return prisma.commission.findMany({
     include: {
       dossiers: {
@@ -45,7 +44,6 @@ const getUpcomingCommissions = async () => {
 };
 
 const getPastCommissions = async () => {
-  const prisma = getPrismaClient();
   return prisma.commission.findMany({
     include: {
       dossiers: {

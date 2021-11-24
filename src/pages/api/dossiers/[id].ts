@@ -1,7 +1,7 @@
 import type { StatutDossier } from "@prisma/client";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import getPrismaClient from "src/lib/prismaClient";
+import prisma from "src/lib/prismaClient";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
@@ -33,7 +33,6 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
-  const prisma = getPrismaClient();
   const dossierId = getId(req);
 
   const dossier = await prisma.dossier.findUnique({
@@ -51,8 +50,6 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const update: NextApiHandler = async (req, res) => {
-  const prisma = getPrismaClient();
-
   if (typeof req.body !== "string") {
     res.status(400).end();
     return;
