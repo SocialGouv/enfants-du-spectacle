@@ -17,10 +17,17 @@ const searchEnfants = async (
   prismaClient: PrismaClient,
   search: string
 ): Promise<(Enfant & { dossier: Dossier & { user: User | null } })[]> => {
-  return prismaClient.enfant.findMany({
-    include: { dossier: { include: { societeProduction: true, user: true } } },
-    where: { OR: [{ nom: { search } }, { prenom: { search } }] },
-  });
+  try {
+    return await prismaClient.enfant.findMany({
+      include: {
+        dossier: { include: { societeProduction: true, user: true } },
+      },
+      where: { OR: [{ nom: { search } }, { prenom: { search } }] },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
 };
 
 const searchDossiers = async (
@@ -35,14 +42,19 @@ const searchDossiers = async (
     } | null;
   })[]
 > => {
-  return prismaClient.dossier.findMany({
-    include: {
-      _count: { select: { enfants: true } },
-      societeProduction: true,
-      user: true,
-    },
-    where: { nom: { search } },
-  });
+  try {
+    return await prismaClient.dossier.findMany({
+      include: {
+        _count: { select: { enfants: true } },
+        societeProduction: true,
+        user: true,
+      },
+      where: { nom: { search } },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
 };
 
 function updateDossier(
