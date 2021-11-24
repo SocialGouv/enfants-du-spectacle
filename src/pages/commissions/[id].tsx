@@ -9,8 +9,9 @@ import useProtectedPage from "src/lib/useProtectedPage";
 const Page: React.FC = () => {
   const router = useRouter();
   const { loading: loadingSession } = useProtectedPage();
-  const commissionId = Number(router.query.id as string);
-  const { commission, isLoading, isError } = useCommission(commissionId);
+  const { commission, isLoading, isError } = useCommission(
+    typeof router.query.id == "string" ? Number(router.query.id) : null
+  );
 
   if (isLoading || loadingSession) return <Icon name="ri-loader-line" />;
   if (isError || !commission) return <Icon name="ri-error" />;

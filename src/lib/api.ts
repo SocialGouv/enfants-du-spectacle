@@ -52,9 +52,9 @@ function useCommissions(datePeriod: DatePeriod | undefined = "upcoming") {
   };
 }
 
-function useCommission(id: number) {
+function useCommission(id: number | null) {
   const { data, error } = useSWR(
-    `/api/commissions/${id}`,
+    id ? `/api/commissions/${id}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData>(await res.text());

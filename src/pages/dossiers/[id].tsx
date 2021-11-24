@@ -12,8 +12,6 @@ const Page: React.FC = () => {
 
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
-  console.log("routerquerid ", router.query.id);
-  console.log("dossierId ", dossierId);
   const { dossier, isLoading, isError } = useDossier(dossierId);
 
   if (isLoading || loading || !session) return <Icon name="ri-loader-line" />;
