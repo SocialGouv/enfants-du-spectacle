@@ -125,13 +125,27 @@ const TYPES_EMPLOI = [
   { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
   { label: "Autre", value: "AUTRE" },
 ];
+
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
   return found.label;
 }
 
+function stringToNumberOrNull(str: string | null | undefined): number | null {
+  return str ? Number(str) : null;
+}
+
+function compact<Type>(obj: Record<string, Type>): Record<string, Type> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      (pair) => pair[1] !== null && pair[1] !== undefined && pair[1] !== ""
+    )
+  );
+}
+
 export {
+  compact,
   filterCommissions,
   filterSearchResults,
   frenchDateText,
@@ -139,6 +153,7 @@ export {
   getFilterableSocietesProductions,
   searchResultsToSocieteProductions,
   shortUserName,
+  stringToNumberOrNull,
   typeEmploiLabel,
   uniqueById,
 };

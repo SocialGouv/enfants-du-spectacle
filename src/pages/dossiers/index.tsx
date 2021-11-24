@@ -1,6 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
 import type { SocieteProduction } from "@prisma/client";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -12,65 +11,68 @@ import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
 import { useCommissions } from "src/lib/api";
 import {
+  compact,
   filterCommissions,
   filterSearchResults,
   getFilterableSocietesProductions,
+  stringToNumberOrNull,
 } from "src/lib/helpers";
-import getPrismaClient from "src/lib/prismaClient";
 import type {
   CommissionData,
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import { searchDossiers, searchEnfants } from "src/lib/queries";
 import useProtectedPage from "src/lib/useProtectedPage";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
-interface Props {
-  searchResults?: SearchResultsType;
-  searchValue?: string;
-}
-
-const Page: React.FC<Props> = ({
-  searchValue: initialSearchValue,
-  searchResults: initialSearchResults,
-}) => {
+const Page: React.FC = () => {
   const { query } = useRouter();
-  const initialFilters: DossiersFilters = {
-    grandeCategorie: query.grandeCategorie,
-    societeProductionId: query.societeProductionId,
-    userId: query.userId,
-  };
-
   const { loading: loadingSession, session } = useProtectedPage();
   const { commissions, ...swrCommissions } = useCommissions();
-  const [searchValue, setSearchValue] = useState(initialSearchValue ?? "");
+  const commissionsOrEmpty = commissions ?? [];
+  const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [searchResults, setSearchResults] = useState<SearchResultsType | null>(
-    initialSearchResults ?? null
+    null
   );
   const [filteredSearchResults, setFilteredSearchResults] =
     useState<SearchResultsType | null>();
   const [filteredCommissions, setFilteredCommissions] =
     useState<CommissionData[]>();
+
   const [filterableSocieteProductions, setFilterableSocietesProductions] =
     useState<SocieteProduction[]>(
-      getFilterableSocietesProductions(searchResults, commissions ?? [])
+      getFilterableSocietesProductions(searchResults, commissionsOrEmpty)
     );
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState<DossiersFilters>(initialFilters);
+  const [filters, setFilters] = useState<DossiersFilters>({});
   const router = useRouter();
+
+  // keep filters in sync with querystring
+  useEffect(() => {
+    const newFilters = compact({
+      grandeCategorie: query.grandeCategorie as string,
+      societeProductionId: stringToNumberOrNull(
+        query.societeProductionId as string
+      ),
+      userId: stringToNumberOrNull(query.userId as string),
+    });
+    // avoid double refresh after filter change
+    if (JSON.stringify(newFilters) != JSON.stringify(filters))
+      setFilters(newFilters);
+  }, [query]);
 
   // Apply filters to displayed dossiers (client-side)
   useEffect(() => {
-    setFilteredCommissions(filterCommissions(commissions ?? [], filters));
+    setFilteredCommissions(filterCommissions(commissionsOrEmpty, filters));
     if (!searchResults) return;
     setFilteredSearchResults(filterSearchResults(searchResults, filters));
   }, [filters, searchResults, commissions]);
 
   // Trigger search for word (server-side)
   useEffect(() => {
+    updateQuerystring({ search: debouncedSearch });
     if (!debouncedSearch) {
       setSearchResults(null);
       setLoading(false);
@@ -96,7 +98,7 @@ const Page: React.FC<Props> = ({
   useEffect(() => {
     const societes = getFilterableSocietesProductions(
       searchResults,
-      commissions ?? []
+      commissionsOrEmpty
     );
     setFilterableSocietesProductions(societes);
     if (
@@ -107,30 +109,22 @@ const Page: React.FC<Props> = ({
     }
   }, [searchResults, commissions, filters]);
 
-  // synchronize URL querystring
-  useEffect(() => {
-    const searchParams = new URLSearchParams();
-    if (loading) return;
-    if (debouncedSearch) searchParams.append("search", debouncedSearch);
-    if (filters.userId) searchParams.append("userId", String(filters.userId));
-    if (filters.grandeCategorie)
-      searchParams.append("grandeCategorie", filters.grandeCategorie);
-    if (filters.societeProductionId)
-      searchParams.append(
-        "societeProductionId",
-        String(filters.societeProductionId)
-      );
-
-    const p = async () =>
-      router.push(
-        `/dossiers${searchParams.toString() !== "" ? "?" : ""}${searchParams}`,
+  function updateQuerystring(
+    updates: Record<string, number | string | null | undefined>
+  ) {
+    router
+      .replace(
+        {
+          pathname: router.pathname,
+          query: compact({ ...router.query, ...updates }),
+        },
         undefined,
         { shallow: true }
-      );
-    p().catch((e) => {
-      throw e;
-    });
-  }, [debouncedSearch, filters, loading]);
+      )
+      .catch((e) => {
+        throw e;
+      });
+  }
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -139,8 +133,11 @@ const Page: React.FC<Props> = ({
     setSearchValue(event.target.value);
   };
 
-  function onChangeFilters(updates: Record<string, number | string>): void {
+  function onChangeFilters(
+    updates: Record<string, number | string | null>
+  ): void {
     setFilters({ ...filters, ...updates });
+    updateQuerystring(updates);
   }
 
   if (loadingSession || swrCommissions.isLoading)
@@ -185,24 +182,6 @@ const Page: React.FC<Props> = ({
       )}
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const prisma = getPrismaClient();
-  const { query } = context;
-  if (query.search) {
-    const searchResults = {
-      dossiers: await searchDossiers(prisma, query.search as string),
-      enfants: await searchEnfants(prisma, query.search as string),
-    };
-    return {
-      props: {
-        searchResults,
-        searchValue: query.search,
-      },
-    };
-  }
-  return { props: {} };
 };
 
 export default Page;

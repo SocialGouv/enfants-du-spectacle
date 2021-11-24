@@ -4,6 +4,7 @@ import React from "react";
 import styles from "src/components/FilterBar.module.scss";
 import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
+import { stringToNumberOrNull } from "src/lib/helpers";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
@@ -31,12 +32,14 @@ const FilterBar: React.FC<Props> = ({
   const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilters({ userId: Number(event.target.value) });
+    onChangeFilters({ userId: stringToNumberOrNull(event.target.value) });
   };
 
   const onChangeSocieteProductionId: React.ChangeEventHandler<HTMLOptionElement> =
     (event) => {
-      onChangeFilters({ societeProductionId: Number(event.target.value) });
+      onChangeFilters({
+        societeProductionId: stringToNumberOrNull(event.target.value),
+      });
     };
 
   const onChangeGrandeCategorie: React.ChangeEventHandler<HTMLOptionElement> = (
