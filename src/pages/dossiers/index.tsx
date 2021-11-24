@@ -1,5 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
-import type { SocieteProduction, User } from "@prisma/client";
+import type { SocieteProduction } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import FilterBarText from "src/components/FilterBarText";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
+import { useCommissions } from "src/lib/api";
 import {
   filterCommissions,
   filterSearchResults,
@@ -21,25 +22,29 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import { getCommissions, searchDossiers, searchEnfants } from "src/lib/queries";
+import { searchDossiers, searchEnfants } from "src/lib/queries";
 import useProtectedPage from "src/lib/useProtectedPage";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 interface Props {
-  commissions: CommissionData[];
   searchResults?: SearchResultsType;
   searchValue?: string;
-  filters?: DossiersFilters;
 }
 
 const Page: React.FC<Props> = ({
   searchValue: initialSearchValue,
-  commissions: initialCommissions,
   searchResults: initialSearchResults,
-  filters: initialFilters,
 }) => {
+  const { query } = useRouter();
+  const initialFilters: DossiersFilters = {
+    grandeCategorie: query.grandeCategorie,
+    societeProductionId: query.societeProductionId,
+    userId: query.userId,
+  };
+
   const { loading: loadingSession, session } = useProtectedPage();
+  const { commissions, ...swrCommissions } = useCommissions();
   const [searchValue, setSearchValue] = useState(initialSearchValue ?? "");
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [searchResults, setSearchResults] = useState<SearchResultsType | null>(
@@ -47,20 +52,19 @@ const Page: React.FC<Props> = ({
   );
   const [filteredSearchResults, setFilteredSearchResults] =
     useState<SearchResultsType | null>();
-  const [commissions] = useState(initialCommissions);
   const [filteredCommissions, setFilteredCommissions] =
     useState<CommissionData[]>();
   const [filterableSocieteProductions, setFilterableSocietesProductions] =
     useState<SocieteProduction[]>(
-      getFilterableSocietesProductions(searchResults, commissions)
+      getFilterableSocietesProductions(searchResults, commissions ?? [])
     );
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState<DossiersFilters>(initialFilters ?? {});
+  const [filters, setFilters] = useState<DossiersFilters>(initialFilters);
   const router = useRouter();
 
   // Apply filters to displayed dossiers (client-side)
   useEffect(() => {
-    setFilteredCommissions(filterCommissions(commissions, filters));
+    setFilteredCommissions(filterCommissions(commissions ?? [], filters));
     if (!searchResults) return;
     setFilteredSearchResults(filterSearchResults(searchResults, filters));
   }, [filters, searchResults, commissions]);
@@ -92,7 +96,7 @@ const Page: React.FC<Props> = ({
   useEffect(() => {
     const societes = getFilterableSocietesProductions(
       searchResults,
-      commissions
+      commissions ?? []
     );
     setFilterableSocietesProductions(societes);
     if (
@@ -139,7 +143,10 @@ const Page: React.FC<Props> = ({
     setFilters({ ...filters, ...updates });
   }
 
-  if (loadingSession || !session) return <Icon name="ri-loader-line" />;
+  if (loadingSession || swrCommissions.isLoading)
+    return <Icon name="ri-loader-line" />;
+  if (swrCommissions.isError || !session || !commissions)
+    return <Icon name="ri-error" />;
 
   return (
     <Layout
@@ -183,12 +190,6 @@ const Page: React.FC<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const prisma = getPrismaClient();
   const { query } = context;
-  const commissions = await getCommissions(prisma);
-  const filters = {
-    grandeCategorie: query.grandeCategorie,
-    societeProductionId: query.societeProductionId,
-    userId: query.userId,
-  };
   if (query.search) {
     const searchResults = {
       dossiers: await searchDossiers(prisma, query.search as string),
@@ -196,14 +197,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
     return {
       props: {
-        commissions,
-        filters,
         searchResults,
         searchValue: query.search,
       },
     };
   }
-  return { props: { commissions, filters } };
+  return { props: {} };
 };
 
 export default Page;

@@ -1,5 +1,5 @@
 import type { User } from "@prisma/client";
-import type { DossierData } from "src/lib/types";
+import type { CommissionData, DossierData } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import useSWR from "swr";
 
@@ -35,4 +35,20 @@ function useAllUsers() {
   };
 }
 
-export { useAllUsers, useDossier };
+function useCommissions() {
+  const { data, error } = useSWR(
+    `/api/commissions`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<CommissionData[]>(await res.text());
+    }
+  );
+
+  return {
+    commissions: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
+export { useAllUsers, useCommissions, useDossier };
