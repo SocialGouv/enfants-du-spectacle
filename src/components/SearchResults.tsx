@@ -77,19 +77,8 @@ interface Props {
 const SearchResults: React.FC<Props> = ({
   searchResults: { enfants, dossiers },
 }) => {
-  return (
+  const enfantsPart = (
     <>
-      <Title as="h3">Dossiers</Title>
-      <div className="card">
-        {dossiers.length == 0 && <span>aucun dossier trouvé</span>}
-        {dossiers.length > 0 && (
-          <div className="dossiersContainer">
-            {dossiers.map((dossier) => (
-              <DossierRow key={dossier.id} dossier={dossier} />
-            ))}
-          </div>
-        )}
-      </div>
       <Title as="h3">Enfants</Title>
       <div className="card">
         {enfants.length == 0 && <span>aucun enfant trouvé</span>}
@@ -103,5 +92,36 @@ const SearchResults: React.FC<Props> = ({
       </div>
     </>
   );
+  const dossiersPart = (
+    <>
+      <Title as="h3">Dossiers</Title>
+      <div className="card">
+        {dossiers.length == 0 && <span>aucun dossier trouvé</span>}
+        {dossiers.length > 0 && (
+          <div className="dossiersContainer">
+            {dossiers.map((dossier) => (
+              <DossierRow key={dossier.id} dossier={dossier} />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  if (enfants.length > 0 && dossiers.length == 0) {
+    return (
+      <>
+        {enfantsPart}
+        {dossiersPart}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {dossiersPart}
+        {enfantsPart}
+      </>
+    );
+  }
 };
 export default SearchResults;

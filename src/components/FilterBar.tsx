@@ -4,7 +4,7 @@ import React from "react";
 import styles from "src/components/FilterBar.module.scss";
 import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
-import { stringToNumberOrNull } from "src/lib/helpers";
+import { shortUserName, stringToNumberOrNull } from "src/lib/helpers";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
@@ -66,7 +66,10 @@ const FilterBar: React.FC<Props> = ({
             id="userId"
             selected={String(filters.userId)}
             options={[defaultUserOption].concat(
-              allUsers.map((u) => ({ label: u.email, value: String(u.id) }))
+              allUsers.map((u) => ({
+                label: shortUserName(u),
+                value: String(u.id),
+              }))
             )}
             onChange={onChangeUserId}
           />

@@ -23,7 +23,14 @@ const Page: React.FC = () => {
     </>
   );
   return (
-    <Layout headerMiddle={title} windowTitle={dossier.nom}>
+    <Layout
+      windowTitle={dossier.nom}
+      headerMiddle={title}
+      breadcrumbs={[
+        { href: "/dossiers", label: "Dossiers" },
+        { label: dossier.nom },
+      ]}
+    >
       <Dossier dossierId={dossierId} />
     </Layout>
   );

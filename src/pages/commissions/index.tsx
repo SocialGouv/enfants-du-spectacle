@@ -66,6 +66,10 @@ const Page: React.FC = () => {
     <Layout
       windowTitle="Commissions passées"
       headerMiddle={<Title as="h1">Commissions passées</Title>}
+      breadcrumbs={[
+        { href: "/", label: "Accueil" },
+        { label: "Commissions passées" },
+      ]}
     >
       {commissions.map((commission) => (
         <CommissionRow key={commission.id} commission={commission} />
