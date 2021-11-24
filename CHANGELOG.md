@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.0...v1.1.1) (2021-11-24)
+
+
+### Bug Fixes
+
+* re-fix prisma connection limit in local with global ([#90](https://github.com/SocialGouv/enfants-du-spectacle/issues/90)) ([6fe2059](https://github.com/SocialGouv/enfants-du-spectacle/commit/6fe2059682539a1d8b9b22c29948af3861031653))
+
 # [1.1.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.0.2...v1.1.0) (2021-11-24)
 
 
