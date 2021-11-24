@@ -30,7 +30,6 @@ const Page: React.FC = () => {
   const { query } = useRouter();
   const { loading: loadingSession, session } = useProtectedPage();
   const { commissions, ...swrCommissions } = useCommissions();
-  const commissionsOrEmpty = commissions ?? [];
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch] = useDebounce(searchValue, 500);
   const [searchResults, setSearchResults] = useState<SearchResultsType | null>(
@@ -43,7 +42,7 @@ const Page: React.FC = () => {
 
   const [filterableSocieteProductions, setFilterableSocietesProductions] =
     useState<SocieteProduction[]>(
-      getFilterableSocietesProductions(searchResults, commissionsOrEmpty)
+      getFilterableSocietesProductions(searchResults, commissions ?? [])
     );
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<DossiersFilters>({});
@@ -61,11 +60,11 @@ const Page: React.FC = () => {
     // avoid double refresh after filter change
     if (JSON.stringify(newFilters) != JSON.stringify(filters))
       setFilters(newFilters);
-  }, [query]);
+  }, [query, filters]);
 
   // Apply filters to displayed dossiers (client-side)
   useEffect(() => {
-    setFilteredCommissions(filterCommissions(commissionsOrEmpty, filters));
+    setFilteredCommissions(filterCommissions(commissions ?? [], filters));
     if (!searchResults) return;
     setFilteredSearchResults(filterSearchResults(searchResults, filters));
   }, [filters, searchResults, commissions]);
@@ -98,7 +97,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const societes = getFilterableSocietesProductions(
       searchResults,
-      commissionsOrEmpty
+      commissions ?? []
     );
     setFilterableSocietesProductions(societes);
     if (

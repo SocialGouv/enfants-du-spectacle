@@ -17,10 +17,18 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 };
-
 const get: NextApiHandler = async (req, res) => {
+  const { datePeriod } = req.query;
+  const commissions =
+    datePeriod == "past"
+      ? await getPastCommissions()
+      : await getUpcomingCommissions();
+  res.status(200).json(superjson.stringify(commissions));
+};
+
+const getUpcomingCommissions = async () => {
   const prisma = getPrismaClient();
-  const commissions = await prisma.commission.findMany({
+  return prisma.commission.findMany({
     include: {
       dossiers: {
         include: {
@@ -34,7 +42,21 @@ const get: NextApiHandler = async (req, res) => {
     orderBy: { date: "asc" },
     where: { date: { gte: new Date() }, dossiers: { some: {} } },
   });
-  res.status(200).json(superjson.stringify(commissions));
+};
+
+const getPastCommissions = async () => {
+  const prisma = getPrismaClient();
+  return prisma.commission.findMany({
+    include: {
+      dossiers: {
+        include: {
+          _count: { select: { enfants: true } },
+        },
+      },
+    },
+    orderBy: { date: "desc" },
+    where: { date: { lt: new Date() }, dossiers: { some: {} } },
+  });
 };
 
 export default handler;

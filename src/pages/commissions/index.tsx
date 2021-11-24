@@ -1,13 +1,11 @@
-import { Title } from "@dataesr/react-dsfr";
+import { Icon, Title } from "@dataesr/react-dsfr";
 import type { Commission, Dossier } from "@prisma/client";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { getSession, useSession } from "next-auth/react";
 import React from "react";
 import Layout from "src/components/Layout";
-import authMiddleware from "src/lib/authMiddleware";
+import { useCommissions } from "src/lib/api";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import getPrismaClient from "src/lib/prismaClient";
+import useProtectedPage from "src/lib/useProtectedPage";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -27,6 +25,7 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
   const enfantsCount = commission.dossiers
     .map((p) => p._count?.enfants ?? 0)
     .reduce((i, b) => i + b, 0);
+
   return (
     <div className={`${styles.row} card`}>
       <div>
@@ -56,14 +55,12 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
   );
 };
 
-interface Props {
-  commissions: CommissionWithCounts[];
-}
+const Page: React.FC = () => {
+  const { loading: loadingSession } = useProtectedPage();
+  const { commissions, isLoading, isError } = useCommissions("past");
 
-const Page: React.FC<Props> = ({ commissions }) => {
-  const { data: session } = useSession();
-
-  if (!session) throw Error("no session on protected page");
+  if (isLoading || loadingSession) return <Icon name="ri-loader-line" />;
+  if (isError || !commissions) return <Icon name="ri-error" />;
 
   return (
     <Layout
@@ -75,26 +72,6 @@ const Page: React.FC<Props> = ({ commissions }) => {
       ))}
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const prisma = getPrismaClient();
-  const session = await getSession(context);
-  const redirectTo = authMiddleware(session);
-  if (redirectTo) return redirectTo;
-
-  const commissions = await prisma.commission.findMany({
-    include: {
-      dossiers: {
-        include: {
-          _count: { select: { enfants: true } },
-        },
-      },
-    },
-    orderBy: { date: "desc" },
-    where: { date: { lt: new Date() }, dossiers: { some: {} } },
-  });
-  return { props: { commissions, session } };
 };
 
 export default Page;

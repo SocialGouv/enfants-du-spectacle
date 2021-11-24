@@ -35,9 +35,10 @@ function useAllUsers() {
   };
 }
 
-function useCommissions() {
+type DatePeriod = "past" | "upcoming";
+function useCommissions(datePeriod: DatePeriod | undefined = "upcoming") {
   const { data, error } = useSWR(
-    `/api/commissions`,
+    `/api/commissions?datePeriod=${datePeriod}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());
