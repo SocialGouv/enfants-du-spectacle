@@ -1,31 +1,44 @@
+import { Icon } from "@dataesr/react-dsfr";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import type { FormEventHandler } from "react";
 import React, { useState } from "react";
 import styles from "src/components/ConnexionForm.module.scss";
+
+const ERROR_MESSAGES = {
+  AccessDenied:
+    "Vous devez utiliser une adresse mail en @drieets.gouv.fr pour vous connecter",
+  Verification:
+    "Le lien de connexion est invalide. Il a peut-être déjà été utilisé ou bien a expiré. Veuillez ré-essayer avec un nouveau lien.",
+  default: "Erreur lors de la connexion",
+};
+type ErrorName = keyof typeof ERROR_MESSAGES;
 
 const ConnexionForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { signinRequired: signinRequiredRaw, error: errorRaw } = router.query;
   const signinRequired = signinRequiredRaw === "true";
   const error = errorRaw as string;
 
+  const submitSigninForm: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    setLoading(true);
+    signIn("email", {
+      callbackUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/dossiers`,
+      email,
+    }).catch((err) => {
+      setLoading(false);
+      window.alert("Une erreur est survenue lors de votre connexion");
+      throw err;
+    });
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.formWrapper}>
-        <form
-          method="post"
-          action="#"
-          onSubmit={(e) => {
-            e.preventDefault();
-            signIn("email", {
-              callbackUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/dossiers`,
-              email,
-            }).catch((err) => {
-              throw err;
-            });
-          }}
-        >
+        <form method="post" action="#" onSubmit={submitSigninForm}>
           <label>
             <div>Adresse Email:</div>
             <div>
@@ -42,8 +55,15 @@ const ConnexionForm: React.FC = () => {
             </div>
           </label>
           <div>
-            <button type="submit" className={styles.submitButton}>
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={loading}
+            >
               Connexion
+              {loading && (
+                <Icon name="ri-loader-line" className={styles.iconLoader} />
+              )}
             </button>
           </div>
         </form>
@@ -54,8 +74,9 @@ const ConnexionForm: React.FC = () => {
             ❌
           </span>
           <span>
-            {error === "AccessDenied" &&
-              "Vous devez utiliser une adresse mail en @drieets.gouv.fr pour vous connecter"}
+            {Object.keys(ERROR_MESSAGES).includes(error)
+              ? ERROR_MESSAGES[error as ErrorName]
+              : ERROR_MESSAGES.default}
           </span>
         </div>
       )}
