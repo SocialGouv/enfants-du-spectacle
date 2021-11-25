@@ -15,7 +15,7 @@
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build --no-lint",
     "start": "next start",
-    "start-prod": "NEXTAUTH_SECRET=\"${NEXTAUTH_SECRET:-missingsecret}\" && npx prisma migrate deploy && next start",
+    "start-prod": "npx prisma migrate deploy && next start",
     "start-review": "npx prisma migrate deploy && source src/scripts/restore_seeds.sh && next start",
     "lint": "eslint components pages lib",
     "prepare": "husky install",
