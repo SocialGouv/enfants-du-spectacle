@@ -1,4 +1,5 @@
 import type { StatutDossier } from "@prisma/client";
+import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "src/lib/prismaClient";
@@ -104,4 +105,4 @@ const update: NextApiHandler = async (req, res) => {
   res.status(200).json(superjson.stringify(updatedDossier));
 };
 
-export default handler;
+export default withSentry(handler);

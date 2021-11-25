@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import * as Sentry from "@sentry/nextjs";
 import emailParser from "email-addresses";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
@@ -17,6 +18,11 @@ export default NextAuth({
         (parsed.domain === "drieets.gouv.fr" ||
           parsed.domain === "beta.gouv.fr")
       );
+    },
+  },
+  logger: {
+    error(code, metadata) {
+      Sentry.captureException({ code, metadata });
     },
   },
   pages: {

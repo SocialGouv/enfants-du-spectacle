@@ -1,3 +1,4 @@
+import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "src/lib/prismaClient";
@@ -26,4 +27,4 @@ const handler: NextApiHandler = async (req, res) => {
   res.status(200).json(superjson.stringify({ dossiers, enfants }));
 };
 
-export default handler;
+export default withSentry(handler);

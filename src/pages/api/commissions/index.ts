@@ -1,3 +1,4 @@
+import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "src/lib/prismaClient";
@@ -57,4 +58,4 @@ const getPastCommissions = async () => {
   });
 };
 
-export default handler;
+export default withSentry(handler);
