@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.2...v1.1.3) (2021-11-25)
+
+
+### Bug Fixes
+
+* temp fix for NEXTAUTH_SECRET ([af85e0c](https://github.com/SocialGouv/enfants-du-spectacle/commit/af85e0cece37643e5a8d125f73f217ceb3d12cd3))
+
 ## [1.1.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.1...v1.1.2) (2021-11-25)
 
 
