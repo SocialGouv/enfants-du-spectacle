@@ -1,7 +1,5 @@
 import { Title } from "@dataesr/react-dsfr";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { getCsrfToken } from "next-auth/react";
 import React from "react";
 import Layout from "src/components/Layout";
 
@@ -36,14 +34,6 @@ const Home: React.FC = () => {
       </div>
     </Layout>
   );
-};
-
-// This is the recommended way for Next.js 9.3 or newer
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const csrfToken = await getCsrfToken(context);
-  return {
-    props: { csrfToken },
-  };
 };
 
 export default Home;
