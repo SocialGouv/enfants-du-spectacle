@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.4...v1.2.0) (2021-11-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sass to ^1.43.5 ([#93](https://github.com/SocialGouv/enfants-du-spectacle/issues/93)) ([a6ccd13](https://github.com/SocialGouv/enfants-du-spectacle/commit/a6ccd137312ebead7511467225397972da1f2b55))
+
+
+### Features
+
+* improve signin errors and loading ([#108](https://github.com/SocialGouv/enfants-du-spectacle/issues/108)) ([3376703](https://github.com/SocialGouv/enfants-du-spectacle/commit/337670312c0734f1ac523a220f45cb4b2dd3ceff))
+
 ## [1.1.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.3...v1.1.4) (2021-11-25)
 
 
