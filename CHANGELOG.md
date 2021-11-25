@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.1...v1.1.2) (2021-11-25)
+
+
+### Bug Fixes
+
+* corrige la connexion initiale sans effet, clarifie les erreurs de connexion [#91](https://github.com/SocialGouv/enfants-du-spectacle/issues/91) ([eedc2d7](https://github.com/SocialGouv/enfants-du-spectacle/commit/eedc2d78f4984dd75a283a0a0bd41cd79090561f))
+
 ## [1.1.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.0...v1.1.1) (2021-11-24)
 
 
