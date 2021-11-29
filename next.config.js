@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
-const { withSuperjson } = require('next-superjson')
 
-module.exports = withSuperjson()({
-  reactStrictMode: true,
+module.exports = {
   typescript: {
-    ignoreBuildErrors: true // TODO: remove?
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
   }
-})
+}
