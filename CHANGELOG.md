@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.7.0...v1.7.1) (2021-11-29)
+
+
+### Bug Fixes
+
+* ne pas afficher le formulaire de connexion trop tot ([#119](https://github.com/SocialGouv/enfants-du-spectacle/issues/119)) ([ae4a368](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae4a36838f873352be25a781a1fe7a9e37671771))
+
 # [1.7.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.6.0...v1.7.0) (2021-11-29)
 
 
