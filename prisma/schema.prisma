@@ -31,6 +31,7 @@ model Demandeur {
   nom                 String
   prenom              String
   phone               String
+  fonction            String
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   societeProductionId Int
   dossiers          Dossier[]
