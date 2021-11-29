@@ -7,4 +7,15 @@ input.search {
   display: inline-block;
   flex: 1;
   padding: 0 1rem;
+
+  &::placeholder{
+    opacity: .9;
+    text-decoration: underline dotted;
+  }
+
+  &:active, &:hover, &:focus {
+    &::placeholder {
+      opacity: 0.7;
+    }
+  }
 }
