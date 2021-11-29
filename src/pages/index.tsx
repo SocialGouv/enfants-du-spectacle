@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     <Layout windowTitle="">
       <div className="card">
         <Title as="h2">Connexion</Title>
-        <ConnexionForm />
+        {!loading && !session && <ConnexionForm />}
         <Callout>
           <CalloutTitle as="h3">Interface agents</CalloutTitle>
           <CalloutText>
