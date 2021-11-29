@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.3.0...v1.4.0) (2021-11-29)
+
+
+### Features
+
+* afficher le poste de la personne qui a soumis le dossier [#105](https://github.com/SocialGouv/enfants-du-spectacle/issues/105) ([37c8487](https://github.com/SocialGouv/enfants-du-spectacle/commit/37c84879d186d3ad197af95ba03e6cd4609b1578))
+* nouvelle colonne Demandeur.fonction ([420cf04](https://github.com/SocialGouv/enfants-du-spectacle/commit/420cf04426c1ffdab7e8fa6072c629dfe3ec8033))
+
 # [1.3.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.2.0...v1.3.0) (2021-11-29)
 
 
