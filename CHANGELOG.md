@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.6.0...v1.7.0) (2021-11-29)
+
+
+### Features
+
+* rendre le texte de recherche par défaut plus visible ([#120](https://github.com/SocialGouv/enfants-du-spectacle/issues/120)) ([1e6ed29](https://github.com/SocialGouv/enfants-du-spectacle/commit/1e6ed29876e0907d4decfa259133b13f80cfa8ce))
+
 # [1.6.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.5.0...v1.6.0) (2021-11-29)
 
 
