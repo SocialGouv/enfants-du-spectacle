@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.4.0...v1.5.0) (2021-11-29)
+
+
+### Features
+
+* afficher plus d'informations sur les sociétés ([#116](https://github.com/SocialGouv/enfants-du-spectacle/issues/116)) ([40c8a98](https://github.com/SocialGouv/enfants-du-spectacle/commit/40c8a988eb27862b61bff3a6406af82fe8f6c83d))
+
 # [1.4.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.3.0...v1.4.0) (2021-11-29)
 
 
