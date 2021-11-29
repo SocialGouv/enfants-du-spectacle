@@ -28,6 +28,7 @@ model SocieteProduction {
   adresseCodePostal String
   adresseCodeCommune String
   formeJuridique String
+  conventionCollectiveCode String
   demandeurs  Demandeur[]
   dossiers    Dossier[]
 }

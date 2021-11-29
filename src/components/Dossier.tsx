@@ -6,6 +6,7 @@ import styles from "src/components/Dossier.module.scss";
 import Enfant from "src/components/Enfant";
 import IconLoader from "src/components/IconLoader";
 import Info from "src/components/Info";
+import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
 import {
@@ -65,21 +66,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
         </div>
         <div>
           <Info title="Société">
-            <div>{dossier.societeProduction.nom}</div>
-            <div>Dénomination : {dossier.societeProduction.raisonSociale}</div>
-            <div>{dossier.societeProduction.formeJuridique}</div>
-            <div>{dossier.societeProduction.adresse}</div>
-            <div>SIRET {dossier.societeProduction.siret}</div>
-            <div>NAF {dossier.societeProduction.naf}</div>
-            <div>
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href={`https://annuaire-entreprises.data.gouv.fr/entreprise/${dossier.societeProduction.siren}`}
-              >
-                Plus dʼinformations…
-              </a>
-            </div>
+            <InfoSociete societeProduction={dossier.societeProduction} />
           </Info>
         </div>
         <Info title="Pièces justificatives">
