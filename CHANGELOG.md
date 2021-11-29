@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.2.0...v1.3.0) (2021-11-29)
+
+
+### Features
+
+* improve loader icon ([#114](https://github.com/SocialGouv/enfants-du-spectacle/issues/114)) ([2366db3](https://github.com/SocialGouv/enfants-du-spectacle/commit/2366db33b04c8152e28565f724f556285c47591a))
+
 # [1.2.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.1.4...v1.2.0) (2021-11-25)
 
 
