@@ -55,6 +55,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             <div>
               {dossier.demandeur.prenom} {dossier.demandeur.nom}
             </div>
+            <div title="Fonction(s)">{dossier.demandeur.fonction}</div>
             <div>
               <a href={`mailto:${dossier.demandeur.email}`}>
                 ✉️ {dossier.demandeur.email}

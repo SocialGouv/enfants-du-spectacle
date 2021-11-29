@@ -120,6 +120,16 @@ function getRandomJustificatifsEnfant(): JustificatifEnfant[] {
   ) as JustificatifEnfant[];
 }
 
+function getRandomDemandeurFonction(): string {
+  return faker.random.arrayElement([
+    "Chargée de production",
+    "Directrice",
+    "Assistant de production",
+    "Stagiaire",
+    "Associée",
+  ]);
+}
+
 function getRandomEnfant(): Omit<
   Prisma.EnfantUncheckedCreateInput,
   "dossierId"
@@ -204,6 +214,7 @@ async function main() {
       const demandeur = await prisma.demandeur.create({
         data: {
           email,
+          fonction: getRandomDemandeurFonction(),
           nom,
           phone: faker.phone.phoneNumber("+336########"),
           prenom,
