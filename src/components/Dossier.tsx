@@ -46,11 +46,6 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
           </Info>
         </div>
         <div>
-          <Info title="Société">
-            <div>{dossier.societeProduction.nom}</div>
-            <div>{dossier.societeProduction.departement}</div>
-            <div>{dossier.societeProduction.siret}</div>
-          </Info>
           <Info title="Demandeur" className={styles.infoSuccessive}>
             <div>
               {dossier.demandeur.prenom} {dossier.demandeur.nom}
@@ -64,6 +59,25 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             <div>
               <a href={`tel:${dossier.demandeur.phone}`}>
                 📞 {dossier.demandeur.phone}
+              </a>
+            </div>
+          </Info>
+        </div>
+        <div>
+          <Info title="Société">
+            <div>{dossier.societeProduction.nom}</div>
+            <div>Dénomination : {dossier.societeProduction.raisonSociale}</div>
+            <div>{dossier.societeProduction.formeJuridique}</div>
+            <div>{dossier.societeProduction.adresse}</div>
+            <div>SIRET {dossier.societeProduction.siret}</div>
+            <div>NAF {dossier.societeProduction.naf}</div>
+            <div>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href={`https://annuaire-entreprises.data.gouv.fr/entreprise/${dossier.societeProduction.siren}`}
+              >
+                Plus dʼinformations…
               </a>
             </div>
           </Info>
