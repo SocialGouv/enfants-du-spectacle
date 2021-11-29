@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.5.0...v1.6.0) (2021-11-29)
+
+
+### Features
+
+* afficher la convention collective des sociétés de production ([#118](https://github.com/SocialGouv/enfants-du-spectacle/issues/118)) ([710695c](https://github.com/SocialGouv/enfants-du-spectacle/commit/710695cd746a6b2af4cae68890f3b2ab18763d5b))
+
 # [1.5.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.4.0...v1.5.0) (2021-11-29)
 
 
