@@ -19,8 +19,15 @@ model Commission {
 model SocieteProduction {
   id          Int         @id @default(autoincrement())
   nom         String
-  siret       String?
+  siret       String
+  siren       String
   departement String
+  naf         String
+  raisonSociale String
+  adresse    String
+  adresseCodePostal String
+  adresseCodeCommune String
+  formeJuridique String
   demandeurs  Demandeur[]
   dossiers    Dossier[]
 }

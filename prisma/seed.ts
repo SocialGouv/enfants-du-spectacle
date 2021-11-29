@@ -36,6 +36,13 @@ interface SocieteCSV {
   nom: string;
   departement: string;
   siret: string;
+  siren: string;
+  raisonSociale: string;
+  adresse: string;
+  adresseCodeCommune: string;
+  adresseCodePostal: string;
+  formeJuridique: string;
+  naf: string;
 }
 interface DossierCSV {
   nom: string;

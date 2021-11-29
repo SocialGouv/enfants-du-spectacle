@@ -7,7 +7,7 @@
 .summaryBloc {
   @extend .bloc;
   display: grid;
-  grid-template-columns: 1fr 1fr 15rem;
+  grid-template-columns: 2fr 2fr 3fr 15rem;
   grid-column-gap: 1rem;
 }
 
