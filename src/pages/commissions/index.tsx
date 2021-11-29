@@ -2,6 +2,7 @@ import { Icon, Title } from "@dataesr/react-dsfr";
 import type { Commission, Dossier } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
+import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommissions } from "src/lib/api";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
@@ -57,10 +58,9 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
 
 const Page: React.FC = () => {
   const { loading: loadingSession } = useProtectedPage();
-  const { commissions, isLoading, isError } = useCommissions("past");
-
-  if (isLoading || loadingSession) return <Icon name="ri-loader-line" />;
-  if (isError || !commissions) return <Icon name="ri-error" />;
+  const { commissions, ...swrCommissions } = useCommissions("past");
+  const isLoading = loadingSession || swrCommissions.isLoading;
+  const isError = !isLoading && (swrCommissions.isError || !commissions);
 
   return (
     <Layout
@@ -71,9 +71,15 @@ const Page: React.FC = () => {
         { label: "Commissions passées" },
       ]}
     >
-      {commissions.map((commission) => (
-        <CommissionRow key={commission.id} commission={commission} />
-      ))}
+      {isLoading && <IconLoader />}
+      {isError && <Icon name="ri-error" />}
+      {!isLoading && !isError && commissions && (
+        <>
+          {commissions.map((commission) => (
+            <CommissionRow key={commission.id} commission={commission} />
+          ))}
+        </>
+      )}
     </Layout>
   );
 };

@@ -2,6 +2,7 @@ import { Icon, Select } from "@dataesr/react-dsfr";
 import type { SocieteProduction } from "@prisma/client";
 import React from "react";
 import styles from "src/components/FilterBar.module.scss";
+import IconLoader from "src/components/IconLoader";
 import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
 import { shortUserName, stringToNumberOrNull } from "src/lib/helpers";
@@ -26,7 +27,7 @@ const FilterBar: React.FC<Props> = ({
 }) => {
   const { allUsers, isLoading, isError } = useAllUsers();
 
-  if (isLoading) return <Icon name="ri-loader-line" />;
+  if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;
 
   const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (

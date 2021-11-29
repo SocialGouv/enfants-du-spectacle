@@ -1,9 +1,9 @@
-import { Icon } from "@dataesr/react-dsfr";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import type { FormEventHandler } from "react";
 import React, { useState } from "react";
 import styles from "src/components/ConnexionForm.module.scss";
+import IconLoader from "src/components/IconLoader";
 
 const ERROR_MESSAGES = {
   AccessDenied:
@@ -61,9 +61,7 @@ const ConnexionForm: React.FC = () => {
               disabled={loading}
             >
               Connexion
-              {loading && (
-                <Icon name="ri-loader-line" className={styles.iconLoader} />
-              )}
+              {loading && <IconLoader className={styles.iconLoader} />}
             </button>
           </div>
         </form>

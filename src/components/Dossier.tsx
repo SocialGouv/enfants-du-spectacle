@@ -4,6 +4,7 @@ import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
 import Enfant from "src/components/Enfant";
+import IconLoader from "src/components/IconLoader";
 import Info from "src/components/Info";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
@@ -20,7 +21,7 @@ interface Props {
 const Dossier: React.FC<Props> = ({ dossierId }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
 
-  if (isLoading) return <Icon name="ri-loader-line" />;
+  if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
 
   return (

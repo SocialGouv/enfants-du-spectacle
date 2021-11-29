@@ -143,9 +143,13 @@ function compact<Type>(obj: Record<string, Type>): Record<string, Type> {
     )
   );
 }
+async function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export {
   compact,
+  delay,
   filterCommissions,
   filterSearchResults,
   frenchDateText,
