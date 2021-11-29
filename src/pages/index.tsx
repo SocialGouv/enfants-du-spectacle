@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import ConnexionForm from "src/components/ConnexionForm";
+import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 
 const Home: React.FC = () => {
@@ -22,6 +23,11 @@ const Home: React.FC = () => {
     <Layout windowTitle="">
       <div className="card">
         <Title as="h2">Connexion</Title>
+        {loading && (
+          <div style={{ padding: "2rem" }}>
+            <IconLoader />
+          </div>
+        )}
         {!loading && !session && <ConnexionForm />}
         <Callout>
           <CalloutTitle as="h3">Interface agents</CalloutTitle>
