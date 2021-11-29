@@ -43,6 +43,7 @@ interface SocieteCSV {
   adresseCodePostal: string;
   formeJuridique: string;
   naf: string;
+  conventionCollectiveCode: string;
 }
 interface DossierCSV {
   nom: string;

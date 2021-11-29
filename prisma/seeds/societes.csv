@@ -1,11 +1,11 @@
-nom,departement,siren,siret,adresse,adresseCodeCommune,adresseCodePostal,formeJuridique,naf,raisonSociale
-17 PRODUCTION,75,410334239,41033423900036,"1560 route de quarante sous, 78630 Orgeval",78466,78630,Société à responsabilité limitée (sans autre indication),5911A,17-23 production
-A VRAI DIRE,75,422694000,42269400000031,"12 rue de la tapisserie, 60000 Beauvais",60057,60000,Association déclarée,9001Z,A vrai dire
-BAGAN FILMS,75,509484648,50948464800050,"32 avenue de flandre, 75019 Paris 19",75119,75019,Société à responsabilité limitée (sans autre indication),5911C,Bagan films
-CINE NOMINE,75,410301469,41030146900020,"21 rue du fbg st antoine, 75011 Paris 11",75111,75011,Société à responsabilité limitée (sans autre indication),5911C,Cine nomine
-EXPLICIT FILMS,75,479592172,47959217200015,"10 rue mayet, 75006 Paris 6",75116,75006,Société à responsabilité limitée (sans autre indication),5911C,Explicit films
-MONA FILMS,75,752805770,75280577000019,"10 b rue bisson, 75020 Paris 20",75120,75020,Société à responsabilité limitée (sans autre indication),5911C,Mona films
-MONDAYMAN,75,834120248,83412024800010,"59 rue du fbg st antoine, 75011 Paris 11",75111,75011,"SAS, société par actions simplifiée",5911C,Mondayman productions
-MONDO TV France,75,489553743,48955374300019,"52 rue gerard, 75013 Paris 13",75113,75013,SA à conseil d'administration (s.a.i.),5911A,Mondo tv france
-BALTHAZAR LES PRODUCTIONS,92,414346619,41434661900011,"23 rue boyer, 75020 Paris 20",75120,75020,Association déclarée,9001Z,Les productions de balthazar
-DOME PRODUCTIONS,92,352344865,35234486500048,"56 grande rue, 77630 Barbizon",77022,77630,Société à responsabilité limitée (sans autre indication),5912Z,Dome productions (DP)
+nom,departement,siren,siret,adresse,adresseCodeCommune,adresseCodePostal,formeJuridique,naf,raisonSociale,conventionCollectiveCode
+17 PRODUCTION,75,410334239,41033423900036,"1560 route de quarante sous, 78630 Orgeval",78466,78630,Société à responsabilité limitée (sans autre indication),5911A,17-23 production,2642
+A VRAI DIRE,75,422694000,42269400000031,"12 rue de la tapisserie, 60000 Beauvais",60057,60000,Association déclarée,9001Z,A vrai dire,1285
+BAGAN FILMS,75,509484648,50948464800050,"32 avenue de flandre, 75019 Paris 19",75119,75019,Société à responsabilité limitée (sans autre indication),5911C,Bagan films,3097
+CINE NOMINE,75,410301469,41030146900020,"21 rue du fbg st antoine, 75011 Paris 11",75111,75011,Société à responsabilité limitée (sans autre indication),5911C,Cine nomine,3097
+EXPLICIT FILMS,75,479592172,47959217200015,"10 rue mayet, 75006 Paris 6",75116,75006,Société à responsabilité limitée (sans autre indication),5911C,Explicit films,2642
+MONA FILMS,75,752805770,75280577000019,"10 b rue bisson, 75020 Paris 20",75120,75020,Société à responsabilité limitée (sans autre indication),5911C,Mona films,2642
+MONDAYMAN,75,834120248,83412024800010,"59 rue du fbg st antoine, 75011 Paris 11",75111,75011,"SAS, société par actions simplifiée",5911C,Mondayman productions,3097
+MONDO TV France,75,489553743,48955374300019,"52 rue gerard, 75013 Paris 13",75113,75013,SA à conseil d'administration (s.a.i.),5911A,Mondo tv france,2412
+BALTHAZAR LES PRODUCTIONS,92,414346619,41434661900011,"23 rue boyer, 75020 Paris 20",75120,75020,Association déclarée,9001Z,Les productions de balthazar,3097
+DOME PRODUCTIONS,92,352344865,35234486500048,"56 grande rue, 77630 Barbizon",77022,77630,Société à responsabilité limitée (sans autre indication),5912Z,Dome productions (DP),3097
