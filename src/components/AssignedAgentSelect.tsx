@@ -1,5 +1,6 @@
 import { Icon, Select } from "@dataesr/react-dsfr";
 import React from "react";
+import IconLoader from "src/components/IconLoader";
 import { useAllUsers, useDossier } from "src/lib/api";
 import { shortUserName } from "src/lib/helpers";
 import { updateDossier } from "src/lib/queries";
@@ -16,8 +17,7 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
   const { dossier, ...swrDossier } = useDossier(dossierId);
   const { allUsers, ...swrUsers } = useAllUsers();
 
-  if (swrDossier.isLoading || swrUsers.isLoading)
-    return <Icon name="ri-loader-line" />;
+  if (swrDossier.isLoading || swrUsers.isLoading) return <IconLoader />;
   if (swrDossier.isError || swrUsers.isError || !allUsers || !dossier)
     return <Icon name="ri-error" />;
 

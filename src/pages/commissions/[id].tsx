@@ -2,6 +2,7 @@ import { Icon, Title } from "@dataesr/react-dsfr";
 import { useRouter } from "next/router";
 import React from "react";
 import CommissionBloc from "src/components/Commission";
+import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommission } from "src/lib/api";
 import useProtectedPage from "src/lib/useProtectedPage";
@@ -9,19 +10,22 @@ import useProtectedPage from "src/lib/useProtectedPage";
 const Page: React.FC = () => {
   const router = useRouter();
   const { loading: loadingSession } = useProtectedPage();
-  const { commission, isLoading, isError } = useCommission(
+  const { commission, ...swrCommission } = useCommission(
     typeof router.query.id == "string" ? Number(router.query.id) : null
   );
-
-  if (isLoading || loadingSession) return <Icon name="ri-loader-line" />;
-  if (isError || !commission) return <Icon name="ri-error" />;
+  const isLoading = swrCommission.isLoading || loadingSession;
+  const isError = !isLoading && (swrCommission.isError || !commission);
 
   return (
     <Layout
       windowTitle="Commission"
       headerMiddle={<Title as="h1">Commission </Title>}
     >
-      <CommissionBloc commission={commission} />
+      {isLoading && <IconLoader />}
+      {isError && <Icon name="ri-error" />}
+      {!isLoading && !isError && commission && (
+        <CommissionBloc commission={commission} />
+      )}
     </Layout>
   );
 };

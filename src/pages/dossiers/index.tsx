@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import CommissionBloc from "src/components/Commission";
 import FilterBar from "src/components/FilterBar";
 import FilterBarText from "src/components/FilterBarText";
+import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
@@ -139,10 +140,9 @@ const Page: React.FC = () => {
     updateQuerystring(updates);
   }
 
-  if (loadingSession || swrCommissions.isLoading)
-    return <Icon name="ri-loader-line" />;
-  if (swrCommissions.isError || !session || !commissions)
-    return <Icon name="ri-error" />;
+  const isLoading = loadingSession || swrCommissions.isLoading || loading;
+  const isError =
+    !isLoading && (swrCommissions.isError || !session || !commissions);
 
   return (
     <Layout
@@ -152,7 +152,7 @@ const Page: React.FC = () => {
           text={
             <FilterBarText
               searchResults={!loading && debouncedSearch ? searchResults : null}
-              commissions={commissions}
+              commissions={commissions ?? []}
             />
           }
           onChangeFilters={onChangeFilters}
@@ -162,8 +162,9 @@ const Page: React.FC = () => {
       }
       windowTitle="Dossiers"
     >
-      {loading && <div>chargement...</div>}
-      {!loading && !debouncedSearch && (
+      {isLoading && <IconLoader />}
+      {isError && <Icon name="ri-error" />}
+      {!isLoading && !isError && !debouncedSearch && (
         <>
           {filteredCommissions?.map((commission: CommissionData) => (
             <CommissionBloc
@@ -176,7 +177,7 @@ const Page: React.FC = () => {
           </div>
         </>
       )}
-      {!loading && debouncedSearch && filteredSearchResults && (
+      {!isLoading && !isError && debouncedSearch && filteredSearchResults && (
         <SearchResults searchResults={filteredSearchResults} />
       )}
     </Layout>
