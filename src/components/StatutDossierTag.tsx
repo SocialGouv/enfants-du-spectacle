@@ -1,5 +1,5 @@
+import type { TagSize } from "@dataesr/react-dsfr";
 import { Tag } from "@dataesr/react-dsfr";
-import type { TagSize } from "@dataesr/react-dsfr/components/interface/Tag";
 import type { Dossier } from "@prisma/client";
 import React from "react";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
