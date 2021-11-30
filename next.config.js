@@ -11,9 +11,6 @@ module.exports = withSentryConfig(
       // !! WARN !!
       ignoreBuildErrors: true,
     },
-    env: {
-      NEXTAUTH_URL: process.env.APP_BASE_URL,
-    },
   }
   , {
     // Additional config options for the Sentry Webpack plugin. Keep in mind that
