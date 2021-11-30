@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.8.0...v1.8.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sass to ^1.44.0 ([#121](https://github.com/SocialGouv/enfants-du-spectacle/issues/121)) ([e324067](https://github.com/SocialGouv/enfants-du-spectacle/commit/e3240674fadecefe97fdf445c3d9124f70b04d6d))
+
 # [1.8.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.7.1...v1.8.0) (2021-11-30)
 
 
