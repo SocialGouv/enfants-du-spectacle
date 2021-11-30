@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.8.1...v1.9.0) (2021-11-30)
+
+
+### Features
+
+* réutiliser les couleurs de dossiers existantes ([#129](https://github.com/SocialGouv/enfants-du-spectacle/issues/129)) ([397dbea](https://github.com/SocialGouv/enfants-du-spectacle/commit/397dbeabe14ca0f9c91c1f6591abeae06946add3)), closes [#101](https://github.com/SocialGouv/enfants-du-spectacle/issues/101)
+
 ## [1.8.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.8.0...v1.8.1) (2021-11-30)
 
 
