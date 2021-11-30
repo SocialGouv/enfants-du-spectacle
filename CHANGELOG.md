@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.0...v1.9.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency next to ^11.1.2 ([#127](https://github.com/SocialGouv/enfants-du-spectacle/issues/127)) ([ac57420](https://github.com/SocialGouv/enfants-du-spectacle/commit/ac57420debc22ad0999b03c185468ecad72fbbd2))
+
 # [1.9.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.8.1...v1.9.0) (2021-11-30)
 
 
