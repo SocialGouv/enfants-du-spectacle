@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.7.1...v1.8.0) (2021-11-30)
+
+
+### Features
+
+* afficher l'age plutot que la date de naissance ([5b7b605](https://github.com/SocialGouv/enfants-du-spectacle/commit/5b7b6053b196181f83d19cbacfed37876ca544df)), closes [#122](https://github.com/SocialGouv/enfants-du-spectacle/issues/122)
+
 ## [1.7.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.7.0...v1.7.1) (2021-11-29)
 
 
