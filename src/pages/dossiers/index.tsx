@@ -1,5 +1,4 @@
 import { Icon } from "@dataesr/react-dsfr";
-import type { SocieteProduction } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -28,29 +27,48 @@ import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 const Page: React.FC = () => {
-  const { query } = useRouter();
+  const router = useRouter();
+  const { isReady: routerIsReady, query } = router;
   const { loading: loadingSession, session } = useProtectedPage();
   const { commissions, ...swrCommissions } = useCommissions();
-  const [searchValue, setSearchValue] = useState("");
-  const [debouncedSearch] = useDebounce(searchValue, 500);
+  const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
+    undefined
+  );
+  const [searchValueDebounced] = useDebounce(searchValueInput, 500);
   const [searchResults, setSearchResults] = useState<SearchResultsType | null>(
     null
   );
-  const [filteredSearchResults, setFilteredSearchResults] =
-    useState<SearchResultsType | null>();
-  const [filteredCommissions, setFilteredCommissions] =
-    useState<CommissionData[]>();
-
-  const [filterableSocieteProductions, setFilterableSocietesProductions] =
-    useState<SocieteProduction[]>(
-      getFilterableSocietesProductions(searchResults, commissions ?? [])
-    );
+  // this madness gets the initial search value from querystring
+  const searchValueEffective =
+    routerIsReady && query.search && searchValueInput === undefined
+      ? (query.search as string) || ""
+      : searchValueDebounced;
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState<DossiersFilters>({});
-  const router = useRouter();
+  const [filters, setFilters] = useState<DossiersFilters | undefined>(
+    undefined
+  );
+
+  const filteredCommissions =
+    !swrCommissions.isLoading && filters !== undefined && commissions
+      ? filterCommissions(commissions, filters)
+      : undefined;
+
+  const filteredSearchResults =
+    !swrCommissions.isLoading &&
+    filters !== undefined &&
+    commissions &&
+    searchResults
+      ? filterSearchResults(searchResults, filters)
+      : undefined;
+
+  const filterableSocietesProductions =
+    !swrCommissions.isLoading && !swrCommissions.isError && commissions
+      ? getFilterableSocietesProductions(searchResults, commissions)
+      : undefined;
 
   // keep filters in sync with querystring
   useEffect(() => {
+    if (!routerIsReady) return;
     const newFilters = compact({
       grandeCategorie: query.grandeCategorie as string,
       societeProductionId: stringToNumberOrNull(
@@ -58,22 +76,15 @@ const Page: React.FC = () => {
       ),
       userId: stringToNumberOrNull(query.userId as string),
     });
-    // avoid double refresh after filter change
-    if (JSON.stringify(newFilters) != JSON.stringify(filters))
-      setFilters(newFilters);
-  }, [query, filters]);
-
-  // Apply filters to displayed dossiers (client-side)
-  useEffect(() => {
-    setFilteredCommissions(filterCommissions(commissions ?? [], filters));
-    if (!searchResults) return;
-    setFilteredSearchResults(filterSearchResults(searchResults, filters));
-  }, [filters, searchResults, commissions]);
+    setFilters(newFilters);
+  }, [routerIsReady, query]);
 
   // Trigger search for word (server-side)
   useEffect(() => {
-    updateQuerystring({ search: debouncedSearch });
-    if (!debouncedSearch) {
+    if (!routerIsReady || searchValueEffective === undefined) return;
+    setLoading(true);
+    updateQuerystring({ search: searchValueEffective });
+    if (!searchValueEffective) {
       setSearchResults(null);
       setLoading(false);
       return;
@@ -81,7 +92,7 @@ const Page: React.FC = () => {
     window
       .fetch(
         `/api/search.json?${new URLSearchParams({
-          search: debouncedSearch,
+          search: searchValueEffective,
         })}`
       )
       .then(async (res) => res.text())
@@ -92,22 +103,28 @@ const Page: React.FC = () => {
       .catch((e) => {
         throw e;
       });
-  }, [debouncedSearch]);
+  }, [searchValueEffective, routerIsReady]);
 
-  // Refresh filterable societe productions
+  // Remove filter on societeProduction if selected societe disappeared
   useEffect(() => {
-    const societes = getFilterableSocietesProductions(
-      searchResults,
-      commissions ?? []
-    );
-    setFilterableSocietesProductions(societes);
+    if (filters === undefined || filterableSocietesProductions === undefined)
+      return;
     if (
       filters.societeProductionId &&
-      !societes.find((s) => s.id == filters.societeProductionId)
+      !filterableSocietesProductions.find(
+        (s) => s.id == filters.societeProductionId
+      )
     ) {
-      setFilters({ ...filters, societeProductionId: undefined });
+      updateQuerystring({ societeProductionId: undefined });
     }
-  }, [searchResults, commissions, filters]);
+  }, [filters, filterableSocietesProductions]);
+
+  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setLoading(true);
+    setSearchValueInput(event.target.value);
+  };
 
   function updateQuerystring(
     updates: Record<string, number | string | null | undefined>
@@ -115,8 +132,7 @@ const Page: React.FC = () => {
     router
       .replace(
         {
-          pathname: router.pathname,
-          query: compact({ ...router.query, ...updates }),
+          query: compact({ ...query, ...updates }),
         },
         undefined,
         { shallow: true }
@@ -126,45 +142,44 @@ const Page: React.FC = () => {
       });
   }
 
-  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setLoading(true);
-    setSearchValue(event.target.value);
-  };
-
-  function onChangeFilters(
-    updates: Record<string, number | string | null>
-  ): void {
-    setFilters({ ...filters, ...updates });
-    updateQuerystring(updates);
-  }
-
   const isLoading = loadingSession || swrCommissions.isLoading || loading;
   const isError =
     !isLoading && (swrCommissions.isError || !session || !commissions);
 
   return (
     <Layout
-      headerMiddle={<SearchBar value={searchValue} onChange={onSearchChange} />}
+      headerMiddle={
+        <SearchBar
+          value={
+            // this other madness lets us keep the searchValueInput undefined
+            // to distinguish initial load from querystring
+            (searchValueInput == undefined && routerIsReady
+              ? (query.search as string)
+              : searchValueInput) ?? ""
+          }
+          onChange={onSearchChange}
+        />
+      }
       headerBottom={
         <FilterBar
           text={
             <FilterBarText
-              searchResults={!loading && debouncedSearch ? searchResults : null}
+              searchResults={
+                !loading && searchValueDebounced ? searchResults : null
+              }
               commissions={commissions ?? []}
             />
           }
-          onChangeFilters={onChangeFilters}
-          allSocieteProductions={filterableSocieteProductions}
-          filters={filters}
+          onChangeFilters={updateQuerystring}
+          allSocieteProductions={filterableSocietesProductions ?? []}
+          filters={filters ?? {}}
         />
       }
       windowTitle="Dossiers"
     >
       {isLoading && <IconLoader />}
       {isError && <Icon name="ri-error" />}
-      {!isLoading && !isError && !debouncedSearch && (
+      {!isLoading && !isError && !searchValueEffective && (
         <>
           {filteredCommissions?.map((commission: CommissionData) => (
             <CommissionBloc
@@ -177,9 +192,12 @@ const Page: React.FC = () => {
           </div>
         </>
       )}
-      {!isLoading && !isError && debouncedSearch && filteredSearchResults && (
-        <SearchResults searchResults={filteredSearchResults} />
-      )}
+      {!isLoading &&
+        !isError &&
+        searchValueEffective &&
+        filteredSearchResults && (
+          <SearchResults searchResults={filteredSearchResults} />
+        )}
     </Layout>
   );
 };

@@ -77,10 +77,12 @@ function filterCommissions(
   filters: DossiersFilters
 ): CommissionData[] {
   const filterFn = filterDossierFn(filters);
-  return commissions.map((commission) => ({
-    ...commission,
-    dossiers: commission.dossiers.filter(filterFn),
-  }));
+  return commissions
+    .map((commission) => ({
+      ...commission,
+      dossiers: commission.dossiers.filter(filterFn),
+    }))
+    .filter((c) => c.dossiers.length > 0);
 }
 
 function filterSearchResults(
