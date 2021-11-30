@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
+import CategorieDossierTag from "src/components/CategorieDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
@@ -26,6 +27,9 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
       </div>
       <div>
         <AssignedAgent dossier={dossier} />
+      </div>
+      <div>
+        <CategorieDossierTag dossier={dossier} />
       </div>
     </div>
   );
@@ -57,7 +61,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
         <div>Dossier</div>
         <div>Société</div>
         <div>Enfants</div>
-        <div>suivi par</div>
+        <div>Suivi par</div>
+        <div>Catégorie</div>
       </div>
       <div>
         {commission.dossiers.map((dossier) => (

@@ -1,6 +1,7 @@
 import { Icon, Title } from "@dataesr/react-dsfr";
 import React from "react";
 import AssignedAgentSelect from "src/components/AssignedAgentSelect";
+import CategorieDossierTag from "src/components/CategorieDossierTag";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
 import styles from "src/components/Dossier.module.scss";
 import Enfant from "src/components/Enfant";
@@ -9,10 +10,7 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
-import {
-  categorieToGrandeCategorieLabel,
-  categorieToLabel,
-} from "src/lib/categories";
+import { categorieToLabel } from "src/lib/categories";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 
 interface Props {
@@ -41,9 +39,10 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             {frenchDateText(dossier.commission.date)} -{" "}
             {frenchDepartementName(dossier.commission.departement)}
           </Info>
-          <Info title="Type de dossier" className={styles.infoSuccessive}>
-            {categorieToLabel(dossier.categorie)} (
-            {categorieToGrandeCategorieLabel(dossier.categorie)})
+          <Info title="Catégorie" className={styles.infoSuccessive}>
+            {categorieToLabel(dossier.categorie)}
+            <br />
+            <CategorieDossierTag dossier={dossier} size="sm" />
           </Info>
         </div>
         <div>

@@ -16,6 +16,7 @@ type GrandeCategorieValue =
   | "THEATRE";
 interface GrandeCategorie {
   label: string;
+  className: string;
   value: GrandeCategorieValue;
   categories: Categorie[];
 }
@@ -26,6 +27,7 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Tournage film long-métrage", value: "LONG_METRAGE" },
       { label: "Tournage film moyen ou court-métrage", value: "COURT_METRAGE" },
     ],
+    className: "cinema",
     label: "Cinéma",
     value: "CINEMA",
   },
@@ -36,11 +38,13 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Émission TV", value: "EMISSION_TV" },
       { label: "Clip", value: "CLIP" },
     ],
+    className: "television",
     label: "Télévision",
     value: "TELEVISION",
   },
   {
     categories: [{ label: "Pièce de théâtre", value: "THEATRE" }],
+    className: "theatre",
     label: "Théâtre",
     value: "THEATRE",
   },
@@ -49,6 +53,7 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Enregistrement doublage", value: "DOUBLAGE" },
       { label: "Enregistrement musique en studio", value: "MUSIQUE_STUDIO" },
     ],
+    className: "enregistrement",
     label: "Enregistrement",
     value: "ENREGISTREMENT",
   },
@@ -61,11 +66,13 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Spectacle de danse", value: "DANSE" },
       { label: "Cirque", value: "CIRQUE" },
     ],
+    className: "spectacle",
     label: "Spectacle",
     value: "SPECTACLE",
   },
   {
     categories: [{ label: "Émission radio", value: "RADIO" }],
+    className: "radio",
     label: "Radio",
     value: "RADIO",
   },
@@ -74,6 +81,7 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Photo", value: "PHOTO" },
       { label: "Film institutionnel", value: "FILM_INSTITUTIONNEL" },
     ],
+    className: "publicite",
     label: "Publicité",
     value: "PUBLICITE",
   },
@@ -82,11 +90,13 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Compétition de jeux vidéos", value: "JEU_VIDEO" },
       { label: "Plateforme de vidéos en ligne", value: "VIDEO_EN_LIGNE" },
     ],
+    className: "nouvellesTechnologies",
     label: "Nouvelles technologies",
     value: "NOUVELLES_TECHNOLOGIES",
   },
   {
     categories: [{ label: "Autre", value: "AUTRE" }],
+    className: "divers",
     label: "Divers",
     value: "DIVERS",
   },
@@ -111,6 +121,14 @@ function categorieToGrandeCategorieLabel(
   )?.label;
 }
 
+function categorieToGrandeCategorieClassName(
+  categorie: CategorieDossier
+): string | undefined {
+  return grandesCategories.find((gc) =>
+    gc.categories.find((c) => c.value == categorie)
+  )?.className;
+}
+
 function grandeCategorieToCategorieValues(
   grandeCategorieValue: GrandeCategorieValue
 ): CategorieDossier[] {
@@ -123,6 +141,7 @@ function grandeCategorieToCategorieValues(
 }
 
 export {
+  categorieToGrandeCategorieClassName,
   categorieToGrandeCategorieLabel,
   categorieToLabel,
   grandeCategorieToCategorieValues,
