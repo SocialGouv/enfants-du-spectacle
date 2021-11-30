@@ -36,7 +36,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remixicon": "^2.5.0",
-    "sass": "^1.43.5",
+    "sass": "^1.44.0",
     "superjson": "^1.8.0",
     "swr": "^1.0.1",
     "use-debounce": "^7.0.1"
