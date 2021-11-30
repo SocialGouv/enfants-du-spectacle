@@ -1,0 +1,22 @@
+.tag {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  display: inline-block !important;
+  max-width: 100%;
+}
+
+.cinema {
+  background-color: var(--red-marianne-main-472) !important;
+  color: white !important;
+}
+
+.television {
+  background-color: var(--yellow-moutarde-main-679) !important;
+  color: white !important;
+}
+
+.theatre, .enregistrement, .spectacle, .radio, .publicite, .nouvellesTechnologies, .divers {
+  background-color: var(--purple-glycine-main-494) !important;
+  color: white !important;
+}
