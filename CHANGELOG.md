@@ -1,3 +1,12 @@
+## [1.9.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.1...v1.9.2) (2021-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency nodemailer to ^6.7.2 ([#111](https://github.com/SocialGouv/enfants-du-spectacle/issues/111)) ([6c29096](https://github.com/SocialGouv/enfants-du-spectacle/commit/6c290960a75e4adcdcc52a24cbf798c5485cf64a))
+* **deps:** update dependency swr to ^1.1.0 ([#132](https://github.com/SocialGouv/enfants-du-spectacle/issues/132)) ([4286934](https://github.com/SocialGouv/enfants-du-spectacle/commit/4286934ab5cfa4b67ef2a5dd15d2e31d2a27c63a))
+* **deps:** update prisma monorepo to ^3.6.0 ([#131](https://github.com/SocialGouv/enfants-du-spectacle/issues/131)) ([cc8cf49](https://github.com/SocialGouv/enfants-du-spectacle/commit/cc8cf4984d45f8e5e101c1b17466761faae931c8))
+
 ## [1.9.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.0...v1.9.1) (2021-11-30)
 
 
