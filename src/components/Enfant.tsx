@@ -3,7 +3,11 @@ import React from "react";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
-import { frenchDateText, typeEmploiLabel } from "src/lib/helpers";
+import {
+  birthDateToFrenchAge,
+  frenchDateText,
+  typeEmploiLabel,
+} from "src/lib/helpers";
 
 interface Props {
   enfant: Enfant;
@@ -17,7 +21,12 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
           {enfant.prenom} {enfant.nom}
         </div>
         <div>
-          <div>né·e le {frenchDateText(enfant.dateNaissance)}</div>
+          <div
+            title={`né·e le ${frenchDateText(enfant.dateNaissance)}`}
+            className="hoverableTitle"
+          >
+            {birthDateToFrenchAge(enfant.dateNaissance)}
+          </div>
           <div>{typeEmploiLabel(enfant.typeEmploi)}</div>
           <div>
             Personnage :{" "}

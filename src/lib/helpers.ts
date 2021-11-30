@@ -28,6 +28,16 @@ function frenchDateText(date: Date): string {
   });
 }
 
+function birthDateToFrenchAge(birthDate: Date): string {
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return `${age} ans`;
+}
+
 function uniqueById<Type extends { id: number }>(array: Type[]): Type[] {
   const map: Map<number, Type> = new Map();
   for (const item of array) {
@@ -148,6 +158,7 @@ async function delay(ms: number): Promise<void> {
 }
 
 export {
+  birthDateToFrenchAge,
   compact,
   delay,
   filterCommissions,

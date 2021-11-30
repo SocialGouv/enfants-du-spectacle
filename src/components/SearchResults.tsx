@@ -5,6 +5,7 @@ import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import styles from "src/components/SearchResults.module.scss";
 import StatutDossierTag from "src/components/StatutDossierTag";
+import { birthDateToFrenchAge } from "src/lib/helpers";
 import type { SearchResultsType } from "src/lib/queries";
 
 interface EnfantProps {
@@ -22,8 +23,11 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
       <div>
         <StatutDossierTag dossier={enfant.dossier} />
       </div>
-      <div className={styles.nom}>
-        {enfant.prenom} {enfant.nom}
+      <div>
+        <div className={styles.nom}>
+          {enfant.prenom} {enfant.nom}
+        </div>
+        {birthDateToFrenchAge(enfant.dateNaissance)}
       </div>
       <div>
         <Link href={`/dossiers/${enfant.dossier.id}`}>
