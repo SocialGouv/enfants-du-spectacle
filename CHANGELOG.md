@@ -1,3 +1,10 @@
+## [1.10.2-alpha.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.1...v1.10.2-alpha.1) (2021-12-01)
+
+
+### Bug Fixes
+
+* **release:** Add prerelease flag to alpha and beta branches ([6bf213d](https://github.com/SocialGouv/enfants-du-spectacle/commit/6bf213d1fa211a72c6583e72582569a535581bfd))
+
 ## [1.10.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.10.1) (2021-12-01)
 
 
