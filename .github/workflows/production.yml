@@ -19,13 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Use autodevops manifests generation
-      uses: SocialGouv/actions/autodevops-manifests@v1
-      with:
-        environment: prod
-        rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
-        socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
-
     - name: Get project name
       run: |
         echo "project=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
@@ -33,6 +26,7 @@ jobs:
     - name: Use autodevops build and register
       uses: SocialGouv/actions/autodevops-build-register@v1
       with:
+        environment: prod
         imageName: enfants-du-spectacle/app
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -53,6 +47,13 @@ jobs:
       name: production
       url: ${{ steps.deploy-prod.outputs.url }}
     steps:
+
+    - name: Use autodevops manifests generation
+      uses: SocialGouv/actions/autodevops-manifests@v1
+      with:
+        environment: prod
+        rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
+        socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
 
     - name: Use autodevops deployment
       uses: SocialGouv/actions/autodevops-deploy@v1
