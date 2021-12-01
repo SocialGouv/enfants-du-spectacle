@@ -5,17 +5,15 @@ import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useDossier } from "src/lib/api";
-import useProtectedPage from "src/lib/useProtectedPage";
 
 const Page: React.FC = () => {
-  const { session, loading } = useProtectedPage();
   const router = useRouter();
 
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
 
-  const isLoading = swrDossier.isLoading || loading || !session;
+  const isLoading = swrDossier.isLoading;
   const isError = !isLoading && (swrDossier.isError || !dossierId || !dossier);
 
   const title = (
@@ -39,5 +37,7 @@ const Page: React.FC = () => {
     </Layout>
   );
 };
+
+Page.auth = true;
 
 export default Page;

@@ -6,7 +6,6 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommissions } from "src/lib/api";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import useProtectedPage from "src/lib/useProtectedPage";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -57,9 +56,8 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
 };
 
 const Page: React.FC = () => {
-  const { loading: loadingSession } = useProtectedPage();
   const { commissions, ...swrCommissions } = useCommissions("past");
-  const isLoading = loadingSession || swrCommissions.isLoading;
+  const isLoading = swrCommissions.isLoading;
   const isError = !isLoading && (swrCommissions.isError || !commissions);
 
   return (
@@ -83,5 +81,7 @@ const Page: React.FC = () => {
     </Layout>
   );
 };
+
+Page.auth = true;
 
 export default Page;

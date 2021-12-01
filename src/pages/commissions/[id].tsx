@@ -5,15 +5,13 @@ import CommissionBloc from "src/components/Commission";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommission } from "src/lib/api";
-import useProtectedPage from "src/lib/useProtectedPage";
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const { loading: loadingSession } = useProtectedPage();
   const { commission, ...swrCommission } = useCommission(
     typeof router.query.id == "string" ? Number(router.query.id) : null
   );
-  const isLoading = swrCommission.isLoading || loadingSession;
+  const isLoading = swrCommission.isLoading;
   const isError = !isLoading && (swrCommission.isError || !commission);
 
   return (
@@ -29,5 +27,7 @@ const Page: React.FC = () => {
     </Layout>
   );
 };
+
+Page.auth = true;
 
 export default Page;
