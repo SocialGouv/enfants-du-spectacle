@@ -1,3 +1,10 @@
+## [1.9.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.3...v1.9.4) (2021-12-01)
+
+
+### Bug Fixes
+
+* corriger l'emploi masculin de connecté ([809bec2](https://github.com/SocialGouv/enfants-du-spectacle/commit/809bec2e28a0773d5471beae9632b2212ca5c723)), closes [#123](https://github.com/SocialGouv/enfants-du-spectacle/issues/123)
+
 ## [1.9.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.2...v1.9.3) (2021-12-01)
 
 
