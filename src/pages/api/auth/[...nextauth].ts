@@ -9,6 +9,10 @@ import prisma from "src/lib/prismaClient";
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   callbacks: {
+    session({ session, user }) {
+      session.dbUser = user;
+      return session;
+    },
     signIn({ user }) {
       if (typeof user.email !== "string") return false;
       const parsed = emailParser.parseOneAddress(user.email);

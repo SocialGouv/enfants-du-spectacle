@@ -65,10 +65,9 @@ const Header: React.FC<Props> = ({
                       />
                     )}
                     <span>
-                      <span>Connecté en tant que </span>
+                      <span>Connecté·e en tant que </span>
                       <strong>
-                        {session.user?.email?.split("@")?.at(0) ??
-                          session.user?.name}
+                        {session.dbUser.prenom || session.dbUser.email}
                       </strong>
                     </span>
                   </ToolItem>
