@@ -22,14 +22,12 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import useProtectedPage from "src/lib/useProtectedPage";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 const Page: React.FC = () => {
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
-  const { loading: loadingSession, session } = useProtectedPage();
   const { commissions, ...swrCommissions } = useCommissions();
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
@@ -142,9 +140,8 @@ const Page: React.FC = () => {
       });
   }
 
-  const isLoading = loadingSession || swrCommissions.isLoading || loading;
-  const isError =
-    !isLoading && (swrCommissions.isError || !session || !commissions);
+  const isLoading = swrCommissions.isLoading || loading;
+  const isError = !isLoading && (swrCommissions.isError || !commissions);
 
   return (
     <Layout
@@ -201,5 +198,7 @@ const Page: React.FC = () => {
     </Layout>
   );
 };
+
+Page.auth = true;
 
 export default Page;

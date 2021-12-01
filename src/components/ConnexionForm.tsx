@@ -17,19 +17,21 @@ type ErrorName = keyof typeof ERROR_MESSAGES;
 const ConnexionForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const { signinRequired: signinRequiredRaw, error: errorRaw } = router.query;
-  const signinRequired = signinRequiredRaw === "true";
+  const { error: errorRaw, callbackUrl } = router.query;
   const error = errorRaw as string;
+  const [submitting, setSubmitting] = useState(false);
+  const loading = submitting || !router.isReady;
+  const { protocol, host } = window.location;
+  const defaultCallbackUrl = `${protocol}//${host}/dossiers`;
 
   const submitSigninForm: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     signIn("email", {
-      callbackUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/dossiers`,
+      callbackUrl: (callbackUrl as string) || defaultCallbackUrl,
       email,
     }).catch((err) => {
-      setLoading(false);
+      setSubmitting(false);
       window.alert("Une erreur est survenue lors de votre connexion");
       throw err;
     });
@@ -76,14 +78,6 @@ const ConnexionForm: React.FC = () => {
               ? ERROR_MESSAGES[error as ErrorName]
               : ERROR_MESSAGES.default}
           </span>
-        </div>
-      )}
-      {!error && signinRequired && (
-        <div className={styles.requiredWrapper}>
-          <span role="img" aria-label="avertissement">
-            ⚠️
-          </span>
-          <span>Veuillez vous connecter</span>
         </div>
       )}
     </div>
