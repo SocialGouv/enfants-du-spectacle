@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.4...v1.10.0) (2021-12-01)
+
+
+### Features
+
+* ajoute des champs aux dossiers ([#141](https://github.com/SocialGouv/enfants-du-spectacle/issues/141)) ([c2d955e](https://github.com/SocialGouv/enfants-du-spectacle/commit/c2d955efb0689a899d488850bc41a0f0741544e6)), closes [#135](https://github.com/SocialGouv/enfants-du-spectacle/issues/135) [#136](https://github.com/SocialGouv/enfants-du-spectacle/issues/136) [#137](https://github.com/SocialGouv/enfants-du-spectacle/issues/137)
+
 ## [1.9.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.3...v1.9.4) (2021-12-01)
 
 
