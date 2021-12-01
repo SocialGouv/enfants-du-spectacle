@@ -8,6 +8,7 @@ import type {
 } from "@prisma/client";
 import { CategorieDossier, PrismaClient } from "@prisma/client";
 import { parse } from "csv-parse/sync";
+import dateAdd from "date-fns/add";
 import faker from "faker";
 import fs from "fs";
 import slugify from "slugify";
@@ -49,6 +50,12 @@ interface DossierCSV {
   nom: string;
   nombreEnfants: number;
 }
+
+const presentations = fs
+  .readFileSync(`${__dirname}/seeds/presentations.txt`)
+  .toString()
+  .split("---")
+  .map((p) => p.trim());
 
 function readCsv<Type>(name: string): Type[] {
   return parse(fs.readFileSync(`${__dirname}/seeds/${name}.csv`), {
@@ -171,6 +178,25 @@ function getRandomEnfants(): Omit<
   );
 }
 
+const SCENES_SENSIBLES = [
+  "Bagarres",
+  "Nudité / Actes sexuels",
+  "Violence psychologique ou physique",
+  "Animaux",
+  "Eau",
+  "Feu",
+  "Cascades",
+  "Hauteur",
+  "Machines dangereuses, produits chimiques ou agents biologiques",
+];
+
+function getRandomScenesSensibles(): string[] {
+  return faker.random.arrayElements(
+    SCENES_SENSIBLES,
+    faker.datatype.number({ max: 2, min: 0 })
+  );
+}
+
 async function main() {
   await prisma.enfant.deleteMany();
   await prisma.dossier.deleteMany();
@@ -231,14 +257,26 @@ async function main() {
       });
       const dossier = dossiersSeeds.shift();
       if (!dossier) throw Error("no more dossiers");
+      const dateDebut = faker.date.between(
+        dateAdd(commission.date, { months: 1 }),
+        dateAdd(commission.date, { months: 3 })
+      );
+      const dateFin = faker.date.between(
+        dateAdd(dateDebut, { days: 10 }),
+        dateAdd(dateDebut, { months: 2 })
+      );
       const data: Prisma.DossierUncheckedCreateInput = {
         categorie: getRandomCategorie(),
         commissionId: commission.id,
+        dateDebut,
+        dateFin,
         demandeurId: demandeur.id,
         enfants: { create: getRandomEnfants() },
         justificatifs: getRandomJustificatifsDossier(),
         nom: dossier.nom,
         numeroDS: NUMEROS_DOSSIERS_DS.shift() ?? 0,
+        presentation: faker.random.arrayElement(presentations),
+        scenesSensibles: getRandomScenesSensibles(),
         societeProductionId: societeProduction.id,
         statut: getRandomStatut(inThePast),
         userId: getRandomUser(users, inThePast)?.id,

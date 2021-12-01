@@ -30,7 +30,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
         <ChangeStatutDossierButton dossier={dossier} />
       </div>
 
-      <div className={styles.summaryBloc}>
+      <div className={styles.dossierSummaryBloc}>
         <div>
           <Info title="Suivi par" className={styles.infoSelect}>
             <AssignedAgentSelect dossierId={dossierId} />
@@ -44,28 +44,24 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             <br />
             <CategorieDossierTag dossier={dossier} size="sm" />
           </Info>
-        </div>
-        <div>
-          <Info title="Demandeur" className={styles.infoSuccessive}>
-            <div>
-              {dossier.demandeur.prenom} {dossier.demandeur.nom}
-            </div>
-            <div title="Fonction(s)">{dossier.demandeur.fonction}</div>
-            <div>
-              <a href={`mailto:${dossier.demandeur.email}`}>
-                ✉️ {dossier.demandeur.email}
-              </a>
-            </div>
-            <div>
-              <a href={`tel:${dossier.demandeur.phone}`}>
-                📞 {dossier.demandeur.phone}
-              </a>
-            </div>
+          <Info title="Scènes sensibles" className={styles.infoSuccessive}>
+            {dossier.scenesSensibles.length == 0 && <span>N/A</span>}
+            {dossier.scenesSensibles.length > 0 && (
+              <ul>
+                {dossier.scenesSensibles.map((sceneSensible) => (
+                  <li key={sceneSensible}>{sceneSensible}</li>
+                ))}
+              </ul>
+            )}
           </Info>
         </div>
         <div>
-          <Info title="Société">
-            <InfoSociete societeProduction={dossier.societeProduction} />
+          <Info title="Dates">
+            {frenchDateText(dossier.dateDebut)} -{" "}
+            {frenchDateText(dossier.dateFin)}
+          </Info>
+          <Info title="Présentation générale" className={styles.info}>
+            {dossier.presentation}
           </Info>
         </div>
         <Info title="Pièces justificatives">
@@ -73,7 +69,28 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
         </Info>
       </div>
 
-      {/* <div className={styles.bloc}> */}
+      <div className={styles.societeSummaryBloc}>
+        <Info title="Demandeur" className={styles.infoSuccessive}>
+          <div>
+            {dossier.demandeur.prenom} {dossier.demandeur.nom}
+          </div>
+          <div title="Fonction(s)">{dossier.demandeur.fonction}</div>
+          <div>
+            <a href={`mailto:${dossier.demandeur.email}`}>
+              ✉️ {dossier.demandeur.email}
+            </a>
+          </div>
+          <div>
+            <a href={`tel:${dossier.demandeur.phone}`}>
+              📞 {dossier.demandeur.phone}
+            </a>
+          </div>
+        </Info>
+        <Info title="Société">
+          <InfoSociete societeProduction={dossier.societeProduction} />
+        </Info>
+      </div>
+
       <Title as="h3">Enfants</Title>
       {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
       {dossier.enfants.map((enfant) => (
