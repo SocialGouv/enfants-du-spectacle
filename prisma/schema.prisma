@@ -105,6 +105,10 @@ model Dossier {
   demandeurId         Int
   demandeur           Demandeur         @relation(fields: [demandeurId], references: [id])
   justificatifs       JustificatifDossier[]
+  scenesSensibles     String[]
+  presentation        String
+  dateDebut           DateTime
+  dateFin             DateTime
 }
 
 enum TypeEmploi {
