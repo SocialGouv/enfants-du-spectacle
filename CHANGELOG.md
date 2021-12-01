@@ -1,3 +1,10 @@
+## [1.9.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.2...v1.9.3) (2021-12-01)
+
+
+### Bug Fixes
+
+* correction de bugs de recherche ([#133](https://github.com/SocialGouv/enfants-du-spectacle/issues/133)) ([4e4a1d8](https://github.com/SocialGouv/enfants-du-spectacle/commit/4e4a1d85ebf94a5eace9585c71db4a2f3c097c01)), closes [#125](https://github.com/SocialGouv/enfants-du-spectacle/issues/125) [#99](https://github.com/SocialGouv/enfants-du-spectacle/issues/99) [#94](https://github.com/SocialGouv/enfants-du-spectacle/issues/94)
+
 ## [1.9.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.9.1...v1.9.2) (2021-11-30)
 
 
