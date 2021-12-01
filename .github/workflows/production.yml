@@ -26,12 +26,6 @@ jobs:
         rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
         socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
 
-    - name: Get namespace name
-      uses: mikefarah/yq@v4.15.1
-      id: namespace
-      with:
-        cmd: yq eval '.metadata.name' namespace-prod.yml
-
     - name: Get project name
       run: |
         echo "project=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
@@ -43,13 +37,10 @@ jobs:
         project: ${{ env.project }}
         token: ${{ secrets.GITHUB_TOKEN }}
         dockerbuildargs: |
-          DEPLOY_URL=${{ env.DEPLOY_URL }}
           NEXT_PUBLIC_SENTRY_DSN=https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
           NEXT_PUBLIC_SENTRY_ENVIRONMENT=production
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           START_SCRIPT=start-prod
-      env:
-        DEPLOY_URL: https://${{ steps.namespace.outputs.result }}.fabrique.social.gouv.fr
 
   ##############################################################################
   ## DEPLOY PRODUCTION APPLICATION
