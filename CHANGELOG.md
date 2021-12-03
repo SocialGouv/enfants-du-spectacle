@@ -7646,6 +7646,14 @@
 * **workflows:** corrige l'URL du déploiement en production ([1fceb6f](https://github.com/SocialGouv/enfants-du-spectacle/commit/1fceb6fceb607a4566a9386f623e0c683c6a0cbc))
 * correction du schema pour le champ societe adresse qui ne peut pas etre vide ([#143](https://github.com/SocialGouv/enfants-du-spectacle/issues/143)) ([5274a57](https://github.com/SocialGouv/enfants-du-spectacle/commit/5274a5756c379d55b2f7afa2bca49c72c053ad03)), closes [#142](https://github.com/SocialGouv/enfants-du-spectacle/issues/142)
 
+## [1.10.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.10.1) (2021-12-03)
+
+
+### Bug Fixes
+
+* **workflows:** corrige l'URL du déploiement en production ([1fceb6f](https://github.com/SocialGouv/enfants-du-spectacle/commit/1fceb6fceb607a4566a9386f623e0c683c6a0cbc))
+* correction du schema pour le champ societe adresse qui ne peut pas etre vide ([#143](https://github.com/SocialGouv/enfants-du-spectacle/issues/143)) ([5274a57](https://github.com/SocialGouv/enfants-du-spectacle/commit/5274a5756c379d55b2f7afa2bca49c72c053ad03)), closes [#142](https://github.com/SocialGouv/enfants-du-spectacle/issues/142)
+
 ## [1.10.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.10.1) (2021-12-02)
 
 
