@@ -1,3 +1,4 @@
+import "@gouvfr/dsfr/dist/dsfr/dsfr.min.css";
 import "src/styles/globals.scss";
 import "remixicon/fonts/remixicon.css";
 
