@@ -1,3 +1,18 @@
+# [1.11.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.11.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @dataesr/react-dsfr to ^0.9.2 ([#85](https://github.com/SocialGouv/enfants-du-spectacle/issues/85)) ([47fd7fd](https://github.com/SocialGouv/enfants-du-spectacle/commit/47fd7fdde145999efa2928b287b74e25123d8ebf))
+* **deps:** update dependency @next-auth/prisma-adapter to v1 ([#149](https://github.com/SocialGouv/enfants-du-spectacle/issues/149)) ([80433b7](https://github.com/SocialGouv/enfants-du-spectacle/commit/80433b75707b1476f7e6b970c28ff42aafcd8a97))
+* **workflows:** corrige l'URL du déploiement en production ([1fceb6f](https://github.com/SocialGouv/enfants-du-spectacle/commit/1fceb6fceb607a4566a9386f623e0c683c6a0cbc))
+* correction du schema pour le champ societe adresse qui ne peut pas etre vide ([#143](https://github.com/SocialGouv/enfants-du-spectacle/issues/143)) ([5274a57](https://github.com/SocialGouv/enfants-du-spectacle/commit/5274a5756c379d55b2f7afa2bca49c72c053ad03)), closes [#142](https://github.com/SocialGouv/enfants-du-spectacle/issues/142)
+
+
+### Features
+
+* amélioration du design de la page dossier ([#153](https://github.com/SocialGouv/enfants-du-spectacle/issues/153)) ([7e6de06](https://github.com/SocialGouv/enfants-du-spectacle/commit/7e6de0663e30e6c463eff132d576a4500e94ec1d)), closes [#151](https://github.com/SocialGouv/enfants-du-spectacle/issues/151)
+
 ## [1.10.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.10.1) (2021-12-06)
 
 
