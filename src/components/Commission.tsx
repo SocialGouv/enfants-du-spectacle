@@ -29,7 +29,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
         <AssignedAgent dossier={dossier} />
       </div>
       <div>
-        <CategorieDossierTag dossier={dossier} />
+        <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
     </div>
   );

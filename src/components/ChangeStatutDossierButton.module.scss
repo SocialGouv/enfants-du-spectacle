@@ -1,6 +1,6 @@
 button.currentStatut {
   border-radius: 20px;
-padding: .3rem .8rem .5rem 1.8rem;
+  padding: .3rem .8rem .5rem 1.8rem;
   font-size: 1.1rem;
   border: 2px solid;
 
@@ -17,7 +17,7 @@ div.container {
 div.dropdown{
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 0;
 
   background-color: white;
   border: 1px solid #ccc;

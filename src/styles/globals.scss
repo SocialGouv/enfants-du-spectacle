@@ -26,10 +26,12 @@
 }
 
 
-.state-accepte, .state-favorable, .state-pret{
+.state-accepte, .state-favorable, .state-pret,
+.state-accepte select, .state-favorable select, .state-pret select{
   background-color: #3C8058 !important;
   border-color: #3C8058;
   color: white !important;
+  border-color: white !important;
 }
 
 button.state-accepte, button.state-favorable, button.state-pret{

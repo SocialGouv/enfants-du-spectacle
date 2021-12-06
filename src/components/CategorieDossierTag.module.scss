@@ -1,22 +1,20 @@
 .tag {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  display: inline-block !important;
-  max-width: 100%;
+  border-left: .3rem solid;
+  padding-left: .8rem;
+}
+
+.grandeCategorie {
+  font-weight: bold;
 }
 
 .cinema {
-  background-color: var(--red-marianne-main-472) !important;
-  color: white !important;
+  border-color: var(--red-marianne-main-472) !important;
 }
 
 .television {
-  background-color: var(--yellow-moutarde-main-679) !important;
-  color: white !important;
+  border-color: var(--yellow-moutarde-main-679) !important;
 }
 
 .theatre, .enregistrement, .spectacle, .radio, .publicite, .nouvellesTechnologies, .divers {
-  background-color: var(--purple-glycine-main-494) !important;
-  color: white !important;
+  border-color: var(--purple-glycine-main-494) !important;
 }

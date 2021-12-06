@@ -13,6 +13,8 @@
 
 .societeSummaryBloc {
   @extend .bloc;
+  padding-top: 0;
+  background-color: inherit;
   display: grid;
   grid-template-columns: 2fr 2fr ;
   grid-column-gap: 1rem;
@@ -33,5 +35,5 @@ button.transitionButton {
 }
 
 .infoSuccessive {
-  margin-top: .5rem;
+  margin-top: 1.5rem;
 }
