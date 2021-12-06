@@ -36,12 +36,13 @@ const FilterBar: React.FC<Props> = ({
     onChangeFilters({ userId: stringToNumberOrNull(event.target.value) });
   };
 
-  const onChangeSocieteProductionId: React.ChangeEventHandler<HTMLOptionElement> =
-    (event) => {
-      onChangeFilters({
-        societeProductionId: stringToNumberOrNull(event.target.value),
-      });
-    };
+  const onChangeSocieteProductionId: React.ChangeEventHandler<
+    HTMLOptionElement
+  > = (event) => {
+    onChangeFilters({
+      societeProductionId: stringToNumberOrNull(event.target.value),
+    });
+  };
 
   const onChangeGrandeCategorie: React.ChangeEventHandler<HTMLOptionElement> = (
     event
