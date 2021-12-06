@@ -1,5 +1,6 @@
 import type { SocieteProduction } from "@prisma/client";
 import React from "react";
+import Foldable from "src/components/Foldable";
 import {
   getConventionLabel,
   getConventionLegifranceUrl,
@@ -29,32 +30,36 @@ const InfoSociete: React.FC<Props> = ({
   );
 
   return (
-    <>
-      <div>{nom}</div>
-      <div>Dénomination : {raisonSociale}</div>
-      <div>{formeJuridique}</div>
-      <div>{adresse}</div>
-      <div>SIRET {siret}</div>
-      <div>
-        {conventionLegifranceUrl ? (
-          <a href={conventionLegifranceUrl} target="_blank" rel="noreferrer">
-            {conventionStr}
-          </a>
-        ) : (
-          <>{conventionStr}</>
-        )}
-      </div>
-      <div>NAF {naf}</div>
-      <div>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href={`https://annuaire-entreprises.data.gouv.fr/entreprise/${siren}`}
-        >
-          Plus dʼinformations…
+    <Foldable onlyOnce={true}>
+      {nom}
+      <br />
+      Dénomination : {raisonSociale}
+      <br />
+      {formeJuridique}
+      <br />
+      {adresse}
+      <br />
+      SIRET {siret}
+      <br />
+      {conventionLegifranceUrl ? (
+        <a href={conventionLegifranceUrl} target="_blank" rel="noreferrer">
+          {conventionStr}
         </a>
-      </div>
-    </>
+      ) : (
+        <>{conventionStr}</>
+      )}
+      <br />
+      NAF {naf}
+      <br />
+      <a
+        target="_blank"
+        rel="noreferrer"
+        href={`https://annuaire-entreprises.data.gouv.fr/entreprise/${siren}`}
+      >
+        Fiche entreprise
+      </a>
+      <br />
+    </Foldable>
   );
 };
 

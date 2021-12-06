@@ -20,15 +20,28 @@ const Justificatif: React.FC<JustificatifProps> = ({
   label,
 }) => {
   const isPresent = subject.justificatifs.includes(value);
+
   const url =
     isPresent &&
     (value == "SCENARIO" ? "/modele-scenario.pdf" : "/modele-piece.pdf");
-  const iconName = isPresent
-    ? "ri-checkbox-circle-fill"
-    : "ri-checkbox-blank-circle-line";
+  const icon = isPresent ? (
+    <Icon
+      name={"ri-checkbox-circle-line"}
+      size="2x"
+      className={styles.iconSpan}
+      color="green"
+    />
+  ) : (
+    <Icon
+      name={"ri-close-line"}
+      size="2x"
+      className={styles.iconSpan}
+      color="red"
+    />
+  );
   return (
     <>
-      <Icon name={iconName} size="1x" className={styles.span} />
+      {icon}
       {!isPresent && label}
       {isPresent && url && (
         <a href={url} target="_blank" rel="noreferrer">
@@ -53,9 +66,14 @@ const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
   ];
 
 const JustificatifsDossier: React.FC<Props> = ({ dossier }) => {
+  const justificatifs = [...JUSTIFICATIFS_DOSSIERS].sort(
+    (a, b) =>
+      dossier.justificatifs.includes(b.value) -
+      dossier.justificatifs.includes(a.value)
+  );
   return (
     <ul className={styles.justificatifs}>
-      {JUSTIFICATIFS_DOSSIERS.map(({ label, value }) => (
+      {justificatifs.map(({ label, value }) => (
         <li key={value}>
           <Justificatif subject={dossier} value={value} label={label} />
         </li>
@@ -74,9 +92,14 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
 ];
 
 const JustificatifsEnfants: React.FC<{ enfant: Enfant }> = ({ enfant }) => {
+  const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
+    (a, b) =>
+      enfant.justificatifs.includes(b.value) -
+      enfant.justificatifs.includes(a.value)
+  );
   return (
     <ul className={styles.justificatifs}>
-      {JUSTIFICATIFS_ENFANTS.map(({ label, value }) => (
+      {justificatifs.map(({ label, value }) => (
         <li key={value}>
           <Justificatif subject={enfant} value={value} label={label} />
         </li>

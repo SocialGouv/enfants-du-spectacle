@@ -1,0 +1,31 @@
+.wrapper {
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  border: 2px solid #ccc;
+
+  &>div:not(:first-child){
+    margin-left: 4rem;
+  }
+}
+
+.itemWrapper {
+  font-weight: bold;
+}
+
+.itemLabel {
+  color: #313178;
+}
+
+.itemContent {
+  line-height: 2.5rem;
+
+  select {
+    background-color: inherit;
+    padding-left: 0;
+    border-bottom: .1rem dashed black;
+    box-shadow: none;
+    font-weight: bold;
+  }
+}
