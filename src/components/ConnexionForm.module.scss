@@ -20,28 +20,3 @@
     padding: 0 1rem 0 0;
   }
 }
-
-.emailInput{
-  display: block;
-  width: 100%;
-  padding: .4rem .6rem;
-  margin: .5rem 0;
-}
-
-.submitButton {
-  width: 100%;
-  padding: .5rem;
-  background-color: #4164F5;
-  color: white;
-  position: relative;
-
-  &:disabled {
-    opacity: 0.6
-  }
-
-  .iconLoader {
-    position: absolute;
-    right: 1rem;
-    top: 12px;
-  }
-}

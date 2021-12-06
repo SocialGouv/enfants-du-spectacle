@@ -1,3 +1,4 @@
+import { Button, ButtonGroup, TextInput } from "@dataesr/react-dsfr";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import type { FormEventHandler } from "react";
@@ -41,30 +42,24 @@ const ConnexionForm: React.FC = () => {
     <div className={styles.wrapper}>
       <div className={styles.formWrapper}>
         <form method="post" action="#" onSubmit={submitSigninForm}>
-          <label>
-            <div>Adresse Email:</div>
-            <div>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="jean.marc@drieets.gouv.fr"
-                className={styles.emailInput}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </div>
-          </label>
+          <TextInput
+            label="Adresse Email"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jean.marc@drieets.gouv.fr"
+            className={styles.emailInput}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
+            }}
+          />
           <div>
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={loading}
-            >
-              Connexion
-              {loading && <IconLoader className={styles.iconLoader} />}
-            </button>
+            <ButtonGroup>
+              <Button submit={true} disabled={loading}>
+                Connexion
+                {loading && <IconLoader className={styles.iconLoader} />}
+              </Button>
+            </ButtonGroup>
           </div>
         </form>
       </div>
