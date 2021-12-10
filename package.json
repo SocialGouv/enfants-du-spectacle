@@ -32,7 +32,7 @@
     "@dataesr/react-dsfr": "^0.9.2",
     "@next-auth/prisma-adapter": "^1.0.0",
     "@prisma/client": "^3.6.0",
-    "@sentry/nextjs": "^6.15.0",
+    "@sentry/nextjs": "^6.16.1",
     "date-fns": "^2.27.0",
     "email-addresses": "^5.0.0",
     "hoist-non-react-statics": "^3.3.2",
