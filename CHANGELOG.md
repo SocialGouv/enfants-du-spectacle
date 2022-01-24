@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.11.0...v1.11.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* **secu:** PSP: use numeric user in Dockerfile ([#167](https://github.com/SocialGouv/enfants-du-spectacle/issues/167)) ([2c2db8b](https://github.com/SocialGouv/enfants-du-spectacle/commit/2c2db8b0392bf5abe26d55c9b08200c412b2e0d4))
+
 # [1.11.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.10.0...v1.11.0) (2021-12-06)
 
 
