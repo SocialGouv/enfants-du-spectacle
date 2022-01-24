@@ -50,7 +50,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder --chown=node:node /app/.next ./.next
 
-USER node
+USER 1000
 EXPOSE 3000
 ARG START_SCRIPT=start-prod
 ENV START_SCRIPT=$START_SCRIPT
