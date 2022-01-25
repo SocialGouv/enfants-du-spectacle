@@ -10,11 +10,25 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
-import { frenchDateText } from "src/lib/helpers";
+import { frenchDateText, typeEmploiLabel } from "src/lib/helpers";
 
 interface Props {
   dossierId: number;
 }
+
+const TYPES_EMPLOI = [
+  { label: "Rôle 1er choix", value: "ROLE_1" },
+  { label: "Rôle 2nd choix", value: "ROLE_2" },
+  { label: "Figurant", value: "FIGURATION" },
+  { label: "Silhouette", value: "SILHOUETTE" },
+  { label: "Silhouette parlante", value: "SILHOUETTE_PARLANTE" },
+  { label: "Doublure", value: "DOUBLURE" },
+  { label: "Doublage", value: "DOUBLAGE" },
+  { label: "Chanteur", value: "CHANT" },
+  { label: "Danseur", value: "DANSE" },
+  { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
+  { label: "Autre", value: "AUTRE" },
+];
 
 const Dossier: React.FC<Props> = ({ dossierId }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
@@ -77,10 +91,32 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
 
       <Title as="h3">Enfants</Title>
       {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
-      {dossier.enfants.map((enfant) => (
-        <div key={enfant.id} className={styles.bloc}>
-          <Enfant enfant={enfant} />
-        </div>
+      {TYPES_EMPLOI.map((typeEmploi, index) => (
+        <span key={index}>
+          {dossier.enfants.filter(function (element) {
+            return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
+          }).length > 0
+            ? typeEmploi.label
+            : ""}
+          {dossier.enfants
+            .filter(function (element) {
+              return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
+            })
+            .sort(function (a, b) {
+              if (a.prenom < b.prenom) {
+                return -1;
+              }
+              if (a.prenom > b.prenom) {
+                return 1;
+              }
+              return 0;
+            })
+            .map((enfant) => (
+              <div key={enfant.id} className={styles.bloc}>
+                <Enfant enfant={enfant} />
+              </div>
+            ))}
+        </span>
       ))}
     </>
   );
