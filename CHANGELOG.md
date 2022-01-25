@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.11.1...v1.12.0) (2022-01-25)
+
+
+### Features
+
+* assign case to instructor ([8ff1d50](https://github.com/SocialGouv/enfants-du-spectacle/commit/8ff1d5053106f2dac4548327f812a743adf241c7))
+
 ## [1.11.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.11.0...v1.11.1) (2022-01-24)
 
 
