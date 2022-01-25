@@ -5,14 +5,17 @@ import styles from "./Foldable.module.scss";
 
 interface Props {
   onlyOnce: boolean;
+  hidden: boolean;
 }
 
-const Foldable: React.FC<Props> = ({ children, onlyOnce }) => {
+const Foldable: React.FC<Props> = ({ children, onlyOnce, hidden }) => {
   const [folded, setFolded] = useState(true);
   return (
     <div>
       <div
-        className={`${styles.content} ${folded ? styles.contentFolded : ""}`}
+        className={`${styles.content} ${folded ? styles.contentFolded : ""} ${
+          folded && hidden ? styles.contentFoldedHidden : ""
+        }`}
       >
         {children}
       </div>
