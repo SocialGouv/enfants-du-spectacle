@@ -1,9 +1,16 @@
 .content {
-  margin-bottom: .7rem;
+  margin-bottom: 0.7rem;
 }
 
 .contentFolded {
   display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.contentFoldedHidden {
+  display: none;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
