@@ -24,7 +24,7 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
   return (
     <Select
       selected={dossier.userId ? String(dossier.userId) : ""}
-      options={[{ label: "", value: "" }].concat(
+      options={[{ label: dossier.userId ? "" : "Choisir", value: "" }].concat(
         allUsers.map((u) => ({
           label: shortUserName(u),
           value: String(u.id),
