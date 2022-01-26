@@ -1,11 +1,21 @@
 import { Title } from "@dataesr/react-dsfr";
-import type { Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
+import type {
+  Commission,
+  Dossier,
+  Enfant,
+  SocieteProduction,
+  User,
+} from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import styles from "src/components/SearchResults.module.scss";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { birthDateToFrenchAge } from "src/lib/helpers";
+import {
+  birthDateToFrenchAge,
+  frenchDateText,
+  frenchDepartementName,
+} from "src/lib/helpers";
 import type { SearchResultsType } from "src/lib/queries";
 
 interface EnfantProps {
@@ -13,6 +23,7 @@ interface EnfantProps {
     dossier: Dossier & {
       user?: User | null;
       societeProduction: SocieteProduction;
+      commission: Commission;
     };
   };
 }
@@ -39,6 +50,10 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
       </div>
       <div>
         <AssignedAgent dossier={enfant.dossier} />
+      </div>
+      <div>
+        Commission du <b>{frenchDateText(enfant.dossier.commission.date)}</b> -{" "}
+        {frenchDepartementName(enfant.dossier.commission.departement)}
       </div>
     </div>
   );
@@ -88,9 +103,31 @@ const SearchResults: React.FC<Props> = ({
         {enfants.length == 0 && <span>aucun enfant trouvé</span>}
         {enfants.length > 0 && (
           <div className="enfantsContainer">
-            {enfants.map((enfant) => (
-              <EnfantRow key={enfant.id} enfant={enfant} />
-            ))}
+            {enfants
+              .sort(function (a, b) {
+                if (a.nom < b.nom) {
+                  return -1;
+                }
+                if (a.nom > b.nom) {
+                  return 1;
+                }
+                if (a.prenom < b.prenom) {
+                  return -1;
+                }
+                if (a.prenom > b.prenom) {
+                  return 1;
+                }
+                if (a.dossier.commission.date < b.dossier.commission.date) {
+                  return -1;
+                }
+                if (a.dossier.commission.date > b.dossier.commission.date) {
+                  return 1;
+                }
+                return 0;
+              })
+              .map((enfant) => (
+                <EnfantRow key={enfant.id} enfant={enfant} />
+              ))}
           </div>
         )}
       </div>

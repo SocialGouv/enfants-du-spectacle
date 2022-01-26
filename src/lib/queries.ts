@@ -1,4 +1,5 @@
 import type {
+  Commission,
   Dossier,
   Enfant,
   PrismaClient,
@@ -20,7 +21,9 @@ const searchEnfants = async (
   try {
     return await prismaClient.enfant.findMany({
       include: {
-        dossier: { include: { societeProduction: true, user: true } },
+        dossier: {
+          include: { commission: true, societeProduction: true, user: true },
+        },
       },
       where: { OR: [{ nom: { search } }, { prenom: { search } }] },
     });
@@ -88,6 +91,7 @@ interface SearchResultsType {
     dossier: Dossier & {
       user?: User | null;
       societeProduction: SocieteProduction;
+      commission: Commission;
     };
   })[];
   dossiers: (Dossier & {
