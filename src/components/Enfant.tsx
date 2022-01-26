@@ -19,7 +19,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
     <div>
       <div className={styles.wrapper}>
         <div className={styles.name}>
-          {enfant.prenom} {enfant.nom}
+          {enfant.nom} {enfant.prenom}
         </div>
         <div
           title={`né·e le ${frenchDateText(enfant.dateNaissance)}`}
@@ -35,7 +35,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
       </div>
 
       <Foldable hidden={true}>
-        <div className={styles.wrapper}>
+        <div className={styles.wrapperFoldable}>
           <Info title="Rémunération" className={styles.info}>
             <div>
               <b>{enfant.nombreCachets}</b> cachets de{" "}

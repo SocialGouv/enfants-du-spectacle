@@ -95,18 +95,20 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
         <span key={index}>
           {dossier.enfants.filter(function (element) {
             return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
-          }).length > 0
-            ? typeEmploi.label
-            : ""}
+          }).length > 0 ? (
+            <h4>{typeEmploi.label}</h4>
+          ) : (
+            ""
+          )}
           {dossier.enfants
             .filter(function (element) {
               return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
             })
             .sort(function (a, b) {
-              if (a.prenom < b.prenom) {
+              if (a.nom < b.nom) {
                 return -1;
               }
-              if (a.prenom > b.prenom) {
+              if (a.nom > b.nom) {
                 return 1;
               }
               return 0;
