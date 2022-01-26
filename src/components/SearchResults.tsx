@@ -105,28 +105,22 @@ const SearchResults: React.FC<Props> = ({
           <div className="enfantsContainer">
             {enfants
               .sort(function (a, b) {
-                if (a.dossier.commission.date < b.dossier.commission.date) {
+                if (a.nom < b.nom) {
                   return -1;
                 }
-                if (a.dossier.commission.date > b.dossier.commission.date) {
+                if (a.nom > b.nom) {
                   return 1;
                 }
-                return 0;
-              })
-              .sort(function (a, b) {
                 if (a.prenom < b.prenom) {
                   return -1;
                 }
                 if (a.prenom > b.prenom) {
                   return 1;
                 }
-                return 0;
-              })
-              .sort(function (a, b) {
-                if (a.nom < b.nom) {
+                if (a.dossier.commission.date < b.dossier.commission.date) {
                   return -1;
                 }
-                if (a.nom > b.nom) {
+                if (a.dossier.commission.date > b.dossier.commission.date) {
                   return 1;
                 }
                 return 0;
