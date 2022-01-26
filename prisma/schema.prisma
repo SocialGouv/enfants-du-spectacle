@@ -19,7 +19,7 @@ model Commission {
 model SocieteProduction {
   id          Int         @id @default(autoincrement())
   nom         String
-  siret       String
+  siret       String      @unique
   siren       String
   departement String
   naf         String
@@ -91,7 +91,7 @@ enum JustificatifDossier {
 
 model Dossier {
   id                  Int               @id @default(autoincrement())
-  numeroDS            Int
+  numeroDS            Int               @unique
   nom                 String
   statut              StatutDossier      @default(CONSTRUCTION)
   categorie           CategorieDossier
