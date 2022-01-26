@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.0...v1.12.1) (2022-01-26)
+
+
+### Bug Fixes
+
+* sorting enfant searchResult ([b952333](https://github.com/SocialGouv/enfants-du-spectacle/commit/b9523333ca4e4361b17dfd15bd58cd422351d0cf))
+
 # [1.12.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.11.1...v1.12.0) (2022-01-25)
 
 
