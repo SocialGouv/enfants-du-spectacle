@@ -22,7 +22,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
           {enfant.nom} {enfant.prenom}
         </div>
         <div
-          title={`né·e le ${frenchDateText(enfant.dateNaissance)}`}
+          title={`${frenchDateText(enfant.dateNaissance)}`}
           className="hoverableTitle"
         >
           {birthDateToFrenchAge(enfant.dateNaissance)}
