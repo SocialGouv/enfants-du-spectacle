@@ -36,7 +36,7 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
       </div>
       <div>
         <div className={styles.nom}>
-          {enfant.prenom} {enfant.nom}
+          {enfant.nom} {enfant.prenom}
         </div>
         {birthDateToFrenchAge(enfant.dateNaissance)}
       </div>
@@ -117,10 +117,10 @@ const SearchResults: React.FC<Props> = ({
                 if (a.prenom > b.prenom) {
                   return 1;
                 }
-                if (a.dossier.commission.date < b.dossier.commission.date) {
+                if (a.dossier.commission.date > b.dossier.commission.date) {
                   return -1;
                 }
-                if (a.dossier.commission.date > b.dossier.commission.date) {
+                if (a.dossier.commission.date < b.dossier.commission.date) {
                   return 1;
                 }
                 return 0;

@@ -146,6 +146,7 @@ model Enfant {
   contexteTravail String?
   montantCachet Float
   nombreCachets Int
+  nombreLignes Int @default(0)
   remunerationsAdditionnelles String?
   remunerationTotale Float
   justificatifs JustificatifEnfant[]

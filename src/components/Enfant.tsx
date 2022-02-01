@@ -22,7 +22,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
           {enfant.nom} {enfant.prenom}
         </div>
         <div
-          title={`né·e le ${frenchDateText(enfant.dateNaissance)}`}
+          title={`${frenchDateText(enfant.dateNaissance)}`}
           className="hoverableTitle"
         >
           {birthDateToFrenchAge(enfant.dateNaissance)}
@@ -40,6 +40,13 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
             <div>
               <b>{enfant.nombreCachets}</b> cachets de{" "}
               <b>{enfant.montantCachet}€</b>
+            </div>
+            <div>
+              {enfant.typeEmploi == "DOUBLAGE" && (
+                <span>
+                  nombre de lignes : <b>{enfant.nombreLignes}</b>
+                </span>
+              )}
             </div>
             <div>
               {!enfant.remunerationsAdditionnelles && (
