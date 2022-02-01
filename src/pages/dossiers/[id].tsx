@@ -1,6 +1,7 @@
 import { Icon, Title } from "@dataesr/react-dsfr";
 import { useRouter } from "next/router";
 import React from "react";
+import { FaHome } from "react-icons/fa";
 import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
@@ -27,7 +28,7 @@ const Page: React.FC = () => {
       windowTitle={dossier?.nom ?? "Dossier"}
       headerMiddle={title}
       breadcrumbs={[
-        { href: "/dossiers", label: "Dossiers" },
+        { href: "/dossiers", icon: <FaHome />, label: "Dossiers" },
         { label: dossier?.nom ?? "Dossier" },
       ]}
     >
