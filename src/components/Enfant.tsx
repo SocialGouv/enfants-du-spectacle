@@ -42,6 +42,13 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
               <b>{enfant.montantCachet}€</b>
             </div>
             <div>
+              {enfant.typeEmploi == "DOUBLAGE" && (
+                <span>
+                  nombre de lignes : <b>{enfant.nombreLignes}</b>
+                </span>
+              )}
+            </div>
+            <div>
               {!enfant.remunerationsAdditionnelles && (
                 <i>Pas de rémunération additionnelle</i>
               )}
