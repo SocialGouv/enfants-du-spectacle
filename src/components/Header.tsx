@@ -15,13 +15,16 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import type { ReactElement } from "react";
 import React from "react";
+import { FaHome } from "react-icons/fa";
 import styles from "src/components/Header.module.scss";
 import logoEds from "src/images/logo.png";
 
 interface BreadcrumbData {
   label: string;
   href?: string;
+  icon?: ReactElement;
 }
 
 interface Props {
@@ -75,7 +78,7 @@ const Header: React.FC<Props> = ({
                     link="/dossiers"
                     onClick={async () => router.push("/dossiers")}
                   >
-                    Dossiers
+                    <FaHome className={styles.icon} />
                   </ToolItem>
                   <ToolItem link="/api/auth/signout" onClick={signOut}>
                     Déconnexion
@@ -111,7 +114,7 @@ const Header: React.FC<Props> = ({
                   href={breadcrumb.href}
                   className={styles.breadcrumb}
                 >
-                  {breadcrumb.label}
+                  {breadcrumb.icon ? breadcrumb.icon : breadcrumb.label}
                 </BreadcrumbItem>
               ))}
             </Breadcrumb>
