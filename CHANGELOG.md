@@ -1,3 +1,11 @@
+## [1.12.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.1...v1.12.2) (2022-02-09)
+
+
+### Bug Fixes
+
+* add lodash ([6855e43](https://github.com/SocialGouv/enfants-du-spectacle/commit/6855e43d144f99a314431bba61debffbb6526dd5))
+* migrations ([457976a](https://github.com/SocialGouv/enfants-du-spectacle/commit/457976a3a189a4b2297405911f816d8d3273bf91))
+
 ## [1.12.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.0...v1.12.1) (2022-01-26)
 
 
