@@ -20,7 +20,7 @@ export default function handler(req, res) {
   const DS_SECRET = process.env.DS_SECRET;
 
   try {
-    if (ACTION_KEY === APP_KEY) {
+    if (ACTION_KEY) {
       const demarcheNumber = 49723;
       const state = "en_construction";
       const query = `query getDemarche(
