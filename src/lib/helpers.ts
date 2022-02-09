@@ -28,6 +28,16 @@ function frenchDateText(date: Date): string {
   });
 }
 
+function frenchDateHour(date: Date): string {
+  return date.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 function birthDateToFrenchAge(birthDate: Date): string {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -124,6 +134,8 @@ function frenchDepartementName(departementNumber: string): string {
   );
 }
 
+const ALL_DEPARTEMENTS = ["75", "77", "78", "91", "92", "93", "94", "95", ""];
+
 const TYPES_EMPLOI = [
   { label: "Rôle 1er choix", value: "ROLE_1" },
   { label: "Rôle 2nd choix", value: "ROLE_2" },
@@ -144,6 +156,12 @@ function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   return found.label;
 }
 
+function typeEmploiValue(typeEmploi: string): string {
+  const found = TYPES_EMPLOI.find((t) => t.label == typeEmploi);
+  if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
+  return found.value;
+}
+
 function stringToNumberOrNull(str: string | null | undefined): number | null {
   return str ? Number(str) : null;
 }
@@ -160,11 +178,13 @@ async function delay(ms: number): Promise<void> {
 }
 
 export {
+  ALL_DEPARTEMENTS,
   birthDateToFrenchAge,
   compact,
   delay,
   filterCommissions,
   filterSearchResults,
+  frenchDateHour,
   frenchDateText,
   frenchDepartementName,
   getFilterableSocietesProductions,
@@ -172,5 +192,7 @@ export {
   shortUserName,
   stringToNumberOrNull,
   typeEmploiLabel,
+  typeEmploiValue,
+  TYPES_EMPLOI,
   uniqueById,
 };
