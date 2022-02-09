@@ -1,5 +1,6 @@
 import type {
   Commission,
+  Demandeur,
   Dossier,
   Enfant,
   PrismaClient,
@@ -33,6 +34,105 @@ const searchEnfants = async (
   }
 };
 
+const searchDossierByExternalId = async (
+  prismaClient: PrismaClient,
+  dossierId: number
+) => {
+  try {
+    return await prismaClient.dossier.findMany({
+      include: {
+        commission: true,
+        demandeur: true,
+        enfants: true,
+        societeProduction: true,
+        user: true,
+      },
+      where: { externalId: dossierId },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const searchDemandeur = async (prismaClient: PrismaClient, email: string) => {
+  try {
+    return await prismaClient.demandeur.findUnique({
+      where: { email: email },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const createDemandeur = async (
+  prismaClient: PrismaClient,
+  demandeur: Demandeur
+) => {
+  try {
+    return await prismaClient.demandeur.create({ data: demandeur });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const getUpcomingCommissions = async (
+  prismaClient: PrismaClient,
+  departement: string
+) => {
+  try {
+    return await prismaClient.commission.findMany({
+      orderBy: { date: "asc" },
+      where: {
+        date: { gte: new Date() },
+        departement: departement,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const searchSocieteProductionBySiret = async (
+  prismaClient: PrismaClient,
+  siretTmp: string
+) => {
+  try {
+    return await prismaClient.societeProduction.findMany({
+      where: { siret: siretTmp },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const createSocieteProduction = async (
+  prismaClient: PrismaClient,
+  societeProduction: SocieteProduction
+) => {
+  try {
+    return await prismaClient.societeProduction.create({
+      data: societeProduction,
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const createDossier = async (prismaClient: PrismaClient, dossier: Dossier) => {
+  try {
+    return await prismaClient.dossier.create({ data: dossier });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
 const searchDossiers = async (
   prismaClient: PrismaClient,
   search: string
@@ -40,6 +140,7 @@ const searchDossiers = async (
   (Dossier & {
     societeProduction: SocieteProduction;
     user: User | null;
+    commission: Commission;
     _count: {
       enfants: number;
     } | null;
@@ -49,11 +150,48 @@ const searchDossiers = async (
     return await prismaClient.dossier.findMany({
       include: {
         _count: { select: { enfants: true } },
+        commission: true,
         societeProduction: true,
         user: true,
       },
       where: { nom: { search } },
     });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const updateConstructDossier = async (
+  prismaClient: PrismaClient,
+  dossier: Dossier,
+  dossierId: number
+) => {
+  try {
+    return await prismaClient.dossier.update({
+      data: dossier,
+      where: { id: dossierId },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const deleteEnfants = async (prismaClient: PrismaClient, dossierId: number) => {
+  try {
+    return await prismaClient.enfant.deleteMany({
+      where: { dossierId: dossierId },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const createEnfant = async (prismaClient: PrismaClient, enfant: Enfant) => {
+  try {
+    return await prismaClient.enfant.create({ data: enfant });
   } catch (e: unknown) {
     console.log(e);
     return [];
@@ -106,6 +244,7 @@ interface SearchResultsType {
 interface DossiersFilters {
   userId?: number;
   societeProductionId?: number;
+  departement?: string;
   grandeCategorie?: GrandeCategorieValue;
 }
 
@@ -116,4 +255,18 @@ export type {
   DossiersFilters,
   SearchResultsType,
 };
-export { searchDossiers, searchEnfants, updateDossier };
+export {
+  createDemandeur,
+  createDossier,
+  createEnfant,
+  createSocieteProduction,
+  deleteEnfants,
+  getUpcomingCommissions,
+  searchDemandeur,
+  searchDossierByExternalId,
+  searchDossiers,
+  searchEnfants,
+  searchSocieteProductionBySiret,
+  updateConstructDossier,
+  updateDossier,
+};

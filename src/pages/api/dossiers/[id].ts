@@ -84,6 +84,113 @@ const update: NextApiHandler = async (req, res) => {
 
     eval(`stateMachine.${transition}()`);
     updates.statut = stateMachine.state;
+    console.log('ok : ', updates.statut)
+    const DS_SECRET = process.env.DS_SECRET;
+    if(updates.statut === 'CONSTRUCTION') {
+      
+    } else if (updates.statut === 'INSTRUCTION') {
+      const query = `mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
+        dossierPasserEnInstruction(input: $input) {
+          dossier {
+            id
+          }
+          errors {
+            message
+          }
+        }
+      }`
+      try {
+        fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+          body: JSON.stringify({
+            query,
+            "operationName": "dossierPasserEnInstruction",
+            "variables": {
+              "input": {
+                "dossierId": dossier.externalId,
+                "instructeurId": "SW5zdHJ1Y3RldXItNDkxMzk="
+              }
+            }
+          }),
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + DS_SECRET,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }).then(async (r) => r.json()).then((data) => console.log('data : ', data))
+      } catch(e) {
+        console.log(e)
+      }
+      
+    } else if (updates.statut === 'ACCEPTE') {
+      const query = `mutation dossierAccepter($input: DossierAccepterInput!) {
+        dossierAccepter(input: $input) {
+          dossier {
+            id
+          }
+          errors {
+            message
+          }
+        }
+      }`
+      try {
+        fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+          body: JSON.stringify({
+            query,
+            "operationName": "dossierAccepter",
+            "variables": {
+              "input": {
+                "dossierId": dossier.externalId,
+                "instructeurId": "SW5zdHJ1Y3RldXItNDkxMzk=",
+                "motivation": "J’accepte ce dossier"
+              }
+            }
+          }),
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + DS_SECRET,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }).then(async (r) => r.json()).then((data) => console.log('data : ', data))
+      } catch(e) {
+        console.log(e)
+      }
+    } else if (updates.statut === 'REFUSE') {
+      const query = `mutation dossierRefuser($input: DossierRefuserInput!) {
+        dossierRefuser(input: $input) {
+          dossier {
+            id
+          }
+          errors {
+            message
+          }
+        }
+      }`
+      try {
+        fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+          body: JSON.stringify({
+            query,
+            "operationName": "dossierRefuser",
+            "variables": {
+              "input": {
+                "dossierId": dossier.externalId,
+                "instructeurId": "SW5zdHJ1Y3RldXItNDkxMzk=",
+                "motivation": "J’accepte ce dossier"
+              }
+            }
+          }),
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + DS_SECRET,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }).then(async (r) => r.json()).then((data) => console.log('data : ', data))
+      } catch(e) {
+        console.log(e)
+      }
+    }
   }
 
   if (typeof parsed.userId === "number" || parsed.userId === null) {

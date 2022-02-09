@@ -91,7 +91,6 @@ enum JustificatifDossier {
 
 model Dossier {
   id                  Int               @id @default(autoincrement())
-  numeroDS            Int
   nom                 String
   statut              StatutDossier      @default(CONSTRUCTION)
   categorie           CategorieDossier
@@ -100,6 +99,7 @@ model Dossier {
   societeProductionId Int
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   enfants             Enfant[]
+  commentaires        Commentaire[]
   userId              Int?
   user                User?             @relation(fields: [userId], references: [id])
   demandeurId         Int
@@ -109,6 +109,17 @@ model Dossier {
   presentation        String
   dateDebut           DateTime
   dateFin             DateTime
+  externalId          String?               @unique
+}
+
+model Commentaire {
+  id         Int               @id @default(autoincrement())
+  text       String
+  date       DateTime
+  userId     Int
+  user       User?              @relation(fields: [userId], references: [id])
+  dossierId  Int            
+  dossier    Dossier?           @relation(fields: [dossierId], references: [id])
 }
 
 enum TypeEmploi {
@@ -167,6 +178,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   dossiers      Dossier[]
+  commentaires  Commentaire[]
 }
 
 model Session {
