@@ -17,7 +17,7 @@ import {
 export default function handler(req, res) {
   const APP_KEY = process.env.APP_KEY;
   const ACTION_KEY = req.headers.authorization.split(" ")[1];
-  const DS_SECRET = process.env.DS_SECRET;
+  const DS_SECRET = '8yA9gy1d8SqPq5ExkWd1qqkg';
 
   try {
     if (ACTION_KEY) {
