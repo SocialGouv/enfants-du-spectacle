@@ -100,6 +100,7 @@ model Dossier {
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   enfants             Enfant[]
   commentaires        Commentaire[]
+  numeroDS            Int @default(0)
   userId              Int?
   user                User?             @relation(fields: [userId], references: [id])
   demandeurId         Int
