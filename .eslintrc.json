@@ -16,8 +16,6 @@
     }
   },
   "rules": {
-    "@typescript-eslint/naming-convention": "off", // TS linter suggests camelCase for React Components
-    "@typescript-eslint/no-explicit-any": "off",
-    "typescript-eslint/no-shadow": "off"
+    "@typescript-eslint/naming-convention": "off" // TS linter suggests camelCase for React Components
   }
 }
