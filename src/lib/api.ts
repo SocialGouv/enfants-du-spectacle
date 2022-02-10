@@ -56,28 +56,6 @@ function useAllUsers() {
   };
 }
 
-function getDataDS() {
-  const { data, error } = useSWR(
-    `/api/sync_ds`,
-    async function (input: RequestInfo, init?: RequestInit) {
-      const res = await fetch(`/api/sync_ds`, {
-        headers: {
-          "authorization" : "Bearer test"
-        },
-        method: "GET",
-      })
-      console.log('OK JE RECUP')
-      return superJSONParse<User[]>(await res.text());
-    }
-  );
-
-  return {
-    allDatas: data,
-    isError: error,
-    isLoading: !error && !data,
-  };
-}
-
 type DatePeriod = "past" | "upcoming";
 function useCommissions(
   datePeriod: DatePeriod | undefined = "upcoming",
@@ -120,5 +98,4 @@ export {
   useCommission,
   useCommissions,
   useDossier,
-  getDataDS
 };

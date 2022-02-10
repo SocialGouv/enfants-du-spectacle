@@ -20,6 +20,7 @@ import React from "react";
 import { FaHome } from "react-icons/fa";
 import styles from "src/components/Header.module.scss";
 import logoEds from "src/images/logo.png";
+import { getDataDS } from "src/lib/queries";
 
 interface BreadcrumbData {
   label: string;
@@ -59,7 +60,11 @@ const Header: React.FC<Props> = ({
             {session && (
               <Tool>
                 <ToolItemGroup>
-                  <ToolItem>
+                  <ToolItem
+                    onClick={() => {
+                      getDataDS();
+                    }}
+                  >
                     {session.user?.image && (
                       <span
                         style={{
