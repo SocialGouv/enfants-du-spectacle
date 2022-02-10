@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.1...v1.13.2) (2022-02-10)
+
+
+### Bug Fixes
+
+* try to fix app not fetching datas ([70909d5](https://github.com/SocialGouv/enfants-du-spectacle/commit/70909d58a62cfd46e420a44b28aaeac4dcc56ee3))
+
 ## [1.13.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.0...v1.13.1) (2022-02-10)
 
 
