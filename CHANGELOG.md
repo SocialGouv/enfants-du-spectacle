@@ -1,3 +1,16 @@
+# [1.13.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.2...v1.13.0) (2022-02-10)
+
+
+### Bug Fixes
+
+* add missing file ([76aa9bc](https://github.com/SocialGouv/enfants-du-spectacle/commit/76aa9bc9ab354650e32cd4cf88a55edd1c3a2435))
+
+
+### Features
+
+* add module commentaires ([a15ebec](https://github.com/SocialGouv/enfants-du-spectacle/commit/a15ebec363120b31b7a9c3e322addd48c3775996))
+* add module commentaires ([9dda625](https://github.com/SocialGouv/enfants-du-spectacle/commit/9dda625c9c584f51a5bbed61b72ee48315a5bb33))
+
 ## [1.12.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.1...v1.12.2) (2022-02-09)
 
 
