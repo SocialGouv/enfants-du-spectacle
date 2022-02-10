@@ -24,11 +24,31 @@ const get: NextApiHandler = async (req, res) => {
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
-      : await getUpcomingCommissions(departement);
+      : departement == "all" ? await getUpcomingCommissions() : await getUpcomingCommissionsByDepartement(departement);
   res.status(200).json(superjson.stringify(commissions));
 };
 
-const getUpcomingCommissions = async (departement: string) => {
+const getUpcomingCommissions = async () => {
+  return prisma.commission.findMany({
+    include: {
+      dossiers: {
+        include: {
+          _count: { select: { enfants: true } },
+          societeProduction: true,
+          user: true,
+        },
+        orderBy: { id: "desc" },
+      },
+    },
+    orderBy: { date: "asc" },
+    where: {
+      date: { gte: new Date() },
+      dossiers: { some: {} },
+    },
+  });
+};
+
+const getUpcomingCommissionsByDepartement = async (departement: string) => {
   return prisma.commission.findMany({
     include: {
       dossiers: {
