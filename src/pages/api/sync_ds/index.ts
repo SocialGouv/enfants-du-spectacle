@@ -18,7 +18,7 @@ import {
 } from "src/lib/queries";
 
 const handler: NextApiHandler = async (req, res) => {
-  const DS_SECRET = 'k4mv6AhNU2XvE4K6f8sBkkSg';
+  const DS_SECRET = "k4mv6AhNU2XvE4K6f8sBkkSg";
   const ACTION_KEY = req.headers.authorization?.split(" ")[1];
 
   try {

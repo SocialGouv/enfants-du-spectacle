@@ -224,6 +224,16 @@ function updateDossier(
     });
 }
 
+function getDataDS(): void {
+  const res = fetch(`/api/sync_ds`, {
+    headers: {
+      authorization: "Bearer test",
+    },
+    method: "GET",
+  });
+  console.log("OK JE RECUP");
+}
+
 interface SearchResultsType {
   enfants: (Enfant & {
     dossier: Dossier & {
@@ -261,6 +271,7 @@ export {
   createEnfant,
   createSocieteProduction,
   deleteEnfants,
+  getDataDS,
   getUpcomingCommissions,
   searchDemandeur,
   searchDossierByExternalId,
