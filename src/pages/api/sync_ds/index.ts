@@ -1,4 +1,7 @@
+import type { Demandeur, Dossier, SocieteProduction } from "@prisma/client";
+import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
+import type { NextApiHandler } from "next";
 import { typeEmploiValue } from "src/lib/helpers";
 import prisma from "src/lib/prismaClient";
 import {
@@ -14,10 +17,9 @@ import {
   updateConstructDossier,
 } from "src/lib/queries";
 
-export default function handler(req, res) {
-  const APP_KEY = process.env.APP_KEY;
-  const ACTION_KEY = req.headers.authorization.split(" ")[1];
-  const DS_SECRET = '8yA9gy1d8SqPq5ExkWd1qqkg';
+const handler: NextApiHandler = async (req, res) => {
+  const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
+  const ACTION_KEY = req.headers.authorization?.split(" ")[1];
 
   try {
     if (ACTION_KEY) {
@@ -348,7 +350,7 @@ export default function handler(req, res) {
             regionCode
           }`;
 
-      fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+      await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
         body: JSON.stringify({
           operationName: "getDemarche",
           query,
@@ -356,375 +358,418 @@ export default function handler(req, res) {
         }),
         headers: {
           Accept: "application/json",
-          Authorization: "Bearer " + DS_SECRET,
+          Authorization: `Bearer ${String(DS_SECRET)}`,
           "Content-Type": "application/json",
         },
         method: "POST",
       })
-        .then(async (r) => r.json())
+        .catch((err) => err)
+        .then((r) => r.json())
         .then((data) => {
+          console.log(
+            "data : ",
+            JSON.stringify(data.data.demarche.dossiers.nodes)
+          );
           data.data.demarche.dossiers.nodes.map(async (dossier) => {
             // Search Societe Production
-            const societe = await searchSocieteProductionBySiret(
+            await searchSocieteProductionBySiret(
               prisma,
-              dossier.demandeur.siret
-            );
-            if (societe.length > 0) {
-            } else {
-              const societeProduction: any = {
-                adresse: dossier.demandeur.address.streetAddress,
-                adresseCodeCommune: dossier.demandeur.address.cityName,
-                adresseCodePostal: dossier.demandeur.address.postalCode,
-                conventionCollectiveCode: "missing",
-                departement: dossier.demandeur.address.postalCode.slice(0, 2),
-                formeJuridique: dossier.demandeur.entreprise.formeJuridique,
-                naf: dossier.demandeur.naf,
-                nom:
-                  dossier.demandeur.entreprise.nomCommercial != ""
-                    ? dossier.demandeur.entreprise.nomCommercial
-                    : dossier.demandeur.entreprise.raisonSociale,
-                raisonSociale: dossier.demandeur.entreprise.raisonSociale,
-                siren: dossier.demandeur.entreprise.siren,
-                siret: dossier.demandeur.siret,
-              };
-              const createdSociete = await createSocieteProduction(
-                prisma,
-                societeProduction
-              );
-            }
+              dossier.demandeur.siret as string
+            )
+              .then(async (societe) => {
+                if (societe.length > 0) {
+                  console.log("found societe production");
+                  return societe[0];
+                } else {
+                  console.log("didnt find societe production");
+                  const societeProduction: SocieteProduction = {
+                    adresse: dossier.demandeur.address.streetAddress,
+                    adresseCodeCommune: dossier.demandeur.address.cityName,
+                    adresseCodePostal: dossier.demandeur.address.postalCode,
+                    conventionCollectiveCode: "missing",
+                    departement: dossier.demandeur.address.postalCode.slice(
+                      0,
+                      2
+                    ),
+                    formeJuridique: dossier.demandeur.entreprise.formeJuridique,
+                    naf: dossier.demandeur.naf,
+                    nom:
+                      dossier.demandeur.entreprise.nomCommercial != ""
+                        ? dossier.demandeur.entreprise.nomCommercial
+                        : dossier.demandeur.entreprise.raisonSociale,
+                    raisonSociale: dossier.demandeur.entreprise.raisonSociale,
+                    siren: dossier.demandeur.entreprise.siren,
+                    siret: dossier.demandeur.siret,
+                  };
+                  const createdSociete = await createSocieteProduction(
+                    prisma,
+                    societeProduction
+                  );
+                  console.log("createdSociete : ", createdSociete);
+                  return createdSociete as SocieteProduction;
+                }
+              })
+              .then(async (societe) => {
+                console.log("societe recup", societe);
 
-            // Search demandeur
-            const demandeur: any = await searchDemandeur(
-              prisma,
-              _.get(_.find(dossier.champs, { label: "Mail " }), "stringValue")
-            );
-            if (demandeur !== null) {
-            } else {
-              const demandeurTmp: any = {
-                email: _.get(
-                  _.find(dossier.champs, { label: "Mail " }),
-                  "stringValue"
-                ),
-                fonction: _.get(
-                  _.find(dossier.champs, { label: "Fonctions" }),
-                  "stringValue"
-                ),
-                nom: _.get(
-                  _.find(dossier.champs, { label: "Nom" }),
-                  "stringValue"
-                ),
-                phone: _.get(
-                  _.find(dossier.champs, { label: "Téléphone " }),
-                  "stringValue"
-                ),
-                prenom: _.get(
-                  _.find(dossier.champs, { label: "Prénom" }),
-                  "stringValue"
-                ),
-                societeProductionId:
-                  societe.length > 0 ? societe[0].id : createdSociete.id,
-              };
-              const createdDemandeur = await createDemandeur(
-                prisma,
-                demandeurTmp
-              );
-            }
-
-            // search commission
-            const commissions = await getUpcomingCommissions(
-              prisma,
-              dossier.demandeur.address.postalCode.slice(0, 2)
-            );
-            const commission = commissions[0];
-
-            const arrayJustifs = [];
-            if (
-              _.get(_.find(dossier.champs, { label: "Synopsis" }), "file") !=
-              null
-            ) {
-              arrayJustifs.push("SYNOPSIS");
-            }
-            if (
-              _.get(_.find(dossier.champs, { label: "Scenario" }), "file") !=
-              null
-            ) {
-              arrayJustifs.push("SCENARIO");
-            }
-            if (
-              _.get(
-                _.find(dossier.champs, {
-                  label: "Note précisant les mesures de sécurité",
-                }),
-                "file"
-              ) != null
-            ) {
-              arrayJustifs.push("MESURES_SECURITE");
-            }
-            if (
-              _.get(
-                _.find(dossier.champs, { label: "Plan de travail" }),
-                "file"
-              ) != null
-            ) {
-              arrayJustifs.push("PLAN_TRAVAIL");
-            }
-            if (
-              _.get(
-                _.find(dossier.champs, {
-                  label: "Eléments d'information complémentaires ",
-                }),
-                "file"
-              ) != null
-            ) {
-              arrayJustifs.push("INFOS_COMPLEMENTAIRES");
-            }
-
-            // Create or update dossier
-            const newDossier: any = {
-              categorie: _.get(
-                _.find(dossier.champs, { label: "Catégorie" }),
-                "stringValue"
-              )
-                .replace(/ /g, "_")
-                .toUpperCase(),
-              commissionId: commission.id,
-              dateDebut: new Date(
-                _.get(
-                  _.find(dossier.champs, {
-                    label: "Date de commencement du projet",
-                  }),
-                  "date"
-                )
-              ),
-              dateFin: new Date(
-                _.get(
-                  _.find(dossier.champs, { label: "Date de fin du projet" }),
-                  "date"
-                )
-              ),
-              demandeurId:
-                demandeur !== null ? demandeur.id : createdDemandeur.id,
-              externalId: dossier.id,
-              justificatifs: arrayJustifs,
-              nom: _.get(
-                _.find(dossier.champs, { label: "Titre du projet" }),
-                "stringValue"
-              ),
-              presentation: _.get(
-                _.find(dossier.champs, {
-                  label: "Présentation globale du projet",
-                }),
-                "stringValue"
-              ),
-              scenesSensibles: _.get(
-                _.find(dossier.champs, {
-                  label: "Projet contenant certains types de scènes",
-                }),
-                "stringValue"
-              ),
-              societeProductionId:
-                societe.length > 0 ? societe[0].id : createdSociete.id,
-              statut:
-                dossier.state === "en_construction"
-                  ? "CONSTRUCTION"
-                  : "INSTRUCTION",
-            };
-
-            const intDossier = await searchDossierByExternalId(
-              prisma,
-              dossier.id
-            );
-            if (intDossier.length > 0) {
-              const finalDossier = await updateConstructDossier(
-                prisma,
-                newDossier,
-                intDossier[0].id
-              );
-            } else {
-              const finalDossier = await createDossier(prisma, newDossier);
-            }
-
-            // Add Enfants
-            const deleteEnfant = await deleteEnfants(
-              prisma,
-              intDossier.length > 0 ? intDossier[0].id : finalDossier.id
-            );
-            const champEnfant = _.get(
-              _.find(dossier.champs, { label: "Enfant" }),
-              "champs"
-            );
-            const nbreEnfants = _.filter(champEnfant, (datab: any) => {
-              return datab.label === "Nom";
-            }).length;
-            for (let i = 0; i < nbreEnfants; i++) {
-              const enfant: any = {
-                contexteTravail: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Temps et lieu de travail";
-                  })[i],
-                  "stringValue"
-                ),
-                dateNaissance: new Date(
+                // Search demandeur
+                let demandeur = (await searchDemandeur(
+                  prisma,
                   _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Né(e) le";
-                    })[i],
-                    "date"
-                  )
-                ),
-                dossierId:
-                  intDossier.length > 0 ? intDossier[0].id : finalDossier.id,
-                montantCachet: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Montant du cachet";
-                  })[i],
-                  "decimalNumber"
-                ),
-                nom: strNoAccent(
+                    _.find(dossier.champs, { label: "Mail " }),
+                    "stringValue"
+                  ) as string
+                )) as Demandeur;
+                if (demandeur !== null) {
+                  return { demandeur, societe };
+                } else {
+                  const demandeurTmp: Demandeur = {
+                    email: _.get(
+                      _.find(dossier.champs, { label: "Mail " }),
+                      "stringValue"
+                    ),
+                    fonction: _.get(
+                      _.find(dossier.champs, { label: "Fonctions" }),
+                      "stringValue"
+                    ),
+                    nom: _.get(
+                      _.find(dossier.champs, { label: "Nom" }),
+                      "stringValue"
+                    ),
+                    phone: _.get(
+                      _.find(dossier.champs, { label: "Téléphone " }),
+                      "stringValue"
+                    ),
+                    prenom: _.get(
+                      _.find(dossier.champs, { label: "Prénom" }),
+                      "stringValue"
+                    ),
+                    societeProductionId: societe.id,
+                  };
+                  demandeur = (await createDemandeur(
+                    prisma,
+                    demandeurTmp
+                  )) as Demandeur;
+                  console.log("createdDemandeur : ", demandeur);
+                  return { demandeur, societe };
+                }
+              })
+              .then(async (datas) => {
+                const { societe, demandeur } = datas;
+                console.log("data pour create dossier : ", datas);
+                console.log("societe recup pour create dossier : ", societe);
+                console.log(
+                  "demandeur recup pour create dossier : ",
+                  demandeur
+                );
+
+                // search commission
+                const commissions = await getUpcomingCommissions(
+                  prisma,
+                  dossier.demandeur.address.postalCode.slice(0, 2) as string
+                );
+                const commission = commissions[0];
+
+                // Build array justifications (dossier)
+                const arrayJustifs = [];
+                if (
                   _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Nom";
-                    })[i],
+                    _.find(dossier.champs, { label: "Synopsis" }),
+                    "file"
+                  ) != null
+                ) {
+                  arrayJustifs.push("SYNOPSIS");
+                }
+                if (
+                  _.get(
+                    _.find(dossier.champs, { label: "Scenario" }),
+                    "file"
+                  ) != null
+                ) {
+                  arrayJustifs.push("SCENARIO");
+                }
+                if (
+                  _.get(
+                    _.find(dossier.champs, {
+                      label: "Note précisant les mesures de sécurité",
+                    }),
+                    "file"
+                  ) != null
+                ) {
+                  arrayJustifs.push("MESURES_SECURITE");
+                }
+                if (
+                  _.get(
+                    _.find(dossier.champs, { label: "Plan de travail" }),
+                    "file"
+                  ) != null
+                ) {
+                  arrayJustifs.push("PLAN_TRAVAIL");
+                }
+                if (
+                  _.get(
+                    _.find(dossier.champs, {
+                      label: "Eléments d'information complémentaires ",
+                    }),
+                    "file"
+                  ) != null
+                ) {
+                  arrayJustifs.push("INFOS_COMPLEMENTAIRES");
+                }
+
+                // Create or update dossier
+                const newDossier: Dossier = {
+                  categorie: _.get(
+                    _.find(dossier.champs, { label: "Catégorie" }),
                     "stringValue"
                   )
-                ),
-                nomPersonnage: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return (
-                      datab.label === "Nom du personnage incarné par l'enfant "
-                    );
-                  })[i],
-                  "stringValue"
-                ),
-                nombreCachets: parseInt(
-                  _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Nombre de cachets";
-                    })[i],
+                    .replace(/ /g, "_")
+                    .toUpperCase(),
+                  commissionId: commission.id,
+                  dateDebut: new Date(
+                    _.get(
+                      _.find(dossier.champs, {
+                        label: "Date de commencement du projet",
+                      }),
+                      "date"
+                    ) as Date
+                  ),
+                  dateFin: new Date(
+                    _.get(
+                      _.find(dossier.champs, {
+                        label: "Date de fin du projet",
+                      }),
+                      "date"
+                    ) as Date
+                  ),
+                  demandeurId: demandeur.id,
+                  externalId: dossier.id,
+                  justificatifs: arrayJustifs,
+                  nom: _.get(
+                    _.find(dossier.champs, { label: "Titre du projet" }),
                     "stringValue"
-                  )
-                ),
-                nombreJours: parseInt(
-                  _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Nombre de jours de travail";
-                    })[i],
+                  ),
+                  presentation: _.get(
+                    _.find(dossier.champs, {
+                      label: "Présentation globale du projet",
+                    }),
                     "stringValue"
-                  )
-                ),
-                nombreLignes: parseInt(
-                  _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Nombre de lignes";
-                    })[i],
+                  ),
+                  scenesSensibles: _.get(
+                    _.find(dossier.champs, {
+                      label: "Projet contenant certains types de scènes",
+                    }),
                     "stringValue"
-                  )
-                ),
-                periodeTravail: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Période de travail";
-                  })[i],
-                  "stringValue"
-                ),
-                prenom: strNoAccent(
-                  _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Prénom(s)";
-                    })[i],
-                    "stringValue"
-                  )
-                ),
-                remunerationTotale: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Rémunération totale";
-                  })[i],
-                  "decimalNumber"
-                ),
-                remunerationsAdditionnelles: _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Rémunérations additionnelles";
-                  })[i],
-                  "stringValue"
-                ),
-                typeEmploi: typeEmploiValue(
-                  _.get(
-                    _.filter(champEnfant, (datab: any) => {
-                      return datab.label === "Type d'emploi";
-                    })[i],
-                    "stringValue"
-                  )
-                ),
-              };
-              const arrayJustifs = [];
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Livret de famille";
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("LIVRET_FAMILLE");
-              }
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Autorisation parentale";
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("AUTORISATION_PARENTALE");
-              }
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return (
-                      datab.label ===
-                      "Situations particulières relatives à l'autorité parentale"
-                    );
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("SITUATION8PARTICULIERE");
-              }
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Projet de contrat de travail";
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("CONTRAT");
-              }
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return (
-                      datab.label ===
-                      "Certificat de scolarité ou/et avis pédagogique"
-                    );
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("CERTIFICAT_SCOLARITE");
-              }
-              if (
-                _.get(
-                  _.filter(champEnfant, (datab: any) => {
-                    return datab.label === "Avis médical d'aptitude";
-                  })[i],
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("AVIS_MEDICAL");
-              }
-              enfant.justificatifs = arrayJustifs;
-              const enfantCreated = await createEnfant(prisma, enfant);
-            }
+                  ),
+                  societeProductionId: societe.id,
+                  statut:
+                    dossier.state === "en_construction"
+                      ? "CONSTRUCTION"
+                      : "INSTRUCTION",
+                };
+
+                const intDossier = await searchDossierByExternalId(
+                  prisma,
+                  dossier.id as number
+                );
+                if (intDossier.length > 0) {
+                  const finalDossier = await updateConstructDossier(
+                    prisma,
+                    newDossier,
+                    intDossier[0].id
+                  );
+                  return finalDossier;
+                } else {
+                  const finalDossier = (await createDossier(
+                    prisma,
+                    newDossier
+                  )) as Dossier;
+                  return finalDossier;
+                }
+              })
+              .then(async (finalDossier: any) => {
+                console.log("dossier created or updated : ", finalDossier);
+
+                // Add Enfants
+                await deleteEnfants(prisma, finalDossier.id as number);
+                const champEnfant = _.get(
+                  _.find(dossier.champs, { label: "Enfant" }),
+                  "champs"
+                );
+                const nbreEnfants = _.filter(champEnfant, (datab) => {
+                  return datab.label === "Nom";
+                }).length;
+                for (let i = 0; i < nbreEnfants; i++) {
+                  const enfant: unknown = {
+                    contexteTravail: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Temps et lieu de travail";
+                      })[i],
+                      "stringValue"
+                    ),
+                    dateNaissance: new Date(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Né(e) le";
+                        })[i],
+                        "date"
+                      ) as Date
+                    ),
+                    dossierId: finalDossier.id,
+                    montantCachet: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Montant du cachet";
+                      })[i],
+                      "decimalNumber"
+                    ),
+                    nom: strNoAccent(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Nom";
+                        })[i],
+                        "stringValue"
+                      ) as string
+                    ),
+                    nomPersonnage: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return (
+                          datab.label ===
+                          "Nom du personnage incarné par l'enfant "
+                        );
+                      })[i],
+                      "stringValue"
+                    ),
+                    nombreCachets: parseInt(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Nombre de cachets";
+                        })[i],
+                        "stringValue"
+                      ) as string
+                    ),
+                    nombreJours: parseInt(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Nombre de jours de travail";
+                        })[i],
+                        "stringValue"
+                      ) as string
+                    ),
+                    nombreLignes: parseInt(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Nombre de lignes";
+                        })[i],
+                        "stringValue"
+                      ) as string || ""
+                    ),
+                    periodeTravail: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Période de travail";
+                      })[i],
+                      "stringValue"
+                    ),
+                    prenom: strNoAccent(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Prénom(s)";
+                        })[i],
+                        "stringValue"
+                      ) as string
+                    ),
+                    remunerationTotale: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Rémunération totale";
+                      })[i],
+                      "decimalNumber"
+                    ),
+                    remunerationsAdditionnelles: _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Rémunérations additionnelles";
+                      })[i],
+                      "stringValue"
+                    ),
+                    typeEmploi: typeEmploiValue(
+                      _.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Type d'emploi";
+                        })[i],
+                        "stringValue"
+                      ) as string
+                    ),
+                  };
+                  const arrayJustifs = [];
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Livret de famille";
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("LIVRET_FAMILLE");
+                  }
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Autorisation parentale";
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("AUTORISATION_PARENTALE");
+                  }
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return (
+                          datab.label ===
+                          "Situations particulières relatives à l'autorité parentale"
+                        );
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("SITUATION8PARTICULIERE");
+                  }
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Projet de contrat de travail";
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("CONTRAT");
+                  }
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return (
+                          datab.label ===
+                          "Certificat de scolarité ou/et avis pédagogique"
+                        );
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("CERTIFICAT_SCOLARITE");
+                  }
+                  if (
+                    _.get(
+                      _.filter(champEnfant, (datab) => {
+                        return datab.label === "Avis médical d'aptitude";
+                      })[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push("AVIS_MEDICAL");
+                  }
+                  enfant.justificatifs = arrayJustifs;
+                  const enfantCreated = await createEnfant(prisma, enfant);
+                  console.log("enfant created : ", enfantCreated);
+                }
+              });
           });
         });
 
@@ -733,15 +778,17 @@ export default function handler(req, res) {
       console.log("pas ok test");
       res.status(401).json({ success: "false" });
     }
-  } catch (err) {
+  } catch (e: unknown) {
     res.status(500).json({ success: "false" });
   }
-}
+};
+
+export default withSentry(handler);
 
 function strNoAccent(a: string) {
-  let b = "áàâäãåçéèêëíïîìñóòôöõúùûüýÁÀÂÄÃÅÇÉÈÊËÍÏÎÌÑÓÒÔÖÕÚÙÛÜÝ",
-    c = "aaaaaaceeeeiiiinooooouuuuyAAAAAACEEEEIIIINOOOOOUUUUY",
-    d = "";
+  const b = "áàâäãåçéèêëíïîìñóòôöõúùûüýÁÀÂÄÃÅÇÉÈÊËÍÏÎÌÑÓÒÔÖÕÚÙÛÜÝ";
+  const c = "aaaaaaceeeeiiiinooooouuuuyAAAAAACEEEEIIIINOOOOOUUUUY";
+  let d = "";
   for (let i = 0, j = a.length; i < j; i++) {
     const e = a.substr(i, 1);
     d += b.includes(e) ? c.substr(b.indexOf(e), 1) : e;

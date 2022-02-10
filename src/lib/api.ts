@@ -1,5 +1,10 @@
 import type { User } from "@prisma/client";
-import type { CommissionData, DossierData } from "src/lib/types";
+import { Commentaire } from "@prisma/client";
+import type {
+  CommentaireData,
+  CommissionData,
+  DossierData,
+} from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import useSWR from "swr";
 
@@ -14,6 +19,22 @@ function useDossier(id: number | null) {
 
   return {
     dossier: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
+function useCommentaires(dossierId: number | null) {
+  const { data, error } = useSWR(
+    dossierId ? `/api/commentaires?dossierId=${dossierId}` : null,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<CommentaireData[]>(await res.text());
+    }
+  );
+
+  return {
+    commentaires: data,
     isError: error,
     isLoading: !error && !data,
   };
@@ -35,10 +56,35 @@ function useAllUsers() {
   };
 }
 
-type DatePeriod = "past" | "upcoming";
-function useCommissions(datePeriod: DatePeriod | undefined = "upcoming") {
+function getDataDS() {
   const { data, error } = useSWR(
-    `/api/commissions?datePeriod=${datePeriod}`,
+    `/api/sync_ds`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(`/api/sync_ds`, {
+        headers: {
+          "authorization" : "Bearer test"
+        },
+        method: "GET",
+      })
+      console.log('OK JE RECUP')
+      return superJSONParse<User[]>(await res.text());
+    }
+  );
+
+  return {
+    allDatas: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
+type DatePeriod = "past" | "upcoming";
+function useCommissions(
+  datePeriod: DatePeriod | undefined = "upcoming",
+  departement: string
+) {
+  const { data, error } = useSWR(
+    `/api/commissions?datePeriod=${datePeriod}&departement=75`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());
@@ -68,4 +114,11 @@ function useCommission(id: number | null) {
   };
 }
 
-export { useAllUsers, useCommission, useCommissions, useDossier };
+export {
+  useAllUsers,
+  useCommentaires,
+  useCommission,
+  useCommissions,
+  useDossier,
+  getDataDS
+};

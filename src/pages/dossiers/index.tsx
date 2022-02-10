@@ -9,7 +9,7 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
-import { useCommissions } from "src/lib/api";
+import { getDataDS, useCommissions } from "src/lib/api";
 import {
   compact,
   filterCommissions,
@@ -29,6 +29,7 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
   const { commissions, ...swrCommissions } = useCommissions();
+  const { allDatas, ...swrDatas } = getDataDS();
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
   );
@@ -67,6 +68,7 @@ const Page: React.FC = () => {
   // keep filters in sync with querystring
   useEffect(() => {
     if (!routerIsReady) return;
+    console.log(allDatas, swrDatas);
     const newFilters = compact({
       grandeCategorie: query.grandeCategorie as string,
       societeProductionId: stringToNumberOrNull(

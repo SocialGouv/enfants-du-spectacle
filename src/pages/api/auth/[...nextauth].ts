@@ -20,7 +20,8 @@ export default NextAuth({
         parsed &&
         "domain" in parsed &&
         (parsed.domain === "drieets.gouv.fr" ||
-          parsed.domain === "beta.gouv.fr")
+          parsed.domain === "beta.gouv.fr" ||
+          parsed.domain === "numericite.eu")
       );
     },
   },
