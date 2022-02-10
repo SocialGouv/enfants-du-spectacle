@@ -370,6 +370,8 @@ const handler: NextApiHandler = async (req, res) => {
             "data : ",
             JSON.stringify(data.data.demarche.dossiers.nodes)
           );*/
+          let modifications = [{}]
+          modifications.push({received: JSON.stringify(data.data.demarche.dossiers.nodes)})
           data.data.demarche.dossiers.nodes.map(async (dossier) => {
             // Search Societe Production
             await searchSocieteProductionBySiret(
@@ -410,7 +412,7 @@ const handler: NextApiHandler = async (req, res) => {
                 }
               })
               .then(async (societe) => {
-                console.log("societe recup", societe);
+                //console.log("societe recup", societe);
 
                 // Search demandeur
                 let demandeur = (await searchDemandeur(
@@ -457,11 +459,11 @@ const handler: NextApiHandler = async (req, res) => {
               .then(async (datas) => {
                 const { societe, demandeur } = datas;
                 //console.log("data pour create dossier : ", datas);
-                console.log("societe recup pour create dossier : ", societe);
-                console.log(
+                //console.log("societe recup pour create dossier : ", societe);
+                /*console.log(
                   "demandeur recup pour create dossier : ",
                   demandeur
-                );
+                );*/
 
                 // search commission
                 const commissions = await getUpcomingCommissions(
@@ -586,7 +588,7 @@ const handler: NextApiHandler = async (req, res) => {
                 }
               })
               .then(async (finalDossier: any) => {
-                console.log("dossier created or updated : ", finalDossier);
+                //console.log("dossier created or updated : ", finalDossier);
 
                 // Add Enfants
                 await deleteEnfants(prisma, finalDossier.id as number);
@@ -772,17 +774,19 @@ const handler: NextApiHandler = async (req, res) => {
                   const enfantCreated = await createEnfant(prisma, enfant);
                   console.log("enfant created : ", enfantCreated);
                 }
+                modifications.push({dossier: finalDossier})
+                //setModifications(modifications)
               });
           });
-        });
-
-      res.status(200).json({ success: "true" });
+          res.status(200).json({ success: "true", modificationsDone: modifications });
+        })
     } else {
       console.log("pas ok test");
-      res.status(401).json({ success: "false" });
+      res.status(401).json({ success: "not authoraized" });
     }
   } catch (e: unknown) {
-    res.status(500).json({ success: "false" });
+    console.log(e)
+    res.status(500).json({ success: "false", error:e });
   }
 };
 
