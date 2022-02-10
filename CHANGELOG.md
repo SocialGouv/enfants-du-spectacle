@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.0...v1.13.1) (2022-02-10)
+
+
+### Bug Fixes
+
+* fix number of lines null issue ([ea3485d](https://github.com/SocialGouv/enfants-du-spectacle/commit/ea3485d0f5c7951e79178613674025a760b2f636))
+
 # [1.13.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.12.2...v1.13.0) (2022-02-10)
 
 
