@@ -1,8 +1,8 @@
-import type { Demandeur, Dossier, SocieteProduction } from "@prisma/client";
+import type { CategorieDossier, Demandeur, Dossier, SocieteProduction } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-import { typeEmploiValue } from "src/lib/helpers";
+import { typeEmploiValue, getFormatedTypeDossier } from "src/lib/helpers";
 import prisma from "src/lib/prismaClient";
 import {
   createDemandeur,
@@ -366,10 +366,10 @@ const handler: NextApiHandler = async (req, res) => {
         .catch((err) => err)
         .then((r) => r.json())
         .then((data) => {
-          console.log(
+          /*console.log(
             "data : ",
             JSON.stringify(data.data.demarche.dossiers.nodes)
-          );
+          );*/
           data.data.demarche.dossiers.nodes.map(async (dossier) => {
             // Search Societe Production
             await searchSocieteProductionBySiret(
@@ -405,7 +405,7 @@ const handler: NextApiHandler = async (req, res) => {
                     prisma,
                     societeProduction
                   );
-                  console.log("createdSociete : ", createdSociete);
+                  //console.log("createdSociete : ", createdSociete);
                   return createdSociete as SocieteProduction;
                 }
               })
@@ -450,13 +450,13 @@ const handler: NextApiHandler = async (req, res) => {
                     prisma,
                     demandeurTmp
                   )) as Demandeur;
-                  console.log("createdDemandeur : ", demandeur);
+                  //console.log("createdDemandeur : ", demandeur);
                   return { demandeur, societe };
                 }
               })
               .then(async (datas) => {
                 const { societe, demandeur } = datas;
-                console.log("data pour create dossier : ", datas);
+                //console.log("data pour create dossier : ", datas);
                 console.log("societe recup pour create dossier : ", societe);
                 console.log(
                   "demandeur recup pour create dossier : ",
@@ -519,12 +519,10 @@ const handler: NextApiHandler = async (req, res) => {
 
                 // Create or update dossier
                 const newDossier: Dossier = {
-                  categorie: _.get(
+                  categorie: getFormatedTypeDossier(_.get(
                     _.find(dossier.champs, { label: "Catégorie" }),
                     "stringValue"
-                  )
-                    .replace(/ /g, "_")
-                    .toUpperCase(),
+                  )) as CategorieDossier,
                   commissionId: commission.id,
                   dateDebut: new Date(
                     _.get(
@@ -656,12 +654,17 @@ const handler: NextApiHandler = async (req, res) => {
                       ) as string
                     ),
                     nombreLignes: parseInt(
-                      (_.get(
+                      _.get(
                         _.filter(champEnfant, (datab) => {
                           return datab.label === "Nombre de lignes";
                         })[i],
                         "stringValue"
-                      ) as string) || ""
+                      ) != '' ? (_.get(
+                        _.filter(champEnfant, (datab) => {
+                          return datab.label === "Nombre de lignes";
+                        })[i],
+                        "stringValue"
+                      ) as string) : '0'
                     ),
                     periodeTravail: _.get(
                       _.filter(champEnfant, (datab) => {
