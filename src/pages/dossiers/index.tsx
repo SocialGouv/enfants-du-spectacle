@@ -72,6 +72,7 @@ const Page: React.FC = () => {
       societeProductionId: stringToNumberOrNull(
         query.societeProductionId as string
       ),
+      departement: query.departement as string,
       userId: stringToNumberOrNull(query.userId as string),
     });
     setFilters(newFilters);

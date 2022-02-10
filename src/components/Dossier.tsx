@@ -10,25 +10,11 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
-import { frenchDateText, typeEmploiLabel } from "src/lib/helpers";
+import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
 
 interface Props {
   dossierId: number;
 }
-
-const TYPES_EMPLOI = [
-  { label: "Rôle 1er choix", value: "ROLE_1" },
-  { label: "Rôle 2nd choix", value: "ROLE_2" },
-  { label: "Figurant", value: "FIGURATION" },
-  { label: "Silhouette", value: "SILHOUETTE" },
-  { label: "Silhouette parlante", value: "SILHOUETTE_PARLANTE" },
-  { label: "Doublure", value: "DOUBLURE" },
-  { label: "Doublage", value: "DOUBLAGE" },
-  { label: "Chanteur", value: "CHANT" },
-  { label: "Danseur", value: "DANSE" },
-  { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
-  { label: "Autre", value: "AUTRE" },
-];
 
 const Dossier: React.FC<Props> = ({ dossierId }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);

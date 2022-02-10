@@ -59,10 +59,10 @@ function useAllUsers() {
 type DatePeriod = "past" | "upcoming";
 function useCommissions(
   datePeriod: DatePeriod | undefined = "upcoming",
-  departement: string
+  departement: string | undefined = "all"
 ) {
   const { data, error } = useSWR(
-    `/api/commissions?datePeriod=${datePeriod}&departement=75`,
+    `/api/commissions?datePeriod=${datePeriod}&departement=${departement}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());
