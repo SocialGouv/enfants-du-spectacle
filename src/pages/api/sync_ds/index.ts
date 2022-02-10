@@ -656,12 +656,12 @@ const handler: NextApiHandler = async (req, res) => {
                       ) as string
                     ),
                     nombreLignes: parseInt(
-                      _.get(
+                      (_.get(
                         _.filter(champEnfant, (datab) => {
                           return datab.label === "Nombre de lignes";
                         })[i],
                         "stringValue"
-                      ) as string || ""
+                      ) as string) || ""
                     ),
                     periodeTravail: _.get(
                       _.filter(champEnfant, (datab) => {
