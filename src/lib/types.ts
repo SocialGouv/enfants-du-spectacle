@@ -1,4 +1,5 @@
 import type {
+  Commentaire,
   Commission,
   Demandeur,
   Dossier,
@@ -23,6 +24,24 @@ type DossierData = Dossier & {
   demandeur: Demandeur;
 };
 
+type CommentaireData = Commentaire & {
+  user?: User | null;
+  dossier?: Dossier | null;
+};
+
+interface CommentaireDataLight {
+  userId: number;
+  text: string;
+  date: Date;
+  dossierId: number;
+}
+
 type CommissionData = Commission & { dossiers: DossierDataLight[] };
 
-export type { CommissionData, DossierData, DossierDataLight };
+export type {
+  CommentaireData,
+  CommentaireDataLight,
+  CommissionData,
+  DossierData,
+  DossierDataLight,
+};

@@ -68,11 +68,11 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (!routerIsReady) return;
     const newFilters = compact({
+      departement: query.departement as string,
       grandeCategorie: query.grandeCategorie as string,
       societeProductionId: stringToNumberOrNull(
         query.societeProductionId as string
       ),
-      departement: query.departement as string,
       userId: stringToNumberOrNull(query.userId as string),
     });
     setFilters(newFilters);

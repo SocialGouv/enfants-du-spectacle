@@ -76,6 +76,6 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,tsx}": "npx eslint --cache"
+    "src/**/*.{js,jsx,ts,tsx}": "npx eslint --cache"
   }
 }

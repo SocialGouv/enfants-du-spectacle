@@ -147,6 +147,7 @@ const searchDossiers = async (
   })[]
 > => {
   try {
+    console.log("dossiers...");
     return await prismaClient.dossier.findMany({
       include: {
         _count: { select: { enfants: true } },

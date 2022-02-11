@@ -92,7 +92,12 @@ function filterCommissions(
       ...commission,
       dossiers: commission.dossiers.filter(filterFn),
     }))
-    .filter((c) => c.dossiers.length > 0);
+    .filter((c) => c.dossiers.length > 0)
+    .filter((c) => {
+      if (filters.departement) {
+        return c.departement == filters.departement;
+      } else return true;
+    });
 }
 
 function filterSearchResults(
