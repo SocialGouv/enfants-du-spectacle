@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.1...v1.14.2) (2022-02-11)
+
+
+### Bug Fixes
+
+* css filterBar ([c87264c](https://github.com/SocialGouv/enfants-du-spectacle/commit/c87264cf1861e09a0637d6dfcdcd8f108b632492))
+
 ## [1.14.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.0...v1.14.1) (2022-02-11)
 
 
