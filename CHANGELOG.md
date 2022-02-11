@@ -1,3 +1,11 @@
+## [1.14.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.2...v1.14.3) (2022-02-11)
+
+
+### Bug Fixes
+
+* fix css issue on contentFoldable ([2a0dd54](https://github.com/SocialGouv/enfants-du-spectacle/commit/2a0dd5452fc98e0f5c3765533760f594aa325bde))
+* fix css issue on contentFolded ([5ff8210](https://github.com/SocialGouv/enfants-du-spectacle/commit/5ff82101e660388837e864d3c6b62de3f7cc9f65))
+
 ## [1.14.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.1...v1.14.2) (2022-02-11)
 
 
