@@ -1,9 +1,12 @@
 .filterContainerTop {
-  display: grid;
-  grid-template-columns: 0.1fr 0.1fr 0.2fr 0.3fr 0.3fr 0.3fr;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .filterContainer {
   display: inline-block;
   margin-left: 1rem;
+  flex: 1;
 }
