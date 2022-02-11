@@ -1,3 +1,10 @@
+## [1.14.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.3...v1.14.4) (2022-02-11)
+
+
+### Bug Fixes
+
+* fix search by societe ([5e5244c](https://github.com/SocialGouv/enfants-du-spectacle/commit/5e5244cda183e4e6abad3d364811e352639d34cd))
+
 ## [1.14.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.2...v1.14.3) (2022-02-11)
 
 
