@@ -41,7 +41,7 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const { text, date, userId, dossierId} = req.body;
+  const { text, date, userId, dossierId } = req.body;
   await prisma.commentaire.create({
     data: {
       date,
