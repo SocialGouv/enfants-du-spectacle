@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import { Commentaire } from "@prisma/client";
 import type {
   CommentaireData,
   CommissionData,
@@ -56,6 +55,22 @@ function useAllUsers() {
   };
 }
 
+function useDataDS() {
+  const { data, error } = useSWR(
+    `/api/dsapi`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<CommissionData[]>(await res.text());
+    }
+  );
+
+  return {
+    dataDS: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
 type DatePeriod = "past" | "upcoming";
 function useCommissions(
   datePeriod: DatePeriod | undefined = "upcoming",
@@ -97,5 +112,6 @@ export {
   useCommentaires,
   useCommission,
   useCommissions,
+  useDataDS,
   useDossier,
 };

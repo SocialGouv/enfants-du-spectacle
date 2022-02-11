@@ -5,7 +5,12 @@ import styles from "src/components/FilterBar.module.scss";
 import IconLoader from "src/components/IconLoader";
 import { useAllUsers } from "src/lib/api";
 import { grandesCategoriesOptions } from "src/lib/categories";
-import { shortUserName, stringToNumberOrNull } from "src/lib/helpers";
+import {
+  ALL_DEPARTEMENTS,
+  frenchDepartementName,
+  shortUserName,
+  stringToNumberOrNull,
+} from "src/lib/helpers";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
@@ -50,6 +55,16 @@ const FilterBar: React.FC<Props> = ({
     onChangeFilters({ grandeCategorie: event.target.value });
   };
 
+  const onChangeDepartement: React.ChangeEventHandler<HTMLOptionElement> = (
+    event
+  ) => {
+    onChangeFilters({ departement: event.target.value });
+  };
+
+  const defaultDepartement: Option = {
+    label: "Département",
+    value: "",
+  };
   const defaultUserOption: Option = {
     label: "Instructeur responsable",
     value: "",
@@ -61,8 +76,21 @@ const FilterBar: React.FC<Props> = ({
 
   return (
     <>
-      <div>
+      <div className={styles.filterContainerTop || ""}>
         {text}{" "}
+        <span className={styles.filterContainer || ""}>
+          <Select
+            id="userId"
+            selected={String(filters.departement)}
+            options={[defaultDepartement].concat(
+              ALL_DEPARTEMENTS.map((u) => ({
+                label: frenchDepartementName(u),
+                value: u,
+              }))
+            )}
+            onChange={onChangeDepartement}
+          />
+        </span>
         <span className={styles.filterContainer || ""}>
           <Select
             id="userId"
@@ -104,6 +132,7 @@ const FilterBar: React.FC<Props> = ({
             <button
               onClick={() => {
                 onChangeFilters({
+                  departement: "",
                   grandeCategorie: "",
                   societeProductionId: "",
                   userId: "",

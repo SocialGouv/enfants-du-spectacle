@@ -9,7 +9,7 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
-import { useCommissions } from "src/lib/api";
+import { useCommissions, useDataDS } from "src/lib/api";
 import {
   compact,
   filterCommissions,
@@ -28,6 +28,7 @@ import { useDebounce } from "use-debounce";
 const Page: React.FC = () => {
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
+  const { dataDS, ...swrDataDS } = useDataDS();
   const { commissions, ...swrCommissions } = useCommissions();
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
@@ -68,14 +69,15 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (!routerIsReady) return;
     const newFilters = compact({
+      departement: query.departement as string,
       grandeCategorie: query.grandeCategorie as string,
       societeProductionId: stringToNumberOrNull(
         query.societeProductionId as string
       ),
-      departement: query.departement as string,
       userId: stringToNumberOrNull(query.userId as string),
     });
     setFilters(newFilters);
+    console.log(dataDS, swrDataDS);
   }, [routerIsReady, query]);
 
   // Trigger search for word (server-side)

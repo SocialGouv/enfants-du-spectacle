@@ -147,6 +147,7 @@ const searchDossiers = async (
   })[]
 > => {
   try {
+    console.log("dossiers...");
     return await prismaClient.dossier.findMany({
       include: {
         _count: { select: { enfants: true } },
@@ -225,10 +226,19 @@ function updateDossier(
 }
 
 function getDataDS(): void {
-  const res = fetch(`/api/dsapi`, {
-    method: "GET",
-  });
-  console.log("OK JE RECUP");
+  window
+    .fetch(`/api/dsapi`, {
+      method: "GET",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
 }
 
 interface SearchResultsType {

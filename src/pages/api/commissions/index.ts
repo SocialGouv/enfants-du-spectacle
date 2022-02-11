@@ -21,6 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
 const get: NextApiHandler = async (req, res) => {
   const { datePeriod } = req.query;
   const { departement } = req.query;
+  console.log("commissions...");
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
