@@ -1,3 +1,17 @@
+# [1.14.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.2...v1.14.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* fix for lint ([f92cb10](https://github.com/SocialGouv/enfants-du-spectacle/commit/f92cb104830e58666ccc5292978d678f4c0da7f3))
+* minor fix ([da764ec](https://github.com/SocialGouv/enfants-du-spectacle/commit/da764ec980a9bda793320bf6674e17f593afcb11))
+* stick fetching data on dossiers ([ed36378](https://github.com/SocialGouv/enfants-du-spectacle/commit/ed36378b01145c711bed23509b8eb99bb23109b4))
+
+
+### Features
+
+* add filter departement ([be46585](https://github.com/SocialGouv/enfants-du-spectacle/commit/be465856ad3b6e4c47a78c7f762144a756e98986))
+
 ## [1.13.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.1...v1.13.2) (2022-02-10)
 
 
