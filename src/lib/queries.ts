@@ -227,8 +227,17 @@ function updateDossier(
 function getDataDS(): void {
   window
     .fetch(`/api/dsapi`, {
-    method: "GET",
-  });
+      method: "GET",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
 }
 
 interface SearchResultsType {
