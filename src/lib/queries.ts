@@ -62,7 +62,7 @@ const searchDemandeur = async (prismaClient: PrismaClient, email: string) => {
     });
   } catch (e: unknown) {
     console.log(e);
-    return [];
+    return null;
   }
 };
 
@@ -225,10 +225,7 @@ function updateDossier(
 }
 
 function getDataDS(): void {
-  const res = fetch(`/api/sync_ds`, {
-    headers: {
-      authorization: "Bearer test",
-    },
+  const res = fetch(`/api/dsapi`, {
     method: "GET",
   });
   console.log("OK JE RECUP");

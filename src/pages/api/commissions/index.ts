@@ -24,7 +24,9 @@ const get: NextApiHandler = async (req, res) => {
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
-      : departement == "all" ? await getUpcomingCommissions() : await getUpcomingCommissionsByDepartement(departement);
+      : departement == "all"
+      ? await getUpcomingCommissions()
+      : await getUpcomingCommissionsByDepartement(departement);
   res.status(200).json(superjson.stringify(commissions));
 };
 

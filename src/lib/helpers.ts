@@ -119,6 +119,45 @@ function getFilterableSocietesProductions(
   }
 }
 
+function getFormatedTypeDossier(type: string): string {
+  return (
+    {
+      Autre: "AUTRE",
+      Ballet: "BALLET",
+      Cirque: "CIRQUE",
+      Clip: "CLIP",
+      "Compétition de jeux vidéos": "JEU_VIDEO",
+      "Comédie musicale": "COMEDIE_MUSICALE",
+      Concert: "CONCERT",
+      "Enregistrement doublage": "DOUBLAGE",
+      "Enregistrement musique en studio": "MUSIQUE_STUDIO",
+      "Film institutionnel": "FILM_INSTITUTIONNEL",
+      "Film long métrage": "LONG_METRAGE",
+      "Film moyen ou court métrage": "COURT_METRAGE",
+      Opéra: "OPERA",
+      Photo: "PHOTO",
+      "Pièce de théâtre": "THEATRE",
+      "Plateformes de vidéos en ligne": "VIDEO_EN_LIGNE",
+      "Spectacle de danse": "DANSE",
+      Série: "SERIE",
+      Téléfilm: "TELEFILM",
+      "Émission radio": "RADIO",
+      "Émission télé": "EMISSION_TV",
+    }[type] ?? "AUTRE"
+  );
+}
+
+function strNoAccent(a: string) {
+  const b = "áàâäãåçéèêëíïîìñóòôöõúùûüýÁÀÂÄÃÅÇÉÈÊËÍÏÎÌÑÓÒÔÖÕÚÙÛÜÝ";
+  const c = "aaaaaaceeeeiiiinooooouuuuyAAAAAACEEEEIIIINOOOOOUUUUY";
+  let d = "";
+  for (let i = 0, j = a.length; i < j; i++) {
+    const e = a.substr(i, 1);
+    d += b.includes(e) ? c.substr(b.indexOf(e), 1) : e;
+  }
+  return d;
+}
+
 function frenchDepartementName(departementNumber: string): string {
   return (
     {
@@ -188,9 +227,11 @@ export {
   frenchDateText,
   frenchDepartementName,
   getFilterableSocietesProductions,
+  getFormatedTypeDossier,
   searchResultsToSocieteProductions,
   shortUserName,
   stringToNumberOrNull,
+  strNoAccent,
   typeEmploiLabel,
   typeEmploiValue,
   TYPES_EMPLOI,
