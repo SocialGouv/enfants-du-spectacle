@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import { Commentaire } from "@prisma/client";
 import type {
   CommentaireData,
   CommissionData,

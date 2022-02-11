@@ -225,10 +225,10 @@ function updateDossier(
 }
 
 function getDataDS(): void {
-  const res = fetch(`/api/dsapi`, {
+  window
+    .fetch(`/api/dsapi`, {
     method: "GET",
   });
-  console.log("OK JE RECUP");
 }
 
 interface SearchResultsType {
