@@ -155,7 +155,16 @@ const searchDossiers = async (
         societeProduction: true,
         user: true,
       },
-      where: { nom: { search } },
+      where: {
+        OR: [
+          { nom: { search } },
+          {
+            societeProduction: {
+              nom: { search },
+            },
+          },
+        ],
+      },
     });
   } catch (e: unknown) {
     console.log(e);
