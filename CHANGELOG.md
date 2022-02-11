@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.0...v1.14.1) (2022-02-11)
+
+
+### Bug Fixes
+
+* makke lint happy ([a2a958a](https://github.com/SocialGouv/enfants-du-spectacle/commit/a2a958ac888e22b34fc779e52630b0852eacb847))
+
 # [1.14.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.13.2...v1.14.0) (2022-02-11)
 
 
