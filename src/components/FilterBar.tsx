@@ -66,11 +66,11 @@ const FilterBar: React.FC<Props> = ({
     value: "",
   };
   const defaultUserOption: Option = {
-    label: "Instructeur responsable",
+    label: "Instructeur",
     value: "",
   };
   const defaultSocieteProductionOption: Option = {
-    label: "Société de production",
+    label: "Société",
     value: "",
   };
 
