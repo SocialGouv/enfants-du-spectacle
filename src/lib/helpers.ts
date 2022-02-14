@@ -167,18 +167,18 @@ function frenchDepartementName(departementNumber: string): string {
   return (
     {
       "75": "Paris",
-      "77": "Seine?",
+      "77": "Seine-et-Marne",
       "78": "Yvelines",
       "91": "Essone",
       "92": "Hauts-de-Seine",
       "93": "Seine-Saint-Denis",
-      "94": "Seine et Marne",
-      "95": "Val d'Oise",
-    }[departementNumber] ?? "Hors Île-de-France"
+      "94": "Val-de-Marne",
+      "95": "Val-d'Oise",
+    }[departementNumber] ?? "Tous"
   );
 }
 
-const ALL_DEPARTEMENTS = ["75", "77", "78", "91", "92", "93", "94", "95", ""];
+const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
 
 const TYPES_EMPLOI = [
   { label: "Rôle 1er choix", value: "ROLE_1" },

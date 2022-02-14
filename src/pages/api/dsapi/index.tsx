@@ -27,7 +27,7 @@ import {
   createSocieteProduction,
   deleteEnfants,
   deletePieceDossier,
-  getUpcomingCommissions,
+  getUpcomingCommissionsByLimitDate,
   searchDemandeur,
   searchDossierByExternalId,
   searchSocieteProductionBySiret,
@@ -389,10 +389,10 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
     .then((data) => {
       try {
         data.data.demarche.dossiers.nodes.map(async (dossier) => {
-          console.log(
+          /*console.log(
             "data : ",
             JSON.stringify(data.data.demarche.dossiers.nodes)
-          );
+          );*/
           // Search Societe Production
           await searchSocieteProductionBySiret(
             prisma,
@@ -477,11 +477,12 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
               const { societe, demandeur } = datas;
 
               // search commission
-              const commissions = await getUpcomingCommissions(
+              const commissions = await getUpcomingCommissionsByLimitDate(
                 prisma,
                 dossier.demandeur.address.postalCode.slice(0, 2) as string
               );
               const commission = commissions[0];
+              //console.log('commissions : ', commissions)
 
               // Build array justifications (dossier)
               const arrayJustifs: JustificatifDossier[] = [];
@@ -501,6 +502,11 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                 }
               );
 
+              const intDossier = await searchDossierByExternalId(
+                prisma,
+                dossier.id as number
+              );
+
               // Create or update dossier
               const newDossier: Dossier = {
                 categorie: getFormatedTypeDossier(
@@ -509,7 +515,10 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                     "stringValue"
                   ) as string
                 ) as CategorieDossier,
-                commissionId: commission.id,
+                commissionId:
+                  intDossier.length > 0
+                    ? intDossier[0].commissionId
+                    : commission.id,
                 dateDebut: new Date(
                   _.get(
                     _.find(dossier.champs, {
@@ -552,10 +561,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                     : "INSTRUCTION",
               };
 
-              const intDossier = await searchDossierByExternalId(
-                prisma,
-                dossier.id as number
-              );
               const finalDossier =
                 intDossier.length > 0
                   ? ((await updateConstructDossier(

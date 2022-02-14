@@ -86,7 +86,7 @@ const createDemandeur = async (
   }
 };
 
-const getUpcomingCommissions = async (
+const getUpcomingCommissionsByLimitDate = async (
   prismaClient: PrismaClient,
   departement: string
 ) => {
@@ -94,7 +94,7 @@ const getUpcomingCommissions = async (
     return await prismaClient.commission.findMany({
       orderBy: { date: "asc" },
       where: {
-        date: { gte: new Date() },
+        dateLimiteDepot: { gte: new Date() },
         departement: departement,
       },
     });
@@ -337,7 +337,7 @@ export {
   deleteEnfants,
   deletePieceDossier,
   getDataDS,
-  getUpcomingCommissions,
+  getUpcomingCommissionsByLimitDate,
   searchDemandeur,
   searchDossierByExternalId,
   searchDossiers,
