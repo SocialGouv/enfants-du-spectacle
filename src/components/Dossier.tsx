@@ -97,6 +97,12 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
               if (a.nom > b.nom) {
                 return 1;
               }
+              if (a.prenom < b.prenom) {
+                return -1;
+              }
+              if (a.prenom > b.prenom) {
+                return 1;
+              }
               return 0;
             })
             .map((enfant) => (

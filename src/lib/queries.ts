@@ -3,6 +3,8 @@ import type {
   Demandeur,
   Dossier,
   Enfant,
+  PieceDossier,
+  PieceDossierEnfant,
   PrismaClient,
   SocieteProduction,
   User,
@@ -18,13 +20,19 @@ import { parse as superJSONParse } from "superjson";
 const searchEnfants = async (
   prismaClient: PrismaClient,
   search: string
-): Promise<(Enfant & { dossier: Dossier & { user: User | null } })[]> => {
+): Promise<
+  (Enfant & {
+    dossier: Dossier & { user: User | null };
+    piecesDossier: PieceDossierEnfant[];
+  })[]
+> => {
   try {
     return await prismaClient.enfant.findMany({
       include: {
         dossier: {
           include: { commission: true, societeProduction: true, user: true },
         },
+        piecesDossier: true,
       },
       where: { OR: [{ nom: { search } }, { prenom: { search } }] },
     });
@@ -208,6 +216,44 @@ const createEnfant = async (prismaClient: PrismaClient, enfant: Enfant) => {
   }
 };
 
+const createPieceDossierEnfant = async (
+  prismaClient: PrismaClient,
+  piece: PieceDossierEnfant
+) => {
+  try {
+    return await prismaClient.pieceDossierEnfant.create({ data: piece });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const createPieceDossier = async (
+  prismaClient: PrismaClient,
+  piece: PieceDossier
+) => {
+  try {
+    return await prismaClient.pieceDossier.create({ data: piece });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const deletePieceDossier = async (
+  prismaClient: PrismaClient,
+  dossierId: number
+) => {
+  try {
+    return await prismaClient.pieceDossier.deleteMany({
+      where: { dossierId: dossierId },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
 function updateDossier(
   dossier: Dossier,
   updates: Record<string, unknown>,
@@ -285,8 +331,11 @@ export {
   createDemandeur,
   createDossier,
   createEnfant,
+  createPieceDossier,
+  createPieceDossierEnfant,
   createSocieteProduction,
   deleteEnfants,
+  deletePieceDossier,
   getDataDS,
   getUpcomingCommissions,
   searchDemandeur,

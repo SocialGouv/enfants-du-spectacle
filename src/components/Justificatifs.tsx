@@ -4,7 +4,9 @@ import type {
   Enfant,
   JustificatifDossier,
   JustificatifEnfant,
+  PieceDossierEnfant,
 } from "@prisma/client";
+import _ from "lodash";
 import React from "react";
 import styles from "src/components/Justificatifs.module.scss";
 
@@ -12,18 +14,18 @@ interface JustificatifProps {
   subject: Dossier | Enfant;
   value: JustificatifDossier | JustificatifEnfant;
   label: string;
+  link?: string;
 }
 
 const Justificatif: React.FC<JustificatifProps> = ({
   subject,
   value,
   label,
+  link,
 }) => {
   const isPresent = subject.justificatifs.includes(value);
 
-  const url =
-    isPresent &&
-    (value == "SCENARIO" ? "/modele-scenario.pdf" : "/modele-piece.pdf");
+  const url = isPresent && link;
   const icon = isPresent ? (
     <Icon
       name={"ri-checkbox-circle-line"}
@@ -53,7 +55,7 @@ const Justificatif: React.FC<JustificatifProps> = ({
 };
 
 interface Props {
-  dossier: Dossier;
+  dossier: Dossier & { piecesDossier: PieceDossierEnfant[] };
 }
 
 const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
@@ -75,7 +77,12 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier }) => {
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => (
         <li key={value}>
-          <Justificatif subject={dossier} value={value} label={label} />
+          <Justificatif
+            subject={dossier}
+            value={value}
+            label={label}
+            link={_.get(_.find(dossier.piecesDossier, { type: value }), "link")}
+          />
         </li>
       ))}
     </ul>
@@ -91,7 +98,9 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
   { label: "Avis médical", value: "AVIS_MEDICAL" },
 ];
 
-const JustificatifsEnfants: React.FC<{ enfant: Enfant }> = ({ enfant }) => {
+const JustificatifsEnfants: React.FC<{
+  enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
+}> = ({ enfant }) => {
   const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
     (a, b) =>
       enfant.justificatifs.includes(b.value) -
@@ -101,7 +110,12 @@ const JustificatifsEnfants: React.FC<{ enfant: Enfant }> = ({ enfant }) => {
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => (
         <li key={value}>
-          <Justificatif subject={enfant} value={value} label={label} />
+          <Justificatif
+            subject={enfant}
+            value={value}
+            label={label}
+            link={_.get(_.find(enfant.piecesDossier, { type: value }), "link")}
+          />
         </li>
       ))}
     </ul>

@@ -194,6 +194,35 @@ const TYPES_EMPLOI = [
   { label: "Autre", value: "AUTRE" },
 ];
 
+const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
+  { label: "Synopsis", value: "SYNOPSIS" },
+  { label: "Scenario", value: "SCENARIO" },
+  {
+    label: "Note précisant les mesures de sécurité",
+    value: "MESURES_SECURITE",
+  },
+  { label: "Plan de travail", value: "PLAN_TRAVAIL" },
+  {
+    label: "Eléments d'information complémentaires ",
+    value: "INFOS_COMPLEMENTAIRES",
+  },
+];
+
+const JUSTIFS_ENFANT: { label: string; value: string }[] = [
+  { label: "Livret de famille", value: "LIVRET_FAMILLE" },
+  { label: "Autorisation parentale", value: "AUTORISATION_PARENTALE" },
+  {
+    label: "Situations particulières relatives à l'autorité parentale",
+    value: "SITUATION_PARTICULIERE",
+  },
+  { label: "Projet de contrat de travail", value: "CONTRAT" },
+  {
+    label: "Certificat de scolarité ou/et avis pédagogique",
+    value: "CERTIFICAT_SCOLARITE",
+  },
+  { label: "Avis médical d'aptitude", value: "AVIS_MEDICAL" },
+];
+
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
@@ -233,6 +262,8 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  JUSTIFS_DOSSIER,
+  JUSTIFS_ENFANT,
   searchResultsToSocieteProductions,
   shortUserName,
   stringToNumberOrNull,
