@@ -1,3 +1,11 @@
+## [1.14.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.4...v1.14.5) (2022-02-14)
+
+
+### Bug Fixes
+
+* update selection of comission by datelimitedepot ([cc711ca](https://github.com/SocialGouv/enfants-du-spectacle/commit/cc711cabb593fbcbe2b800881bf38f0ba1da340e))
+* wording ([a4d1eca](https://github.com/SocialGouv/enfants-du-spectacle/commit/a4d1eca0dbe45003971286e63d88a8d47d6399d0))
+
 ## [1.14.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.3...v1.14.4) (2022-02-11)
 
 
