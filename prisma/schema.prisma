@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "referentialActions"]
 }
 
 datasource db {
@@ -81,6 +81,14 @@ enum CategorieDossier {
   AUTRE
 }
 
+model PieceDossier {
+  id        Int @id @default(autoincrement())
+  dossierId  Int
+  dossier    Dossier?@relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  type      JustificatifDossier
+  link      String
+}
+
 enum JustificatifDossier {
   SYNOPSIS
   SCENARIO
@@ -99,6 +107,7 @@ model Dossier {
   societeProductionId Int
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   enfants             Enfant[]
+  piecesDossier       PieceDossier[]
   commentaires        Commentaire[]
   numeroDS            Int @default(0)
   userId              Int?
@@ -146,6 +155,14 @@ enum JustificatifEnfant {
   AVIS_MEDICAL
 }
 
+model PieceDossierEnfant {
+  id        Int @id @default(autoincrement())
+  enfantId  Int
+  enfant    Enfant?@relation(fields: [enfantId], references: [id], onDelete: Cascade)
+  type      JustificatifEnfant
+  link      String
+}
+
 model Enfant {
   id       Int    @id @default(autoincrement())
   prenom   String
@@ -162,6 +179,7 @@ model Enfant {
   remunerationsAdditionnelles String?
   remunerationTotale Float
   justificatifs JustificatifEnfant[]
+  piecesDossier PieceDossierEnfant[]
   dossierId Int
   dossier   Dossier @relation(fields: [dossierId], references: [id])
 }

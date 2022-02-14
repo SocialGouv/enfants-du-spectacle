@@ -167,18 +167,18 @@ function frenchDepartementName(departementNumber: string): string {
   return (
     {
       "75": "Paris",
-      "77": "Seine?",
+      "77": "Seine-et-Marne",
       "78": "Yvelines",
       "91": "Essone",
       "92": "Hauts-de-Seine",
       "93": "Seine-Saint-Denis",
-      "94": "Seine et Marne",
-      "95": "Val d'Oise",
-    }[departementNumber] ?? "Hors Île-de-France"
+      "94": "Val-de-Marne",
+      "95": "Val-d'Oise",
+    }[departementNumber] ?? "Tous"
   );
 }
 
-const ALL_DEPARTEMENTS = ["75", "77", "78", "91", "92", "93", "94", "95", ""];
+const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
 
 const TYPES_EMPLOI = [
   { label: "Rôle 1er choix", value: "ROLE_1" },
@@ -192,6 +192,35 @@ const TYPES_EMPLOI = [
   { label: "Danseur", value: "DANSE" },
   { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
   { label: "Autre", value: "AUTRE" },
+];
+
+const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
+  { label: "Synopsis", value: "SYNOPSIS" },
+  { label: "Scenario", value: "SCENARIO" },
+  {
+    label: "Note précisant les mesures de sécurité",
+    value: "MESURES_SECURITE",
+  },
+  { label: "Plan de travail", value: "PLAN_TRAVAIL" },
+  {
+    label: "Eléments d'information complémentaires ",
+    value: "INFOS_COMPLEMENTAIRES",
+  },
+];
+
+const JUSTIFS_ENFANT: { label: string; value: string }[] = [
+  { label: "Livret de famille", value: "LIVRET_FAMILLE" },
+  { label: "Autorisation parentale", value: "AUTORISATION_PARENTALE" },
+  {
+    label: "Situations particulières relatives à l'autorité parentale",
+    value: "SITUATION_PARTICULIERE",
+  },
+  { label: "Projet de contrat de travail", value: "CONTRAT" },
+  {
+    label: "Certificat de scolarité ou/et avis pédagogique",
+    value: "CERTIFICAT_SCOLARITE",
+  },
+  { label: "Avis médical d'aptitude", value: "AVIS_MEDICAL" },
 ];
 
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
@@ -233,6 +262,8 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  JUSTIFS_DOSSIER,
+  JUSTIFS_ENFANT,
   searchResultsToSocieteProductions,
   shortUserName,
   stringToNumberOrNull,

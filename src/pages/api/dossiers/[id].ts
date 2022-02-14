@@ -40,7 +40,12 @@ const get: NextApiHandler = async (req, res) => {
     include: {
       commission: true,
       demandeur: true,
-      enfants: true,
+      enfants: {
+        include: {
+          piecesDossier: true,
+        },
+      },
+      piecesDossier: true,
       societeProduction: true,
       user: true,
     },

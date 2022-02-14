@@ -2,6 +2,8 @@ import type {
   CategorieDossier,
   Demandeur,
   Dossier,
+  JustificatifDossier,
+  JustificatifEnfant,
   SocieteProduction,
 } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
@@ -10,6 +12,8 @@ import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import {
   getFormatedTypeDossier,
+  JUSTIFS_DOSSIER,
+  JUSTIFS_ENFANT,
   strNoAccent,
   typeEmploiValue,
 } from "src/lib/helpers";
@@ -18,9 +22,12 @@ import {
   createDemandeur,
   createDossier,
   createEnfant,
+  createPieceDossier,
+  createPieceDossierEnfant,
   createSocieteProduction,
   deleteEnfants,
-  getUpcomingCommissions,
+  deletePieceDossier,
+  getUpcomingCommissionsByLimitDate,
   searchDemandeur,
   searchDossierByExternalId,
   searchSocieteProductionBySiret,
@@ -158,9 +165,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
         avis {
             ...AvisFragment
         }
-        messages {
-            ...MessageFragment
-        }
         demandeur {
             ... on PersonnePhysique {
             civilite
@@ -206,16 +210,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
         expert {
             email
         }
-        attachment {
-            ...FileFragment
-        }
-        }
-        
-        fragment MessageFragment on Message {
-        id
-        email
-        body
-        createdAt
         attachment {
             ...FileFragment
         }
@@ -395,6 +389,10 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
     .then((data) => {
       try {
         data.data.demarche.dossiers.nodes.map(async (dossier) => {
+          /*console.log(
+            "data : ",
+            JSON.stringify(data.data.demarche.dossiers.nodes)
+          );*/
           // Search Societe Production
           await searchSocieteProductionBySiret(
             prisma,
@@ -477,62 +475,37 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
             })
             .then(async (datas) => {
               const { societe, demandeur } = datas;
-              //console.log("data pour create dossier : ", datas);
-              //console.log("societe recup pour create dossier : ", societe);
-              /*console.log(
-                    "demandeur recup pour create dossier : ",
-                    demandeur
-                  );*/
 
               // search commission
-              const commissions = await getUpcomingCommissions(
+              const commissions = await getUpcomingCommissionsByLimitDate(
                 prisma,
                 dossier.demandeur.address.postalCode.slice(0, 2) as string
               );
               const commission = commissions[0];
+              //console.log('commissions : ', commissions)
 
               // Build array justifications (dossier)
-              const arrayJustifs = [];
-              if (
-                _.get(_.find(dossier.champs, { label: "Synopsis" }), "file") !=
-                null
-              ) {
-                arrayJustifs.push("SYNOPSIS");
-              }
-              if (
-                _.get(_.find(dossier.champs, { label: "Scenario" }), "file") !=
-                null
-              ) {
-                arrayJustifs.push("SCENARIO");
-              }
-              if (
-                _.get(
-                  _.find(dossier.champs, {
-                    label: "Note précisant les mesures de sécurité",
-                  }),
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("MESURES_SECURITE");
-              }
-              if (
-                _.get(
-                  _.find(dossier.champs, { label: "Plan de travail" }),
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("PLAN_TRAVAIL");
-              }
-              if (
-                _.get(
-                  _.find(dossier.champs, {
-                    label: "Eléments d'information complémentaires ",
-                  }),
-                  "file"
-                ) != null
-              ) {
-                arrayJustifs.push("INFOS_COMPLEMENTAIRES");
-              }
+              const arrayJustifs: JustificatifDossier[] = [];
+              _.forEach(
+                JUSTIFS_DOSSIER,
+                (justif: { label: string; value: string }) => {
+                  if (
+                    _.get(
+                      _.find(dossier.champs, {
+                        label: justif.label,
+                      }),
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push(justif.value as JustificatifDossier);
+                  }
+                }
+              );
+
+              const intDossier = await searchDossierByExternalId(
+                prisma,
+                dossier.id as number
+              );
 
               // Create or update dossier
               const newDossier: Dossier = {
@@ -542,7 +515,10 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                     "stringValue"
                   ) as string
                 ) as CategorieDossier,
-                commissionId: commission.id,
+                commissionId:
+                  intDossier.length > 0
+                    ? intDossier[0].commissionId
+                    : commission.id,
                 dateDebut: new Date(
                   _.get(
                     _.find(dossier.champs, {
@@ -585,48 +561,67 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                     : "INSTRUCTION",
               };
 
-              const intDossier = await searchDossierByExternalId(
-                prisma,
-                dossier.id as number
-              );
+              const finalDossier =
+                intDossier.length > 0
+                  ? ((await updateConstructDossier(
+                      prisma,
+                      newDossier,
+                      intDossier[0].id
+                    )) as Dossier)
+                  : ((await createDossier(prisma, newDossier)) as Dossier);
+
+              // add pieces dossier (delete old pieces if needed)
               if (intDossier.length > 0) {
-                const finalDossier = await updateConstructDossier(
-                  prisma,
-                  newDossier,
-                  intDossier[0].id
-                );
-                return finalDossier;
-              } else {
-                const finalDossier = (await createDossier(
-                  prisma,
-                  newDossier
-                )) as Dossier;
-                return finalDossier;
+                await deletePieceDossier(prisma, intDossier[0].id);
               }
+              _.forEach(arrayJustifs, async (piece: JustificatifDossier) => {
+                const createdPiece = {
+                  dossierId: finalDossier.id,
+                  link: _.get(
+                    _.find(dossier.champs, (datab: unknown) => {
+                      return (
+                        datab.label ===
+                        _.get(
+                          _.find(JUSTIFS_DOSSIER, { value: piece }),
+                          "label"
+                        )
+                      );
+                    }),
+                    "file"
+                  ).url,
+                  type: piece,
+                };
+                //console.log("enfant created : ", createdPiece);
+                await createPieceDossier(prisma, createdPiece);
+              });
+
+              return finalDossier;
             })
             .then(async (finalDossier: unknown) => {
-              //console.log("dossier created or updated : ", finalDossier);
+              console.log("dossier created or updated : ", finalDossier);
 
-              // Add Enfants
+              // Delete all concerned Enfants
               await deleteEnfants(prisma, finalDossier.id as number);
               const champEnfant = _.get(
                 _.find(dossier.champs, { label: "Enfant" }),
                 "champs"
               );
-              const nbreEnfants = _.filter(champEnfant, (datab) => {
+              // Get nombre Enfants
+              const nbreEnfants = _.filter(champEnfant, (datab: unknown) => {
                 return datab.label === "Nom";
               }).length;
+              // Add all concerned Enfants
               for (let i = 0; i < nbreEnfants; i++) {
                 const enfant: unknown = {
                   contexteTravail: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return datab.label === "Temps et lieu de travail";
                     })[i],
                     "stringValue"
                   ),
                   dateNaissance: new Date(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Né(e) le";
                       })[i],
                       "date"
@@ -634,21 +629,21 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   ),
                   dossierId: finalDossier.id,
                   montantCachet: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return datab.label === "Montant du cachet";
                     })[i],
                     "decimalNumber"
                   ),
                   nom: strNoAccent(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Nom";
                       })[i],
                       "stringValue"
                     ) as string
                   ),
                   nomPersonnage: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return (
                         datab.label ===
                         "Nom du personnage incarné par l'enfant "
@@ -658,7 +653,7 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   ),
                   nombreCachets: parseInt(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Nombre de cachets";
                       })[i],
                       "stringValue"
@@ -666,7 +661,7 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   ),
                   nombreJours: parseInt(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Nombre de jours de travail";
                       })[i],
                       "stringValue"
@@ -674,13 +669,13 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   ),
                   nombreLignes: parseInt(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Nombre de lignes";
                       })[i],
                       "stringValue"
                     ) != ""
                       ? (_.get(
-                          _.filter(champEnfant, (datab) => {
+                          _.filter(champEnfant, (datab: unknown) => {
                             return datab.label === "Nombre de lignes";
                           })[i],
                           "stringValue"
@@ -688,110 +683,81 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                       : "0"
                   ),
                   periodeTravail: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return datab.label === "Période de travail";
                     })[i],
                     "stringValue"
                   ),
                   prenom: strNoAccent(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Prénom(s)";
                       })[i],
                       "stringValue"
                     ) as string
                   ),
                   remunerationTotale: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return datab.label === "Rémunération totale";
                     })[i],
                     "decimalNumber"
                   ),
                   remunerationsAdditionnelles: _.get(
-                    _.filter(champEnfant, (datab) => {
+                    _.filter(champEnfant, (datab: unknown) => {
                       return datab.label === "Rémunérations additionnelles";
                     })[i],
                     "stringValue"
                   ),
                   typeEmploi: typeEmploiValue(
                     _.get(
-                      _.filter(champEnfant, (datab) => {
+                      _.filter(champEnfant, (datab: unknown) => {
                         return datab.label === "Type d'emploi";
                       })[i],
                       "stringValue"
                     ) as string
                   ),
                 };
-                const arrayJustifs = [];
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return datab.label === "Livret de famille";
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("LIVRET_FAMILLE");
-                }
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return datab.label === "Autorisation parentale";
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("AUTORISATION_PARENTALE");
-                }
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return (
-                        datab.label ===
-                        "Situations particulières relatives à l'autorité parentale"
-                      );
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("SITUATION8PARTICULIERE");
-                }
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return datab.label === "Projet de contrat de travail";
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("CONTRAT");
-                }
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return (
-                        datab.label ===
-                        "Certificat de scolarité ou/et avis pédagogique"
-                      );
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("CERTIFICAT_SCOLARITE");
-                }
-                if (
-                  _.get(
-                    _.filter(champEnfant, (datab) => {
-                      return datab.label === "Avis médical d'aptitude";
-                    })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push("AVIS_MEDICAL");
-                }
+                // build justificatifs enfant
+                const arrayJustifs: string[] = [];
+                _.forEach(
+                  JUSTIFS_ENFANT,
+                  (justif: { label: string; value: string }) => {
+                    if (
+                      _.get(
+                        _.filter(champEnfant, (datab: unknown) => {
+                          return datab.label === justif.label;
+                        })[i],
+                        "file"
+                      ) != null
+                    ) {
+                      arrayJustifs.push(justif.value);
+                    }
+                  }
+                );
                 enfant.justificatifs = arrayJustifs;
+
+                // add pieces dossier enfant
                 const enfantCreated = await createEnfant(prisma, enfant);
-                console.log("enfant created : ", enfantCreated);
+                _.forEach(arrayJustifs, async (piece: JustificatifEnfant) => {
+                  const createdPiece = {
+                    enfantId: enfantCreated.id,
+                    link: _.get(
+                      _.filter(champEnfant, (datab: unknown) => {
+                        return (
+                          datab.label ===
+                          _.get(
+                            _.find(JUSTIFS_ENFANT, { value: piece }),
+                            "label"
+                          )
+                        );
+                      })[i],
+                      "file"
+                    ).url,
+                    type: piece,
+                  };
+                  //console.log("enfant created : ", createdPiece);
+                  await createPieceDossierEnfant(prisma, createdPiece);
+                });
               }
             });
         });
