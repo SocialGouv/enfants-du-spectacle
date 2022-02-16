@@ -38,6 +38,11 @@ const get: NextApiHandler = async (req, res) => {
 
   const dossier = await prisma.dossier.findUnique({
     include: {
+      commentaires: {
+        include: {
+          user: true,
+        },
+      },
       commission: true,
       demandeur: true,
       enfants: {
@@ -89,7 +94,6 @@ const update: NextApiHandler = async (req, res) => {
 
     eval(`stateMachine.${transition}()`);
     updates.statut = stateMachine.state;
-    console.log("ok : ", updates.statut);
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
     if (updates.statut === "INSTRUCTION") {
       const query = `mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {

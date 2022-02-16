@@ -169,7 +169,7 @@ function frenchDepartementName(departementNumber: string): string {
       "75": "Paris",
       "77": "Seine-et-Marne",
       "78": "Yvelines",
-      "91": "Essone",
+      "91": "Essonne",
       "92": "Hauts-de-Seine",
       "93": "Seine-Saint-Denis",
       "94": "Val-de-Marne",

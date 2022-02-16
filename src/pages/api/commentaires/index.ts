@@ -15,6 +15,8 @@ const handler: NextApiHandler = async (req, res) => {
     await get(req, res);
   } else if (req.method == "POST") {
     await post(req, res);
+  } else if (req.method == "DELETE") {
+    await remove(req, res);
   } else {
     res.status(405).end();
     return;
@@ -25,11 +27,23 @@ function getId(req: NextApiRequest): number {
   return Number(req.query.dossierId as string);
 }
 
+const remove: NextApiHandler = async (req, res) => {
+  const commentId = Number(req.body as string);
+  try {
+    await prisma.commentaire.delete({
+      where: { id: commentId },
+    });
+    res.status(200).json({ message: "Commentaire ajouté" });
+  } catch (e: unknown) {
+    console.log(e);
+    res.status(200).json({ message: "Commentaire non trouve" });
+  }
+};
+
 const get: NextApiHandler = async (req, res) => {
   const dossierId = getId(req);
   const allComments = await prisma.commentaire.findMany({
     include: {
-      dossier: true,
       user: true,
     },
     orderBy: { date: "asc" },
@@ -41,15 +55,12 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const { text, date, userId, dossierId } = req.body;
-  await prisma.commentaire.create({
-    data: {
-      date,
-      dossierId,
-      text,
-      userId,
-    },
-  });
+  const data = JSON.parse(req.body as string);
+  try {
+    await prisma.commentaire.create({ data });
+  } catch (e: unknown) {
+    console.log(e);
+  }
   res.status(200).json({ message: "Commentaire ajouté" });
 };
 
