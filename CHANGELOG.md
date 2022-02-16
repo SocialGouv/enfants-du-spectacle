@@ -1,3 +1,11 @@
+## [1.14.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.5...v1.14.6) (2022-02-16)
+
+
+### Bug Fixes
+
+* commission collective to dossier ([2a16dbd](https://github.com/SocialGouv/enfants-du-spectacle/commit/2a16dbdbdc88caac35da3a6a33a98d5ecac600d1))
+* update feature add comment ([f376541](https://github.com/SocialGouv/enfants-du-spectacle/commit/f376541e13a5cfbd50059881b741621282c36d65))
+
 ## [1.14.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.4...v1.14.5) (2022-02-14)
 
 
