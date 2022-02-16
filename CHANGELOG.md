@@ -1,3 +1,10 @@
+## [1.14.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.6...v1.14.7) (2022-02-16)
+
+
+### Bug Fixes
+
+* push migrations ([1b79d74](https://github.com/SocialGouv/enfants-du-spectacle/commit/1b79d74cd78ebc6a6c808eb53a45315ff9908634))
+
 ## [1.14.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.5...v1.14.6) (2022-02-16)
 
 
