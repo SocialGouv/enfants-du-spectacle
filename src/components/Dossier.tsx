@@ -55,7 +55,10 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
 
       <div className={styles.societeSummaryBloc}>
         <Info title="Société">
-          <InfoSociete societeProduction={dossier.societeProduction} />
+          <InfoSociete
+            societeProduction={dossier.societeProduction}
+            conventionCollectiveCode={dossier.conventionCollectiveCode}
+          />
         </Info>
         <Info title="Demandeur">
           <div>

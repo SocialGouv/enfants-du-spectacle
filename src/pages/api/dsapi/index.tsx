@@ -51,7 +51,6 @@ const handler: NextApiHandler = async (req, res) => {
 };
 const get: NextApiHandler = async (req, res) => {
   const fetching = await getDatasFromDS(req, res);
-  console.log("res DS : ", superjson.stringify(fetching));
   res.status(200).json(superjson.stringify(fetching));
 };
 
@@ -389,10 +388,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
     .then((data) => {
       try {
         data.data.demarche.dossiers.nodes.map(async (dossier) => {
-          /*console.log(
-            "data : ",
-            JSON.stringify(data.data.demarche.dossiers.nodes)
-          );*/
           // Search Societe Production
           await searchSocieteProductionBySiret(
             prisma,
@@ -400,15 +395,18 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
           )
             .then(async (societe) => {
               if (societe.length > 0) {
-                console.log("found societe production");
                 return societe[0];
               } else {
-                console.log("didnt find societe production");
                 const societeProduction: SocieteProduction = {
                   adresse: dossier.demandeur.address.streetAddress,
                   adresseCodeCommune: dossier.demandeur.address.cityName,
                   adresseCodePostal: dossier.demandeur.address.postalCode,
-                  conventionCollectiveCode: "missing",
+                  conventionCollectiveCode: _.get(
+                    _.find(dossier.champs, {
+                      label: "Convention collective applicable",
+                    }),
+                    "stringValue"
+                  ).slice(-4),
                   departement: dossier.demandeur.address.postalCode.slice(0, 2),
                   formeJuridique: dossier.demandeur.entreprise.formeJuridique,
                   naf: dossier.demandeur.naf,
@@ -424,13 +422,10 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   prisma,
                   societeProduction
                 );
-                //console.log("createdSociete : ", createdSociete);
                 return createdSociete as SocieteProduction;
               }
             })
             .then(async (societe) => {
-              //console.log("societe recup", societe);
-
               // Search demandeur
               let demandeur = (await searchDemandeur(
                 prisma,
@@ -469,7 +464,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   prisma,
                   demandeurTmp
                 )) as Demandeur;
-                //console.log("createdDemandeur : ", demandeur);
                 return { demandeur, societe };
               }
             })
@@ -482,7 +476,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                 dossier.demandeur.address.postalCode.slice(0, 2) as string
               );
               const commission = commissions[0];
-              //console.log('commissions : ', commissions)
 
               // Build array justifications (dossier)
               const arrayJustifs: JustificatifDossier[] = [];
@@ -519,6 +512,12 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   intDossier.length > 0
                     ? intDossier[0].commissionId
                     : commission.id,
+                conventionCollectiveCode: _.get(
+                  _.find(dossier.champs, {
+                    label: "Convention collective applicable",
+                  }),
+                  "stringValue"
+                ).slice(-4),
                 dateDebut: new Date(
                   _.get(
                     _.find(dossier.champs, {
@@ -591,15 +590,12 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                   ).url,
                   type: piece,
                 };
-                //console.log("enfant created : ", createdPiece);
                 await createPieceDossier(prisma, createdPiece);
               });
 
               return finalDossier;
             })
             .then(async (finalDossier: unknown) => {
-              console.log("dossier created or updated : ", finalDossier);
-
               // Delete all concerned Enfants
               await deleteEnfants(prisma, finalDossier.id as number);
               const champEnfant = _.get(
@@ -755,7 +751,6 @@ const getDatasFromDS = async (): Promise<NextApiHandler> => {
                     ).url,
                     type: piece,
                   };
-                  //console.log("enfant created : ", createdPiece);
                   await createPieceDossierEnfant(prisma, createdPiece);
                 });
               }
