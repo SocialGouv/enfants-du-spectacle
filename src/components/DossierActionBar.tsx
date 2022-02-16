@@ -1,4 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
+import Link from "next/link";
 import React from "react";
 import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
@@ -43,6 +44,11 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
       <Item label="Commission">{frenchDateText(dossier.commission.date)}</Item>
       <Item label="Suivi par">
         <AssignedAgentSelect dossierId={dossierId} />
+      </Item>
+      <Item label="Commentaires">
+        <Link href={`/dossiers/commentaires/${dossier.id}`}>
+          Notes instructeur
+        </Link>
       </Item>
     </div>
   );

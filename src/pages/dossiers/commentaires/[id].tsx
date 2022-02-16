@@ -30,8 +30,8 @@ const Page: React.FC = () => {
       breadcrumbs={[
         { href: "/dossiers", icon: <FaHome />, label: "Dossiers" },
         {
-          href: "/dossiers/" /* + dossier?.id*/,
-          label: /* dossier?.nom ?? */ "Dossier",
+          href: `/dossiers/${String(dossier?.id)}`,
+          label: dossier?.nom ?? "Dossier",
         },
         { label: "Commentaires" },
       ]}
@@ -39,7 +39,10 @@ const Page: React.FC = () => {
       {isLoading && <IconLoader />}
       {isError && <Icon name="ri-error" />}
       {!isLoading && !isError && dossierId && (
-        <Commentaires dossierId={dossierId} />
+        <Commentaires
+          dossierId={dossierId}
+          commentaires={dossier?.commentaires ? dossier.commentaires : []}
+        />
       )}
     </Layout>
   );

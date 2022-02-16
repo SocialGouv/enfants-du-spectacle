@@ -1,4 +1,6 @@
+import { useSession } from "next-auth/react";
 import * as React from "react";
+import styles from "src/components/AddComment.module.scss";
 import type { CommentaireDataLight } from "src/lib/types";
 
 interface Props {
@@ -6,37 +8,52 @@ interface Props {
   savePost: (e: React.FormEvent, formData: CommentaireDataLight) => void;
 }
 
-const AddPost: React.FC<Props> = ({ savePost /*, dossierId */ }) => {
+const AddPost: React.FC<Props> = ({ savePost, dossierId }) => {
   const [formData, setFormData] = React.useState<CommentaireDataLight>();
+  const { data: session } = useSession();
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
       date: new Date(),
-      dossierId: 118,
-      text: e.currentTarget.value,
-      userId: 8,
+      dossierId: dossierId,
+      text: e.currentTarget.value.replace(/\n/g, "<br />"),
+      user: session?.dbUser,
+      userId: session?.dbUser.id,
     });
   };
 
   return (
     <form
-      className="Form"
+      className={styles.Form}
       onSubmit={(e) => {
+        setFormData({
+          ...formData,
+          date: new Date(),
+          dossierId: dossierId,
+          text: "",
+          user: session?.dbUser,
+          userId: session?.dbUser.id,
+        });
+        e.currentTarget.value = "";
         savePost(e, formData);
       }}
     >
       <div>
         <div className="Form--field">
-          <label htmlFor="text">Description</label>
-          <input onChange={handleForm} type="text" id="text" />
+          <textarea
+            onChange={handleForm}
+            type="textarea"
+            id="text"
+            className={styles.areaText}
+          />
         </div>
       </div>
       <button
-        className="Form__button"
-        disabled={formData === undefined ? true : false}
+        className={styles.postButton}
+        disabled={formData === undefined || formData.text === "" ? true : false}
       >
-        Add Post
+        Poster
       </button>
     </form>
   );

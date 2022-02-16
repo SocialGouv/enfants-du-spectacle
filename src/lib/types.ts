@@ -21,6 +21,7 @@ type DossierData = Dossier & {
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];
+  commentaires: Commentaire[];
   demandeur: Demandeur;
 };
 

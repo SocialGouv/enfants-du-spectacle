@@ -117,6 +117,7 @@ model Dossier {
   justificatifs       JustificatifDossier[]
   scenesSensibles     String[]
   presentation        String
+  conventionCollectiveCode String?
   dateDebut           DateTime
   dateFin             DateTime
   externalId          String?               @unique
@@ -129,7 +130,7 @@ model Commentaire {
   userId     Int
   user       User?              @relation(fields: [userId], references: [id])
   dossierId  Int            
-  dossier    Dossier?           @relation(fields: [dossierId], references: [id])
+  dossier    Dossier?           @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 }
 
 enum TypeEmploi {

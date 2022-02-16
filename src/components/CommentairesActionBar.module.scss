@@ -4,8 +4,9 @@
   display: flex;
   align-items: center;
   border: 2px solid #ccc;
+  margin-bottom: 1rem;
 
-  &>div:not(:first-child){
+  & > div:not(:first-child) {
     margin-left: 4rem;
   }
 }
@@ -24,7 +25,7 @@
   select {
     background-color: inherit;
     padding-left: 0;
-    border-bottom: .1rem dashed black;
+    border-bottom: 0.1rem dashed black;
     box-shadow: none;
     font-weight: bold;
   }

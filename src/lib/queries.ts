@@ -1,4 +1,5 @@
 import type {
+  Commentaire,
   Commission,
   Demandeur,
   Dossier,
@@ -280,6 +281,40 @@ function updateDossier(
     });
 }
 
+const createCommentaire = (commentaire: Commentaire) => {
+  window
+    .fetch(`/api/commentaires`, {
+      body: JSON.stringify(commentaire),
+      method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const deleteCommentaire = (id: number) => {
+  window
+    .fetch(`/api/commentaires`, {
+      body: JSON.stringify(id),
+      method: "DELETE",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 function getDataDS(): void {
   window
     .fetch(`/api/dsapi`, {
@@ -328,12 +363,14 @@ export type {
   SearchResultsType,
 };
 export {
+  createCommentaire,
   createDemandeur,
   createDossier,
   createEnfant,
   createPieceDossier,
   createPieceDossierEnfant,
   createSocieteProduction,
+  deleteCommentaire,
   deleteEnfants,
   deletePieceDossier,
   getDataDS,

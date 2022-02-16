@@ -1,0 +1,25 @@
+.bloc {
+  background-color: white;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.commentSummaryBloc {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+
+  .dateBloc {
+    text-align: right;
+  }
+}
+
+.name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding-bottom: 0.8rem;
+}
+
+.date {
+  font-weight: bold;
+  padding-bottom: 0.8rem;
+}
