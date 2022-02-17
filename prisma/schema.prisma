@@ -103,7 +103,7 @@ model Dossier {
   statut              StatutDossier      @default(CONSTRUCTION)
   categorie           CategorieDossier
   commissionId        Int
-  commission          Commission        @relation(fields: [commissionId], references: [id])
+  commission          Commission        @relation(fields: [commissionId], references: [id], onDelete: Cascade)
   societeProductionId Int
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   enfants             Enfant[]
@@ -182,7 +182,7 @@ model Enfant {
   justificatifs JustificatifEnfant[]
   piecesDossier PieceDossierEnfant[]
   dossierId Int
-  dossier   Dossier @relation(fields: [dossierId], references: [id])
+  dossier   Dossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 }
 
 // for next-auth
