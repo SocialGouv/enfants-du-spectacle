@@ -13,6 +13,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (req.method == "GET") {
     await get(req, res);
+  } else if (req.method == "DELETE") {
+    await remove(req, res);
   } else {
     res.status(405).end();
     return;
@@ -21,17 +23,49 @@ const handler: NextApiHandler = async (req, res) => {
 const get: NextApiHandler = async (req, res) => {
   const { datePeriod } = req.query;
   const { departement } = req.query;
-  console.log("commissions...");
+  const { withChild } = req.query;
+  console.log("commissions...", withChild);
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
       : departement == "all"
-      ? await getUpcomingCommissions()
+      ? withChild == "true"
+        ? await getUpcomingCommissionsNotEmpty()
+        : await getAllCommissions()
       : await getUpcomingCommissionsByDepartement(departement);
   res.status(200).json(superjson.stringify(commissions));
 };
 
-const getUpcomingCommissions = async () => {
+const remove: NextApiHandler = async (req, res) => {
+  const commissionId = Number(req.body as string);
+  try {
+    await prisma.commission.delete({
+      where: { id: commissionId },
+    });
+    res.status(200).json({ message: "Commission supprimée" });
+  } catch (e: unknown) {
+    console.log(e);
+    res.status(200).json({ message: "Commission non trouvée" });
+  }
+};
+
+const getAllCommissions = async () => {
+  console.log("get all");
+  return prisma.commission.findMany({
+    include: {
+      dossiers: {
+        include: {
+          _count: { select: { enfants: true } },
+        },
+        orderBy: { id: "desc" },
+      },
+    },
+    orderBy: { date: "asc" },
+  });
+};
+
+const getUpcomingCommissionsNotEmpty = async () => {
+  console.log("get not empty");
   return prisma.commission.findMany({
     include: {
       dossiers: {

@@ -33,7 +33,7 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma.commentaire.delete({
       where: { id: commentId },
     });
-    res.status(200).json({ message: "Commentaire ajouté" });
+    res.status(200).json({ message: "Commentaire supprimé" });
   } catch (e: unknown) {
     console.log(e);
     res.status(200).json({ message: "Commentaire non trouve" });

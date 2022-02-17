@@ -74,10 +74,11 @@ function useDataDS() {
 type DatePeriod = "past" | "upcoming";
 function useCommissions(
   datePeriod: DatePeriod | undefined = "upcoming",
-  departement: string | undefined = "all"
+  departement: string | undefined = "all",
+  withChild = true
 ) {
   const { data, error } = useSWR(
-    `/api/commissions?datePeriod=${datePeriod}&departement=${departement}`,
+    `/api/commissions?datePeriod=${datePeriod}&departement=${departement}&withChild=${withChild}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());

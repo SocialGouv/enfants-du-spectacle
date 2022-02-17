@@ -315,6 +315,23 @@ const deleteCommentaire = (id: number) => {
     });
 };
 
+const removeCommission = (id: number) => {
+  window
+    .fetch(`/api/commissions`, {
+      body: JSON.stringify(id),
+      method: "DELETE",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 function getDataDS(): void {
   window
     .fetch(`/api/dsapi`, {
@@ -375,6 +392,7 @@ export {
   deletePieceDossier,
   getDataDS,
   getUpcomingCommissionsByLimitDate,
+  removeCommission,
   searchDemandeur,
   searchDossierByExternalId,
   searchDossiers,
