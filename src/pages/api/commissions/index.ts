@@ -13,6 +13,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (req.method == "GET") {
     await get(req, res);
+  } else if (req.method == "POST") {
+    await post(req, res);
   } else if (req.method == "DELETE") {
     await remove(req, res);
   } else {
@@ -34,6 +36,16 @@ const get: NextApiHandler = async (req, res) => {
         : await getAllCommissions()
       : await getUpcomingCommissionsByDepartement(departement);
   res.status(200).json(superjson.stringify(commissions));
+};
+
+const post: NextApiHandler = async (req, res) => {
+  const data = JSON.parse(req.body as string);
+  try {
+    await prisma.commission.create({ data });
+  } catch (e: unknown) {
+    console.log(e);
+  }
+  res.status(200).json({ message: "Commission ajoutée" });
 };
 
 const remove: NextApiHandler = async (req, res) => {
