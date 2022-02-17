@@ -16,6 +16,7 @@ const Post: React.FC<Props> = ({ comment, index, deletePost }) => {
       <div key={index} className={styles.bloc}>
         <div className={styles.commentSummaryBloc}>
           <div className={styles.name}>
+            {!comment.user?.prenom && <>{comment.user?.email}</>}
             {comment.user?.prenom} {comment.user?.nom}
           </div>
           <div className={styles.dateBloc}>
