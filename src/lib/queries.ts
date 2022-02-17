@@ -315,6 +315,23 @@ const deleteCommentaire = (id: number) => {
     });
 };
 
+const createCommission = (commission: Commission) => {
+  window
+    .fetch(`/api/commissions`, {
+      body: JSON.stringify(commission),
+      method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const removeCommission = (id: number) => {
   window
     .fetch(`/api/commissions`, {
@@ -381,6 +398,7 @@ export type {
 };
 export {
   createCommentaire,
+  createCommission,
   createDemandeur,
   createDossier,
   createEnfant,

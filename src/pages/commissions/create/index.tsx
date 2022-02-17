@@ -7,7 +7,7 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommissions } from "src/lib/api";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import { removeCommission } from "src/lib/queries";
+import { createCommission, removeCommission } from "src/lib/queries";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -79,8 +79,15 @@ const Page: React.FC = () => {
 
   const addCommission = (e: React.FormEvent, formData: Commission) => {
     e.preventDefault();
-    console.log("e : ", e);
+    console.log("eeee : ", e);
     console.log("formData : ", formData);
+    const commission: Commission = {
+      date: new Date(formData.date),
+      dateLimiteDepot: new Date(formData.dateLimiteDepot),
+      departement: formData.departement,
+    };
+    createCommission(commission);
+    console.log("commission : ", commission);
   };
 
   return (
