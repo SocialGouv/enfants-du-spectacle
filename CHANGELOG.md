@@ -1,3 +1,11 @@
+## [1.14.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.7...v1.14.8) (2022-02-17)
+
+
+### Bug Fixes
+
+* push migrations ([1edefbb](https://github.com/SocialGouv/enfants-du-spectacle/commit/1edefbbd3b3dc9921e46d6e3a266e5a25cf17ccd))
+* update page liste/create commissions ([c342fa0](https://github.com/SocialGouv/enfants-du-spectacle/commit/c342fa0fa3facddb40e28a79d8a7a20ef25e4457))
+
 ## [1.14.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.6...v1.14.7) (2022-02-16)
 
 
