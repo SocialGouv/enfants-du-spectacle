@@ -349,6 +349,40 @@ const removeCommission = (id: number) => {
     });
 };
 
+const createUser = (user: User) => {
+  window
+    .fetch(`/api/users`, {
+      body: JSON.stringify(user),
+      method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const removeUser = (id: number) => {
+  window
+    .fetch(`/api/users`, {
+      body: JSON.stringify(id),
+      method: "DELETE",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 function getDataDS(): void {
   window
     .fetch(`/api/dsapi`, {
@@ -405,12 +439,14 @@ export {
   createPieceDossier,
   createPieceDossierEnfant,
   createSocieteProduction,
+  createUser,
   deleteCommentaire,
   deleteEnfants,
   deletePieceDossier,
   getDataDS,
   getUpcomingCommissionsByLimitDate,
   removeCommission,
+  removeUser,
   searchDemandeur,
   searchDossierByExternalId,
   searchDossiers,

@@ -1,17 +1,20 @@
-import type { Commission } from "@prisma/client";
+import type { User } from "@prisma/client";
 import * as React from "react";
 import styles from "src/components/AddCommission.module.scss";
 
 interface Props {
-  saveCommission: (e: React.FormEvent, formData: Commission) => void;
+  saveUser: (e: React.FormEvent, formData: User) => void;
 }
 
-const AddCommission: React.FC<Props> = ({ saveCommission }) => {
-  const [formData, setFormData] = React.useState<Commission>({
-    date: new Date(),
-    dateLimiteDepot: new Date(),
-    departement: "",
+const AddUser: React.FC<Props> = ({ saveUser }) => {
+  const [formData, setFormData] = React.useState<User>({
+    email: "",
+    emailVerified: new Date(),
     id: 1,
+    image: "",
+    name: "",
+    nom: "",
+    prenom: "",
   });
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -26,44 +29,44 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
       className={styles.Form}
       onSubmit={(e) => {
         e.currentTarget.value = "";
-        saveCommission(e, formData);
+        saveUser(e, formData);
       }}
     >
       <div>
         <div className={styles.formField}>
           <div>
-            <label htmlFor="departement" className="mb-2 italic">
-              Département
+            <label htmlFor="nom" className="mb-2 italic">
+              Nom
             </label>
             <input
               onChange={handleForm}
               type="text"
-              id="departement"
-              name="departement"
+              id="nom"
+              name="nom"
               className={styles.inputText}
             />
           </div>
           <div>
-            <label htmlFor="date" className="mb-2 italic">
-              Date
+            <label htmlFor="prenom" className="mb-2 italic">
+              Prénom
             </label>
             <input
               onChange={handleForm}
               type="text"
-              id="date"
-              name="date"
+              id="prenom"
+              name="prenom"
               className={styles.inputText}
             />
           </div>
           <div>
-            <label htmlFor="dateLimiteDepot" className="mb-2 italic">
-              Date limite dépôt
+            <label htmlFor="email" className="mb-2 italic">
+              Email
             </label>
             <input
               onChange={handleForm}
               type="text"
-              id="dateLimiteDepot"
-              name="dateLimiteDepot"
+              id="email"
+              name="email"
               className={styles.inputText}
             />
           </div>
@@ -71,7 +74,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
       </div>
       <button
         className={styles.postButton}
-        disabled={formData.departement === "" ? true : false}
+        disabled={formData.email === "" ? true : false}
       >
         Poster
       </button>
@@ -79,4 +82,4 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   );
 };
 
-export default AddCommission;
+export default AddUser;
