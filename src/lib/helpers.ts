@@ -196,7 +196,7 @@ const TYPES_EMPLOI = [
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
   { label: "Synopsis", value: "SYNOPSIS" },
-  { label: "Scenario", value: "SCENARIO" },
+  { label: "Scenario ou script", value: "SCENARIO" },
   {
     label: "Note précisant les mesures de sécurité",
     value: "MESURES_SECURITE",
@@ -217,7 +217,7 @@ const JUSTIFS_ENFANT: { label: string; value: string }[] = [
   },
   { label: "Projet de contrat de travail", value: "CONTRAT" },
   {
-    label: "Certificat de scolarité ou/et avis pédagogique",
+    label: "Certificat de scolarité ou avis pédagogique",
     value: "CERTIFICAT_SCOLARITE",
   },
   { label: "Avis médical d'aptitude", value: "AVIS_MEDICAL" },
