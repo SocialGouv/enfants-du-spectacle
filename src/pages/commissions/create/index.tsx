@@ -79,8 +79,6 @@ const Page: React.FC = () => {
 
   const addCommission = (e: React.FormEvent, formData: Commission) => {
     e.preventDefault();
-    console.log("eeee : ", e);
-    console.log("formData : ", formData);
     const commission: Commission = {
       date: new Date(formData.date),
       dateLimiteDepot: new Date(formData.dateLimiteDepot),
