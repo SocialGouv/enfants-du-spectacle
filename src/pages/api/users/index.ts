@@ -13,9 +13,36 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (req.method == "GET") {
     await get(req, res);
+  } else if (req.method == "POST") {
+    await post(req, res);
+  } else if (req.method == "DELETE") {
+    await remove(req, res);
   } else {
     res.status(405).end();
     return;
+  }
+};
+
+const post: NextApiHandler = async (req, res) => {
+  const data = JSON.parse(req.body as string);
+  try {
+    await prisma.user.create({ data });
+  } catch (e: unknown) {
+    console.log(e);
+  }
+  res.status(200).json({ message: "Utilisateur ajoutée" });
+};
+
+const remove: NextApiHandler = async (req, res) => {
+  const userId = Number(req.body as string);
+  try {
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+    res.status(200).json({ message: "Utilisateur supprimé" });
+  } catch (e: unknown) {
+    console.log(e);
+    res.status(200).json({ message: "Utilisateur non trouvé" });
   }
 };
 
