@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.16...v1.15.0) (2022-02-18)
+
+
+### Features
+
+* add user CRUD ([9cdca78](https://github.com/SocialGouv/enfants-du-spectacle/commit/9cdca78f1ffe960912a30c4bfb057945eb010a7d))
+
 ## [1.14.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.15...v1.14.16) (2022-02-18)
 
 
