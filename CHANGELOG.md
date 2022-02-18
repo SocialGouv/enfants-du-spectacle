@@ -1,3 +1,10 @@
+## [1.14.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.11...v1.14.12) (2022-02-18)
+
+
+### Bug Fixes
+
+* rotate DS api token ([9bb4c67](https://github.com/SocialGouv/enfants-du-spectacle/commit/9bb4c67d0bfa3f0b57cb785beed7e2aebdaa236d))
+
 ## [1.14.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.10...v1.14.11) (2022-02-17)
 
 
