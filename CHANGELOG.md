@@ -1,3 +1,10 @@
+## [1.14.14](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.13...v1.14.14) (2022-02-18)
+
+
+### Bug Fixes
+
+* change some labels ([3dc9411](https://github.com/SocialGouv/enfants-du-spectacle/commit/3dc9411c19e7f578fdcf6d4a0493d757024ccf0a))
+
 ## [1.14.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.12...v1.14.13) (2022-02-18)
 
 
