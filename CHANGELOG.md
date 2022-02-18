@@ -1,3 +1,10 @@
+## [1.14.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.15...v1.14.16) (2022-02-18)
+
+
+### Bug Fixes
+
+* add secret API Key ([45c6605](https://github.com/SocialGouv/enfants-du-spectacle/commit/45c66051d5fb3a26ee4c04c92a949416c826e0d0))
+
 ## [1.14.15](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.14...v1.14.15) (2022-02-18)
 
 
