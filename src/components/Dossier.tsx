@@ -40,7 +40,13 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             title="Présentation générale"
             className={`${styles.info} ${styles.infoSuccessive}`}
           >
-            <Foldable>{dossier.presentation}</Foldable>
+            <Foldable>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: dossier.presentation.replace(/\n/g, "<br />"),
+                }}
+              />
+            </Foldable>
           </Info>
           <Info title="Scènes sensibles" className={styles.infoSuccessive}>
             {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
