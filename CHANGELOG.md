@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.0...v1.15.1) (2022-02-21)
+
+
+### Bug Fixes
+
+* add breaks to description project ([169cd87](https://github.com/SocialGouv/enfants-du-spectacle/commit/169cd8704398dd6e0583b7fdee78caabd2b99385))
+
 # [1.15.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.14.16...v1.15.0) (2022-02-18)
 
 
