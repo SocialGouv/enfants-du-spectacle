@@ -252,7 +252,7 @@ const insertDataFromDs = (data: unknown) => {
             const createdPiece = {
               dossierId: finalDossier.id,
               link: _.get(
-                _.find(dossier.champs, (datab: unknown) => {
+                _.find(dossier.champs, (datab: Record<string, unknown>) => {
                   return (
                     datab.label ===
                     _.get(_.find(JUSTIFS_DOSSIER, { value: piece }), "label")
@@ -267,7 +267,7 @@ const insertDataFromDs = (data: unknown) => {
 
           return finalDossier;
         })
-        .then(async (finalDossier: unknown) => {
+        .then(async (finalDossier: Record<string, unknown>) => {
           // Delete all concerned Enfants
           await deleteEnfants(prisma, finalDossier.id as number);
           const champEnfant = _.get(
@@ -275,21 +275,24 @@ const insertDataFromDs = (data: unknown) => {
             "champs"
           );
           // Get nombre Enfants
-          const nbreEnfants = _.filter(champEnfant, (datab: unknown) => {
-            return datab.label === "Nom";
-          }).length;
+          const nbreEnfants = _.filter(
+            champEnfant,
+            (datab: Record<string, unknown>) => {
+              return datab.label === "Nom";
+            }
+          ).length;
           // Add all concerned Enfants
           for (let i = 0; i < nbreEnfants; i++) {
-            const enfant: unknown = {
+            const enfant: Record<string, unknown> = {
               contexteTravail: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return datab.label === "Temps et lieu de travail";
                 })[i],
                 "stringValue"
               ),
               dateNaissance: new Date(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Né(e) le";
                   })[i],
                   "date"
@@ -297,21 +300,21 @@ const insertDataFromDs = (data: unknown) => {
               ),
               dossierId: finalDossier.id,
               montantCachet: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return datab.label === "Montant du cachet";
                 })[i],
                 "decimalNumber"
               ),
               nom: strNoAccent(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nom";
                   })[i],
                   "stringValue"
                 ) as string
               ),
               nomPersonnage: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return (
                     datab.label === "Nom du personnage incarné par l'enfant "
                   );
@@ -320,7 +323,7 @@ const insertDataFromDs = (data: unknown) => {
               ),
               nombreCachets: parseInt(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nombre de cachets";
                   })[i],
                   "stringValue"
@@ -328,7 +331,7 @@ const insertDataFromDs = (data: unknown) => {
               ),
               nombreJours: parseInt(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nombre de jours de travail";
                   })[i],
                   "stringValue"
@@ -336,48 +339,51 @@ const insertDataFromDs = (data: unknown) => {
               ),
               nombreLignes: parseInt(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nombre de lignes";
                   })[i],
                   "stringValue"
                 ) != ""
                   ? (_.get(
-                      _.filter(champEnfant, (datab: unknown) => {
-                        return datab.label === "Nombre de lignes";
-                      })[i],
+                      _.filter(
+                        champEnfant,
+                        (datab: Record<string, unknown>) => {
+                          return datab.label === "Nombre de lignes";
+                        }
+                      )[i],
                       "stringValue"
                     ) as string)
                   : "0"
               ),
               periodeTravail: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return datab.label === "Période de travail";
                 })[i],
                 "stringValue"
               ),
               prenom: strNoAccent(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Prénom(s)";
                   })[i],
                   "stringValue"
                 ) as string
               ),
               remunerationTotale: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return datab.label === "Rémunération totale";
                 })[i],
                 "decimalNumber"
               ),
               remunerationsAdditionnelles: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
                   return datab.label === "Rémunérations additionnelles";
                 })[i],
                 "stringValue"
               ),
               typeEmploi: typeEmploiValue(
                 _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Type d'emploi";
                   })[i],
                   "stringValue"
@@ -391,7 +397,7 @@ const insertDataFromDs = (data: unknown) => {
               (justif: { label: string; value: string }) => {
                 if (
                   _.get(
-                    _.filter(champEnfant, (datab: unknown) => {
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
                       return datab.label === justif.label;
                     })[i],
                     "file"
