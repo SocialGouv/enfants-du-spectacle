@@ -3,8 +3,7 @@
   "type": "app",
   "project": "enfants-du-spectacle",
   "subdomain": "enfants-du-spectacle",
-  "azurepg": true,
-  "pgHostDev": "edsdevserver.postgres.database.azure.com",
+  "pg": true,
   "probesPath": "/api/healthz",
   "registry": "ghcr"
 }
