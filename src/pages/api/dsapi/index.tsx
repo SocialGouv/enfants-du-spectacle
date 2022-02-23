@@ -2,9 +2,12 @@ import type {
   CategorieDossier,
   Demandeur,
   Dossier,
+  Enfant,
   JustificatifDossier,
   JustificatifEnfant,
+  PieceDossier,
   SocieteProduction,
+  TypeEmploi,
 } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
@@ -72,7 +75,7 @@ const insertDataFromDs = (data: unknown) => {
           if (societe.length > 0) {
             return societe[0];
           } else {
-            const societeProduction: SocieteProduction = {
+            const societeProduction: Omit<SocieteProduction, "id"> = {
               adresse: dossier.demandeur.address.streetAddress,
               adresseCodeCommune: dossier.demandeur.address.cityName,
               adresseCodePostal: dossier.demandeur.address.postalCode,
@@ -102,17 +105,17 @@ const insertDataFromDs = (data: unknown) => {
         })
         .then(async (societe) => {
           // Search demandeur
-          let demandeur = (await searchDemandeur(
+          let demandeur = await searchDemandeur(
             prisma,
             _.get(
               _.find(dossier.champs, { label: "Mail " }),
               "stringValue"
             ) as string
-          )) as unknown;
+          );
           if (demandeur !== null) {
             return { demandeur, societe };
           } else {
-            const demandeurTmp: Demandeur = {
+            const demandeurTmp: Omit<Demandeur, "id"> = {
               email: _.get(
                 _.find(dossier.champs, { label: "Mail " }),
                 "stringValue"
@@ -176,7 +179,7 @@ const insertDataFromDs = (data: unknown) => {
           );
 
           // Create or update dossier
-          const newDossier: Dossier = {
+          const newDossier: Omit<Dossier, "id" | "numeroDS" | "userId"> = {
             categorie: getFormatedTypeDossier(
               _.get(
                 _.find(dossier.champs, { label: "Catégorie" }),
@@ -249,10 +252,10 @@ const insertDataFromDs = (data: unknown) => {
             await deletePieceDossier(prisma, intDossier[0].id);
           }
           _.forEach(arrayJustifs, async (piece: JustificatifDossier) => {
-            const createdPiece = {
+            const createdPiece: Omit<PieceDossier, "id"> = {
               dossierId: finalDossier.id,
               link: _.get(
-                _.find(dossier.champs, (datab: unknown) => {
+                _.find(dossier.champs, (datab: Record<string, unknown>) => {
                   return (
                     datab.label ===
                     _.get(_.find(JUSTIFS_DOSSIER, { value: piece }), "label")
@@ -267,7 +270,7 @@ const insertDataFromDs = (data: unknown) => {
 
           return finalDossier;
         })
-        .then(async (finalDossier: unknown) => {
+        .then(async (finalDossier: Record<string, unknown>) => {
           // Delete all concerned Enfants
           await deleteEnfants(prisma, finalDossier.id as number);
           const champEnfant = _.get(
@@ -275,152 +278,170 @@ const insertDataFromDs = (data: unknown) => {
             "champs"
           );
           // Get nombre Enfants
-          const nbreEnfants = _.filter(champEnfant, (datab: unknown) => {
-            return datab.label === "Nom";
-          }).length;
+          const nbreEnfants = _.filter(
+            champEnfant,
+            (datab: Record<string, unknown>) => {
+              return datab.label === "Nom";
+            }
+          ).length;
           // Add all concerned Enfants
           for (let i = 0; i < nbreEnfants; i++) {
-            const enfant: unknown = {
-              contexteTravail: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return datab.label === "Temps et lieu de travail";
+            if (
+              _.get(
+                _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                  return datab.label === "Type d'emploi";
                 })[i],
                 "stringValue"
-              ),
-              dateNaissance: new Date(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Né(e) le";
-                  })[i],
-                  "date"
-                ) as Date
-              ),
-              dossierId: finalDossier.id,
-              montantCachet: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return datab.label === "Montant du cachet";
-                })[i],
-                "decimalNumber"
-              ),
-              nom: strNoAccent(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Nom";
+              )
+            ) {
+              const enfant: Enfant = {
+                contexteTravail: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                    return datab.label === "Temps et lieu de travail";
                   })[i],
                   "stringValue"
-                ) as string
-              ),
-              nomPersonnage: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return (
-                    datab.label === "Nom du personnage incarné par l'enfant "
-                  );
-                })[i],
-                "stringValue"
-              ),
-              nombreCachets: parseInt(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Nombre de cachets";
-                  })[i],
-                  "stringValue"
-                ) as string
-              ),
-              nombreJours: parseInt(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Nombre de jours de travail";
-                  })[i],
-                  "stringValue"
-                ) as string
-              ),
-              nombreLignes: parseInt(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Nombre de lignes";
-                  })[i],
-                  "stringValue"
-                ) != ""
-                  ? (_.get(
-                      _.filter(champEnfant, (datab: unknown) => {
-                        return datab.label === "Nombre de lignes";
-                      })[i],
-                      "stringValue"
-                    ) as string)
-                  : "0"
-              ),
-              periodeTravail: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return datab.label === "Période de travail";
-                })[i],
-                "stringValue"
-              ),
-              prenom: strNoAccent(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Prénom(s)";
-                  })[i],
-                  "stringValue"
-                ) as string
-              ),
-              remunerationTotale: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return datab.label === "Rémunération totale";
-                })[i],
-                "decimalNumber"
-              ),
-              remunerationsAdditionnelles: _.get(
-                _.filter(champEnfant, (datab: unknown) => {
-                  return datab.label === "Rémunérations additionnelles";
-                })[i],
-                "stringValue"
-              ),
-              typeEmploi: typeEmploiValue(
-                _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
-                    return datab.label === "Type d'emploi";
-                  })[i],
-                  "stringValue"
-                ) as string
-              ),
-            };
-            // build justificatifs enfant
-            const arrayJustifs: string[] = [];
-            _.forEach(
-              JUSTIFS_ENFANT,
-              (justif: { label: string; value: string }) => {
-                if (
+                ),
+                dateNaissance: new Date(
                   _.get(
-                    _.filter(champEnfant, (datab: unknown) => {
-                      return datab.label === justif.label;
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Né(e) le";
                     })[i],
-                    "file"
-                  ) != null
-                ) {
-                  arrayJustifs.push(justif.value);
-                }
-              }
-            );
-            enfant.justificatifs = arrayJustifs;
-
-            // add pieces dossier enfant
-            const enfantCreated = await createEnfant(prisma, enfant);
-            _.forEach(arrayJustifs, async (piece: JustificatifEnfant) => {
-              const createdPiece = {
-                enfantId: enfantCreated.id,
-                link: _.get(
-                  _.filter(champEnfant, (datab: unknown) => {
+                    "date"
+                  ) as Date
+                ),
+                dossierId: finalDossier.id as number,
+                montantCachet: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                    return datab.label === "Montant du cachet";
+                  })[i],
+                  "decimalNumber"
+                ),
+                nom: strNoAccent(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Nom";
+                    })[i],
+                    "stringValue"
+                  ) as string
+                ),
+                nomPersonnage: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return (
-                      datab.label ===
-                      _.get(_.find(JUSTIFS_ENFANT, { value: piece }), "label")
+                      datab.label === "Nom du personnage incarné par l'enfant "
                     );
                   })[i],
-                  "file"
-                ).url,
-                type: piece,
+                  "stringValue"
+                ),
+                nombreCachets: parseInt(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Nombre de cachets";
+                    })[i],
+                    "stringValue"
+                  ) as string
+                ),
+                nombreJours: parseInt(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Nombre de jours de travail";
+                    })[i],
+                    "stringValue"
+                  ) as string
+                ),
+                nombreLignes: parseInt(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Nombre de lignes";
+                    })[i],
+                    "stringValue"
+                  ) != ""
+                    ? (_.get(
+                        _.filter(
+                          champEnfant,
+                          (datab: Record<string, unknown>) => {
+                            return datab.label === "Nombre de lignes";
+                          }
+                        )[i],
+                        "stringValue"
+                      ) as string)
+                    : "0"
+                ),
+                periodeTravail: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                    return datab.label === "Période de travail";
+                  })[i],
+                  "stringValue"
+                ),
+                prenom: strNoAccent(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Prénom(s)";
+                    })[i],
+                    "stringValue"
+                  ) as string
+                ),
+                remunerationTotale: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                    return datab.label === "Rémunération totale";
+                  })[i],
+                  "decimalNumber"
+                ),
+                remunerationsAdditionnelles: _.get(
+                  _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                    return datab.label === "Rémunérations additionnelles";
+                  })[i],
+                  "stringValue"
+                ),
+                typeEmploi: typeEmploiValue(
+                  _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return datab.label === "Type d'emploi";
+                    })[i],
+                    "stringValue"
+                  ) as TypeEmploi
+                ),
               };
-              await createPieceDossierEnfant(prisma, createdPiece);
-            });
+              // build justificatifs enfant
+              const arrayJustifs: JustificatifEnfant[] = [];
+              _.forEach(
+                JUSTIFS_ENFANT,
+                (justif: { label: string; value: string }) => {
+                  if (
+                    _.get(
+                      _.filter(
+                        champEnfant,
+                        (datab: Record<string, unknown>) => {
+                          return datab.label === justif.label;
+                        }
+                      )[i],
+                      "file"
+                    ) != null
+                  ) {
+                    arrayJustifs.push(justif.value as JustificatifEnfant);
+                  }
+                }
+              );
+              enfant.justificatifs = arrayJustifs;
+
+              // add pieces dossier enfant
+              const enfantCreated = await createEnfant(prisma, enfant);
+              _.forEach(arrayJustifs, async (piece: JustificatifEnfant) => {
+                const createdPiece = {
+                  enfantId: enfantCreated.id,
+                  link: _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return (
+                        datab.label ===
+                        _.get(_.find(JUSTIFS_ENFANT, { value: piece }), "label")
+                      );
+                    })[i],
+                    "file"
+                  ).url,
+                  type: piece,
+                };
+                await createPieceDossierEnfant(prisma, createdPiece);
+              });
+            }
           }
         });
     });

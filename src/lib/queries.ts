@@ -77,7 +77,7 @@ const searchDemandeur = async (prismaClient: PrismaClient, email: string) => {
 
 const createDemandeur = async (
   prismaClient: PrismaClient,
-  demandeur: Demandeur
+  demandeur: Omit<Demandeur, "id">
 ) => {
   try {
     return await prismaClient.demandeur.create({ data: demandeur });
@@ -121,7 +121,7 @@ const searchSocieteProductionBySiret = async (
 
 const createSocieteProduction = async (
   prismaClient: PrismaClient,
-  societeProduction: SocieteProduction
+  societeProduction: Omit<SocieteProduction, "id">
 ) => {
   try {
     return await prismaClient.societeProduction.create({
@@ -133,7 +133,10 @@ const createSocieteProduction = async (
   }
 };
 
-const createDossier = async (prismaClient: PrismaClient, dossier: Dossier) => {
+const createDossier = async (
+  prismaClient: PrismaClient,
+  dossier: Omit<Dossier, "id" | "numeroDS" | "userId">
+) => {
   try {
     return await prismaClient.dossier.create({ data: dossier });
   } catch (e: unknown) {
@@ -183,7 +186,7 @@ const searchDossiers = async (
 
 const updateConstructDossier = async (
   prismaClient: PrismaClient,
-  dossier: Dossier,
+  dossier: Omit<Dossier, "id" | "numeroDS" | "userId">,
   dossierId: number
 ) => {
   try {
@@ -219,7 +222,7 @@ const createEnfant = async (prismaClient: PrismaClient, enfant: Enfant) => {
 
 const createPieceDossierEnfant = async (
   prismaClient: PrismaClient,
-  piece: PieceDossierEnfant
+  piece: Omit<PieceDossierEnfant, "id">
 ) => {
   try {
     return await prismaClient.pieceDossierEnfant.create({ data: piece });
@@ -231,7 +234,7 @@ const createPieceDossierEnfant = async (
 
 const createPieceDossier = async (
   prismaClient: PrismaClient,
-  piece: PieceDossier
+  piece: Omit<PieceDossier, "id">
 ) => {
   try {
     return await prismaClient.pieceDossier.create({ data: piece });
