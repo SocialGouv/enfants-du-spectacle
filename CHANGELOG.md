@@ -1,3 +1,12 @@
+## [1.15.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.1...v1.15.2) (2022-02-23)
+
+
+### Bug Fixes
+
+* check enfant not empty from DS ([b6a3018](https://github.com/SocialGouv/enfants-du-spectacle/commit/b6a3018f71374a5213520acfb820f1aa2db936e5))
+* check enfant not empty from DS ([925c615](https://github.com/SocialGouv/enfants-du-spectacle/commit/925c615cceefd9a712eb410e8bf19fd1839e8b96))
+* test fix type unknown ([c8db79b](https://github.com/SocialGouv/enfants-du-spectacle/commit/c8db79b48bd2e033551ea85e768fcc4eeffb24fa))
+
 ## [1.15.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.0...v1.15.1) (2022-02-21)
 
 
