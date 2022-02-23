@@ -232,7 +232,7 @@ function typeEmploiLabel(typeEmploi: TypeEmploi): string {
 function typeEmploiValue(typeEmploi: string): string {
   const found = TYPES_EMPLOI.find((t) => t.label == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
-  return found.value;
+  return found.value as TypeEmploi;
 }
 
 function stringToNumberOrNull(str: string | null | undefined): number | null {

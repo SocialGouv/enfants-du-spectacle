@@ -9,28 +9,28 @@ datasource db {
 }
 
 model Commission {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   departement     String
   date            DateTime
   dateLimiteDepot DateTime
-  dossiers         Dossier[]
+  dossiers        Dossier[]
 }
 
 model SocieteProduction {
-  id          Int         @id @default(autoincrement())
-  nom         String
-  siret       String
-  siren       String
-  departement String
-  naf         String
-  raisonSociale String
-  adresse    String
-  adresseCodePostal String
-  adresseCodeCommune String
-  formeJuridique String
+  id                       Int         @id @default(autoincrement())
+  nom                      String
+  siret                    String
+  siren                    String
+  departement              String
+  naf                      String
+  raisonSociale            String
+  adresse                  String
+  adresseCodePostal        String
+  adresseCodeCommune       String
+  formeJuridique           String
   conventionCollectiveCode String
-  demandeurs  Demandeur[]
-  dossiers    Dossier[]
+  demandeurs               Demandeur[]
+  dossiers                 Dossier[]
 }
 
 model Demandeur {
@@ -42,7 +42,7 @@ model Demandeur {
   fonction            String
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   societeProductionId Int
-  dossiers          Dossier[]
+  dossiers            Dossier[]
 }
 
 enum StatutDossier {
@@ -82,9 +82,9 @@ enum CategorieDossier {
 }
 
 model PieceDossier {
-  id        Int @id @default(autoincrement())
-  dossierId  Int
-  dossier    Dossier?@relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  id        Int                 @id @default(autoincrement())
+  dossierId Int
+  dossier   Dossier?            @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   type      JustificatifDossier
   link      String
 }
@@ -98,39 +98,39 @@ enum JustificatifDossier {
 }
 
 model Dossier {
-  id                  Int               @id @default(autoincrement())
-  nom                 String
-  statut              StatutDossier      @default(CONSTRUCTION)
-  categorie           CategorieDossier
-  commissionId        Int
-  commission          Commission        @relation(fields: [commissionId], references: [id], onDelete: Cascade)
-  societeProductionId Int
-  societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
-  enfants             Enfant[]
-  piecesDossier       PieceDossier[]
-  commentaires        Commentaire[]
-  numeroDS            Int @default(0)
-  userId              Int?
-  user                User?             @relation(fields: [userId], references: [id])
-  demandeurId         Int
-  demandeur           Demandeur         @relation(fields: [demandeurId], references: [id])
-  justificatifs       JustificatifDossier[]
-  scenesSensibles     String[]
-  presentation        String
+  id                       Int                   @id @default(autoincrement())
+  nom                      String
+  statut                   StatutDossier         @default(CONSTRUCTION)
+  categorie                CategorieDossier
+  commissionId             Int
+  commission               Commission            @relation(fields: [commissionId], references: [id], onDelete: Cascade)
+  societeProductionId      Int
+  societeProduction        SocieteProduction     @relation(fields: [societeProductionId], references: [id])
+  enfants                  Enfant[]
+  piecesDossier            PieceDossier[]
+  commentaires             Commentaire[]
+  numeroDS                 Int                   @default(0)
+  userId                   Int?
+  user                     User?                 @relation(fields: [userId], references: [id])
+  demandeurId              Int
+  demandeur                Demandeur             @relation(fields: [demandeurId], references: [id])
+  justificatifs            JustificatifDossier[]
+  scenesSensibles          String[]
+  presentation             String
   conventionCollectiveCode String?
-  dateDebut           DateTime
-  dateFin             DateTime
-  externalId          String?               @unique
+  dateDebut                DateTime
+  dateFin                  DateTime
+  externalId               String?               @unique
 }
 
 model Commentaire {
-  id         Int               @id @default(autoincrement())
-  text       String
-  date       DateTime
-  userId     Int
-  user       User?              @relation(fields: [userId], references: [id])
-  dossierId  Int            
-  dossier    Dossier?           @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  text      String
+  date      DateTime
+  userId    Int
+  user      User?    @relation(fields: [userId], references: [id])
+  dossierId Int
+  dossier   Dossier? @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 }
 
 enum TypeEmploi {
@@ -157,42 +157,42 @@ enum JustificatifEnfant {
 }
 
 model PieceDossierEnfant {
-  id        Int @id @default(autoincrement())
-  enfantId  Int
-  enfant    Enfant?@relation(fields: [enfantId], references: [id], onDelete: Cascade)
-  type      JustificatifEnfant
-  link      String
+  id       Int                @id @default(autoincrement())
+  enfantId Int
+  enfant   Enfant?            @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+  type     JustificatifEnfant
+  link     String
 }
 
 model Enfant {
-  id       Int    @id @default(autoincrement())
-  prenom   String
-  nom      String
-  dateNaissance DateTime
-  typeEmploi TypeEmploi
-  nomPersonnage String?
-  periodeTravail String?
-  nombreJours Int
-  contexteTravail String?
-  montantCachet Float
-  nombreCachets Int
-  nombreLignes Int @default(0)
+  id                          Int                  @id @default(autoincrement())
+  prenom                      String
+  nom                         String
+  dateNaissance               DateTime
+  typeEmploi                  TypeEmploi
+  nomPersonnage               String?
+  periodeTravail              String?
+  nombreJours                 Int
+  contexteTravail             String?
+  montantCachet               Float
+  nombreCachets               Int
+  nombreLignes                Int                  @default(0)
   remunerationsAdditionnelles String?
-  remunerationTotale Float
-  justificatifs JustificatifEnfant[]
-  piecesDossier PieceDossierEnfant[]
-  dossierId Int
-  dossier   Dossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  remunerationTotale          Float
+  justificatifs               JustificatifEnfant[]
+  piecesDossier               PieceDossierEnfant[]
+  dossierId                   Int
+  dossier                     Dossier              @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 }
 
 // for next-auth
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   name          String?
   nom           String?
   prenom        String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
