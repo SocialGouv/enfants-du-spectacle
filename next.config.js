@@ -11,6 +11,10 @@ module.exports = withSentryConfig(
       // !! WARN !!
       ignoreBuildErrors: true,
     },
+    sentry: {
+      disableClientWebpackPlugin: true,
+      disableServerWebpackPlugin: true,
+    },
   }
   , {
     // Additional config options for the Sentry Webpack plugin. Keep in mind that
