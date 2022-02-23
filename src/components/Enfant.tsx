@@ -73,7 +73,13 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
             </div>
             <div>
               Temps et lieu de travail :{" "}
-              {enfant.contexteTravail ? enfant.contexteTravail : <i>n/a</i>}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: enfant.contexteTravail
+                    ? enfant.contexteTravail.replace(/\n/g, "<br />")
+                    : "n/a",
+                }}
+              />
             </div>
           </Info>
 
