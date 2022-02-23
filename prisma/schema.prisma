@@ -121,6 +121,7 @@ model Dossier {
   dateDebut                DateTime
   dateFin                  DateTime
   externalId               String?               @unique
+  dateDerniereModification DateTime?
 }
 
 model Commentaire {
