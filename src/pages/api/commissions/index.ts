@@ -26,7 +26,6 @@ const get: NextApiHandler = async (req, res) => {
   const { datePeriod } = req.query;
   const { departement } = req.query;
   const { withChild } = req.query;
-  console.log("commissions...", withChild);
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
@@ -77,7 +76,6 @@ const getAllCommissions = async () => {
 };
 
 const getUpcomingCommissionsNotEmpty = async () => {
-  console.log("get not empty");
   return prisma.commission.findMany({
     include: {
       dossiers: {
