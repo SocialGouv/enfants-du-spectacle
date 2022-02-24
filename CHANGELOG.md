@@ -1,3 +1,10 @@
+## [1.15.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.3...v1.15.4) (2022-02-24)
+
+
+### Bug Fixes
+
+* update domains granted access ([7254d7c](https://github.com/SocialGouv/enfants-du-spectacle/commit/7254d7cea584349392cf9472f933ed4bf3a7a87e))
+
 ## [1.15.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.2...v1.15.3) (2022-02-23)
 
 
