@@ -1,3 +1,10 @@
+## [1.15.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.4...v1.15.5) (2022-02-24)
+
+
+### Bug Fixes
+
+* update nextjs config ([19426ec](https://github.com/SocialGouv/enfants-du-spectacle/commit/19426eca85d86db5a8d52df73423106bcd49ba7b))
+
 ## [1.15.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.3...v1.15.4) (2022-02-24)
 
 
