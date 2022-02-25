@@ -1,3 +1,12 @@
+## [1.15.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.5...v1.15.6) (2022-02-25)
+
+
+### Bug Fixes
+
+* check user exists for signin ([da10cd0](https://github.com/SocialGouv/enfants-du-spectacle/commit/da10cd0db7f9e3bbe9aa6b9bff07a0d226acd252))
+* filter users by role for affectation dossier ([f93417f](https://github.com/SocialGouv/enfants-du-spectacle/commit/f93417f3c65489f22264063a9d76282b6cf611d6))
+* updage crud users ([03f352a](https://github.com/SocialGouv/enfants-du-spectacle/commit/03f352a760a2dd2173f97b2d72e5cc2fb26864e5))
+
 ## [1.15.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.4...v1.15.5) (2022-02-24)
 
 
