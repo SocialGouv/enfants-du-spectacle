@@ -1,3 +1,10 @@
+## [1.15.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.6...v1.15.7) (2022-02-25)
+
+
+### Bug Fixes
+
+* fix filtering on users ([363989d](https://github.com/SocialGouv/enfants-du-spectacle/commit/363989dff5097d206faf3b4f2a50de553684d4f4))
+
 ## [1.15.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.5...v1.15.6) (2022-02-25)
 
 
