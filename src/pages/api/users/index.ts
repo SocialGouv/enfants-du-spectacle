@@ -30,7 +30,7 @@ const post: NextApiHandler = async (req, res) => {
   } catch (e: unknown) {
     console.log(e);
   }
-  res.status(200).json({ message: "Utilisateur ajoutée" });
+  res.status(200).json({ message: "Utilisateur ajouté" });
 };
 
 const remove: NextApiHandler = async (req, res) => {
@@ -47,7 +47,10 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const allUsers = await prisma.user.findMany({ orderBy: { name: "asc" } });
+  const allUsers = await prisma.user.findMany({
+    orderBy: { name: "asc" },
+    where: { role: "INSTRUCTEUR" },
+  });
   res.status(200).json(superjson.stringify(allUsers));
 };
 

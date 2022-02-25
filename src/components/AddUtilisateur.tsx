@@ -1,6 +1,8 @@
+import { Select } from "@dataesr/react-dsfr";
 import type { User } from "@prisma/client";
 import * as React from "react";
-import styles from "src/components/AddCommission.module.scss";
+import styles from "src/components/AddUtilisateur.module.scss";
+import { ROLES_USERS } from "src/lib/helpers";
 
 interface Props {
   saveUser: (e: React.FormEvent, formData: User) => void;
@@ -15,6 +17,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
     name: "",
     nom: "",
     prenom: "",
+    role: "",
   });
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -22,19 +25,20 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
       ...formData,
       [e.target.id]: e.currentTarget.value,
     });
+    console.log(formData);
   };
 
   return (
-    <form
-      className={styles.Form}
-      onSubmit={(e) => {
-        e.currentTarget.value = "";
-        saveUser(e, formData);
-      }}
-    >
-      <div>
+    <div>
+      <form
+        className={styles.Form}
+        onSubmit={(e) => {
+          e.currentTarget.value = "";
+          saveUser(e, formData);
+        }}
+      >
         <div className={styles.formField}>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="nom" className="mb-2 italic">
               Nom
             </label>
@@ -46,7 +50,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               className={styles.inputText}
             />
           </div>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="prenom" className="mb-2 italic">
               Prénom
             </label>
@@ -58,7 +62,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               className={styles.inputText}
             />
           </div>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="email" className="mb-2 italic">
               Email
             </label>
@@ -70,15 +74,38 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               className={styles.inputText}
             />
           </div>
+          <div className={styles.blocForm}>
+            <div className={styles.selectRole}>
+              <label htmlFor="role" className="mb-2 italic">
+                Rôle
+              </label>
+              <Select
+                id="role"
+                name="role"
+                selected={formData.role ? formData.role : ""}
+                options={[
+                  { label: formData.role ? "" : "Choisir", value: "" },
+                ].concat(
+                  ROLES_USERS.map((u) => ({
+                    label: u.label,
+                    value: String(u.value),
+                  }))
+                )}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleForm(event);
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <button
-        className={styles.postButton}
-        disabled={formData.email === "" ? true : false}
-      >
-        Poster
-      </button>
-    </form>
+        <button
+          className={styles.postButton}
+          disabled={formData.email === "" ? true : false}
+        >
+          Poster
+        </button>
+      </form>
+    </div>
   );
 };
 
