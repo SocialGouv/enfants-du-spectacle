@@ -188,6 +188,11 @@ model Enfant {
 
 // for next-auth
 
+enum Role {
+  ADMIN
+  INSTRUCTEUR
+}
+
 model User {
   id            Int           @id @default(autoincrement())
   name          String?
@@ -200,6 +205,7 @@ model User {
   sessions      Session[]
   dossiers      Dossier[]
   commentaires  Commentaire[]
+  role          Role?
 }
 
 model Session {

@@ -1,6 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import * as Sentry from "@sentry/nextjs";
-import emailParser from "email-addresses";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
 import { sendVerificationRequest } from "src/lib/emailAuth";
@@ -13,15 +12,13 @@ export default NextAuth({
       session.dbUser = user;
       return session;
     },
-    signIn({ user }) {
+    async signIn({ user }) {
       if (typeof user.email !== "string") return false;
-      const parsed = emailParser.parseOneAddress(user.email);
-      return !!(
-        parsed &&
-        "domain" in parsed &&
-        (parsed.domain === "drieets.gouv.fr" ||
-          parsed.domain === "numericite.eu")
-      );
+      const test = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+      console.log("test : ", test);
+      return test != null;
     },
   },
   logger: {
