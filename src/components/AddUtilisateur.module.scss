@@ -1,4 +1,5 @@
-.inputText {
+.inputText,
+.selectRole select {
   background-color: white;
   height: 3rem;
   border-bottom: solid #060591 2px;
@@ -19,9 +20,9 @@
 
 .formField {
   display: grid;
-  grid-template-columns: 3fr 3fr 3fr;
+  grid-template-columns: 2fr 2fr 2fr 2fr;
 
-  div {
+  .blocForm {
     padding: 0.5rem;
   }
 }

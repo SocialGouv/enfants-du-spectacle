@@ -30,7 +30,7 @@ const post: NextApiHandler = async (req, res) => {
   } catch (e: unknown) {
     console.log(e);
   }
-  res.status(200).json({ message: "Utilisateur ajoutée" });
+  res.status(200).json({ message: "Utilisateur ajouté" });
 };
 
 const remove: NextApiHandler = async (req, res) => {

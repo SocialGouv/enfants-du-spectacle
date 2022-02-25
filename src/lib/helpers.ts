@@ -178,6 +178,11 @@ function frenchDepartementName(departementNumber: string): string {
   );
 }
 
+const ROLES_USERS = [
+  { label: "Administrateur", value: "ADMIN" },
+  { label: "Instructeur", value: "INSTRUCTEUR" },
+];
+
 const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
 
 const TYPES_EMPLOI = [
@@ -264,6 +269,7 @@ export {
   getFormatedTypeDossier,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,
+  ROLES_USERS,
   searchResultsToSocieteProductions,
   shortUserName,
   stringToNumberOrNull,
