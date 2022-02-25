@@ -15,7 +15,7 @@ interface Props {
 const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
   const { mutate } = useSWRConfig();
   const { dossier, ...swrDossier } = useDossier(dossierId);
-  const { allUsers, ...swrUsers } = useAllUsers();
+  const { allUsers, ...swrUsers } = useAllUsers("instructeurs");
 
   if (swrDossier.isLoading || swrUsers.isLoading) return <IconLoader />;
   if (swrDossier.isError || swrUsers.isError || !allUsers || !dossier)

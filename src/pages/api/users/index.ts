@@ -47,10 +47,17 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const allUsers = await prisma.user.findMany({
-    orderBy: { name: "asc" },
-    where: { role: "INSTRUCTEUR" },
-  });
+  const role = req.query.role;
+  console.log("role : ", role);
+  const allUsers =
+    role == "all"
+      ? await prisma.user.findMany({
+          orderBy: { name: "asc" },
+        })
+      : await prisma.user.findMany({
+          orderBy: { name: "asc" },
+          where: { role: "INSTRUCTEUR" },
+        });
   res.status(200).json(superjson.stringify(allUsers));
 };
 

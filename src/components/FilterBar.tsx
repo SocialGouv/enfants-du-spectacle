@@ -30,7 +30,7 @@ const FilterBar: React.FC<Props> = ({
   allSocieteProductions,
   onChangeFilters,
 }) => {
-  const { allUsers, isLoading, isError } = useAllUsers();
+  const { allUsers, isLoading, isError } = useAllUsers("instructeurs");
 
   if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;

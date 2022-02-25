@@ -39,9 +39,9 @@ function useCommentaires(dossierId: number | null) {
   };
 }
 
-function useAllUsers() {
+function useAllUsers(role: string | undefined = "all") {
   const { data, error } = useSWR(
-    `/api/users`,
+    `/api/users?role=${role}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<User[]>(await res.text());
