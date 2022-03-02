@@ -1,3 +1,10 @@
+## [1.15.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.7...v1.15.8) (2022-03-02)
+
+
+### Bug Fixes
+
+* readd check if pull needed ([59c98a3](https://github.com/SocialGouv/enfants-du-spectacle/commit/59c98a3051ee76b721efc4aea36c0d26fb823d7a))
+
 ## [1.15.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.6...v1.15.7) (2022-02-25)
 
 
