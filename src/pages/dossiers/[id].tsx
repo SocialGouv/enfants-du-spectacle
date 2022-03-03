@@ -5,7 +5,7 @@ import { FaHome } from "react-icons/fa";
 import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
-import { useDossier } from "src/lib/api";
+import { useDataDS, useDossier } from "src/lib/api";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -13,9 +13,13 @@ const Page: React.FC = () => {
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
+  const { dataDS, ...swrDataDS } = useDataDS(true);
+  console.log(dataDS);
 
   const isLoading = swrDossier.isLoading;
-  const isError = !isLoading && (swrDossier.isError || !dossierId || !dossier);
+  const isError =
+    !isLoading &&
+    (swrDossier.isError || !dossierId || !dossier || swrDataDS.isError);
 
   const title = (
     <>
