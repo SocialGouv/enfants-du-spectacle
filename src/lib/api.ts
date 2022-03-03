@@ -55,9 +55,9 @@ function useAllUsers(role: string | undefined = "all") {
   };
 }
 
-function useDataDS() {
+function useDataDS(onlyLinks = false) {
   const { data, error } = useSWR(
-    `/api/dsapi`,
+    `/api/dsapi?links=${onlyLinks}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());
