@@ -1,3 +1,10 @@
+## [1.15.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.8...v1.15.9) (2022-03-03)
+
+
+### Bug Fixes
+
+* stabilize enfants count and refresh links when click on dossier ([9c96a62](https://github.com/SocialGouv/enfants-du-spectacle/commit/9c96a626d9831a8ae3a52d895194727bc19bc03f))
+
 ## [1.15.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.7...v1.15.8) (2022-03-02)
 
 
