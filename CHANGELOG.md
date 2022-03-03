@@ -1,3 +1,10 @@
+## [1.15.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.9...v1.15.10) (2022-03-03)
+
+
+### Bug Fixes
+
+* add pieces dossiers enfant to refresh ([ca7ade2](https://github.com/SocialGouv/enfants-du-spectacle/commit/ca7ade298e74d132a3429480d47e66c94c39dbe2))
+
 ## [1.15.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.8...v1.15.9) (2022-03-03)
 
 
