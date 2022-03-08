@@ -36,7 +36,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const dossierExternalId = req.query.externalid;
-  console.log("number dossier : ", dossierExternalId);
   const fetching = await getDatasFromDS(dossierExternalId as string);
   if (_.get(fetching, "errors")) {
     res.status(500).json(superjson.stringify(_.get(fetching, "errors")));
@@ -102,8 +101,8 @@ const insertDataFromDs = async (data: unknown) => {
       _.forEach(enfant.piecesDossier, async (pieceDossier: unknown) => {
         pieceDossier.link = _.find(
           champEnfant,
-          (champ: Record<string, Record<string, unknown>>) => {
-            return champ.file.checksum === pieceDossier.externalId;
+          (champ: Record<string, Record<string, unknown> | null>) => {
+            return champ.file?.checksum === pieceDossier.externalId;
           }
         ).file.url;
         await updatePieceDossierEnfant(prisma, pieceDossier);
