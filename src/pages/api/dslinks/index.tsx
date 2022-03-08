@@ -118,7 +118,6 @@ const insertDataFromDs = async (data: unknown) => {
 const getDatasFromDS = async (dossierExternalId: string) => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
   const dossierId = parseInt(dossierExternalId);
-  console.log("dossierId : ", dossierId);
   const query = `query getDossier(
     $dossierId: Int!
   ) {
