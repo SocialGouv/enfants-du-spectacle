@@ -1,3 +1,10 @@
+## [1.15.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.11...v1.15.12) (2022-03-08)
+
+
+### Bug Fixes
+
+* readd checking DS ([ca9f96f](https://github.com/SocialGouv/enfants-du-spectacle/commit/ca9f96fadd6e163bdf69495fd42f5d2d5d57ffa1))
+
 ## [1.15.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.10...v1.15.11) (2022-03-08)
 
 
