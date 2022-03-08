@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.16.0...v1.16.1) (2022-03-08)
+
+
+### Bug Fixes
+
+* fix checksum problem, delete cdc access ([adf923c](https://github.com/SocialGouv/enfants-du-spectacle/commit/adf923c103714f043b52b7b872e009c8d9bb57c5))
+
 # [1.16.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.12...v1.16.0) (2022-03-08)
 
 
