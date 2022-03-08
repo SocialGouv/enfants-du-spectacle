@@ -48,7 +48,6 @@ const remove: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const role = req.query.role;
-  console.log("role : ", role);
   const allUsers =
     role == "all"
       ? await prisma.user.findMany({

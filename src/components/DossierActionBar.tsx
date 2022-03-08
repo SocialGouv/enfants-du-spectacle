@@ -50,9 +50,6 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
           Notes instructeur
         </Link>
       </Item>
-      <Item label="CdC">
-        <Link href={`/dossiers/cdc/${dossier.id}`}>Part</Link>
-      </Item>
     </div>
   );
 };
