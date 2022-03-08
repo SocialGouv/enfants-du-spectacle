@@ -54,10 +54,8 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const linksOnly = req.query.links == "true";
-  console.log("only links : ", linksOnly);
   const infos = await getInfosFromDS();
-  const neddUpdate = await checkNeedUpdate(infos, linksOnly);
+  const neddUpdate = await checkNeedUpdate(infos);
   if (neddUpdate) {
     const fetching = await getDatasFromDS();
     if (_.get(fetching, "errors")) {
@@ -73,9 +71,9 @@ const get: NextApiHandler = async (req, res) => {
   }
 };
 
-const checkNeedUpdate = async (data: unknown, linksOnly: boolean) => {
+const checkNeedUpdate = async (data: unknown) => {
   const needUpdate = new Promise((resolve) => {
-    let checker = linksOnly;
+    let checker = true;
     data.data.demarche.dossiers.nodes.forEach(async (dossier, index) => {
       //console.log(dossier)
       const intDossier = await searchDossierByExternalId(
@@ -257,6 +255,7 @@ const insertDataFromDs = (data: unknown) => {
               _.find(dossier.champs, { label: "Titre du projet" }),
               "stringValue"
             ),
+            number: dossier.number,
             presentation: _.get(
               _.find(dossier.champs, {
                 label: "Présentation globale du projet",
@@ -292,6 +291,15 @@ const insertDataFromDs = (data: unknown) => {
           _.forEach(arrayJustifs, async (piece: JustificatifDossier) => {
             const createdPiece: Omit<PieceDossier, "id"> = {
               dossierId: finalDossier.id,
+              externalId: _.get(
+                _.find(dossier.champs, (datab: Record<string, unknown>) => {
+                  return (
+                    datab.label ===
+                    _.get(_.find(JUSTIFS_DOSSIER, { value: piece }), "label")
+                  );
+                }),
+                "file"
+              ).checksum,
               link: _.get(
                 _.find(dossier.champs, (datab: Record<string, unknown>) => {
                   return (
@@ -465,7 +473,17 @@ const insertDataFromDs = (data: unknown) => {
               const enfantCreated = await createEnfant(prisma, enfant);
               _.forEach(arrayJustifs, async (piece: JustificatifEnfant) => {
                 const createdPiece = {
+                  dossierId: finalDossier.id,
                   enfantId: enfantCreated.id,
+                  externalId: _.get(
+                    _.filter(champEnfant, (datab: Record<string, unknown>) => {
+                      return (
+                        datab.label ===
+                        _.get(_.find(JUSTIFS_ENFANT, { value: piece }), "label")
+                      );
+                    })[i],
+                    "file"
+                  ).checksum,
                   link: _.get(
                     _.filter(champEnfant, (datab: Record<string, unknown>) => {
                       return (
