@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.12...v1.16.0) (2022-03-08)
+
+
+### Features
+
+* add cdc feature ([ac4b403](https://github.com/SocialGouv/enfants-du-spectacle/commit/ac4b4037ba25478a333db26cc13aa129b4acaa14))
+
 ## [1.15.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.15.11...v1.15.12) (2022-03-08)
 
 
