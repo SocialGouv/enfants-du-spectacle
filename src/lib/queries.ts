@@ -46,13 +46,17 @@ const searchEnfants = async (
 const searchDossierByExternalId = async (
   prismaClient: PrismaClient,
   dossierId: number
-) => {
+): Promise<Dossier[]> => {
   try {
     return await prismaClient.dossier.findMany({
       include: {
         commission: true,
         demandeur: true,
-        enfants: true,
+        enfants: {
+          include: {
+            piecesDossier: true,
+          },
+        },
         societeProduction: true,
         user: true,
       },
@@ -232,6 +236,23 @@ const createPieceDossierEnfant = async (
   }
 };
 
+const updatePieceDossierEnfant = async (
+  prismaClient: PrismaClient,
+  piece: PieceDossierEnfant
+) => {
+  try {
+    return await prismaClient.pieceDossierEnfant.update({
+      data: piece,
+      where: {
+        id: piece.id,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
 const createPieceDossier = async (
   prismaClient: PrismaClient,
   piece: Omit<PieceDossier, "id">
@@ -250,6 +271,20 @@ const deletePieceDossier = async (
 ) => {
   try {
     return await prismaClient.pieceDossier.deleteMany({
+      where: { dossierId: dossierId },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const deletePieceDossierEnfant = async (
+  prismaClient: PrismaClient,
+  dossierId: number
+) => {
+  try {
+    return await prismaClient.pieceDossierEnfant.deleteMany({
       where: { dossierId: dossierId },
     });
   } catch (e: unknown) {
@@ -446,6 +481,7 @@ export {
   deleteCommentaire,
   deleteEnfants,
   deletePieceDossier,
+  deletePieceDossierEnfant,
   getDataDS,
   getUpcomingCommissionsByLimitDate,
   removeCommission,
@@ -457,4 +493,5 @@ export {
   searchSocieteProductionBySiret,
   updateConstructDossier,
   updateDossier,
+  updatePieceDossierEnfant,
 };

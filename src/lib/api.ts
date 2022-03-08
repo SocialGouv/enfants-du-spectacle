@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { PieceDossierEnfant, User } from "@prisma/client";
 import type {
   CommentaireData,
   CommissionData,
@@ -55,9 +55,9 @@ function useAllUsers(role: string | undefined = "all") {
   };
 }
 
-function useDataDS(onlyLinks = false) {
+function useDataDS() {
   const { data, error } = useSWR(
-    `/api/dsapi?links=${onlyLinks}`,
+    `/api/dsapi`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());
@@ -66,6 +66,21 @@ function useDataDS(onlyLinks = false) {
 
   return {
     dataDS: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
+function RefreshLinks(dossierExternalId: string) {
+  const { data, error } = useSWR(
+    `/api/dslinks?externalid=${dossierExternalId}`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<PieceDossierEnfant[]>(await res.text());
+    }
+  );
+
+  return {
     isError: error,
     isLoading: !error && !data,
   };
@@ -109,6 +124,7 @@ function useCommission(id: number | null) {
 }
 
 export {
+  RefreshLinks,
   useAllUsers,
   useCommentaires,
   useCommission,

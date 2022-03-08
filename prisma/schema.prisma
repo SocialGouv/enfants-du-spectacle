@@ -82,11 +82,12 @@ enum CategorieDossier {
 }
 
 model PieceDossier {
-  id        Int                 @id @default(autoincrement())
-  dossierId Int
-  dossier   Dossier?            @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-  type      JustificatifDossier
-  link      String
+  id         Int                 @id @default(autoincrement())
+  dossierId  Int
+  dossier    Dossier?            @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  externalId String?
+  type       JustificatifDossier
+  link       String
 }
 
 enum JustificatifDossier {
@@ -121,6 +122,7 @@ model Dossier {
   dateDebut                DateTime
   dateFin                  DateTime
   externalId               String?               @unique
+  number                   Int?
   dateDerniereModification DateTime?
 }
 
@@ -158,11 +160,13 @@ enum JustificatifEnfant {
 }
 
 model PieceDossierEnfant {
-  id       Int                @id @default(autoincrement())
-  enfantId Int
-  enfant   Enfant?            @relation(fields: [enfantId], references: [id], onDelete: Cascade)
-  type     JustificatifEnfant
-  link     String
+  id         Int                @id @default(autoincrement())
+  enfantId   Int
+  enfant     Enfant?            @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+  dossierId  Int?
+  externalId String?
+  type       JustificatifEnfant
+  link       String
 }
 
 model Enfant {
@@ -184,6 +188,7 @@ model Enfant {
   piecesDossier               PieceDossierEnfant[]
   dossierId                   Int
   dossier                     Dossier              @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  cdc                         Int?
 }
 
 // for next-auth
