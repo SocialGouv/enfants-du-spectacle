@@ -29,6 +29,7 @@ jobs:
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           START_SCRIPT=start-review
 
+
   deploy:
     name: Deploy application
     runs-on: ubuntu-latest
