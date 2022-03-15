@@ -1,6 +1,18 @@
+.enfantRow {
+  background-color: white;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.largeTitle,
+.formWrapper {
+  display: inline-block;
+}
+
 .wrapper {
   display: grid;
-  grid-template-columns: 15rem 1fr 1fr 15rem;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
 }
 
 .wrapperFoldable {
@@ -19,8 +31,31 @@
 }
 
 .inputText {
-  background: white;
+  background: rgb(224, 224, 224);
   width: 2rem;
   margin-left: 1rem;
   height: 1.7rem;
+  border-bottom: solid #060591 2px;
+}
+
+.inputContainer {
+  display: inline-block;
+}
+
+.postButton {
+  --color-hover: rgba(0, 0, 221, 0.5);
+  --color-active: rgba(41, 41, 255, 0.5);
+  cursor: pointer;
+  background-color: #060591;
+  color: var(--w-bf500);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.5rem;
+  color: white;
+  float: right;
+}
+
+.postGeneral {
+  margin-left: 1rem;
 }

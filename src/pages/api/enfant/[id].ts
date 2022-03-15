@@ -1,0 +1,53 @@
+import { withSentry } from "@sentry/nextjs";
+import type { NextApiHandler, NextApiRequest } from "next";
+import { getSession } from "next-auth/react";
+import prisma from "src/lib/prismaClient";
+import superjson from "superjson";
+
+const handler: NextApiHandler = async (req, res) => {
+  const session = await getSession({ req });
+  if (!session) {
+    res.status(401).end();
+    return;
+  }
+  const { id: enfantIdStr } = req.query;
+  if (typeof enfantIdStr !== "string") {
+    res.status(404).send(`not a valid dossier id`);
+    return;
+  }
+
+  if (req.method == "PUT") {
+    await update(req, res);
+  } else {
+    return;
+  }
+};
+
+function getId(req: NextApiRequest): number {
+  return Number(req.query.id as string);
+}
+
+const update: NextApiHandler = async (req, res) => {
+  if (typeof req.body !== "string") {
+    res.status(400).end();
+    return;
+  }
+
+  const parsed = JSON.parse(req.body);
+  if (!parsed) {
+    res.status(400).end();
+    return;
+  }
+
+  const enfantId = getId(req);
+
+  const updatedEnfant = await prisma.enfant.update({
+    data: {
+      cdc: parsed.cdc,
+    },
+    where: { id: enfantId },
+  });
+
+  res.status(200).json(superjson.stringify(updatedEnfant));
+};
+export default withSentry(handler);

@@ -224,6 +224,40 @@ const createEnfant = async (prismaClient: PrismaClient, enfant: Enfant) => {
   }
 };
 
+const updateEnfant = (enfant: Enfant) => {
+  window
+    .fetch(`/api/enfant/${enfant.id}`, {
+      body: JSON.stringify(enfant),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const updateEnfants = (cdc: number, dossierId: number) => {
+  window
+    .fetch(`/api/enfants`, {
+      body: JSON.stringify({ cdc, dossierId }),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const createPieceDossierEnfant = async (
   prismaClient: PrismaClient,
   piece: Omit<PieceDossierEnfant, "id">
@@ -493,5 +527,7 @@ export {
   searchSocieteProductionBySiret,
   updateConstructDossier,
   updateDossier,
+  updateEnfant,
+  updateEnfants,
   updatePieceDossierEnfant,
 };
