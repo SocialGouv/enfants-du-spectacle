@@ -1,0 +1,15 @@
+app:
+  enabled: true
+  env:
+    - name: APP_BASE_URL
+      value: "https://{{ $.Values.global.host }}"
+  envFrom:
+    - secretRef:
+        name: pg-user
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+  probesPath: /api/healthz
+  replicas: 1
+  imagePackage: app

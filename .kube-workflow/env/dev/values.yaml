@@ -1,0 +1,19 @@
+app:
+  needs: [db]
+  envFrom:
+    - secretRef:
+        name: pg-user-{{ .Values.global.branchSlug }}
+  volumes:
+    - name: docs
+      emptyDir: {}
+  volumeMounts:
+    - mountPath: /mnt/docs
+      name: docs
+
+jobs:
+  enabled: true
+  runs:
+    - name: db
+      use: SocialGouv/kube-workflow/jobs/create-db@master
+      with:
+        pgAdminSecretRefName: azure-pg-admin-user
