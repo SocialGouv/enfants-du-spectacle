@@ -1,3 +1,10 @@
+## [1.18.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.1...v1.18.2) (2022-03-15)
+
+
+### Bug Fixes
+
+* proper CRUD on commissions ([acb2530](https://github.com/SocialGouv/enfants-du-spectacle/commit/acb253070c2589a17b8e4a5afdbeb4b729da98c2))
+
 ## [1.18.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.0...v1.18.1) (2022-03-15)
 
 
