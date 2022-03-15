@@ -1,14 +1,11 @@
-components:
-  jobs: true
-
 app:
   needs: [db]
-  replicas: 1
   envFrom:
     - secretRef:
         name: pg-user-{{ .Values.global.branchSlug }}
 
 jobs:
+  enabled: true
   runs:
     - name: db
       use: SocialGouv/actions/uses/create-db@v1

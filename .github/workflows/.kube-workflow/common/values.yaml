@@ -1,7 +1,5 @@
-components:
-  app: true
-
 app:
+  enabled: true
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
