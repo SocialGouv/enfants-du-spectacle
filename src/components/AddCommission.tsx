@@ -1,5 +1,8 @@
+import "react-datepicker/dist/react-datepicker.css";
+
 import type { Commission } from "@prisma/client";
 import * as React from "react";
+import DatePicker from "react-datepicker";
 import styles from "src/components/AddCommission.module.scss";
 
 interface Props {
@@ -18,6 +21,13 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
     setFormData({
       ...formData,
       [e.target.id]: e.currentTarget.value,
+    });
+  };
+
+  const handleDate = (wichDate: string, date: Date): void => {
+    setFormData({
+      ...formData,
+      [wichDate]: date,
     });
   };
 
@@ -47,25 +57,29 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
             <label htmlFor="date" className="mb-2 italic">
               Date
             </label>
-            <input
-              onChange={handleForm}
-              type="text"
-              id="date"
-              name="date"
-              className={styles.inputText}
-            />
+            <div className={styles.datePickerWrapper}>
+              <DatePicker
+                selected={formData.date}
+                className={styles.inputText}
+                onChange={(date: Date) => {
+                  handleDate("date", date);
+                }}
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="dateLimiteDepot" className="mb-2 italic">
               Date limite dépôt
             </label>
-            <input
-              onChange={handleForm}
-              type="text"
-              id="dateLimiteDepot"
-              name="dateLimiteDepot"
-              className={styles.inputText}
-            />
+            <div className={styles.datePickerWrapper}>
+              <DatePicker
+                selected={formData.dateLimiteDepot}
+                className={styles.inputText}
+                onChange={(date: Date) => {
+                  handleDate("dateLimiteDepot", date);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
