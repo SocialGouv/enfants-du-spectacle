@@ -102,7 +102,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
           className={styles.postButton}
           disabled={formData.email === "" ? true : false}
         >
-          Poster
+          Ajouter
         </button>
       </form>
     </div>
