@@ -6,6 +6,8 @@ import {
   HeaderBody,
   HeaderOperator,
   Logo,
+  NavItem,
+  NavSubItem,
   Row,
   Service,
   Tool,
@@ -20,7 +22,6 @@ import React from "react";
 import { FaHome } from "react-icons/fa";
 import styles from "src/components/Header.module.scss";
 import logoEds from "src/images/logo.png";
-import { getDataDS } from "src/lib/queries";
 
 interface BreadcrumbData {
   label: string;
@@ -60,25 +61,40 @@ const Header: React.FC<Props> = ({
             {session && (
               <Tool>
                 <ToolItemGroup>
-                  <ToolItem
-                    onClick={() => {
-                      getDataDS();
-                    }}
-                  >
-                    {session.user?.image && (
-                      <span
-                        style={{
-                          backgroundImage: `url(${session.user.image})`,
-                        }}
-                      />
-                    )}
-                    <span>
-                      <span>Utilisateur </span>
-                      <strong>
-                        {session.dbUser.prenom || session.dbUser.email}
-                      </strong>
-                    </span>
-                  </ToolItem>
+                  {session.dbUser.role !== "ADMIN" && (
+                    <ToolItem>
+                      {session.user?.image && (
+                        <span
+                          style={{
+                            backgroundImage: `url(${session.user.image})`,
+                          }}
+                        />
+                      )}
+                      <span>
+                        <span>Utilisateur </span>
+                        <strong>
+                          {session.dbUser.prenom || session.dbUser.email}
+                        </strong>
+                      </span>
+                    </ToolItem>
+                  )}
+                  {session.dbUser.role === "ADMIN" && (
+                    <div className={styles.menuUser}>
+                      <NavItem
+                        title={
+                          `Utilisateur ` +
+                          `${session.dbUser.prenom || session.dbUser.email}`
+                        }
+                        className={styles.menuUser}
+                      >
+                        <NavSubItem
+                          title="Commissions"
+                          link="/commissions/create"
+                        />
+                        <NavSubItem title="Utilisateurs" link="/utilisateurs" />
+                      </NavItem>
+                    </div>
+                  )}
                   <ToolItem
                     link="/dossiers"
                     onClick={async () => router.push("/dossiers")}
