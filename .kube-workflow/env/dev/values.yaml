@@ -3,6 +3,12 @@ app:
   envFrom:
     - secretRef:
         name: pg-user-{{ .Values.global.branchSlug }}
+  volumes:
+    - name: docs
+      emptyDir: {}
+  volumeMounts:
+    - mountPath: /mnt/docs
+      name: docs
 
 jobs:
   enabled: true
