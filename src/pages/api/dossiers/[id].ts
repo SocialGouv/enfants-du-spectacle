@@ -72,7 +72,7 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const updates: { statut?: StatutDossier; userId?: number } = {};
+  const updates: { statut?: StatutDossier; userId?: number; cdc?: number } = {};
   const dossierId = getId(req);
 
   if (typeof parsed.transitionEvent === "string") {
@@ -213,6 +213,10 @@ const update: NextApiHandler = async (req, res) => {
 
   if (typeof parsed.userId === "number" || parsed.userId === null) {
     updates.userId = parsed.userId;
+  }
+
+  if (typeof parsed.cdc === "number" || parsed.cdc === null) {
+    updates.cdc = parsed.cdc;
   }
 
   const updatedDossier = await prisma.dossier.update({

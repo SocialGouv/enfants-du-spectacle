@@ -6,41 +6,37 @@ import {
   frenchDateText,
   typeEmploiLabel,
 } from "src/lib/helpers";
-import { useSWRConfig } from "swr";
 
 interface Props {
   enfant: Enfant;
+  saveEnfant: (e: React.FormEvent, data: Enfant, enfant: Enfant) => void;
 }
 
-/*interface PropCdc {
-  cdc: number;
-}*/
-
-const EnfantCdc: React.FC<Props> = ({ enfant }) => {
-  const { mutate } = useSWRConfig();
+const EnfantCdc: React.FC<Props> = ({ enfant, saveEnfant }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
 
+  const [changes, setChanges] = React.useState<boolean>(false);
+
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
+    const name = e.target.name;
+    const value = e.target.value;
     setFormData({
       ...formData,
-      [e.target.id]: e.currentTarget.value,
+      [name]: value,
     });
-    mutate(`/api/enfant/${formData.id}`, { ...formData }, false).catch(
-      (err) => {
-        throw err;
-      }
-    );
-    /*updateEnfant(dossier, { userId }, () => {
-      mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
-        throw e;
-      });
-    });*/
+    setChanges(true);
+  };
+
+  const selectText = (): void => {
+    const input = document.getElementById(`cdc_${enfant.id}`);
+    input.focus();
+    input.select();
   };
 
   return (
-    <div>
+    <div className={styles.enfantRow}>
       <div className={styles.wrapper}>
         <div className={styles.name}>
           {enfant.nom} {enfant.prenom}
@@ -53,20 +49,34 @@ const EnfantCdc: React.FC<Props> = ({ enfant }) => {
         </div>
         <div>{typeEmploiLabel(enfant.typeEmploi)}</div>
         <div>
-          <form className={styles.Form}>
+          <form
+            className={styles.Form}
+            onSubmit={(e) => {
+              e.currentTarget.value = "";
+              saveEnfant(e, formData, enfant);
+              setChanges(false);
+            }}
+          >
             <div>
               <div className={styles.formField}>
-                <div>
+                <div className={styles.inputContainer}>
                   <input
                     onChange={handleForm}
+                    onClick={selectText}
                     type="text"
-                    id="cdc"
+                    id={`cdc_${enfant.id}`}
                     name="cdc"
                     className={styles.inputText}
                     value={formData.cdc ? formData.cdc : 0}
                   />{" "}
                   %
                 </div>
+                <button
+                  className={styles.postButton}
+                  disabled={changes ? false : true}
+                >
+                  Mettre à jour
+                </button>
               </div>
             </div>
           </form>

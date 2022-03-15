@@ -124,6 +124,7 @@ model Dossier {
   externalId               String?               @unique
   number                   Int?
   dateDerniereModification DateTime?
+  cdc                      Int?
 }
 
 model Commentaire {
