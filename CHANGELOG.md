@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.17.0...v1.18.0) (2022-03-15)
+
+
+### Features
+
+* add menu admin ([70615c3](https://github.com/SocialGouv/enfants-du-spectacle/commit/70615c335e30d33544e79c411fcd88e030d1b4ff))
+
 # [1.17.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.16.3...v1.17.0) (2022-03-15)
 
 
