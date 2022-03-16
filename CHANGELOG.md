@@ -1,3 +1,10 @@
+## [1.18.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.2...v1.18.3) (2022-03-16)
+
+
+### Bug Fixes
+
+* **up-ci:** remove fake namespaces ([fbcebc7](https://github.com/SocialGouv/enfants-du-spectacle/commit/fbcebc7731d51e0a42b61064d37595f20daea436))
+
 ## [1.18.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.1...v1.18.2) (2022-03-15)
 
 
