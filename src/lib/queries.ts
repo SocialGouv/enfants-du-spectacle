@@ -387,7 +387,7 @@ const deleteCommentaire = (id: number) => {
     });
 };
 
-const createCommission = (commission: Commission) => {
+const createCommission = (commission: Omit<Commission, "id">) => {
   window
     .fetch(`/api/commissions`, {
       body: JSON.stringify(commission),

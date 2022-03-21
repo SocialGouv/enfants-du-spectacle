@@ -1,12 +1,19 @@
 import "react-datepicker/dist/react-datepicker.css";
 
+import { Select } from "@dataesr/react-dsfr";
 import type { Commission } from "@prisma/client";
 import * as React from "react";
 import DatePicker from "react-datepicker";
 import styles from "src/components/AddCommission.module.scss";
+import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
 
 interface Props {
   saveCommission: (e: React.FormEvent, formData: Commission) => void;
+}
+
+interface Option {
+  label: string | null;
+  value: string;
 }
 
 const AddCommission: React.FC<Props> = ({ saveCommission }) => {
@@ -31,6 +38,11 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
     });
   };
 
+  const defaultDepartement: Option = {
+    label: "Département",
+    value: "",
+  };
+
   return (
     <form
       className={styles.Form}
@@ -41,19 +53,28 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
     >
       <div>
         <div className={styles.formField}>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="departement" className="mb-2 italic">
               Département
             </label>
-            <input
-              onChange={handleForm}
-              type="text"
-              id="departement"
-              name="departement"
-              className={styles.inputText}
-            />
+            <div className={styles.selectDpt}>
+              <Select
+                id="departement"
+                name="departement"
+                selected={formData.departement ? formData.departement : ""}
+                options={[defaultDepartement].concat(
+                  ALL_DEPARTEMENTS.map((u) => ({
+                    label: frenchDepartementName(u),
+                    value: u,
+                  }))
+                )}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleForm(event);
+                }}
+              />
+            </div>
           </div>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="date" className="mb-2 italic">
               Date
             </label>
@@ -67,7 +88,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
               />
             </div>
           </div>
-          <div>
+          <div className={styles.blocForm}>
             <label htmlFor="dateLimiteDepot" className="mb-2 italic">
               Date limite dépôt
             </label>

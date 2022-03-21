@@ -17,6 +17,7 @@ const InfoSociete: React.FC<Props> = ({
     raisonSociale,
     formeJuridique,
     adresse,
+    adresseCodeCommune,
     siret,
     naf,
     siren,
@@ -39,6 +40,8 @@ const InfoSociete: React.FC<Props> = ({
       {formeJuridique}
       <br />
       {adresse}
+      <br />
+      {adresseCodeCommune}
       <br />
       SIRET {siret}
       <br />
