@@ -1,3 +1,11 @@
+## [1.18.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.3...v1.18.4) (2022-03-21)
+
+
+### Bug Fixes
+
+* add city to infosociete ([b7a6c94](https://github.com/SocialGouv/enfants-du-spectacle/commit/b7a6c94a9cebfcc90ec35b1e271d3bd988084e09))
+* implement select department for create commissions ([13573df](https://github.com/SocialGouv/enfants-du-spectacle/commit/13573df35c02611add682b1dcf3b3eb91b1b78ed))
+
 ## [1.18.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.2...v1.18.3) (2022-03-16)
 
 
