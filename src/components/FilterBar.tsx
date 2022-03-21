@@ -80,7 +80,7 @@ const FilterBar: React.FC<Props> = ({
         {text}{" "}
         <span className={styles.filterContainer || ""}>
           <Select
-            id="userId"
+            id="departementId"
             selected={String(filters.departement)}
             options={[defaultDepartement].concat(
               ALL_DEPARTEMENTS.map((u) => ({
@@ -106,7 +106,7 @@ const FilterBar: React.FC<Props> = ({
         </span>
         <span className={styles.filterContainer}>
           <Select
-            id="userId"
+            id="societeId"
             selected={String(filters.societeProductionId) || ""}
             options={[defaultSocieteProductionOption].concat(
               allSocieteProductions.map((s) => ({
