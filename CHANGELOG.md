@@ -1,3 +1,10 @@
+## [1.18.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.4...v1.18.5) (2022-03-24)
+
+
+### Bug Fixes
+
+* manually trigger refresh sync from DS ([f7dbf43](https://github.com/SocialGouv/enfants-du-spectacle/commit/f7dbf4303b1a46bd580a95cb565c35172d86b046))
+
 ## [1.18.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.3...v1.18.4) (2022-03-21)
 
 
