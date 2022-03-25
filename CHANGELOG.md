@@ -1,3 +1,10 @@
+## [1.18.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.6...v1.18.7) (2022-03-25)
+
+
+### Bug Fixes
+
+* implement sealed secret demarche number ([0be3052](https://github.com/SocialGouv/enfants-du-spectacle/commit/0be3052bf0c0bd39f33610ea544888afbf07b230))
+
 ## [1.18.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.5...v1.18.6) (2022-03-24)
 
 
