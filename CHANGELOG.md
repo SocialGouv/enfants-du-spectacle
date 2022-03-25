@@ -1,3 +1,11 @@
+## [1.18.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.7...v1.18.8) (2022-03-25)
+
+
+### Bug Fixes
+
+* forgot remove demarche number from sealed-secret ([61c2c08](https://github.com/SocialGouv/enfants-du-spectacle/commit/61c2c0898692b5a5020e7da198a823f78938c9be))
+* move demarche_number from sealed-secret to configmap ([909a2d2](https://github.com/SocialGouv/enfants-du-spectacle/commit/909a2d2aae1d1fbe9a971b0d88c1e5250c778149))
+
 ## [1.18.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.6...v1.18.7) (2022-03-25)
 
 
