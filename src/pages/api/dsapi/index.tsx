@@ -509,7 +509,7 @@ const insertDataFromDs = (data: unknown) => {
 
 const getDatasFromDS = async () => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
-  const demarcheNumber = 49723;
+  const demarcheNumber = process.env.DEMARCHE_NUMBER;
   const state = "en_construction";
   const query = `query getDemarche(
     $demarcheNumber: Int!
@@ -893,7 +893,7 @@ const getDatasFromDS = async () => {
 
 const getInfosFromDS = async () => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
-  const demarcheNumber = 49723;
+  const demarcheNumber = process.env.DEMARCHE_NUMBER;
   const state = "en_construction";
   const query = `query getDemarche(
     $demarcheNumber: Int!
