@@ -50,7 +50,7 @@ const AddPost: React.FC<Props> = ({ savePost, dossierId }) => {
         </div>
       </div>
       <button
-        className={styles.postButton}
+        className="postButton"
         disabled={formData === undefined || formData.text === "" ? true : false}
       >
         Poster

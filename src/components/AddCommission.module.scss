@@ -27,21 +27,6 @@
   }
 }
 
-.postButton {
-  --color-hover: rgba(0, 0, 221, 0.5);
-  --color-active: rgba(41, 41, 255, 0.5);
-  cursor: pointer;
-  background-color: #060591;
-  color: var(--w-bf500);
-  font-size: 1rem;
-  line-height: 1.5rem;
-  min-height: 2.5rem;
-  padding: 0.5rem 1.5rem;
-  color: white;
-  float: right;
-  margin-top: 1rem;
-}
-
 .Form {
   margin-bottom: 5rem;
 }

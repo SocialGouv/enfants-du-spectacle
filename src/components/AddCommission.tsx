@@ -105,7 +105,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
         </div>
       </div>
       <button
-        className={styles.postButton}
+        className="postButton"
         disabled={formData.departement === "" ? true : false}
       >
         Créer

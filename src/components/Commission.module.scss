@@ -1,4 +1,9 @@
 
+.commissionHeader {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
 .dossierGrid {
   grid-template-columns: 10rem 1.3fr 1.3fr .6fr 1fr 8rem;
 }

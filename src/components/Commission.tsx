@@ -46,7 +46,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
     .reduce((i, b) => i + b, 0);
   return (
     <div className="card">
-      <div>
+      <div className={styles.commissionHeader}>
         <div className={styles.dossierTitle}>
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}

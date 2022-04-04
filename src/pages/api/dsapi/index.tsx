@@ -12,7 +12,7 @@ import type {
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
+//import { getSession } from "next-auth/react";
 import {
   getFormatedTypeDossier,
   JUSTIFS_DOSSIER,
@@ -39,11 +39,13 @@ import {
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
-  if (!session) {
+  //const session = await getSession({ req });
+  const { key } = req.query;
+  console.log("key : ", key);
+  /*if (!session) {
     res.status(401).end();
     return;
-  }
+  }*/
 
   if (req.method == "GET") {
     await get(req, res);
@@ -73,7 +75,7 @@ const get: NextApiHandler = async (req, res) => {
 
 const checkNeedUpdate = async (data: unknown) => {
   const needUpdate = new Promise((resolve) => {
-    let checker = false;
+    let checker = true;
     data.data.demarche.dossiers.nodes.forEach(async (dossier, index) => {
       //console.log(dossier)
       const intDossier = await searchDossierByExternalId(
