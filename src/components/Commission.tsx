@@ -51,7 +51,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
-        <button className="postButton">Télécharger ordre du jour</button>
       </div>
       <div style={{ marginBottom: "2rem" }}>
         <b>{dossiersCount}</b> dossiers - <b>{enfantsCount}</b> enfants
