@@ -1,3 +1,12 @@
+## [1.18.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.9...v1.18.10) (2022-04-04)
+
+
+### Bug Fixes
+
+* clean css ([89aa5ff](https://github.com/SocialGouv/enfants-du-spectacle/commit/89aa5ff91a680661f1d216143ac0b4a1724d6915))
+* prepare fetching from DS for cron job ([20867f9](https://github.com/SocialGouv/enfants-du-spectacle/commit/20867f9a2f4c39ea0a228d37f796e9432bbc8915))
+* remove button odj ([341fdc3](https://github.com/SocialGouv/enfants-du-spectacle/commit/341fdc3f5e8db3a1ade920972dcdef1781b68f99))
+
 ## [1.18.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.8...v1.18.9) (2022-03-25)
 
 
