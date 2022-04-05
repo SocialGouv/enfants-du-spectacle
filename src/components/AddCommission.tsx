@@ -2,8 +2,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { Select } from "@dataesr/react-dsfr";
 import type { Commission } from "@prisma/client";
+import fr from "date-fns/locale/fr";
 import * as React from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, {
+  getDefaultLocale,
+  registerLocale,
+  setDefaultLocale,
+} from "react-datepicker";
 import styles from "src/components/AddCommission.module.scss";
 import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
 
@@ -25,6 +30,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   });
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
+    console.log("locale : ", getDefaultLocale);
     setFormData({
       ...formData,
       [e.target.id]: e.currentTarget.value,
@@ -32,6 +38,8 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   };
 
   const handleDate = (wichDate: string, date: Date): void => {
+    date.setUTCHours(23);
+    date.setMinutes(59);
     setFormData({
       ...formData,
       [wichDate]: date,
@@ -42,6 +50,12 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
     label: "Département",
     value: "",
   };
+
+  React.useEffect(() => {
+    registerLocale("fr", fr);
+    setDefaultLocale("fr");
+    console.log("locale : ", getDefaultLocale);
+  });
 
   return (
     <form
@@ -64,6 +78,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
                 selected={formData.departement ? formData.departement : ""}
                 options={[defaultDepartement].concat(
                   ALL_DEPARTEMENTS.map((u) => ({
+                    key: u,
                     label: frenchDepartementName(u),
                     value: u,
                   }))
@@ -80,6 +95,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
             </label>
             <div className={styles.datePickerWrapper}>
               <DatePicker
+                dateFormat="dd/MM/yyyy"
                 selected={formData.date}
                 className={styles.inputText}
                 onChange={(date: Date) => {
@@ -94,6 +110,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
             </label>
             <div className={styles.datePickerWrapper}>
               <DatePicker
+                dateFormat="dd/MM/yyyy"
                 selected={formData.dateLimiteDepot}
                 className={styles.inputText}
                 onChange={(date: Date) => {
