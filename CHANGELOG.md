@@ -1,3 +1,10 @@
+## [1.18.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.11...v1.18.12) (2022-04-05)
+
+
+### Bug Fixes
+
+* clean datepicker for commissions ([23ad218](https://github.com/SocialGouv/enfants-du-spectacle/commit/23ad218c935233ae11bc80c9132e7f8dca172570))
+
 ## [1.18.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.10...v1.18.11) (2022-04-05)
 
 
