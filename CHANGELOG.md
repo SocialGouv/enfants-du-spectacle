@@ -1,3 +1,10 @@
+## [1.18.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.10...v1.18.11) (2022-04-05)
+
+
+### Bug Fixes
+
+* implement scheduler with github action ([8a862d1](https://github.com/SocialGouv/enfants-du-spectacle/commit/8a862d17c83a3b54967605fcd1f16353645f8290))
+
 ## [1.18.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.9...v1.18.10) (2022-04-04)
 
 
