@@ -20,7 +20,7 @@ interface Props {
 
 interface RowProps {
   commission: CommissionWithCounts;
-  deleteCommission: (id: number) => void;
+  deleteCommission: (e: React.FormEvent, id: number) => void;
 }
 
 const CommissionRow: React.FC<RowProps> = ({
@@ -52,8 +52,8 @@ const CommissionRow: React.FC<RowProps> = ({
           <a
             href={`/commissions/create`}
             className={styles.seeDossiers}
-            onClick={() => {
-              deleteCommission(commission.id);
+            onClick={(e: React.ChangeEvent<HTMLInputElement>) => {
+              deleteCommission(e, commission.id);
             }}
           >
             Supprimer la commission
@@ -68,7 +68,8 @@ const Commissions: React.FC<Props> = ({ commissions }) => {
   const [commissionList, setCommissionList] =
     React.useState<CommissionWithCounts[]>(commissions);
 
-  const deleteCommission = (id: number) => {
+  const deleteCommission = (e: React.FormEvent, id: number) => {
+    e.preventDefault();
     const commissionListTmp: CommissionWithCounts[] = commissionList.filter(
       (commission: CommissionWithCounts) => commission.id !== id
     );
@@ -97,7 +98,7 @@ const Commissions: React.FC<Props> = ({ commissions }) => {
       <AddCommission saveCommission={addCommission} />
       {commissionList.map((commission) => (
         <CommissionRow
-          key={commission.id}
+          key={commission.id.toString()}
           commission={commission}
           deleteCommission={deleteCommission}
         />
