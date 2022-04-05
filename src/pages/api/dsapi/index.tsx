@@ -75,7 +75,7 @@ const get: NextApiHandler = async (req, res) => {
 
 const checkNeedUpdate = async (data: unknown) => {
   const needUpdate = new Promise((resolve) => {
-    let checker = true;
+    let checker = false;
     data.data.demarche.dossiers.nodes.forEach(async (dossier, index) => {
       //console.log(dossier)
       const intDossier = await searchDossierByExternalId(
