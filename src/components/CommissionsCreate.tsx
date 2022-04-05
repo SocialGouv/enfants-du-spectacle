@@ -79,6 +79,8 @@ const Commissions: React.FC<Props> = ({ commissions }) => {
 
   const addCommission = (e: React.FormEvent, formData: Commission) => {
     e.preventDefault();
+    formData.dateLimiteDepot.setHours(23);
+    formData.dateLimiteDepot.setMinutes(59);
     const commission: CommissionWithCounts = {
       date: new Date(formData.date),
       dateLimiteDepot: new Date(formData.dateLimiteDepot),
@@ -98,7 +100,7 @@ const Commissions: React.FC<Props> = ({ commissions }) => {
       <AddCommission saveCommission={addCommission} />
       {commissionList.map((commission) => (
         <CommissionRow
-          key={commission.id.toString()}
+          key={commission.id ? commission.id.toString() : `"tmp"`}
           commission={commission}
           deleteCommission={deleteCommission}
         />
