@@ -1,0 +1,85 @@
+section.calendarSection {
+  padding-top:2rem;
+  padding-bottom:2rem;
+
+  .calendarGrid {
+    display:grid;
+    grid-template-columns: 40% 60%;
+    .leftColumn {
+      padding:2rem;
+      
+    }
+    .rightColumn {
+      padding:2rem;
+      h3 {
+        color: #000091;
+        font-size:22px;
+        line-height:28px;
+        margin-bottom: 0.5rem;
+      }
+      h2 {
+        font-size:32px;
+        line-height:40px;
+      }
+      p {
+        margin-bottom:0.5rem;
+        &.pushTop {
+          margin-top:2rem;
+        }
+        &.smallGrey {
+          color:#666666;
+          font-size:12px;
+          line-height:20px;
+        }
+      }
+      .selectDepartement {
+        max-width:400px;
+      }
+      .rowButtons {
+        display:inline-block;
+        margin-top:2rem;
+        a {
+          float:none;
+          border: solid #000091 2px;
+        }
+        .whiteButton {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+          color: #000091;
+          border: solid #000091 2px;
+          padding: 0.5rem 1.5rem;
+          margin-right:2rem;
+        }
+      }
+      .calendar {
+        margin-top:2rem;
+        .calendarRow {
+          background-color:#F6F6F6;
+          display:grid;
+          grid-template-columns: 50% 50%;
+          padding:1rem;
+          border-bottom: solid #d7d3d3 1px;
+          &:first-child {
+            border-bottom:solid #838181 2px;
+          }
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width:768px) {
+    .calendarGrid {
+      display: flex;
+      -webkit-flex-direction: column-reverse;
+      flex-direction: column-reverse;
+      .rowButtons {
+        display:block;
+        a {
+          display:inline-block;
+          margin-top:1rem;
+        }
+      }
+    }
+  }
+}

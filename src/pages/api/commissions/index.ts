@@ -32,7 +32,7 @@ const get: NextApiHandler = async (req, res) => {
       : departement == "all"
       ? withChild == "true"
         ? await getUpcomingCommissionsNotEmpty()
-        : await getAllCommissions()
+        : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departement);
   res.status(200).json(superjson.stringify(commissions));
 };
@@ -60,7 +60,7 @@ const remove: NextApiHandler = async (req, res) => {
   }
 };
 
-const getAllCommissions = async () => {
+const getUpcomingCommissions = async () => {
   console.log("get all");
   return prisma.commission.findMany({
     include: {
@@ -72,6 +72,9 @@ const getAllCommissions = async () => {
       },
     },
     orderBy: { date: "asc" },
+    where: {
+      date: { gte: new Date() },
+    },
   });
 };
 

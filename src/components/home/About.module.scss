@@ -1,0 +1,20 @@
+section.aboutSection {
+  margin-top:2rem;
+  background-color:#F5F5FE;
+  padding-top:2rem;
+  padding-bottom:2rem;
+  h2 {
+    text-align:center;
+    margin-bottom:2rem;
+  }
+  p {
+    font-size: 18px;
+    line-height: 28px;
+    .redBold {
+      color: var(--red-marianne-main-472);
+    }
+  }
+  @media only screen and (max-width:768px) {
+    
+  }
+}

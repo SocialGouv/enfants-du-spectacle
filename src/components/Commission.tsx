@@ -4,6 +4,7 @@ import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+//import { generatePdf } from "src/lib/pdfJSCore";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";

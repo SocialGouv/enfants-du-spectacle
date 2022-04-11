@@ -38,8 +38,6 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   };
 
   const handleDate = (wichDate: string, date: Date): void => {
-    date.setUTCHours(23);
-    date.setMinutes(59);
     setFormData({
       ...formData,
       [wichDate]: date,
