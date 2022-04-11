@@ -107,6 +107,22 @@ function useCommissions(
   };
 }
 
+function useDatesCommissions() {
+  const { data, error } = useSWR(
+    `/api/commissions/date`,
+    async function (input: RequestInfo, init?: RequestInit) {
+      const res = await fetch(input, init);
+      return superJSONParse<CommissionData[]>(await res.text());
+    }
+  );
+
+  return {
+    commissions: data,
+    isError: error,
+    isLoading: !error && !data,
+  };
+}
+
 function useCommission(id: number | null) {
   const { data, error } = useSWR(
     id ? `/api/commissions/${id}` : null,
@@ -130,5 +146,6 @@ export {
   useCommission,
   useCommissions,
   useDataDS,
+  useDatesCommissions,
   useDossier,
 };

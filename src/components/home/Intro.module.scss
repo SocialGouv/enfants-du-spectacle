@@ -1,0 +1,47 @@
+section.introSection {
+  .introGrid {
+    display:grid;
+    grid-template-columns: 70% 30%;
+    .leftColumn {
+      padding:2rem;
+      li {
+        font-weight:600;
+        font-size:28px;
+        line-height: 36px;
+      }
+      p {
+        margin-top:3rem;
+        margin-bottom: 4rem;
+        font-size: 18px;
+        line-height: 28px;
+      }
+      a {
+        float:none;
+        font-size:20px;
+        padding: 15px 30px 15px 30px;
+      }
+    }
+    .rightColumn {
+      padding:2rem;
+      text-align:center;
+    }
+  }
+
+  @media only screen and (max-width:768px) {
+    .introGrid {
+      display: flex;
+      -webkit-flex-direction: column-reverse;
+      flex-direction: column-reverse;
+      .leftColumn > a {
+        font-size:18px;
+        padding:7px;
+      }
+      .leftColumn > a > span {
+        display: none;
+      }
+      .leftColumn > a:after {
+        content: "Commencez votre démarche"
+      }
+    }
+  }
+}

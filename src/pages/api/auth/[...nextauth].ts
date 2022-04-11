@@ -17,7 +17,6 @@ export default NextAuth({
       const test = await prisma.user.findUnique({
         where: { email: user.email },
       });
-      console.log("test : ", test);
       return test != null;
     },
   },
@@ -28,7 +27,7 @@ export default NextAuth({
   },
   pages: {
     error: "/",
-    signIn: "/",
+    signIn: "/login",
     verifyRequest: "/verifyRequest",
   },
   providers: [
