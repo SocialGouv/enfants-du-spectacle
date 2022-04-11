@@ -1,3 +1,15 @@
+# [1.19.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.12...v1.19.0) (2022-04-11)
+
+
+### Bug Fixes
+
+* only display upcoming commissions on list create ([62e23a7](https://github.com/SocialGouv/enfants-du-spectacle/commit/62e23a76eece7d607fc0c84871cf9703e89f33bb))
+
+
+### Features
+
+* implement Home page ([1a464dc](https://github.com/SocialGouv/enfants-du-spectacle/commit/1a464dcb2bed56064489ce9c4e13f1df7a6538aa))
+
 ## [1.18.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.11...v1.18.12) (2022-04-05)
 
 
