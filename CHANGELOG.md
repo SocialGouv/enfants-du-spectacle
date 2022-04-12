@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.19.0...v1.19.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* add image for pdf generation ([22525c1](https://github.com/SocialGouv/enfants-du-spectacle/commit/22525c165318cd5d2c2f1e725f1d64e971aebc86))
+
 # [1.19.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.18.12...v1.19.0) (2022-04-11)
 
 
