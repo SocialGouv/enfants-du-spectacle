@@ -11,6 +11,7 @@ import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
 import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
+import { generateFE } from "src/lib/pdfGenerateFE";
 
 interface Props {
   dossierId: number;
@@ -57,6 +58,16 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
         <Info title="Pièces justificatives">
           <JustificatifsDossier dossier={dossier} />
         </Info>
+        {dossier.statut == "PRET" && (
+          <button
+            className="postButton"
+            onClick={() => {
+              generateFE([dossier]);
+            }}
+          >
+            Télécharger Fiche Emploi
+          </button>
+        )}
       </div>
 
       <div className={styles.societeSummaryBloc}>

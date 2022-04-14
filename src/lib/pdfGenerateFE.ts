@@ -4,22 +4,18 @@ import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import _ from "lodash";
 import logoPrefet from "src/images/logo_prefet.png";
-import {
-  categorieToGrandeCategorieLabel,
-  categorieToLabel,
-} from "src/lib/categories";
+import { categorieToLabel } from "src/lib/categories";
 import {
   birthDateToFrenchAge,
   frenchDateText,
-  frenchDepartementName,
   typeEmploiLabel,
 } from "src/lib/helpers";
-import type { CommissionData, DossierData } from "src/lib/types";
+import type { DossierData } from "src/lib/types";
 
-const generateOdj = (commission: CommissionData) => {
+const generateFE = (dossiers: DossierData[]) => {
   const doc = new jsPDF();
   const categories = _.uniq(
-    _.filter(commission.dossiers, { statut: "PRET" }).map((d: DossierData) => {
+    _.filter(dossiers, { statut: "PRET" }).map((d: DossierData) => {
       return d.categorie;
     })
   );
@@ -28,19 +24,7 @@ const generateOdj = (commission: CommissionData) => {
 
   if (categories.length > 0) {
     categories.map((categorie: CategorieDossier) => {
-      blocs.push([
-        {
-          content: ` \n CATÉGORIE : ${categorieToGrandeCategorieLabel(
-            categorie
-          )}`,
-          styles: {
-            fontSize: 13,
-            fontStyle: "bold",
-            halign: "center",
-          },
-        },
-      ]);
-      _.filter(commission.dossiers, (dossier: DossierData) => {
+      _.filter(dossiers, (dossier: DossierData) => {
         return dossier.categorie === categorie && dossier.statut === "PRET";
       }).map((dossier: DossierData) => {
         blocs.push([
@@ -113,14 +97,9 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     body: [
       [
         {
-          content:
-            "Ordre du jour de la commission des enfants du spectacle" +
-            "\n" +
-            frenchDateText(commission.date) +
-            " - " +
-            frenchDepartementName(commission.departement),
+          content: "FICHE EMPLOI",
           styles: {
-            fontSize: 13,
+            fontSize: 15,
             halign: "center",
           },
         },
@@ -133,6 +112,86 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
   autoTable(doc, {
     body: [...blocs],
     margin: { top: 70 },
+    theme: "plain",
+  });
+
+  //doc.addPage();
+
+  autoTable(doc, {
+    body: [
+      [
+        {
+          content: "AVIS",
+          styles: {
+            fontSize: 13,
+            fontStyle: "bold",
+            halign: "left",
+          },
+        },
+        {
+          content: "|_| Favorable",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+        {
+          content: "|_| Favorable sous réserve",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+        {
+          content: "|_| Ajourné",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+        {
+          content: "|_| Défavorable",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+      ],
+      [
+        {
+          content: "Motifs \n\n\n\n\n\n\n",
+          styles: {
+            fontSize: 13,
+            fontStyle: "bold",
+            halign: "left",
+          },
+        },
+      ],
+    ],
+    margin: { bottom: 100, top: 70 },
+    theme: "plain",
+  });
+
+  autoTable(doc, {
+    body: [
+      [
+        {
+          content: "Secrétariat de la commission",
+          styles: {
+            fontSize: 11,
+            halign: "center",
+          },
+        },
+        {
+          content: "Présidence de la commission",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+      ],
+    ],
+    margin: { top: 150 },
     theme: "plain",
   });
 
@@ -150,12 +209,7 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }
 
-  return doc.save(
-    "Ordre du jour commission " +
-      frenchDateText(commission.date) +
-      " - " +
-      frenchDepartementName(commission.departement)
-  );
+  return doc.save("FICHE EMPLOI " + dossiers[0].nom);
 };
 
-export { generateOdj };
+export { generateFE };
