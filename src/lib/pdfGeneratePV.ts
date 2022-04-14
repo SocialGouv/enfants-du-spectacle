@@ -4,18 +4,22 @@ import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import _ from "lodash";
 import logoPrefet from "src/images/logo_prefet.png";
-import { categorieToLabel } from "src/lib/categories";
+import {
+  categorieToGrandeCategorieLabel,
+  categorieToLabel,
+} from "src/lib/categories";
 import {
   birthDateToFrenchAge,
   frenchDateText,
+  frenchDepartementName,
   typeEmploiLabel,
 } from "src/lib/helpers";
-import type { DossierData } from "src/lib/types";
+import type { CommissionData, DossierData } from "src/lib/types";
 
-const generateFE = (dossiers: DossierData[]) => {
+const generatePV = (commission: CommissionData) => {
   const doc = new jsPDF();
   const categories = _.uniq(
-    _.filter(dossiers, { statut: "PRET" }).map((d: DossierData) => {
+    _.filter(commission.dossiers, { statut: "PRET" }).map((d: DossierData) => {
       return d.categorie;
     })
   );
@@ -24,7 +28,19 @@ const generateFE = (dossiers: DossierData[]) => {
 
   if (categories.length > 0) {
     categories.map((categorie: CategorieDossier) => {
-      _.filter(dossiers, (dossier: DossierData) => {
+      blocs.push([
+        {
+          content: ` \n CATÉGORIE : ${categorieToGrandeCategorieLabel(
+            categorie
+          )}`,
+          styles: {
+            fontSize: 13,
+            fontStyle: "bold",
+            halign: "center",
+          },
+        },
+      ]);
+      _.filter(commission.dossiers, (dossier: DossierData) => {
         return dossier.categorie === categorie && dossier.statut === "PRET";
       }).map((dossier: DossierData) => {
         blocs.push([
@@ -89,6 +105,26 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
             }
           );
         });
+        blocs.push([
+          {
+            content:
+              " \nAVIS:   |_| Favorable    |_| Favorable sous réserve     |_| Ajourné     |_| Défavorable",
+            styles: {
+              fontSize: 13,
+              halign: "left",
+            },
+          },
+        ]);
+        blocs.push([
+          {
+            content: " \nMotifs \n\n\n\n\n\n\n",
+            styles: {
+              fontSize: 13,
+              fontStyle: "bold",
+              halign: "left",
+            },
+          },
+        ]);
       });
     });
   }
@@ -97,10 +133,24 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     body: [
       [
         {
-          content: "FICHE EMPLOI",
+          content:
+            "Procès verbal commission des enfants du spectacle" +
+            "\n" +
+            frenchDateText(commission.date) +
+            " - " +
+            frenchDepartementName(commission.departement),
           styles: {
-            fontSize: 15,
+            fontSize: 13,
             halign: "center",
+          },
+        },
+      ],
+      [
+        {
+          content: "Membres présents : \n\n\n\n",
+          styles: {
+            fontSize: 13,
+            halign: "left",
           },
         },
       ],
@@ -112,63 +162,6 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
   autoTable(doc, {
     body: [...blocs],
     margin: { top: 70 },
-    theme: "plain",
-  });
-
-  //doc.addPage();
-
-  autoTable(doc, {
-    body: [
-      [
-        {
-          content: "AVIS",
-          styles: {
-            fontSize: 13,
-            fontStyle: "bold",
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Favorable",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Favorable sous réserve",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Ajourné",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Défavorable",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-      ],
-      [
-        {
-          content: "Motifs \n\n\n\n\n\n\n",
-          styles: {
-            fontSize: 13,
-            fontStyle: "bold",
-            halign: "left",
-          },
-        },
-      ],
-    ],
-    margin: { bottom: 100, top: 70 },
     theme: "plain",
   });
 
@@ -209,7 +202,12 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }
 
-  return doc.save("FICHE EMPLOI " + dossiers[0].nom);
+  return doc.save(
+    "Procès Verbal commission " +
+      frenchDateText(commission.date) +
+      " - " +
+      frenchDepartementName(commission.departement)
+  );
 };
 
-export { generateFE };
+export { generatePV };
