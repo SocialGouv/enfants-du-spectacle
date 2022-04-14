@@ -1,3 +1,15 @@
+# [1.21.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.20.0...v1.21.0) (2022-04-14)
+
+
+### Bug Fixes
+
+* gerenate pdf Proces verbal ([08a4319](https://github.com/SocialGouv/enfants-du-spectacle/commit/08a4319507d0bc32236db1e99cb0f98d25eb1efc))
+
+
+### Features
+
+* gerenate pdf Decision autorisation ([53b286e](https://github.com/SocialGouv/enfants-du-spectacle/commit/53b286ec912855b9d77fc08964b34ad0077a3d63))
+
 # [1.20.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.19.1...v1.20.0) (2022-04-14)
 
 
