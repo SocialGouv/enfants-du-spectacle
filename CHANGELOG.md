@@ -1,3 +1,11 @@
+# [1.20.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.19.1...v1.20.0) (2022-04-14)
+
+
+### Features
+
+* generate pdf ordre du jour ([1c6a2d6](https://github.com/SocialGouv/enfants-du-spectacle/commit/1c6a2d67c89619adb9224c07fdf02908b0df9401))
+* implement generator Fiche Emploi ([6734827](https://github.com/SocialGouv/enfants-du-spectacle/commit/6734827a11fb8deddef4d78f0f7873823bd77024))
+
 ## [1.19.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.19.0...v1.19.1) (2022-04-12)
 
 
