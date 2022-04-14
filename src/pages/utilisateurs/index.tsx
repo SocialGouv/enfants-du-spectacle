@@ -15,7 +15,7 @@ const Page: React.FC = () => {
       windowTitle="Utilisateurs"
       headerMiddle={<Title as="h1">Utilisateurs</Title>}
       breadcrumbs={[
-        { href: "/", label: "Accueil" },
+        { href: "/dossiers", label: "Accueil" },
         { label: "Liste utilisateurs" },
       ]}
     >

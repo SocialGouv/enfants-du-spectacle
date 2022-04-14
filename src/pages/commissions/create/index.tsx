@@ -19,7 +19,7 @@ const Page: React.FC = () => {
       windowTitle="Commissions"
       headerMiddle={<Title as="h1">Commissions</Title>}
       breadcrumbs={[
-        { href: "/", label: "Accueil" },
+        { href: "/dossiers", label: "Accueil" },
         { label: "Liste commissions" },
       ]}
     >
