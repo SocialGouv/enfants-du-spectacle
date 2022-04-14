@@ -23,6 +23,9 @@ type DossierData = Dossier & {
   enfants: Enfant[];
   commentaires: Commentaire[];
   demandeur: Demandeur;
+  _count?: {
+    enfants: number;
+  } | null;
 };
 
 type CommentaireData = Commentaire & {
@@ -37,7 +40,7 @@ interface CommentaireDataLight {
   dossierId: number;
 }
 
-type CommissionData = Commission & { dossiers: DossierDataLight[] };
+type CommissionData = Commission & { dossiers: DossierData[] };
 
 export type {
   CommentaireData,

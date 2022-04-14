@@ -4,7 +4,7 @@ import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-//import { generatePdf } from "src/lib/pdfJSCore";
+import { generateOdj } from "src/lib/pdfGenerateOdj";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
@@ -43,7 +43,9 @@ interface Props {
 const Commission: React.FC<Props> = ({ commission }) => {
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
-    .map((p) => p._count?.enfants ?? 0)
+    .map((p) => {
+      return p._count?.enfants ?? 0;
+    })
     .reduce((i, b) => i + b, 0);
   return (
     <div className="card">
@@ -52,6 +54,15 @@ const Commission: React.FC<Props> = ({ commission }) => {
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
+        <button
+          className="postButton"
+          onClick={() => {
+            console.log("commission : ", commission);
+            generateOdj(commission);
+          }}
+        >
+          Télécharger ordre du jour
+        </button>
       </div>
       <div style={{ marginBottom: "2rem" }}>
         <b>{dossiersCount}</b> dossiers - <b>{enfantsCount}</b> enfants
