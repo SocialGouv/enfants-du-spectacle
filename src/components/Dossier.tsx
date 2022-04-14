@@ -11,6 +11,7 @@ import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
 import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
+import { generateDA } from "src/lib/pdfGenerateDA";
 import { generateFE } from "src/lib/pdfGenerateFE";
 
 interface Props {
@@ -66,6 +67,17 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             }}
           >
             Télécharger Fiche Emploi
+          </button>
+        )}
+        <br />
+        {dossier.statut == "PRET" && (
+          <button
+            className="postButton"
+            onClick={() => {
+              generateDA([dossier]);
+            }}
+          >
+            Télécharger Décision autorisation
           </button>
         )}
       </div>
