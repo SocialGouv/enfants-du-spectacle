@@ -1,3 +1,10 @@
+## [1.22.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.2...v1.22.3) (2022-04-19)
+
+
+### Bug Fixes
+
+* hide HP for prod ([bea25b5](https://github.com/SocialGouv/enfants-du-spectacle/commit/bea25b512a4db9bdc110b89ae48cdf4297dc87fb))
+
 ## [1.22.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.1...v1.22.2) (2022-04-19)
 
 
