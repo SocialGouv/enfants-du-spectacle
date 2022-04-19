@@ -181,6 +181,7 @@ function frenchDepartementName(departementNumber: string): string {
 const ROLES_USERS = [
   { label: "Administrateur", value: "ADMIN" },
   { label: "Instructeur", value: "INSTRUCTEUR" },
+  { label: "Membre commission", value: "MEMBRE" },
 ];
 
 const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
