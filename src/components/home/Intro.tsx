@@ -27,7 +27,7 @@ const Intro: React.FC = () => {
               href="https://www.demarches-simplifiees.fr/commencer/enfants-du-spectacle"
               className="postButton"
             >
-              <span>Commencer votre démarche en ligne</span>
+              <span>Commencez votre démarche en ligne</span>
             </a>
           </div>
           <div className={styles.rightColumn}>

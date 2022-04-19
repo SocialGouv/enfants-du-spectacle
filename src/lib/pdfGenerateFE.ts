@@ -74,14 +74,21 @@ const generateFE = (dossiers: DossierData[]) => {
                     enfant.adresseEnfant
                       ? "\nDomicile : " + enfant.adresseEnfant
                       : ""
+                  }${
+                    enfant.nomRepresentant1
+                      ? `\nReprésentant légal 1 : ${enfant.nomRepresentant1} ${enfant.prenomRepresentant1} - ${enfant.adresseRepresentant1}`
+                      : ""
+                  }${
+                    enfant.nomRepresentant2
+                      ? `\nReprésentant légal 2 : ${enfant.nomRepresentant2} ${enfant.prenomRepresentant2} - ${enfant.adresseRepresentant2}`
+                      : ""
                   }
 ${enfant.nombreJours} jours travaillés
-${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros
-(Rémunérations additionnelles : ${
+${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                     enfant.remunerationsAdditionnelles
-                      ? enfant.remunerationTotale
-                      : "0"
-                  } Euros
+                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles} Euros`
+                      : ""
+                  }
 TOTAL : ${enfant.remunerationTotale} Euros
 Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
                   styles: {
@@ -208,7 +215,6 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    console.log(imgData);
     doc.setFontSize(40);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }

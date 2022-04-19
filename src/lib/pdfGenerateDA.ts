@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import logoPrefet from "src/images/logo_prefet.png";
-import { birthDateToFrenchAge, frenchDateText } from "src/lib/helpers";
+import { frenchDateText } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
 const generateDA = (dossiers: DossierData[]) => {
@@ -10,11 +10,10 @@ const generateDA = (dossiers: DossierData[]) => {
   const blocs: RowInput[] = [];
 
   dossiers.map((dossier: DossierData) => {
-    console.log("dossierrrr : ", dossier);
     blocs.push([
       {
         content: `Vu la demande présentée le ${frenchDateText(
-          dossier.commission.date
+          dossier.dateDerniereModification ?? dossier.commission.date
         )} par la société ${dossier.societeProduction.nom}, sise ${
           dossier.societeProduction.siren
         }, pour l'emploi d'enfants dans le cadre du projet intitulé ${
@@ -69,9 +68,7 @@ const generateDA = (dossiers: DossierData[]) => {
     dossier.enfants.map((enfant) => {
       blocs.push([
         {
-          content: `${enfant.prenom} ${
-            enfant.nom
-          }, né le ${birthDateToFrenchAge(
+          content: `${enfant.prenom} ${enfant.nom}, né le ${frenchDateText(
             enfant.dateNaissance
           )}, pour une rémunération totale de ${enfant.remunerationTotale} €, ${
             enfant.cdc ? enfant.cdc : 0
@@ -165,6 +162,26 @@ Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel 
       [
         {
           content:
+            "La rémunération totale comprend un ou plusieurs cachets de base et des rémunérations additionnelles éventuelles. Ces dernières seront déduites du montant total dans le cas où les prestations correspondantes n’auront pas été réalisées.",
+          styles: {
+            fontSize: 11,
+            halign: "left",
+          },
+        },
+      ],
+      [
+        {
+          content: "\nARTICLE 3",
+          styles: {
+            fontSize: 13,
+            fontStyle: "bold",
+            halign: "left",
+          },
+        },
+      ],
+      [
+        {
+          content:
             "Le versement à la Caisse des dépôts et consignations est accompagné d'une déclaration de l'employeur rappelant l'état civil de l'enfant, son domicile et le nom de ses représentants légaux.",
           styles: {
             fontSize: 11,
@@ -174,7 +191,7 @@ Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel 
       ],
       [
         {
-          content: "ARTICLE 3",
+          content: "\nARTICLE 4",
           styles: {
             fontSize: 13,
             fontStyle: "bold",
@@ -238,7 +255,6 @@ Responsable du département protection et insertion des jeunes`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    console.log(imgData);
     doc.setFontSize(40);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }

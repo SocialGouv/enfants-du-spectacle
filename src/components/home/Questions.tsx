@@ -62,7 +62,8 @@ const Questions: React.FC = () => {
                     <li>projet de contrat de travail</li>
                     <li>
                       certificat de scolarité ou avis pédagogique (à partir de 4
-                      jours d’absence scolaire). Si l’enfant est scolarisé en
+                      jours d’absence scolaire). Pour les dossiers relevant de
+                      la commission de Paris, si l’enfant est scolarisé en
                       dehors de l’académie de Paris, l’avis pédagogique doit
                       être accompagné de l’avis du Directeur académique concerné
                     </li>
@@ -148,29 +149,66 @@ const Questions: React.FC = () => {
             <Accordion className={styles.accordion}>
               <AccordionItem title="Les pièces doivent-elles répondre à un formalisme particulier ?">
                 <p>
-                  L’autorisation parentale, l’avis pédagogique et l’avis du
-                  Directeur académique doivent être remplis à partir des modèles
-                  suivants:
                   <ul>
                     <li>
-                      <a href="autorisation_parentale.docx" download>
-                        Autorisation parentale
-                      </a>
+                      <p>
+                        <span>
+                          L’autorisation parentale doit être remplie à partir du
+                          modèle suivant:{" "}
+                        </span>
+                        <br />
+                        <br />
+                        <a href="autorisation_parentale.docx" download>
+                          Autorisation parentale
+                        </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="avis_pedagogique_1D.pdf" download>
-                        Avis pédagogique 1er degré
-                      </a>
+                      <p>
+                        <span>
+                          Pour les dossiers relevant de la commission de Paris,
+                          l’avis pédagogique et, le cas échéant, l’avis du
+                          Directeur académique doivent être remplis à partir des
+                          modèles suivants:
+                        </span>
+                        <br />
+                        <br />
+                        <a href="avis_pedagogique_1D.pdf" download>
+                          Avis pédagogique 1er degré
+                        </a>
+                        <br />
+                        <a href="avis_pedagogique_2D.pdf" download>
+                          Avis pédagogique 2nd degré
+                        </a>
+                        <br />
+                        <a href="avis_DASEN.docx" download>
+                          Avis directeur académique
+                        </a>
+                      </p>
                     </li>
                     <li>
-                      <a href="avis_pedagogique_2D.pdf" download>
-                        Avis pédagogique 2nd degré
-                      </a>
-                    </li>
-                    <li>
-                      <a href="avis_DASEN.docx" download>
-                        Avis directeur académique
-                      </a>
+                      <p>
+                        <span>
+                          Pour les dossiers relevant des autres commissions
+                          départementales, l’avis pédagogique doit être rempli à
+                          partir de l’un des modèles suivants:
+                        </span>
+                        <br />
+                        <br />
+                        <a
+                          href="avis_chef_etablissement_1er_degre.doc"
+                          download
+                        >
+                          Avis chef d&apos;établissement 1er degré
+                        </a>
+                        <br />
+                        <a
+                          href="avis_inspecteur_academique_2nd_degre.doc"
+                          download
+                        >
+                          Avis inspecteur académique 2nd degré
+                        </a>
+                      </p>
                     </li>
                   </ul>
                   <br />
@@ -244,27 +282,89 @@ const Questions: React.FC = () => {
             <Accordion className={styles.accordion}>
               <AccordionItem title="Que dois-je faire si l'enfant est amené à manquer l'école plus de trois jours ?">
                 <p>
+                  <span>
+                    Concernant les dossiers relevant de la commission de Paris:
+                  </span>
                   <ul>
                     <li>
-                      Pour les enfants de primaire de plus de 3 ans: un avis
-                      pédagogique rempli et signé par le directeur d’école et
-                      validé par l’inspecteur de l’éducation nationale de
-                      circonscription doit être déposé.
-                      <br />
-                      Si l’enfant est scolarisé en dehors de l’académie de
-                      Paris, l’avis du Directeur académique des services de
-                      l’éducation nationale (DASEN) de l’académie concernée doit
-                      accompagner l’avis pédagogique.
+                      <p>
+                        Pour les enfants de primaire de plus de 3 ans: un avis
+                        pédagogique rempli et signé par le directeur d’école et
+                        validé par l’inspecteur de l’éducation nationale de
+                        circonscription doit être déposé.
+                        <br />
+                        Si l’enfant est scolarisé en dehors de l’académie de
+                        Paris, l’avis du Directeur académique des services de
+                        l’éducation nationale (DASEN) de l’académie concernée
+                        doit accompagner l’avis pédagogique.
+                        <br />
+                        <br />
+                        <a href="avis_pedagogique_1D.pdf" download>
+                          Avis pédagogique 1er degré
+                        </a>
+                        <br />
+                        <a href="avis_DASEN.docx" download>
+                          Avis directeur académique
+                        </a>
+                      </p>
                     </li>
                     <li>
-                      Pour les collégiens et les lycéens de moins de 16 ans: un
-                      avis pédagogique rempli et signé par le chef
-                      d’établissement doit être déposé.
-                      <br />
-                      Si l’enfant est scolarisé en dehors de l’académie de
-                      Paris, l’avis du Directeur académique des services de
-                      l’éducation nationale (DASEN) de l’académie concernée doit
-                      accompagner l’avis pédagogique.
+                      <p>
+                        Pour les collégiens et les lycéens de moins de 16 ans:
+                        un avis pédagogique rempli et signé par le chef
+                        d’établissement doit être déposé.
+                        <br />
+                        Si l’enfant est scolarisé en dehors de l’académie de
+                        Paris, l’avis du Directeur académique des services de
+                        l’éducation nationale (DASEN) de l’académie concernée
+                        doit accompagner l’avis pédagogique.
+                        <br />
+                        <br />
+                        <a href="avis_pedagogique_2D.pdf" download>
+                          Avis pédagogique 2nd degré
+                        </a>
+                        <br />
+                        <a href="avis_DASEN.docx" download>
+                          Avis directeur académique
+                        </a>
+                      </p>
+                    </li>
+                  </ul>
+                  <br />
+                  <span>
+                    Concernant les dossiers relevant des autres commissions
+                    départementales:
+                  </span>
+                  <ul>
+                    <li>
+                      <p>
+                        Pour les enfants de primaire de plus de 3 ans: un avis
+                        pédagogique rempli et signé par le directeur d’école
+                        doit être déposé.
+                        <br />
+                        <br />
+                        <a
+                          href="avis_chef_etablissement_1er_degre.doc"
+                          download
+                        >
+                          Avis chef d&apos;établissement 1er degré
+                        </a>
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Pour les collégiens et les lycéens de moins de 16 ans:
+                        un avis pédagogique rempli et signé par l’inspecteur
+                        académique doit être déposé.
+                        <br />
+                        <br />
+                        <a
+                          href="avis_inspecteur_academique_2nd_degre.doc"
+                          download
+                        >
+                          Avis inspecteur académique 2nd degré
+                        </a>
+                      </p>
                     </li>
                   </ul>
                 </p>
@@ -285,7 +385,7 @@ const Questions: React.FC = () => {
               </AccordionItem>
             </Accordion>
             <Accordion className={styles.accordion}>
-              <AccordionItem title="Y'a-til d'autres démarches à réaliser ?">
+              <AccordionItem title="Y a-til d'autres démarches à réaliser ?">
                 <p>
                   Un exemplaire papier du scenario ou script doit également être
                   envoyé par voie postale à l’adresse suivante:

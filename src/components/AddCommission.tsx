@@ -4,11 +4,7 @@ import { Select } from "@dataesr/react-dsfr";
 import type { Commission } from "@prisma/client";
 import fr from "date-fns/locale/fr";
 import * as React from "react";
-import DatePicker, {
-  getDefaultLocale,
-  registerLocale,
-  setDefaultLocale,
-} from "react-datepicker";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import styles from "src/components/AddCommission.module.scss";
 import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
 
@@ -30,7 +26,6 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   });
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
-    console.log("locale : ", getDefaultLocale);
     setFormData({
       ...formData,
       [e.target.id]: e.currentTarget.value,
@@ -52,7 +47,6 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
   React.useEffect(() => {
     registerLocale("fr", fr);
     setDefaultLocale("fr");
-    console.log("locale : ", getDefaultLocale);
   });
 
   return (

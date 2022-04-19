@@ -40,8 +40,7 @@ import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
   //const session = await getSession({ req });
-  const { key } = req.query;
-  console.log("key : ", key);
+  //const { key } = req.query;
   /*if (!session) {
     res.status(401).end();
     return;
@@ -77,7 +76,6 @@ const checkNeedUpdate = async (data: unknown) => {
   const needUpdate = new Promise((resolve) => {
     let checker = false;
     data.data.demarche.dossiers.nodes.forEach(async (dossier, index) => {
-      //console.log(dossier)
       const intDossier = await searchDossierByExternalId(
         prisma,
         dossier.id as number

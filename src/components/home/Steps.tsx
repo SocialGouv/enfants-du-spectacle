@@ -34,7 +34,7 @@ const Steps: React.FC = () => {
             <p className={styles.number}>2</p>
             <p>
               <span>
-                Je rempmlis mon <b>formulaire</b> en ligne
+                Je remplis mon <b>formulaire</b> en ligne
               </span>{" "}
             </p>
           </div>
@@ -52,7 +52,7 @@ const Steps: React.FC = () => {
             <p className={styles.number}>4</p>
             <p>
               <span>
-                Je peux <b>mopdifier mon dossier</b> avant son passage en
+                Je peux <b>modifier mon dossier</b> avant son passage en
                 instruction
               </span>{" "}
             </p>

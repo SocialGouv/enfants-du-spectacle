@@ -25,7 +25,6 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
       ...formData,
       [e.target.id]: e.currentTarget.value,
     });
-    console.log(formData);
   };
 
   return (
