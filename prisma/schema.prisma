@@ -190,6 +190,13 @@ model Enfant {
   dossierId                   Int
   dossier                     Dossier              @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   cdc                         Int?
+  adresseEnfant               String?
+  nomRepresentant1            String?
+  prenomRepresentant1         String?
+  adresseRepresentant1        String?
+  adresseRepresentant2        String?
+  nomRepresentant2            String?
+  prenomRepresentant2         String?
 }
 
 // for next-auth
