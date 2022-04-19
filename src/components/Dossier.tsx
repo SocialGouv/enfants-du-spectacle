@@ -69,8 +69,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             Télécharger Fiche Emploi
           </button>
         )}
-        <br />
-        {dossier.statut == "PRET" && (
+        {dossier.statut == "ACCEPTE" && (
           <button
             className="postButton"
             onClick={() => {
@@ -80,6 +79,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             Télécharger Décision autorisation
           </button>
         )}
+        <br />
       </div>
 
       <div className={styles.societeSummaryBloc}>
