@@ -1,3 +1,10 @@
+## [1.22.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.1...v1.22.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* add role membre commission ([8513c1f](https://github.com/SocialGouv/enfants-du-spectacle/commit/8513c1fc281862b2a0b9bbefd5faab0ee9e2302c))
+
 ## [1.22.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.0...v1.22.1) (2022-04-19)
 
 
