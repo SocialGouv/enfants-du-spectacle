@@ -1,3 +1,12 @@
+## [1.22.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.0...v1.22.1) (2022-04-19)
+
+
+### Bug Fixes
+
+* corrections generation pdf ([026e8b2](https://github.com/SocialGouv/enfants-du-spectacle/commit/026e8b2ae1b3955245db6661df587b3649284247))
+* corrections to homepage ([108ab1b](https://github.com/SocialGouv/enfants-du-spectacle/commit/108ab1b550fcda236f6bf49378a5c1e9c2190f6f))
+* display everything and clean console logs ([dbae7dd](https://github.com/SocialGouv/enfants-du-spectacle/commit/dbae7ddb045465d84152ab2a40a93dfb58e5a468))
+
 # [1.22.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.21.0...v1.22.0) (2022-04-19)
 
 
