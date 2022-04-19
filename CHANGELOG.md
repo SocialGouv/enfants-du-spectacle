@@ -1,3 +1,16 @@
+# [1.22.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.21.0...v1.22.0) (2022-04-19)
+
+
+### Bug Fixes
+
+* hide buttons pdf for prod ([701d2ba](https://github.com/SocialGouv/enfants-du-spectacle/commit/701d2ba045cd049dbec927a02785f8a2983a7b0d))
+* hide HP for prod ([450b63f](https://github.com/SocialGouv/enfants-du-spectacle/commit/450b63fbd531c6afbf028761ad5d861418db3eff))
+
+
+### Features
+
+* add champs adresses on enfants ([97a7196](https://github.com/SocialGouv/enfants-du-spectacle/commit/97a7196061b7506cd701692dadd18aa0165b4abe))
+
 # [1.21.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.20.0...v1.21.0) (2022-04-14)
 
 
