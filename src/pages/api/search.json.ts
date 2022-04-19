@@ -21,7 +21,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const tsquery = req.query.search.trim().replace(/ +/g, " & ");
-  console.log("dossiers...");
 
   const enfants = await searchEnfants(prisma, tsquery);
   const dossiers = await searchDossiers(prisma, tsquery);

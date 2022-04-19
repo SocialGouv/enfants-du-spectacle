@@ -10,7 +10,6 @@ const generateDA = (dossiers: DossierData[]) => {
   const blocs: RowInput[] = [];
 
   dossiers.map((dossier: DossierData) => {
-    console.log("dossierrrr : ", dossier);
     blocs.push([
       {
         content: `Vu la demande présentée le ${frenchDateText(
@@ -238,7 +237,6 @@ Responsable du département protection et insertion des jeunes`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    console.log(imgData);
     doc.setFontSize(40);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }

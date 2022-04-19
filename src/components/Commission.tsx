@@ -4,6 +4,8 @@ import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import { generateOdj } from "src/lib/pdfGenerateOdj";
+import { generatePV } from "src/lib/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
@@ -53,6 +55,14 @@ const Commission: React.FC<Props> = ({ commission }) => {
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
+        <button
+          className="postButton"
+          onClick={() => {
+            generateOdj(commission);
+          }}
+        >
+          Télécharger ordre du jour
+        </button>
       </div>
       <div style={{ marginBottom: "2rem" }}>
         <b>{dossiersCount}</b> dossiers - <b>{enfantsCount}</b> enfants
@@ -71,6 +81,14 @@ const Commission: React.FC<Props> = ({ commission }) => {
           <Dossier key={dossier.id} dossier={dossier} />
         ))}
       </div>
+      <button
+        className="postButton"
+        onClick={() => {
+          generatePV(commission);
+        }}
+      >
+        Télécharger Procès Verbal
+      </button>
     </div>
   );
 };

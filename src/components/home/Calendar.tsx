@@ -45,7 +45,6 @@ const Calendar: React.FC = () => {
   };
 
   const showCalendar = () => {
-    console.log("test : ", formData);
     if (formData.departement !== "") {
       setDisplayCalendar(true);
       setFilteredCommissions(
@@ -53,7 +52,6 @@ const Calendar: React.FC = () => {
           return commission.departement === formData.departement;
         }) ?? []
       );
-      console.log("comission filtrees : ", commissionsFiltered);
     }
   };
 

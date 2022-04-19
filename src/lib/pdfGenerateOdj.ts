@@ -145,7 +145,6 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    console.log(imgData);
     doc.setFontSize(40);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
   }

@@ -126,8 +126,8 @@ const update: NextApiHandler = async (req, res) => {
           method: "POST",
         })
           .then(async (r) => r.json())
-          .then((data) => {
-            console.log("data : ", data);
+          .then((data: Response) => {
+            return data;
           });
       } catch (e: unknown) {
         console.log(e);
@@ -164,8 +164,8 @@ const update: NextApiHandler = async (req, res) => {
           method: "POST",
         })
           .then(async (r) => r.json())
-          .then((data) => {
-            console.log("data : ", data);
+          .then((data: Response) => {
+            return data;
           });
       } catch (e: unknown) {
         console.log(e);
@@ -202,8 +202,8 @@ const update: NextApiHandler = async (req, res) => {
           method: "POST",
         })
           .then(async (r) => r.json())
-          .then((data) => {
-            console.log("data : ", data);
+          .then((data: Response) => {
+            return data;
           });
       } catch (e: unknown) {
         console.log(e);
