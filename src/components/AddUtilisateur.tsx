@@ -47,7 +47,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               type="text"
               id="nom"
               name="nom"
-              className={styles.inputText}
+              className="inputText"
             />
           </div>
           <div className={styles.blocForm}>
@@ -59,7 +59,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               type="text"
               id="prenom"
               name="prenom"
-              className={styles.inputText}
+              className="inputText"
             />
           </div>
           <div className={styles.blocForm}>
@@ -71,7 +71,7 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               type="text"
               id="email"
               name="email"
-              className={styles.inputText}
+              className="inputText"
             />
           </div>
           <div className={styles.blocForm}>

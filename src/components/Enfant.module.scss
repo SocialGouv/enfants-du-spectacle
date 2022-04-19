@@ -17,3 +17,16 @@
 .info {
   padding-top: 2rem;
 }
+
+.adressesGrid form{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  .inputAdresse {
+    padding-right:1rem;
+    margin-top:1rem;
+    input {
+      background-color:rgb(240, 240, 240) !important;
+    }
+  }
+}
+

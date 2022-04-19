@@ -43,7 +43,14 @@ const update: NextApiHandler = async (req, res) => {
 
   const updatedEnfant = await prisma.enfant.update({
     data: {
+      adresseEnfant: parsed.adresseEnfant,
+      adresseRepresentant1: parsed.adresseRepresentant1,
+      adresseRepresentant2: parsed.adresseRepresentant2,
       cdc: parsed.cdc,
+      nomRepresentant1: parsed.nomRepresentant1,
+      nomRepresentant2: parsed.nomRepresentant2,
+      prenomRepresentant1: parsed.prenomRepresentant1,
+      prenomRepresentant2: parsed.prenomRepresentant2,
     },
     where: { id: enfantId },
   });

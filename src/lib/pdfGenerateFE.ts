@@ -66,11 +66,15 @@ const generateFE = (dossiers: DossierData[]) => {
                 {
                   content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
                     enfant.dateNaissance
-                  )} (incarne : ${
+                  )} ${
                     enfant.nomPersonnage
-                      ? enfant.nomPersonnage
-                      : "Non Renseigné"
-                  } )
+                      ? "incarne : " + enfant.nomPersonnage
+                      : ""
+                  }${
+                    enfant.adresseEnfant
+                      ? "\nDomicile : " + enfant.adresseEnfant
+                      : ""
+                  }
 ${enfant.nombreJours} jours travaillés
 ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros
 (Rémunérations additionnelles : ${

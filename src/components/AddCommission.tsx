@@ -69,7 +69,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
             <label htmlFor="departement" className="mb-2 italic">
               Département
             </label>
-            <div className={styles.selectDpt}>
+            <div className="selectDpt">
               <Select
                 id="departement"
                 name="departement"
@@ -95,7 +95,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
               <DatePicker
                 dateFormat="dd/MM/yyyy"
                 selected={formData.date}
-                className={styles.inputText}
+                className="inputText"
                 onChange={(date: Date) => {
                   handleDate("date", date);
                 }}
@@ -110,7 +110,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
               <DatePicker
                 dateFormat="dd/MM/yyyy"
                 selected={formData.dateLimiteDepot}
-                className={styles.inputText}
+                className="inputText"
                 onChange={(date: Date) => {
                   handleDate("dateLimiteDepot", date);
                 }}

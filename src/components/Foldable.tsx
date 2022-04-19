@@ -6,9 +6,10 @@ import styles from "./Foldable.module.scss";
 interface Props {
   onlyOnce: boolean;
   hidden: boolean;
+  text: string;
 }
 
-const Foldable: React.FC<Props> = ({ children, onlyOnce, hidden }) => {
+const Foldable: React.FC<Props> = ({ children, onlyOnce, hidden, text }) => {
   const [folded, setFolded] = useState(true);
   return (
     <div>
@@ -26,7 +27,11 @@ const Foldable: React.FC<Props> = ({ children, onlyOnce, hidden }) => {
               setFolded(!folded);
             }}
           >
-            {folded ? "Afficher plus d'informations…" : "Cacher…"}
+            {folded
+              ? text
+                ? text
+                : "Afficher plus d'informations…"
+              : "Cacher…"}
           </Link>
         </div>
       )}
