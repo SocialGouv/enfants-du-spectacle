@@ -1,3 +1,11 @@
+## [1.22.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.4...v1.22.5) (2022-04-20)
+
+
+### Bug Fixes
+
+* minor corrections questions ([2676816](https://github.com/SocialGouv/enfants-du-spectacle/commit/26768160b77d5ba8313cdc78a31c64924e74dc76))
+* remove insert in base from fetching links DS ([469dc44](https://github.com/SocialGouv/enfants-du-spectacle/commit/469dc446776f8ca8a85013f20d8be44a2f8b0912))
+
 ## [1.22.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.3...v1.22.4) (2022-04-19)
 
 
