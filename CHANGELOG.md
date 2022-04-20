@@ -1,3 +1,10 @@
+## [1.22.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.7...v1.22.8) (2022-04-20)
+
+
+### Bug Fixes
+
+* properly fix useEffect trigger ([9dd44b1](https://github.com/SocialGouv/enfants-du-spectacle/commit/9dd44b14413021f5c0c5b0bb2fe74baca778768b))
+
 ## [1.22.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.6...v1.22.7) (2022-04-20)
 
 
