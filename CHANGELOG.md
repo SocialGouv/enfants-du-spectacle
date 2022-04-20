@@ -1,3 +1,10 @@
+## [1.22.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.5...v1.22.6) (2022-04-20)
+
+
+### Bug Fixes
+
+* add preprod to fetching ([b19898c](https://github.com/SocialGouv/enfants-du-spectacle/commit/b19898c0e2eb65483e9b43bd33b011b5d6dc1d93))
+
 ## [1.22.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.4...v1.22.5) (2022-04-20)
 
 
