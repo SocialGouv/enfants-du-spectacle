@@ -257,6 +257,23 @@ const updateEnfants = (cdc: number, dossierId: number) => {
     });
 };
 
+const uploadDocs = () => {
+  window
+    .fetch(`/api/docs`, {
+      body: JSON.stringify({}),
+      method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const createPieceDossierEnfant = async (
   prismaClient: PrismaClient,
   piece: Omit<PieceDossierEnfant, "id">
@@ -529,4 +546,5 @@ export {
   updateEnfant,
   updateEnfants,
   updatePieceDossierEnfant,
+  uploadDocs,
 };

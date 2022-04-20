@@ -37,7 +37,9 @@ const Page: React.FC = () => {
     >
       {isLoading && <IconLoader />}
       {isError && <Icon name="ri-error" />}
-      {!isLoading && !isError && dossierId && <Dossier dossierId={dossierId} />}
+      {!isLoading && !isError && dossierId && (
+        <Dossier dossierId={dossierId} dataLinks={swrLinks.dataLinks} />
+      )}
     </Layout>
   );
 };

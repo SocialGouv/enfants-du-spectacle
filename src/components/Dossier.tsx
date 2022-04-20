@@ -16,9 +16,10 @@ import { generateFE } from "src/lib/pdfGenerateFE";
 
 interface Props {
   dossierId: number;
+  dataLinks: Record<string, unknown>;
 }
 
-const Dossier: React.FC<Props> = ({ dossierId }) => {
+const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
 
   if (isLoading) return <IconLoader />;
@@ -57,7 +58,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
           </Info>
         </div>
         <Info title="Pièces justificatives">
-          <JustificatifsDossier dossier={dossier} />
+          <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
         </Info>
         {dossier.statut == "PRET" && (
           <button
@@ -139,7 +140,7 @@ const Dossier: React.FC<Props> = ({ dossierId }) => {
             })
             .map((enfant) => (
               <div key={enfant.id} className={styles.bloc}>
-                <Enfant enfant={enfant} />
+                <Enfant enfant={enfant} dataLinks={dataLinks} />
               </div>
             ))}
         </span>
