@@ -68,7 +68,7 @@ const generateFE = (dossiers: DossierData[]) => {
                     enfant.dateNaissance
                   )} ${
                     enfant.nomPersonnage
-                      ? "incarne : " + enfant.nomPersonnage
+                      ? ", incarne : " + enfant.nomPersonnage
                       : ""
                   }${
                     enfant.adresseEnfant

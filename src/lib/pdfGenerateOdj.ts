@@ -82,18 +82,17 @@ const generateOdj = (commission: CommissionData) => {
                 {
                   content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
                     enfant.dateNaissance
-                  )} (incarne : ${
+                  )} ${
                     enfant.nomPersonnage
-                      ? enfant.nomPersonnage
-                      : "Non Renseigné"
-                  } )
+                      ? ", incarne : " + enfant.nomPersonnage
+                      : ""
+                  }
 ${enfant.nombreJours} jours travaillés
-${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros
-(Rémunérations additionnelles : ${
+${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                     enfant.remunerationsAdditionnelles
-                      ? enfant.remunerationTotale
-                      : "0"
-                  } Euros
+                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles} Euros`
+                      : ""
+                  }
 TOTAL : ${enfant.remunerationTotale} Euros
 Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
                   styles: {
