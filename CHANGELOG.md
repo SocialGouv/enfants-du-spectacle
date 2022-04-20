@@ -1,3 +1,10 @@
+## [1.22.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.6...v1.22.7) (2022-04-20)
+
+
+### Bug Fixes
+
+* corrections on generation pdf ([b7c1fe9](https://github.com/SocialGouv/enfants-du-spectacle/commit/b7c1fe91564ee953a4acc45715dc97307535a584))
+
 ## [1.22.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.5...v1.22.6) (2022-04-20)
 
 
