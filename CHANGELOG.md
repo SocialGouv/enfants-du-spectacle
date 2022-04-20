@@ -1,3 +1,10 @@
+## [1.22.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.8...v1.22.9) (2022-04-20)
+
+
+### Bug Fixes
+
+* update scheduler fetch data DS ([51d94f4](https://github.com/SocialGouv/enfants-du-spectacle/commit/51d94f4c1bdbe05951613c01d5f14a94474e7d54))
+
 ## [1.22.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.7...v1.22.8) (2022-04-20)
 
 
