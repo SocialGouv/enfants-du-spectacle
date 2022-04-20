@@ -9,3 +9,4 @@ jobs:
       - name: Hit API endpoints
         run: |
           curl -X GET "https://enfants-du-spectacle.fabrique.social.gouv.fr/api/dsapi"
+          curl -X GET "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/dsapi"
