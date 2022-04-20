@@ -21,6 +21,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
+  const [mountedRef, setMountedRef] = React.useState<boolean>(false);
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
@@ -31,8 +32,14 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks }) => {
   };
 
   useEffect(() => {
-    lauchUpdate(formData);
+    if (mountedRef) {
+      lauchUpdate(formData);
+    }
   }, [formData]);
+
+  useEffect(() => {
+    setMountedRef(true);
+  });
 
   const lauchUpdate = useCallback(
     _.debounce((enfantToUpdate: Enfant) => {
