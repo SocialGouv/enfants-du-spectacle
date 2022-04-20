@@ -124,7 +124,8 @@ const Questions: React.FC = () => {
                   <ul>
                     <li>
                       certificat de scolarité ou avis pédagogique (à partir de 4
-                      jours d’absence scolaire). Si l’enfant est scolarisé en
+                      jours d’absence scolaire). Pour les dossiers relevant de
+                      la commission de Paris, si l’enfant est scolarisé en
                       dehors de l’académie de Paris, l’avis pédagogique doit
                       être accompagné de l’avis du Directeur académique concerné
                     </li>
@@ -385,7 +386,7 @@ const Questions: React.FC = () => {
               </AccordionItem>
             </Accordion>
             <Accordion className={styles.accordion}>
-              <AccordionItem title="Y a-til d'autres démarches à réaliser ?">
+              <AccordionItem title="Y a-t'il d'autres démarches à réaliser ?">
                 <p>
                   Un exemplaire papier du scenario ou script doit également être
                   envoyé par voie postale à l’adresse suivante:
