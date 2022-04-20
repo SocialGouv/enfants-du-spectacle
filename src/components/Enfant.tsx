@@ -14,9 +14,10 @@ import { updateEnfant } from "src/lib/queries";
 
 interface Props {
   enfant: Enfant;
+  dataLinks: Record<string, unknown>;
 }
 
-const EnfantComponent: React.FC<Props> = ({ enfant }) => {
+const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
@@ -109,7 +110,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant }) => {
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>
-            <JustificatifsEnfants enfant={enfant} />
+            <JustificatifsEnfants enfant={enfant} dataLinks={dataLinks} />
           </Info>
         </div>
       </Foldable>

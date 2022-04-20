@@ -9,6 +9,7 @@ import type {
 import _ from "lodash";
 import React from "react";
 import styles from "src/components/Justificatifs.module.scss";
+import { JUSTIFS_DOSSIER } from "src/lib/helpers";
 
 interface JustificatifProps {
   subject: Dossier | Enfant;
@@ -56,6 +57,7 @@ const Justificatif: React.FC<JustificatifProps> = ({
 
 interface Props {
   dossier: Dossier & { piecesDossier: PieceDossierEnfant[] };
+  dataLinks: Record<string, unknown>;
 }
 
 const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
@@ -67,7 +69,7 @@ const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
     { label: "Infos complémentaires", value: "INFOS_COMPLEMENTAIRES" },
   ];
 
-const JustificatifsDossier: React.FC<Props> = ({ dossier }) => {
+const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
   const justificatifs = [...JUSTIFICATIFS_DOSSIERS].sort(
     (a, b) =>
       dossier.justificatifs.includes(b.value) -
@@ -81,7 +83,11 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier }) => {
             subject={dossier}
             value={value}
             label={label}
-            link={_.get(_.find(dossier.piecesDossier, { type: value }), "link")}
+            link={
+              _.find(dataLinks.data.dossier.champs, {
+                label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
+              }).file?.url
+            }
           />
         </li>
       ))}
@@ -100,11 +106,16 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
 
 const JustificatifsEnfants: React.FC<{
   enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
-}> = ({ enfant }) => {
+  dataLinks: Record<string, unknown>;
+}> = ({ enfant, dataLinks }) => {
   const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
     (a, b) =>
       enfant.justificatifs.includes(b.value) -
       enfant.justificatifs.includes(a.value)
+  );
+  const champEnfant = _.get(
+    _.find(dataLinks.data.dossier.champs, { label: "Enfant" }),
+    "champs"
   );
   return (
     <ul className={styles.justificatifs}>
@@ -114,7 +125,17 @@ const JustificatifsEnfants: React.FC<{
             subject={enfant}
             value={value}
             label={label}
-            link={_.get(_.find(enfant.piecesDossier, { type: value }), "link")}
+            link={
+              _.find(
+                champEnfant,
+                (champ: Record<string, Record<string, unknown> | null>) => {
+                  return (
+                    champ.file?.checksum ===
+                    _.find(enfant.piecesDossier, { type: value })?.externalId
+                  );
+                }
+              )?.file?.url
+            }
           />
         </li>
       ))}

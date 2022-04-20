@@ -81,6 +81,7 @@ function RefreshLinks(dossierExternalId: string) {
   );
 
   return {
+    dataLinks: data,
     isError: error,
     isLoading: !error && !data,
   };
