@@ -1,6 +1,8 @@
 import {
   Footer as FooterDSE,
   FooterBody,
+  FooterBottom,
+  FooterLink,
   FooterPartners,
   FooterPartnersLogo,
   FooterPartnersTitle,
@@ -28,6 +30,9 @@ export default function Footer(): ReactElement {
           imageAlt="beta.gouv.fr"
         />
       </FooterPartners>
+      <FooterBottom>
+        <FooterLink href="/mentions">Mentions légales</FooterLink>
+      </FooterBottom>
     </FooterDSE>
   );
 }
