@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.9...v1.23.0) (2022-04-22)
+
+
+### Features
+
+* add mentions legales ([8f9b385](https://github.com/SocialGouv/enfants-du-spectacle/commit/8f9b385ef175c75a4e109cec19aa641b1a08290c))
+
 ## [1.22.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.22.8...v1.22.9) (2022-04-20)
 
 
