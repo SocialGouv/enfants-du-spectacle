@@ -163,7 +163,6 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
 
   autoTable(doc, {
     body: [...blocs],
-    margin: { top: 70 },
     theme: "plain",
   });
 
@@ -193,14 +192,16 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
   const pageCount = doc.internal.getNumberOfPages(); //Total Page Number
   for (let i = 0; i < pageCount; i++) {
     doc.setPage(i);
-    doc.setFontSize(15).setFont(undefined, "bold");
-    doc.text("Direction Régionale et Interdépartementale", 85, 18);
-    doc.text("de l’Economie, de l'Emploi, du Travail", 98, 25);
-    doc.text("et des Solidarités d’Ile-de-France", 110, 32);
-    const imgData = new Image();
-    imgData.src = logoPrefet.src;
-    doc.setFontSize(40);
-    doc.addImage(imgData, "png", 15, 15, 50, 45);
+    if (i === 1) {
+      doc.setFontSize(15).setFont(undefined, "bold");
+      doc.text("Direction Régionale et Interdépartementale", 85, 18);
+      doc.text("de l’Economie, de l'Emploi, du Travail", 98, 25);
+      doc.text("et des Solidarités d’Ile-de-France", 110, 32);
+      const imgData = new Image();
+      imgData.src = logoPrefet.src;
+      doc.setFontSize(40);
+      doc.addImage(imgData, "png", 15, 15, 50, 45);
+    }
   }
 
   return doc.save(
