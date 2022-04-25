@@ -44,7 +44,7 @@ const Steps: React.FC = () => {
               {" "}
               <span>
                 Je <b>reçois par mail</b> un lien qui me permet de consulter mon
-                dosier à tout moment
+                dossier à tout moment
               </span>{" "}
             </p>
           </div>
