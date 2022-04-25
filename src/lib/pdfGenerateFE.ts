@@ -12,6 +12,7 @@ import {
   birthDateToFrenchAge,
   frenchDateText,
   typeEmploiLabel,
+  TYPES_EMPLOI,
 } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
@@ -56,57 +57,59 @@ const generateFE = (dossiers: DossierData[]) => {
             return e.typeEmploi;
           })
         );
-        roles.map((role: TypeEmploi) => {
-          blocs.push([
-            {
-              content: typeEmploiLabel(role),
-              styles: {
-                fontSize: 13,
-                fontStyle: "bold",
-                halign: "left",
-              },
-            },
-          ]);
-          _.filter(dossier.enfants, { typeEmploi: role }).map(
-            (enfant: Enfant) => {
-              blocs.push([
-                {
-                  content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
-                    enfant.dateNaissance
-                  )} ${
-                    enfant.nomPersonnage
-                      ? ", incarne " + enfant.nomPersonnage
-                      : ""
-                  }${
-                    enfant.adresseEnfant
-                      ? "\nDomicile : " + enfant.adresseEnfant
-                      : ""
-                  }${
-                    enfant.nomRepresentant1
-                      ? `\nReprésentant légal 1 : ${enfant.nomRepresentant1} ${enfant.prenomRepresentant1} - ${enfant.adresseRepresentant1}`
-                      : ""
-                  }${
-                    enfant.nomRepresentant2
-                      ? `\nReprésentant légal 2 : ${enfant.nomRepresentant2} ${enfant.prenomRepresentant2} - ${enfant.adresseRepresentant2}`
-                      : ""
-                  }
-${enfant.nombreJours} jours travaillés
-${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
-${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
-                    enfant.remunerationsAdditionnelles
-                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
-                      : ""
-                  }
-TOTAL : ${enfant.remunerationTotale} Euros
-Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
-                  styles: {
-                    fontSize: 11,
-                    halign: "left",
-                  },
+        TYPES_EMPLOI.map((role) => {
+          if (roles.indexOf(role.value) !== -1) {
+            blocs.push([
+              {
+                content: typeEmploiLabel(role.value as TypeEmploi),
+                styles: {
+                  fontSize: 13,
+                  fontStyle: "bold",
+                  halign: "left",
                 },
-              ]);
-            }
-          );
+              },
+            ]);
+            _.filter(dossier.enfants, { typeEmploi: role.value }).map(
+              (enfant: Enfant) => {
+                blocs.push([
+                  {
+                    content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
+                      enfant.dateNaissance
+                    )} ${
+                      enfant.nomPersonnage
+                        ? ", incarne " + enfant.nomPersonnage
+                        : ""
+                    }${
+                      enfant.adresseEnfant
+                        ? "\nDomicile : " + enfant.adresseEnfant
+                        : ""
+                    }${
+                      enfant.nomRepresentant1
+                        ? `\nReprésentant légal 1 : ${enfant.nomRepresentant1} ${enfant.prenomRepresentant1} - ${enfant.adresseRepresentant1}`
+                        : ""
+                    }${
+                      enfant.nomRepresentant2
+                        ? `\nReprésentant légal 2 : ${enfant.nomRepresentant2} ${enfant.prenomRepresentant2} - ${enfant.adresseRepresentant2}`
+                        : ""
+                    }
+  ${enfant.nombreJours} jours travaillés
+  ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
+  ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
+                      enfant.remunerationsAdditionnelles
+                        ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+                        : ""
+                    }
+  TOTAL : ${enfant.remunerationTotale} Euros
+  Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
+                    styles: {
+                      fontSize: 11,
+                      halign: "left",
+                    },
+                  },
+                ]);
+              }
+            );
+          }
         });
       });
     });
@@ -130,7 +133,6 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
 
   autoTable(doc, {
     body: [...blocs],
-    margin: { top: 70 },
     theme: "plain",
   });
 
@@ -217,14 +219,16 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
   const pageCount = doc.internal.getNumberOfPages(); //Total Page Number
   for (let i = 0; i < pageCount; i++) {
     doc.setPage(i);
-    doc.setFontSize(15).setFont(undefined, "bold");
-    doc.text("Direction Régionale et Interdépartementale", 85, 18);
-    doc.text("de l’Economie, de l'Emploi, du Travail", 98, 25);
-    doc.text("et des Solidarités d’Ile-de-France", 110, 32);
-    const imgData = new Image();
-    imgData.src = logoPrefet.src;
-    doc.setFontSize(40);
-    doc.addImage(imgData, "png", 15, 15, 50, 45);
+    if (i === 1) {
+      doc.setFontSize(15).setFont(undefined, "bold");
+      doc.text("Direction Régionale et Interdépartementale", 85, 18);
+      doc.text("de l’Economie, de l'Emploi, du Travail", 98, 25);
+      doc.text("et des Solidarités d’Ile-de-France", 110, 32);
+      const imgData = new Image();
+      imgData.src = logoPrefet.src;
+      doc.setFontSize(40);
+      doc.addImage(imgData, "png", 15, 15, 50, 45);
+    }
   }
 
   return doc.save("FICHE EMPLOI " + dossiers[0].nom);
