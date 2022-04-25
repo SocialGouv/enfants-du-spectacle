@@ -239,6 +239,17 @@ const STATUS_ODJ = [
   "REFUSE",
 ];
 
+const BINDING_DS_STATUS = [
+  { ds: "en_construction", eds: "CONSTRUCTION" },
+  { ds: "en_instruction", eds: "INSTRUCTION" },
+  { ds: "accepte", eds: "ACCEPTE" },
+  { ds: "avis_ajourne", eds: "AVIS_AJOURNE" },
+  { ds: "avis_favorable", eds: "AVIS_FAVORABLE" },
+  { ds: "avis_favorable_sous_reserve", eds: "AVIS_FAVORABLE_SOUS_RESERVE" },
+  { ds: "avis_defavorable", eds: "AVIS_DEFAVORABLE" },
+  { ds: "refuse", eds: "REFUSE" },
+];
+
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
@@ -268,6 +279,7 @@ async function delay(ms: number): Promise<void> {
 
 export {
   ALL_DEPARTEMENTS,
+  BINDING_DS_STATUS,
   birthDateToFrenchAge,
   compact,
   delay,
