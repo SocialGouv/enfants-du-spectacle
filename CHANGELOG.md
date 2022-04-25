@@ -1,3 +1,11 @@
+## [1.23.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.1...v1.23.2) (2022-04-25)
+
+
+### Bug Fixes
+
+* leave headers only on first page pdf ([20b9d1f](https://github.com/SocialGouv/enfants-du-spectacle/commit/20b9d1f4ff40888660a22b6731f266da15eb0985))
+* order roles on pdf ([b20289d](https://github.com/SocialGouv/enfants-du-spectacle/commit/b20289dbe331899598c17de1eaa0588051aa8e0a))
+
 ## [1.23.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.0...v1.23.1) (2022-04-25)
 
 
