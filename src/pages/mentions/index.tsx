@@ -1,34 +1,20 @@
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import LayoutHome from "src/components/Layout";
 
 const Home: React.FC = () => {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
-
-  useEffect(() => {
-    if (!loading && session)
-      router.push("/dossiers").catch((e) => {
-        throw e;
-      });
-  }, [session, loading]);
-
   return (
     <LayoutHome windowTitle="">
       <h2>Mentions légales</h2>
       <h3>Éditeur</h3>
       <p>
-        Ce site est édité par la Direction régionale et interdépartementale de
-        l’économie, de l’emploi, du travail et des solidarités d’Île-de-France
-        (DRIEETS IDF).
+        Ce site est édité par
         <br />
-        19 Rue Madeleine Vionnet,
+        Direction régionale et interdépartementale de l’économie, de l’emploi,
+        du travail et des solidarités d’Île-de-France (DRIEETS IDF).
         <br />
-        93300,
+        19 Rue Madeleine Vionnet
         <br />
-        Aubervilliers
+        93300 AUBERVILLIERS
       </p>
       <h3>Directeur de la publication</h3>
       <p>Monsieur Gaëtan RUDANT, Directeur régional et interdépartemental</p>

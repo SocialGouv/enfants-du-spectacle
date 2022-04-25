@@ -229,6 +229,16 @@ const JUSTIFS_ENFANT: { label: string; value: string }[] = [
   { label: "Avis médical d'aptitude", value: "AVIS_MEDICAL" },
 ];
 
+const STATUS_ODJ = [
+  "PRET",
+  "AVIS_AJOURNE",
+  "AVIS_FAVORABLE",
+  "AVIS_FAVORABLE_SOUS_RESERVE",
+  "AVIS_DEFAVORABLE",
+  "ACCEPTE",
+  "REFUSE",
+];
+
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
@@ -273,6 +283,7 @@ export {
   ROLES_USERS,
   searchResultsToSocieteProductions,
   shortUserName,
+  STATUS_ODJ,
   stringToNumberOrNull,
   strNoAccent,
   typeEmploiLabel,

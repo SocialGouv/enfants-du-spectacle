@@ -266,8 +266,8 @@ const Questions: React.FC = () => {
                   Pour les enfants de 12 à 16 ans:
                   <br />
                   En période scolaire: 4h/jour avec pause obligatoire après 2h00
-                  de temps de travail En période de vacances scolaires: 6h/jour
-                  avec pause obligatoire après 3h00 de temps de travail.
+                  de temps de travail ; En période de vacances scolaires:
+                  6h/jour avec pause obligatoire après 3h00 de temps de travail.
                 </p>
               </AccordionItem>
             </Accordion>
@@ -386,7 +386,7 @@ const Questions: React.FC = () => {
               </AccordionItem>
             </Accordion>
             <Accordion className={styles.accordion}>
-              <AccordionItem title="Y a-t'il d'autres démarches à réaliser ?">
+              <AccordionItem title="Y a-t-il d'autres démarches à réaliser ?">
                 <p>
                   Un exemplaire papier du scenario ou script doit également être
                   envoyé par voie postale à l’adresse suivante:

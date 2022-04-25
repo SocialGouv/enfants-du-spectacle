@@ -60,7 +60,7 @@ const generateDA = (dossiers: DossierData[]) => {
     ]);
     blocs.push([
       {
-        content: `La société ${dossier.societeProduction.nom} est autorisée à engager dans le cadre du projet ${dossier.nom}, et selon les conditions définies dans la demande, l’enfant : `,
+        content: `La société ${dossier.societeProduction.nom} est autorisée à engager dans le cadre du projet "${dossier.nom}", et selon les conditions définies dans la demande, l’enfant : `,
         styles: {
           fontSize: 11,
           halign: "left",
