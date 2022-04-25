@@ -1,3 +1,10 @@
+## [1.23.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.4...v1.23.5) (2022-04-25)
+
+
+### Bug Fixes
+
+* update status for display buttons pdf ([1f15769](https://github.com/SocialGouv/enfants-du-spectacle/commit/1f1576921b0df0ea4c2dcbb948cb9850311a31b9))
+
 ## [1.23.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.3...v1.23.4) (2022-04-25)
 
 
