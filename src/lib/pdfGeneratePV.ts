@@ -12,6 +12,7 @@ import {
   birthDateToFrenchAge,
   frenchDateText,
   frenchDepartementName,
+  STATUS_ODJ,
   typeEmploiLabel,
   TYPES_EMPLOI,
 } from "src/lib/helpers";
@@ -20,7 +21,9 @@ import type { CommissionData, DossierData } from "src/lib/types";
 const generatePV = (commission: CommissionData) => {
   const doc = new jsPDF();
   const categories = _.uniq(
-    _.filter(commission.dossiers, { statut: "PRET" }).map((d: DossierData) => {
+    _.filter(commission.dossiers, (dossier: DossierData) => {
+      return STATUS_ODJ.includes(dossier.statut);
+    }).map((d: DossierData) => {
       return d.categorie;
     })
   );
@@ -42,7 +45,9 @@ const generatePV = (commission: CommissionData) => {
         },
       ]);
       _.filter(commission.dossiers, (dossier: DossierData) => {
-        return dossier.categorie === categorie && dossier.statut === "PRET";
+        return (
+          dossier.categorie === categorie && STATUS_ODJ.includes(dossier.statut)
+        );
       }).map((dossier: DossierData) => {
         blocs.push([
           {
@@ -80,8 +85,26 @@ const generatePV = (commission: CommissionData) => {
                 },
               },
             ]);
-            _.filter(dossier.enfants, { typeEmploi: role.value }).map(
-              (enfant: Enfant) => {
+            _.filter(dossier.enfants, { typeEmploi: role.value })
+              .sort(function (
+                a: Record<string, string>,
+                b: Record<string, string>
+              ) {
+                if (a.nom < b.nom) {
+                  return -1;
+                }
+                if (a.nom > b.nom) {
+                  return 1;
+                }
+                if (a.prenom < b.prenom) {
+                  return -1;
+                }
+                if (a.prenom > b.prenom) {
+                  return 1;
+                }
+                return 0;
+              })
+              .map((enfant: Enfant) => {
                 blocs.push([
                   {
                     content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
@@ -95,7 +118,7 @@ const generatePV = (commission: CommissionData) => {
   ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
   ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                       enfant.remunerationsAdditionnelles
-                        ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+                        ? `\n  Rémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
                         : ""
                     }
   TOTAL : ${enfant.remunerationTotale} Euros
@@ -106,8 +129,7 @@ const generatePV = (commission: CommissionData) => {
                     },
                   },
                 ]);
-              }
-            );
+              });
           }
         });
         blocs.push([

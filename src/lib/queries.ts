@@ -257,10 +257,10 @@ const updateEnfants = (cdc: number, dossierId: number) => {
     });
 };
 
-const uploadDocs = () => {
+const uploadDocs = (commissionId: number) => {
   window
     .fetch(`/api/docs`, {
-      body: JSON.stringify({}),
+      body: JSON.stringify(commissionId),
       method: "POST",
     })
     .then((r) => {
