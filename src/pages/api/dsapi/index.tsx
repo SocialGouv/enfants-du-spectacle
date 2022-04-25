@@ -14,6 +14,7 @@ import _ from "lodash";
 import type { NextApiHandler } from "next";
 //import { getSession } from "next-auth/react";
 import {
+  BINDING_DS_STATUS,
   getFormatedTypeDossier,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,
@@ -55,10 +56,12 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const infos = await getInfosFromDS();
+  console.log("querry : ", req.query);
+  const status = req.query.status || "en_construction";
+  const infos = await getInfosFromDS(status as string);
   const neddUpdate = await checkNeedUpdate(infos);
   if (neddUpdate) {
-    const fetching = await getDatasFromDS();
+    const fetching = await getDatasFromDS(status as string);
     if (_.get(fetching, "errors")) {
       res.status(500).json(superjson.stringify(_.get(fetching, "errors")));
     } else {
@@ -269,10 +272,10 @@ const insertDataFromDs = (data: unknown) => {
               "stringValue"
             ),
             societeProductionId: societe.id,
-            statut:
-              dossier.state === "en_construction"
-                ? "CONSTRUCTION"
-                : "INSTRUCTION",
+            statut: _.get(
+              _.find(BINDING_DS_STATUS, { ds: dossier.state }),
+              "eds"
+            ),
           };
 
           const finalDossier =
@@ -507,10 +510,10 @@ const insertDataFromDs = (data: unknown) => {
   return { message: "success" };
 };
 
-const getDatasFromDS = async () => {
+const getDatasFromDS = async (status: string) => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
   const demarcheNumber = parseInt(process.env.DEMARCHE_NUMBER ?? "");
-  const state = "en_construction";
+  const state = status;
   const query = `query getDemarche(
     $demarcheNumber: Int!
     $state: DossierState
@@ -891,10 +894,10 @@ const getDatasFromDS = async () => {
   return fetching.json();
 };
 
-const getInfosFromDS = async () => {
+const getInfosFromDS = async (status: string) => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
   const demarcheNumber = parseInt(process.env.DEMARCHE_NUMBER ?? "");
-  const state = "en_construction";
+  const state = status;
   const query = `query getDemarche(
     $demarcheNumber: Int!
     $state: DossierState
