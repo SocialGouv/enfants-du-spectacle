@@ -1,3 +1,10 @@
+## [1.23.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.3...v1.23.4) (2022-04-25)
+
+
+### Bug Fixes
+
+* update fetch DS to get dossiers based on status ([270a2c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/270a2c21961ac882c0306e52e97d435a86058146))
+
 ## [1.23.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.2...v1.23.3) (2022-04-25)
 
 
