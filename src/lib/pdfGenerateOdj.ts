@@ -45,8 +45,10 @@ const generateOdj = (commission: CommissionData) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${
-              dossier.societeProduction.nom
+            content: `\n\nSOCIETE : ${dossier.societeProduction.nom}  - ${
+              dossier.societeProduction.adresse
+            } ${dossier.societeProduction.adresseCodePostal} ${
+              dossier.societeProduction.adresseCodeCommune
             } \nPROJET : ${dossier.nom} - du ${frenchDateText(
               dossier.dateDebut
             )} au ${frenchDateText(
@@ -84,13 +86,14 @@ const generateOdj = (commission: CommissionData) => {
                     enfant.dateNaissance
                   )} ${
                     enfant.nomPersonnage
-                      ? ", incarne : " + enfant.nomPersonnage
+                      ? ", incarne " + enfant.nomPersonnage
                       : ""
                   }
 ${enfant.nombreJours} jours travaillés
+${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
 ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                     enfant.remunerationsAdditionnelles
-                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles} Euros`
+                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
                       : ""
                   }
 TOTAL : ${enfant.remunerationTotale} Euros
@@ -136,7 +139,7 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
   });
 
   const pageCount = doc.internal.getNumberOfPages(); //Total Page Number
-  for (let i = 0; i < pageCount; i++) {
+  for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(15).setFont(undefined, "bold");
     doc.text("Direction Régionale et Interdépartementale", 85, 18);
@@ -144,8 +147,16 @@ Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    doc.setFontSize(40);
+    doc.setFontSize(10);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
+    doc.text(
+      "Page " + String(i) + " sur " + String(pageCount),
+      210 - 20,
+      317 - 30,
+      null,
+      null,
+      "right"
+    );
   }
 
   return doc.save(
