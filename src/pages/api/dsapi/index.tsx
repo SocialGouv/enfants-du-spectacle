@@ -56,7 +56,6 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  console.log("querry : ", req.query);
   const status = req.query.status || "en_construction";
   const infos = await getInfosFromDS(status as string);
   const neddUpdate = await checkNeedUpdate(infos);
