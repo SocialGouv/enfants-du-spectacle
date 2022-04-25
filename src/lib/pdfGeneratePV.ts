@@ -45,8 +45,10 @@ const generatePV = (commission: CommissionData) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${
-              dossier.societeProduction.nom
+            content: `\n\nSOCIETE : ${dossier.societeProduction.nom} - ${
+              dossier.societeProduction.adresse
+            } ${dossier.societeProduction.adresseCodePostal} ${
+              dossier.societeProduction.adresseCodeCommune
             } \nPROJET : ${dossier.nom} - du ${frenchDateText(
               dossier.dateDebut
             )} au ${frenchDateText(
@@ -82,15 +84,16 @@ const generatePV = (commission: CommissionData) => {
                 {
                   content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
                     enfant.dateNaissance
-                  )} (incarne : ${
+                  )} ${
                     enfant.nomPersonnage
-                      ? ", incarne : " + enfant.nomPersonnage
+                      ? ", incarne " + enfant.nomPersonnage
                       : ""
                   }
 ${enfant.nombreJours} jours travaillés
+${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
 ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                     enfant.remunerationsAdditionnelles
-                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles} Euros`
+                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
                       : ""
                   }
 TOTAL : ${enfant.remunerationTotale} Euros

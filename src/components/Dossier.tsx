@@ -60,7 +60,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         <Info title="Pièces justificatives">
           <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
         </Info>
-        {dossier.statut == "PRET" && (
+        {dossier.statut !== "INSTRUCTION" && dossier.statut !== "CONSTRUCTION" && (
           <button
             className="postButton"
             onClick={() => {

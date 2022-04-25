@@ -15,10 +15,12 @@ const generateDA = (dossiers: DossierData[]) => {
         content: `Vu la demande présentée le ${frenchDateText(
           dossier.dateDerniereModification ?? dossier.commission.date
         )} par la société ${dossier.societeProduction.nom}, sise ${
-          dossier.societeProduction.siren
-        }, pour l'emploi d'enfants dans le cadre du projet intitulé ${
+          dossier.societeProduction.adresse
+        }  ${dossier.societeProduction.adresseCodePostal} ${
+          dossier.societeProduction.adresseCodeCommune
+        }, pour l'emploi d'enfants dans le cadre du projet intitulé "${
           dossier.nom
-        } `,
+        }" `,
         styles: {
           fontSize: 11,
           halign: "left",
@@ -246,8 +248,26 @@ Responsable du département protection et insertion des jeunes`,
     theme: "plain",
   });
 
+  autoTable(doc, {
+    body: [
+      [
+        {
+          content: `Voies et délais de recours :
+          Cette décision peut faire l’objet  dans un délai de deux mois à compter de sa notification:
+          -  d’un recours hiérarchique auprès du ministre du travail, de l’emploi et de l’insertion, Direction générale du travail, 39-43 quai André-Citroën 75902 Paris cedex 15;
+          -  d’un recours contentieux auprès du tribunal administratif de Paris, 7 rue de Jouy -75181 Paris Cedex 04.`,
+          styles: {
+            fontSize: 9,
+            halign: "left",
+          },
+        },
+      ],
+    ],
+    theme: "plain",
+  });
+
   const pageCount = doc.internal.getNumberOfPages(); //Total Page Number
-  for (let i = 0; i < pageCount; i++) {
+  for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(15).setFont(undefined, "bold");
     doc.text("Direction Régionale et Interdépartementale", 85, 18);
@@ -255,8 +275,41 @@ Responsable du département protection et insertion des jeunes`,
     doc.text("et des Solidarités d’Ile-de-France", 110, 32);
     const imgData = new Image();
     imgData.src = logoPrefet.src;
-    doc.setFontSize(40);
+    doc.setFontSize(10);
     doc.addImage(imgData, "png", 15, 15, 50, 45);
+    doc.text(
+      "Page " + String(i) + " sur " + String(pageCount),
+      220 - 20,
+      317 - 30,
+      null,
+      null,
+      "right"
+    );
+    doc.setFontSize(6);
+    doc.text(
+      "Direction Régionale et interdépartementale de l’Economie, de l'Emploi, du Travail et des solidarités (Drieets) d’Ile-de-France",
+      60 - 20,
+      317 - 30,
+      null,
+      null,
+      "left"
+    );
+    doc.text(
+      "19-21, rue Madeleine Vionnet  - 93300  Aubervilliers ",
+      100 - 20,
+      320 - 30,
+      null,
+      null,
+      "left"
+    );
+    doc.text(
+      "www.travail-emploi.gouv.fr – www.economie.gouv.fr - www.idf.direccte.gouv.fr",
+      90 - 20,
+      323 - 30,
+      null,
+      null,
+      "left"
+    );
   }
 
   return doc.save("Décision autorisation " + dossiers[0].nom);

@@ -4,7 +4,10 @@ import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import _ from "lodash";
 import logoPrefet from "src/images/logo_prefet.png";
-import { categorieToLabel } from "src/lib/categories";
+import {
+  categorieToGrandeCategorieLabel,
+  categorieToLabel,
+} from "src/lib/categories";
 import {
   birthDateToFrenchAge,
   frenchDateText,
@@ -29,13 +32,17 @@ const generateFE = (dossiers: DossierData[]) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${
-              dossier.societeProduction.nom
+            content: `\n\nSOCIETE : ${dossier.societeProduction.nom} - ${
+              dossier.societeProduction.adresse
+            } ${dossier.societeProduction.adresseCodePostal} ${
+              dossier.societeProduction.adresseCodeCommune
             } \nPROJET : ${dossier.nom} - du ${frenchDateText(
               dossier.dateDebut
             )} au ${frenchDateText(
               dossier.dateFin
-            )} \nTYPE DE PROJET : ${categorieToLabel(dossier.categorie)} 
+            )} \nCATEGORIE : ${categorieToGrandeCategorieLabel(
+              dossier.categorie
+            )} - TYPE DE PROJET : ${categorieToLabel(dossier.categorie)} 
               `,
             styles: {
               fontSize: 13,
@@ -68,7 +75,7 @@ const generateFE = (dossiers: DossierData[]) => {
                     enfant.dateNaissance
                   )} ${
                     enfant.nomPersonnage
-                      ? ", incarne : " + enfant.nomPersonnage
+                      ? ", incarne " + enfant.nomPersonnage
                       : ""
                   }${
                     enfant.adresseEnfant
@@ -84,9 +91,10 @@ const generateFE = (dossiers: DossierData[]) => {
                       : ""
                   }
 ${enfant.nombreJours} jours travaillés
+${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
 ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
                     enfant.remunerationsAdditionnelles
-                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles} Euros`
+                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
                       : ""
                   }
 TOTAL : ${enfant.remunerationTotale} Euros
