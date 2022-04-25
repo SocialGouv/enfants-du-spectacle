@@ -13,6 +13,7 @@ import {
   frenchDateText,
   frenchDepartementName,
   typeEmploiLabel,
+  TYPES_EMPLOI,
 } from "src/lib/helpers";
 import type { CommissionData, DossierData } from "src/lib/types";
 
@@ -67,45 +68,47 @@ const generatePV = (commission: CommissionData) => {
             return e.typeEmploi;
           })
         );
-        roles.map((role: TypeEmploi) => {
-          blocs.push([
-            {
-              content: typeEmploiLabel(role),
-              styles: {
-                fontSize: 13,
-                fontStyle: "bold",
-                halign: "left",
-              },
-            },
-          ]);
-          _.filter(dossier.enfants, { typeEmploi: role }).map(
-            (enfant: Enfant) => {
-              blocs.push([
-                {
-                  content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
-                    enfant.dateNaissance
-                  )} ${
-                    enfant.nomPersonnage
-                      ? ", incarne " + enfant.nomPersonnage
-                      : ""
-                  }
-${enfant.nombreJours} jours travaillés
-${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
-${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
-                    enfant.remunerationsAdditionnelles
-                      ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
-                      : ""
-                  }
-TOTAL : ${enfant.remunerationTotale} Euros
-Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
-                  styles: {
-                    fontSize: 11,
-                    halign: "left",
-                  },
+        TYPES_EMPLOI.map((role) => {
+          if (roles.indexOf(role.value) !== -1) {
+            blocs.push([
+              {
+                content: typeEmploiLabel(role.value as TypeEmploi),
+                styles: {
+                  fontSize: 13,
+                  fontStyle: "bold",
+                  halign: "left",
                 },
-              ]);
-            }
-          );
+              },
+            ]);
+            _.filter(dossier.enfants, { typeEmploi: role.value }).map(
+              (enfant: Enfant) => {
+                blocs.push([
+                  {
+                    content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
+                      enfant.dateNaissance
+                    )} ${
+                      enfant.nomPersonnage
+                        ? ", incarne " + enfant.nomPersonnage
+                        : ""
+                    }
+  ${enfant.nombreJours} jours travaillés
+  ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
+  ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
+                      enfant.remunerationsAdditionnelles
+                        ? `\nRémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+                        : ""
+                    }
+  TOTAL : ${enfant.remunerationTotale} Euros
+  Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
+                    styles: {
+                      fontSize: 11,
+                      halign: "left",
+                    },
+                  },
+                ]);
+              }
+            );
+          }
         });
         blocs.push([
           {
