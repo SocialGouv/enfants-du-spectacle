@@ -4,7 +4,11 @@ import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import {
+  frenchDateText,
+  frenchDepartementName,
+  STATUS_ODJ,
+} from "src/lib/helpers";
 import { generateOdj } from "src/lib/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
@@ -57,7 +61,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
           {frenchDepartementName(commission.departement)}
         </div>
         {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-          return dossier.statut === "PRET";
+          return STATUS_ODJ.includes(dossier.statut);
         }) && (
           <button
             className="postButton"
@@ -87,7 +91,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
         ))}
       </div>
       {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-        return dossier.statut === "PRET";
+        return STATUS_ODJ.includes(dossier.statut);
       }) && (
         <button
           className="postButton"
