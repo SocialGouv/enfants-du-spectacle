@@ -1,3 +1,10 @@
+## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* improve fetching data ds ([a587673](https://github.com/SocialGouv/enfants-du-spectacle/commit/a587673f75abb91ee15bca4216311f61731f7f99))
+
 ## [1.25.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.0...v1.25.1) (2022-04-29)
 
 
