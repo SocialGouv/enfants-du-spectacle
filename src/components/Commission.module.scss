@@ -8,6 +8,16 @@
   grid-template-columns: 10rem 1.3fr 1.3fr .6fr 1fr 8rem;
 }
 
+.actionGrid {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  margin-top:2rem;
+  div {
+    padding-left:0.5rem;
+    padding-right:0.5rem;
+  }
+}
+
 
 .nomDossier {
   max-width: 300px;

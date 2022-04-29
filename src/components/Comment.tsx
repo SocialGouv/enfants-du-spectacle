@@ -1,4 +1,3 @@
-//import { Commentaire } from "@prisma/client";
 import * as React from "react";
 import styles from "src/components/Comment.module.scss";
 import { frenchDateHour } from "src/lib/helpers";
