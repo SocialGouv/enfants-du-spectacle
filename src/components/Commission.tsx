@@ -12,7 +12,6 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { downloadDocs, sendEmail } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -80,27 +79,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
         ))}
       </div>
       <div className={styles.actionGrid}>
-        <div className={styles.dlButton}>
-          <button
-            className="postButton"
-            onClick={() => {
-              console.log("commission : ", commission);
-              downloadDocs(commission);
-            }}
-          >
-            Télécharger dossiers
-          </button>
-        </div>
-        <div className={styles.sendButton}>
-          <button
-            className="whiteButton"
-            onClick={() => {
-              sendEmail("dl_commission");
-            }}
-          >
-            Envoyer dossiers
-          </button>
-        </div>
+        <div className={styles.dlButton} />
+        <div className={styles.sendButton} />
         <div className={styles.odjButton}>
           {_.find(commission.dossiers, (dossier: DossierDataLight) => {
             return STATUS_ODJ.includes(dossier.statut);
