@@ -4,6 +4,7 @@ import type {
   Demandeur,
   Dossier,
   Enfant,
+  PieceDossier,
   SocieteProduction,
   User,
 } from "@prisma/client";
@@ -21,6 +22,7 @@ type DossierData = Dossier & {
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];
+  piecesDossier: PieceDossier[];
   commentaires: Commentaire[];
   demandeur: Demandeur;
   _count?: {

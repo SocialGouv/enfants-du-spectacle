@@ -9,9 +9,10 @@ import {
   frenchDepartementName,
   STATUS_ODJ,
 } from "src/lib/helpers";
-import { generateOdj } from "src/lib/pdfGenerateOdj";
-import { generatePV } from "src/lib/pdfGeneratePV";
+import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
+import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
+import { downloadDocs } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -60,18 +61,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
-        {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-          return STATUS_ODJ.includes(dossier.statut);
-        }) && (
-          <button
-            className="postButton"
-            onClick={() => {
-              generateOdj(commission);
-            }}
-          >
-            Télécharger ordre du jour
-          </button>
-        )}
       </div>
       <div style={{ marginBottom: "2rem" }}>
         <b>{dossiersCount}</b> dossiers - <b>{enfantsCount}</b> enfants
@@ -90,18 +79,57 @@ const Commission: React.FC<Props> = ({ commission }) => {
           <Dossier key={dossier.id} dossier={dossier} />
         ))}
       </div>
-      {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-        return STATUS_ODJ.includes(dossier.statut);
-      }) && (
-        <button
-          className="postButton"
-          onClick={() => {
-            generatePV(commission);
-          }}
-        >
-          Télécharger Procès Verbal
-        </button>
-      )}
+      <div className={styles.actionGrid}>
+        <div className={styles.dlButton}>
+          <button
+            className="postButton"
+            onClick={() => {
+              console.log("commission : ", commission);
+              downloadDocs(commission);
+            }}
+          >
+            Télécharger dossiers
+          </button>
+        </div>
+        <div className={styles.sendButton}>
+          <button
+            className="whiteButton"
+            onClick={() => {
+              downloadDocs(commission);
+            }}
+          >
+            Envoyer dossiers
+          </button>
+        </div>
+        <div className={styles.odjButton}>
+          {_.find(commission.dossiers, (dossier: DossierDataLight) => {
+            return STATUS_ODJ.includes(dossier.statut);
+          }) && (
+            <button
+              className="postButton"
+              onClick={() => {
+                generateOdj(commission);
+              }}
+            >
+              Télécharger ordre du jour
+            </button>
+          )}
+        </div>
+        <div className={styles.pvButton}>
+          {_.find(commission.dossiers, (dossier: DossierDataLight) => {
+            return STATUS_ODJ.includes(dossier.statut);
+          }) && (
+            <button
+              className="postButton"
+              onClick={() => {
+                generatePV(commission);
+              }}
+            >
+              Télécharger Procès Verbal
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
