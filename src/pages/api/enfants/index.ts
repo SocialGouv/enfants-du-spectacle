@@ -32,12 +32,6 @@ const update: NextApiHandler = async (req, res) => {
   }
 
   const dossierId = parsed.dossierId;
-  console.log(
-    "changing cdc to : ",
-    parsed.cdc,
-    " for all enfants in dossier : ",
-    dossierId
-  );
 
   const updatedEnfant = await prisma.enfant.updateMany({
     data: {
