@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.6...v1.24.0) (2022-04-29)
+
+
+### Features
+
+* Add download zip dossiers commission ([99dc3c6](https://github.com/SocialGouv/enfants-du-spectacle/commit/99dc3c6882ba699c2da78175c92e2925543495f4))
+
 ## [1.23.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.5...v1.23.6) (2022-04-25)
 
 
