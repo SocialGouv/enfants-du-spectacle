@@ -48,7 +48,6 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
       );
 
       dossier.files.map((file) => {
-        //console.log('file : ', file)
         const indexChar = (file.file.filename.indexOf(".") as number) + 1;
         dossierFolder?.file(
           `${file.label}.${file.file.filename.substring(indexChar)}`,

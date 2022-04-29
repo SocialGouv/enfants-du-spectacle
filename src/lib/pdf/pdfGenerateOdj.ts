@@ -20,7 +20,6 @@ import type { CommissionData, DossierData } from "src/lib/types";
 
 const generateOdj = (commission: CommissionData) => {
   const doc = new jsPDF();
-  console.log("commission : ", commission);
   const categories = _.uniq(
     _.filter(commission.dossiers, (dossier: DossierData) => {
       return STATUS_ODJ.includes(dossier.statut);
