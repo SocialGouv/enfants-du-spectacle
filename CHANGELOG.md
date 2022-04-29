@@ -1,3 +1,15 @@
+# [1.25.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.0...v1.25.0) (2022-04-29)
+
+
+### Bug Fixes
+
+* hide buttons dl ([8e6bf17](https://github.com/SocialGouv/enfants-du-spectacle/commit/8e6bf17c699cc71b1f7134fa5dd0960adb065e90))
+
+
+### Features
+
+* generic mailing ([7b6f762](https://github.com/SocialGouv/enfants-du-spectacle/commit/7b6f7627dbd4bd831c0bfd6da4d72bb00d198b8c))
+
 # [1.24.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.6...v1.24.0) (2022-04-29)
 
 
