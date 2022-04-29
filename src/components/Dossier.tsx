@@ -11,8 +11,8 @@ import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
 import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
-import { generateDA } from "src/lib/pdfGenerateDA";
-import { generateFE } from "src/lib/pdfGenerateFE";
+import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 
 interface Props {
   dossierId: number;
