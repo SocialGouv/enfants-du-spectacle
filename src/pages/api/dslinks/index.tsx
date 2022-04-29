@@ -21,7 +21,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const dossierExternalId = req.query.externalid;
-  console.log("external : ", dossierExternalId);
   const fetching = await getDatasFromDS(parseInt(dossierExternalId));
   res.status(fetching.errors ? 500 : 200).json(superjson.stringify(fetching));
 };

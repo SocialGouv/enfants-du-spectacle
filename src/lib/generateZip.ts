@@ -66,7 +66,7 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
                 enfant.prenom + " " + enfant.nom
               );
               enfantFolder?.file(
-                enfant.prenom + " " + enfant.nom + ".docx",
+                enfant.prenom + " " + enfant.nom + ".txt",
                 `Enfant: ${enfant.prenom} ${enfant.nom} \n
 Date de naissance: ${new Date(enfant.dateNaissance).toLocaleDateString("fr")} \n
 Type d'emploi: ${role.label} \n

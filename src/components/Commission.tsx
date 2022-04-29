@@ -12,7 +12,7 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { downloadDocs } from "src/lib/queries";
+import { downloadDocs, sendEmail } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -95,7 +95,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
           <button
             className="whiteButton"
             onClick={() => {
-              downloadDocs(commission);
+              sendEmail("dl_commission");
             }}
           >
             Envoyer dossiers
