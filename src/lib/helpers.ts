@@ -200,6 +200,16 @@ const TYPES_EMPLOI = [
   { label: "Autre", value: "AUTRE" },
 ];
 
+const WORDING_MAILING = [
+  {
+    button: "Télécharger",
+    bye: "Merci",
+    text: 'Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission "__COMMISSION__" via un lien sécurisé.',
+    type: "dl_commission",
+  },
+  { button: "", bye: "", text: "", type: "dl_da" },
+];
+
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
   { label: "Synopsis", value: "SYNOPSIS" },
   { label: "Scenario ou script", value: "SCENARIO" },
@@ -302,4 +312,5 @@ export {
   typeEmploiValue,
   TYPES_EMPLOI,
   uniqueById,
+  WORDING_MAILING,
 };

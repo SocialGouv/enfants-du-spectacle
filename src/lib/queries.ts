@@ -260,6 +260,23 @@ const updateEnfants = (cdc: number, dossierId: number) => {
     });
 };
 
+const sendEmail = (type: string) => {
+  window
+    .fetch(`/api/mail/`, {
+      body: JSON.stringify({ type: type }),
+      method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const downloadDocs = (commission: Commission) => {
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   window
@@ -708,6 +725,7 @@ export {
   searchDossiers,
   searchEnfants,
   searchSocieteProductionBySiret,
+  sendEmail,
   updateConstructDossier,
   updateDossier,
   updateEnfant,
