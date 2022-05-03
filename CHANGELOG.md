@@ -1,3 +1,10 @@
+## [1.25.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.9...v1.25.10) (2022-05-03)
+
+
+### Bug Fixes
+
+* readd migrations ([ae358bd](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae358bd0af6dbffad135b1ee7fd838cb8684dd47))
+
 ## [1.25.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.8...v1.25.9) (2022-05-03)
 
 
