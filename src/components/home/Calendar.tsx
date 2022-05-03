@@ -70,7 +70,7 @@ const Calendar: React.FC = () => {
             <p>
               Chaque dossier nécessite entre 3 et 5 semaines d&apos;instruction.
             </p>
-            <p>Pensez à déposer votre dossier suffisament à l&apos;avance.</p>
+            <p>Pensez à déposer votre dossier suffisamment à l&apos;avance.</p>
             <p className={styles.pushTop}>Le département</p>
             <p className={styles.smallGrey}>
               Celui du siège social de la société
