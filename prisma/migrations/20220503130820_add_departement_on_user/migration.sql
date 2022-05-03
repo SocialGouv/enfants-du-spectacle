@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN     "departement" TEXT;
+ALTER TABLE "User" ADD COLUMN  IF NOT EXISTS "departement" TEXT;
