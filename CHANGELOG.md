@@ -1,3 +1,14 @@
+## [1.25.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.5...v1.25.6) (2022-05-03)
+
+
+### Bug Fixes
+
+* add column departement on user ([a1dc4e5](https://github.com/SocialGouv/enfants-du-spectacle/commit/a1dc4e5c09ffb44601a843a25028228fe53c47ce))
+* add column lastSent on commission ([b5238f1](https://github.com/SocialGouv/enfants-du-spectacle/commit/b5238f1cfccb27b83698cdcf2fe7d156a19b59ca))
+* add type member to role ([b50fc55](https://github.com/SocialGouv/enfants-du-spectacle/commit/b50fc552981be6bd7e5c74883bbbdd4c2e6b7018))
+* change prisma chema ([c1dbaf4](https://github.com/SocialGouv/enfants-du-spectacle/commit/c1dbaf42c08459b0df3a983f0f50860306d1735b))
+* test delete migration ([ff72617](https://github.com/SocialGouv/enfants-du-spectacle/commit/ff72617d4e6f2adf707813f832aa1af8687af6eb))
+
 ## [1.25.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.4...v1.25.5) (2022-05-03)
 
 ### Bug Fixes
