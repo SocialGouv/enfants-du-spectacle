@@ -181,7 +181,7 @@ model Enfant {
   nombreJours                 Int
   contexteTravail             String?
   montantCachet               Float
-  nombreCachets               Int
+  nombreCachets               Int                  @default(0)
   nombreLignes                Int                  @default(0)
   remunerationsAdditionnelles String?
   remunerationTotale          Float
