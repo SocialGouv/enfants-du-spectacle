@@ -139,7 +139,6 @@ Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel 
         },
       ],
     ],
-    margin: { top: 70 },
     theme: "plain",
   });
 
@@ -222,7 +221,6 @@ En période de vacances scolaires: 6h/jour avec pause obligatoire après 3h00 de
         },
       ],
     ],
-    margin: { top: 70 },
     theme: "plain",
   });
 
