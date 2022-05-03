@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "Commission" ADD COLUMN     "lastSent" TIMESTAMP(3);
+ALTER TABLE "Commission" ADD COLUMN  IF NOT EXISTS "lastSent" TIMESTAMP(3);
