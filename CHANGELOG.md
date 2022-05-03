@@ -1,3 +1,11 @@
+## [1.25.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.3...v1.25.4) (2022-05-03)
+
+
+### Bug Fixes
+
+* enfant with no files ([8c23941](https://github.com/SocialGouv/enfants-du-spectacle/commit/8c2394165dec4394d06c0d979e0e5ad48d02fdd1))
+* fix space on pdfs ([e088e7b](https://github.com/SocialGouv/enfants-du-spectacle/commit/e088e7be1e76293bfd357e7e40f45a360e75a2de))
+
 ## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-04-29)
 
 

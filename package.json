@@ -1,6 +1,10 @@
 {
   "name": "enfants-du-spectacle",
+<<<<<<< HEAD
   "version": "1.25.2",
+=======
+  "version": "1.25.4",
+>>>>>>> 008c32c... chore(release): 1.25.4
   "private": true,
   "release": {
     "branches": [
