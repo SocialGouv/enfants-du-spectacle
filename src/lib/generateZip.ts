@@ -86,17 +86,22 @@ ${
 Rémunération totale: ${enfant.remunerationTotale}
 `
               );
-              enfant.files.map((file) => {
-                if (file.doc !== null) {
-                  const indexChar =
-                    (file.file.filename.indexOf(".") as number) + 1;
-                  enfantFolder?.file(
-                    `${file.label}.${file.file.filename.substring(indexChar)}`,
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    file?.doc
-                  );
-                }
-              });
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              if (enfant.files !== undefined) {
+                enfant.files.map((file) => {
+                  if (file.doc !== null) {
+                    const indexChar =
+                      (file.file.filename.indexOf(".") as number) + 1;
+                    enfantFolder?.file(
+                      `${file.label}.${file.file.filename.substring(
+                        indexChar
+                      )}`,
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                      file?.doc
+                    );
+                  }
+                });
+              }
             }
           );
         }
