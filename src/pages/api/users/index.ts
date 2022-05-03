@@ -25,6 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body as string);
+  console.log("data : ", data);
   try {
     await prisma.user.create({ data });
   } catch (e: unknown) {

@@ -23,6 +23,7 @@ const Calendar: React.FC = () => {
     dateLimiteDepot: new Date(),
     departement: "",
     id: 1,
+    lastSent: null,
   });
 
   const [displayCalendar, setDisplayCalendar] = React.useState(false);
