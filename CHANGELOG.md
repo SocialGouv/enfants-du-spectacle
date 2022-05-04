@@ -1,3 +1,13 @@
+## [1.23.4-beta.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.3...v1.23.4-beta.1) (2022-05-04)
+
+
+### Bug Fixes
+
+* bump version ([cab4b98](https://github.com/SocialGouv/enfants-du-spectacle/commit/cab4b98fcfc60f91ee9aaf94e4127ebb8916de0e))
+* small correction on steps HP ([ac7ef67](https://github.com/SocialGouv/enfants-du-spectacle/commit/ac7ef673bd4c08c3914c31e1cc85bf0a421cc541))
+* update fetch DS to get dossiers based on status ([1ae5031](https://github.com/SocialGouv/enfants-du-spectacle/commit/1ae50317c6c35891f54a5b0d54239b16ff1e9de6))
+* update status for display buttons pdf ([732239f](https://github.com/SocialGouv/enfants-du-spectacle/commit/732239f7e143610dab7a3682cf65b92a7c186f16))
+
 ## [1.23.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.5...v1.23.6) (2022-04-25)
 
 
