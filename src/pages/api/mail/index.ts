@@ -6,7 +6,9 @@ import { getSession } from "next-auth/react";
 import type { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
-import { WORDING_MAILING } from "src/lib/helpers";
+import { frenchDepartementName, WORDING_MAILING } from "src/lib/helpers";
+import prisma from "src/lib/prismaClient";
+import { searchUsers } from "src/lib/queries";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -35,12 +37,21 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { type } = parsed;
+  const { type, commission, date } = parsed;
   const wording = _.find(WORDING_MAILING, { type: type });
   if (!wording) {
     res.status(400).end();
     return;
   }
+
+  const search = await searchUsers(
+    prisma,
+    "MEMBRE",
+    commission.departement as string
+  );
+  const sendTo = search?.map((user) => {
+    return user.email;
+  });
 
   const templateSignin = fs
     .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
@@ -49,8 +60,17 @@ const sendMail: NextApiHandler = async (req, res) => {
   function html({ url }: { url: string }): string {
     return templateSignin
       .replace("__TEXT__", wording.text as string)
-      .replace("__COMMISSION__", "a remplacer")
-      .replace("__URL__", url);
+      .replace(
+        "__ELEMENT__",
+        type === "dl_commission"
+          ? `${frenchDepartementName(
+              commission.departement as string
+            )} - ${date}`
+          : ``
+      )
+      .replace("__URL__", url)
+      .replace("__BUTTON__", wording.button as string)
+      .replace("__BYE__", wording.bye as string);
   }
 
   function text({ url }: { url: string }) {
@@ -58,7 +78,10 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const url = "https://test.com";
+    const url = `${req.headers.host}/download?type=${type}&elementId=${
+      type === "dl_commission" ? commission.id : ""
+    }`;
+    console.log("url : ", url);
 
     const transporter: Transporter = nodemailer.createTransport({
       auth: {
@@ -72,9 +95,9 @@ const sendMail: NextApiHandler = async (req, res) => {
     const options = {
       from: process.env.EMAIL_FROM,
       html: html({ url }),
-      subject: `Lien download dossiers commission ...`,
+      subject: wording.subject,
       text: text({ url }),
-      to: "y.lebars@numericite.eu",
+      to: sendTo,
     };
 
     const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(

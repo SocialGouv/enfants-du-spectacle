@@ -203,11 +203,18 @@ const TYPES_EMPLOI = [
 const WORDING_MAILING = [
   {
     button: "Télécharger",
-    bye: "Merci",
-    text: 'Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission "__COMMISSION__" via un lien sécurisé.',
+    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
+    subject: "Téléchargement dossiers commission",
+    text: 'Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission "__ELEMENT__" via un lien sécurisé.',
     type: "dl_commission",
   },
-  { button: "", bye: "", text: "", type: "dl_da" },
+  {
+    button: "Télécharger",
+    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
+    subject: "Décision d'autorisation",
+    text: 'Votre dossier "__ELEMENT__" a été accepté. Vous pouvez télécharger la décision dautorisation en cliquant sur le bouton ci-dessous.',
+    type: "dl_da",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [

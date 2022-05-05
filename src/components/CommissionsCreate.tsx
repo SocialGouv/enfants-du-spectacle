@@ -91,6 +91,7 @@ const Commissions: React.FC<Props> = ({ commissions }) => {
       date: commission.date,
       dateLimiteDepot: commission.dateLimiteDepot,
       departement: commission.departement,
+      lastSent: null,
     });
     setCommissionList([commission, ...commissionList]);
   };

@@ -11,7 +11,7 @@ import type {
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
+//import { getSession } from "next-auth/react";
 import generateZip from "src/lib/generateZip";
 import { strNoAccent } from "src/lib/helpers";
 import { getDatasFromDS, getDocDS } from "src/lib/queries";
@@ -32,11 +32,11 @@ type DossierData = Dossier & {
 type CommissionData = Commission & { dossiers: DossierData[] };
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  /*const session = await getSession({ req });
   if (!session) {
     res.status(401).end();
     return;
-  }
+  }*/
 
   if (req.method == "POST") {
     await uploadDoc(req, res);
