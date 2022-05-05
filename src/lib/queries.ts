@@ -7,6 +7,7 @@ import type {
   PieceDossier,
   PieceDossierEnfant,
   PrismaClient,
+  Role,
   SocieteProduction,
   User,
 } from "@prisma/client";
@@ -226,6 +227,24 @@ const createEnfant = async (prismaClient: PrismaClient, enfant: Enfant) => {
   }
 };
 
+const searchUsers = async (
+  prismaClient: PrismaClient,
+  role: Role,
+  departement = ""
+) => {
+  try {
+    return await prismaClient.user.findMany({
+      where: {
+        departement: departement,
+        role: role,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return null;
+  }
+};
+
 const updateEnfant = (enfant: Enfant) => {
   window
     .fetch(`/api/enfant/${enfant.id}`, {
@@ -236,6 +255,40 @@ const updateEnfant = (enfant: Enfant) => {
       if (!r.ok) {
         throw Error(`got status ${r.status}`);
       }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const updateCommission = (commission: Commission) => {
+  window
+    .fetch(`/api/commissions/${commission.id}`, {
+      body: JSON.stringify(commission),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const getCommission = async (id: string) => {
+  await window
+    .fetch(`/api/commissions/${id}`, {
+      method: "GET",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      console.log("r returned : ", r);
       return r;
     })
     .catch((e) => {
@@ -260,10 +313,14 @@ const updateEnfants = (cdc: number, dossierId: number) => {
     });
 };
 
-const sendEmail = (type: string) => {
+const sendEmail = (type: string, commission?: Commission, date?: string) => {
   window
     .fetch(`/api/mail/`, {
-      body: JSON.stringify({ type: type }),
+      body: JSON.stringify({
+        commission: commission ? commission : null,
+        date: date ? date : null,
+        type: type,
+      }),
       method: "POST",
     })
     .then((r) => {
@@ -714,6 +771,7 @@ export {
   deletePieceDossier,
   deletePieceDossierEnfant,
   downloadDocs,
+  getCommission,
   getDataDS,
   getDatasFromDS,
   getDocDS,
@@ -725,7 +783,9 @@ export {
   searchDossiers,
   searchEnfants,
   searchSocieteProductionBySiret,
+  searchUsers,
   sendEmail,
+  updateCommission,
   updateConstructDossier,
   updateDossier,
   updateEnfant,

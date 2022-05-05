@@ -23,6 +23,7 @@ const AddCommission: React.FC<Props> = ({ saveCommission }) => {
     dateLimiteDepot: new Date(),
     departement: "",
     id: 1,
+    lastSent: null,
   });
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {

@@ -2,6 +2,7 @@ import type { User } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 import AddUser from "src/components/AddUtilisateur";
+import { frenchDepartementName } from "src/lib/helpers";
 import { createUser, removeUser } from "src/lib/queries";
 import styles from "src/styles/commissions.module.scss";
 
@@ -16,7 +17,7 @@ interface RowProps {
 
 const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
   return (
-    <div className={`${styles.row} card`}>
+    <div className={`${styles.rowUser} card`}>
       <div>
         <span role="img" aria-label="hammer">
           🔨
@@ -30,6 +31,9 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
       </div>
       <div>
         <b>{user.role}</b>
+      </div>
+      <div>
+        <b>{user.departement ? frenchDepartementName(user.departement) : ""}</b>
       </div>
       <div>
         <Link href={`/utilisateurs`}>
@@ -60,6 +64,7 @@ const Utilisateurs: React.FC<Props> = ({ allUsers }) => {
   const addUser = (e: React.FormEvent, formData: User) => {
     e.preventDefault();
     const user: User = {
+      departement: formData.departement,
       email: formData.email,
       emailVerified: new Date(),
       nom: formData.nom,
