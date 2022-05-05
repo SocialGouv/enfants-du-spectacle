@@ -1,3 +1,23 @@
+# [1.24.0-alpha.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.2...v1.24.0-alpha.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* dummy commit ([013fdd5](https://github.com/SocialGouv/enfants-du-spectacle/commit/013fdd5c7c5da84f26893f112d6de6ceb20a9554))
+* hide buttons dl ([e709326](https://github.com/SocialGouv/enfants-du-spectacle/commit/e709326ab7a1b4b1dfad64423c1d1a9ba9e83c42))
+* improve fetching data ds ([60f1740](https://github.com/SocialGouv/enfants-du-spectacle/commit/60f1740708eff6234204e248ef857928168f4a29))
+* last corrections on pdf ([4671d7a](https://github.com/SocialGouv/enfants-du-spectacle/commit/4671d7a034ca5682d5fbf3d0e2a40cbd1eb1b354))
+* remove console logs ([542c3f5](https://github.com/SocialGouv/enfants-du-spectacle/commit/542c3f552c3786e264a4b33bf2db7117d3d03ff9))
+* small correction on steps HP ([ac7ef67](https://github.com/SocialGouv/enfants-du-spectacle/commit/ac7ef673bd4c08c3914c31e1cc85bf0a421cc541))
+* update fetch DS to get dossiers based on status ([1ae5031](https://github.com/SocialGouv/enfants-du-spectacle/commit/1ae50317c6c35891f54a5b0d54239b16ff1e9de6))
+* update status for display buttons pdf ([732239f](https://github.com/SocialGouv/enfants-du-spectacle/commit/732239f7e143610dab7a3682cf65b92a7c186f16))
+
+
+### Features
+
+* Add download zip dossiers commission ([63b4531](https://github.com/SocialGouv/enfants-du-spectacle/commit/63b453176ac326ade5dd3dc5e45d77c1a9bce60e))
+* generic mailing ([482f178](https://github.com/SocialGouv/enfants-du-spectacle/commit/482f178c2b3d24e543e0d73ae8cb596ebf8aa0a9))
+
 ## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-04-29)
 
 
