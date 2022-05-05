@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.0...v1.24.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* readd deleted code ([b1bc698](https://github.com/SocialGouv/enfants-du-spectacle/commit/b1bc698d20fe2961ae9a9058246869ef2485bea5))
+
 # [1.24.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.23.2...v1.24.0) (2022-05-05)
 
 
