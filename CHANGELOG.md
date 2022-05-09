@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.0...v1.25.1) (2022-05-09)
+
+
+### Bug Fixes
+
+* minor improvement page DL ([084f7c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/084f7c2eb3e575f76bda4bd4da1a6dc792b38ee2))
+
 # [1.25.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.1...v1.25.0) (2022-05-09)
 
 
