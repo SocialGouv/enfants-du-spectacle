@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.1...v1.25.0) (2022-05-09)
+
+
+### Features
+
+* finish feature notif dl and decision autorisation ([edf50c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/edf50c2c60e6f04c8cb92b3cdf1f978e1a03d725))
+
 ## [1.24.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.0...v1.24.1) (2022-05-05)
 
 
