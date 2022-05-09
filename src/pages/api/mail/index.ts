@@ -6,9 +6,15 @@ import { getSession } from "next-auth/react";
 import type { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
-import { frenchDepartementName, WORDING_MAILING } from "src/lib/helpers";
-import prisma from "src/lib/prismaClient";
-import { searchUsers } from "src/lib/queries";
+import { WORDING_MAILING } from "src/lib/helpers";
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb", // Set desired value here
+    },
+  },
+};
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -37,40 +43,42 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { type, commission, date } = parsed;
+  const { type, dossier, to, attachment } = parsed;
   const wording = _.find(WORDING_MAILING, { type: type });
   if (!wording) {
     res.status(400).end();
     return;
   }
 
-  const search = await searchUsers(
+  /*const search = await searchUsers(
     prisma,
     "MEMBRE",
     commission.departement as string
   );
   const sendTo = search?.map((user) => {
     return user.email;
-  });
+  });*/
 
   const templateSignin = fs
     .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
     .toString();
 
   function html({ url }: { url: string }): string {
-    return templateSignin
-      .replace("__TEXT__", wording.text as string)
-      .replace(
+    return (
+      templateSignin
+        .replace("__TEXT__", wording.text as string)
+        /*.replace(
         "__ELEMENT__",
         type === "dl_commission"
           ? `${frenchDepartementName(
               commission.departement as string
             )} - ${date}`
           : ``
-      )
-      .replace("__URL__", url)
-      .replace("__BUTTON__", wording.button as string)
-      .replace("__BYE__", wording.bye as string);
+      )*/
+        .replace("__URL__", url)
+        .replace("__BUTTON__", wording.button as string)
+        .replace("__BYE__", wording.bye as string)
+    );
   }
 
   function text({ url }: { url: string }) {
@@ -78,10 +86,7 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const url = `${req.headers.host}/download?type=${type}&elementId=${
-      type === "dl_commission" ? commission.id : ""
-    }`;
-    console.log("url : ", url);
+    const url = `${req.headers.host}`;
 
     const transporter: Transporter = nodemailer.createTransport({
       auth: {
@@ -93,11 +98,18 @@ const sendMail: NextApiHandler = async (req, res) => {
     });
 
     const options = {
+      attachments: [
+        {
+          // utf-8 string as an attachment
+          filename: `Décision autorisation ${dossier.nom}.pdf`,
+          path: attachment,
+        },
+      ],
       from: process.env.EMAIL_FROM,
       html: html({ url }),
       subject: wording.subject,
       text: text({ url }),
-      to: sendTo,
+      to: to,
     };
 
     const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(

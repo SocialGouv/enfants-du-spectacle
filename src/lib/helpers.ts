@@ -204,16 +204,23 @@ const WORDING_MAILING = [
   {
     button: "Télécharger",
     bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
-    subject: "Téléchargement dossiers commission",
-    text: 'Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission "__ELEMENT__" via un lien sécurisé.',
+    subject: "Téléchargement commission Enfants du spectacle",
+    text: "Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission via un lien sécurisé.",
     type: "dl_commission",
   },
   {
-    button: "Télécharger",
-    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
-    subject: "Décision d'autorisation",
-    text: 'Votre dossier "__ELEMENT__" a été accepté. Vous pouvez télécharger la décision dautorisation en cliquant sur le bouton ci-dessous.',
+    button: "Enfants du spectacle",
+    bye: "",
+    subject: "Décision d'autorisation Enfants du spectacle",
+    text: "Votre dossier a été accepté. Vous trouverez donc en pièce jointe la décision d'autorisation.",
     type: "dl_da",
+  },
+  {
+    button: "Connexion",
+    bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
+    subject: "Connexion à enfants du spectacle",
+    text: "Connectez-vous en suivant ce lien : ",
+    type: "auth",
   },
 ];
 

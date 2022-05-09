@@ -12,7 +12,7 @@ import type {
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-//import { getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import {
   BINDING_DS_STATUS,
   getFormatedTypeDossier,
@@ -40,12 +40,12 @@ import {
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
-  //const session = await getSession({ req });
+  const session = await getSession({ req });
   //const { key } = req.query;
-  /*if (!session) {
+  if (!session) {
     res.status(401).end();
     return;
-  }*/
+  }
 
   if (req.method == "GET") {
     await get(req, res);

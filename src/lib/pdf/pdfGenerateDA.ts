@@ -5,7 +5,7 @@ import logoPrefet from "src/images/logo_prefet.png";
 import { frenchDateText } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
-const generateDA = (dossiers: DossierData[]) => {
+const generateDA = (dossiers: DossierData[], binary = false) => {
   const doc = new jsPDF();
   const blocs: RowInput[] = [];
 
@@ -312,7 +312,9 @@ Responsable du département protection et insertion des jeunes`,
     );
   }
 
-  return doc.save("Décision autorisation " + dossiers[0].nom);
+  return binary
+    ? "data:application/pdf;base64," + btoa(doc.output())
+    : doc.save("Décision autorisation " + dossiers[0].nom);
 };
 
 export { generateDA };
