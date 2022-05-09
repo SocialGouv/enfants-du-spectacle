@@ -110,7 +110,6 @@ Rémunération totale: ${enfant.remunerationTotale}
   );
 
   const zipAsBase64 = await zip.generateAsync({ type: "base64" });
-  //console.log('zip : ', zipAsBase64)
 
   return zipAsBase64;
 };

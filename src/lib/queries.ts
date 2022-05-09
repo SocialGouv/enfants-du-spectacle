@@ -279,23 +279,6 @@ const updateCommission = (commission: Commission) => {
     });
 };
 
-const getCommission = async (id: string) => {
-  await window
-    .fetch(`/api/commissions/${id}`, {
-      method: "GET",
-    })
-    .then((r) => {
-      if (!r.ok) {
-        throw Error(`got status ${r.status}`);
-      }
-      console.log("r returned : ", r);
-      return r;
-    })
-    .catch((e) => {
-      throw e;
-    });
-};
-
 const updateEnfants = (cdc: number, dossierId: number) => {
   window
     .fetch(`/api/enfants`, {
@@ -313,12 +296,18 @@ const updateEnfants = (cdc: number, dossierId: number) => {
     });
 };
 
-const sendEmail = (type: string, commission?: Commission, date?: string) => {
+const sendEmail = (
+  type: string,
+  attachment: string,
+  dossier?: Dossier,
+  to?: string
+) => {
   window
     .fetch(`/api/mail/`, {
       body: JSON.stringify({
-        commission: commission ? commission : null,
-        date: date ? date : null,
+        attachment: attachment ? attachment : null,
+        dossier: dossier ? dossier : null,
+        to: to ? to : null,
         type: type,
       }),
       method: "POST",
@@ -334,9 +323,9 @@ const sendEmail = (type: string, commission?: Commission, date?: string) => {
     });
 };
 
-const downloadDocs = (commission: Commission) => {
+const downloadDocs = async (commission: Commission) => {
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
-  window
+  await window
     .fetch(`/api/docs`, {
       body: JSON.stringify(commission),
       method: "POST",
@@ -552,22 +541,6 @@ const removeUser = (id: number) => {
     });
 };
 
-function getDataDS(): void {
-  window
-    .fetch(`/api/dsapi`, {
-      method: "GET",
-    })
-    .then((r) => {
-      if (!r.ok) {
-        throw Error(`got status ${r.status}`);
-      }
-      return r;
-    })
-    .catch((e) => {
-      throw e;
-    });
-}
-
 const getDocDS = async (docUrl: string) => {
   const fetching = (
     await fetch(docUrl).then(async (r) => r.blob())
@@ -771,8 +744,6 @@ export {
   deletePieceDossier,
   deletePieceDossierEnfant,
   downloadDocs,
-  getCommission,
-  getDataDS,
   getDatasFromDS,
   getDocDS,
   getUpcomingCommissionsByLimitDate,

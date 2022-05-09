@@ -2,7 +2,8 @@ import { Icon } from "@dataesr/react-dsfr";
 import type { Dossier } from "@prisma/client";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { updateDossier } from "src/lib/queries";
+import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import { sendEmail, updateDossier } from "src/lib/queries";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
@@ -61,6 +62,15 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier }) => {
                   throw e;
                 });
               });
+              if (transition.name === "passerAccepte") {
+                const attachment = generateDA([dossier], true);
+                sendEmail(
+                  "dl_da",
+                  attachment,
+                  dossier,
+                  dossier.demandeur.email as string
+                );
+              }
             }}
           >
             <span role="img" className={styles.icon} aria-label="test">

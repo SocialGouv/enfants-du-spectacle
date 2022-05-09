@@ -140,8 +140,21 @@ function useCommission(id: number | null) {
   };
 }
 
+const searchUsers = async (departement: string | null) => {
+  const fetching = await fetch(`/api/users/search?departement=${departement}`, {
+    method: "GET",
+  }).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return fetching.json as User[];
+};
+
 export {
   RefreshLinks,
+  searchUsers,
   useAllUsers,
   useCommentaires,
   useCommission,

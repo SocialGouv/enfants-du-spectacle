@@ -1,14 +1,8 @@
 import fs from "fs";
+import _ from "lodash";
 import type { Awaitable } from "next-auth";
 import nodemailer from "nodemailer";
-
-const templateSignin = fs
-  .readFileSync(`${process.cwd()}/src/mails/signin.html`)
-  .toString();
-
-function html({ url }: { url: string }): string {
-  return templateSignin.replace("__URL__", url);
-}
+import { WORDING_MAILING } from "src/lib/helpers";
 
 function text({ url }: { url: string }) {
   return `Connectez-vous à Enfants du Spectacle en suivant ce lien\n${url}\n`;
@@ -25,6 +19,37 @@ function sendVerificationRequest({
   provider: EmailConfig;
   // token: string;
 }): Awaitable<void> {
+  const templateSignin = fs
+    .readFileSync(
+      url.includes("dl_commission")
+        ? `${process.cwd()}/src/mails/mailgeneric.html`
+        : `${process.cwd()}/src/mails/signin.html`
+    )
+    .toString();
+
+  const type = url.includes("dl_commission") ? "dl_commission" : "auth";
+
+  const wording = _.find(WORDING_MAILING, { type: type });
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  function html({ url }: { url: string }): string {
+    return (
+      templateSignin
+        .replace("__TEXT__", wording.text as string)
+        /*.replace(
+        "__ELEMENT__",
+        type === "dl_commission"
+          ? `${frenchDepartementName(
+              commission.departement as string
+            )} - ${date}`
+          : ``
+      )*/
+        .replace("__URL__", url)
+        .replace("__BUTTON__", wording.button as string)
+        .replace("__BYE__", wording.bye as string)
+    );
+  }
+
   return new Promise((resolve, reject) => {
     const { server, from } = provider;
 
@@ -32,7 +57,7 @@ function sendVerificationRequest({
       {
         from,
         html: html({ url }),
-        subject: `Connexion à Enfants Du Spectacle`,
+        subject: wording.subject,
         text: text({ url }),
         to: email,
       },

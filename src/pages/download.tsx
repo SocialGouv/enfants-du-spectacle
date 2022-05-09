@@ -1,6 +1,7 @@
 import { Callout, CalloutText, CalloutTitle, Title } from "@dataesr/react-dsfr";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 import React, { useEffect } from "react";
 import Layout from "src/components/Layout";
 import { useCommission } from "src/lib/api";
@@ -23,12 +24,17 @@ const Download: React.FC = () => {
 
   useEffect(() => {
     if (mountedRef) {
-      console.log("ok");
-      console.log("commission", commission);
-      const { type, elementId } = router.query;
-      console.log("type and element : ", type, elementId);
+      const { type } = router.query;
       if (type === "dl_commission" && commission) {
-        downloadDocs(commission);
+        downloadDocs(commission)
+          .then(() => {
+            signOut({ callbackUrl: "google.fr" }).catch((e) => {
+              console.log(e);
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       }
     }
   }, [mountedRef, isError, isLoading]);
