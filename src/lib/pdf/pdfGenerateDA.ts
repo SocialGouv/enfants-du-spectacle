@@ -13,7 +13,9 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
     blocs.push([
       {
         content: `Vu la demande présentée le ${frenchDateText(
-          dossier.dateDerniereModification ?? dossier.commission.date
+          dossier.dateDepot ??
+            dossier.dateDerniereModification ??
+            dossier.commission.date
         )} par la société ${dossier.societeProduction.nom}, sise ${
           dossier.societeProduction.adresse
         }  ${dossier.societeProduction.adresseCodePostal} ${
