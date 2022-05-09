@@ -30,7 +30,7 @@ export default async (commission: CommissionData) => {
       );
 
       dossierFolder?.file(
-        dossier.nom + ".docx",
+        dossier.nom + ".txt",
         `Nom: ${dossier.nom} \n
 Statut: ${dossier.statut} \n
 Catégorie: ${categorieToLabel(dossier.categorie)} \n

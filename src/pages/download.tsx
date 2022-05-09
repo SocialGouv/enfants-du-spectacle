@@ -28,9 +28,11 @@ const Download: React.FC = () => {
       if (type === "dl_commission" && commission) {
         downloadDocs(commission)
           .then(() => {
-            signOut({ callbackUrl: "google.fr" }).catch((e) => {
-              console.log(e);
-            });
+            setTimeout(() => {
+              signOut({ callbackUrl: "google.fr" }).catch((e) => {
+                console.log(e);
+              });
+            }, 5000);
           })
           .catch((e) => {
             console.log(e);
@@ -47,7 +49,9 @@ const Download: React.FC = () => {
           <CalloutTitle as="h3">Interface téléchargement</CalloutTitle>
           <CalloutText>
             Votre téléchargement va débuter automatiquement d&apos;ici quelques
-            instants
+            instants. <br />
+            Une fois le teléchargement effectué vous serez redirigé sur la page
+            d&apos;accueil Enfants du spectacle.
           </CalloutText>
           <div style={{ marginTop: "2rem" }}>
             <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">
