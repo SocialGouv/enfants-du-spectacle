@@ -1,3 +1,46 @@
+## [1.25.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.4...v1.25.5) (2022-05-10)
+
+
+### Bug Fixes
+
+* corrections on generation zip ([#297](https://github.com/SocialGouv/enfants-du-spectacle/issues/297)) ([3b9288c](https://github.com/SocialGouv/enfants-du-spectacle/commit/3b9288c59f36175acf306568de37d28a6d38e791))
+
+## [1.25.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.3...v1.25.4) (2022-05-10)
+
+
+### Bug Fixes
+
+* sauts de ligne .txt ([741f85a](https://github.com/SocialGouv/enfants-du-spectacle/commit/741f85a44fae43b9bdcb12d74243a7c9e829b8a0))
+
+## [1.25.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.2...v1.25.3) (2022-05-10)
+
+
+### Bug Fixes
+
+* hide buttons download ([4ffda27](https://github.com/SocialGouv/enfants-du-spectacle/commit/4ffda276fec1aa3c8e1a3dc248925997d5ff790f))
+
+## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* improve download dossiers commission ([c528b86](https://github.com/SocialGouv/enfants-du-spectacle/commit/c528b865217f64972fa64037949f9adf639bebd3))
+* use dateDepot for decision autorisation ([e59cfa0](https://github.com/SocialGouv/enfants-du-spectacle/commit/e59cfa01c00f29efc531f0e09a2f7cee79d644d5))
+
+## [1.25.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.0...v1.25.1) (2022-05-09)
+
+
+### Bug Fixes
+
+* minor improvement page DL ([084f7c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/084f7c2eb3e575f76bda4bd4da1a6dc792b38ee2))
+
+# [1.25.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.1...v1.25.0) (2022-05-09)
+
+
+### Features
+
+* finish feature notif dl and decision autorisation ([edf50c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/edf50c2c60e6f04c8cb92b3cdf1f978e1a03d725))
+
 ## [1.24.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.24.0...v1.24.1) (2022-05-05)
 
 
