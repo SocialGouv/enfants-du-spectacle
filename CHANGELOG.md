@@ -1,3 +1,11 @@
+## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* improve download dossiers commission ([c528b86](https://github.com/SocialGouv/enfants-du-spectacle/commit/c528b865217f64972fa64037949f9adf639bebd3))
+* use dateDepot for decision autorisation ([e59cfa0](https://github.com/SocialGouv/enfants-du-spectacle/commit/e59cfa01c00f29efc531f0e09a2f7cee79d644d5))
+
 ## [1.25.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.0...v1.25.1) (2022-05-09)
 
 
