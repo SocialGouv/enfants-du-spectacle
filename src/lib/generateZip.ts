@@ -31,8 +31,8 @@ export default async (commission: CommissionData) => {
 
       dossierFolder?.file(
         dossier.nom + ".txt",
-        `Nom: ${dossier.nom} \n
-Statut: ${dossier.statut} \n
+        `Statut: ${dossier.statut} \n
+Nom: ${dossier.nom} \n
 Catégorie: ${categorieToLabel(dossier.categorie)} \n
 Société de production: ${dossier.societeProduction.nom} \n
 Adresse société de production: ${dossier.societeProduction.adresse}, ${
@@ -103,7 +103,6 @@ ${
 Nombre de jours: ${enfant.nombreJours} \n
 Temps et lieu de travail: ${enfant.contexteTravail} \n
 Montant cachet: ${enfant.montantCachet} \n
-Part cdc : ${enfant.cdc ? enfant.cdc : 0}% \n
 Nombre de cachets: ${enfant.nombreCachets} \n
 ${enfant.nombreLignes ? `Nombre de lignes: ${enfant.nombreLignes}` : ""} \n
 ${

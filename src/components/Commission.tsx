@@ -3,7 +3,6 @@ import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
-import SendLinks from "src/components/SendLinks";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
   frenchDateText,
@@ -13,7 +12,6 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { downloadDocs } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -81,22 +79,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
         ))}
       </div>
       <div className={styles.actionGrid}>
-        <div className={styles.dlButton}>
-          <button
-            className="postButton"
-            onClick={() => {
-              console.log("commission : ", commission);
-              downloadDocs(commission).catch((e) => {
-                console.log(e);
-              });
-            }}
-          >
-            Télécharger dossiers
-          </button>
-        </div>
-        <div className={styles.sendButton}>
-          <SendLinks commission={commission} />
-        </div>
+        <div className={styles.dlButton} />
+        <div className={styles.sendButton} />
         <div className={styles.odjButton}>
           {_.find(commission.dossiers, (dossier: DossierDataLight) => {
             return STATUS_ODJ.includes(dossier.statut);
