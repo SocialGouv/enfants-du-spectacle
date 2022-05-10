@@ -3,8 +3,6 @@ import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
-import IconLoader from "src/components/IconLoader";
-import SendLinks from "src/components/SendLinks";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
   frenchDateText,
@@ -14,7 +12,6 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { downloadDocs } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -56,7 +53,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
       return p._count?.enfants ?? 0;
     })
     .reduce((i, b) => i + b, 0);
-  const [submitting, setSubmitting] = React.useState(false);
   return (
     <div className="card">
       <div className={styles.commissionHeader}>
@@ -83,27 +79,8 @@ const Commission: React.FC<Props> = ({ commission }) => {
         ))}
       </div>
       <div className={styles.actionGrid}>
-        <div className={styles.dlButton}>
-          <button
-            className="postButton"
-            onClick={() => {
-              setSubmitting(true);
-              downloadDocs(commission)
-                .then(() => {
-                  setSubmitting(false);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }}
-          >
-            {submitting && <IconLoader className={styles.iconLoader} />}{" "}
-            Télécharger dossiers
-          </button>
-        </div>
-        <div className={styles.sendButton}>
-          <SendLinks commission={commission} />
-        </div>
+        <div className={styles.dlButton} />
+        <div className={styles.sendButton} />
         <div className={styles.odjButton}>
           {_.find(commission.dossiers, (dossier: DossierDataLight) => {
             return STATUS_ODJ.includes(dossier.statut);
