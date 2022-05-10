@@ -1,3 +1,10 @@
+## [1.25.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.4...v1.25.5) (2022-05-10)
+
+
+### Bug Fixes
+
+* corrections on generation zip ([#297](https://github.com/SocialGouv/enfants-du-spectacle/issues/297)) ([3b9288c](https://github.com/SocialGouv/enfants-du-spectacle/commit/3b9288c59f36175acf306568de37d28a6d38e791))
+
 ## [1.25.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.3...v1.25.4) (2022-05-10)
 
 
