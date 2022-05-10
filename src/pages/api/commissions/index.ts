@@ -83,6 +83,7 @@ const getUpcomingCommissionsNotEmpty = async () => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
+          demandeur: true,
           enfants: true,
           piecesDossier: true,
           societeProduction: true,

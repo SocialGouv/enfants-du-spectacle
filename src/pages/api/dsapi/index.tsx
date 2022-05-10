@@ -104,7 +104,6 @@ const checkNeedUpdate = async (data: unknown) => {
 const insertDataFromDs = (data: unknown) => {
   try {
     for (const dossier of data.demarche.dossiers.nodes) {
-      console.log("dossier : ", dossier);
       // Search Societe Production
       searchSocieteProductionBySiret(prisma, dossier.demandeur.siret as string)
         .then(async (societe) => {

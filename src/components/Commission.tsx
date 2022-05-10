@@ -85,6 +85,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
           <button
             className="postButton"
             onClick={() => {
+              console.log("commission : ", commission);
               downloadDocs(commission).catch((e) => {
                 console.log(e);
               });
