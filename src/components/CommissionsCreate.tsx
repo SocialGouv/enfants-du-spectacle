@@ -48,7 +48,6 @@ const CommissionRow: React.FC<RowProps> = ({
               selected={commission.date}
               className="inputText"
               onChange={(date: Date) => {
-                console.log("ok good");
                 setDates([date, dates[1]]);
                 setChangeDates([!changeDates[0], changeDates[1]]);
               }}
