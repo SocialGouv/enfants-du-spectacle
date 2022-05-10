@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import React, { useEffect } from "react";
+import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { useCommission } from "src/lib/api";
 import { downloadDocs } from "src/lib/queries";
 
 const Download: React.FC = () => {
   const router = useRouter();
+  const [submitting, setSubmitting] = React.useState(false);
   const { commission, ...swrCommission } = useCommission(
     typeof router.query.elementId == "string"
       ? Number(router.query.elementId)
@@ -26,8 +28,10 @@ const Download: React.FC = () => {
     if (mountedRef) {
       const { type } = router.query;
       if (type === "dl_commission" && commission) {
+        setSubmitting(true);
         downloadDocs(commission)
           .then(() => {
+            setSubmitting(false);
             setTimeout(() => {
               signOut({ callbackUrl: "google.fr" }).catch((e) => {
                 console.log(e);
@@ -48,8 +52,8 @@ const Download: React.FC = () => {
         <Callout>
           <CalloutTitle as="h3">Interface téléchargement</CalloutTitle>
           <CalloutText>
-            Votre téléchargement va débuter automatiquement d&apos;ici quelques
-            instants. <br />
+            {submitting && <IconLoader />} Votre téléchargement va débuter
+            automatiquement d&apos;ici quelques instants. <br />
             Une fois le teléchargement effectué vous serez redirigé sur la page
             d&apos;accueil Enfants du spectacle.
           </CalloutText>
