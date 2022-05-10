@@ -66,13 +66,13 @@ ${
     ? `Fonction demandeur : ${dossier.demandeur.fonction} \r\n`
     : ""
 }
-Présentation: ${dossier.presentation} \r\n
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  dossier.scenesSensibles.length > 0 && dossier.scenesSensibles[0] !== ""
-    ? `Scènes sensibles: ${dossier.scenesSensibles}`
-    : ``
-} \r\n
+Présentation: ${dossier.presentation} \r\n${
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          dossier.scenesSensibles.length > 0 &&
+          dossier.scenesSensibles[0] !== ""
+            ? `Scènes sensibles: ${dossier.scenesSensibles} \r\n`
+            : ``
+        }
 Date de début: ${new Date(dossier.dateDebut).toLocaleDateString("fr")} \r\n
 Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
 `
