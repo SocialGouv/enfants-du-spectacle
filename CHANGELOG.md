@@ -1,3 +1,10 @@
+## [1.25.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.3...v1.25.4) (2022-05-10)
+
+
+### Bug Fixes
+
+* sauts de ligne .txt ([741f85a](https://github.com/SocialGouv/enfants-du-spectacle/commit/741f85a44fae43b9bdcb12d74243a7c9e829b8a0))
+
 ## [1.25.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.2...v1.25.3) (2022-05-10)
 
 
