@@ -239,6 +239,7 @@ const insertDataFromDs = (data: unknown) => {
                 "date"
               ) as Date
             ),
+            dateDepot: dossier.datePassageEnConstruction,
             dateDerniereModification: dossier.dateDerniereModification,
             dateFin: new Date(
               _.get(

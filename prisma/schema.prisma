@@ -126,6 +126,7 @@ model Dossier {
   number                   Int?
   dateDerniereModification DateTime?
   cdc                      Int?
+  dateDepot                DateTime?
 }
 
 model Commentaire {

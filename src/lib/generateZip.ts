@@ -35,13 +35,40 @@ export default async (commission: CommissionData) => {
 Statut: ${dossier.statut} \n
 Catégorie: ${categorieToLabel(dossier.categorie)} \n
 Société de production: ${dossier.societeProduction.nom} \n
+Adresse société de production: ${dossier.societeProduction.adresse}, ${
+          dossier.societeProduction.adresseCodeCommune
+        } \n
+Siret Société production : ${dossier.societeProduction.siret} \n
 Convention collective: ${
           dossier.conventionCollectiveCode
         } (${getConventionLabel(
           dossier.conventionCollectiveCode ?? "missing"
         )}) \n
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.demandeur
+    ? `Nom demandeur : ${dossier.demandeur.prenom} ${dossier.demandeur.prenom} \n`
+    : ""
+}
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.demandeur ? `Email demandeur : ${dossier.demandeur.email} \n` : ""
+}
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.demandeur ? `Téléphone demandeur : ${dossier.demandeur.phone} \n` : ""
+}
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.demandeur
+    ? `Fonction demandeur : ${dossier.demandeur.fonction} \n`
+    : ""
+}
 Présentation: ${dossier.presentation} \n
-Scènes sensibles: ${dossier.scenesSensibles} \n
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.scenesSensibles ? `Scènes sensibles: ${dossier.scenesSensibles}` : ``
+} \n
 Date de début: ${new Date(dossier.dateDebut).toLocaleDateString("fr")} \n
 Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
 `
@@ -69,11 +96,12 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
                 `Enfant: ${enfant.prenom} ${enfant.nom} \n
 Date de naissance: ${new Date(enfant.dateNaissance).toLocaleDateString("fr")} \n
 Type d'emploi: ${role.label} \n
+${enfant.nomPersonnage ? `Nom du personnage ${enfant.nomPersonnage} \n` : ""}
 ${
   enfant.periodeTravail ? `Période de travail: ${enfant.periodeTravail}` : ""
 } \n
 Nombre de jours: ${enfant.nombreJours} \n
-Contexte: ${enfant.contexteTravail} \n
+Temps et lieu de travail: ${enfant.contexteTravail} \n
 Montant cachet: ${enfant.montantCachet} \n
 Part cdc : ${enfant.cdc ? enfant.cdc : 0}% \n
 Nombre de cachets: ${enfant.nombreCachets} \n

@@ -1,8 +1,9 @@
 import type { Commission, Dossier } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
+import DatePicker from "react-datepicker";
 import AddCommission from "src/components/AddCommission";
-import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
+import { frenchDateHour, frenchDepartementName } from "src/lib/helpers";
 import { createCommission, removeCommission } from "src/lib/queries";
 import styles from "src/styles/commissions.module.scss";
 
@@ -28,24 +29,54 @@ const CommissionRow: React.FC<RowProps> = ({
   deleteCommission,
 }) => {
   const dossiersCount = commission.dossiers.length;
-  /*const enfantsCount = commission.dossiers
-        .map((p) => p._count?.enfants ?? 0)
-        .reduce((i, b) => i + b, 0);*/
+  const [dates, setDates] = React.useState<Date[]>([
+    commission.date,
+    commission.dateLimiteDepot,
+  ]);
+  const [changeDates, setChangeDates] = React.useState<boolean[]>([
+    false,
+    false,
+  ]);
 
   return (
     <div className={`${styles.row} card`}>
       <div>
-        <span role="img" aria-label="hammer">
-          🔨
-        </span>{" "}
-        <b>{frenchDateText(commission.date)}</b> -{" "}
-        {frenchDepartementName(commission.departement)}
+        {changeDates[0] ? (
+          <span>
+            <DatePicker
+              dateFormat="dd/MM/yyyy"
+              selected={commission.date}
+              className="inputText"
+              onChange={(date: Date) => {
+                console.log("ok good");
+                setDates([date, dates[1]]);
+                setChangeDates([!changeDates[0], changeDates[1]]);
+              }}
+            />
+          </span>
+        ) : (
+          <span>
+            <span role="img" aria-label="hammer">
+              🔨
+            </span>{" "}
+            <b>{frenchDateHour(dates[0])}</b> -{" "}
+            {frenchDepartementName(commission.departement)}
+            <br />
+            <button
+              onClick={() => {
+                setChangeDates([!changeDates[0], changeDates[1]]);
+              }}
+            >
+              Modifier
+            </button>
+          </span>
+        )}
       </div>
       <div>
         <b>{dossiersCount}</b> dossiers
       </div>
       <div>
-        limite dépôt : <b>{frenchDateText(commission.dateLimiteDepot)}</b>
+        limite dépôt : <b>{frenchDateHour(commission.dateLimiteDepot)}</b>
       </div>
       <div>
         <Link href={`/commissions/create`}>
