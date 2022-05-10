@@ -31,46 +31,48 @@ export default async (commission: CommissionData) => {
 
       dossierFolder?.file(
         dossier.nom + ".txt",
-        `Statut: ${dossier.statut} \n
-Nom: ${dossier.nom} \n
-Catégorie: ${categorieToLabel(dossier.categorie)} \n
-Société de production: ${dossier.societeProduction.nom} \n
+        `Statut: ${dossier.statut} \r\n
+Nom: ${dossier.nom} \r\n
+Catégorie: ${categorieToLabel(dossier.categorie)} \r\n
+Société de production: ${dossier.societeProduction.nom} \r\n
 Adresse société de production: ${dossier.societeProduction.adresse}, ${
           dossier.societeProduction.adresseCodeCommune
-        } \n
-Siret Société production : ${dossier.societeProduction.siret} \n
+        } \r\n
+Siret Société production : ${dossier.societeProduction.siret} \r\n
 Convention collective: ${
           dossier.conventionCollectiveCode
         } (${getConventionLabel(
           dossier.conventionCollectiveCode ?? "missing"
-        )}) \n
+        )}) \r\n
 ${
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   dossier.demandeur
-    ? `Nom demandeur : ${dossier.demandeur.prenom} ${dossier.demandeur.prenom} \n`
+    ? `Nom demandeur : ${dossier.demandeur.prenom} ${dossier.demandeur.prenom} \r\n`
     : ""
 }
 ${
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  dossier.demandeur ? `Email demandeur : ${dossier.demandeur.email} \n` : ""
-}
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  dossier.demandeur ? `Téléphone demandeur : ${dossier.demandeur.phone} \n` : ""
+  dossier.demandeur ? `Email demandeur : ${dossier.demandeur.email} \r\n` : ""
 }
 ${
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   dossier.demandeur
-    ? `Fonction demandeur : ${dossier.demandeur.fonction} \n`
+    ? `Téléphone demandeur : ${dossier.demandeur.phone} \r\n`
     : ""
 }
-Présentation: ${dossier.presentation} \n
+${
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  dossier.demandeur
+    ? `Fonction demandeur : ${dossier.demandeur.fonction} \r\n`
+    : ""
+}
+Présentation: ${dossier.presentation} \r\n
 ${
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   dossier.scenesSensibles ? `Scènes sensibles: ${dossier.scenesSensibles}` : ``
-} \n
-Date de début: ${new Date(dossier.dateDebut).toLocaleDateString("fr")} \n
-Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
+} \r\n
+Date de début: ${new Date(dossier.dateDebut).toLocaleDateString("fr")} \r\n
+Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
 `
       );
 
@@ -93,23 +95,25 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \n
               );
               enfantFolder?.file(
                 enfant.prenom + " " + enfant.nom + ".txt",
-                `Enfant: ${enfant.prenom} ${enfant.nom} \n
-Date de naissance: ${new Date(enfant.dateNaissance).toLocaleDateString("fr")} \n
-Type d'emploi: ${role.label} \n
-${enfant.nomPersonnage ? `Nom du personnage ${enfant.nomPersonnage} \n` : ""}
+                `Enfant: ${enfant.prenom} ${enfant.nom} \r\n
+Date de naissance: ${new Date(enfant.dateNaissance).toLocaleDateString(
+                  "fr"
+                )} \r\n
+Type d'emploi: ${role.label} \r\n
+${enfant.nomPersonnage ? `Nom du personnage ${enfant.nomPersonnage} \r\n` : ""}
 ${
   enfant.periodeTravail ? `Période de travail: ${enfant.periodeTravail}` : ""
-} \n
-Nombre de jours: ${enfant.nombreJours} \n
-Temps et lieu de travail: ${enfant.contexteTravail} \n
-Montant cachet: ${enfant.montantCachet} \n
-Nombre de cachets: ${enfant.nombreCachets} \n
-${enfant.nombreLignes ? `Nombre de lignes: ${enfant.nombreLignes}` : ""} \n
+} \r\n
+Nombre de jours: ${enfant.nombreJours} \r\n
+Temps et lieu de travail: ${enfant.contexteTravail} \r\n
+Montant cachet: ${enfant.montantCachet} \r\n
+Nombre de cachets: ${enfant.nombreCachets} \r\n
+${enfant.nombreLignes ? `Nombre de lignes: ${enfant.nombreLignes}` : ""} \r\n
 ${
   enfant.remunerationsAdditionnelles
     ? `Rémunération additionnelle: ${enfant.remunerationsAdditionnelles}`
     : ""
-} \n
+} \r\n
 Rémunération totale: ${enfant.remunerationTotale}
 `
               );
