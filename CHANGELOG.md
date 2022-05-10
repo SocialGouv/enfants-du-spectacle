@@ -1,3 +1,10 @@
+## [1.25.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.6...v1.25.7) (2022-05-10)
+
+
+### Bug Fixes
+
+* deploy prod ([#300](https://github.com/SocialGouv/enfants-du-spectacle/issues/300)) ([15c4502](https://github.com/SocialGouv/enfants-du-spectacle/commit/15c4502860a2a28183f55162a301df489a82f3eb))
+
 ## [1.25.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.5...v1.25.6) (2022-05-10)
 
 
