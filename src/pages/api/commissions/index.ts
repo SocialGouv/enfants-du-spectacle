@@ -106,6 +106,7 @@ const getUpcomingCommissionsByDepartement = async (departement: string) => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
+          demandeur: true,
           societeProduction: true,
           user: true,
         },
