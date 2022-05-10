@@ -1,3 +1,10 @@
+## [1.25.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.2...v1.25.3) (2022-05-10)
+
+
+### Bug Fixes
+
+* hide buttons download ([4ffda27](https://github.com/SocialGouv/enfants-du-spectacle/commit/4ffda276fec1aa3c8e1a3dc248925997d5ff790f))
+
 ## [1.25.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.1...v1.25.2) (2022-05-10)
 
 
