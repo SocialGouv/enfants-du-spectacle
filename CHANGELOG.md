@@ -1,3 +1,10 @@
+## [1.25.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.7...v1.25.8) (2022-05-10)
+
+
+### Bug Fixes
+
+* remove console log ([#301](https://github.com/SocialGouv/enfants-du-spectacle/issues/301)) ([0bbc9fb](https://github.com/SocialGouv/enfants-du-spectacle/commit/0bbc9fb3aa7ee0a73426fe90cec0f3a565d4a400))
+
 ## [1.25.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.6...v1.25.7) (2022-05-10)
 
 
