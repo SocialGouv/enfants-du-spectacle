@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
+import IconLoader from "src/components/IconLoader";
 import SendLinks from "src/components/SendLinks";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
@@ -55,6 +56,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
       return p._count?.enfants ?? 0;
     })
     .reduce((i, b) => i + b, 0);
+  const [submitting, setSubmitting] = React.useState(false);
   return (
     <div className="card">
       <div className={styles.commissionHeader}>
@@ -85,12 +87,17 @@ const Commission: React.FC<Props> = ({ commission }) => {
           <button
             className="postButton"
             onClick={() => {
-              console.log("commission : ", commission);
-              downloadDocs(commission).catch((e) => {
-                console.log(e);
-              });
+              setSubmitting(true);
+              downloadDocs(commission)
+                .then(() => {
+                  setSubmitting(false);
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
             }}
           >
+            {submitting && <IconLoader className={styles.iconLoader} />}{" "}
             Télécharger dossiers
           </button>
         </div>

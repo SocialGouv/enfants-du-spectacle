@@ -37,6 +37,7 @@ const get: NextApiHandler = async (req, res) => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
+          demandeur: true,
           enfants: true,
           societeProduction: true,
           user: true,
