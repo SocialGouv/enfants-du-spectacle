@@ -1,3 +1,10 @@
+## [1.25.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.10...v1.25.11) (2022-05-11)
+
+
+### Bug Fixes
+
+* fix memory leak on create zip ([#305](https://github.com/SocialGouv/enfants-du-spectacle/issues/305)) ([1303cc4](https://github.com/SocialGouv/enfants-du-spectacle/commit/1303cc43c7d069b03aa545045d031f98ce9ffe0c))
+
 ## [1.25.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.9...v1.25.10) (2022-05-11)
 
 
