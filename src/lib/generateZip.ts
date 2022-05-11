@@ -1,4 +1,5 @@
 import type { Enfant } from "@prisma/client";
+import fs from "fs";
 import JSZip from "jszip";
 import _ from "lodash";
 import { categorieToLabel } from "src/lib/categories";
@@ -141,6 +142,15 @@ Rémunération totale: ${enfant.remunerationTotale}
       });
     }
   );
+
+  zip
+    .generateNodeStream({ streamFiles: true, type: "nodebuffer" })
+    .pipe(fs.createWriteStream("/mnt/docs/commission.zip"))
+    .on("finish", function () {
+      // JSZip generates a readable stream with a "end" event,
+      // but is piped here in a writable stream which emits a "finish" event.
+      console.log("commission.zip written.");
+    });
 
   const zipAsBase64 = await zip.generateAsync({ type: "base64" });
 
