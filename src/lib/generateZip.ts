@@ -16,7 +16,7 @@ import type { CommissionData, DossierData } from "./types";
   });
 }*/
 
-export default async (commission: CommissionData) => {
+export default (commission: CommissionData) => {
   const zip = new JSZip();
 
   _.forEach(
@@ -152,7 +152,7 @@ Rémunération totale: ${enfant.remunerationTotale}
       console.log("commission.zip written.");
     });
 
-  const zipAsBase64 = await zip.generateAsync({ type: "base64" });
+  /*const zipAsBase64 = await zip.generateAsync({ type: "base64" });*/
 
-  return zipAsBase64;
+  return "success";
 };
