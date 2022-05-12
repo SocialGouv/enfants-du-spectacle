@@ -511,6 +511,23 @@ const createUser = (user: User) => {
     });
 };
 
+const updateUser = (user: User) => {
+  window
+    .fetch(`/api/users`, {
+      body: JSON.stringify(user),
+      method: "PUT",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const removeUser = (id: number) => {
   window
     .fetch(`/api/users`, {
@@ -748,5 +765,6 @@ export {
   updateEnfant,
   updateEnfants,
   updatePieceDossierEnfant,
+  updateUser,
   uploadZip,
 };

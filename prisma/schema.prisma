@@ -223,6 +223,7 @@ model User {
   commentaires  Commentaire[]
   role          Role?
   departement   String?
+  departements  String[]
 }
 
 model Session {
