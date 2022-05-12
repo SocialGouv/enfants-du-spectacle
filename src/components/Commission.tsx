@@ -1,5 +1,6 @@
 import _ from "lodash";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
@@ -14,7 +15,7 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { downloadDocs } from "src/lib/queries";
+import { uploadZip } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -57,6 +58,11 @@ const Commission: React.FC<Props> = ({ commission }) => {
     })
     .reduce((i, b) => i + b, 0);
   const [submitting, setSubmitting] = React.useState(false);
+  const { data: session } = useSession();
+  const docName = `commission_${frenchDepartementName(
+    commission.departement
+  )}_${frenchDateText(commission.date)}`;
+  const urlDoc = `/api/docs?zipname=${docName}`;
   return (
     <div className="card">
       <div className={styles.commissionHeader}>
@@ -84,22 +90,35 @@ const Commission: React.FC<Props> = ({ commission }) => {
       </div>
       <div className={styles.actionGrid}>
         <div className={styles.dlButton}>
-          <button
-            className="postButton"
-            onClick={() => {
-              setSubmitting(true);
-              downloadDocs(commission)
-                .then(() => {
-                  setSubmitting(false);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }}
-          >
-            {submitting && <IconLoader className={styles.iconLoader} />}{" "}
-            Télécharger dossiers
-          </button>
+          {
+            <div className={styles.downloadLink}>
+              <a
+                href={urlDoc}
+                className="postButton"
+                download={docName + ".zip"}
+              >
+                Télécharger dossiers
+              </a>
+            </div>
+          }
+          {session && session.dbUser.nom === "Le Bars" && (
+            <button
+              className="postButton"
+              onClick={() => {
+                setSubmitting(true);
+                uploadZip(commission)
+                  .then(() => {
+                    setSubmitting(false);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+              }}
+            >
+              {submitting && <IconLoader className={styles.iconLoader} />}{" "}
+              Mettre a jour l&apos;archive
+            </button>
+          )}
         </div>
         <div className={styles.sendButton}>
           <SendLinks commission={commission} />

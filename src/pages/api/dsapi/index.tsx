@@ -550,17 +550,14 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                 });
               }
             }
+            console.log(
+              "Data fetching Démarches simplifiées : updated dossier ",
+              finalDossier.nom
+            );
           })
           .catch((error) => {
             console.log("error : ", error);
           });
-        console.log(
-          "Data fetching Démarches simplifiées : updated dossier ",
-          _.get(
-            _.find(dossier.champs, { label: "Titre du projet" }),
-            "stringValue"
-          )
-        );
       }
     }
   } catch (e: unknown) {

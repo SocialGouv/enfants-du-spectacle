@@ -11,10 +11,7 @@ import type {
   SocieteProduction,
   User,
 } from "@prisma/client";
-import b64ToBlob from "b64-to-blob";
-import fileSaver from "file-saver";
 import type { GrandeCategorieValue } from "src/lib/categories";
-import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type {
   CommissionData,
   DossierData,
@@ -323,24 +320,14 @@ const sendEmail = (
     });
 };
 
-const downloadDocs = async (commission: Commission) => {
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
-  await window
+const uploadZip = async (commission: Commission) => {
+  return window
     .fetch(`/api/docs`, {
       body: JSON.stringify(commission),
       method: "POST",
     })
     .then(async (response) => {
       return response.text();
-    })
-    .then((zipAsBase64) => {
-      const blob = b64ToBlob(zipAsBase64, "application/zip");
-      fileSaver.saveAs(
-        blob,
-        `commission_${frenchDepartementName(
-          commission.departement
-        )}_${frenchDateText(commission.date)}.zip`
-      );
     });
 };
 
@@ -743,7 +730,6 @@ export {
   deleteEnfants,
   deletePieceDossier,
   deletePieceDossierEnfant,
-  downloadDocs,
   getDatasFromDS,
   getDocDS,
   getUpcomingCommissionsByLimitDate,
@@ -762,4 +748,5 @@ export {
   updateEnfant,
   updateEnfants,
   updatePieceDossierEnfant,
+  uploadZip,
 };
