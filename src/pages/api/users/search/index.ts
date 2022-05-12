@@ -24,7 +24,11 @@ const get: NextApiHandler = async (req, res) => {
   if (typeof departement === "string") {
     const allUsers = await prisma.user.findMany({
       orderBy: { name: "asc" },
-      where: { departement: departement },
+      where: {
+        departements: {
+          has: departement,
+        },
+      },
     });
     res.status(200).json(superjson.stringify(allUsers));
   } else {

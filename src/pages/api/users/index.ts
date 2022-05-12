@@ -17,6 +17,8 @@ const handler: NextApiHandler = async (req, res) => {
     await post(req, res);
   } else if (req.method == "DELETE") {
     await remove(req, res);
+  } else if (req.method == "PUT") {
+    await update(req, res);
   } else {
     res.status(405).end();
     return;
@@ -44,6 +46,31 @@ const remove: NextApiHandler = async (req, res) => {
     console.log(e);
     res.status(200).json({ message: "Utilisateur non trouvé" });
   }
+};
+
+const update: NextApiHandler = async (req, res) => {
+  if (typeof req.body !== "string") {
+    res.status(400).end();
+    return;
+  }
+
+  const parsed = JSON.parse(req.body);
+  if (!parsed) {
+    res.status(400).end();
+    return;
+  }
+
+  const userId = parsed.id;
+
+  console.log("id : ", userId);
+  const updatedUser = await prisma.user.update({
+    data: {
+      departements: parsed.departements,
+    },
+    where: { id: userId },
+  });
+
+  res.status(200).json(superjson.stringify(updatedUser));
 };
 
 const get: NextApiHandler = async (req, res) => {

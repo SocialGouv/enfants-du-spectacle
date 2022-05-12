@@ -1,6 +1,8 @@
 import { Select } from "@dataesr/react-dsfr";
 import type { User } from "@prisma/client";
+import _ from "lodash";
 import * as React from "react";
+import { MultiSelect } from "react-multi-select-component";
 import styles from "src/components/AddUtilisateur.module.scss";
 import {
   ALL_DEPARTEMENTS,
@@ -10,11 +12,6 @@ import {
 
 interface Props {
   saveUser: (e: React.FormEvent, formData: User) => void;
-}
-
-interface Option {
-  label: string | null;
-  value: string;
 }
 
 const AddUser: React.FC<Props> = ({ saveUser }) => {
@@ -30,16 +27,24 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
     role: "",
   });
 
+  const [selected, setSelected] = React.useState([]);
+
+  const handleSelect = () => {
+    setFormData({
+      ...formData,
+      departements: _.map(selected, "key"),
+    });
+  };
+
+  React.useEffect(() => {
+    handleSelect();
+  }, [selected]);
+
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
       [e.target.id]: e.currentTarget.value,
     });
-  };
-
-  const defaultDepartement: Option = {
-    label: "Département",
-    value: "",
   };
 
   return (
@@ -116,20 +121,18 @@ const AddUser: React.FC<Props> = ({ saveUser }) => {
               Département
             </label>
             <div className="selectDpt">
-              <Select
-                id="departement"
-                name="departement"
-                selected={formData.departement ? formData.departement : ""}
-                options={[defaultDepartement].concat(
-                  ALL_DEPARTEMENTS.map((u) => ({
-                    key: u,
-                    label: frenchDepartementName(u),
-                    value: u,
-                  }))
-                )}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleForm(event);
+              <MultiSelect
+                options={ALL_DEPARTEMENTS.map((u) => ({
+                  key: u,
+                  label: frenchDepartementName(u),
+                  value: u,
+                }))}
+                value={selected}
+                hasSelectAll={false}
+                onChange={(value) => {
+                  setSelected(value as React.SetStateAction<never[]>);
                 }}
+                labelledBy="Département(s)"
               />
             </div>
           </div>

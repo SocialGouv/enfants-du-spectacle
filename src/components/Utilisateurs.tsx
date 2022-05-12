@@ -1,9 +1,11 @@
 import type { User } from "@prisma/client";
+import _ from "lodash";
 import Link from "next/link";
 import React from "react";
+import { MultiSelect } from "react-multi-select-component";
 import AddUser from "src/components/AddUtilisateur";
-import { frenchDepartementName } from "src/lib/helpers";
-import { createUser, removeUser } from "src/lib/queries";
+import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
+import { createUser, removeUser, updateUser } from "src/lib/queries";
 import styles from "src/styles/commissions.module.scss";
 
 interface Props {
@@ -16,6 +18,36 @@ interface RowProps {
 }
 
 const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
+  const [changeDep, setDepartementChange] = React.useState<boolean>(false);
+  const [selected, setSelected] = React.useState(
+    user.departements.map((departement) => {
+      return {
+        key: departement,
+        label: frenchDepartementName(departement),
+        value: departement,
+      };
+    })
+  );
+  const [newUser, changeUser] = React.useState<User>(user);
+  const [mountedRef, setMountedRef] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    changeUser({
+      ...user,
+      departements: _.map(selected, "key"),
+    });
+  }, [selected]);
+
+  React.useEffect(() => {
+    setMountedRef(true);
+  });
+
+  React.useEffect(() => {
+    if (mountedRef && newUser.id) {
+      updateUser(newUser);
+    }
+  }, [newUser]);
+
   return (
     <div className={`${styles.rowUser} card`}>
       <div>
@@ -33,7 +65,44 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
         <b>{user.role}</b>
       </div>
       <div>
-        <b>{user.departement ? frenchDepartementName(user.departement) : ""}</b>
+        {changeDep ? (
+          <MultiSelect
+            options={ALL_DEPARTEMENTS.map((u) => ({
+              key: u,
+              label: frenchDepartementName(u),
+              value: u,
+            }))}
+            value={selected}
+            hasSelectAll={false}
+            onChange={(value) => {
+              setSelected(
+                value as React.SetStateAction<
+                  { key: string; label: string; value: string }[]
+                >
+              );
+              setDepartementChange(!changeDep);
+            }}
+            labelledBy="Département(s)"
+          />
+        ) : (
+          <span>
+            {newUser.departements.map((departement) => (
+              <b key={departement}>
+                <li key={departement}>{frenchDepartementName(departement)}</li>
+              </b>
+            ))}
+            <br />
+            {user.role === "MEMBRE" && (
+              <button
+                onClick={() => {
+                  setDepartementChange(!changeDep);
+                }}
+              >
+                Modifier
+              </button>
+            )}
+          </span>
+        )}
       </div>
       <div>
         <Link href={`/utilisateurs`}>
@@ -65,6 +134,8 @@ const Utilisateurs: React.FC<Props> = ({ allUsers }) => {
     e.preventDefault();
     const user: User = {
       departement: formData.departement,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      departements: formData.departements || [""],
       email: formData.email,
       emailVerified: new Date(),
       nom: formData.nom,

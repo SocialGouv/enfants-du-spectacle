@@ -54,6 +54,7 @@
     "react-datepicker": "^4.7.0",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
+    "react-multi-select-component": "^4.2.5",
     "remixicon": "^2.5.0",
     "sass": "^1.44.0",
     "superjson": "^1.8.0",
