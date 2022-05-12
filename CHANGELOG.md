@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.11...v1.26.0) (2022-05-12)
+
+
+### Features
+
+* store zip on mount ([#306](https://github.com/SocialGouv/enfants-du-spectacle/issues/306)) ([0f6f2ee](https://github.com/SocialGouv/enfants-du-spectacle/commit/0f6f2ee1827a41d6ea7a7d839d5be73437a968a9))
+
 ## [1.25.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.10...v1.25.11) (2022-05-11)
 
 
