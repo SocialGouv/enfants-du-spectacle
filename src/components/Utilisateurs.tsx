@@ -134,7 +134,8 @@ const Utilisateurs: React.FC<Props> = ({ allUsers }) => {
     e.preventDefault();
     const user: User = {
       departement: formData.departement,
-      departements: formData.departement,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      departements: formData.departements || [""],
       email: formData.email,
       emailVerified: new Date(),
       nom: formData.nom,
