@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.0...v1.26.1) (2022-05-12)
+
+
+### Bug Fixes
+
+* fix signout callback ([#307](https://github.com/SocialGouv/enfants-du-spectacle/issues/307)) ([0cf361b](https://github.com/SocialGouv/enfants-du-spectacle/commit/0cf361b07075b434e16a52ff85433d309d8d1eda))
+
 # [1.26.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.25.11...v1.26.0) (2022-05-12)
 
 
