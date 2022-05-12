@@ -101,7 +101,17 @@ const Header: React.FC<Props> = ({
                   >
                     <FaHome className={styles.icon} />
                   </ToolItem>
-                  <ToolItem link="/api/auth/signout" onClick={signOut}>
+                  <ToolItem
+                    link="/api/auth/signout"
+                    onClick={() => {
+                      signOut({
+                        callbackUrl:
+                          "https://enfants-du-spectacle.fabrique.social.gouv.fr/",
+                      }).catch((e) => {
+                        console.log(e);
+                      });
+                    }}
+                  >
                     Déconnexion
                   </ToolItem>
                 </ToolItemGroup>
