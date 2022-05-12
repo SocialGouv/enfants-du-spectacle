@@ -1,3 +1,10 @@
+## [1.26.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.3...v1.26.4) (2022-05-12)
+
+
+### Bug Fixes
+
+* allow multiple departements for members ([#312](https://github.com/SocialGouv/enfants-du-spectacle/issues/312)) ([f601ac8](https://github.com/SocialGouv/enfants-du-spectacle/commit/f601ac85ffbed48cadfdcb8879fda73679451c92))
+
 ## [1.26.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.2...v1.26.3) (2022-05-12)
 
 
