@@ -1,5 +1,12 @@
 app:
   enabled: true
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 2Gi
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
