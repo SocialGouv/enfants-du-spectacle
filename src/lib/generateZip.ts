@@ -4,7 +4,7 @@ import JSZip from "jszip";
 import _ from "lodash";
 import { categorieToLabel } from "src/lib/categories";
 import { getConventionLabel } from "src/lib/conventionsCollectives";
-import { TYPES_EMPLOI } from "src/lib/helpers";
+import { frenchDepartementName, TYPES_EMPLOI } from "src/lib/helpers";
 
 import type { CommissionData, DossierData } from "./types";
 
@@ -145,7 +145,17 @@ Rémunération totale: ${enfant.remunerationTotale}
 
   zip
     .generateNodeStream({ streamFiles: true, type: "nodebuffer" })
-    .pipe(fs.createWriteStream("/mnt/docs/commission.zip"))
+    .pipe(
+      fs.createWriteStream(
+        `/mnt/docs/commission_${frenchDepartementName(
+          commission.departement
+        )}_${new Date(commission.date).toLocaleDateString("fr-FR", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}.zip`
+      )
+    )
     .on("finish", function () {
       // JSZip generates a readable stream with a "end" event,
       // but is piped here in a writable stream which emits a "finish" event.

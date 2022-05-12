@@ -9,6 +9,7 @@ import type {
   User,
 } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
+import fs from "fs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
@@ -40,10 +41,53 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (req.method == "POST") {
     await uploadDoc(req, res);
+  } else if (req.method == "GET") {
+    await downloadZip(req, res);
   } else {
     res.status(405).end();
     return;
   }
+};
+
+const downloadZip: NextApiHandler = async (req, res) => {
+  const zipname = req.query.zipname;
+  console.log("jessaye de trouver le bon doc : ", zipname);
+  //const zip = fs.readFileSync(`/mnt/docs/${zipname}.zip`)
+  /*fs.readFile(`/mnt/docs/${zipname}.zip`, (error, data) => {
+    if(error) throw(error)
+    console.log('data : ', data)
+  })*/
+  /*console.log('zip : ', zip)
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename=dummy.pdf');
+  const test = fs.createReadStream(`/mnt/docs/${zipname}.zip`)
+  test.pipe(res)*/
+  //await pipeline(zip, res);
+  //res.send(zip)
+
+  const filePath = `/mnt/docs/${zipname}.zip`;
+  const stat = fs.statSync(filePath);
+  console.log("stat : ", stat);
+
+  res.writeHead(200, {
+    "Content-Length": stat.size,
+    "Content-Name": "test.zip",
+    "Content-Type": "application/zip",
+  });
+
+  const downloadStream = fs.createReadStream(filePath, {});
+
+  await new Promise(function (resolve) {
+    downloadStream.pipe(res);
+    downloadStream.on("end", resolve);
+  });
+  // We replaced all the event handlers with a simple call to readStream.pipe()
+  //downloadStream.pipe(res);
+
+  /*const zipBuffer = fs.readFileSync(filePath)
+
+  res.setHeader('Content-Type', 'application/zip')
+  res.send(zipBuffer)*/
 };
 
 const getDocsDossier = async (champs: unknown, enfant: boolean) => {
@@ -122,8 +166,8 @@ const uploadDoc: NextApiHandler = async (req, res) => {
     }
   }
 
-  const zip = await generateZip(parsed as CommissionData);
-  res.send(zip);
+  const createZip = generateZip(parsed as CommissionData);
+  res.send(createZip);
 };
 
 export default withSentry(handler);
