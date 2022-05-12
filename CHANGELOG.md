@@ -1,3 +1,10 @@
+## [1.26.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.2...v1.26.3) (2022-05-12)
+
+
+### Bug Fixes
+
+* **kube:** more ressources ([#310](https://github.com/SocialGouv/enfants-du-spectacle/issues/310)) ([0fca925](https://github.com/SocialGouv/enfants-du-spectacle/commit/0fca925131e81af051ae71c2961242628716ba70))
+
 ## [1.26.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.1...v1.26.2) (2022-05-12)
 
 
