@@ -12,7 +12,6 @@ import type {
 import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import {
   BINDING_DS_STATUS,
   getFormatedTypeDossier,
@@ -43,13 +42,6 @@ import {
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
-  //const { key } = req.query;
-  if (!session) {
-    res.status(401).end();
-    return;
-  }
-
   if (req.method == "GET") {
     await get(req, res);
   } else {
@@ -62,6 +54,7 @@ const get: NextApiHandler = async (req, res) => {
   const status = req.query.status || "en_construction";
   const forceRefresh = req.query.force === "true" ? true : false;
   const infos = await getInfosFromDS(status as string);
+  console.log("fetching data DS");
   const { needUpdate, dossiersToUpdate } = await checkNeedUpdate(
     infos,
     forceRefresh
