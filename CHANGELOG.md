@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.6...v1.27.0) (2022-05-19)
+
+
+### Features
+
+* move cronjob from GA to kubewf ([#315](https://github.com/SocialGouv/enfants-du-spectacle/issues/315)) ([3634e7f](https://github.com/SocialGouv/enfants-du-spectacle/commit/3634e7f471b8dabc3050b73b29a83dda6c172e30))
+
 ## [1.26.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.5...v1.26.6) (2022-05-19)
 
 
