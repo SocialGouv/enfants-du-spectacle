@@ -24,7 +24,7 @@ const generateOdj = (commission: CommissionData) => {
     _.filter(commission.dossiers, (dossier: DossierData) => {
       return STATUS_ODJ.includes(dossier.statut);
     }).map((d: DossierData) => {
-      return d.categorie;
+      return categorieToGrandeCategorieLabel(d.categorie);
     })
   );
 
@@ -34,9 +34,7 @@ const generateOdj = (commission: CommissionData) => {
     categories.map((categorie: CategorieDossier) => {
       blocs.push([
         {
-          content: ` \n CATÉGORIE : ${categorieToGrandeCategorieLabel(
-            categorie
-          )}`,
+          content: ` \n CATÉGORIE : ${categorie}`,
           styles: {
             fontSize: 13,
             fontStyle: "bold",
@@ -46,7 +44,8 @@ const generateOdj = (commission: CommissionData) => {
       ]);
       _.filter(commission.dossiers, (dossier: DossierData) => {
         return (
-          dossier.categorie === categorie && STATUS_ODJ.includes(dossier.statut)
+          categorieToGrandeCategorieLabel(dossier.categorie) === categorie &&
+          STATUS_ODJ.includes(dossier.statut)
         );
       }).map((dossier: DossierData) => {
         blocs.push([

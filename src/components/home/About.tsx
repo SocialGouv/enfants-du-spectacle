@@ -30,9 +30,9 @@ const About: React.FC = () => {
           </p>
           <p>
             {" "}
-            <b className={styles.redBold}>
+            <b>
               En Ile-de-France, ce type de demandes emprunte désormais la voie
-              du dépôt numérique, pour tout dossier jusqu&apos;à 30 enfants.
+              du dépôt numérique.
             </b>
           </p>
         </div>
