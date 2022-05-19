@@ -1,3 +1,10 @@
+## [1.26.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.4...v1.26.5) (2022-05-19)
+
+
+### Bug Fixes
+
+* fix adresses deleted when fetching demarches simplifies ([#313](https://github.com/SocialGouv/enfants-du-spectacle/issues/313)) ([23cb91f](https://github.com/SocialGouv/enfants-du-spectacle/commit/23cb91f8447dfd5d17d9ee6c4a2f20b10fed793a))
+
 ## [1.26.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.3...v1.26.4) (2022-05-12)
 
 
