@@ -29,8 +29,11 @@ import {
   createPieceDossier,
   createPieceDossierEnfant,
   createSocieteProduction,
+  deleteEnfant,
   deleteEnfants,
   deletePieceDossier,
+  findEnfant,
+  findEnfants,
   getUpcomingCommissionsByLimitDate,
   searchDemandeur,
   searchDossierByExternalId,
@@ -334,12 +337,11 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
             return finalDossier;
           })
           .then(async (finalDossier: Record<string, unknown>) => {
-            // Delete all concerned Enfants
-            await deleteEnfants(prisma, finalDossier.id as number);
             const champEnfant = _.get(
               _.find(dossier.champs, { label: "Enfant" }),
               "champs"
             );
+
             // Get nombre Enfants
             const nbreEnfants = _.filter(
               champEnfant,
@@ -347,6 +349,13 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                 return datab.label === "Nom";
               }
             ).length;
+
+            //Get all enfants concerned
+            const allEnfants = await findEnfants(
+              prisma,
+              finalDossier.id as number
+            );
+
             // Add all concerned Enfants
             for (let i = 0; i < nbreEnfants; i++) {
               if (
@@ -486,6 +495,35 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                     ) as TypeEmploi
                   ),
                 };
+
+                //get infos which need saving
+                //check if enfant already exists
+                const infosEnfant = await findEnfant(
+                  prisma,
+                  finalDossier.id as number,
+                  enfant.nom,
+                  enfant.prenom
+                );
+                if (infosEnfant) {
+                  enfant.cdc = infosEnfant.cdc;
+                  enfant.adresseEnfant = infosEnfant.adresseEnfant;
+                  enfant.nomRepresentant1 = infosEnfant.nomRepresentant1;
+                  enfant.prenomRepresentant1 = infosEnfant.prenomRepresentant1;
+                  enfant.adresseRepresentant1 =
+                    infosEnfant.adresseRepresentant1;
+                  enfant.nomRepresentant2 = infosEnfant.nomRepresentant2;
+                  enfant.prenomRepresentant2 = infosEnfant.prenomRepresentant2;
+                  enfant.adresseRepresentant2 =
+                    infosEnfant.adresseRepresentant2;
+                }
+                // Delete concerned Enfant
+                await deleteEnfants(
+                  prisma,
+                  finalDossier.id as number,
+                  enfant.nom,
+                  enfant.prenom
+                );
+
                 // build justificatifs enfant
                 const arrayJustifs: JustificatifEnfant[] = [];
                 _.forEach(
@@ -508,8 +546,20 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                 );
                 enfant.justificatifs = arrayJustifs;
 
-                // add pieces dossier enfant
+                // create enfant
                 const enfantCreated = await createEnfant(prisma, enfant);
+
+                // get enfants not found
+                const enfantFound = _.find(allEnfants, (enfantF: Enfant) => {
+                  return (
+                    enfantF.nom === enfantCreated.nom &&
+                    enfantF.prenom === enfantCreated.prenom
+                  );
+                });
+                const indexEnfant = _.indexOf(allEnfants, enfantFound, 0);
+                allEnfants.splice(indexEnfant as number, 1);
+
+                // add pieces dossier enfant
                 _.forEach(arrayJustifs, async (piece: JustificatifEnfant) => {
                   const createdPiece = {
                     dossierId: finalDossier.id,
@@ -550,6 +600,10 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                 });
               }
             }
+            //delete not found enfants
+            allEnfants.map(async (enfant: Enfant) => {
+              await deleteEnfant(prisma, enfant.id);
+            });
             console.log(
               "Data fetching Démarches simplifiées : updated dossier ",
               finalDossier.nom
