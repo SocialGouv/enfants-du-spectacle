@@ -204,10 +204,65 @@ const updateConstructDossier = async (
   }
 };
 
-const deleteEnfants = async (prismaClient: PrismaClient, dossierId: number) => {
+const deleteEnfants = async (
+  prismaClient: PrismaClient,
+  dossierId: number,
+  nom: string,
+  prenom: string
+) => {
   try {
     return await prismaClient.enfant.deleteMany({
-      where: { dossierId: dossierId },
+      where: {
+        dossierId: dossierId,
+        nom: nom,
+        prenom: prenom,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const deleteEnfant = async (prismaClient: PrismaClient, enfantId: number) => {
+  try {
+    return await prismaClient.enfant.delete({
+      where: {
+        id: enfantId,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const findEnfant = async (
+  prismaClient: PrismaClient,
+  dossierId: number,
+  nom: string,
+  prenom: string
+) => {
+  try {
+    return await prismaClient.enfant.findFirst({
+      where: {
+        dossierId: dossierId,
+        nom: nom,
+        prenom: prenom,
+      },
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    return [];
+  }
+};
+
+const findEnfants = async (prismaClient: PrismaClient, dossierId: number) => {
+  try {
+    return await prismaClient.enfant.findMany({
+      where: {
+        dossierId: dossierId,
+      },
     });
   } catch (e: unknown) {
     console.log(e);
@@ -744,9 +799,12 @@ export {
   createSocieteProduction,
   createUser,
   deleteCommentaire,
+  deleteEnfant,
   deleteEnfants,
   deletePieceDossier,
   deletePieceDossierEnfant,
+  findEnfant,
+  findEnfants,
   getDatasFromDS,
   getDocDS,
   getUpcomingCommissionsByLimitDate,
