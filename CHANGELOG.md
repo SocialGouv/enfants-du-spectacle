@@ -1,3 +1,10 @@
+## [1.26.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.5...v1.26.6) (2022-05-19)
+
+
+### Bug Fixes
+
+* change HP and fix categories on ODJ and PV ([#314](https://github.com/SocialGouv/enfants-du-spectacle/issues/314)) ([a3995b7](https://github.com/SocialGouv/enfants-du-spectacle/commit/a3995b79600ef0f1b6cf95fdec3db6fda11d549e))
+
 ## [1.26.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.26.4...v1.26.5) (2022-05-19)
 
 
