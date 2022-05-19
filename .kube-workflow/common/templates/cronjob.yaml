@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
@@ -21,9 +21,13 @@ spec:
           containers:
             - name: cronjob-container
               image: registry.hub.docker.com/library/curlimages/curl
-              command: |
-                curl -X GET "https://enfants-du-spectacle.fabrique.social.gouv.fr/api/dsapi"
-                curl -X GET "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/dsapi"
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - |
+                  curl -X GET "https://enfants-du-spectacle.fabrique.social.gouv.fr/api/dsapi"
+                  curl -X GET "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/dsapi"
               envFrom:
                 - secretRef:
                     name: backend-sealed-secret
