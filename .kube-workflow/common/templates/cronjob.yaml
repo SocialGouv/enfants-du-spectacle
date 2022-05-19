@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    component: pe-cronjob
+    application: enfants-du-spectacle
+  name: pe-cronjob
+spec:
+  schedule: 10 * * * *
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            component: pe-cronjob
+            application: enfants-du-spectacle
+          name: pe-cronjob
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cronjob-container
+              image: registry.hub.docker.com/library/curlimages/curl
+              command: |
+                curl -X GET "https://enfants-du-spectacle.fabrique.social.gouv.fr/api/dsapi"
+                curl -X GET "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/dsapi"
+              envFrom:
+                - secretRef:
+                    name: backend-sealed-secret
+                - configMapRef:
+                    name: backend-configmap
+              env:
+                - name: hello
+                  value: world
