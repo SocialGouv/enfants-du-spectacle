@@ -78,12 +78,13 @@ const getDocsDossier = async (champs: unknown, enfant: boolean) => {
       return champ.file !== undefined && champ.file !== null;
     }
   });
-  for (const champ of filteredChamps) {
+  for (const [index, champ] of filteredChamps.entries()) {
     const doc =
       champ.file !== null ? await getDocDS(champ.file.url as string) : null;
     const file = {
       doc: doc,
       file: champ.file,
+      index: index,
       label: champ.label,
     };
     files.push(file);
@@ -139,8 +140,8 @@ const uploadDoc: NextApiHandler = async (req, res) => {
         );
       });
       parsed.dossiers[index].enfants[indexEnfant].files = docsEnfants.slice(
-        i,
-        i + 6
+        i * 6,
+        i * 6 + 6
       );
     }
   }
