@@ -1,3 +1,10 @@
+## [1.27.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.2...v1.27.3) (2022-05-30)
+
+
+### Bug Fixes
+
+* add API key to fetch DS endpoint ([#319](https://github.com/SocialGouv/enfants-du-spectacle/issues/319)) ([792e81b](https://github.com/SocialGouv/enfants-du-spectacle/commit/792e81bf1af37eeff64261f58ec38debfca671eb))
+
 ## [1.27.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.1...v1.27.2) (2022-05-20)
 
 
