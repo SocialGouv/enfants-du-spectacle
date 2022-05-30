@@ -42,6 +42,14 @@ import {
 import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
+  const refresh_key = req.query.refresh_key;
+  if (
+    !refresh_key ||
+    refresh_key !== process.env.DEMARCHES_SIMPLIFIEES_REFRESH_KEY
+  ) {
+    res.status(401).end();
+    return;
+  }
   if (req.method == "GET") {
     await get(req, res);
   } else {
@@ -122,6 +130,7 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
             if (societe.length > 0) {
               return societe[0];
             } else {
+              // create societe if not exists
               const societeProduction: Omit<SocieteProduction, "id"> = {
                 adresse: dossier.demandeur.address.streetAddress,
                 adresseCodeCommune: dossier.demandeur.address.cityName,
@@ -162,6 +171,7 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
             if (demandeur !== null) {
               return { demandeur, societe };
             } else {
+              // create demandeur if not exists
               const demandeurTmp: Omit<Demandeur, "id"> = {
                 email: _.get(
                   _.find(dossier.champs, { label: "Mail " }),
@@ -220,6 +230,7 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
               }
             );
 
+            // search dossier
             const intDossier = await searchDossierByExternalId(
               prisma,
               dossier.id as number
@@ -508,14 +519,15 @@ const insertDataFromDs = (data: unknown, dossiersToUpdate: string[]) => {
                   enfant.prenomRepresentant2 = infosEnfant.prenomRepresentant2;
                   enfant.adresseRepresentant2 =
                     infosEnfant.adresseRepresentant2;
+
+                  // Delete concerned Enfant
+                  await deleteEnfants(
+                    prisma,
+                    finalDossier.id as number,
+                    enfant.nom,
+                    enfant.prenom
+                  );
                 }
-                // Delete concerned Enfant
-                await deleteEnfants(
-                  prisma,
-                  finalDossier.id as number,
-                  enfant.nom,
-                  enfant.prenom
-                );
 
                 // build justificatifs enfant
                 const arrayJustifs: JustificatifEnfant[] = [];
