@@ -27,6 +27,22 @@
     background-color:#3d3d9e;
   }
 }
+.deleteButton {
+  --color-hover: rgba(139, 1, 1, 0.5);
+  --color-active: rgba(163, 4, 4, 0.5);
+  cursor: pointer;
+  background-color: #910505;
+  color: var(--w-bf500);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.5rem;
+  color: white;
+  margin-top: 1rem;
+  &:hover {
+    background-color:#9e3d3d;
+  }
+}
 .whiteButton {
   font-weight: 400;
   font-size: 16px;

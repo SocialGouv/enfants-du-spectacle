@@ -23,6 +23,8 @@ const handler: NextApiHandler = async (req, res) => {
     await update(req, res);
   } else if (req.method == "GET") {
     await get(req, res);
+  } else if (req.method == "DELETE") {
+    await remove(req, res);
   } else {
     res.status(405).end();
     return;
@@ -58,6 +60,20 @@ const get: NextApiHandler = async (req, res) => {
   });
 
   res.status(200).json(superjson.stringify(dossier));
+};
+
+const remove: NextApiHandler = async (req, res) => {
+  const dossierId = getId(req);
+  console.log("dossier a supprimer : ", dossierId);
+  try {
+    await prisma.dossier.delete({
+      where: { id: dossierId },
+    });
+    res.status(200).json({ message: "Dossier supprimé" });
+  } catch (e: unknown) {
+    console.log(e);
+    res.status(200).json({ message: "Dossier non trouvé" });
+  }
 };
 
 const update: NextApiHandler = async (req, res) => {

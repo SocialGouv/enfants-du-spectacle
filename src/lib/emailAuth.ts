@@ -34,6 +34,7 @@ function sendVerificationRequest({
     : "auth";
 
   const wording = _.find(WORDING_MAILING, { type: type });
+  console.log("wording : ", wording);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   function html({ url }: { url: string }): string {
