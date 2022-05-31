@@ -1,9 +1,9 @@
 import { Icon } from "@dataesr/react-dsfr";
-import type { Dossier } from "@prisma/client";
+import type { Demandeur, Dossier } from "@prisma/client";
+import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { generateDA } from "src/lib/pdf/pdfGenerateDA";
-import { sendEmail, updateDossier } from "src/lib/queries";
+import { updateDossier } from "src/lib/queries";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
@@ -16,13 +16,38 @@ import styles from "./ChangeStatutDossierButton.module.scss";
 
 interface Props {
   dossier: Dossier;
+  demandeur: Demandeur;
 }
 
-const ChangeStatutDossierButton: React.FC<Props> = ({ dossier }) => {
+const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
   const { mutate } = useSWRConfig();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
   const className = statutDossierFSM.stateClassName();
+  const [submitting, setSubmitting] = useState(false);
+  const { protocol, host } = window.location;
+  const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_decision&elementId=${dossier.id}`;
+  const email = demandeur.email;
+
+  const submitSigninForm = async (mail: string) => {
+    setSubmitting(true);
+    await signIn("email", {
+      callbackUrl: defaultCallbackUrl,
+      mail,
+      redirect: false,
+    }).catch((err) => {
+      setSubmitting(false);
+      window.alert("Une erreur est survenue lors de votre connexion");
+      throw err;
+    });
+    console.log(submitting);
+  };
+
+  const handleSend = async () => {
+    setSubmitting(true);
+    await submitSigninForm(email);
+    setSubmitting(false);
+  };
 
   if (statutDossierFSM.transitionObjects().length == 0) {
     return <StatutDossierTag dossier={dossier} size="lg" />;
@@ -63,13 +88,9 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier }) => {
                 });
               });
               if (transition.name === "passerAccepte") {
-                const attachment = generateDA([dossier], true);
-                sendEmail(
-                  "dl_da",
-                  attachment,
-                  dossier,
-                  dossier.demandeur.email as string
-                );
+                handleSend().catch((e) => {
+                  console.log(e);
+                });
               }
             }}
           >
