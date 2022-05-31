@@ -1,3 +1,10 @@
+# [1.28.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.4...v1.28.0) (2022-05-31)
+
+
+### Features
+
+* add function delete dossier ([#321](https://github.com/SocialGouv/enfants-du-spectacle/issues/321)) ([ca223bd](https://github.com/SocialGouv/enfants-du-spectacle/commit/ca223bd60585ba786e362cf4be8d89f6f91c14d5))
+
 ## [1.27.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.3...v1.27.4) (2022-05-31)
 
 
