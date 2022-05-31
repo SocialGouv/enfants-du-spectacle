@@ -1,4 +1,6 @@
 import { Icon, Title } from "@dataesr/react-dsfr";
+import router from "next/router";
+import { useSession } from "next-auth/react";
 import React from "react";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import styles from "src/components/Dossier.module.scss";
@@ -13,6 +15,7 @@ import { useDossier } from "src/lib/api";
 import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
+import { deleteDossier } from "src/lib/queries";
 
 interface Props {
   dossierId: number;
@@ -21,6 +24,7 @@ interface Props {
 
 const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
+  const { data: session } = useSession();
 
   if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
@@ -78,6 +82,23 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             }}
           >
             Télécharger Décision autorisation
+          </button>
+        )}
+        {session.dbUser.role === "ADMIN" && (
+          <button
+            className="deleteButton"
+            onClick={() => {
+              if (
+                window.confirm("Souhaitez-vous vraiment supprimer ce dossier?")
+              ) {
+                deleteDossier(dossier.id);
+                router.push("/dossiers").catch((e) => {
+                  console.log(e);
+                });
+              }
+            }}
+          >
+            Supprimer dossier
           </button>
         )}
         <br />

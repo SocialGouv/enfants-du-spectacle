@@ -481,6 +481,23 @@ function updateDossier(
     });
 }
 
+const deleteDossier = (id: number) => {
+  window
+    .fetch(`/api/dossiers/${id}`, {
+      body: JSON.stringify(id),
+      method: "DELETE",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 const createCommentaire = (commentaire: Commentaire) => {
   window
     .fetch(`/api/commentaires`, {
@@ -799,6 +816,7 @@ export {
   createSocieteProduction,
   createUser,
   deleteCommentaire,
+  deleteDossier,
   deleteEnfant,
   deleteEnfants,
   deletePieceDossier,

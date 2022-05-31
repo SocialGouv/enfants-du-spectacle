@@ -27,26 +27,25 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
   const [submitting, setSubmitting] = useState(false);
   const { protocol, host } = window.location;
   const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_decision&elementId=${dossier.id}`;
-  const email = demandeur.email;
+  const mail = demandeur.email;
 
-  const submitSigninForm = async (mail: string) => {
-    setSubmitting(true);
+  const submitSigninForm = async (email: string) => {
     await signIn("email", {
       callbackUrl: defaultCallbackUrl,
-      mail,
+      email,
       redirect: false,
     }).catch((err) => {
       setSubmitting(false);
       window.alert("Une erreur est survenue lors de votre connexion");
       throw err;
     });
-    console.log(submitting);
   };
 
   const handleSend = async () => {
     setSubmitting(true);
-    await submitSigninForm(email);
+    await submitSigninForm(mail);
     setSubmitting(false);
+    console.log(submitting);
   };
 
   if (statutDossierFSM.transitionObjects().length == 0) {

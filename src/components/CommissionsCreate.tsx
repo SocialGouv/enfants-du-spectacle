@@ -4,7 +4,11 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import AddCommission from "src/components/AddCommission";
 import { frenchDateHour, frenchDepartementName } from "src/lib/helpers";
-import { createCommission, removeCommission } from "src/lib/queries";
+import {
+  createCommission,
+  removeCommission,
+  updateCommission,
+} from "src/lib/queries";
 import styles from "src/styles/commissions.module.scss";
 
 type CommissionWithCounts = Commission & {
@@ -50,6 +54,7 @@ const CommissionRow: React.FC<RowProps> = ({
               onChange={(date: Date) => {
                 setDates([date, dates[1]]);
                 setChangeDates([!changeDates[0], changeDates[1]]);
+                updateCommission(commission);
               }}
             />
           </span>
