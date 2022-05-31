@@ -1,3 +1,10 @@
+## [1.27.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.3...v1.27.4) (2022-05-31)
+
+
+### Bug Fixes
+
+* add download decision autorisation to docs workflow ([#320](https://github.com/SocialGouv/enfants-du-spectacle/issues/320)) ([4c30b50](https://github.com/SocialGouv/enfants-du-spectacle/commit/4c30b5092bb8119eb6a95621edd2030c0d556ed3))
+
 ## [1.27.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.2...v1.27.3) (2022-05-30)
 
 
