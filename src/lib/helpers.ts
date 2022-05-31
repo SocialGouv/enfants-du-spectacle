@@ -21,7 +21,8 @@ function shortUserName(user: User): string {
 }
 
 function frenchDateText(date: Date): string {
-  return date.toLocaleDateString("fr-FR", {
+  const newDate = new Date(date);
+  return newDate.toLocaleDateString("fr-FR", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -209,11 +210,11 @@ const WORDING_MAILING = [
     type: "dl_commission",
   },
   {
-    button: "Enfants du spectacle",
-    bye: "",
+    button: "Télécharger",
+    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
     subject: "Décision d'autorisation Enfants du spectacle",
-    text: "Votre dossier a été accepté. Vous trouverez donc en pièce jointe la décision d'autorisation.",
-    type: "dl_da",
+    text: "Votre dossier a été accepté. Cliquez sur le bouton ci-dessous pour télécharger la décision d'autorisation via un lien sécurisé.",
+    type: "dl_decision",
   },
   {
     button: "Connexion",

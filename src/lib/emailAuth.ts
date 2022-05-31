@@ -21,13 +21,17 @@ function sendVerificationRequest({
 }): Awaitable<void> {
   const templateSignin = fs
     .readFileSync(
-      url.includes("dl_commission")
+      url.includes("secured_download")
         ? `${process.cwd()}/src/mails/mailgeneric.html`
         : `${process.cwd()}/src/mails/signin.html`
     )
     .toString();
 
-  const type = url.includes("dl_commission") ? "dl_commission" : "auth";
+  const type = url.includes("dl_commission")
+    ? "dl_commission"
+    : url.includes("dl_decision")
+    ? "dl_decision"
+    : "auth";
 
   const wording = _.find(WORDING_MAILING, { type: type });
 

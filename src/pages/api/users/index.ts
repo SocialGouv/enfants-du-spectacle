@@ -62,7 +62,6 @@ const update: NextApiHandler = async (req, res) => {
 
   const userId = parsed.id;
 
-  console.log("id : ", userId);
   const updatedUser = await prisma.user.update({
     data: {
       departements: parsed.departements,

@@ -9,12 +9,13 @@ datasource db {
 }
 
 model Commission {
-  id              Int       @id @default(autoincrement())
+  id              Int        @id @default(autoincrement())
   departement     String
   date            DateTime
   dateLimiteDepot DateTime
   dossiers        Dossier[]
   lastSent        DateTime?
+  SendList        SendList[]
 }
 
 model SocieteProduction {
@@ -209,6 +210,16 @@ enum Role {
   MEMBRE
 }
 
+model SendList {
+  id           Int        @id @default(autoincrement())
+  send         Boolean
+  lastSent     DateTime?
+  commissionId Int
+  commission   Commission @relation(fields: [commissionId], references: [id])
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
+}
+
 model User {
   id            Int           @id @default(autoincrement())
   name          String?
@@ -224,6 +235,7 @@ model User {
   role          Role?
   departement   String?
   departements  String[]
+  SendList      SendList[]
 }
 
 model Session {

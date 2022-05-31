@@ -37,7 +37,10 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
 
   return (
     <div className={`${styles.wrapper} ${className}`}>
-      <ChangeStatutDossierButton dossier={dossier} />
+      <ChangeStatutDossierButton
+        dossier={dossier}
+        demandeur={dossier.demandeur}
+      />
       <Item label="Département">
         {frenchDepartementName(dossier.commission.departement)}
       </Item>

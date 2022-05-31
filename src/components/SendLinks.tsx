@@ -19,7 +19,7 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
   const [submitting, setSubmitting] = useState(false);
   const { callbackUrl } = router.query;
   const { protocol, host } = window.location;
-  const defaultCallbackUrl = `${protocol}//${host}/download?type=dl_commission&elementId=${commission.id}`;
+  const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_commission&elementId=${commission.id}`;
 
   const submitSigninForm = (email: string) => {
     setSubmitting(true);

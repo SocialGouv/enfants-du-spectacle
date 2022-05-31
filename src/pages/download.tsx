@@ -6,15 +6,19 @@ import React, { useEffect } from "react";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { frenchDepartementName } from "src/lib/helpers";
+import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import type { DossierData } from "src/lib/types";
 
 import styles from "../components/Commission.module.scss";
 
 const Download: React.FC = () => {
   const router = useRouter();
   const { elementId } = router.query;
+  const { type } = router.query;
   const [submitting, setSubmitting] = React.useState(false);
   const [docName, setDocName] = React.useState("");
   const [urlDoc, setUrlDoc] = React.useState("");
+  const [dossier, setDossier] = React.useState<DossierData>();
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
 
   useEffect(() => {
@@ -22,7 +26,7 @@ const Download: React.FC = () => {
   });
 
   useEffect(() => {
-    if (elementId !== undefined) {
+    if (elementId !== undefined && type?.includes("dl_commission")) {
       window
         .fetch(`api/commissions/${elementId}`)
         .then(async (r) => {
@@ -53,6 +57,20 @@ const Download: React.FC = () => {
           console.log(e);
         });
     }
+    if (elementId !== undefined && type?.includes("dl_decision")) {
+      window
+        .fetch(`api/dossiers/${elementId}`)
+        .then(async (r) => {
+          return r.json();
+        })
+        .then((r) => {
+          const dos = r.json;
+          setDossier(dos as DossierData);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
     if (submitting) {
       setTimeout(() => {
         signOut({
@@ -72,11 +90,15 @@ const Download: React.FC = () => {
           <CalloutTitle as="h3">Interface téléchargement</CalloutTitle>
           <CalloutText>
             {submitting && <IconLoader />} Vous pouvez cliquer sur le bouton
-            ci-dessous pour télécharger votre dossier. <br />
+            ci-dessous pour télécharger votre{" "}
+            {type?.includes("dl_commission")
+              ? "dossier"
+              : "décision d'autorisation"}
+            . <br />
             Une fois le teléchargement effectué vous serez redirigé sur la page
             d&apos;accueil Enfants du spectacle.
           </CalloutText>
-          {
+          {type?.includes("dl_commission") && (
             <div className={styles.downloadLink}>
               <a
                 href={urlDoc}
@@ -89,7 +111,18 @@ const Download: React.FC = () => {
                 Télécharger dossiers
               </a>
             </div>
-          }
+          )}
+          {type?.includes("dl_decision") && (
+            <button
+              className="postButton"
+              onClick={() => {
+                generateDA([dossier]);
+                setSubmitting(true);
+              }}
+            >
+              Télécharger Décision autorisation
+            </button>
+          )}
           <div style={{ marginTop: "2rem" }}>
             <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">
               Plus d&apos;informations sur le service ↗
