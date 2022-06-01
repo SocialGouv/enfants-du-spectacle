@@ -84,7 +84,7 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
             value={value}
             label={label}
             link={
-              _.find(dataLinks.data.dossier.champs, {
+              _.find(dataLinks.data?.dossier.champs, {
                 label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
               }).file?.url
             }
@@ -114,7 +114,7 @@ const JustificatifsEnfants: React.FC<{
       enfant.justificatifs.includes(a.value)
   );
   const champEnfant = _.get(
-    _.find(dataLinks.data.dossier.champs, { label: "Enfant" }),
+    _.find(dataLinks.data?.dossier.champs, { label: "Enfant" }),
     "champs"
   );
   return (

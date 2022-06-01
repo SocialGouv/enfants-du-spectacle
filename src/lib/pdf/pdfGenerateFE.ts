@@ -211,7 +211,7 @@ const generateFE = (dossiers: DossierData[]) => {
         },
       ],
     ],
-    margin: { bottom: 100, top: 70 },
+    margin: { bottom: 10 },
     theme: "plain",
   });
 
@@ -234,12 +234,11 @@ const generateFE = (dossiers: DossierData[]) => {
         },
       ],
     ],
-    margin: { top: 70 },
     theme: "plain",
   });
 
   const pageCount = doc.internal.getNumberOfPages(); //Total Page Number
-  for (let i = 0; i < pageCount; i++) {
+  for (let i = 0; i <= pageCount; i++) {
     doc.setPage(i);
     if (i === 1) {
       doc.setFontSize(15).setFont(undefined, "bold");

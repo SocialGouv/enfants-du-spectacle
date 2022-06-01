@@ -24,7 +24,6 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
   const className = statutDossierFSM.stateClassName();
-  const [submitting, setSubmitting] = useState(false);
   const { protocol, host } = window.location;
   const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_decision&elementId=${dossier.id}`;
   const mail = demandeur.email;
@@ -35,17 +34,13 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
       email,
       redirect: false,
     }).catch((err) => {
-      setSubmitting(false);
       window.alert("Une erreur est survenue lors de votre connexion");
       throw err;
     });
   };
 
   const handleSend = async () => {
-    setSubmitting(true);
     await submitSigninForm(mail);
-    setSubmitting(false);
-    console.log(submitting);
   };
 
   if (statutDossierFSM.transitionObjects().length == 0) {
