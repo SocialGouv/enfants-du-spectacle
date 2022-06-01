@@ -64,7 +64,6 @@ const get: NextApiHandler = async (req, res) => {
 
 const remove: NextApiHandler = async (req, res) => {
   const dossierId = getId(req);
-  console.log("dossier a supprimer : ", dossierId);
   try {
     await prisma.dossier.delete({
       where: { id: dossierId },

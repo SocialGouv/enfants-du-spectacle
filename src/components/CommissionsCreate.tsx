@@ -3,7 +3,11 @@ import Link from "next/link";
 import React from "react";
 import DatePicker from "react-datepicker";
 import AddCommission from "src/components/AddCommission";
-import { frenchDateHour, frenchDepartementName } from "src/lib/helpers";
+import {
+  frenchDateHour,
+  frenchDateText,
+  frenchDepartementName,
+} from "src/lib/helpers";
 import {
   createCommission,
   removeCommission,
@@ -33,6 +37,7 @@ const CommissionRow: React.FC<RowProps> = ({
   deleteCommission,
 }) => {
   const dossiersCount = commission.dossiers.length;
+  const [mountedRef, setMountedRef] = React.useState(false);
   const [dates, setDates] = React.useState<Date[]>([
     commission.date,
     commission.dateLimiteDepot,
@@ -41,6 +46,18 @@ const CommissionRow: React.FC<RowProps> = ({
     false,
     false,
   ]);
+
+  React.useEffect(() => {
+    setMountedRef(true);
+  }, [dates]);
+
+  React.useEffect(() => {
+    if (mountedRef) {
+      commission.date = dates[0];
+      commission.dateLimiteDepot = dates[1];
+      updateCommission(commission);
+    }
+  }, [dates]);
 
   return (
     <div className={`${styles.row} card`}>
@@ -54,7 +71,6 @@ const CommissionRow: React.FC<RowProps> = ({
               onChange={(date: Date) => {
                 setDates([date, dates[1]]);
                 setChangeDates([!changeDates[0], changeDates[1]]);
-                updateCommission(commission);
               }}
             />
           </span>
@@ -63,7 +79,7 @@ const CommissionRow: React.FC<RowProps> = ({
             <span role="img" aria-label="hammer">
               🔨
             </span>{" "}
-            <b>{frenchDateHour(dates[0])}</b> -{" "}
+            <b>{frenchDateText(dates[0])}</b> -{" "}
             {frenchDepartementName(commission.departement)}
             <br />
             <button
@@ -80,7 +96,33 @@ const CommissionRow: React.FC<RowProps> = ({
         <b>{dossiersCount}</b> dossiers
       </div>
       <div>
-        limite dépôt : <b>{frenchDateHour(commission.dateLimiteDepot)}</b>
+        {changeDates[1] ? (
+          <span>
+            <DatePicker
+              dateFormat="dd/MM/yyyy"
+              selected={commission.dateLimiteDepot}
+              className="inputText"
+              onChange={(date: Date) => {
+                date.setHours(23);
+                date.setMinutes(59);
+                setDates([dates[0], date]);
+                setChangeDates([changeDates[0], !changeDates[1]]);
+              }}
+            />
+          </span>
+        ) : (
+          <span>
+            limite dépôt : <b>{frenchDateHour(dates[1])}</b>
+            <br />
+            <button
+              onClick={() => {
+                setChangeDates([changeDates[0], !changeDates[1]]);
+              }}
+            >
+              Modifier
+            </button>
+          </span>
+        )}
       </div>
       <div>
         <Link href={`/commissions/create`}>

@@ -69,6 +69,14 @@ const update: NextApiHandler = async (req, res) => {
     updates.lastSent = parsed.lastSent;
   }
 
+  if (parsed.date !== null) {
+    updates.date = parsed.date;
+  }
+
+  if (parsed.dateLimiteDepot !== null) {
+    updates.dateLimiteDepot = parsed.dateLimiteDepot;
+  }
+
   const updateCommission = await prisma.commission.update({
     data: updates,
     where: { id: parsed.id },

@@ -17,6 +17,7 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
     React.useState<CommissionData>(commission);
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [mountedRef, setMountedRef] = React.useState(false);
   const { callbackUrl } = router.query;
   const { protocol, host } = window.location;
   const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_commission&elementId=${commission.id}`;
@@ -44,9 +45,18 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
       ...commission,
       lastSent: new Date(),
     });
-    updateCommission(commissionTmp);
     setSubmitting(false);
   };
+
+  React.useEffect(() => {
+    setMountedRef(true);
+  });
+
+  React.useEffect(() => {
+    if (mountedRef) {
+      updateCommission(commissionTmp);
+    }
+  }, [commissionTmp]);
 
   return (
     <div>
