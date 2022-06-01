@@ -1,3 +1,10 @@
+## [1.28.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.28.0...v1.28.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* finish feature modify dates commissions ([#322](https://github.com/SocialGouv/enfants-du-spectacle/issues/322)) ([bbe4bd9](https://github.com/SocialGouv/enfants-du-spectacle/commit/bbe4bd93ca50c8471db1617afc0457f87ad1899b))
+
 # [1.28.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.27.4...v1.28.0) (2022-05-31)
 
 
