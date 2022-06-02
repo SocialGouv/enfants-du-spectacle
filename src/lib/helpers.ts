@@ -30,7 +30,8 @@ function frenchDateText(date: Date): string {
 }
 
 function frenchDateHour(date: Date): string {
-  return date.toLocaleDateString("fr-FR", {
+  const newDate = new Date(date);
+  return newDate.toLocaleDateString("fr-FR", {
     day: "numeric",
     hour: "numeric",
     minute: "numeric",

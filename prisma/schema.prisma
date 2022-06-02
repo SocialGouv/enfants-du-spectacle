@@ -217,7 +217,7 @@ model SendList {
   commissionId Int
   commission   Commission @relation(fields: [commissionId], references: [id])
   userId       Int
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {

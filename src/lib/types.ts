@@ -5,6 +5,7 @@ import type {
   Dossier,
   Enfant,
   PieceDossier,
+  SendList,
   SocieteProduction,
   User,
 } from "@prisma/client";
@@ -44,10 +45,13 @@ interface CommentaireDataLight {
 
 type CommissionData = Commission & { dossiers: DossierData[] };
 
+type SendListData = SendList & { user: User };
+
 export type {
   CommentaireData,
   CommentaireDataLight,
   CommissionData,
   DossierData,
   DossierDataLight,
+  SendListData,
 };
