@@ -86,7 +86,7 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
             link={
               _.find(dataLinks.data?.dossier.champs, {
                 label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
-              }).file?.url
+              })?.file?.url
             }
           />
         </li>

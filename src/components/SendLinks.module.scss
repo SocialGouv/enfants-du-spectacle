@@ -1,0 +1,28 @@
+
+.emailList {
+    padding-left: 0 !important;
+    margin-top:1em;
+    div {
+        padding-left: 0 !important;
+    }
+
+    .divEmail {
+        margin-top:1.5em;
+
+        .emailInfos {
+            padding-left:2em;
+            font-style:italic;
+        }
+
+        .checkbox {
+
+            label {
+                padding:0;
+            }
+    
+            label::before {
+                margin:0;
+            }
+        }
+    }
+}
