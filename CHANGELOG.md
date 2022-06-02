@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.28.1...v1.29.0) (2022-06-02)
+
+
+### Features
+
+* add feature send link to specific accounts ([#323](https://github.com/SocialGouv/enfants-du-spectacle/issues/323)) ([fdae97f](https://github.com/SocialGouv/enfants-du-spectacle/commit/fdae97f1e6d603470aaa1c893b0a4b8015be614e))
+
 ## [1.28.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.28.0...v1.28.1) (2022-06-01)
 
 
