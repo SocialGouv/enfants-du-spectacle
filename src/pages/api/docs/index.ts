@@ -13,9 +13,10 @@ import fs from "fs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { getDatasFromDS } from "src/lib/fetching/ds";
 import generateZip from "src/lib/generateZip";
 import { strNoAccent } from "src/lib/helpers";
-import { getDatasFromDS, getDocDS } from "src/lib/queries";
+import { getDocDS } from "src/lib/queries";
 
 type DossierData = Dossier & {
   user: User | null;
