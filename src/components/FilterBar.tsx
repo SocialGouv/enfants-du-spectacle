@@ -80,10 +80,11 @@ const FilterBar: React.FC<Props> = ({
         {text}{" "}
         <span className={styles.filterContainer || ""}>
           <Select
-            id="departementId"
+            id="departement"
             selected={String(filters.departement)}
             options={[defaultDepartement].concat(
               ALL_DEPARTEMENTS.map((u) => ({
+                key: u,
                 label: frenchDepartementName(u),
                 value: u,
               }))

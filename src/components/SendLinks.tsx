@@ -1,10 +1,8 @@
-import { Checkbox } from "@dataesr/react-dsfr";
 import type { SendList } from "@prisma/client";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
-import Foldable from "src/components/Foldable";
 import IconLoader from "src/components/IconLoader";
 import styles from "src/components/SendLinks.module.scss";
 import { searchUsers } from "src/lib/api";
@@ -13,7 +11,6 @@ import {
   getSendList,
   updateSendList,
 } from "src/lib/fetching/sendlist";
-import { frenchDateHour } from "src/lib/helpers";
 import type { CommissionData } from "src/lib/queries";
 import type { SendListData } from "src/lib/types";
 
@@ -118,44 +115,7 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
         role="button"
         tabIndex={0}
         className={styles.emailList}
-      >
-        <Foldable
-          hidden={true}
-          text="Gérer la liste de diffusion"
-          onlyOnce={false}
-        >
-          <div className={styles.emailList}>
-            {SendList.sort(function (a?, b?) {
-              if (a.user.email < b.user.email) {
-                return -1;
-              }
-              if (a.user.email > b.user.email) {
-                return 1;
-              }
-              return 0;
-            }).map((user) => (
-              <div key={user.id} className={styles.divEmail}>
-                <Checkbox
-                  value={user.id}
-                  checked={user.send}
-                  onChange={async () => {
-                    user.send = !user.send;
-                    console.log("sendlist a update :", user);
-                    await updateSendList(user);
-                  }}
-                  label={user.user.email}
-                  hint={`${
-                    user.lastSent
-                      ? "envoyé le " + frenchDateHour(user.lastSent)
-                      : "Jamais envoyé"
-                  }`}
-                  className={styles.checkbox}
-                />
-              </div>
-            ))}
-          </div>
-        </Foldable>
-      </div>
+      />
     </div>
   );
 };
