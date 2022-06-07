@@ -1,3 +1,10 @@
+## [1.29.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.1...v1.29.2) (2022-06-07)
+
+
+### Bug Fixes
+
+* readd foldable list emails ([#325](https://github.com/SocialGouv/enfants-du-spectacle/issues/325)) ([3af489a](https://github.com/SocialGouv/enfants-du-spectacle/commit/3af489a5d3d74e2adca49d15b1f070e776bbf4b0))
+
 ## [1.29.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.0...v1.29.1) (2022-06-07)
 
 
