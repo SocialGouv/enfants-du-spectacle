@@ -1,3 +1,10 @@
+## [1.29.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.3...v1.29.4) (2022-06-08)
+
+
+### Bug Fixes
+
+* fix ds api limit ([#328](https://github.com/SocialGouv/enfants-du-spectacle/issues/328)) ([e8cb206](https://github.com/SocialGouv/enfants-du-spectacle/commit/e8cb206bad890fb197797fd9eb833bccecf92ffc))
+
 ## [1.29.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.2...v1.29.3) (2022-06-08)
 
 
