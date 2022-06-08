@@ -199,18 +199,22 @@ export const getInfosFromDS = async (status: string) => {
   const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
   const demarcheNumber = parseInt(process.env.DEMARCHE_NUMBER ?? "");
   const state = status;
-  const order = "DESC";
+  const order = "ASC";
+  const date = new Date();
+  date.setHours(date.getHours() - 10);
+  const updatedSince = date.toISOString();
   const query = `query getDemarche(
       $demarcheNumber: Int!
       $state: DossierState
       $order: Order
       $after: String
+      $updatedSince: ISO8601DateTime
       ) {
       demarche(number: $demarcheNumber) {
           id
           number
           title
-          dossiers(state: $state,first: 50, order: $order, after: $after) {
+          dossiers(state: $state,first: 100, order: $order, updatedSince:$updatedSince, after: $after) {
           nodes {
               ...DossierFragment
           }
@@ -274,7 +278,7 @@ export const getInfosFromDS = async (status: string) => {
       body: JSON.stringify({
         operationName: "getDemarche",
         query,
-        variables: { demarcheNumber, order, state },
+        variables: { demarcheNumber, order, state, updatedSince },
       }),
       headers: {
         Accept: "application/json",
