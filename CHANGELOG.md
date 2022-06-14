@@ -1,3 +1,10 @@
+## [1.29.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.4...v1.29.5) (2022-06-14)
+
+
+### Bug Fixes
+
+* add feat update specific dossier and allow AVIS_FAVORABLE_SOUS_RESERVE TO ACCEPTE ([#329](https://github.com/SocialGouv/enfants-du-spectacle/issues/329)) ([7d9d501](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d9d501bc3668facaefb86b3303dd1248dead388))
+
 ## [1.29.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.3...v1.29.4) (2022-06-08)
 
 
