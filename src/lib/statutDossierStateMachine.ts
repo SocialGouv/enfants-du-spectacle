@@ -131,7 +131,7 @@ const transitions: TransitionObject[] = [
     to: "AVIS_FAVORABLE_SOUS_RESERVE",
   },
   {
-    from: ["AVIS_FAVORABLE", "AVIS_DEFAVORABLE"],
+    from: ["AVIS_FAVORABLE", "AVIS_DEFAVORABLE", "AVIS_FAVORABLE_SOUS_RESERVE"],
     name: "passerAccepte",
     to: "ACCEPTE",
   },

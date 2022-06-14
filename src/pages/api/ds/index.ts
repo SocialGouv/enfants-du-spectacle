@@ -62,18 +62,21 @@ const handler: NextApiHandler = async (req, res) => {
 const get: NextApiHandler = async (req, res) => {
   const status = req.query.status || "en_construction";
   const forceRefresh = req.query.force === "true" ? true : false;
+  const forceUpdateIds = req.query.forceIds || [];
+  console.log("forceUpdateIds = ", forceUpdateIds);
   const infos = await getInfosFromDS(status as string);
   console.log("fetching data DS");
   const { needUpdate, dossiersToUpdate } = await checkNeedUpdate(
     infos,
-    forceRefresh
+    forceRefresh,
+    forceUpdateIds
   );
   console.log("need update : ", needUpdate);
   console.log("dossiers to update : ", dossiersToUpdate);
   if (needUpdate || forceRefresh) {
     for (const dosNumber of dossiersToUpdate) {
       try {
-        console.log("getting file : ", dosNumber);
+        console.log("getting file : ", parseInt(dosNumber));
         const fetching = await getDatasFromDS(parseInt(dosNumber));
         const insert = await insertDataFromDs(fetching.data.dossier);
         console.log("inserted : ", insert);
@@ -89,9 +92,13 @@ const get: NextApiHandler = async (req, res) => {
   }
 };
 
-const checkNeedUpdate = async (data: unknown, forceRefresh: boolean) => {
-  let needUpdate = false;
-  const dossiersToUpdate = [] as string[];
+const checkNeedUpdate = async (
+  data: unknown,
+  forceRefresh: boolean,
+  forceUpdateIds: string[]
+) => {
+  let needUpdate = forceUpdateIds.length > 0;
+  const dossiersToUpdate = forceUpdateIds;
 
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < data.data.demarche.dossiers.nodes.length; i++) {
