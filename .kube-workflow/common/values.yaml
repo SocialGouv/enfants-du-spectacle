@@ -6,7 +6,7 @@ app:
       memory: 256Mi
     limits:
       cpu: 1
-      memory: 4Gi
+      memory: 6Gi
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
