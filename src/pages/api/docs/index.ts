@@ -18,6 +18,14 @@ import generateZip from "src/lib/generateZip";
 import { strNoAccent } from "src/lib/helpers";
 import { getDocDS } from "src/lib/queries";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb", // Set desired value here
+    },
+  },
+};
+
 type DossierData = Dossier & {
   user: User | null;
   commission: Commission;
