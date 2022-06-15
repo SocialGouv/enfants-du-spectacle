@@ -1,3 +1,10 @@
+## [1.29.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.6...v1.29.7) (2022-06-15)
+
+
+### Bug Fixes
+
+* increase api body limit ([#331](https://github.com/SocialGouv/enfants-du-spectacle/issues/331)) ([2602c52](https://github.com/SocialGouv/enfants-du-spectacle/commit/2602c521536faa40b9508ce4841e127bc5754376))
+
 ## [1.29.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.5...v1.29.6) (2022-06-15)
 
 
