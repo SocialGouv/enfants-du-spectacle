@@ -1,3 +1,10 @@
+## [1.29.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.5...v1.29.6) (2022-06-15)
+
+
+### Bug Fixes
+
+* up memory pod ([#330](https://github.com/SocialGouv/enfants-du-spectacle/issues/330)) ([dddf908](https://github.com/SocialGouv/enfants-du-spectacle/commit/dddf9080017d4bcdcf52904b6bd24147094d9c44))
+
 ## [1.29.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.4...v1.29.5) (2022-06-14)
 
 
