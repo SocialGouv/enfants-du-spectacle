@@ -150,10 +150,11 @@ const uploadDoc: NextApiHandler = async (req, res) => {
           enfant.prenom === strNoAccent(firstname)
         );
       });
-      parsed.dossiers[index].enfants[indexEnfant].files = docsEnfants.slice(
-        i * 6,
-        i * 6 + 6
-      );
+      if (parsed.dossiers[index].enfants[indexEnfant])
+        parsed.dossiers[index].enfants[indexEnfant].files = docsEnfants.slice(
+          i * 6,
+          i * 6 + 6
+        );
     }
   }
 
