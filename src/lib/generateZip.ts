@@ -22,7 +22,9 @@ export default (commission: CommissionData) => {
   _.forEach(
     commission.dossiers,
     (dossier: DossierData & { files: unknown[] }) => {
-      const dossierFolder = zip.folder(dossier.nom.replace(".", "_"));
+      const dossierFolder = zip.folder(
+        dossier.nom.replace(".", "_").replace("'", "_")
+      );
 
       const roles = _.uniq(
         dossier.enfants.map((e: Enfant) => {
