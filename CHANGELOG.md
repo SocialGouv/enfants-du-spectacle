@@ -1,3 +1,10 @@
+## [1.29.15](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.14...v1.29.15) (2022-06-20)
+
+
+### Bug Fixes
+
+* limit name length in zip ([#340](https://github.com/SocialGouv/enfants-du-spectacle/issues/340)) ([22a90d8](https://github.com/SocialGouv/enfants-du-spectacle/commit/22a90d8e1c6ba55b5ca9357fca4ddcad93f1e336))
+
 ## [1.29.14](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.13...v1.29.14) (2022-06-20)
 
 
