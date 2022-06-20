@@ -41,7 +41,7 @@ const Download: React.FC = () => {
               day: "numeric",
               month: "long",
               year: "numeric",
-            })}`
+            })}`.replace(/[\W]+/g, "_")
           );
           setUrlDoc(
             `/api/docs?zipname=${`commission_${frenchDepartementName(
@@ -50,7 +50,7 @@ const Download: React.FC = () => {
               day: "numeric",
               month: "long",
               year: "numeric",
-            })}`}`
+            })}`.replace(/[\W]+/g, "_")}`
           );
         })
         .catch((e) => {

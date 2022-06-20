@@ -62,7 +62,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
   const docName = `commission_${frenchDepartementName(
     commission.departement
   )}_${frenchDateText(commission.date)}`;
-  const urlDoc = `/api/docs?zipname=${docName}`;
+  const urlDoc = `/api/docs?zipname=${docName.replace(/[\W]+/g, "_")}`;
   return (
     <div className="card">
       <div className={styles.commissionHeader}>
