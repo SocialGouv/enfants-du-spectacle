@@ -22,9 +22,7 @@ export default (commission: CommissionData) => {
   _.forEach(
     commission.dossiers,
     (dossier: DossierData & { files: unknown[] }) => {
-      const dossierFolder = zip.folder(
-        dossier.nom.replace(".", "_").replace("'", "_")
-      );
+      const dossierFolder = zip.folder(dossier.nom.replace(/[\W]+/g, "_"));
 
       const roles = _.uniq(
         dossier.enfants.map((e: Enfant) => {
@@ -33,7 +31,7 @@ export default (commission: CommissionData) => {
       );
 
       dossierFolder?.file(
-        dossier.nom + ".txt",
+        dossier.nom.replace(/[\W]+/g, "_") + ".txt",
         `Statut: ${dossier.statut} \r\n
 Nom: ${dossier.nom} \r\n
 Catégorie: ${categorieToLabel(dossier.categorie)} \r\n
@@ -92,7 +90,9 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
 
       TYPES_EMPLOI.map((role) => {
         if (roles.indexOf(role.value) !== -1) {
-          const roleFolder = dossierFolder?.folder(role.label);
+          const roleFolder = dossierFolder?.folder(
+            role.label.replace(/[\W]+/g, "_")
+          );
           _.filter(dossier.enfants, { typeEmploi: role.value }).map(
             (enfant: Enfant & { files: unknown[] }) => {
               const enfantFolder = roleFolder?.folder(
