@@ -22,7 +22,12 @@ export default (commission: CommissionData) => {
   _.forEach(
     commission.dossiers,
     (dossier: DossierData & { files: unknown[] }) => {
-      const dossierFolder = zip.folder(dossier.nom.replace(/[\W]+/g, "_"));
+      const dossierFolder = zip.folder(
+        dossier.nom
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[\W]+/g, "_")
+      );
 
       const roles = _.uniq(
         dossier.enfants.map((e: Enfant) => {
@@ -31,7 +36,10 @@ export default (commission: CommissionData) => {
       );
 
       dossierFolder?.file(
-        dossier.nom.replace(/[\W]+/g, "_") + ".txt",
+        dossier.nom
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[\W]+/g, "_") + ".txt",
         `Statut: ${dossier.statut} \r\n
 Nom: ${dossier.nom} \r\n
 Catégorie: ${categorieToLabel(dossier.categorie)} \r\n
@@ -80,9 +88,15 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
       );
 
       dossier.files.map((file) => {
-        const indexChar = (file.file.filename.indexOf(".") as number) + 1;
+        const indexChar =
+          (file.file.filename.replace("..", ".").indexOf(".") as number) + 1;
         dossierFolder?.file(
-          `${file.label}.${file.file.filename.substring(indexChar)}`,
+          `${file.label
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[\W]+/g, "_")}.${file.file.filename
+            .replace("..", ".")
+            .substring(indexChar)}`,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           file?.doc
         );
@@ -91,7 +105,10 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
       TYPES_EMPLOI.map((role) => {
         if (roles.indexOf(role.value) !== -1) {
           const roleFolder = dossierFolder?.folder(
-            role.label.replace(/[\W]+/g, "_")
+            role.label
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/[\W]+/g, "_")
           );
           _.filter(dossier.enfants, { typeEmploi: role.value }).map(
             (enfant: Enfant & { files: unknown[] }) => {
@@ -99,7 +116,10 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
                 enfant.prenom + " " + enfant.nom
               );
               enfantFolder?.file(
-                enfant.prenom + " " + enfant.nom + ".txt",
+                enfant.prenom.normalize("NFD").replace(/[\u0300-\u036f]/g, "") +
+                  "_" +
+                  enfant.nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "") +
+                  ".txt",
                 `Enfant: ${enfant.prenom} ${enfant.nom} \r\n
 Date de naissance: ${new Date(enfant.dateNaissance).toLocaleDateString(
                   "fr"
@@ -127,11 +147,16 @@ Rémunération totale: ${enfant.remunerationTotale}
                 enfant.files.map((file) => {
                   if (file.doc !== null) {
                     const indexChar =
-                      (file.file.filename.indexOf(".") as number) + 1;
+                      (file.file.filename
+                        .replace("..", ".")
+                        .indexOf(".") as number) + 1;
                     enfantFolder?.file(
-                      `${file.label}.${file.file.filename.substring(
-                        indexChar
-                      )}`,
+                      `${file.label
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[\W]+/g, "_")}.${file.file.filename
+                        .replace("..", ".")
+                        .substring(indexChar)}`,
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                       file?.doc
                     );
