@@ -60,6 +60,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 const downloadZip: NextApiHandler = async (req, res) => {
   const zipname = req.query.zipname;
+  console.log("zipname : ", zipname);
 
   const filePath = `/mnt/docs/${zipname}.zip`;
   const stat = fs.statSync(filePath);

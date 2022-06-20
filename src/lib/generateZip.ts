@@ -19,10 +19,20 @@ import type { CommissionData, DossierData } from "./types";
 export default (commission: CommissionData) => {
   const zip = new JSZip();
 
+  const fileName = `commission_${frenchDepartementName(
+    commission.departement
+  )}_${new Date(commission.date).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })}`.replace(/[\W]+/g, "_");
+
+  const zipFolder = zip.folder(fileName);
+
   _.forEach(
     commission.dossiers,
     (dossier: DossierData & { files: unknown[] }) => {
-      const dossierFolder = zip.folder(
+      const dossierFolder = zipFolder?.folder(
         dossier.nom
           .slice(0, 75)
           .normalize("NFD")
@@ -174,21 +184,11 @@ Rémunération totale: ${enfant.remunerationTotale}
 
   zip
     .generateNodeStream({ streamFiles: true, type: "nodebuffer" })
-    .pipe(
-      fs.createWriteStream(
-        `/mnt/docs/commission_${frenchDepartementName(
-          commission.departement
-        )}_${new Date(commission.date).toLocaleDateString("fr-FR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}.zip`
-      )
-    )
+    .pipe(fs.createWriteStream(`/mnt/docs/${fileName}.zip`))
     .on("finish", function () {
       // JSZip generates a readable stream with a "end" event,
       // but is piped here in a writable stream which emits a "finish" event.
-      console.log("commission.zip written.");
+      console.log(fileName, " written.");
     });
 
   /*const zipAsBase64 = await zip.generateAsync({ type: "base64" });*/
