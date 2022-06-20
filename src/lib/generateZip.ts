@@ -24,6 +24,7 @@ export default (commission: CommissionData) => {
     (dossier: DossierData & { files: unknown[] }) => {
       const dossierFolder = zip.folder(
         dossier.nom
+          .slice(0, 75)
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/[\W]+/g, "_")
@@ -37,6 +38,7 @@ export default (commission: CommissionData) => {
 
       dossierFolder?.file(
         dossier.nom
+          .slice(0, 75)
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/[\W]+/g, "_") + ".txt",
