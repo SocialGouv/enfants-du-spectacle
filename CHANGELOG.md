@@ -1,3 +1,10 @@
+## [1.29.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.12...v1.29.13) (2022-06-20)
+
+
+### Bug Fixes
+
+* try fixing corrupted zips ([#337](https://github.com/SocialGouv/enfants-du-spectacle/issues/337)) ([7d85ca3](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d85ca320beae37de32fda577e425ab3177f67a8))
+
 ## [1.29.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.11...v1.29.12) (2022-06-16)
 
 
