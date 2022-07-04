@@ -1,3 +1,10 @@
+## [1.29.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.16...v1.29.17) (2022-07-04)
+
+
+### Bug Fixes
+
+* upgrade Fiche Emploi ([#343](https://github.com/SocialGouv/enfants-du-spectacle/issues/343)) ([ee9319d](https://github.com/SocialGouv/enfants-du-spectacle/commit/ee9319d4877dfc023104be73cdd8c222c051849a))
+
 ## [1.29.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.15...v1.29.16) (2022-06-20)
 
 
