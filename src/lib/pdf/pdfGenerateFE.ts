@@ -123,7 +123,9 @@ const generateFE = (dossiers: DossierData[]) => {
                         : ""
                     }
   TOTAL : ${enfant.remunerationTotale} Euros
-  Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
+  Part CDC : ${enfant.cdc ? enfant.cdc : "0"}% 
+  |_| Favorable        |_| Favorable sous réserve          |_| Ajourné          |_| Défavorable 
+  Motifs : \n \n`,
                     styles: {
                       fontSize: 11,
                       halign: "left",
@@ -159,61 +161,6 @@ const generateFE = (dossiers: DossierData[]) => {
   });
 
   //doc.addPage();
-
-  autoTable(doc, {
-    body: [
-      [
-        {
-          content: "AVIS",
-          styles: {
-            fontSize: 13,
-            fontStyle: "bold",
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Favorable",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Favorable sous réserve",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Ajourné",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-        {
-          content: "|_| Défavorable",
-          styles: {
-            fontSize: 11,
-            halign: "left",
-          },
-        },
-      ],
-      [
-        {
-          content: "Motifs \n\n\n\n\n\n\n",
-          styles: {
-            fontSize: 13,
-            fontStyle: "bold",
-            halign: "left",
-          },
-        },
-      ],
-    ],
-    margin: { bottom: 10 },
-    theme: "plain",
-  });
 
   autoTable(doc, {
     body: [
