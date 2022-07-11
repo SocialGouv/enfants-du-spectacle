@@ -1,3 +1,10 @@
+## [1.29.18](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.17...v1.29.18) (2022-07-11)
+
+
+### Bug Fixes
+
+* fix name dossiers for pdfs ([#346](https://github.com/SocialGouv/enfants-du-spectacle/issues/346)) ([6f7d285](https://github.com/SocialGouv/enfants-du-spectacle/commit/6f7d285992b53f32cc82ecc1c3f96460436a1dfc))
+
 ## [1.29.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.16...v1.29.17) (2022-07-04)
 
 
