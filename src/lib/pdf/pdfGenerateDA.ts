@@ -316,7 +316,7 @@ Responsable du département protection et insertion des jeunes`,
 
   return binary
     ? "data:application/pdf;base64," + btoa(doc.output())
-    : doc.save("Décision autorisation " + dossiers[0].nom);
+    : doc.save("Décision_autorisation_" + dossiers[0].nom.replaceAll(".", "_"));
 };
 
 export { generateDA };

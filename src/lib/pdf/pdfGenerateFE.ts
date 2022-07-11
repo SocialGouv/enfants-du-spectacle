@@ -199,7 +199,7 @@ const generateFE = (dossiers: DossierData[]) => {
     }
   }
 
-  return doc.save("FICHE EMPLOI " + dossiers[0].nom);
+  return doc.save("FICHE_EMPLOI " + dossiers[0].nom.replaceAll(".", "_"));
 };
 
 export { generateFE };
