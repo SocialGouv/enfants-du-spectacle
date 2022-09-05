@@ -2,9 +2,9 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
-    component: pe-cronjob
+    component: ds-cronjob
     application: enfants-du-spectacle
-  name: pe-cronjob
+  name: ds-cronjob
 spec:
   schedule: 10 * * * *
   concurrencyPolicy: Forbid
@@ -13,14 +13,14 @@ spec:
       template:
         metadata:
           labels:
-            component: pe-cronjob
+            component: ds-cronjob
             application: enfants-du-spectacle
-          name: pe-cronjob
+          name: ds-cronjob
         spec:
           restartPolicy: OnFailure
           containers:
             - name: cronjob-container
-              image: registry.hub.docker.com/library/curlimages/curl
+              image: curlimages/curl:7.84.0
               command:
                 - /bin/sh
                 - -c
@@ -33,6 +33,3 @@ spec:
                     name: backend-sealed-secret
                 - configMapRef:
                     name: backend-configmap
-              env:
-                - name: hello
-                  value: world
