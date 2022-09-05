@@ -20,7 +20,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: cronjob-container
-              image: registry.hub.docker.com/library/curlimages/curl
+              image: curlimages/curl
               command:
                 - /bin/sh
                 - -c
