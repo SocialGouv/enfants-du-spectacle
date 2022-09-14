@@ -405,12 +405,14 @@ const Questions: React.FC = () => {
           </div>
         </div>
         <div className={styles.mailtoRow}>
-          <a
+          <button
             className="whiteButton"
-            href="mailto:enfantsduspectacle@fabrique.social.gouv.fr?subject=Contact depuis la plateforme Enfants du spectacle"
+            onClick={() => {
+              alert("Contacter nous au numéro suivant :  01 70 96 17 61");
+            }}
           >
             Vous ne trouvez pas votre question ?
-          </a>
+          </button>
         </div>
       </Container>
     </section>

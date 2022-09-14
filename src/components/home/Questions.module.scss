@@ -36,6 +36,8 @@ section.questionsSection {
     margin-top:1rem;
     a {
       border-bottom: solid #000091 1px;
+      color: black;
+      cursor: pointer;
     }
   }
   @media only screen and (max-width:768px) {
