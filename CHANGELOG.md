@@ -1,3 +1,10 @@
+## [1.29.22](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.21...v1.29.22) (2022-09-14)
+
+
+### Bug Fixes
+
+* change behaviour button contact us ([#354](https://github.com/SocialGouv/enfants-du-spectacle/issues/354)) ([3672eac](https://github.com/SocialGouv/enfants-du-spectacle/commit/3672eacce0660d03643dd7de9becb6c14972e3b9))
+
 ## [1.29.21](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.20...v1.29.21) (2022-09-05)
 
 
