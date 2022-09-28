@@ -1,3 +1,10 @@
+## [1.29.23](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.22...v1.29.23) (2022-09-28)
+
+
+### Bug Fixes
+
+* fix error empty number of days on DS ([#357](https://github.com/SocialGouv/enfants-du-spectacle/issues/357)) ([d54c532](https://github.com/SocialGouv/enfants-du-spectacle/commit/d54c532fff943244eb13af2e723186c9e310af7f))
+
 ## [1.29.22](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.21...v1.29.22) (2022-09-14)
 
 
