@@ -125,9 +125,25 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
-          content: "\nDécision de la commission des enfant du spectacle",
+          content: "\nDécision de la commission des enfants du spectacle",
           styles: {
-            fontSize: 16,
+            fontSize: 18,
+            halign: "center",
+          },
+        },
+      ],
+    ],
+    margin: { top: 70 },
+    theme: "plain",
+  });
+
+  autoTable(doc, {
+    body: [
+      [
+        {
+          content: "\nLe Préfet de Paris, Préfet de la région d’Ile-de-France",
+          styles: {
+            fontSize: 13,
             halign: "center",
           },
         },
