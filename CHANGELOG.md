@@ -1,3 +1,10 @@
+## [1.29.24](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.23...v1.29.24) (2022-09-28)
+
+
+### Bug Fixes
+
+* fix ds issues ([#359](https://github.com/SocialGouv/enfants-du-spectacle/issues/359)) ([a2c95b2](https://github.com/SocialGouv/enfants-du-spectacle/commit/a2c95b2d2b01d52f4e86f575589beb38465426e3))
+
 ## [1.29.23](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.22...v1.29.23) (2022-09-28)
 
 
