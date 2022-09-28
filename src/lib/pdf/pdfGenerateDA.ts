@@ -90,6 +90,24 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
+          content: `Aubervilliers, le ${frenchDateText(
+            dossiers[0].commission.date
+          )}`,
+          styles: {
+            fontSize: 11,
+            halign: "right",
+          },
+        },
+      ],
+    ],
+    margin: { top: 70 },
+    theme: "plain",
+  });
+
+  autoTable(doc, {
+    body: [
+      [
+        {
           content:
             "Service des enfants du spectacle \nDépartement protection et insertion des jeunes \nDirection de l’emploi, des entreprises et des solidarités \nUnité départementale de Paris de la DRIEETS",
           styles: {
@@ -107,9 +125,9 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
-          content: "\nLe Préfet de Paris, Préfet de la région d’Ile-de-France",
+          content: "\nDécision de la commission des enfant du spectacle",
           styles: {
-            fontSize: 13,
+            fontSize: 16,
             halign: "center",
           },
         },
@@ -124,16 +142,16 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
       [
         {
           content: `\nVu les articles L7124-1 à L7124-35 et R7124-1 à R7124-35 du code du travail ;\n
-Vu la loi n° 82-213 du 2 mars 1982 relative aux droits et libertés des communes, des départements et des régions, modifiée ; 
-Vu la loi d'orientation n° 92-125 du 6 février 1992 modifiée relative à l'administration territoriale de la République, notamment ses articles 4 et 6 ; 
-Vu le décret n° 97-34 du 15 janvier 1997 relatif à la déconcentration des décisions administratives individuelles ;
-Vu  le décret n° 2004-374 du 29 avril 2004 modifié relatif aux pouvoirs des préfets, à l'organisation et à l'action des services de l'État dans les régions et départements ;
-Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l'administration territoriale de l'État ;
-Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l’organisation et à l’action des services de l’État dans les régions et départements ; 
-Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; 
-Vu le décret du 22 juillet 2020 portant nomination de Monsieur Marc GUILLAUME en qualité de Préfet de Paris ;
-Vu l’arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Ile-de-France à compter du 1er avril 2021 ;
-Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel le Préfet de Paris délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; `,
+Vu la loi n° 82-213 du 2 mars 1982 relative aux droits et libertés des communes, des départements et des régions, modifiée ; \n
+Vu la loi d'orientation n° 92-125 du 6 février 1992 modifiée relative à l'administration territoriale de la République, notamment ses articles 4 et 6 ; \n
+Vu le décret n° 97-34 du 15 janvier 1997 relatif à la déconcentration des décisions administratives individuelles ; \n
+Vu  le décret n° 2004-374 du 29 avril 2004 modifié relatif aux pouvoirs des préfets, à l'organisation et à l'action des services de l'État dans les régions et départements ; \n
+Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l'administration territoriale de l'État ; \n
+Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l’organisation et à l’action des services de l’État dans les régions et départements ; \n
+Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; \n
+Vu le décret du 22 juillet 2020 portant nomination de Monsieur Marc GUILLAUME en qualité de Préfet de Paris ; \n
+Vu l’arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Ile-de-France à compter du 1er avril 2021 ; \n
+Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel le Préfet de Paris délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; \n`,
           styles: {
             fontSize: 11,
             halign: "left",
@@ -230,11 +248,13 @@ En période de vacances scolaires: 6h/jour avec pause obligatoire après 3h00 de
     body: [
       [
         {
-          content: `Fait à Aubervilliers, le : ${frenchDateText(new Date())}
+          content: `Fait à Aubervilliers, le : ${frenchDateText(
+            dossiers[0].commission.date
+          )}
 
-Pour le préfet et par la délégation
+Pour le préfet et par délégation
+Sophie Bidon
 
-Patricia RENUCCI 
 Responsable du département protection et insertion des jeunes`,
           styles: {
             fontSize: 11,
