@@ -418,12 +418,22 @@ const insertDataFromDs = async (dossier: unknown) => {
                 ) as string
               ),
               nombreJours: parseInt(
-                _.get(
+                (_.get(
                   _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nombre de jours de travail";
                   })[i],
                   "stringValue"
-                ) as string
+                ) as string) !== ""
+                  ? (_.get(
+                      _.filter(
+                        champEnfant,
+                        (datab: Record<string, unknown>) => {
+                          return datab.label === "Nombre de jours de travail";
+                        }
+                      )[i],
+                      "stringValue"
+                    ) as string)
+                  : "0"
               ),
               nombreLignes: parseInt(
                 _.get(
