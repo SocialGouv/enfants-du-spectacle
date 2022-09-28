@@ -1,3 +1,10 @@
+## [1.29.26](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.25...v1.29.26) (2022-09-28)
+
+
+### Bug Fixes
+
+* update template decision autorisation ([#361](https://github.com/SocialGouv/enfants-du-spectacle/issues/361)) ([a28831e](https://github.com/SocialGouv/enfants-du-spectacle/commit/a28831ed313845a3c57519fe6d62e4d056d844a5))
+
 ## [1.29.25](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.24...v1.29.25) (2022-09-28)
 
 
