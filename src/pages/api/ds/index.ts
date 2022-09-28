@@ -410,12 +410,22 @@ const insertDataFromDs = async (dossier: unknown) => {
                 "stringValue"
               ),
               nombreCachets: parseInt(
-                _.get(
+                (_.get(
                   _.filter(champEnfant, (datab: Record<string, unknown>) => {
                     return datab.label === "Nombre de cachets";
                   })[i],
                   "stringValue"
-                ) as string
+                ) as string) !== ""
+                  ? (_.get(
+                      _.filter(
+                        champEnfant,
+                        (datab: Record<string, unknown>) => {
+                          return datab.label === "Nombre de cachets";
+                        }
+                      )[i],
+                      "stringValue"
+                    ) as string)
+                  : "0"
               ),
               nombreJours: parseInt(
                 (_.get(
