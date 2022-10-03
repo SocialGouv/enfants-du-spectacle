@@ -141,7 +141,11 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
-          content: "\nLe Préfet de Paris, Préfet de la région d’Ile-de-France",
+          content: `\nLe Préfet ${
+            dossiers[0].commission.departement === "92"
+              ? "des Hauts-de-Seine"
+              : "de Paris"
+          }, Préfet de la région d’Ile-de-France`,
           styles: {
             fontSize: 13,
             halign: "center",
@@ -165,9 +169,21 @@ Vu  le décret n° 2004-374 du 29 avril 2004 modifié relatif aux pouvoirs des p
 Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l'administration territoriale de l'État ; \n
 Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l’organisation et à l’action des services de l’État dans les régions et départements ; \n
 Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; \n
-Vu le décret du 22 juillet 2020 portant nomination de Monsieur Marc GUILLAUME en qualité de Préfet de Paris ; \n
+Vu le décret du 22 juillet 2020 portant nomination de Monsieur ${
+            dossiers[0].commission.departement === "92"
+              ? "Gaëtan RUDAN"
+              : "Marc Guillaume"
+          } en qualité de Préfet ${
+            dossiers[0].commission.departement === "92"
+              ? "des Hauts-de_Seine"
+              : "de Paris"
+          } ; \n
 Vu l’arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Ile-de-France à compter du 1er avril 2021 ; \n
-Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel le Préfet de Paris délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; \n`,
+Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel le Préfet ${
+            dossiers[0].commission.departement === "92"
+              ? "des Hauts-de_Seine"
+              : "de Paris"
+          } délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; \n`,
           styles: {
             fontSize: 11,
             halign: "left",
@@ -289,8 +305,16 @@ Responsable du département protection et insertion des jeunes`,
         {
           content: `Voies et délais de recours :
           Cette décision peut faire l’objet  dans un délai de deux mois à compter de sa notification:
-          -  d’un recours hiérarchique auprès du ministre du travail, de l’emploi et de l’insertion, Direction générale du travail, 39-43 quai André-Citroën 75902 Paris cedex 15;
-          -  d’un recours contentieux auprès du tribunal administratif de Paris, 7 rue de Jouy -75181 Paris Cedex 04.`,
+          -  d’un recours ${
+            dossiers[0].commission.departement === "92"
+              ? "gracieux auprès du préfet des Hauts-de-Seine"
+              : "hiérarchique auprès du ministre du travail, de l’emploi et de l’insertion, Direction générale du travail, 39-43 quai André-Citroën 75902 Paris cedex 15"
+          };
+          -  d’un recours contentieux auprès du tribunal administratif ${
+            dossiers[0].commission.departement === "92"
+              ? "Cergy 2-4, boulevard de l'Hautil"
+              : "de Paris, 7 rue de Jouy -75181 Paris Cedex 04."
+          }`,
           styles: {
             fontSize: 9,
             halign: "left",
