@@ -1,3 +1,10 @@
+## [1.29.27](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.26...v1.29.27) (2022-10-03)
+
+
+### Bug Fixes
+
+* fix template DA ([#362](https://github.com/SocialGouv/enfants-du-spectacle/issues/362)) ([fc1424c](https://github.com/SocialGouv/enfants-du-spectacle/commit/fc1424c76f7225f16761ab7d1cad503b86338a44))
+
 ## [1.29.26](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.25...v1.29.26) (2022-09-28)
 
 
