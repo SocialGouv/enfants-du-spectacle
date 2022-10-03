@@ -169,19 +169,27 @@ Vu  le décret n° 2004-374 du 29 avril 2004 modifié relatif aux pouvoirs des p
 Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l'administration territoriale de l'État ; \n
 Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l’organisation et à l’action des services de l’État dans les régions et départements ; \n
 Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; \n
-Vu le décret du 22 juillet 2020 portant nomination de Monsieur ${
+Vu le décret du ${
             dossiers[0].commission.departement === "92"
-              ? "Gaëtan RUDAN"
+              ? "29 juillet 2020"
+              : "22 juillet 2020"
+          } portant nomination de Monsieur ${
+            dossiers[0].commission.departement === "92"
+              ? "Laurent HOTTIAUX"
               : "Marc Guillaume"
           } en qualité de Préfet ${
             dossiers[0].commission.departement === "92"
-              ? "des Hauts-de_Seine"
+              ? "des Hauts-de-Seine"
               : "de Paris"
           } ; \n
 Vu l’arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Ile-de-France à compter du 1er avril 2021 ; \n
-Vu l’arrêté préfectoral n° 75-2021-03-31-00003 du 31 mars 2021 par lequel le Préfet ${
+Vu l’arrêté préfectoral n° ${
             dossiers[0].commission.departement === "92"
-              ? "des Hauts-de_Seine"
+              ? "PCI n° 2021-018 du 31 mars 2021"
+              : "75-2021-03-31-00003 du 31 mars 2021"
+          } par lequel le Préfet ${
+            dossiers[0].commission.departement === "92"
+              ? "des Hauts-de-Seine"
               : "de Paris"
           } délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; \n`,
           styles: {
@@ -314,6 +322,11 @@ Responsable du département protection et insertion des jeunes`,
             dossiers[0].commission.departement === "92"
               ? "Cergy 2-4, boulevard de l'Hautil"
               : "de Paris, 7 rue de Jouy -75181 Paris Cedex 04."
+          }
+          ${
+            dossiers[0].commission.departement === "92"
+              ? "Le tribunal administratif peut-être saisi par l’application informatique « Telerecours citoyens » accessible par le site internet www.telerecours.fr"
+              : ""
           }`,
           styles: {
             fontSize: 9,
