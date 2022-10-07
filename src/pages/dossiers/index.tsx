@@ -1,6 +1,7 @@
 import { Icon } from "@dataesr/react-dsfr";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import CommissionBloc from "src/components/Commission";
 import FilterBar from "src/components/FilterBar";
@@ -26,6 +27,18 @@ import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 const Page: React.FC = () => {
+  const session = useSession();
+  if (
+    session.status === "authenticated" &&
+    session.data.dbUser.role !== "ADMIN" &&
+    session.data.dbUser.role !== "INSTRUCTEUR"
+  ) {
+    signOut({
+      callbackUrl: "",
+    }).catch((e) => {
+      console.log(e);
+    });
+  }
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
   const { commissions, ...swrCommissions } = useCommissions();
