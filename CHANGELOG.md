@@ -1,3 +1,10 @@
+## [1.29.32](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.31...v1.29.32) (2022-10-07)
+
+
+### Bug Fixes
+
+* fix workflow user unauthorized ([#368](https://github.com/SocialGouv/enfants-du-spectacle/issues/368)) ([ac8f95f](https://github.com/SocialGouv/enfants-du-spectacle/commit/ac8f95f886ef6cfa0ffa0075e7872d40616d3c1f))
+
 ## [1.29.31](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.30...v1.29.31) (2022-10-07)
 
 
