@@ -6,7 +6,11 @@ import superjson from "superjson";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
-  if (!session) {
+  console.log("session : ", session);
+  if (
+    !session ||
+    (session.dbUser.role !== "ADMIN" && session.dbUser.role !== "INSTRUCTEUR")
+  ) {
     res.status(401).end();
     return;
   }
