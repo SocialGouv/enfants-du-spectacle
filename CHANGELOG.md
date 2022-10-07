@@ -1,3 +1,10 @@
+## [1.29.30](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.29...v1.29.30) (2022-10-07)
+
+
+### Bug Fixes
+
+* remove filtering access ([#366](https://github.com/SocialGouv/enfants-du-spectacle/issues/366)) ([df0b262](https://github.com/SocialGouv/enfants-du-spectacle/commit/df0b262b4ef3c0c66a3c44f9a628bce76ff63ac1))
+
 ## [1.29.29](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.28...v1.29.29) (2022-10-07)
 
 
