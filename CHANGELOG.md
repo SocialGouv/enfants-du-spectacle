@@ -1,3 +1,10 @@
+## [1.29.33](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.32...v1.29.33) (2022-10-14)
+
+
+### Bug Fixes
+
+* fix sync change state dossier with DS, fix QR on HP, remove console logs ([#369](https://github.com/SocialGouv/enfants-du-spectacle/issues/369)) ([8461483](https://github.com/SocialGouv/enfants-du-spectacle/commit/84614838f9c17dcd5e8acf152fb8b7e49f189d41))
+
 ## [1.29.32](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.31...v1.29.32) (2022-10-07)
 
 
