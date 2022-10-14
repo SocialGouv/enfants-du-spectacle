@@ -111,6 +111,7 @@ const update: NextApiHandler = async (req, res) => {
     updates.statut = stateMachine.state;
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
     if (updates.statut === "INSTRUCTION") {
+      console.log("ok pour instruction");
       const query = `mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
         dossierPasserEnInstruction(input: $input) {
           dossier {
@@ -129,7 +130,7 @@ const update: NextApiHandler = async (req, res) => {
             variables: {
               input: {
                 dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNDkxMzk=",
+                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
               },
             },
           }),
@@ -142,6 +143,7 @@ const update: NextApiHandler = async (req, res) => {
         })
           .then(async (r) => r.json())
           .then((data: Response) => {
+            console.log(data.data.dossierPasserEnInstruction);
             return data;
           });
       } catch (e: unknown) {
@@ -166,7 +168,7 @@ const update: NextApiHandler = async (req, res) => {
             variables: {
               input: {
                 dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNDkxMzk=",
+                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
                 motivation: "J’accepte ce dossier",
               },
             },
@@ -204,7 +206,7 @@ const update: NextApiHandler = async (req, res) => {
             variables: {
               input: {
                 dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNDkxMzk=",
+                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
                 motivation: "J’accepte ce dossier",
               },
             },

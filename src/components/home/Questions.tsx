@@ -61,11 +61,13 @@ const Questions: React.FC = () => {
                     <li>livret de famille à jour</li>
                     <li>projet de contrat de travail</li>
                     <li>
-                      certificat de scolarité ou avis pédagogique (à partir de 4
-                      jours d’absence scolaire). Pour les dossiers relevant de
-                      la commission de Paris, si l’enfant est scolarisé en
-                      dehors de l’académie de Paris, l’avis pédagogique doit
-                      être accompagné de l’avis du Directeur académique concerné
+                      le certificat de scolarité est obligatoire à partir de 3
+                      ans, quelle que soit la durée du tournage. L’avis
+                      pédagogique est à fournir à partir de 4 jours d’absence
+                      scolaire. Pour les dossiers relevant de la commission de
+                      Paris, si l’enfant est scolarisé en dehors de l’académie
+                      de Paris, l’avis pédagogique doit être accompagné de
+                      l’avis du « Directeur académique concerné
                     </li>
                     <li>
                       avis médical d’aptitude d&apos;un médecin du travail de
@@ -123,11 +125,13 @@ const Questions: React.FC = () => {
                   <b>Pour chaque enfant concerné :</b>
                   <ul>
                     <li>
-                      certificat de scolarité ou avis pédagogique (à partir de 4
-                      jours d’absence scolaire). Pour les dossiers relevant de
-                      la commission de Paris, si l’enfant est scolarisé en
-                      dehors de l’académie de Paris, l’avis pédagogique doit
-                      être accompagné de l’avis du Directeur académique concerné
+                      le certificat de scolarité est obligatoire à partir de 3
+                      ans, quelle que soit la durée du tournage. L’avis
+                      pédagogique est à fournir à partir de 4 jours d’absence
+                      scolaire. Pour les dossiers relevant de la commission de
+                      Paris, si l’enfant est scolarisé en dehors de l’académie
+                      de Paris, l’avis pédagogique doit être accompagné de
+                      l’avis du « Directeur académique concerné
                     </li>
                     <li>
                       avis médical d’aptitude d&apos;un médecin du travail de
