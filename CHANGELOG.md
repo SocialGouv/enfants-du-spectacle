@@ -1,3 +1,10 @@
+## [1.29.34](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.33...v1.29.34) (2022-10-27)
+
+
+### Bug Fixes
+
+* fix raison sociale societe prod ([#370](https://github.com/SocialGouv/enfants-du-spectacle/issues/370)) ([2ad9730](https://github.com/SocialGouv/enfants-du-spectacle/commit/2ad9730638140884c26e7358ad15998557df45c6))
+
 ## [1.29.33](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.32...v1.29.33) (2022-10-14)
 
 
