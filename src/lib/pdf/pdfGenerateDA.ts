@@ -16,7 +16,7 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
           dossier.dateDepot ??
             dossier.dateDerniereModification ??
             dossier.commission.date
-        )} par la société ${dossier.societeProduction.nom}, sise ${
+        )} par la société ${dossier.societeProduction.raisonSociale}, sise ${
           dossier.societeProduction.adresse
         }  ${dossier.societeProduction.adresseCodePostal} ${
           dossier.societeProduction.adresseCodeCommune
