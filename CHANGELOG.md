@@ -1,3 +1,10 @@
+## [1.29.35](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.34...v1.29.35) (2022-10-27)
+
+
+### Bug Fixes
+
+* fix decision autorisation ([#371](https://github.com/SocialGouv/enfants-du-spectacle/issues/371)) ([f5e2554](https://github.com/SocialGouv/enfants-du-spectacle/commit/f5e2554c5e13a2c5ca869a05e6221d34799d4b69))
+
 ## [1.29.34](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.33...v1.29.34) (2022-10-27)
 
 
