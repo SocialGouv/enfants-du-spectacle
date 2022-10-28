@@ -1,3 +1,10 @@
+## [1.29.36](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.35...v1.29.36) (2022-10-28)
+
+
+### Bug Fixes
+
+* add page stats ([#372](https://github.com/SocialGouv/enfants-du-spectacle/issues/372)) ([0cefb2f](https://github.com/SocialGouv/enfants-du-spectacle/commit/0cefb2fcab51b2d28a5731b6c25baa8c73b99803))
+
 ## [1.29.35](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.34...v1.29.35) (2022-10-27)
 
 
