@@ -1,3 +1,10 @@
+## [1.30.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.30.0...v1.30.1) (2022-11-04)
+
+
+### Bug Fixes
+
+* fixx wording page login ([#377](https://github.com/SocialGouv/enfants-du-spectacle/issues/377)) ([3a08c73](https://github.com/SocialGouv/enfants-du-spectacle/commit/3a08c73a413f8aeb916734ab684474ba6dccfeaf))
+
 # [1.30.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.36...v1.30.0) (2022-11-04)
 
 
