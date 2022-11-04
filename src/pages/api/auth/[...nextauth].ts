@@ -17,10 +17,7 @@ export default NextAuth({
       const test = await prisma.user.findUnique({
         where: { email: user.email },
       });
-      const test2 = await prisma.demandeur.findUnique({
-        where: { email: user.email },
-      });
-      return test != null || test2 != null;
+      return test != null;
     },
   },
   logger: {

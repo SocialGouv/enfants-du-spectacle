@@ -212,9 +212,9 @@ const WORDING_MAILING = [
   },
   {
     button: "Télécharger",
-    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
     subject: "Décision d'autorisation Enfants du spectacle",
-    text: "Votre dossier a été accepté. Cliquez sur le bouton ci-dessous pour télécharger la décision d'autorisation via un lien sécurisé.",
+    text: "Votre dossier a été accepté. Vous trouverez en pièce jointe de ce mail la décision d'autorisation.",
     type: "dl_decision",
   },
   {

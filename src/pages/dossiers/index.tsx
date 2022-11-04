@@ -31,7 +31,8 @@ const Page: React.FC = () => {
   if (
     session.status === "authenticated" &&
     session.data.dbUser.role !== "ADMIN" &&
-    session.data.dbUser.role !== "INSTRUCTEUR"
+    session.data.dbUser.role !== "INSTRUCTEUR" &&
+    session.data.dbUser.role !== "MEMBRE"
   ) {
     signOut({
       callbackUrl: "",
@@ -41,7 +42,14 @@ const Page: React.FC = () => {
   }
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
-  const { commissions, ...swrCommissions } = useCommissions();
+  const { commissions, ...swrCommissions } = useCommissions(
+    "upcoming",
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    session.data.dbUser.role !== "MEMBRE"
+      ? "all"
+      : session.data.dbUser.departements
+  );
+  console.log("departements : ", session.data.dbUser.departements);
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
   );
@@ -198,9 +206,11 @@ const Page: React.FC = () => {
               commission={commission}
             />
           ))}
-          <div style={{ fontSize: "1.5rem", padding: "2rem 0 3rem 0" }}>
-            <Link href="/commissions">Commissions passées…</Link>
-          </div>
+          {session.data.dbUser.role !== "MEMBRE" && (
+            <div style={{ fontSize: "1.5rem", padding: "2rem 0 3rem 0" }}>
+              <Link href="/commissions">Commissions passées…</Link>
+            </div>
+          )}
         </>
       )}
       {!isLoading &&

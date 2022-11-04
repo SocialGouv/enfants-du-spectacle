@@ -89,12 +89,13 @@ function RefreshLinks(dossierExternalId: string) {
 
 type DatePeriod = "past" | "upcoming";
 function useCommissions(
-  datePeriod: DatePeriod | undefined = "upcoming",
-  departement: string | undefined = "all",
+  datePeriod: DatePeriod | "upcoming",
+  departements: string[] | "all",
   withChild = true
 ) {
+  console.log("departements in swr : ", departements);
   const { data, error } = useSWR(
-    `/api/commissions?datePeriod=${datePeriod}&departement=${departement}&withChild=${withChild}`,
+    `/api/commissions?datePeriod=${datePeriod}&departements=${departements}&withChild=${withChild}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<CommissionData[]>(await res.text());

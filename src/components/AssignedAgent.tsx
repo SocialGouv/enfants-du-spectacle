@@ -1,4 +1,5 @@
 import type { Dossier, User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import React from "react";
 import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import { shortUserName } from "src/lib/helpers";
@@ -10,9 +11,10 @@ interface Props {
 }
 
 const AssignedAgent: React.FC<Props> = ({ dossier }) => {
+  const session = useSession();
   return (
     <>
-      {!dossier.user && (
+      {!dossier.user && session.data.dbUser.role !== "MEMBRE" && (
         <span className={styles.na}>
           <AssignedAgentSelect dossierId={dossier.id} />
         </span>

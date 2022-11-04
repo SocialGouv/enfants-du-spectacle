@@ -4,8 +4,6 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
-import IconLoader from "src/components/IconLoader";
-import SendLinks from "src/components/SendLinks";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
   frenchDateText,
@@ -15,7 +13,6 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import { uploadZip } from "src/lib/queries";
 
 import styles from "./Commission.module.scss";
 
@@ -57,12 +54,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
       return p._count?.enfants ?? 0;
     })
     .reduce((i, b) => i + b, 0);
-  const [submitting, setSubmitting] = React.useState(false);
   const { data: session } = useSession();
-  const docName = `commission_${frenchDepartementName(
-    commission.departement
-  )}_${frenchDateText(commission.date)}`;
-  const urlDoc = `/api/docs?zipname=${docName.replace(/[\W]+/g, "_")}`;
   return (
     <div className="card">
       <div className={styles.commissionHeader}>
@@ -89,68 +81,38 @@ const Commission: React.FC<Props> = ({ commission }) => {
         ))}
       </div>
       <div className={styles.actionGrid}>
-        <div className={styles.dlButton}>
-          {
-            <div className={styles.downloadLink}>
-              <a
-                href={urlDoc}
+        {session && session.dbUser.role !== "MEMBRE" && (
+          <div className={styles.odjButton}>
+            {_.find(commission.dossiers, (dossier: DossierDataLight) => {
+              return STATUS_ODJ.includes(dossier.statut);
+            }) && (
+              <button
                 className="postButton"
-                download={docName + ".zip"}
+                onClick={() => {
+                  generateOdj(commission);
+                }}
               >
-                Télécharger dossiers
-              </a>
-            </div>
-          }
-          {session && session.dbUser.nom === "Le Bars" && (
-            <button
-              className="postButton"
-              onClick={() => {
-                setSubmitting(true);
-                uploadZip(commission)
-                  .then(() => {
-                    setSubmitting(false);
-                  })
-                  .catch((e) => {
-                    console.log(e);
-                  });
-              }}
-            >
-              {submitting && <IconLoader className={styles.iconLoader} />}{" "}
-              Mettre a jour l&apos;archive
-            </button>
-          )}
-        </div>
-        <div className={styles.sendButton}>
-          <SendLinks commission={commission} />
-        </div>
-        <div className={styles.odjButton}>
-          {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-            return STATUS_ODJ.includes(dossier.statut);
-          }) && (
-            <button
-              className="postButton"
-              onClick={() => {
-                generateOdj(commission);
-              }}
-            >
-              Télécharger ordre du jour
-            </button>
-          )}
-        </div>
-        <div className={styles.pvButton}>
-          {_.find(commission.dossiers, (dossier: DossierDataLight) => {
-            return STATUS_ODJ.includes(dossier.statut);
-          }) && (
-            <button
-              className="postButton"
-              onClick={() => {
-                generatePV(commission);
-              }}
-            >
-              Télécharger Procès Verbal
-            </button>
-          )}
-        </div>
+                Télécharger ordre du jour
+              </button>
+            )}
+          </div>
+        )}
+        {session && session.dbUser.role !== "MEMBRE" && (
+          <div className={styles.pvButton}>
+            {_.find(commission.dossiers, (dossier: DossierDataLight) => {
+              return STATUS_ODJ.includes(dossier.statut);
+            }) && (
+              <button
+                className="postButton"
+                onClick={() => {
+                  generatePV(commission);
+                }}
+              >
+                Télécharger Procès Verbal
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

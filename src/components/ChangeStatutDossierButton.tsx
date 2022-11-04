@@ -1,9 +1,10 @@
 import { Icon } from "@dataesr/react-dsfr";
 import type { Demandeur, Dossier } from "@prisma/client";
-import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { updateDossier } from "src/lib/queries";
+import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import type { DossierData } from "src/lib/queries";
+import { sendEmail, updateDossier } from "src/lib/queries";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
@@ -24,24 +25,6 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const statutDossierFSM = statutDossierFSMFactory(dossier.statut as string);
   const className = statutDossierFSM.stateClassName();
-  const { protocol, host } = window.location;
-  const defaultCallbackUrl = `${protocol}//${host}/download?type=secured_download_dl_decision&elementId=${dossier.id}`;
-  const mail = demandeur.email;
-
-  const submitSigninForm = async (email: string) => {
-    await signIn("email", {
-      callbackUrl: defaultCallbackUrl,
-      email,
-      redirect: false,
-    }).catch((err) => {
-      window.alert("Une erreur est survenue lors de votre connexion");
-      throw err;
-    });
-  };
-
-  const handleSend = async () => {
-    await submitSigninForm(mail);
-  };
 
   if (statutDossierFSM.transitionObjects().length == 0) {
     return <StatutDossierTag dossier={dossier} size="lg" />;
@@ -82,9 +65,13 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                 });
               });
               if (transition.name === "passerAccepte") {
-                handleSend().catch((e) => {
-                  console.log(e);
-                });
+                const attachment = generateDA([dossier as DossierData], true);
+                sendEmail(
+                  "dl_decision",
+                  attachment as string,
+                  dossier,
+                  demandeur.email
+                );
               }
             }}
           >
