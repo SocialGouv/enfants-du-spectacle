@@ -8,7 +8,9 @@ const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
   if (
     !session ||
-    (session.dbUser.role !== "ADMIN" && session.dbUser.role !== "INSTRUCTEUR")
+    (session.dbUser.role !== "ADMIN" &&
+      session.dbUser.role !== "INSTRUCTEUR" &&
+      session.dbUser.role !== "MEMBRE")
   ) {
     res.status(401).end();
     return;
@@ -27,16 +29,16 @@ const handler: NextApiHandler = async (req, res) => {
 };
 const get: NextApiHandler = async (req, res) => {
   const { datePeriod } = req.query;
-  const { departement } = req.query;
+  const { departements } = req.query;
   const { withChild } = req.query;
   const commissions =
     datePeriod == "past"
       ? await getPastCommissions()
-      : departement == "all"
+      : departements == "all"
       ? withChild == "true"
         ? await getUpcomingCommissionsNotEmpty()
         : await getUpcomingCommissions()
-      : await getUpcomingCommissionsByDepartement(departement);
+      : await getUpcomingCommissionsByDepartement(departements as string);
   res.status(200).json(superjson.stringify(commissions));
 };
 
@@ -103,7 +105,8 @@ const getUpcomingCommissionsNotEmpty = async () => {
   });
 };
 
-const getUpcomingCommissionsByDepartement = async (departement: string) => {
+const getUpcomingCommissionsByDepartement = async (departements: string) => {
+  console.log("departements : ", departements.split(","));
   return prisma.commission.findMany({
     include: {
       dossiers: {
@@ -119,7 +122,9 @@ const getUpcomingCommissionsByDepartement = async (departement: string) => {
     orderBy: { date: "asc" },
     where: {
       date: { gte: new Date() },
-      departement: departement,
+      departement: {
+        in: departements.split(","),
+      },
       dossiers: { some: {} },
     },
   });

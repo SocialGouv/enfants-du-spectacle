@@ -58,7 +58,7 @@ const Header: React.FC<Props> = ({
               />
             </HeaderOperator>
             <Service title="Enfants du Spectacle" description="" />
-            {session && session.dbUser.role !== "MEMBRE" && (
+            {session && (
               <Tool>
                 <ToolItemGroup>
                   {session.dbUser.role !== "ADMIN" && (

@@ -15,7 +15,7 @@ import { useDossier } from "src/lib/api";
 import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
-import { deleteDossier } from "src/lib/queries";
+import { deleteDossier, sendEmail } from "src/lib/queries";
 
 interface Props {
   dossierId: number;
@@ -31,7 +31,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return (
     <>
-      <DossierActionBar dossierId={dossierId} />
+      {session.dbUser.role !== "MEMBRE" && (
+        <DossierActionBar dossierId={dossierId} />
+      )}
       <div className={styles.dossierSummaryBloc}>
         <div>
           <Info title="Type de projet">
@@ -64,17 +66,19 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         <Info title="Pièces justificatives">
           <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
         </Info>
-        {dossier.statut !== "INSTRUCTION" && dossier.statut !== "CONSTRUCTION" && (
-          <button
-            className="postButton"
-            onClick={() => {
-              generateFE([dossier]);
-            }}
-          >
-            Télécharger Fiche Emploi
-          </button>
-        )}
-        {dossier.statut == "ACCEPTE" && (
+        {dossier.statut !== "INSTRUCTION" &&
+          dossier.statut !== "CONSTRUCTION" &&
+          session.dbUser.role !== "MEMBRE" && (
+            <button
+              className="postButton"
+              onClick={() => {
+                generateFE([dossier]);
+              }}
+            >
+              Télécharger Fiche Emploi
+            </button>
+          )}
+        {dossier.statut == "ACCEPTE" && session.dbUser.role !== "MEMBRE" && (
           <button
             className="postButton"
             onClick={() => {
@@ -125,6 +129,22 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             <a href={`tel:${dossier.demandeur.phone}`}>
               📞 {dossier.demandeur.phone}
             </a>
+          </div>
+          <div>
+            <button
+              className="postButton"
+              onClick={() => {
+                const attachment = generateDA([dossier], true);
+                sendEmail(
+                  "dl_decision",
+                  attachment as string,
+                  dossier,
+                  dossier.demandeur.email
+                );
+              }}
+            >
+              Renvoyer décision autorisation
+            </button>
           </div>
         </Info>
       </div>

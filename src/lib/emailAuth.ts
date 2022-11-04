@@ -27,11 +27,7 @@ function sendVerificationRequest({
     )
     .toString();
 
-  const type = url.includes("dl_commission")
-    ? "dl_commission"
-    : url.includes("dl_decision")
-    ? "dl_decision"
-    : "auth";
+  const type = url.includes("dl_commission") ? "dl_commission" : "auth";
 
   const wording = _.find(WORDING_MAILING, { type: type });
 
