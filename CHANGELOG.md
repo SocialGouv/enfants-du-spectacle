@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.36...v1.30.0) (2022-11-04)
+
+
+### Features
+
+* remove feature download dossier, implement interface for members, send decision autorisation by email ([#376](https://github.com/SocialGouv/enfants-du-spectacle/issues/376)) ([ffe6767](https://github.com/SocialGouv/enfants-du-spectacle/commit/ffe67675996ac08ab7ab44d88e2044533cbb8e8a))
+
 ## [1.29.36](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.29.35...v1.29.36) (2022-10-28)
 
 
