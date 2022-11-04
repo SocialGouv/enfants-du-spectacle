@@ -33,8 +33,9 @@ const Home: React.FC = () => {
           <CalloutTitle as="h3">Interface agents</CalloutTitle>
           <CalloutText>
             Ce site est destiné aux agents de la DRIEETS dʼÎle-de-France en
-            charge des dossiers de demande d’emploi d’enfants du spectacle
-            uniquement
+            charge des dossiers de demande dʼemploi d’enfants du spectacle,
+            ainsi quʼaux membres des commissions statuant sur les décisions
+            dʼautorisations desdits dossiers.
           </CalloutText>
           <div style={{ marginTop: "2rem" }}>
             <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">
