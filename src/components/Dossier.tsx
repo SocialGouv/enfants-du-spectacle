@@ -130,22 +130,24 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               📞 {dossier.demandeur.phone}
             </a>
           </div>
-          <div>
-            <button
-              className="postButton"
-              onClick={() => {
-                const attachment = generateDA([dossier], true);
-                sendEmail(
-                  "dl_decision",
-                  attachment as string,
-                  dossier,
-                  dossier.demandeur.email
-                );
-              }}
-            >
-              Renvoyer décision autorisation
-            </button>
-          </div>
+          {dossier.statut == "ACCEPTE" && session.dbUser.role !== "MEMBRE" && (
+            <div>
+              <button
+                className="postButton"
+                onClick={() => {
+                  const attachment = generateDA([dossier], true);
+                  sendEmail(
+                    "dl_decision",
+                    attachment as string,
+                    dossier,
+                    dossier.demandeur.email
+                  );
+                }}
+              >
+                Renvoyer décision autorisation
+              </button>
+            </div>
+          )}
         </Info>
       </div>
 
