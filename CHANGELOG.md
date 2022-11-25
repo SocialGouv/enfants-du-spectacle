@@ -1,3 +1,10 @@
+## [1.30.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.30.1...v1.30.2) (2022-11-25)
+
+
+### Bug Fixes
+
+* fix display button renvoyer decision autorisation ([#381](https://github.com/SocialGouv/enfants-du-spectacle/issues/381)) ([0b5c02a](https://github.com/SocialGouv/enfants-du-spectacle/commit/0b5c02a2bfba1e37ed116a0d4312e26755a67789))
+
 ## [1.30.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.30.0...v1.30.1) (2022-11-04)
 
 
