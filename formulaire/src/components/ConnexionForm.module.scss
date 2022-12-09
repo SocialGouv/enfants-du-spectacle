@@ -1,0 +1,22 @@
+.wrapper {
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: stretch;
+  }
+  
+  .formWrapper {
+    width: 300px;
+  }
+  
+  .requiredWrapper {
+    margin-left: 2rem;
+    background-color: #F0F0F0;
+    border-left: 3px solid #FBD41E;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+  
+    &>span[role=img]{
+      padding: 0 1rem 0 0;
+    }
+  }

@@ -6,7 +6,7 @@ app:
       memory: 256Mi
     limits:
       cpu: 1
-      memory: 6Gi
+      memory: 4Gi
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
@@ -20,3 +20,26 @@ app:
   probesPath: /api/healthz
   replicas: 1
   imagePackage: app
+
+app-form:
+  enabled: true
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 4Gi
+  env:
+    - name: APP_BASE_URL
+      value: "https://{{ $.Values.global.host }}"
+  envFrom:
+    - secretRef:
+        name: pg-user
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+  probesPath: /api/healthz
+  replicas: 1
+  imagePackage: form

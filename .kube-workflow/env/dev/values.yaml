@@ -10,10 +10,28 @@ app:
     - mountPath: /mnt/docs
       name: docs
 
+app-form:
+  needs: [db-form]
+  envFrom:
+    - secretRef:
+        name: pg-user-form-{{ .Values.global.branchSlug32 }}
+  volumes:
+    - name: docs-form
+      emptyDir: {}
+  volumeMounts:
+    - mountPath: /mnt/docs
+      name: docs-form
+
 jobs:
   enabled: true
   runs:
     - name: db
       use: SocialGouv/kube-workflow/jobs/create-db@master
       with:
+        pgAdminSecretRefName: azure-pg-admin-user
+    - name: db-form
+      use: SocialGouv/kube-workflow/jobs/create-db@master
+      with:
+        database: "form_{{.Values.global.branchSlug32}}"
+        pgUser: pg-user-form-{{ .Values.global.branchSlug32 }}
         pgAdminSecretRefName: azure-pg-admin-user

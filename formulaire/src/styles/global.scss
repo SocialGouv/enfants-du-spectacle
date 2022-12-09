@@ -1,0 +1,139 @@
+:root {
+    --blue-fr: #313178;
+    --light-grey-fr: #f6f6f6;
+    --dark-grey-fr: #eeeeee;
+    --light-dark-fr: #666666;
+    --purple-fr: #ececfe;
+  }
+  
+  .card {
+    padding: 2rem;
+    padding-bottom:3.5rem;
+    margin: 2rem 0;
+    background-color: white;
+  }
+  
+  .postButton {
+    --color-hover: rgba(0, 0, 221, 0.5);
+    --color-active: rgba(41, 41, 255, 0.5);
+    cursor: pointer;
+    background-color: #060591;
+    color: var(--w-bf500);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.5rem;
+    color: white;
+    margin-top: 1rem;
+    &:hover {
+      background-color:#3d3d9e;
+    }
+  }
+  .deleteButton {
+    --color-hover: rgba(139, 1, 1, 0.5);
+    --color-active: rgba(163, 4, 4, 0.5);
+    cursor: pointer;
+    background-color: #910505;
+    color: var(--w-bf500);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.5rem;
+    color: white;
+    margin-top: 1rem;
+    &:hover {
+      background-color:#9e3d3d;
+    }
+  }
+  .whiteButton {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000091;
+    border: solid #000091 2px;
+    padding: 0.5rem 1.5rem;
+    margin-right:2rem;
+    margin-top: 1rem;
+    &:hover {
+      background-color:#e8e8e8;
+    }
+  }
+  
+  .inputText,
+  .selectDpt select, select {
+    background-color: var(--dark-grey-fr);
+    height: 3rem;
+    border-bottom: solid #060591 2px;
+    display: block;
+    width: 100%;
+    border-radius: 0.25rem 0.25rem 0 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0.5rem 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline-color: #2a77fe;
+    color: var(--g800);
+    box-shadow: inset 0 -2px 0 0 var(--g600);
+    resize: vertical;
+  }
+  
+  .itemGrid {
+    display: grid;
+    padding: .7rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .itemGrid:last-child {
+    border-bottom: none;
+  }
+  .headGrid{
+    color: #3366cc;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: none;
+  }
+  
+  
+  .state-accepte, .state-favorable, .state-pret,
+  .state-accepte select, .state-favorable select, .state-pret select{
+    background-color: #3C8058 !important;
+    border-color: #3C8058;
+    color: white !important;
+    border-color: white !important;
+  }
+  
+  button.state-accepte, button.state-favorable, button.state-pret{
+    &:hover, &:active, &:focus {
+      background-color: white !important;
+      color: #3C8058 !important;
+    }
+  }
+  
+  .state-avisAjourne,
+  .state-avisAjourne,
+  .state-avisDefavorable,
+  .state-favorableSousReserve,
+  .state-construction,
+  .state-instruction,
+  .state-refuse {
+    background-color: #FDEDD1 !important;
+    border-color: #FDEDD1;
+    color: black !important;
+  }
+  
+  button.state-avisAjourne,
+  button.state-avisAjourne,
+  button.state-avisDefavorable,
+  button.state-favorableSousReserve,
+  button.state-construction,
+  button.state-instruction,
+  button.state-refuse {
+    &:hover, &:active, &:focus {
+      background-color: white !important;
+    }
+  }
+  
+  .hoverableTitle {
+    text-decoration: underline dotted;
+  }

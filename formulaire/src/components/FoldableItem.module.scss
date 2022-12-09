@@ -1,0 +1,25 @@
+.content {
+    margin-bottom: 0.7rem;
+    word-break: break-word;
+  }
+  
+  .contentFolded {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    word-break: break-word;
+  }
+  
+  .contentFoldedHidden {
+    display: none;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .foldableItem {
+    a {
+      cursor: pointer !important;
+    }
+  }

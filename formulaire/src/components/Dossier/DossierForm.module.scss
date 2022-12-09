@@ -1,0 +1,65 @@
+.dossierForm {
+    .menuDossier {
+        margin-top: 4rem;
+        text-align: center;
+    }
+
+    .divForm {
+        margin: 4rem 0rem;
+        .titleCard {
+            color: black;
+        }
+
+        .blocForm {
+            margin-top:4rem;
+        }
+
+        textarea {
+            width: 100%;
+            background-color: var(--dark-grey-fr);
+            font-size: 1rem;
+            padding: 1rem;
+            min-height: 7rem;
+            border-bottom: solid var(--blue-fr) 2px;
+        }
+
+        .halfForm {
+            width: 50%;
+        }
+
+        .byThreeForm {
+            display: grid;
+            grid-template-columns: 31% 31% 31%;
+            grid-gap: 2%;
+
+            .blocForm {
+                margin-top:2rem;
+            }
+        }
+
+        .byTwoForm {
+            display: grid;
+            grid-template-columns: 49% 49%;
+            grid-gap: 2%;
+
+            .blocForm {
+                margin-top:2rem;
+            }
+        }
+
+    }
+
+    label {
+        font-size: 1.1rem;
+    }
+
+    .smallText {
+        color: var(--light-dark-fr);
+        font-size: 0.8rem;
+    }
+
+    .saveBar {
+        text-align: right;
+        margin-top: 2rem;
+    }
+}
