@@ -23,6 +23,7 @@ app:
 
 app-form:
   enabled: true
+  host: "formulaire-{{ $.Values.global.host }}"
   resources:
     requests:
       cpu: 0.2
@@ -32,7 +33,7 @@ app-form:
       memory: 4Gi
   env:
     - name: APP_BASE_URL
-      value: "https://{{ $.Values.global.host }}"
+      value: "https://formulaire-{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
         name: pg-user
