@@ -37,7 +37,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
     React.useEffect(() => {
         passData(dossierTmp)
-    }, [dossierTmp])
+    }, [dossierTmp, passData])
 
     return (
         <div className={styles.projectForm}>

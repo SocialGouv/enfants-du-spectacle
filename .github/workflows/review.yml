@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build-main:
-    name: Build & Register application
+    name: Build & Register main application
     runs-on: ubuntu-latest
     steps:
       - name: Use autodevops build and register
@@ -28,7 +28,7 @@ jobs:
             START_SCRIPT=start-review
 
   build-form:
-    name: Build & Register application
+    name: Build & Register form application
     runs-on: ubuntu-latest
     steps:
       - name: Use autodevops build and register
