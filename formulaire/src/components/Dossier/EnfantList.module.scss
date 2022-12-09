@@ -1,0 +1,50 @@
+.enfantList {
+    margin-bottom: 2rem;
+
+    .titleTable {
+        color: black;
+    }
+
+    .headRow {
+        display: grid;
+        grid-template-columns: 10% 20% 15% 25% 15% 15%;
+        background-color: var(--light-grey-fr);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-bottom: solid black 2px;
+
+        .itemHead {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    }
+
+    .tableEnfant {
+        display: grid;
+        grid-template-columns: 10% 20% 15% 25% 15% 15%;
+        background-color: var(--light-grey-fr);
+        padding: 1rem;
+        cursor: pointer;
+        background-image: none;
+
+        &:hover {
+            background-color: var(--dark-grey-fr);
+        }
+    }
+
+    .pagination {
+        margin-top:1rem;
+        text-align: center;
+        button {
+            margin: 0rem 0.5rem;
+        }
+    }
+
+    .actionRow {
+        margin-top: 2rem;
+    }
+
+    .rowEnfant {
+        margin-top: 2rem;
+    }
+}

@@ -1,0 +1,38 @@
+<mjml>
+  <mj-body background-color="#fff">
+    <mj-section>
+      <mj-group>
+        <mj-column width="150px">
+          <mj-image width="100px" src="https://i.imgur.com/prQCN8v.png" />
+        </mj-column>
+        <mj-column>
+          <mj-text align="center" font-size="20px" color="#E84C26" line-height="100px">
+            Enfants du Spectacle
+          </mj-text>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-divider padding-top="0px" padding-bottom="30px" border-color="#E84C26" />
+        <mj-text align="center" font-size="16px">
+          Connectez-vous en suivant ce lien:
+        </mj-text>
+        <mj-button background-color="#E84C26" href="__URL__" font-size="16px" padding-bottom="50px">
+          Connexion
+        </mj-button>
+        <mj-text align="center" font-style="italic" font-size="14px">
+          Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column width="150px">
+        <mj-image width="100px" src="https://i.imgur.com/Dzxm8Zh.png" />
+      </mj-column>
+      <mj-column width="150px">
+        <mj-image width="150px" src="https://i.imgur.com/fIqo2Cf.png" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

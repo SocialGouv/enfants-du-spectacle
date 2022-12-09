@@ -1,0 +1,42 @@
+.wrapper {
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.1),
+      0 8px 16px -16px rgba(0, 0, 0, 0.32);
+  }
+  
+  .headerSDE {
+    box-shadow: none !important;
+  }
+  
+  .breadcrumbs {
+    margin-top: 1rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  .breadcrumb {
+    a {
+      font-size: 1rem;
+    }
+  }
+  
+  .fr-nav__btn,
+  .menuUser {
+    button {
+      color: #313178;
+    }
+  }
+  
+  .middle {
+    background-color: #313178;
+    padding: 2rem 0 1rem 0;
+    * {
+      color: white !important;
+    }
+    display: flex;
+  }
+  .bottom {
+    background-color: white;
+    padding: 2rem;
+  }
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }

@@ -2,16 +2,22 @@ name: Deactivate
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [closed]
 
 jobs:
   bury_review_env:
     name: Deactivate review branch
     runs-on: ubuntu-latest
     steps:
-    - uses: SocialGouv/actions/autodevops-deactivate@v1
-      with:
-        kube-config: ${{ secrets.KUBECONFIG  }}
-        rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
-        socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: SocialGouv/actions/autodevops-deactivate@v1
+        with:
+          kube-config: ${{ secrets.KUBECONFIG  }}
+          rancherId: ${{ secrets.RANCHER_PROJECT_ID }}
+          socialgouvBaseDomain: ${{ secrets.SOCIALGOUV_BASE_DOMAIN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+#      - uses: SocialGouv/actions/autodevops-drop-db@v1
+#        with:
+#          kubeconfig: ${{ secrets.KUBECONFIG  }}
+#          rancherProjectName: ${{ secrets.RANCHER_PROJECT_NAME }}
+#          adminPgSecret: azure-pg-admin-user
+#          dbname: form_?
