@@ -114,7 +114,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
             ))}
             <div className={styles.pagination}>
                 {[...Array(Math.ceil(enfants.length/10))].map((e, i) => (
-                    <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}}>{i + 1}</ButtonLink>
+                    <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}} key={i}>{i + 1}</ButtonLink>
                 ))}
             </div>
             </CardDescription>
