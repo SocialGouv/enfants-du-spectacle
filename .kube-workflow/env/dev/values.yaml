@@ -33,5 +33,6 @@ jobs:
       use: SocialGouv/kube-workflow/jobs/create-db@master
       with:
         database: "form_{{.Values.global.branchSlug32}}"
-        pgUser: pg-user-form-{{ .Values.global.branchSlug32 }}
+        pgSecretName: pg-user-form-{{ .Values.global.branchSlug32 }}
+        pgUser: form_{{ .Values.global.branchSlug32 }}
         pgAdminSecretRefName: azure-pg-admin-user

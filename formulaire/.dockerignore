@@ -1,14 +1,9 @@
-.kube-workflow
-.git
-.github
 *.md
 **/node_modules
 **/.next/cache
-/formulaire
 .dockerignore
 Dockerfile
 .gitignore
-docker-compose.yml
 CHANGELOG.md
 .eslintrc.json
 .eslintcache
