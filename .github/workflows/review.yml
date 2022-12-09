@@ -41,7 +41,7 @@ jobs:
             NEXT_PUBLIC_SENTRY_DSN=https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=review
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-            START_SCRIPT=start
+            START_SCRIPT=start-review
 
   deploy:
     name: Deploy application
