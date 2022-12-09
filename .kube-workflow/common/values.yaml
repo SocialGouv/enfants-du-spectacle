@@ -36,7 +36,7 @@ app-form:
       value: "https://formulaire-{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-user
+        name: pg-user-form
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
