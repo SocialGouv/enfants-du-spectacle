@@ -148,6 +148,7 @@ const factory = (init = "CONSTRUCTION"): StatutDossierStateMachine => {
     transitions,
   }) as StatutDossierStateMachine;
   fsm.transitionObjects = function () {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return transitions.filter((t) => t.from.includes(this.state));
   };
   fsm.stateDetails = function () {
