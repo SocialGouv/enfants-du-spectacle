@@ -1,3 +1,10 @@
+## [1.32.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.0...v1.32.1) (2022-12-15)
+
+
+### Bug Fixes
+
+* ignore error typing on statemachine for now ([#387](https://github.com/SocialGouv/enfants-du-spectacle/issues/387)) ([c84f834](https://github.com/SocialGouv/enfants-du-spectacle/commit/c84f834bcc1cde07d4d7691687bf195259b54d1b))
+
 # [1.32.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.31.0...v1.32.0) (2022-12-15)
 
 
