@@ -1,3 +1,10 @@
+# [1.32.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.31.0...v1.32.0) (2022-12-15)
+
+
+### Features
+
+* add formulaire ([#386](https://github.com/SocialGouv/enfants-du-spectacle/issues/386)) ([8c4a2eb](https://github.com/SocialGouv/enfants-du-spectacle/commit/8c4a2eb55422e4c0135d02894bcc6b16dda90a56))
+
 # [1.31.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.30.2...v1.31.0) (2022-12-09)
 
 
