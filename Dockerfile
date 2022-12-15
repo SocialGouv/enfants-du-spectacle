@@ -1,14 +1,14 @@
 # from https://nextjs.org/docs/deployment#docker-image
 
 # 1. Install node dependencies only when needed
-FROM node:alpine AS deps
+FROM node:alpine3.16 AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # 2. Rebuild the source code only when needed
-FROM node:alpine AS builder
+FROM node:alpine3.16 AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
@@ -30,7 +30,7 @@ RUN npm ci --production --ignore-scripts
 RUN npx prisma generate
 
 # Production image, copy all the files and run next
-FROM node:alpine AS runner
+FROM node:alpine3.16 AS runner
 RUN apk add --no-cache postgresql-client
 WORKDIR /app
 ENV NODE_ENV production
