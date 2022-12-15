@@ -8,7 +8,7 @@
     .headRow {
         display: grid;
         grid-template-columns: 10% 20% 15% 25% 15% 15%;
-        background-color: var(--light-grey-fr);
+        background-color: var(--dark-grey-fr);
         padding: 1rem;
         margin-top: 1rem;
         border-bottom: solid black 2px;
@@ -22,14 +22,23 @@
     .tableEnfant {
         display: grid;
         grid-template-columns: 10% 20% 15% 25% 15% 15%;
-        background-color: var(--light-grey-fr);
+        background-color: var(--dark-grey-fr);
         padding: 1rem;
         cursor: pointer;
         background-image: none;
 
+        div {
+            display: flex;
+            align-items: center;
+        }
+
         &:hover {
             background-color: var(--dark-grey-fr);
         }
+    }
+
+    .tableEnfant:nth-child(2n) {
+        background-color: var(--light-grey-fr);
     }
 
     .pagination {

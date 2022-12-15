@@ -1,4 +1,5 @@
 import { Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
+import { statusGroup } from "src/lib/types";
 
 type DossierData = Dossier & {
     user: User,
@@ -6,8 +7,15 @@ type DossierData = Dossier & {
     societeProduction?: SocieteProduction;
 }
 
-const getDossiers = async () => {
-    const url = "/api/dossier"
+type ResDossier = {
+    dossiers: DossierData[]
+    countCurrent: number,
+    countEnCours: number,
+    countTermines: number
+}
+
+const getDossiers = async (page: number, status: statusGroup, search: string, termToOrder: keyof Dossier, order: 'asc' | 'desc') => {
+    const url = `/api/dossier?page=${page}&status=${status}&search=${search}&termToOrder=${termToOrder}&order=${order}`
     const fetching = await fetch(url.split(",").join(""), {
         method: "GET",
     }).then(async (r) => {
@@ -16,7 +24,7 @@ const getDossiers = async () => {
         }
         return r.json();
     });
-    return fetching as DossierData[]
+    return fetching as ResDossier
 };
 
 const getDossier = async (id: string) => {
@@ -74,6 +82,6 @@ const deleteDossier = async (id: number) => {
     return fetching
 };
 
-export type { DossierData }
+export type { DossierData, ResDossier }
 
 export { getDossier, getDossiers, createDossierEds, updateDossier, deleteDossier }

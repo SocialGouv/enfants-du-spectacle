@@ -1,6 +1,6 @@
 .containerActionBar {
 
-    margin-top:1rem;
+    margin-top:2rem;
 
     .tabs {
         text-align:center;
@@ -8,5 +8,24 @@
 
     .button {
         margin-top: 2rem;
+    }
+
+    .buttonStatus {
+        display: flex;
+
+        .countNumber {
+            margin-right: 0.4rem;
+            background-color: white;
+            color: var(--blue-fr);
+            min-width: 24px;
+            border-radius: 25px;
+        }
+    }
+
+    .inactiveStatus {
+        .countNumber {
+            background-color: var(--blue-fr);
+            color: white;
+        }
     }
 }

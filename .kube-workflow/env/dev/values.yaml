@@ -3,6 +3,10 @@ app:
   envFrom:
     - secretRef:
         name: pg-user-{{ .Values.global.branchSlug }}
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
   volumes:
     - name: docs
       emptyDir: {}
@@ -15,6 +19,10 @@ app-form:
   envFrom:
     - secretRef:
         name: pg-user-form-{{ .Values.global.branchSlug32 }}
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
   volumes:
     - name: docs-form
       emptyDir: {}
@@ -33,5 +41,6 @@ jobs:
       use: SocialGouv/kube-workflow/jobs/create-db@master
       with:
         database: "form_{{.Values.global.branchSlug32}}"
-        pgUser: pg-user-form-{{ .Values.global.branchSlug32 }}
+        pgSecretName: pg-user-form-{{ .Values.global.branchSlug32 }}
+        pgUser: form_{{ .Values.global.branchSlug32 }}
         pgAdminSecretRefName: azure-pg-admin-user

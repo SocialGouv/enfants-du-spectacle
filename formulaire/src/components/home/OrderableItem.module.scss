@@ -1,0 +1,11 @@
+.orderableItem {
+    font-size: 1rem;
+    font-weight: bold;
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+
+    img {
+        margin-right: 0.5rem;
+    }
+}

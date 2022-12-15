@@ -43,6 +43,7 @@ model SocieteProduction {
 }
 
 enum StatutDossier {
+  BROUILLON
   CONSTRUCTION
   INSTRUCTION
   PRET
@@ -98,7 +99,7 @@ enum JustificatifDossier {
 model Dossier {
   id                       Int                   @id @default(autoincrement())
   nom                      String?
-  statut                   StatutDossier         @default(CONSTRUCTION)
+  statut                   StatutDossier         @default(BROUILLON)
   categorie                CategorieDossier?
   enfants                  Enfant[]
   piecesDossier            PieceDossier[]

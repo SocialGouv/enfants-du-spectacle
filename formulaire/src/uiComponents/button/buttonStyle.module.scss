@@ -7,7 +7,7 @@ a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
     margin: 0;
     cursor: pointer;
     text-align: center;
-    padding: 15px 25px 15px 25px;
+    padding: 10px 20px 10px 20px;
     font-size: 1rem;
     font-weight: 600;
 
@@ -73,10 +73,11 @@ a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
     color: white;
     border: solid transparent 1px;
     position: relative;
+    top: 0px;
 
     &:hover {
-      transition: background-color 200ms ease-in-out, box-shadow 100ms ease-in-out;
-      top: 3px;
+      transition: top 0.1s ease 0s;
+      top: 2px;
       background-color: var(--blue-fr) !important;
 
     }
@@ -87,10 +88,11 @@ a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
     color: var(--blue-fr);
     border: solid var(--blue-fr) 1px;
     position: relative;
+    top: 0px;
 
     &:hover {
-      transition: background-color 200ms ease-in-out, box-shadow 100ms ease-in-out;
-      top: 3px;
+      transition: top 0.1s ease 0s;
+      top: 2px;
       background-color: var(--red-datafid);
     }
   }
