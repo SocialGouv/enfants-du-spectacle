@@ -1,3 +1,10 @@
+## [1.32.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.2...v1.32.3) (2022-12-15)
+
+
+### Bug Fixes
+
+* fix migrate deploy ([#390](https://github.com/SocialGouv/enfants-du-spectacle/issues/390)) ([d841cf2](https://github.com/SocialGouv/enfants-du-spectacle/commit/d841cf2c1df2ed7b91d5b527405d5af423f93ec4))
+
 ## [1.32.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.1...v1.32.2) (2022-12-15)
 
 
