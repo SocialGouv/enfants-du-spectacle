@@ -96,8 +96,8 @@ import {
                       </div>
                     )}
                     <ToolItem
-                      link="/dossiers"
-                      onClick={async () => router.push("/dossiers")}
+                      link="/"
+                      onClick={async () => router.push("/")}
                     >
                       <FaHome className={styles.icon} />
                     </ToolItem>

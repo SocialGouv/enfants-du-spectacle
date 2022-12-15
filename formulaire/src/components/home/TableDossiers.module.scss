@@ -8,8 +8,8 @@
 
     .headRow {
         display: grid;
-        grid-template-columns: 10% 20% 15% 25% 15% 15%;
-        background-color: var(--light-grey-fr);
+        grid-template-columns: 10% 20% 20% 18% 12% 15%;
+        background-color: var(--dark-grey-fr);
         padding: 1rem;
         margin-top: 1rem;
         border-bottom: solid black 2px;
@@ -17,13 +17,33 @@
         .itemHead {
             font-size: 1rem;
             font-weight: bold;
+            font-size: 0.9rem;
         }
     }
 
     .rowDossier {
         display: grid;
-        grid-template-columns: 10% 20% 15% 25% 15% 15%;
-        background-color: var(--light-grey-fr);
+        grid-template-columns: 10% 20% 20% 18% 12% 15%;
+        background-color: var(--dark-grey-fr);
         padding: 1rem;
+
+        div {
+            display: flex;
+            align-items: center;
+            padding-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    .pagination {
+        margin-top:1rem;
+        text-align: center;
+        button {
+            margin: 0rem 0.5rem;
+        }
+    }
+
+    .rowDossier:nth-child(2n) {
+        background-color: var(--light-grey-fr);
     }
 }

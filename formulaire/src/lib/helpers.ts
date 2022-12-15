@@ -18,6 +18,22 @@ function birthDateToFrenchAge(birthDate: Date): string {
   return `${age} ans`;
 }
 
+const STATUS_EN_COURS = [
+  'BROUILLON',
+  'CONSTRUCTION',
+  'INSTRUCTION',
+  'PRET',
+  'AVIS_AJOURNE',
+  'AVIS_FAVORABLE',
+  'AVIS_FAVORABLE_SOUS_RESERVE',
+  'AVIS_DEFAVORABLE'
+]
+
+const STATUS_TERMINES = [
+  'ACCEPTE',
+  'REFUSE'
+]
+
 const CATEGORIES = [
   "LONG_METRAGE",
   "COURT_METRAGE",
@@ -84,6 +100,8 @@ const WORDING_MAILING = [
 export {
     frenchDateText,
     birthDateToFrenchAge,
+    STATUS_EN_COURS,
+    STATUS_TERMINES,
     TYPE_EMPLOI,
     WORDING_MAILING,
     CATEGORIES
