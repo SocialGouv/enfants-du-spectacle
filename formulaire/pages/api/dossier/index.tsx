@@ -40,6 +40,7 @@ const get: NextApiHandler = async (req, res) => {
       include: {
         user: true,
         enfants: true,
+        Demandeur: true
       },
       skip: page,
       take: numberByPage,
@@ -101,9 +102,12 @@ const get: NextApiHandler = async (req, res) => {
 
 const post: NextApiHandler = async (req, res) => {
     const session = await getSession({ req });
+    const parsed: Dossier = JSON.parse(req.body);
     const data = {
       userId: session?.dbUser.id,
-      dateDerniereModification: new Date()
+      dateDerniereModification: new Date(),
+      demandeurId: parsed.demandeurId,
+      nom: ''
     }
     console.log('data : ', data)
     try {
@@ -129,6 +133,7 @@ const update: NextApiHandler = async (req, res) => {
 
   delete parsed.user;
   delete parsed.enfants;
+  delete parsed.Demandeur;
 
   console.log('parsed : ', parsed)
 

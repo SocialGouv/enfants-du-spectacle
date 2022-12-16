@@ -36,6 +36,7 @@ function getId(req: NextApiRequest): number {
         include: {
           user: true,
           enfants: true,
+          Demandeur: true 
         },
         where: { id: dossierId }
       });
