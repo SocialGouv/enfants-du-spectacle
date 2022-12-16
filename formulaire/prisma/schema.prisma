@@ -27,8 +27,20 @@ model User {
   departements  String[]
 }
 
+model Demandeur {
+  id                  Int                @id @default(autoincrement())
+  email               String?            @unique
+  nom                 String?
+  prenom              String?
+  phone               String?
+  fonction            String?
+  societeProduction   SocieteProduction? @relation(fields: [societeProductionId], references: [id])
+  societeProductionId Int?
+  dossiers            Dossier[]
+}
+
 model SocieteProduction {
-  id                       Int     @id @default(autoincrement())
+  id                       Int         @id @default(autoincrement())
   nom                      String?
   siret                    String?
   siren                    String?
@@ -40,6 +52,7 @@ model SocieteProduction {
   adresseCodeCommune       String?
   formeJuridique           String?
   conventionCollectiveCode String?
+  Demandeur                Demandeur[]
 }
 
 enum StatutDossier {
@@ -114,7 +127,12 @@ model Dossier {
   number                   Int?
   dateDerniereModification DateTime?
   cdc                      Int?
+  scenario                 String?
+  securite                 String?
+  complementaire           String?
   dateDepot                DateTime?
+  Demandeur                Demandeur?            @relation(fields: [demandeurId], references: [id])
+  demandeurId              Int?
 }
 
 enum TypeEmploi {
@@ -177,6 +195,12 @@ model Enfant {
   adresseRepresentant2        String?
   nomRepresentant2            String?
   prenomRepresentant2         String?
+  livret                      String?
+  autorisation                String?
+  situation                   String?
+  contrat                     String?
+  certificat                  String?
+  avis                        String?
 }
 
 // for next-auth

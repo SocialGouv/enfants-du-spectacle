@@ -63,3 +63,12 @@
         margin-top: 2rem;
     }
 }
+
+.fileUploaded {
+    margin-top: 1rem;
+    span {
+        background-color: var(--dark-grey-fr);
+        padding: 10px 15px;
+        border-radius: 10px;
+    }
+}

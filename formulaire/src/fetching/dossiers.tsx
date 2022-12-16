@@ -1,9 +1,10 @@
-import { Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
+import { Demandeur, Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
 import { statusGroup } from "src/lib/types";
 
 type DossierData = Dossier & {
     user: User,
-    enfants: Enfant[]
+    enfants: Enfant[],
+    Demandeur: Demandeur,
     societeProduction?: SocieteProduction;
 }
 
@@ -37,6 +38,7 @@ const getDossier = async (id: string) => {
         }
         return r.json();
     });
+    console.log('fetching : ', fetching)
     return fetching as DossierData
 
 }

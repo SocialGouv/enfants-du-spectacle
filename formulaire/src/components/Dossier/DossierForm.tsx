@@ -1,6 +1,6 @@
 
 import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Dossier, Enfant, User } from "@prisma/client";
+import { Demandeur, Dossier, Enfant, User } from "@prisma/client";
 import React from "react";
 import { DossierData, updateDossier } from "../../fetching/dossiers";
 import { CATEGORIES, TYPE_EMPLOI } from "../../lib/helpers";
@@ -12,6 +12,7 @@ import DemandeurForm from "./DemandeurForm";
 import ProjectForm from "./ProjectForm";
 import EnfantForm from "./EnfantForm";
 import EnfantList from "./EnfantList";
+import { updateDemandeur } from "src/fetching/demandeur";
 
 interface Props {
     dossier: DossierData
@@ -22,15 +23,22 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
 
     const [toDisplay, setTodisplay] = React.useState<'Demandeur' | 'Projet' | 'Enfants'>('Demandeur')
     const [dossierTmp, setDossier] = React.useState<Dossier>(dossier)
+    const [demandeurTmp, setDemandeur] = React.useState<Demandeur>(dossier.Demandeur)
 
     const saveDossier = async () => {
-        let res = await updateDossier(dossierTmp)
-        console.log('res : ', res)
+        let resDemandeur = await updateDemandeur(demandeurTmp)
+        console.log('res : ', resDemandeur)
+        let resDossier = await updateDossier(dossierTmp)
+        console.log('res : ', resDossier)
         router.push('/')
     }
 
     const receiveData = (received: Dossier) => {
         setDossier(received)
+    }
+
+    const receiveDataDemandeur = (received: Demandeur) => {
+        setDemandeur(received)
     }
 
     return (
@@ -44,7 +52,7 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
 
             <div className={styles.divForm}>
                 {toDisplay === 'Demandeur' &&
-                    <DemandeurForm dossier={dossier}></DemandeurForm>
+                    <DemandeurForm dossier={dossier} passData={receiveDataDemandeur}></DemandeurForm>
                 }
 
 

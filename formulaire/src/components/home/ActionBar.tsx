@@ -1,6 +1,7 @@
-import { Dossier } from "@prisma/client";
+import { Demandeur, Dossier } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
+import { createDemandeur } from "src/fetching/demandeur";
 import { statusGroup } from "src/lib/types";
 import { createDossierEds } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
@@ -18,8 +19,10 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
     console.log('counts : ', counts)
 
     const createDossier = async () => {
-        let res = await createDossierEds({} as Dossier);
-        router.push(`/dossier/${res.id}`)
+        let resDemanndeur = await createDemandeur({} as Demandeur)
+        console.log('demandeur created : ', resDemanndeur)
+        let resDossier = await createDossierEds({demandeurId: resDemanndeur.id} as Dossier);
+        router.push(`/dossier/${resDossier.id}`)
     }
 
     return (

@@ -42,6 +42,15 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
       []
     );
 
+    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('field : ', e.target.id)
+        console.log('input files : ', e.target.files)
+        setEnfant({
+            ...enfantTmp,
+            [e.target.id]: e.target.files[0].name
+        })
+    }
+
 
 
     return (
@@ -272,7 +281,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="livret" className="mb-2 italic">
                             Livret de Famille
                         </label>
 
@@ -282,17 +291,22 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="livret" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.livret && enfantTmp.livret !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.livret}</span>
+                            </div>
+                        }
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="autorisation" className="mb-2 italic">
                             Autorisation parentale
                         </label>
 
@@ -302,17 +316,22 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="autorisation" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.autorisation && enfantTmp.autorisation !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.autorisation}</span>
+                            </div>
+                        }
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="situation" className="mb-2 italic">
                             Situation particulière relative à l&apos;autorité parentale
                         </label>
 
@@ -322,17 +341,22 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="situation" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.situation && enfantTmp.situation !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.situation}</span>
+                            </div>
+                        }
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="contrat" className="mb-2 italic">
                             Projet de contrat de travail
                         </label>
 
@@ -342,17 +366,22 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="contrat" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.contrat && enfantTmp.contrat !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.contrat}</span>
+                            </div>
+                        }
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="certificat" className="mb-2 italic">
                             Certificat de scolarité ou avis pédagogique
                         </label>
 
@@ -362,17 +391,22 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="certificat" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.certificat && enfantTmp.certificat !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.certificat}</span>
+                            </div>
+                        }
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
+                        <label htmlFor="avis" className="mb-2 italic">
                             Avis médical d&apos;aptitude
                         </label>
 
@@ -382,11 +416,16 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                         <div className="Form--field">
                             <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                id="avis" name="avatar"
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {enfantTmp.avis && enfantTmp.avis !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{enfantTmp.avis}</span>
+                            </div>
+                        }
 
                     </div>
             

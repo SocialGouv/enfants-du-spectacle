@@ -71,7 +71,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                     {frenchDateText(dossier.dateDerniereModification)}
                                 </div>
                                 <div className={styles.itemDossier}>
-                                    <ButtonLink light={true} onClick={() => {router.push(`/dossier/${dossier.id}`)}}>Actions</ButtonLink>
+                                    <ButtonLink light={true} onClick={() => {router.push(`/dossier/${dossier.id}`)}}>Éditer</ButtonLink>
                                 </div>
                                 <div className={styles.itemDossier}>
                                     Pièces justificatives

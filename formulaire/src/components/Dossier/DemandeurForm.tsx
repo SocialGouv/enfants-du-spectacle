@@ -1,22 +1,27 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
 import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { User } from "@prisma/client";
+import { Demandeur, User } from "@prisma/client";
 import { DossierData } from "src/fetching/dossiers";
 
 interface Props {
     dossier: DossierData
+    passData: (demandeur: Demandeur) => void;
 }
 
-const DemandeurForm: React.FC<Props> = ({dossier}) => {
-    const [user, setUser] = React.useState<User>(dossier.user)
+const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
+    const [demandeur, setDemandeur] = React.useState<Demandeur>(dossier.Demandeur)
 
-    const handleFormUser = (e: React.FormEvent<HTMLInputElement>): void => {
-      setUser({
-        ...user,
+    const handleFormDemandeur = (e: React.FormEvent<HTMLInputElement>): void => {
+        setDemandeur({
+        ...demandeur,
         [e.target.id]: e.currentTarget.value,
       });
     };
+
+    React.useEffect(() => {
+        passData(demandeur)
+    }, [demandeur, passData])
 
     return (
         <div className={styles.demandeurForm}>
@@ -33,8 +38,8 @@ const DemandeurForm: React.FC<Props> = ({dossier}) => {
                                 Prénom
                             </label>
                             <input
-                                onChange={handleFormUser}
-                                value={user.prenom || ''}
+                                onChange={handleFormDemandeur}
+                                value={demandeur.prenom || ''}
                                 type="text"
                                 id="prenom"
                                 name="prenom"
@@ -48,8 +53,8 @@ const DemandeurForm: React.FC<Props> = ({dossier}) => {
                                 Nom
                             </label>
                             <input
-                                onChange={handleFormUser}
-                                value={user.nom || ''}
+                                onChange={handleFormDemandeur}
+                                value={demandeur.nom || ''}
                                 type="text"
                                 id="nom"
                                 name="nom"
@@ -63,8 +68,8 @@ const DemandeurForm: React.FC<Props> = ({dossier}) => {
                                 Fonction
                             </label>
                             <input
-                                onChange={handleFormUser}
-                                value={user.fonction || ''}
+                                onChange={handleFormDemandeur}
+                                value={demandeur.fonction || ''}
                                 type="text"
                                 id="fonction"
                                 name="fonction"
@@ -74,30 +79,30 @@ const DemandeurForm: React.FC<Props> = ({dossier}) => {
 
 
                         <div className={styles.blocForm}>
-                            <label htmlFor="mail" className="mb-2 italic">
+                            <label htmlFor="email" className="mb-2 italic">
                                 Mail
                             </label>
                             <input
-                                onChange={handleFormUser}
-                                value={user.email || ''}
+                                onChange={handleFormDemandeur}
+                                value={demandeur.email || ''}
                                 type="text"
-                                id="mail"
-                                name="mail"
+                                id="email"
+                                name="email"
                                 className="inputText"
                             />
                         </div>
 
 
                         <div className={styles.blocForm}>
-                            <label htmlFor="telephone" className="mb-2 italic">
+                            <label htmlFor="phone" className="mb-2 italic">
                                 Téléphone
                             </label>
                             <input
-                                onChange={handleFormUser}
-                                value={user.telephone || ''}
+                                onChange={handleFormDemandeur}
+                                value={demandeur.phone || ''}
                                 type="text"
-                                id="telephone"
-                                name="telephone"
+                                id="phone"
+                                name="phone"
                                 className="inputText"
                             />
                         </div>

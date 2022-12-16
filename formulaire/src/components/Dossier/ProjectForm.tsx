@@ -35,6 +35,15 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
         });
     };
 
+    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('field : ', e.target.id)
+        console.log('input files : ', e.target.files)
+        setDossier({
+            ...dossierTmp,
+            [e.target.id]: e.target.files[0].name
+        })
+    }
+
     React.useEffect(() => {
         passData(dossierTmp)
     }, [dossierTmp, passData])
@@ -118,9 +127,15 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                         <div className="Form--field">
                             <input type="file"
                                 id="scenario" name="avatar"
-                                accept="image/png, image/jpeg">
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                             </input>
                         </div>
+                        {dossierTmp.scenario && dossierTmp.scenario !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{dossierTmp.scenario}</span>
+                            </div>
+                        }
+                        
 
                     </div>
 
@@ -137,10 +152,15 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                         <div className="Form--field">
                             <input type="file"
                                 id="securite" name="avatar"
-                                accept="image/png, image/jpeg">
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {dossierTmp.securite && dossierTmp.securite !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{dossierTmp.securite}</span>
+                            </div>
+                        }
 
                     </div>
 
@@ -197,10 +217,15 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                         <div className="Form--field">
                             <input type="file"
                                 id="complementaire" name="avatar"
-                                accept="image/png, image/jpeg">
+                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
                                     
                             </input>
                         </div>
+                        {dossierTmp.complementaire && dossierTmp.complementaire !== null &&
+                            <div className={styles.fileUploaded}>
+                                <span>{dossierTmp.complementaire}</span>
+                            </div>
+                        }
 
                     </div>
 
