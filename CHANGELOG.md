@@ -1,3 +1,10 @@
+## [1.32.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.4...v1.32.5) (2022-12-16)
+
+
+### Bug Fixes
+
+* fix dateformat ([#392](https://github.com/SocialGouv/enfants-du-spectacle/issues/392)) ([61cab08](https://github.com/SocialGouv/enfants-du-spectacle/commit/61cab08db183aba79fde5d9041407531710d41e3))
+
 ## [1.32.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.3...v1.32.4) (2022-12-16)
 
 
