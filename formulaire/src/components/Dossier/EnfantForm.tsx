@@ -6,6 +6,8 @@ import { TYPE_EMPLOI } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
+import fr from "date-fns/locale/fr";
+import moment from 'moment';
 
 interface Props {
     enfant: Enfant;
@@ -51,6 +53,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
         })
     }
 
+    React.useEffect(() => {
+      registerLocale("fr", fr);
+      setDefaultLocale("fr");
+    });
+
 
 
     return (
@@ -93,7 +100,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             <div className={styles.datePickerWrapper}>
                             <DatePicker
                                 dateFormat="dd/MM/yyyy"
-                                selected={enfantTmp?.dateNaissance}
+                                selected={enfantTmp?.dateNaissance ? moment(enfantTmp?.dateNaissance).toDate() : enfantTmp?.dateNaissance}
                                 className="inputText"
                                 onChange={(date: Date) => {
                                     handleDateEnfant("dateNaissance", date);
@@ -146,8 +153,8 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfantTmp?.nombreJours || ''}
-                                type="text"
+                                value={enfantTmp?.nombreJours || 0}
+                                type="number"
                                 id="nombreJours"
                                 name="nombreJours"
                                 className="inputText"
@@ -205,8 +212,8 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.montantCachet || ''}
-                                type="text"
+                                value={enfant?.montantCachet || 0}
+                                type="number"
                                 id="montantCachet"
                                 name="montantCachet"
                                 className="inputText"
@@ -220,8 +227,8 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.nombreCachets || ''}
-                                type="text"
+                                value={enfant?.nombreCachets || 0}
+                                type="number"
                                 id="nombreCachets"
                                 name="nombreCachets"
                                 className="inputText"
@@ -235,8 +242,8 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.nombreLignes || ''}
-                                type="text"
+                                value={enfant?.nombreLignes || 0}
+                                type="number"
                                 id="nombreLignes"
                                 name="nombreLignes"
                                 className="inputText"

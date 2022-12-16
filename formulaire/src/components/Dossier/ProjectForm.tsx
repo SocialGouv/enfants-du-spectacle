@@ -5,6 +5,8 @@ import { Dossier } from "@prisma/client";
 import { DossierData } from "src/fetching/dossiers";
 import { CATEGORIES } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from "date-fns/locale/fr";
+import moment from 'moment';
 
 interface Props {
     dossier: DossierData
@@ -24,7 +26,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
     const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
         setDossier({
           ...dossierTmp,
-          presentation: e.currentTarget.value.replace(/\n/g, "<br />"),
+          presentation: e.currentTarget.value,
         });
       };
 
@@ -47,6 +49,11 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
     React.useEffect(() => {
         passData(dossierTmp)
     }, [dossierTmp, passData])
+
+    React.useEffect(() => {
+      registerLocale("fr", fr);
+      setDefaultLocale("fr");
+    });
 
     return (
         <div className={styles.projectForm}>
@@ -173,7 +180,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                             <div className={styles.datePickerWrapper}>
                             <DatePicker
                                 dateFormat="dd/MM/yyyy"
-                                selected={dossierTmp.dateDebut}
+                                selected={dossierTmp.dateDebut ? moment(dossierTmp.dateDebut).toDate() : dossierTmp.dateDebut}
                                 className="inputText"
                                 onChange={(date: Date) => {
                                     handleDate("dateDebut", date);
@@ -193,7 +200,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                             <div className={styles.datePickerWrapper}>
                             <DatePicker
                                 dateFormat="dd/MM/yyyy"
-                                selected={dossierTmp.dateFin}
+                                selected={dossierTmp.dateFin ? moment(dossierTmp.dateFin).toDate() : dossierTmp.dateFin}
                                 className="inputText"
                                 onChange={(date: Date) => {
                                     handleDate("dateFin", date);

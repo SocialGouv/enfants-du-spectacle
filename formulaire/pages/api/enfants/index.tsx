@@ -44,6 +44,11 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
+  parsed.nombreJours = parseInt(parsed.nombreJours as string || '0')
+  parsed.montantCachet = parseInt(parsed.montantCachet as string || '0')
+  parsed.nombreCachets = parseInt(parsed.nombreCachets as string || '0')
+  parsed.nombreLignes = parseInt(parsed.nombreLignes as string || '0')
+
   console.log('parsed : ', parsed)
 
   const produitupdated = await prisma.enfant.update({
