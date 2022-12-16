@@ -23,8 +23,6 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
         ...enfantTmp,
         [e.target.id]: e.currentTarget.value,
       });
-      debounce(enfantTmp);
-      updateEnfant(enfantTmp)
     };
 
     const handleDateEnfant = ( wichDate: string, date: Date): void => {
@@ -32,14 +30,16 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
             ...enfantTmp,
             [wichDate]: date,
         });
-        debounce(enfantTmp);
     };
+
+    const handleFocus = (event:React.FocusEvent<HTMLInputElement, Element>) => {
+        event.target.select();
+    }
 
     const debounce = React.useCallback(
       _.debounce(async (enfantUp: Enfant) => {
         setDebouncedState(enfantUp);	
             await updateEnfant(enfantUp)
-            refresh(enfantUp)
       }, 1000),
       []
     );
@@ -52,6 +52,12 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
             [e.target.id]: e.target.files[0].name
         })
     }
+
+    React.useEffect(() => {
+        console.log('enfant Tmp : ', enfantTmp)
+        updateEnfant(enfantTmp)
+        refresh(enfantTmp)
+    }, [enfantTmp])
 
     React.useEffect(() => {
       registerLocale("fr", fr);
@@ -75,6 +81,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 id="prenom"
                                 name="prenom"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
@@ -90,6 +97,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 id="nom"
                                 name="nom"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
