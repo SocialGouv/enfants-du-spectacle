@@ -10,6 +10,7 @@ import EnfantForm from "./EnfantForm";
 import { createEnfant } from "src/fetching/enfant";
 import Link from "next/link";
 import {useRef} from 'react';
+import moment from 'moment';
 
 interface Props {
     dossier: DossierData
@@ -99,7 +100,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
                         {`${enfant.nom} ${enfant.prenom}`}
                     </div>
                     <div className={styles.itemDossier}>
-                        {enfant.dateNaissance ? birthDateToFrenchAge(enfant.dateNaissance) : ''}
+                        {enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}
                     </div>
                     <div className={styles.itemDossier}>
                         {enfant.nomPersonnage}
@@ -129,7 +130,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
             <div className={styles.rowEnfant} key={`row-enfant-${enfant.id}`} id={`row-enfant-${enfant.id}`}>
                 <Card>
                     <CardTitle>
-                        <div className={styles.titleTable}>{`${enfant.typeEmploi} : ${enfant.nom} ${enfant.prenom} (${enfant.dateNaissance ? birthDateToFrenchAge(enfant.dateNaissance) : ''}) - Personnage : ${enfant.nomPersonnage}`}</div>
+                        <div className={styles.titleTable}>{`${enfant.typeEmploi} : ${enfant.nom} ${enfant.prenom} (${enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}) - Personnage : ${enfant.nomPersonnage}`}</div>
                     </CardTitle>
                     <CardDescription>
                     <Foldable hidden={true} folded={!(selectedEnfant?.id === enfant.id)} action={() => {handleFolded(enfant)}}>
