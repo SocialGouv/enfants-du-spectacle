@@ -1,3 +1,10 @@
+## [1.32.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.3...v1.32.4) (2022-12-16)
+
+
+### Bug Fixes
+
+* improvements on form ([#391](https://github.com/SocialGouv/enfants-du-spectacle/issues/391)) ([82a22b1](https://github.com/SocialGouv/enfants-du-spectacle/commit/82a22b1f610d94b63bc5389aa1d3359b78b4af28))
+
 ## [1.32.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.2...v1.32.3) (2022-12-15)
 
 
