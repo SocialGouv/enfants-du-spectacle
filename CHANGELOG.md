@@ -1,3 +1,10 @@
+## [1.32.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.5...v1.32.6) (2022-12-16)
+
+
+### Bug Fixes
+
+* fix debounce for now ([#393](https://github.com/SocialGouv/enfants-du-spectacle/issues/393)) ([5f8bf73](https://github.com/SocialGouv/enfants-du-spectacle/commit/5f8bf7361274384a75f6419f2a13b6751462aecf))
+
 ## [1.32.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.4...v1.32.5) (2022-12-16)
 
 
