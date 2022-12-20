@@ -41,6 +41,10 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
         setDemandeur(received)
     }
 
+    React.useEffect(() => {
+        console.log('test effect')
+    }, [dossierTmp, demandeurTmp])
+
     return (
         <div className={styles.dossierForm}>
 

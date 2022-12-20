@@ -35,8 +35,13 @@ function getId(req: NextApiRequest): number {
       const dossier = await prisma.dossier.findUnique({
         include: {
           user: true,
-          enfants: true,
-          Demandeur: true 
+          enfants: {
+            include: {
+              piecesDossier: true
+            }
+          },
+          Demandeur: true ,
+          piecesDossier: true
         },
         where: { id: dossierId }
       });

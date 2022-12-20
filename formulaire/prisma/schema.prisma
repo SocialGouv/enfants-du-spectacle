@@ -94,6 +94,7 @@ enum CategorieDossier {
 
 model PieceDossier {
   id         Int                 @id @default(autoincrement())
+  nom        String
   dossierId  Int
   dossier    Dossier?            @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   externalId String?
@@ -160,9 +161,9 @@ enum JustificatifEnfant {
 
 model PieceDossierEnfant {
   id         Int                @id @default(autoincrement())
+  nom        String
   enfantId   Int
   enfant     Enfant?            @relation(fields: [enfantId], references: [id], onDelete: Cascade)
-  dossierId  Int?
   externalId String?
   type       JustificatifEnfant
   link       String?
