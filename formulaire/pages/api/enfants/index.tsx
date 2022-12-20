@@ -2,6 +2,7 @@ import { Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { EnfantData } from "src/fetching/dossiers";
 import prisma from "../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -38,16 +39,18 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const parsed: Enfant = JSON.parse(req.body);
+  const parsed: EnfantData = JSON.parse(req.body);
   if (!parsed) {
     res.status(400).end();
     return;
   }
 
-  parsed.nombreJours = parseInt(parsed.nombreJours as string || '0')
-  parsed.montantCachet = parseInt(parsed.montantCachet as string || '0')
-  parsed.nombreCachets = parseInt(parsed.nombreCachets as string || '0')
-  parsed.nombreLignes = parseInt(parsed.nombreLignes as string || '0')
+  parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || '0')
+  parsed.montantCachet = parseInt(parsed.montantCachet?.toString() || '0')
+  parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || '0')
+  parsed.nombreLignes = parseInt(parsed.nombreLignes?.toString() || '0')
+
+  delete parsed.piecesDossier
 
   console.log('parsed : ', parsed)
 

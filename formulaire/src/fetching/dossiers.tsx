@@ -1,10 +1,15 @@
-import { Demandeur, Dossier, Enfant, SocieteProduction, User } from "@prisma/client";
+import { Demandeur, Dossier, Enfant, PieceDossier, PieceDossierEnfant, SocieteProduction, User } from "@prisma/client";
 import { statusGroup } from "src/lib/types";
+
+type EnfantData = Enfant & {
+    piecesDossier: PieceDossierEnfant[]
+}
 
 type DossierData = Dossier & {
     user: User,
-    enfants: Enfant[],
+    enfants: EnfantData[],
     Demandeur: Demandeur,
+    piecesDossier: PieceDossier[],
     societeProduction?: SocieteProduction;
 }
 
@@ -84,6 +89,6 @@ const deleteDossier = async (id: number) => {
     return fetching
 };
 
-export type { DossierData, ResDossier }
+export type { EnfantData, DossierData, ResDossier }
 
 export { getDossier, getDossiers, createDossierEds, updateDossier, deleteDossier }

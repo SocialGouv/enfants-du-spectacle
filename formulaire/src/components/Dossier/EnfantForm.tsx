@@ -1,21 +1,24 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
-import { Enfant } from "@prisma/client";
+import { Enfant, JustificatifEnfant } from "@prisma/client";
 import { TYPE_EMPLOI } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
 import fr from "date-fns/locale/fr";
 import moment from 'moment';
+import InputFile from "../uiComponents/InputFile";
+import { EnfantData } from "src/fetching/dossiers";
+import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
 
 interface Props {
-    enfant: Enfant;
+    enfant: EnfantData;
     refresh: (enfant: Enfant) => void
 }
 
 const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
-    const [enfantTmp, setEnfant] = React.useState<Enfant>(enfant)
+    const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant)
     const [debouncedState, setDebouncedState] = React.useState<Enfant>();
 
     const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -44,12 +47,28 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
       []
     );
 
-    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('field : ', e.target.id)
-        console.log('input files : ', e.target.files)
+    const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        let res = await createPieceEnfant(
+            {
+                nom: e.target.files[0].name,
+                enfantId: enfantTmp.id,
+                type: e.target.id as JustificatifEnfant, 
+                externalId: '', 
+                link: ''
+            }
+        )
         setEnfant({
             ...enfantTmp,
-            [e.target.id]: e.target.files[0].name
+            piecesDossier: [...enfantTmp.piecesDossier, res]
+        })
+    }
+
+    const handleDelete = async (id: string) => {
+        let res = await deletePieceEnfant(parseInt(id))
+        console.log('res : ', res)
+        setEnfant({
+            ...enfantTmp,
+            piecesDossier: enfantTmp.piecesDossier.filter(doc => {return doc.id !== parseInt(id)})
         })
     }
 
@@ -163,9 +182,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 onChange={handleFormEnfant}
                                 value={enfantTmp?.nombreJours || 0}
                                 type="number"
+                                min="0"
                                 id="nombreJours"
                                 name="nombreJours"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
@@ -222,9 +243,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 onChange={handleFormEnfant}
                                 value={enfant?.montantCachet || 0}
                                 type="number"
+                                min="0"
                                 id="montantCachet"
                                 name="montantCachet"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
@@ -237,9 +260,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 onChange={handleFormEnfant}
                                 value={enfant?.nombreCachets || 0}
                                 type="number"
+                                min="0"
                                 id="nombreCachets"
                                 name="nombreCachets"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
@@ -252,9 +277,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 onChange={handleFormEnfant}
                                 value={enfant?.nombreLignes || 0}
                                 type="number"
+                                min="0"
                                 id="nombreLignes"
                                 name="nombreLignes"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
                     </div>
@@ -270,7 +297,8 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                         <input
                             onChange={handleFormEnfant}
                             value={enfant?.remunerationsAdditionnelles || ''}
-                            type="text"
+                            type="number"
+                            min="0"
                             id="remunerationsAdditionnelles"
                             name="remunerationsAdditionnelles"
                             className="inputText"
@@ -285,10 +313,12 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             <input
                                 onChange={handleFormEnfant}
                                 value={enfant?.remunerationTotale || ''}
-                                type="text"
+                                type="number"
+                                min="0"
                                 id="remunerationTotale"
                                 name="remunerationTotale"
                                 className="inputText"
+                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
                             />
                         </div>
 
@@ -296,151 +326,73 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="livret" className="mb-2 italic">
-                            Livret de Famille
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Ce document doit être à jour
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="livret" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.livret && enfantTmp.livret !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.livret}</span>
-                            </div>
-                        }
+                        <InputFile id={'LIVRET_FAMILLE'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Livret de Famille`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Ce document doit être à jour`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="autorisation" className="mb-2 italic">
-                            Autorisation parentale
-                        </label>
-
-                        <p className={styles.smallText}>
-                            En cas d&apos;absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l&apos;enfant.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="autorisation" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.autorisation && enfantTmp.autorisation !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.autorisation}</span>
-                            </div>
-                        }
+                        <InputFile id={'AUTORISATION_PARENTALE'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Autorisation parentale`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`En cas d'absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l'enfant.`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="situation" className="mb-2 italic">
-                            Situation particulière relative à l&apos;autorité parentale
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Veuillez fournir, le cas échéant, tout document justifiant d&apos;une situation particulière relative à l&apos;exercice de l&apos;autorité parentale (retrait d&apos;autorité parentale, tutelle, etc)
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="situation" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.situation && enfantTmp.situation !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.situation}</span>
-                            </div>
-                        }
+                        <InputFile id={'SITUATION_PARTICULIERE'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Situation particulière relative à l'autorité parentale`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l&apos;autorité parentale (retrait d'autorité parentale, tutelle, etc)`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="contrat" className="mb-2 italic">
-                            Projet de contrat de travail
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d&apos;exposer l&apos;enfant à un risque, ainsi que les mesures prises pour l&apos;éviter.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="contrat" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.contrat && enfantTmp.contrat !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.contrat}</span>
-                            </div>
-                        }
+                        <InputFile id={'CONTRAT'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Projet de contrat de travail`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="certificat" className="mb-2 italic">
-                            Certificat de scolarité ou avis pédagogique
-                        </label>
-
-                        <p className={styles.smallText}>
-                            L&apos;avis pédagogique est requis à partir de 4 jours d&apos;absence scolaire.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="certificat" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.certificat && enfantTmp.certificat !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.certificat}</span>
-                            </div>
-                        }
+                        <InputFile id={'CERTIFICAT_SCOLARITE'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Certificat de scolarité ou avis pédagogique`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="avis" className="mb-2 italic">
-                            Avis médical d&apos;aptitude
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Un avis d&apos;un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d&apos;une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d&apos;un médecin généraliste (enfant à partir de 3 ans) ou d&apos;un pédiatre (enfant de moins de 3 ans) est accepté.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="avis" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {enfantTmp.avis && enfantTmp.avis !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{enfantTmp.avis}</span>
-                            </div>
-                        }
+                        <InputFile id={'AVIS_MEDICAL'} 
+                            docs={enfantTmp.piecesDossier} 
+                            label={`Avis médical d'aptitude`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
+                        />
 
                     </div>
             

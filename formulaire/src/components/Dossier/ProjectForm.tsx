@@ -1,12 +1,14 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
 import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Dossier } from "@prisma/client";
+import { Dossier, JustificatifDossier } from "@prisma/client";
 import { DossierData } from "src/fetching/dossiers";
 import { CATEGORIES } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
 import moment from 'moment';
+import InputFile from "../uiComponents/InputFile";
+import { createPiece, deletePiece } from "src/fetching/pieces";
 
 interface Props {
     dossier: DossierData
@@ -14,7 +16,7 @@ interface Props {
 }
 
 const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
-    const [dossierTmp, setDossier] = React.useState<Dossier>(dossier)
+    const [dossierTmp, setDossier] = React.useState<DossierData>(dossier)
 
     const handleFormDossier = (e: React.FormEvent<HTMLInputElement>): void => {
         setDossier({
@@ -37,12 +39,28 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
         });
     };
 
-    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('field : ', e.target.id)
-        console.log('input files : ', e.target.files)
+    const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        let res = await createPiece(
+            {
+                nom: e.target.files[0].name,
+                dossierId: dossierTmp.id,
+                type: e.target.id as JustificatifDossier, 
+                externalId: '', 
+                link: ''
+            }
+        )
         setDossier({
             ...dossierTmp,
-            [e.target.id]: e.target.files[0].name
+            piecesDossier: [...dossierTmp.piecesDossier, res]
+        })
+    }
+
+    const handleDelete = async (id: string) => {
+        let res = await deletePiece(parseInt(id))
+        console.log('res : ', res)
+        setDossier({
+            ...dossierTmp,
+            piecesDossier: dossierTmp.piecesDossier.filter(doc => {return doc.id !== parseInt(id)})
         })
     }
 
@@ -114,7 +132,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                             onChange={handleForm}
                             type="textarea"
                             id="presentation"
-                            value={dossierTmp.presentation}
+                            value={dossierTmp.presentation || ''}
                             className={styles.areaText}
                         />
                         </div>
@@ -123,51 +141,25 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="scenario" className="mb-2 italic">
-                            Scenario ou script
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Veuillez accompagner le document d&apos;une note mentionnant les numéros de page sur lesquelles sont décrites les scènes ou intervient l&apos;enfant.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="scenario" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                            </input>
-                        </div>
-                        {dossierTmp.scenario && dossierTmp.scenario !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{dossierTmp.scenario}</span>
-                            </div>
-                        }
-                        
+                        <InputFile id={'SCENARIO'} 
+                            docs={dossierTmp.piecesDossier} 
+                            label={'Scenario ou script'} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Veuillez accompagner le document d'une note mentionnant les numéros de page sur lesquelles sont décrites les scènes ou intervient l'enfant.`}
+                        />
 
                     </div>
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="securite" className="mb-2 italic">
-                            Note précisant les mesures de sécurité
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d&apos;exposer l&apos;enfant à un risque, ainsi que les mesures prises pour l&apos;éviter.
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="securite" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {dossierTmp.securite && dossierTmp.securite !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{dossierTmp.securite}</span>
-                            </div>
-                        }
+                        <InputFile id={'MESURES_SECURITE'} 
+                            docs={dossierTmp.piecesDossier} 
+                            label={'Note précisant les mesures de sécurité'} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
+                        />
 
                     </div>
 
@@ -213,26 +205,13 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                     <div className={styles.blocForm}>
 
-                        <label htmlFor="complementaire" className="mb-2 italic">
-                            Éléments d&apos;information complémentaires
-                        </label>
-
-                        <p className={styles.smallText}>
-                            Veuillez fournir, le cas échéant, tous éléments que vous jugez utiles à la compréhension du dossier (précisions sur les particularités du projet et sur les conditions spécifiques de tournage, de répétition ou de représentation imposées aux enfants, justification de la nécessité de ces conditions, etc)
-                        </p>
-
-                        <div className="Form--field">
-                            <input type="file"
-                                id="complementaire" name="avatar"
-                                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" onChange={handleFile}>
-                                    
-                            </input>
-                        </div>
-                        {dossierTmp.complementaire && dossierTmp.complementaire !== null &&
-                            <div className={styles.fileUploaded}>
-                                <span>{dossierTmp.complementaire}</span>
-                            </div>
-                        }
+                        <InputFile id={'INFOS_COMPLEMENTAIRES'} 
+                            docs={dossierTmp.piecesDossier} 
+                            label={`Éléments d'information complémentaires`} 
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={`Veuillez fournir, le cas échéant, tous éléments que vous jugez utiles à la compréhension du dossier (précisions sur les particularités du projet et sur les conditions spécifiques de tournage, de répétition ou de représentation imposées aux enfants, justification de la nécessité de ces conditions, etc)`}
+                        />
 
                     </div>
 
