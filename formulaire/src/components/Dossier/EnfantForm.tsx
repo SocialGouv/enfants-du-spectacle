@@ -59,7 +59,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
         )
         setEnfant({
             ...enfantTmp,
-            piecesDossier: [...enfantTmp.piecesDossier, res]
+            piecesDossier: enfantTmp.piecesDossier ? [...enfantTmp.piecesDossier, res] : [res]
         })
     }
 
@@ -327,7 +327,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'LIVRET_FAMILLE'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Livret de Famille`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
@@ -339,7 +339,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'AUTORISATION_PARENTALE'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Autorisation parentale`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
@@ -351,7 +351,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'SITUATION_PARTICULIERE'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Situation particulière relative à l'autorité parentale`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
@@ -363,7 +363,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'CONTRAT'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Projet de contrat de travail`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
@@ -375,7 +375,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'CERTIFICAT_SCOLARITE'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Certificat de scolarité ou avis pédagogique`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
@@ -387,7 +387,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.blocForm}>
 
                         <InputFile id={'AVIS_MEDICAL'} 
-                            docs={enfantTmp.piecesDossier} 
+                            docs={enfantTmp.piecesDossier || []} 
                             label={`Avis médical d'aptitude`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
