@@ -1,3 +1,10 @@
+## [1.32.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.8...v1.32.9) (2022-12-20)
+
+
+### Bug Fixes
+
+* fix justifs issue on create enfant ([#396](https://github.com/SocialGouv/enfants-du-spectacle/issues/396)) ([4319bd1](https://github.com/SocialGouv/enfants-du-spectacle/commit/4319bd1daf7803fabb09eb5b359f0827d9930aa7))
+
 ## [1.32.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.7...v1.32.8) (2022-12-20)
 
 
