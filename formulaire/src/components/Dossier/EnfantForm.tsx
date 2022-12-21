@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
 import { Enfant, JustificatifEnfant } from "@prisma/client";
-import { TYPE_EMPLOI } from "../../lib/helpers";
+import { TYPE_EMPLOI, useDebouncedCallback } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
@@ -20,6 +20,7 @@ interface Props {
 const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
     const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant)
     const [debouncedState, setDebouncedState] = React.useState<Enfant>();
+    const [initialRender, setInitialRender] = React.useState<Boolean>(true)
 
     const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
       setEnfant({
@@ -38,14 +39,6 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
     const handleFocus = (event:React.FocusEvent<HTMLInputElement, Element>) => {
         event.target.select();
     }
-
-    const debounce = React.useCallback(
-      _.debounce(async (enfantUp: Enfant) => {
-        setDebouncedState(enfantUp);	
-            await updateEnfant(enfantUp)
-      }, 1000),
-      []
-    );
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         let res = await createPieceEnfant(
@@ -72,10 +65,18 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
         })
     }
 
-    React.useEffect(() => {
-        console.log('enfant Tmp : ', enfantTmp)
+    const saveEnfant = useDebouncedCallback(() => {
+        console.log('saving enfant ...')
         updateEnfant(enfantTmp)
         refresh(enfantTmp)
+    }, 1000);
+
+    React.useEffect(() => {
+        if(initialRender){
+            setInitialRender(false);
+        } else{
+            saveEnfant()
+        }
     }, [enfantTmp])
 
     React.useEffect(() => {
@@ -129,6 +130,9 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                                 dateFormat="dd/MM/yyyy"
                                 selected={enfantTmp?.dateNaissance ? moment(enfantTmp?.dateNaissance).toDate() : enfantTmp?.dateNaissance}
                                 className="inputText"
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
                                 onChange={(date: Date) => {
                                     handleDateEnfant("dateNaissance", date);
                                 }}
@@ -143,7 +147,6 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             <div className="selectDpt">
                             <Select
                                 id="typeEmploi"
-                                name="typeEmploi"
                                 selected={enfantTmp?.typeEmploi ? enfantTmp.typeEmploi : ''}
                                 options={[
                                 { label: enfantTmp?.typeEmploi ? "" : "Choisir", value: "" },
@@ -224,7 +227,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             onChange={handleFormEnfant}
                             type="textarea"
                             id="contexteTravail"
-                            value={enfantTmp?.contexteTravail}
+                            value={enfantTmp?.contexteTravail || ''}
                             className={styles.areaText}
                         />
                         </div>

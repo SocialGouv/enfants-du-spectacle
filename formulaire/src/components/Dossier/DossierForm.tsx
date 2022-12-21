@@ -1,18 +1,16 @@
 
-import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Demandeur, Dossier, Enfant, User } from "@prisma/client";
+import { Demandeur, Enfant } from "@prisma/client";
 import React from "react";
 import { DossierData, updateDossier } from "../../fetching/dossiers";
-import { CATEGORIES, TYPE_EMPLOI } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./DossierForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/router";
 import DemandeurForm from "./DemandeurForm";
 import ProjectForm from "./ProjectForm";
-import EnfantForm from "./EnfantForm";
 import EnfantList from "./EnfantList";
 import { updateDemandeur } from "src/fetching/demandeur";
+import { useDebouncedCallback } from "src/lib/helpers";
 
 interface Props {
     dossier: DossierData
@@ -22,18 +20,11 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
     const router = useRouter()
 
     const [toDisplay, setTodisplay] = React.useState<'Demandeur' | 'Projet' | 'Enfants'>('Demandeur')
-    const [dossierTmp, setDossier] = React.useState<Dossier>(dossier)
+    const [dossierTmp, setDossier] = React.useState<DossierData>(dossier)
     const [demandeurTmp, setDemandeur] = React.useState<Demandeur>(dossier.Demandeur)
+    const [enfantsTmp, setEnfants] = React.useState<Enfant[]>(dossier.enfants)
 
-    const saveDossier = async () => {
-        let resDemandeur = await updateDemandeur(demandeurTmp)
-        console.log('res : ', resDemandeur)
-        let resDossier = await updateDossier(dossierTmp)
-        console.log('res : ', resDossier)
-        router.push('/')
-    }
-
-    const receiveData = (received: Dossier) => {
+    const receiveDataDossier = (received: DossierData) => {
         setDossier(received)
     }
 
@@ -41,9 +32,27 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
         setDemandeur(received)
     }
 
+    const receiveDataEnfants = (received: Enfant[]) => {
+        setEnfants(received)
+    }
+
+    const saveDossier = useDebouncedCallback(() => {
+        console.log('saving dossier ...')
+        updateDossier(dossierTmp)
+    }, 1000);
+
+    const saveDemandeur = useDebouncedCallback(() => {
+        console.log('saving demandeur ...')
+        updateDemandeur(demandeurTmp)
+    }, 1000);
+
     React.useEffect(() => {
-        console.log('test effect')
-    }, [dossierTmp, demandeurTmp])
+        saveDemandeur()
+    }, [demandeurTmp])
+
+    React.useEffect(() => {
+        saveDossier()
+    }, [dossierTmp])
 
     return (
         <div className={styles.dossierForm}>
@@ -56,18 +65,18 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
 
             <div className={styles.divForm}>
                 {toDisplay === 'Demandeur' &&
-                    <DemandeurForm dossier={dossier} passData={receiveDataDemandeur}></DemandeurForm>
+                    <DemandeurForm demandeur={demandeurTmp} passData={receiveDataDemandeur}></DemandeurForm>
                 }
 
 
                 {toDisplay === 'Projet' &&
-                    <ProjectForm dossier={dossier} passData={receiveData}></ProjectForm>
+                    <ProjectForm dossier={dossierTmp} passData={receiveDataDossier}></ProjectForm>
                 }
 
 
                 {toDisplay === 'Enfants' &&
                     <>
-                        <EnfantList dossier={dossier}></EnfantList>
+                        <EnfantList dossier={dossierTmp} enfants={enfantsTmp} passData={receiveDataEnfants}></EnfantList>
                     </>
                 }
 

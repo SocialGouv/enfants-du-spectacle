@@ -30,9 +30,9 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
         action(res.countEnCours, res.countTermines)
     }
 
-    const handleOrder = (termToOrder: keyof Dossier) => {
+    const handleOrder = (termToOrder: string) => {
         setOrder(termToOrder === termOrdered ? order === 'desc' ? 'asc' : 'desc' : 'desc')
-        setTermToOrder(termToOrder);
+        setTermToOrder(termToOrder as keyof Dossier);
     }
 
     React.useEffect(() => {
@@ -68,7 +68,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                     {dossier.statut}
                                 </div>
                                 <div className={styles.itemDossier}>
-                                    {frenchDateText(dossier.dateDerniereModification)}
+                                    {dossier.dateDerniereModification ? frenchDateText(dossier.dateDerniereModification) : ''}
                                 </div>
                                 <div className={styles.itemDossier}>
                                     <ButtonLink light={true} onClick={() => {router.push(`/dossier/${dossier.id}`)}}>Éditer</ButtonLink>

@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Dossier, Enfant } from "@prisma/client";
+import { Card, CardDescription, CardTitle } from "@dataesr/react-dsfr";
+import { Enfant } from "@prisma/client";
 import { DossierData } from "src/fetching/dossiers";
-import { birthDateToFrenchAge, TYPE_EMPLOI } from "../../lib/helpers";
+import { birthDateToFrenchAge, frenchDateText } from "../../lib/helpers";
 import styles from "./EnfantList.module.scss";
 import { ButtonLink } from "src/uiComponents/button";
 import Foldable from "../FoldableItem";
@@ -11,16 +11,21 @@ import { createEnfant } from "src/fetching/enfant";
 import Link from "next/link";
 import {useRef} from 'react';
 import moment from 'moment';
+import OrderableItem from "../home/OrderableItem";
 
 interface Props {
     dossier: DossierData
+    enfants: Enfant[]
+    passData: (enfans: Enfant[]) => void;
 }
 
-const EnfantList: React.FC<Props> = ({dossier}) => {
-    const [enfants, setEnfants] = React.useState<Enfant[]>(dossier.enfants)
+const EnfantList: React.FC<Props> = ({dossier, enfants, passData}) => {
+    const [enfantsTmp, setEnfants] = React.useState<Enfant[]>(enfants)
     const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>()
     const [page, setPage] = React.useState<number>(0)
     const myRef = useRef(null);
+    const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>('dateDerniereModification')
+    const [order, setOrder] = React.useState<'asc' | 'desc'>('desc')
 
     const scrollToRef = (ref: React.MutableRefObject<null>) => {
         if(ref && ref.current) {
@@ -30,7 +35,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
 
     const addEnfant = async () => {
         let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:''} as Enfant)
-        setEnfants([ res, ...enfants])
+        setEnfants([ res, ...enfantsTmp])
         setSelectedEnfant(res)
         scrollToRef(myRef)
     }
@@ -48,9 +53,8 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
     }
 
     const handleRefresh = (enfantUp: Enfant) => {
-        console.log('enfant to refresh in list : ', enfantUp)
         setEnfants(
-            enfants.map((enfant) => {return enfant.id === enfantUp.id ? enfantUp : enfant})
+            enfantsTmp.map((enfant) => {return enfant.id === enfantUp.id ? enfantUp : enfant})
         )
     }
 
@@ -58,9 +62,27 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
         setPage(pageToGo)
     }
 
+    const handleOrder = (termToOrder: string) => {
+        setOrder(termToOrder === termOrdered ? order === 'desc' ? 'asc' : 'desc' : 'desc')
+        setTermToOrder(termToOrder as keyof Enfant);
+    }
+
     React.useEffect(() => {
-        console.log('selected : ', selectedEnfant)
-    }, [selectedEnfant])
+        setEnfants([...enfantsTmp].sort(function (a, b) {
+            if (a[termOrdered] && b[termOrdered] && a[termOrdered] < b[termOrdered]) {
+                return order === 'desc' ? 1 : -1;
+            }
+            if (a[termOrdered] && b[termOrdered] && a[termOrdered] > b[termOrdered]) {
+                return order === 'desc' ? -1 : 1;
+            }
+            return 0;
+        }))
+        console.log('order done')
+    }, [order, termOrdered])
+
+    React.useEffect(() => {
+        passData(enfantsTmp)
+    }, [enfantsTmp, passData])
 
     return (
         <div className={styles.enfantList}>
@@ -72,26 +94,16 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
             <CardDescription>
 
             <div className={styles.headRow}>
-                <div className={styles.itemHead}>
-                    Rôle
-                </div>
-                <div className={styles.itemHead}>
-                    Nom et prénom
-                </div>
-                <div className={styles.itemHead}>
-                    Age
-                </div>
-                <div className={styles.itemHead}>
-                    Personnage
-                </div>
-                <div className={styles.itemHead}>
-                    Jours travaillés
-                </div>
+                <OrderableItem text={'Rôle'} termToOrder={'typeEmploi'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                <OrderableItem text={'Nom et prénom'} termToOrder={'nom'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                <OrderableItem text={'Age'} termToOrder={'dateNaissance'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                <OrderableItem text={'Personnage'} termToOrder={'nomPersonnage'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                <OrderableItem text={'Mis à jour'} termToOrder={'dateDerniereModification'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
                 <div className={styles.itemHead}>
                     Pièces justificatives
                 </div>
             </div>
-            {enfants.slice(page * 10, (page * 10) + 10).map((enfant) => (
+            {enfantsTmp.slice(page * 10, (page * 10) + 10).map((enfant) => (
                 <Link href={`#row-enfant-${enfant.id}`} className={styles.tableEnfant} key={`table-enfant-${enfant.id}`} onClick={() => {clickEnfant(enfant)}}>
                     <div className={styles.itemDossier}>
                         {enfant.typeEmploi}
@@ -106,7 +118,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
                         {enfant.nomPersonnage}
                     </div>
                     <div className={styles.itemDossier}>
-                        {enfant.nombreJours}
+                        {enfant.dateDerniereModification ? frenchDateText(enfant.dateDerniereModification) : ''}
                     </div>
                     <div className={styles.itemDossier}>
                         Pièces justificatives
@@ -114,7 +126,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
                 </Link>
             ))}
             <div className={styles.pagination}>
-                {[...Array(Math.ceil(enfants.length/10))].map((e, i) => (
+                {[...Array(Math.ceil(enfantsTmp.length/10))].map((e, i) => (
                     <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}} key={i}>{i + 1}</ButtonLink>
                 ))}
             </div>
@@ -126,7 +138,7 @@ const EnfantList: React.FC<Props> = ({dossier}) => {
         </div>
 
         <div className={styles.listEnfants}>
-        {enfants.map((enfant) => (
+        {enfantsTmp.map((enfant) => (
             <div className={styles.rowEnfant} key={`row-enfant-${enfant.id}`} id={`row-enfant-${enfant.id}`}>
                 <Card>
                     <CardTitle>

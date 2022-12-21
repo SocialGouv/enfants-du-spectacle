@@ -1,3 +1,4 @@
+import React from "react";
 
 function frenchDateText(date: Date): string {
   const newDate = new Date(date);
@@ -17,6 +18,21 @@ function birthDateToFrenchAge(birthDate: Date): string {
   }
   return `${age} ans`;
 }
+
+const useDebouncedCallback = (func: Function, wait: number) => {
+  const timeout = React.useRef();
+
+  return React.useCallback(
+    (...args) => {
+      const later = () => {
+        clearTimeout(timeout.current);
+        func(...args);
+      };
+
+      clearTimeout(timeout.current);
+      timeout.current = setTimeout(later, wait);
+  }, [func, wait]);
+};
 
 const STATUS_EN_COURS = [
   'BROUILLON',
@@ -100,6 +116,7 @@ const WORDING_MAILING = [
 export {
     frenchDateText,
     birthDateToFrenchAge,
+    useDebouncedCallback,
     STATUS_EN_COURS,
     STATUS_TERMINES,
     TYPE_EMPLOI,

@@ -12,7 +12,7 @@ import { createPiece, deletePiece } from "src/fetching/pieces";
 
 interface Props {
     dossier: DossierData
-    passData: (dossier: Dossier) => void;
+    passData: (dossier: DossierData) => void;
 }
 
 const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
@@ -174,6 +174,9 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                                 dateFormat="dd/MM/yyyy"
                                 selected={dossierTmp.dateDebut ? moment(dossierTmp.dateDebut).toDate() : dossierTmp.dateDebut}
                                 className="inputText"
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
                                 onChange={(date: Date) => {
                                     handleDate("dateDebut", date);
                                 }}
@@ -194,6 +197,9 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                                 dateFormat="dd/MM/yyyy"
                                 selected={dossierTmp.dateFin ? moment(dossierTmp.dateFin).toDate() : dossierTmp.dateFin}
                                 className="inputText"
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
                                 onChange={(date: Date) => {
                                     handleDate("dateFin", date);
                                 }}

@@ -49,6 +49,7 @@ const update: NextApiHandler = async (req, res) => {
   parsed.montantCachet = parseInt(parsed.montantCachet?.toString() || '0')
   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || '0')
   parsed.nombreLignes = parseInt(parsed.nombreLignes?.toString() || '0')
+  parsed.dateDerniereModification = new Date();
 
   delete parsed.piecesDossier
 
