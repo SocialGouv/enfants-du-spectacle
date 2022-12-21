@@ -1,27 +1,27 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
-import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Demandeur, User } from "@prisma/client";
+import { Card, CardDescription, CardTitle } from "@dataesr/react-dsfr";
+import { Demandeur } from "@prisma/client";
 import { DossierData } from "src/fetching/dossiers";
 
 interface Props {
-    dossier: DossierData
+    demandeur: Demandeur
     passData: (demandeur: Demandeur) => void;
 }
 
-const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
-    const [demandeur, setDemandeur] = React.useState<Demandeur>(dossier.Demandeur)
+const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
+    const [demandeurTmp, setDemandeur] = React.useState<Demandeur>(demandeur)
 
     const handleFormDemandeur = (e: React.FormEvent<HTMLInputElement>): void => {
         setDemandeur({
-        ...demandeur,
+        ...demandeurTmp,
         [e.target.id]: e.currentTarget.value,
       });
     };
 
     React.useEffect(() => {
-        passData(demandeur)
-    }, [demandeur, passData])
+        passData(demandeurTmp)
+    }, [demandeurTmp, passData])
 
     return (
         <div className={styles.demandeurForm}>
@@ -39,7 +39,7 @@ const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
                             </label>
                             <input
                                 onChange={handleFormDemandeur}
-                                value={demandeur.prenom || ''}
+                                value={demandeurTmp.prenom || ''}
                                 type="text"
                                 id="prenom"
                                 name="prenom"
@@ -54,7 +54,7 @@ const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
                             </label>
                             <input
                                 onChange={handleFormDemandeur}
-                                value={demandeur.nom || ''}
+                                value={demandeurTmp.nom || ''}
                                 type="text"
                                 id="nom"
                                 name="nom"
@@ -69,7 +69,7 @@ const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
                             </label>
                             <input
                                 onChange={handleFormDemandeur}
-                                value={demandeur.fonction || ''}
+                                value={demandeurTmp.fonction || ''}
                                 type="text"
                                 id="fonction"
                                 name="fonction"
@@ -84,7 +84,7 @@ const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
                             </label>
                             <input
                                 onChange={handleFormDemandeur}
-                                value={demandeur.email || ''}
+                                value={demandeurTmp.email || ''}
                                 type="text"
                                 id="email"
                                 name="email"
@@ -99,7 +99,7 @@ const DemandeurForm: React.FC<Props> = ({dossier, passData}) => {
                             </label>
                             <input
                                 onChange={handleFormDemandeur}
-                                value={demandeur.phone || ''}
+                                value={demandeurTmp.phone || ''}
                                 type="text"
                                 id="phone"
                                 name="phone"

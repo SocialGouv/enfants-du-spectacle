@@ -2,6 +2,7 @@ import { Dossier, Prisma, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { DossierData } from "src/fetching/dossiers";
 import { STATUS_EN_COURS, STATUS_TERMINES } from "src/lib/helpers";
 import { statusGroup } from "src/lib/types";
 import prisma from "../../../src/lib/prismaClient";
@@ -125,7 +126,7 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const parsed: Dossier = JSON.parse(req.body);
+  const parsed: DossierData = JSON.parse(req.body);
   if (!parsed) {
     res.status(400).end();
     return;
@@ -134,6 +135,8 @@ const update: NextApiHandler = async (req, res) => {
   delete parsed.user;
   delete parsed.enfants;
   delete parsed.Demandeur;
+  delete parsed.piecesDossier;
+  parsed.dateDerniereModification = new Date();
 
   console.log('parsed : ', parsed)
 

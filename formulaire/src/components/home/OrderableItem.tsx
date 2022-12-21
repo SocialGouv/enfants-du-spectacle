@@ -1,14 +1,14 @@
-import { Dossier } from "@prisma/client";
+import { Dossier, Enfant } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 import styles from "./OrderableItem.module.scss";
 
 interface Props {
     text: string,
-    termToOrder: keyof Dossier
-    termOrdered: keyof Dossier
+    termToOrder: keyof Dossier | keyof Enfant
+    termOrdered: keyof Dossier | keyof Enfant
     order?: 'asc' | 'desc'
-    action: (term: keyof Dossier) => void
+    action: (term: keyof Dossier | keyof Enfant) => void
 }
 
 const OrderableItem: React.FC<Props> = ({ text, termToOrder, termOrdered, order, action }) => {
