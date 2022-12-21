@@ -1,3 +1,10 @@
+## [1.32.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.9...v1.32.10) (2022-12-21)
+
+
+### Bug Fixes
+
+* rct form 21/12 ([#397](https://github.com/SocialGouv/enfants-du-spectacle/issues/397)) ([f5e708b](https://github.com/SocialGouv/enfants-du-spectacle/commit/f5e708bfee38cbaeb11a9c9d8e64ba3b7200e495))
+
 ## [1.32.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.8...v1.32.9) (2022-12-20)
 
 
