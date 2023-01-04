@@ -1,3 +1,10 @@
+## [1.32.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.10...v1.32.11) (2023-01-04)
+
+
+### Bug Fixes
+
+* add gestion societe prod ([#398](https://github.com/SocialGouv/enfants-du-spectacle/issues/398)) ([13c59fa](https://github.com/SocialGouv/enfants-du-spectacle/commit/13c59fa8fa9419dd3e7f2be7aa1ae9fad172e982))
+
 ## [1.32.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.9...v1.32.10) (2022-12-21)
 
 
