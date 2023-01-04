@@ -20,13 +20,10 @@ const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
     }
 
     const processSiret = useDebouncedCallback(async () => {
-        console.log('processing siret ...')
         let res = await getSocieteInfos(siret)
         setResSirene(res)
-        console.log('res : ', res)
         if(res.header.message === 'ok') {
             const foundSociete = await getSocieteProd(siret);
-            console.log('found societe : ', foundSociete)
             if(!foundSociete) {
                 const createdSociete = await createSociete({
                     nom: res.etablissement.uniteLegale.denominationUniteLegale,
