@@ -34,7 +34,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData}) => {
     }
 
     const addEnfant = async () => {
-        let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:''} as Enfant)
+        let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:'', montantCachet: 0, remunerationTotale: 0} as Enfant)
         setEnfants([ res, ...enfantsTmp])
         setSelectedEnfant(res)
         scrollToRef(myRef)

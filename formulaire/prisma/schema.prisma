@@ -28,31 +28,31 @@ model User {
 }
 
 model Demandeur {
-  id                  Int                @id @default(autoincrement())
-  email               String?            @unique
-  nom                 String?
-  prenom              String?
-  phone               String?
-  fonction            String?
-  societeProduction   SocieteProduction? @relation(fields: [societeProductionId], references: [id])
-  societeProductionId Int?
-  dossiers            Dossier[]
+  id                       Int                @id @default(autoincrement())
+  email                    String?            @unique
+  nom                      String?
+  prenom                   String?
+  phone                    String?
+  fonction                 String?
+  conventionCollectiveCode String?
+  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [siret])
+  societeProductionId      String?
+  dossiers                 Dossier[]
 }
 
 model SocieteProduction {
-  id                       Int         @id @default(autoincrement())
-  nom                      String?
-  siret                    String?
-  siren                    String?
-  departement              String?
-  naf                      String?
-  raisonSociale            String?
-  adresse                  String?
-  adresseCodePostal        String?
-  adresseCodeCommune       String?
-  formeJuridique           String?
-  conventionCollectiveCode String?
-  Demandeur                Demandeur[]
+  id                 Int         @id @default(autoincrement())
+  nom                String?
+  siret              String?     @unique
+  siren              String?
+  departement        String?
+  naf                String?
+  raisonSociale      String?
+  adresse            String?
+  adresseCodePostal  String?
+  adresseCodeCommune String?
+  formeJuridique     String?
+  Demandeur          Demandeur[]
 }
 
 enum StatutDossier {
@@ -122,7 +122,6 @@ model Dossier {
   justificatifs            JustificatifDossier[]
   scenesSensibles          String[]
   presentation             String?
-  conventionCollectiveCode String?
   dateDebut                DateTime?
   dateFin                  DateTime?
   number                   Int?

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEventHandler } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
 import { Enfant, JustificatifEnfant } from "@prisma/client";
@@ -19,10 +19,11 @@ interface Props {
 
 const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
     const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant)
-    const [debouncedState, setDebouncedState] = React.useState<Enfant>();
     const [initialRender, setInitialRender] = React.useState<Boolean>(true)
 
     const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
+        console.log('e value : ', e.currentTarget.value)
+        console.log('e value : ', e.currentTarget.value.replace('.', ','))
       setEnfant({
         ...enfantTmp,
         [e.target.id]: e.currentTarget.value,
@@ -244,9 +245,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.montantCachet || 0}
+                                value={enfantTmp?.montantCachet}
                                 type="number"
                                 min="0"
+                                step="0.01"
+                                lang="en-US"
                                 id="montantCachet"
                                 name="montantCachet"
                                 className="inputText"
@@ -261,7 +264,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.nombreCachets || 0}
+                                value={enfantTmp?.nombreCachets || 0}
                                 type="number"
                                 min="0"
                                 id="nombreCachets"
@@ -278,7 +281,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.nombreLignes || 0}
+                                value={enfantTmp?.nombreLignes || 0}
                                 type="number"
                                 min="0"
                                 id="nombreLignes"
@@ -299,7 +302,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                         </p>
                         <input
                             onChange={handleFormEnfant}
-                            value={enfant?.remunerationsAdditionnelles || ''}
+                            value={enfantTmp?.remunerationsAdditionnelles || ''}
                             type="number"
                             min="0"
                             id="remunerationsAdditionnelles"
@@ -309,13 +312,14 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     </div>
 
                     <div className={styles.halfForm}>
+
                         <div className={styles.blocForm}>
                             <label htmlFor="remunerationTotale" className="mb-2 italic">
                                 Rémunération totale
                             </label>
                             <input
                                 onChange={handleFormEnfant}
-                                value={enfant?.remunerationTotale || ''}
+                                value={enfantTmp?.remunerationTotale}
                                 type="number"
                                 min="0"
                                 id="remunerationTotale"
@@ -358,7 +362,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                             label={`Situation particulière relative à l'autorité parentale`} 
                             handleFile={handleFile}
                             handleDelete={handleDelete}
-                            text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l&apos;autorité parentale (retrait d'autorité parentale, tutelle, etc)`}
+                            text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc)`}
                         />
 
                     </div>
