@@ -45,15 +45,18 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
+  console.log('parsed before : ', parsed)
+
   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || '0')
-  parsed.montantCachet = parseInt(parsed.montantCachet?.toString() || '0')
+  parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || '0')
   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || '0')
   parsed.nombreLignes = parseInt(parsed.nombreLignes?.toString() || '0')
+  parsed.remunerationTotale = parseFloat(parsed.remunerationTotale?.toString() || '0')
   parsed.dateDerniereModification = new Date();
 
   delete parsed.piecesDossier
 
-  console.log('parsed : ', parsed)
+  console.log('parsed after : ', parsed)
 
   const produitupdated = await prisma.enfant.update({
     data: parsed,

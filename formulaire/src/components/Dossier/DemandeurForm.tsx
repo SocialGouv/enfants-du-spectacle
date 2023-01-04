@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
-import { Card, CardDescription, CardTitle } from "@dataesr/react-dsfr";
+import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
 import { Demandeur } from "@prisma/client";
-import { DossierData } from "src/fetching/dossiers";
+import { CONVENTIONS } from "src/lib/helpers";
+import SocieteProd from "./SocieteProd";
 
 interface Props {
     demandeur: Demandeur
@@ -11,6 +12,7 @@ interface Props {
 
 const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
     const [demandeurTmp, setDemandeur] = React.useState<Demandeur>(demandeur)
+    const [siret, setSiret] = React.useState<String>('')
 
     const handleFormDemandeur = (e: React.FormEvent<HTMLInputElement>): void => {
         setDemandeur({
@@ -18,6 +20,14 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
         [e.target.id]: e.currentTarget.value,
       });
     };
+
+    const handleSocieteProd = (id: number) => {
+        console.log('id a rajouter : ', id)
+        setDemandeur({
+            ...demandeurTmp,
+            societeProductionId: id
+        })
+    }
 
     React.useEffect(() => {
         passData(demandeurTmp)
@@ -31,8 +41,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                     <span className={styles.titleCard}>Informations liées au demandeur</span>
                 </CardTitle>
                 <CardDescription>
-                    <div className={styles.byThreeForm}>
 
+                    <div className={styles.byThreeForm}>
                         <div className={styles.blocForm}>
                             <label htmlFor="prenom" className="mb-2 italic">
                                 Prénom
@@ -46,7 +56,6 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                                 className="inputText"
                             />
                         </div>
-
 
                         <div className={styles.blocForm}>
                             <label htmlFor="nom" className="mb-2 italic">
@@ -62,7 +71,6 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                             />
                         </div>
 
-
                         <div className={styles.blocForm}>
                             <label htmlFor="fonction" className="mb-2 italic">
                                 Fonction
@@ -77,7 +85,6 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                             />
                         </div>
 
-
                         <div className={styles.blocForm}>
                             <label htmlFor="email" className="mb-2 italic">
                                 Mail
@@ -85,13 +92,13 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                             <input
                                 onChange={handleFormDemandeur}
                                 value={demandeurTmp.email || ''}
-                                type="text"
+                                type="email"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                 id="email"
                                 name="email"
                                 className="inputText"
                             />
                         </div>
-
 
                         <div className={styles.blocForm}>
                             <label htmlFor="phone" className="mb-2 italic">
@@ -107,6 +114,32 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData}) => {
                             />
                         </div>
                     </div>
+
+                        <div className={styles.blocForm}>
+                            <label htmlFor="conventionCollectiveCode" className="mb-2 italic">
+                                Convention collective applicable
+                            </label>
+                            <div className="selectDpt">
+                            <Select
+                                id="conventionCollectiveCode"
+                                selected={demandeurTmp.conventionCollectiveCode ? demandeurTmp.conventionCollectiveCode : ""}
+                                options={[
+                                    { label: demandeurTmp.conventionCollectiveCode ? "" : "Choisir", value: "" },
+                                    ].concat(
+                                    CONVENTIONS.map((u) => ({
+                                        label: `${u.label} - ${u.code}`,
+                                        value: u.code,
+                                    }))
+                                )}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    handleFormDemandeur(event);
+                                }}
+                            />
+                            </div>
+                        </div>
+
+                        <SocieteProd passSociete={handleSocieteProd} societeProdId={demandeurTmp.societeProductionId}></SocieteProd>
+
                 </CardDescription>
             </Card>
             
