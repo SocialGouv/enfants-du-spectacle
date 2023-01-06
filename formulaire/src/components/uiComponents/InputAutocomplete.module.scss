@@ -1,0 +1,18 @@
+.InputAutocomplete {
+
+    input {
+        height: 3rem;
+        border-bottom: solid #060591 2px !important;
+        border-radius: 0.25rem 0.25rem 0 0;
+    }
+
+}
+
+.rowResult {
+    cursor: pointer;
+    .infos {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--light-dark-fr);
+    }
+}

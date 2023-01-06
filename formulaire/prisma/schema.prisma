@@ -25,6 +25,7 @@ model User {
   role          Role?
   departement   String?
   departements  String[]
+  Enfant        Enfant[]
 }
 
 model Demandeur {
@@ -202,6 +203,8 @@ model Enfant {
   certificat                  String?
   avis                        String?
   dateDerniereModification    DateTime?
+  populatedBy                 User?                @relation(fields: [userId], references: [id])
+  userId                      Int?
 }
 
 // for next-auth
