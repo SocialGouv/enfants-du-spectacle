@@ -33,7 +33,7 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, handleFile, handleD
             {docs.length > 0 &&
                 <div className={styles.fileUploaded}>
                     {docs.filter(doc => {return doc.type === id}).map((doc, index) => (
-                        <div className={styles.rowDoc} onClick={() => {handleDelete(doc.id.toString())}}>
+                        <div className={styles.rowDoc} key={`${doc.nom}_${index}`} onClick={() => {handleDelete(doc.id.toString())}}>
                             <div className={styles.deleteDoc}>
                                 <Image
                                     src={`/images/trash.svg`}

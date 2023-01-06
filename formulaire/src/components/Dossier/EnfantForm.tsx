@@ -1,16 +1,17 @@
 import React, { KeyboardEventHandler } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
-import { Enfant, JustificatifEnfant } from "@prisma/client";
+import { Enfant, JustificatifEnfant, PieceDossierEnfant } from "@prisma/client";
 import { TYPE_EMPLOI, useDebouncedCallback } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
-import { updateEnfant } from "src/fetching/enfant";
+import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
 import fr from "date-fns/locale/fr";
 import moment from 'moment';
 import InputFile from "../uiComponents/InputFile";
 import { EnfantData } from "src/fetching/dossiers";
 import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
+import InputAutocomplete from "../uiComponents/InputAutocomplete";
 
 interface Props {
     enfant: EnfantData;
@@ -20,15 +21,32 @@ interface Props {
 const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
     const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant)
     const [initialRender, setInitialRender] = React.useState<Boolean>(true)
+    const [popOver, setPopOver] = React.useState<boolean>(false)
 
     const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
-        console.log('e value : ', e.currentTarget.value)
-        console.log('e value : ', e.currentTarget.value.replace('.', ','))
       setEnfant({
         ...enfantTmp,
         [e.target.id]: e.currentTarget.value,
       });
     };
+
+    const handleAutocomplete = (str: string, field: 'nom' | 'prenom') : void => {
+        setEnfant({
+            ...enfantTmp,
+            [field]: str
+        });
+    };
+
+    const handleSelect = (enfant: EnfantWithDosier) => {
+        console.log('enfant to set : ', enfant)
+        setEnfant({
+            ...enfantTmp,
+            nom: enfant.nom,
+            prenom: enfant.prenom,
+            dateNaissance: enfant.dateNaissance,
+            piecesDossier: enfant.piecesDossier as PieceDossierEnfant
+        })
+    }
 
     const handleDateEnfant = ( wichDate: string, date: Date): void => {
         setEnfant({
@@ -67,7 +85,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
     }
 
     const saveEnfant = useDebouncedCallback(() => {
-        console.log('saving enfant ...')
+        console.log('saving enfant ...', enfantTmp)
         updateEnfant(enfantTmp)
         refresh(enfantTmp)
     }, 1000);
@@ -85,6 +103,10 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
       setDefaultLocale("fr");
     });
 
+    React.useEffect(() => {
+        console.log('popOver : ', popOver)
+    }, [popOver])
+
 
 
     return (
@@ -92,34 +114,11 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
                     <div className={styles.byThreeForm}>
 
                         <div className={styles.blocForm}>
-                            <label htmlFor="prenom" className="mb-2 italic">
-                                Prénom(s)
-                            </label>
-                            <input
-                                onChange={handleFormEnfant}
-                                value={enfantTmp?.prenom || ''}
-                                type="text"
-                                id="prenom"
-                                name="prenom"
-                                className="inputText"
-                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
-                            />
+                            <InputAutocomplete label={'Prénom(s)'} field={'prenom'} enfant={enfantTmp} passData={handleAutocomplete} passEnfant={handleSelect}></InputAutocomplete>
                         </div>
 
-
                         <div className={styles.blocForm}>
-                            <label htmlFor="nom" className="mb-2 italic">
-                                Nom
-                            </label>
-                            <input
-                                onChange={handleFormEnfant}
-                                value={enfantTmp?.nom || ''}
-                                type="text"
-                                id="nom"
-                                name="nom"
-                                className="inputText"
-                                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => handleFocus(e)}
-                            />
+                            <InputAutocomplete label={'Nom'} field={'nom'} enfant={enfantTmp} passData={handleAutocomplete} passEnfant={handleSelect}></InputAutocomplete>
                         </div>
 
                         <div className={styles.blocForm}>
