@@ -59,7 +59,7 @@
     "react-multi-select-component": "^4.2.5",
     "remixicon": "^2.5.0",
     "sass": "^1.44.0",
-    "superjson": "^1.8.0",
+    "superjson": "^1.8.1",
     "swr": "^1.1.0",
     "use-debounce": "^7.0.1"
   },
