@@ -1,3 +1,10 @@
+## [1.32.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.12...v1.32.13) (2023-01-09)
+
+
+### Bug Fixes
+
+* update depot dossier ([#402](https://github.com/SocialGouv/enfants-du-spectacle/issues/402)) ([29b90b4](https://github.com/SocialGouv/enfants-du-spectacle/commit/29b90b4586321c34cbabbb65c8ca3e0d3cb205be))
+
 ## [1.32.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.32.11...v1.32.12) (2023-01-06)
 
 
