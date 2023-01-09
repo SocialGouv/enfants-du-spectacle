@@ -44,7 +44,7 @@ const EnfantForm: React.FC<Props> = ({enfant, refresh}) => {
             nom: enfant.nom,
             prenom: enfant.prenom,
             dateNaissance: enfant.dateNaissance,
-            piecesDossier: enfant.piecesDossier as PieceDossierEnfant
+            piecesDossier: enfant.piecesDossier
         })
     }
 

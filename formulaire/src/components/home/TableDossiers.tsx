@@ -24,6 +24,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     const [order, setOrder] = React.useState<'asc' | 'desc'>('desc')
 
     const fetchDossiers = async () => {
+        console.log('fetching dossiers ...')
         let res = await getDossiers(page, status, search, termOrdered, order)
         setDossiers(res.dossiers)
         setCountDossiers(res.countCurrent)
@@ -39,6 +40,11 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
         console.log('page', page)
         fetchDossiers()
     }, [ search, termOrdered, order, page, status ])
+
+    React.useEffect(() => {
+        console.log('page', page)
+        fetchDossiers()
+    }, [])
 
     return (
         <div className={styles.containerDossiers}>

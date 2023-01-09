@@ -81,7 +81,16 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
                 }
 
                 <div className={styles.saveBar}>
-                    <ButtonLink onClick={() => {saveDossier()}}>Déposer le dossier</ButtonLink>
+                    <ButtonLink onClick={async () => {
+                        setDossier({
+                            ...dossierTmp,
+                            statut: 'CONSTRUCTION'
+                        })
+                        await updateDossier(dossierTmp); 
+                        setTimeout(() => {
+                            router.push(`/`)
+                          }, 1000)
+                    }}>Déposer le dossier</ButtonLink>
                 </div>
 
 

@@ -2,7 +2,7 @@ import { Dossier, Enfant, PieceDossierEnfant } from "@prisma/client";
 
 export type EnfantWithDosier = Enfant & {
     dossier: Dossier
-    piecesDossier: PieceDossierEnfant
+    piecesDossier: PieceDossierEnfant[]
 }
 
 const createEnfant = async (enfant: Omit<Enfant, "id">) => {
