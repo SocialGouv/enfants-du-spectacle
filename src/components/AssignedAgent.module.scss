@@ -4,11 +4,11 @@
 
   select {
     background-color: white;
-    border: solid #313178 2px;
-    border-radius: 25px;
+    border-bottom: 2px solid black;
     text-decoration: none;
-    max-width: 150px;
     box-shadow: none;
+    width: fit-content;
+    outline: none;
   }
 }
 

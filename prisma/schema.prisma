@@ -99,7 +99,10 @@ enum JustificatifDossier {
   PLAN_TRAVAIL
   INFOS_COMPLEMENTAIRES
 }
-
+enum StatusNotif {
+  NOUVEAU
+  MIS_A_JOUR
+}
 model Dossier {
   id                       Int                   @id @default(autoincrement())
   nom                      String
@@ -128,6 +131,7 @@ model Dossier {
   dateDerniereModification DateTime?
   cdc                      Int?
   dateDepot                DateTime?
+  statusNotification       StatusNotif?
 }
 
 model Commentaire {

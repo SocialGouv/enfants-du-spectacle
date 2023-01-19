@@ -3,6 +3,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { HiClock } from "react-icons/hi";
+import { RiAlertFill, RiDownloadLine, RiInformationFill } from "react-icons/ri";
+import ButtonList from "src/components/ButtonList";
 import CommissionBloc from "src/components/Commission";
 import FilterBar from "src/components/FilterBar";
 import FilterBarText from "src/components/FilterBarText";
@@ -15,16 +19,25 @@ import {
   compact,
   filterCommissions,
   filterSearchResults,
+  frenchDateText,
+  frenchDepartementName,
   getFilterableSocietesProductions,
   stringToNumberOrNull,
 } from "src/lib/helpers";
+import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
+import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type {
   CommissionData,
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
+import type { statusGroup } from "src/lib/types";
+import { ButtonLink } from "src/uiComponents/button";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
+
+import styles from "../../components/Commission.module.scss";
+import tagStyle from "../../components/Tag.module.scss";
 
 const Page: React.FC = () => {
   const session = useSession();
@@ -42,6 +55,15 @@ const Page: React.FC = () => {
   }
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
+  const [showTable, setShowTable] = React.useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [status, setStatus] = React.useState<statusGroup>("futur");
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const handleStatus = (status: statusGroup) => {
+    setStatus(status);
+  };
+
   const { commissions, ...swrCommissions } = useCommissions(
     "upcoming",
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -49,7 +71,6 @@ const Page: React.FC = () => {
       ? "all"
       : session.data.dbUser.departements
   );
-  console.log("departements : ", session.data.dbUser.departements);
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
   );
@@ -200,11 +221,176 @@ const Page: React.FC = () => {
       {isError && <Icon name="ri-error" />}
       {!isLoading && !isError && !searchValueEffective && (
         <>
+          <ButtonList action={handleStatus} />
+          <div className={styles.commissionWrapper}>
+            <div className={styles.dossierTitleContainer}>
+              <div>Commissions</div>
+              {!showTable ? (
+                <AiOutlinePlus
+                  cursor="pointer"
+                  onClick={() => {
+                    setShowTable(true);
+                  }}
+                />
+              ) : (
+                <AiOutlineMinus
+                  cursor="pointer"
+                  onClick={() => {
+                    setShowTable(false);
+                  }}
+                />
+              )}
+            </div>
+            {showTable && (
+              <table cellSpacing={0} className={styles.tableHeader}>
+                <thead>
+                  <tr>
+                    <th>Département</th>
+                    <th>Dossiers</th>
+                    <th>Enfants</th>
+                    <th>Etat</th>
+                    <th>Télécharger</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCommissions?.map((commission, index) => {
+                    const countNew = commission.dossiers
+                      .map((dossier) => dossier.statusNotification)
+                      .filter((x) => x === "NOUVEAU").length;
+
+                    const countMaj = commission.dossiers
+                      .map((dossier) => dossier.statusNotification)
+                      .filter((x) => x === "MIS_A_JOUR").length;
+
+                    const countInstruction = commission.dossiers
+                      .map((dossier) => dossier.statut)
+                      .filter((d) => d === "INSTRUCTION").length;
+
+                    const countConstruction = commission.dossiers
+                      .map((dossier) => dossier.statut)
+                      .filter((d) => d === "CONSTRUCTION").length;
+
+                    const countPret = commission.dossiers
+                      .map((dossier) => dossier.statut)
+                      .filter((d) => d === "PRET").length;
+
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <a href={`#` + commission.id.toString()}>
+                            {frenchDateText(commission.date)} -{" "}
+                            {frenchDepartementName(commission.departement)}
+                          </a>
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <div style={{ marginRight: "15px" }}>
+                            {commission.dossiers.length}{" "}
+                          </div>
+                          {countNew !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagBlue}`}
+                              style={{ marginRight: "6px" }}
+                            >
+                              <RiInformationFill /> {countNew} NOUVEAU
+                            </div>
+                          )}
+                          {countMaj !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagRed}`}
+                            >
+                              <RiAlertFill /> {countMaj} MAJ
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {commission.dossiers
+                            .map((p) => {
+                              return p._count?.enfants ?? 0;
+                            })
+                            .reduce((i, b) => i + b, 0)}
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          {countInstruction !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
+                              style={{ marginRight: "15px" }}
+                            >
+                              <HiClock size={12} /> {countInstruction}
+                            </div>
+                          )}
+                          {countConstruction !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
+                            >
+                              <HiClock size={12} /> {countConstruction}
+                            </div>
+                          )}
+                          {countPret !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
+                            >
+                              {/* <BsCheckCircleFill size={12} /> {countPret} */}
+                              PRÊT
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {commission.dossiers.filter(
+                            (dossier) => dossier.statut === "PRET"
+                          ).length > 0 && (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <ButtonLink
+                                light={true}
+                                onClick={() => {
+                                  generateOdj(commission);
+                                }}
+                              >
+                                <RiDownloadLine
+                                  style={{ marginRight: "10px" }}
+                                />
+                                Ordre du jour
+                              </ButtonLink>
+                              <ButtonLink
+                                light={true}
+                                onClick={() => {
+                                  generatePV(commission);
+                                }}
+                              >
+                                <RiDownloadLine
+                                  style={{ marginRight: "10px" }}
+                                />
+                                Procès Verbal
+                              </ButtonLink>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
           {filteredCommissions?.map((commission: CommissionData) => (
-            <CommissionBloc
+            <div
               key={commission.date.toString()}
-              commission={commission}
-            />
+              className={styles.commissionBloc}
+            >
+              <CommissionBloc commission={commission} />
+            </div>
           ))}
           {session.data.dbUser.role !== "MEMBRE" && (
             <div style={{ fontSize: "1.5rem", padding: "2rem 0 3rem 0" }}>

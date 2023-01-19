@@ -2,6 +2,14 @@
   --red-marianne-main-472: #e1000f;
   --yellow-moutarde-main-679: #C3992A;
   --purple-glycine-main-494: #A558A0;
+  --blue-fr: #313178;
+  --light-grey-fr: #f6f6f6;
+  --dark-grey-fr: #eeeeee;
+  --light-dark-fr: #666666;
+  --purple-fr: #ececfe;
+}
+html {
+  scroll-behavior: smooth;
 }
 
 .card {
@@ -86,10 +94,11 @@
   border-bottom: none;
 }
 .headGrid{
-  color: #3366cc;
+  color: #000091;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 500;
   border-bottom: none;
+
 }
 
 
