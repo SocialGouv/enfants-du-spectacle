@@ -12,10 +12,7 @@
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   margin-top:2rem;
-  div {
-    padding-left:0.5rem;
-    padding-right:0.5rem;
-  }
+
   p {
     margin-bottom:0;
   }
@@ -69,6 +66,7 @@
   }
   td {
     padding: 16px 16px;
+    vertical-align: baseline;
   }
   tbody tr {
     width: 100%;

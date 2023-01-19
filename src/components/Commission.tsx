@@ -2,6 +2,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import React from "react";
+import { RiDownloadLine } from "react-icons/ri";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import NotificationDossierTag from "src/components/NotificationDossierTag";
@@ -105,6 +106,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
                   generateOdj(commission);
                 }}
               >
+                <RiDownloadLine style={{ marginRight: "10px" }} />
                 Télécharger ordre du jour
               </button>
             )}
@@ -121,6 +123,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
                   generatePV(commission);
                 }}
               >
+                <RiDownloadLine style={{ marginRight: "10px" }} />
                 Télécharger Procès Verbal
               </button>
             )}

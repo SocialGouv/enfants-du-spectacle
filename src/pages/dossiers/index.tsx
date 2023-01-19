@@ -203,12 +203,14 @@ const Page: React.FC = () => {
       headerBottom={
         <FilterBar
           text={
-            <FilterBarText
-              searchResults={
-                !loading && searchValueDebounced ? searchResults : null
-              }
-              commissions={commissions ?? []}
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FilterBarText
+                searchResults={
+                  !loading && searchValueDebounced ? searchResults : null
+                }
+                commissions={commissions ?? []}
+              />
+            </div>
           }
           onChangeFilters={updateQuerystring}
           allSocieteProductions={filterableSocietesProductions ?? []}

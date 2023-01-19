@@ -1,16 +1,17 @@
 input.search {
-  background: inherit;
+  background: #EEEEEE;
   border: none;
-  color: white;
+  color: #666666 !important;
   font-size: 1.2rem;
   width: auto;
   display: inline-block;
   flex: 1;
-  padding: 0 1rem;
+  padding: 12px 16px;
+  border-bottom: 2px solid #000091;
 
   &::placeholder {
     opacity: 0.9;
-    color: white;
+    color: #666666;
   }
 
   &:active,

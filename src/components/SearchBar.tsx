@@ -1,4 +1,3 @@
-import { Title } from "@dataesr/react-dsfr";
 import React from "react";
 import { GiMagnifyingGlass } from "react-icons/gi";
 import styles from "src/components/SearchBar.module.scss";
@@ -12,7 +11,6 @@ const SearchBar: React.FC<Props> = ({ value, onChange }) => {
   return (
     <>
       <GiMagnifyingGlass className={styles.icon} />
-      <Title as="h1">|</Title>
       <input
         value={value}
         type="text"
