@@ -1,3 +1,10 @@
+## [1.33.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.4...v1.33.5) (2023-01-20)
+
+
+### Bug Fixes
+
+* fix migration ([#412](https://github.com/SocialGouv/enfants-du-spectacle/issues/412)) ([c45a184](https://github.com/SocialGouv/enfants-du-spectacle/commit/c45a184cd34ba04b00fa89f6dcdf03ec4403f658))
+
 ## [1.33.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.3...v1.33.4) (2023-01-20)
 
 
