@@ -6,9 +6,12 @@ import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
+import { useSWRConfig } from "swr";
+import { updateDossier } from "src/lib/queries";
 
 const Page: React.FC = () => {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
@@ -19,6 +22,22 @@ const Page: React.FC = () => {
   const isError =
     !isLoading &&
     (swrDossier.isError || !dossierId || !dossier || swrLinks.isError);
+
+  if( dossier && dossier?.statusNotification !== null) {
+    let statusNotification = null
+    mutate(
+      `/api/dossiers/${dossier.id}`,
+      { ...dossier, statusNotification },
+      false
+    ).catch((e) => {
+      throw e;
+    });
+    updateDossier(dossier, { statusNotification }, () => {
+      mutate(`/api/dossiers/${dossier?.id}`).catch((e) => {
+        throw e;
+      });
+    });
+  }
 
   const title = (
     <>
