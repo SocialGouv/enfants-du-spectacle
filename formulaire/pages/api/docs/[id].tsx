@@ -32,7 +32,7 @@ const uploadFile = (req: NextApiRequest, saveLocally?: boolean):Promise<{fields:
   const dossierId = getId(req)
   const options: formidable.Options = {};
   if(saveLocally){
-    options.uploadDir = `/mnt/docs/${dossierId}`;
+    options.uploadDir = `/mnt/docs`;
     options.filename = (name, ext, path, form) => {
       return Date.now().toString() + "_" + path.originalFilename;
     }
@@ -50,11 +50,6 @@ const uploadFile = (req: NextApiRequest, saveLocally?: boolean):Promise<{fields:
 const post: NextApiHandler = async (req, res) => {
     const dossierId = getId(req)
     console.log('dossier id : ', dossierId)
-    try {
-      await fs.readdir(`/mnt/docs/${dossierId}`)
-    } catch (error) {
-      await fs.mkdir(`/mnt/docs/${dossierId}`)
-    }
     const upload = await uploadFile(req, true)
     console.log('upload', upload)
     res.status(200).json({filePath: upload.files.justificatif.filepath})
