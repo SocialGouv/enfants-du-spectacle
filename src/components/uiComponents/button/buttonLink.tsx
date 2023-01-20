@@ -1,6 +1,6 @@
 import React from 'react';
+import IconLoader from 'src/components/IconLoader';
 import styles from "./buttonStyle.module.scss";
-import IconLoader from '../../components/IconLoader';
 
 interface IProps {
   href?: string;
