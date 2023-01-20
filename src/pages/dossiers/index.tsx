@@ -32,12 +32,12 @@ import type {
   SearchResultsType,
 } from "src/lib/queries";
 import type { statusGroup } from "src/lib/types";
-import { ButtonLink } from "src/uiComponents/button";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
 import styles from "../../components/Commission.module.scss";
 import tagStyle from "../../components/Tag.module.scss";
+import { ButtonLink } from "src/components/uiComponents/button";
 
 const Page: React.FC = () => {
   const session = useSession();

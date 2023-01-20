@@ -8,4 +8,4 @@
 CREATE TYPE "StatusNotif" AS ENUM ('NOUVEAU', 'MIS_A_JOUR');
 
 -- AlterTable
-ALTER TABLE "Dossier" ADD COLUMN     "statusNotification" "StatusNotif" NOT NULL;
+ALTER TABLE "Dossier" ADD COLUMN     "statusNotification" "StatusNotif";
