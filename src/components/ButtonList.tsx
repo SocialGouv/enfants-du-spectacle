@@ -4,8 +4,8 @@ import { BsCalendar4Event } from "react-icons/bs";
 import { TbBadge } from "react-icons/tb";
 import type { statusGroup } from "src/lib/types";
 
-import { ButtonLink } from "../uiComponents/button";
 import styles from "./ButtonList.module.scss";
+import { ButtonLink } from "./uiComponents/button";
 
 interface Props {
   action: (status: statusGroup) => void;
