@@ -264,17 +264,17 @@ const Page: React.FC = () => {
                       .map((dossier) => dossier.statusNotification)
                       .filter((x) => x === "MIS_A_JOUR").length;
 
-                    const countInstruction = commission.dossiers
+                    const countPending = commission.dossiers
                       .map((dossier) => dossier.statut)
-                      .filter((d) => d === "INSTRUCTION").length;
+                      .filter(
+                        (d) => d === "INSTRUCTION" || d === "CONSTRUCTION"
+                      ).length;
 
-                    const countConstruction = commission.dossiers
+                    const countReady = commission.dossiers
                       .map((dossier) => dossier.statut)
-                      .filter((d) => d === "CONSTRUCTION").length;
-
-                    const countPret = commission.dossiers
-                      .map((dossier) => dossier.statut)
-                      .filter((d) => d === "PRET").length;
+                      .filter(
+                        (d) => d !== "CONSTRUCTION" && d !== "INSTRUCTION"
+                      ).length;
 
                     return (
                       <tr key={index}>
@@ -320,27 +320,19 @@ const Page: React.FC = () => {
                             display: "flex",
                           }}
                         >
-                          {countInstruction !== 0 && (
+                          {countPending !== 0 && (
                             <div
                               className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
                               style={{ marginRight: "15px" }}
                             >
-                              <HiClock size={12} /> {countInstruction}
+                              <HiClock size={12} /> {countPending}
                             </div>
                           )}
-                          {countConstruction !== 0 && (
-                            <div
-                              className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
-                            >
-                              <HiClock size={12} /> {countConstruction}
-                            </div>
-                          )}
-                          {countPret !== 0 && (
+                          {countReady !== 0 && (
                             <div
                               className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
                             >
-                              {/* <BsCheckCircleFill size={12} /> {countPret} */}
-                              PRÊT
+                              <HiClock size={12} /> {countReady}
                             </div>
                           )}
                         </td>
