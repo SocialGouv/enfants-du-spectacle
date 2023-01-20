@@ -427,7 +427,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
                         handleDelete={handleDelete}
                         text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
                     />
-                    <div className={styles.smallText}>Informations disponibles sur le site de <Link href="https://www.ac-paris.fr/" target={"_blank"}>l'Académie de Paris</Link></div>
+                    <div className={styles.smallText}>Informations disponibles sur le site de <Link href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 " target={"_blank"}>l'Académie de Paris</Link></div>
 
                 </div>
 
