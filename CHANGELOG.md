@@ -1,3 +1,10 @@
+## [1.33.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.3...v1.33.4) (2023-01-20)
+
+
+### Bug Fixes
+
+* fix import uibutton ([#411](https://github.com/SocialGouv/enfants-du-spectacle/issues/411)) ([d1e3ab4](https://github.com/SocialGouv/enfants-du-spectacle/commit/d1e3ab4002de13fe6a249366baf5540b2f3de053))
+
 ## [1.33.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.2...v1.33.3) (2023-01-20)
 
 
