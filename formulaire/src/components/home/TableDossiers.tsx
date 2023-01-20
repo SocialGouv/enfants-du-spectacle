@@ -5,6 +5,7 @@ import { statusGroup } from "src/lib/types";
 import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
+import LabelStatus from "../LabelStatus";
 import TableCard from "../TableCard";
 import OrderableItem from "./OrderableItem";
 import styles from "./TableDossiers.module.scss";
@@ -24,7 +25,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     const [order, setOrder] = React.useState<'asc' | 'desc'>('desc')
 
     const fetchDossiers = async () => {
-        console.log('fetching dossiers ...')
         let res = await getDossiers(page, status, search, termOrdered, order)
         setDossiers(res.dossiers)
         setCountDossiers(res.countCurrent)
@@ -37,12 +37,10 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     }
 
     React.useEffect(() => {
-        console.log('page', page)
         fetchDossiers()
     }, [ search, termOrdered, order, page, status ])
 
     React.useEffect(() => {
-        console.log('page', page)
         fetchDossiers()
     }, [])
 
@@ -71,7 +69,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                     {dossier.nom}
                                 </div>
                                 <div className={styles.itemDossier}>
-                                    {dossier.statut}
+                                    <LabelStatus status={dossier.statut}></LabelStatus>
                                 </div>
                                 <div className={styles.itemDossier}>
                                     {dossier.dateDerniereModification ? frenchDateText(dossier.dateDerniereModification) : ''}

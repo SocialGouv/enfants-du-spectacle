@@ -1,9 +1,20 @@
 .headingDossier {
-    padding: 3rem 0rem;
+    padding: 2rem 0rem;
     margin-bottom: 1rem;
     background-color: var(--purple-fr);
 
+    .topRow {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+
+        h4 {
+            margin-bottom: 0;
+        }
+    }
+
     h2 {
         color: var(--light-dark-fr);
+        margin-bottom: 0;
     }
 }

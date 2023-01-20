@@ -26,5 +26,8 @@ module.exports = withSentryConfig(
     silent: true, // Suppresses all logs
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options.
+  },
+  {
+    reactStrictMode: false,
   }
 )

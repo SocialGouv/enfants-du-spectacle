@@ -23,4 +23,12 @@
         }
     }
 
+    input::file-selector-button {
+        background-color: var(--dark-grey-fr);
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
 }

@@ -7,7 +7,7 @@ import styles from "./SocieteProd.module.scss";
 
 interface Props {
     societeProdId: string | null,
-    passSociete: (id: string) => void
+    passSociete: (societeProd: SocieteProduction) => void
 }
 
 const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
@@ -37,9 +37,11 @@ const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
                     adresseCodeCommune: res.etablissement.adresseEtablissement.libelleCommuneEtablissement,
                     formeJuridique: res.etablissement.uniteLegale.categorieJuridiqueUniteLegale
                 })
-                passSociete(createdSociete.siret as string)
+                setSocieteProd(createdSociete)
+                passSociete(createdSociete)
             } else {
-                passSociete(foundSociete.siret as string)
+                setSocieteProd(foundSociete)
+                passSociete(foundSociete)
             }
         }
     }, 1000);
@@ -52,7 +54,6 @@ const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
 
     React.useEffect(() => {
         if(societeProdId) {
-            console.log('got societe prod')
             fetchSociete()
         }
     }, [])
@@ -68,7 +69,7 @@ const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
 
             <div className={styles.blocForm}>
                 <label htmlFor="nom" className="mb-2 italic">
-                    Société Production (SIRET) 
+                    Société Production (SIRET) *
                 </label>
                 <input
                     onChange={handleSiret}

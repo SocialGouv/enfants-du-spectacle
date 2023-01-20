@@ -21,15 +21,6 @@ import {
             <a href="https://next-auth.js.org">Documentation</a>
           </FooterBodyItem> */}
         </FooterBody>
-        <FooterPartners>
-          <FooterPartnersTitle>Partenaires</FooterPartnersTitle>
-          <FooterPartnersLogo
-            isMain
-            href="#"
-            imageSrc="/logo-beta-gouv.png"
-            imageAlt="beta.gouv.fr"
-          />
-        </FooterPartners>
         <FooterBottom>
           <FooterLink href="/mentions">Mentions légales</FooterLink>
         </FooterBottom>

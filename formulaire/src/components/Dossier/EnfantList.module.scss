@@ -53,6 +53,18 @@
         margin-top: 2rem;
     }
 
+    .buttonUp {
+        margin-top: 2rem;
+        text-align: right;
+        padding: 0 0.5rem;
+        float: right;
+        position: sticky;
+        bottom: 25px;
+        img {
+            cursor: pointer;
+        }
+    }
+
     .rowEnfant {
         margin-top: 2rem;
     }

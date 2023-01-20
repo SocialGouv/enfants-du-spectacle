@@ -110,7 +110,6 @@ const post: NextApiHandler = async (req, res) => {
       demandeurId: parsed.demandeurId,
       nom: ''
     }
-    console.log('data : ', data)
     try {
       const dossier = await prisma.dossier.create({ data });
       res.status(200).json(dossier);
@@ -137,8 +136,6 @@ const update: NextApiHandler = async (req, res) => {
   delete parsed.Demandeur;
   delete parsed.piecesDossier;
   parsed.dateDerniereModification = new Date();
-
-  console.log('parsed : ', parsed)
 
   const produitupdated = await prisma.dossier.update({
     data: parsed,

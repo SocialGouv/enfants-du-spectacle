@@ -6,3 +6,5 @@ data:
   NODE_ENV: "production"
   EMAIL_FROM: "Enfants du Spectacle [PREPROD] <enfantsduspectacle@diffusion.fabrique.social.gouv.fr>"
   DEMARCHE_NUMBER: "55315"
+  API_URL_INSTRUCTEUR: "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync"
+  API_URL_SDP: "https://formulaire-enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync"

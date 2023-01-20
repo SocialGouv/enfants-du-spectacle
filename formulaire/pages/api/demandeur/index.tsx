@@ -21,9 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-    const session = await getSession({ req });
     const data = {}
-    console.log('data : ', data)
     try {
       const demandeur = await prisma.demandeur.create({ data });
       res.status(200).json(demandeur);
@@ -45,10 +43,22 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  console.log('parsed : ', parsed)
+  delete parsed.societeFound
+  delete parsed.societeProductionId
 
-  const dempandeurUpdated = await prisma.demandeur.update({
+  let dempandeurUpdated = await prisma.demandeur.update({
     data: parsed,
+    where: { id: parsed.id },
+  })
+
+  dempandeurUpdated = await prisma.demandeur.update({
+    data: {
+      societeProduction: {
+        connect: {
+          id: 11
+        },
+      }
+    },
     where: { id: parsed.id },
   })
 

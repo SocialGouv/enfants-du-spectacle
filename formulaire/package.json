@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
+    "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build",
     "start": "export NEXTAUTH_URL=$APP_BASE_URL && npx prisma migrate deploy && next start",
     "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && npx prisma migrate deploy && next start",
@@ -19,11 +20,14 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
+    "axios": "^1.2.3",
     "DatePicker": "^2.0.0",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "formidable": "^2.1.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "multer": "^1.4.5-lts.1",
     "next": "13.0.5",
     "next-auth": "^4.17.0",
     "nodemailer": "^6.8.0",
@@ -39,6 +43,8 @@
     "typescript": "4.9.3"
   },
   "devDependencies": {
+    "@types/formidable": "^2.0.5",
+    "@types/multer": "^1.4.7",
     "prisma": "^4.7.0"
   }
 }

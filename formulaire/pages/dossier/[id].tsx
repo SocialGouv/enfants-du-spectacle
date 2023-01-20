@@ -13,9 +13,7 @@ const DossierPage: React.FC = () => {
 
   const fetchDossier = async () => {
     if (router.query.id) {
-      console.log('router : ', router.query.id)
       const res = await getDossier(router.query.id as string)
-      console.log('res : ', res)
       setDossier(res)
     }
   }

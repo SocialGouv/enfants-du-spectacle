@@ -1,5 +1,6 @@
 import { Icon } from "@dataesr/react-dsfr";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import React from "react";
 import AssignedAgentSelect from "src/components/AssignedAgentSelect";
 import ChangeStatutDossierButton from "src/components/ChangeStatutDossierButton";
@@ -8,6 +9,8 @@ import IconLoader from "src/components/IconLoader";
 import { useDossier } from "src/lib/api";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import { factory as statutDossierFSMFactory } from "src/lib/statutDossierStateMachine";
+
+import AssignCommissionSelect from "./AssignCommissionSelect";
 
 interface ItemProps {
   label: string;
@@ -28,6 +31,7 @@ interface Props {
 
 const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
+  const { data: session } = useSession();
 
   if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
@@ -44,7 +48,16 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
       <Item label="Département">
         {frenchDepartementName(dossier.commission.departement)}
       </Item>
-      <Item label="Commission">{frenchDateText(dossier.commission.date)}</Item>
+      {session.dbUser.role !== "ADMIN" && (
+        <Item label="Commission">
+          {frenchDateText(dossier.commission.date)}
+        </Item>
+      )}
+      {session.dbUser.role === "ADMIN" && (
+        <Item label="Commission">
+          <AssignCommissionSelect dossierId={dossierId} />
+        </Item>
+      )}
       <Item label="Suivi par">
         <AssignedAgentSelect dossierId={dossierId} />
       </Item>

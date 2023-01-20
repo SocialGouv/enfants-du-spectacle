@@ -1,0 +1,2 @@
+web: npm run dev
+mail: npx maildev

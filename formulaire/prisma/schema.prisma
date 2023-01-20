@@ -30,7 +30,7 @@ model User {
 
 model Demandeur {
   id                       Int                @id @default(autoincrement())
-  email                    String?            @unique
+  email                    String?
   nom                      String?
   prenom                   String?
   phone                    String?

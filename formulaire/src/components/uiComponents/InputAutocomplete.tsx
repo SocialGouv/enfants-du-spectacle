@@ -18,17 +18,22 @@ const InputAutocomplete: React.FC<Props> = ({ label, field, enfant, passData, pa
     const [enfantsList, setEnfantsList] = React.useState<EnfantWithDosier[]>([])
 
     const handleOnSearch = async (string: string, results: Object) => {
-      console.log(string, results)
       passData(string, field)
       let infosEnfant = {nom: '', prenom: ''}
       infosEnfant[field] = string
       let enfantsFound = await searchEnfants(infosEnfant)
-      setEnfantsList(enfantsFound)
-      console.log('enfants found : ', enfantsFound)
+      let seen = Object.create(null)
+      let result = enfantsFound.filter(o => {
+          var key = ['nom', 'prenom', 'dataNaissance'].map(k => o[k as keyof Enfant]).join('|');
+          if (!seen[key]) {
+              seen[key] = true;
+              return true;
+          }
+      });
+      setEnfantsList(result)
     }
 
     const handleOnSelect = (item: EnfantWithDosier) => {
-      console.log(item)
       passEnfant(item)
     }
   
@@ -45,7 +50,7 @@ const InputAutocomplete: React.FC<Props> = ({ label, field, enfant, passData, pa
     return (
         <div className={styles.InputAutocomplete}>
 
-            <label htmlFor="prenom" className="mb-2 italic">
+            <label className="mb-2 italic">
                 {label}
             </label>
             <div className={styles.autoComplete}>

@@ -15,11 +15,12 @@ interface Props {
     label: string,
     text: string,
     docs: Doc[],
+    allowChanges: Boolean,
     handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void,
     handleDelete: (id: string) => void
 }
 
-const InputFile: React.FC<Props> = ({ id, label, text, docs, handleFile, handleDelete }) => {
+const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handleFile, handleDelete }) => {
 
     return (
         <div className={styles.InputFile}>
@@ -33,24 +34,29 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, handleFile, handleD
             {docs.length > 0 &&
                 <div className={styles.fileUploaded}>
                     {docs.filter(doc => {return doc.type === id}).map((doc, index) => (
-                        <div className={styles.rowDoc} key={`${doc.nom}_${index}`} onClick={() => {handleDelete(doc.id.toString())}}>
-                            <div className={styles.deleteDoc}>
-                                <Image
-                                    src={`/images/trash.svg`}
-                                    alt="Supprimer"
-                                    width={20}
-                                    height={20}
-                                />
+                        <div key={`${doc.nom}_${index}`}>
+                            <div className={styles.rowDoc}>
+                                {!allowChanges &&
+                                    <div className={styles.deleteDoc} onClick={() => {handleDelete(doc.id.toString())}}>
+                                        <Image
+                                            src={`/images/trash.svg`}
+                                            alt="Supprimer"
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </div>
+                                }
+                                <span key={`piece_justificative_${id}_${index}`}>{doc.nom}</span>
                             </div>
-                            <span key={`piece_justificative_${id}_${index}`}>{doc.nom}</span>
                         </div>
                     ))}
                 </div>
             }
-            {docs.filter(doc => {return doc.type === id}).length < 3 && 
+            {docs.filter(doc => {return doc.type === id}).length < 3 && !allowChanges &&
                 <div className="Form--field">
                     <input type="file"
-                        id={id} name="avatar"
+                        id={id} name="justificatif"
+                        placeholder="Parcourir..."
                         accept=".doc,.docx,image/jpeg,image/gif,image/png,application/pdf,application/msword,
                         application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" onChange={handleFile}>
                     </input>

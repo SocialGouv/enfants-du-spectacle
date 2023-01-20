@@ -12,20 +12,36 @@ import Link from "next/link";
 import {useRef} from 'react';
 import moment from 'moment';
 import OrderableItem from "../home/OrderableItem";
+import Image from "next/image";
 
 interface Props {
     dossier: DossierData
+    allowChanges: Boolean
     enfants: Enfant[]
     passData: (enfans: Enfant[]) => void;
 }
 
-const EnfantList: React.FC<Props> = ({dossier, enfants, passData}) => {
+const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges}) => {
     const [enfantsTmp, setEnfants] = React.useState<Enfant[]>(enfants)
     const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>()
     const [page, setPage] = React.useState<number>(0)
     const myRef = useRef(null);
     const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>('dateDerniereModification')
     const [order, setOrder] = React.useState<'asc' | 'desc'>('desc')
+
+    const [scrollPosition, setScrollPosition] = React.useState(0);
+    const handleScroll = () => {
+        const position = window.pageYOffset;
+        setScrollPosition(position);
+    };
+
+    React.useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [selectedEnfant]);
 
     const scrollToRef = (ref: React.MutableRefObject<null>) => {
         if(ref && ref.current) {
@@ -77,7 +93,6 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData}) => {
             }
             return 0;
         }))
-        console.log('order done')
     }, [order, termOrdered])
 
     React.useEffect(() => {
@@ -87,72 +102,85 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData}) => {
     return (
         <div className={styles.enfantList}>
             
-        <Card>
-            <CardTitle>
-                <span className={styles.titleTable}>Enfants</span>
-            </CardTitle>
-            <CardDescription>
+            <Card>
+                <CardTitle>
+                    <span className={styles.titleTable} id='list-enfants-top'>Enfants</span>
+                </CardTitle>
+                <CardDescription>
 
-            <div className={styles.headRow}>
-                <OrderableItem text={'Rôle'} termToOrder={'typeEmploi'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
-                <OrderableItem text={'Nom et prénom'} termToOrder={'nom'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
-                <OrderableItem text={'Age'} termToOrder={'dateNaissance'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
-                <OrderableItem text={'Personnage'} termToOrder={'nomPersonnage'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
-                <OrderableItem text={'Mis à jour'} termToOrder={'dateDerniereModification'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
-                <div className={styles.itemHead}>
-                    Pièces justificatives
-                </div>
-            </div>
-            {enfantsTmp.slice(page * 10, (page * 10) + 10).map((enfant) => (
-                <Link href={`#row-enfant-${enfant.id}`} className={styles.tableEnfant} key={`table-enfant-${enfant.id}`} onClick={() => {clickEnfant(enfant)}}>
-                    <div className={styles.itemDossier}>
-                        {enfant.typeEmploi}
-                    </div>
-                    <div className={styles.itemDossier}>
-                        {`${enfant.nom} ${enfant.prenom}`}
-                    </div>
-                    <div className={styles.itemDossier}>
-                        {enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}
-                    </div>
-                    <div className={styles.itemDossier}>
-                        {enfant.nomPersonnage}
-                    </div>
-                    <div className={styles.itemDossier}>
-                        {enfant.dateDerniereModification ? frenchDateText(enfant.dateDerniereModification) : ''}
-                    </div>
-                    <div className={styles.itemDossier}>
+                <div className={styles.headRow}>
+                    <OrderableItem text={'Rôle'} termToOrder={'typeEmploi'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                    <OrderableItem text={'Nom et prénom'} termToOrder={'nom'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                    <OrderableItem text={'Age'} termToOrder={'dateNaissance'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                    <OrderableItem text={'Personnage'} termToOrder={'nomPersonnage'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                    <OrderableItem text={'Mis à jour'} termToOrder={'dateDerniereModification'} action={handleOrder} termOrdered={termOrdered} order={order}></OrderableItem>
+                    <div className={styles.itemHead}>
                         Pièces justificatives
                     </div>
-                </Link>
-            ))}
-            <div className={styles.pagination}>
-                {[...Array(Math.ceil(enfantsTmp.length/10))].map((e, i) => (
-                    <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}} key={i}>{i + 1}</ButtonLink>
+                </div>
+                {enfantsTmp.slice(page * 10, (page * 10) + 10).map((enfant) => (
+                    <Link href={`#row-enfant-${enfant.id}`} className={styles.tableEnfant} key={`table-enfant-${enfant.id}`} onClick={() => {clickEnfant(enfant)}}>
+                        <div className={styles.itemDossier}>
+                            {enfant.typeEmploi}
+                        </div>
+                        <div className={styles.itemDossier}>
+                            {`${enfant.nom} ${enfant.prenom}`}
+                        </div>
+                        <div className={styles.itemDossier}>
+                            {enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}
+                        </div>
+                        <div className={styles.itemDossier}>
+                            {enfant.nomPersonnage}
+                        </div>
+                        <div className={styles.itemDossier}>
+                            {enfant.dateDerniereModification ? frenchDateText(enfant.dateDerniereModification) : ''}
+                        </div>
+                        <div className={styles.itemDossier}>
+                            Pièces justificatives
+                        </div>
+                    </Link>
                 ))}
-            </div>
-            </CardDescription>
-        </Card>
+                <div className={styles.pagination}>
+                    {[...Array(Math.ceil(enfantsTmp.length/10))].map((e, i) => (
+                        <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}} key={i}>{i + 1}</ButtonLink>
+                    ))}
+                </div>
+                </CardDescription>
+            </Card>
 
-        <div className={styles.actionRow} ref={myRef}>
-            <ButtonLink light={true} onClick={() => {addEnfant()}}>Ajouter un enfant</ButtonLink>
-        </div>
-
-        <div className={styles.listEnfants}>
-        {enfantsTmp.map((enfant) => (
-            <div className={styles.rowEnfant} key={`row-enfant-${enfant.id}`} id={`row-enfant-${enfant.id}`}>
-                <Card>
-                    <CardTitle>
-                        <div className={styles.titleTable}>{`${enfant.typeEmploi} : ${enfant.nom} ${enfant.prenom} (${enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}) - Personnage : ${enfant.nomPersonnage}`}</div>
-                    </CardTitle>
-                    <CardDescription>
-                    <Foldable hidden={true} folded={!(selectedEnfant?.id === enfant.id)} action={() => {handleFolded(enfant)}}>
-                        <EnfantForm enfant={enfant} refresh={handleRefresh}></EnfantForm>
-                    </Foldable>
-                    </CardDescription>
-                </Card>
+            <div className={styles.actionRow} ref={myRef}>
+                <ButtonLink light={true} onClick={() => {addEnfant()}}>Ajouter un enfant</ButtonLink>
             </div>
-        ))}
-        </div>
+
+            <div className={styles.listEnfants}>
+            {enfantsTmp.map((enfant) => (
+                <div className={styles.rowEnfant} key={`row-enfant-${enfant.id}`} id={`row-enfant-${enfant.id}`}>
+                    <Card>
+                        <CardTitle>
+                            <div className={styles.titleTable}>{`${enfant.typeEmploi} : ${enfant.nom} ${enfant.prenom} (${enfant.dateNaissance ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate()) : ''}) - Personnage : ${enfant.nomPersonnage}`}</div>
+                        </CardTitle>
+                        <CardDescription>
+                        <Foldable hidden={true} folded={!(selectedEnfant?.id === enfant.id)} action={() => {handleFolded(enfant)}}>
+                            <EnfantForm enfant={enfant} refresh={handleRefresh} allowChanges={allowChanges}></EnfantForm>
+                        </Foldable>
+                        </CardDescription>
+                    </Card>
+                </div>
+            ))}
+            </div>
+
+            {scrollPosition > 450 &&
+                <div className={styles.buttonUp}>
+                    <Link href={`#menu-dossier`}>
+                        <Image
+                            src={`/images/arrow-up.svg`}
+                            alt="Supprimer"
+                            width={30}
+                            height={30}
+                        />
+                    </Link>
+                </div>
+            }
             
         </div>
     );
