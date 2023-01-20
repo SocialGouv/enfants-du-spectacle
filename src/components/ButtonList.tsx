@@ -34,16 +34,16 @@ const ButtonList: React.FC<Props> = ({ action }) => {
           </div>
         </ButtonLink>
         <ButtonLink
-          light={!(status === "passed")}
+          light={!(status === "past")}
           onClick={() => {
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/no-confusing-void-expression
-            setStatus("passed"), action("passed");
+            setStatus("past"), action("past");
           }}
         >
           <TbBadge style={{ marginRight: "6px" }} />
           <div
             className={`${styles.buttonStatus} ${
-              status !== "passed" ? `${styles.inactiveStatus}` : ""
+              status !== "past" ? `${styles.inactiveStatus}` : ""
             }`}
           >
             Commissions passées...

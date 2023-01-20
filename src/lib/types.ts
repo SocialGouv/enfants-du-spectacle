@@ -47,7 +47,7 @@ type CommissionData = Commission & { dossiers: DossierData[] };
 
 type SendListData = SendList & { user: User };
 
-type statusGroup = "futur" | "passed";
+type statusGroup = "futur" | "past";
 
 export type {
   CommentaireData,
