@@ -2,8 +2,10 @@ import _ from "lodash";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import React from "react";
+import { RiDownloadLine } from "react-icons/ri";
 import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
+import NotificationDossierTag from "src/components/NotificationDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
 import {
   frenchDateText,
@@ -39,6 +41,9 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
       <div>
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
+      <div>
+        <NotificationDossierTag dossier={dossier} />
+      </div>
     </div>
   );
 };
@@ -56,28 +61,37 @@ const Commission: React.FC<Props> = ({ commission }) => {
     .reduce((i, b) => i + b, 0);
   const { data: session } = useSession();
   return (
-    <div className="card">
+    <div id={commission.id.toString()} className="card">
       <div className={styles.commissionHeader}>
         <div className={styles.dossierTitle}>
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
       </div>
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ fontWeight: 600, marginBottom: "2rem" }}>
         <b>{dossiersCount}</b> dossiers - <b>{enfantsCount}</b> enfants
       </div>
 
-      <div className={`${styles.dossierGrid} itemGrid headGrid`}>
-        <div />
+      <div
+        className={`${styles.dossierGrid} itemGrid headGrid`}
+        style={{ borderBottom: "1px solid #DDDDDD", paddingBottom: "12px" }}
+      >
+        <div>Etats</div>
         <div>Dossier</div>
         <div>Société</div>
         <div>Enfants</div>
         <div>Suivi par</div>
         <div>Catégorie</div>
+        <div>Notifications</div>
       </div>
       <div>
         {commission.dossiers.map((dossier) => (
-          <Dossier key={dossier.id} dossier={dossier} />
+          <div
+            style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
+            key={dossier.id}
+          >
+            <Dossier dossier={dossier} />
+          </div>
         ))}
       </div>
       <div className={styles.actionGrid}>
@@ -92,6 +106,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
                   generateOdj(commission);
                 }}
               >
+                <RiDownloadLine style={{ marginRight: "10px" }} />
                 Télécharger ordre du jour
               </button>
             )}
@@ -108,6 +123,7 @@ const Commission: React.FC<Props> = ({ commission }) => {
                   generatePV(commission);
                 }}
               >
+                <RiDownloadLine style={{ marginRight: "10px" }} />
                 Télécharger Procès Verbal
               </button>
             )}

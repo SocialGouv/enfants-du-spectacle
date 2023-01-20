@@ -5,17 +5,14 @@
 }
 
 .dossierGrid {
-  grid-template-columns: 10rem 1.3fr 1.3fr .6fr 1fr 8rem;
+  grid-template-columns: 1.3fr 1.3fr 1.3fr 1.3fr 1.3fr 1.3fr 1.3fr;
 }
 
 .actionGrid {
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   margin-top:2rem;
-  div {
-    padding-left:0.5rem;
-    padding-right:0.5rem;
-  }
+
   p {
     margin-bottom:0;
   }
@@ -33,7 +30,68 @@
   overflow: hidden;
 }
 
-.dossierTitle {
-  font-size: 1.5rem;
-  margin-bottom: .6rem;
+.dossierTitle  {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+.dossierTitleContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 16px;
+}
+
+.tableHeader {
+  padding: 16px;
+  width: 100%;
+  border-collapse: collapse;
+
+
+  tr:nth-child(even) {
+    background: #EEEEEE;
+  }
+  tr:nth-child(odd) {
+    background: #F6F6F6;
+  }
+
+  tr th {
+    width: fit-content;
+    text-align: left;
+    padding: 16px 16px;
+    border-bottom: 2px solid black;
+  }
+  td {
+    padding: 16px 16px;
+    vertical-align: baseline;
+  }
+  tbody tr {
+    width: 100%;
+  }
+}
+
+.commissionBloc {
+  display: flex;
+  flex-direction: column;
+}
+
+.commissionWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: white;
+  border-bottom: 1px solid #DDDDDD;
+  padding: 12px 16px;
+}
+
+.buttonList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
