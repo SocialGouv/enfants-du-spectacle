@@ -1,3 +1,10 @@
+## [1.33.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.2...v1.33.3) (2023-01-20)
+
+
+### Bug Fixes
+
+* push integration maquettes ([#410](https://github.com/SocialGouv/enfants-du-spectacle/issues/410)) ([26d8808](https://github.com/SocialGouv/enfants-du-spectacle/commit/26d8808de2965c1b0970850f1537f81b28213558))
+
 ## [1.33.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.1...v1.33.2) (2023-01-20)
 
 
