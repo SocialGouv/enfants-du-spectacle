@@ -1,3 +1,10 @@
+## [1.33.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.5...v1.33.6) (2023-01-20)
+
+
+### Bug Fixes
+
+* remove status when open dossier ([#413](https://github.com/SocialGouv/enfants-du-spectacle/issues/413)) ([7c0ad7e](https://github.com/SocialGouv/enfants-du-spectacle/commit/7c0ad7e72b569fd444d106a332f7a84318e55427))
+
 ## [1.33.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.4...v1.33.5) (2023-01-20)
 
 
