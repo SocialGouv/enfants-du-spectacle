@@ -3,6 +3,7 @@ import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "../../../../src/lib/prismaClient";
+import fs from "fs";
 
 const handler: NextApiHandler = async (req, res) => {
     const session = await getSession({ req });

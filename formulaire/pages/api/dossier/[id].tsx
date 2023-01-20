@@ -45,7 +45,6 @@ function getId(req: NextApiRequest): number {
         },
         where: { id: dossierId }
       });
-      console.log('dossier return : ', dossier)
       res.status(200).json(dossier);
     } catch (e: unknown) {
       console.log(e);

@@ -34,6 +34,53 @@ const useDebouncedCallback = (func: Function, wait: number) => {
   }, [func, wait]);
 };
 
+const CHECKS = [
+    {
+      entity: 'Demandeur',
+      mandatory_fields: [ 
+          {label : 'Prenom', code: 'prenom'},
+          {label : 'Nom', code: 'nom'},
+          {label : 'Mail', code: 'email'},
+          {label : 'Convention collective applicable', code: 'conventionCollectiveCode'},
+      ]
+    },
+    {
+      entity: 'Projet',
+      mandatory_fields: [ 
+        {label : 'Titre du projet', code: 'nom'},
+        {label : 'Catégorie', code: 'categorie'},
+        {label : 'Présentation globale du projet', code: 'presentation'},
+        {label : 'Date de commencement du projet', code: 'dateDebut'},
+        {label : 'Date de fin du projet', code: 'dateFin'},
+      ],
+      mandatory_files: [
+        {label : 'Scénario ou script', code : 'SCENARIO'},
+        {label: 'Note précisant les mesures de sécurité', code: 'MESURES_SECURITE'}
+      ]
+    },
+    {
+      entity: 'Enfants',
+      mandatory_fields: [
+        {label : 'Prenom(s)', code: 'prenom'},
+        {label : 'Nom', code: 'nom'},
+        {label : 'Né(e) le', code: 'dateNaissance'},
+        {label : 'Type d\'emploi', code: 'typeEmploi'},
+        {label : 'Nombre de jours de travail', code: 'nombreJours'},
+        {label : 'Période de travail', code: 'periodeTravail'},
+        {label : 'Temps et lieu de travail', code: 'contexteTravail'},
+        {label : 'Montant du cachet', code: 'montantCachet'},
+        {label : 'Nombre de cachets', code: 'nombreCachets'},
+        {label : 'Rémunération totale', code: 'remunerationTotale'},
+      ],
+      mandatory_files: [
+        {label : 'Livret de famille', code : 'LIVRET_FAMILLE'},
+        {label: 'Autorisation parentale', code: 'AUTORISATION_PARENTALE'},
+        {label: 'Projet de contrat de travail', code: 'CONTRAT'},
+        
+      ]
+    }
+]
+
 const STATUS_EN_COURS = [
   'BROUILLON',
   'CONSTRUCTION',
@@ -112,6 +159,7 @@ const WORDING_MAILING = [
     },
 ];
 
+
 const CONVENTIONS = [
   {
     code: "1261",
@@ -124,6 +172,12 @@ const CONVENTIONS = [
     label: "entreprises artistiques et culturelles",
     legifranceUrl:
       "https://www.legifrance.gouv.fr/affichIDCC.do?idConvention=KALICONT000005635964",
+  },
+  {
+    code: "1518",
+    label: "métiers de l'éducation, de la culture, des loisirs et de l'animation",
+    legifranceUrl:
+      "https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635177",
   },
   {
     code: "1734",
@@ -197,6 +251,7 @@ export {
     frenchDateText,
     birthDateToFrenchAge,
     useDebouncedCallback,
+    CHECKS,
     STATUS_EN_COURS,
     STATUS_TERMINES,
     TYPE_EMPLOI,

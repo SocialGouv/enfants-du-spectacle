@@ -16,11 +16,8 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
     const [status, setStatus] = React.useState<statusGroup>('enCours')
     const router = useRouter()
 
-    console.log('counts : ', counts)
-
     const createDossier = async () => {
         let resDemanndeur = await createDemandeur({} as Demandeur)
-        console.log('demandeur created : ', resDemanndeur)
         let resDossier = await createDossierEds({demandeurId: resDemanndeur.id} as Dossier);
         router.push(`/dossier/${resDossier.id}`)
     }

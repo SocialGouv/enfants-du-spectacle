@@ -9,13 +9,15 @@ import fr from "date-fns/locale/fr";
 import moment from 'moment';
 import InputFile from "../uiComponents/InputFile";
 import { createPiece, deletePiece } from "src/fetching/pieces";
+import { uploadDoc } from "src/fetching/docs";
 
 interface Props {
     dossier: DossierData
+    allowChanges: Boolean
     passData: (dossier: DossierData) => void;
 }
 
-const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
+const ProjectForm: React.FC<Props> = ({dossier, passData, allowChanges}) => {
     const [dossierTmp, setDossier] = React.useState<DossierData>(dossier)
 
     const handleFormDossier = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -40,13 +42,16 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
     };
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const data = new FormData()
+        data.append(e.target.name, e.target.files[0])
+        let upload = await uploadDoc(data, dossierTmp.id)
         let res = await createPiece(
             {
                 nom: e.target.files[0].name,
                 dossierId: dossierTmp.id,
                 type: e.target.id as JustificatifDossier, 
                 externalId: '', 
-                link: ''
+                link: upload.filePath
             }
         )
         setDossier({
@@ -57,7 +62,6 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
     const handleDelete = async (id: string) => {
         let res = await deletePiece(parseInt(id))
-        console.log('res : ', res)
         setDossier({
             ...dossierTmp,
             piecesDossier: dossierTmp.piecesDossier.filter(doc => {return doc.id !== parseInt(id)})
@@ -84,11 +88,12 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <div className={styles.blocForm}>
                             <label htmlFor="nom" className="mb-2 italic">
-                                Titre du projet
+                                Titre du projet *
                             </label>
                             <input
                                 onChange={handleFormDossier}
                                 value={dossierTmp.nom || ''}
+                                disabled={!allowChanges}
                                 type="text"
                                 id="nom"
                                 name="nom"
@@ -98,7 +103,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <div className={styles.blocForm}>
                             <label htmlFor="categorie" className="mb-2 italic">
-                                Catégorie
+                                Catégorie *
                             </label>
                             <div className="selectDpt">
                             <Select
@@ -124,12 +129,13 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                     <div className={styles.blocForm}>
 
                         <label htmlFor="presentation" className="mb-2 italic">
-                            Présentation globale du projet
+                            Présentation globale du projet *
                         </label>
-
+                        <div className={styles.smallText}>Veuillez fournir une brève description du projet (ex: synopsis pour un film, liste des épisodes pour une série...). </div>
                         <div className="Form--field">
                         <textarea
                             onChange={handleForm}
+                            disabled={!allowChanges}
                             type="textarea"
                             id="presentation"
                             value={dossierTmp.presentation || ''}
@@ -143,7 +149,8 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <InputFile id={'SCENARIO'} 
                             docs={dossierTmp.piecesDossier} 
-                            label={'Scenario ou script'} 
+                            label={'Scenario ou script *'} 
+                            allowChanges={!allowChanges}
                             handleFile={handleFile}
                             handleDelete={handleDelete}
                             text={`Veuillez accompagner le document d'une note mentionnant les numéros de page sur lesquelles sont décrites les scènes ou intervient l'enfant.`}
@@ -155,7 +162,8 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <InputFile id={'MESURES_SECURITE'} 
                             docs={dossierTmp.piecesDossier} 
-                            label={'Note précisant les mesures de sécurité'} 
+                            label={'Note précisant les mesures de sécurité *'} 
+                            allowChanges={!allowChanges}
                             handleFile={handleFile}
                             handleDelete={handleDelete}
                             text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
@@ -167,7 +175,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <div className={styles.blocForm}>
                             <label htmlFor="date" className="mb-2 italic">
-                                Date de commencement du projet
+                                Date de commencement du projet *
                             </label>
                             <div className={styles.datePickerWrapper}>
                             <DatePicker
@@ -176,6 +184,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                                 className="inputText"
                                 showMonthDropdown
                                 showYearDropdown
+                                disabled={!allowChanges}
                                 dropdownMode="select"
                                 onChange={(date: Date) => {
                                     handleDate("dateDebut", date);
@@ -190,7 +199,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
 
                         <div className={styles.blocForm}>
                             <label htmlFor="date" className="mb-2 italic">
-                                Date de fin du projet
+                                Date de fin du projet *
                             </label>
                             <div className={styles.datePickerWrapper}>
                             <DatePicker
@@ -199,6 +208,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                                 className="inputText"
                                 showMonthDropdown
                                 showYearDropdown
+                                disabled={!allowChanges}
                                 dropdownMode="select"
                                 onChange={(date: Date) => {
                                     handleDate("dateFin", date);
@@ -214,6 +224,7 @@ const ProjectForm: React.FC<Props> = ({dossier, passData}) => {
                         <InputFile id={'INFOS_COMPLEMENTAIRES'} 
                             docs={dossierTmp.piecesDossier} 
                             label={`Éléments d'information complémentaires`} 
+                            allowChanges={!allowChanges}
                             handleFile={handleFile}
                             handleDelete={handleDelete}
                             text={`Veuillez fournir, le cas échéant, tous éléments que vous jugez utiles à la compréhension du dossier (précisions sur les particularités du projet et sur les conditions spécifiques de tournage, de répétition ou de représentation imposées aux enfants, justification de la nécessité de ces conditions, etc)`}

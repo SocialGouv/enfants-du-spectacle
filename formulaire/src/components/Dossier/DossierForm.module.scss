@@ -1,11 +1,43 @@
 .dossierForm {
     .menuDossier {
-        margin-top: 4rem;
+        margin-top: 2rem;
         text-align: center;
     }
 
+    .messageError {
+        margin-top: 2rem;
+        color: red;
+    }
+
+    .messageSuccess {
+        margin-top: 2rem;
+        color: rgb(2, 148, 14);
+    }
+
+    .infosRow {
+        border: solid #0063CB 1px;
+        margin-top: 2rem;
+        display: flex;
+        flex-grow: 1;
+        align-items: stretch;
+
+        .infoImage {
+            background-color: #0063CB;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+        
+        }
+        .infoText {
+            padding: 0.5rem;
+            p {
+                margin-bottom: 0;
+            }
+        }
+    }
+
     .divForm {
-        margin: 4rem 0rem;
+        margin: 2rem 0rem;
         .titleCard {
             color: black;
         }
@@ -59,7 +91,18 @@
     }
 
     .saveBar {
-        text-align: right;
         margin-top: 2rem;
+        background-color: var(--dark-grey-fr);
+        box-shadow: 0 0 0 1px #c7c7c7;
+        display: flex;
+        padding: 1rem;
+        justify-content: space-between;
+        position: sticky;
+        bottom: 0%;
+        .textSaveBar {
+        }
+        p {
+            margin-bottom: 0;
+        }
     }
 }

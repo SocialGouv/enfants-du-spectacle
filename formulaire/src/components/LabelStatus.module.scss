@@ -1,0 +1,41 @@
+.labelStatus {
+    font-weight: 500;
+    padding:0.3rem;
+    border-radius: 8px;
+    display: inline-block;
+
+    &.blue {
+        background-color: #E8EDFF;
+        color: #0063CB;
+    }
+
+    &.yellow {
+        background-color: #FEECC2;
+        color: #716043;
+    }
+
+    &.green {
+        background-color: #b7e0ad;
+        color: #1f7037;
+    }
+
+    &.accepted {
+        background-color: #1f7037;
+        color: white;
+    }
+
+    &.refused {
+        background-color: #cc1433;
+        color: white;
+    }
+
+    &.default {
+        background-color: var(--light-dark-fr);
+        color: white;
+    }
+
+    &.white {
+        background-color: white;
+        color: var(--light-dark-fr);
+    }
+}
