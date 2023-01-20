@@ -1,6 +1,7 @@
 import type { Demandeur, SocieteProduction } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
+import dossier from "formulaire/pages/api/piece/dossier";
 import type { EnfantData } from "formulaire/src/fetching/dossiers";
 import type { NextApiHandler, NextApiRequest } from "next";
 import prisma from "src/lib/prismaClient";
@@ -119,6 +120,7 @@ const post: NextApiHandler = async (req, res) => {
         },
       },
       statut: "CONSTRUCTION",
+      statusNotification: "NOUVEAU"
     },
   });
 
@@ -133,6 +135,15 @@ const update: NextApiHandler = async (req, res) => {
     demandeur: Demandeur & { societeFound?: SocieteProduction };
     enfants: EnfantData[];
   };
+  
+  const uploadDossier = await prisma?.dossier.update({
+    data: {
+        statusNotification: "MIS_A_JOUR"
+    },
+    where: {
+        id: data.dossier.id
+    }
+  })
   console.log("dossier to update : ", data);
 };
 

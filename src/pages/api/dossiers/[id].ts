@@ -92,6 +92,7 @@ const update: NextApiHandler = async (req, res) => {
     userId?: number;
     cdc?: number;
     commissionId?: number;
+    statusNotification?: string | null;
   } = {};
   const dossierId = getId(req);
 
@@ -243,6 +244,10 @@ const update: NextApiHandler = async (req, res) => {
 
   if (typeof parsed.cdc === "number" || parsed.cdc === null) {
     updates.cdc = parsed.cdc;
+  }
+
+  if (typeof parsed.statusNotification === null || parsed.statusNotification === null) {
+    updates.statusNotification = parsed.statusNotification;
   }
 
   console.log("updates : ", updates);
