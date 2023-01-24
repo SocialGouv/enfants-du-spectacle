@@ -1,4 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
+import type { Commission, Dossier } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -71,6 +72,15 @@ const Page: React.FC = () => {
       ? "all"
       : session.data.dbUser.departements
   );
+
+  const { ...commissionsPast } = useCommissions(
+    "past",
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    session.data.dbUser.role !== "MEMBRE"
+      ? "all"
+      : session.data.dbUser.departements
+  );
+
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
   );
@@ -183,6 +193,56 @@ const Page: React.FC = () => {
       });
   }
 
+  type CommissionWithCounts = Commission & {
+    dossiers: (Dossier & {
+      _count: {
+        enfants: number;
+      } | null;
+    })[];
+  };
+
+  interface RowProps {
+    commission: CommissionWithCounts;
+  }
+
+  const CommissionRow: React.FC<RowProps> = ({ commission }) => {
+    const dossiersCount = commission.dossiers.length;
+    const enfantsCount = commission.dossiers
+      .map((p) => p._count?.enfants ?? 0)
+      .reduce((i, b) => i + b, 0);
+
+    return (
+      <div id={commission.id.toString()} className={`${styles.row} card`}>
+        <div>
+          <span role="img" aria-label="hammer">
+            🔨
+          </span>{" "}
+          <b>{frenchDateText(commission.date)}</b> -{" "}
+          {frenchDepartementName(commission.departement)}
+        </div>
+        <div>
+          <b>{dossiersCount}</b> dossiers
+        </div>
+        <div>
+          <b>{enfantsCount}</b> enfants
+        </div>
+        <div>
+          <Link href={`/commissions/${commission.id}`}>
+            <a
+              href={`/commissions/${commission.id}`}
+              className={styles.seeDossiers}
+            >
+              Voir le détail des dossiers
+            </a>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
+  const currentCommissions =
+    status === "futur" ? filteredCommissions : commissionsPast.commissions;
+
   const isLoading = swrCommissions.isLoading || loading;
   const isError = !isLoading && (swrCommissions.isError || !commissions);
 
@@ -203,7 +263,7 @@ const Page: React.FC = () => {
       headerBottom={
         <FilterBar
           text={
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ alignItems: "center", display: "flex" }}>
               <FilterBarText
                 searchResults={
                   !loading && searchValueDebounced ? searchResults : null
@@ -255,7 +315,7 @@ const Page: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredCommissions?.map((commission, index) => {
+                  {currentCommissions?.map((commission, index) => {
                     const countNew = commission.dossiers
                       .map((dossier) => dossier.statusNotification)
                       .filter((x) => x === "NOUVEAU").length;
@@ -378,19 +438,24 @@ const Page: React.FC = () => {
               </table>
             )}
           </div>
-          {filteredCommissions?.map((commission: CommissionData) => (
-            <div
-              key={commission.date.toString()}
-              className={styles.commissionBloc}
-            >
-              <CommissionBloc commission={commission} />
-            </div>
-          ))}
-          {session.data.dbUser.role !== "MEMBRE" && (
-            <div style={{ fontSize: "1.5rem", padding: "2rem 0 3rem 0" }}>
-              <Link href="/commissions">Commissions passées…</Link>
-            </div>
-          )}
+          {status === "futur" &&
+            filteredCommissions?.map((commission: CommissionData) => (
+              <div
+                key={commission.date.toString()}
+                className={styles.commissionBloc}
+              >
+                <CommissionBloc commission={commission} />
+              </div>
+            ))}
+          {status === "past" &&
+            commissionsPast.commissions?.map((commission: CommissionData) => (
+              <div
+                key={commission.date.toString()}
+                className={styles.commissionBloc}
+              >
+                <CommissionRow key={commission.id} commission={commission} />
+              </div>
+            ))}
         </>
       )}
       {!isLoading &&

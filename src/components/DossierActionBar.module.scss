@@ -1,9 +1,10 @@
 .wrapper {
-  padding: 1rem;
+  padding: 16px;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  border: 2px solid #ccc;
+  justify-content: space-between;
+  background-color: #FEF6E3 !important;
 
   &>div:not(:first-child){
     margin-left: 4rem;
@@ -16,6 +17,7 @@
 
 .itemLabel {
   color: #313178;
+  margin-bottom: 22px;
 }
 
 .itemContent {

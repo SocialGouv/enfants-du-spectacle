@@ -1,8 +1,11 @@
 button.currentStatut {
-  border-radius: 20px;
   padding: .3rem .8rem .5rem 1.8rem;
   font-size: 1.1rem;
-  border: 2px solid;
+  background-color: #FEECC2 !important;
+  font-weight: 700 !important;
+  color: #716043 !important;
+  text-transform: uppercase;
+  font-size: 14px;
 
   .chevron {
     vertical-align: bottom;
