@@ -1,68 +1,56 @@
 import { SocieteProduction } from "@prisma/client";
 import React from "react";
+import useStateContext from "src/context/StateContext";
 import { getSocieteInfos, ResSirene } from "src/fetching/sirene";
-import { createSociete, getSocieteProd } from "src/fetching/societeProduction";
+import { createSociete, getSocieteProd, updateSociete } from "src/fetching/societeProduction";
 import { useDebouncedCallback } from "src/lib/helpers";
 import styles from "./SocieteProd.module.scss";
 
 interface Props {
-    societeProdId: string | null,
-    passSociete: (societeProd: SocieteProduction) => void
 }
 
-const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
-    const [siret, setSiret] = React.useState<string>('')
+const SocieteProd: React.FC<Props> = ({ }) => {
+    const contextDossier = {...useStateContext()}
     const [resSirene, setResSirene] = React.useState<ResSirene>()
-    const [societeProd, setSocieteProd] = React.useState<SocieteProduction>()
-
-    const handleSiret = (e: React.FormEvent<HTMLInputElement>) => {
-        setSiret(e.target.value)
-    }
-
-    const processSiret = useDebouncedCallback(async () => {
-        let res = await getSocieteInfos(siret)
-        setResSirene(res)
-        if(res.header.message === 'ok') {
-            const foundSociete = await getSocieteProd(siret);
-            if(!foundSociete) {
-                const createdSociete = await createSociete({
-                    nom: res.etablissement.uniteLegale.denominationUniteLegale,
-                    siret: res.etablissement.siret,
-                    siren: res.etablissement.siren,
-                    departement: res.etablissement.adresseEtablissement.codePostalEtablissement.slice(0, 2),
-                    naf: res.etablissement.uniteLegale.activitePrincipaleUniteLegale.replace('.', ''),
-                    raisonSociale: res.etablissement.uniteLegale.denominationUniteLegale,
-                    adresse: res.etablissement.adresseEtablissement.numeroVoieEtablissement + ' ' + res.etablissement.adresseEtablissement.typeVoieEtablissement + ' ' + res.etablissement.adresseEtablissement.libelleVoieEtablissement,
-                    adresseCodePostal: res.etablissement.adresseEtablissement.codePostalEtablissement,
-                    adresseCodeCommune: res.etablissement.adresseEtablissement.libelleCommuneEtablissement,
-                    formeJuridique: res.etablissement.uniteLegale.categorieJuridiqueUniteLegale
-                })
-                setSocieteProd(createdSociete)
-                passSociete(createdSociete)
-            } else {
-                setSocieteProd(foundSociete)
-                passSociete(foundSociete)
-            }
-        }
-    }, 1000);
-
-    const fetchSociete = async () => {
-        if(societeProdId) {
-            setSiret(societeProdId)
-        }
-    }
 
     React.useEffect(() => {
-        if(societeProdId) {
-            fetchSociete()
-        }
-    }, [])
-
-    React.useEffect(() => {
-        if(siret !== '') {
+        if(contextDossier.societeProduction.siret && contextDossier.societeProduction.siret !== '') {
             processSiret()
         }
-    }, [siret])
+    }, [contextDossier.societeProduction.siret])
+
+    const processSiret = useDebouncedCallback(async () => {
+        let res = await getSocieteInfos(contextDossier.societeProduction.siret ?? '')
+        setResSirene(res)
+    }, 1000);
+
+    React.useEffect(() => {
+        if(resSirene && resSirene.header.message === 'ok') {
+            processSociete()
+        }
+    }, [resSirene])
+
+    const processSociete = async () => {
+        if(resSirene){
+            const societeFound = await getSocieteProd(contextDossier.societeProduction.siret ?? '')
+            let societeTmp: SocieteProduction = {
+                id: societeFound ? societeFound.id : 0,
+                nom: resSirene.etablissement.uniteLegale.denominationUniteLegale,
+                siret: resSirene.etablissement.siret,
+                siren: resSirene.etablissement.siren,
+                departement: resSirene.etablissement.adresseEtablissement.codePostalEtablissement.slice(0, 2),
+                naf: resSirene.etablissement.uniteLegale.activitePrincipaleUniteLegale.replace('.', ''),
+                raisonSociale: resSirene.etablissement.uniteLegale.denominationUniteLegale,
+                adresse: resSirene.etablissement.adresseEtablissement.numeroVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.typeVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.libelleVoieEtablissement,
+                adresseCodePostal: resSirene.etablissement.adresseEtablissement.codePostalEtablissement,
+                adresseCodeCommune: resSirene.etablissement.adresseEtablissement.libelleCommuneEtablissement,
+                formeJuridique: resSirene.etablissement.uniteLegale.categorieJuridiqueUniteLegale
+            }
+            const societeProcessed = societeFound ? await updateSociete(societeTmp) : await createSociete(societeTmp)
+            contextDossier.processEntity('societeProduction', societeProcessed)
+            contextDossier.processInput('demandeur', 'societeProductionId', societeProcessed.id)
+        }
+    }
 
     return (
         <div className={styles.societeProd}>
@@ -72,8 +60,8 @@ const SocieteProd: React.FC<Props> = ({ societeProdId, passSociete }) => {
                     Société Production (SIRET) *
                 </label>
                 <input
-                    onChange={handleSiret}
-                    value={siret}
+                    onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('societeProduction', 'siret', (e.target as HTMLInputElement).value)}}
+                    value={contextDossier.societeProduction.siret ?? ''}
                     type="text"
                     id="nom"
                     name="nom"

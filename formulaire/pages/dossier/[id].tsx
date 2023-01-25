@@ -2,6 +2,7 @@ import { Container, Link } from '@dataesr/react-dsfr';
 import { Dossier } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React from "react";
+import { StateProvider } from 'src/context/StateContext';
 import DossierForm from '../../src/components/Dossier/DossierForm';
 import HeadingDossier from '../../src/components/Dossier/HeadingDossier';
 import Layout from '../../src/components/Layout'
@@ -34,7 +35,9 @@ const DossierPage: React.FC = () => {
         <Link href='/'>Retour aux dossiers</Link>
         {dossier && 
           <>
-            <DossierForm dossier={dossier}></DossierForm>
+            <StateProvider>
+              <DossierForm dossier={dossier}></DossierForm>
+            </StateProvider>
           </>
         }
       </Container>

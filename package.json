@@ -61,7 +61,8 @@
     "sass": "^1.44.0",
     "superjson": "^1.8.0",
     "swr": "^1.1.0",
-    "use-debounce": "^7.0.1"
+    "use-debounce": "^7.0.1",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@socialgouv/eslint-config-react": "^1.100.0",
@@ -83,7 +84,8 @@
     "prisma": "^3.6.0",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "zod-prisma": "^0.5.4"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

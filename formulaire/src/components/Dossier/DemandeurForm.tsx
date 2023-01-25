@@ -1,38 +1,16 @@
 import React from "react";
 import styles from "./DossierForm.module.scss";
 import { Card, CardDescription, CardTitle, Select } from "@dataesr/react-dsfr";
-import { Demandeur, SocieteProduction } from "@prisma/client";
 import { CONVENTIONS } from "src/lib/helpers";
 import SocieteProd from "./SocieteProd";
+import useStateContext from "src/context/StateContext";
 
 interface Props {
-    demandeur: Demandeur & {societeFound?: SocieteProduction}
     allowChanges: Boolean
-    passData: (demandeur: Demandeur & {societeFound?: SocieteProduction}) => void;
 }
 
-const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => {
-    const [demandeurTmp, setDemandeur] = React.useState<Demandeur & {societeFound?: SocieteProduction}>(demandeur)
-    const [siret, setSiret] = React.useState<String>('')
-
-    const handleFormDemandeur = (e: React.FormEvent<HTMLInputElement>): void => {
-        setDemandeur({
-        ...demandeurTmp,
-        [e.target.id]: e.currentTarget.value,
-      });
-    };
-
-    const handleSocieteProd = (societeProd: SocieteProduction) => {
-        setDemandeur({
-            ...demandeurTmp,
-            societeProductionId: societeProd.id,
-            societeFound: societeProd
-        })
-    }
-
-    React.useEffect(() => {
-        passData(demandeurTmp)
-    }, [demandeurTmp, passData])
+const DemandeurForm: React.FC<Props> = ({ allowChanges}) => {
+    const contextDossier = {...useStateContext()}
 
     return (
         <div className={styles.demandeurForm}>
@@ -49,8 +27,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                                 Prénom *
                             </label>
                             <input
-                                onChange={handleFormDemandeur}
-                                value={demandeurTmp.prenom || ''}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'prenom', (e.target as HTMLInputElement).value)}}
+                                value={contextDossier.demandeur.prenom || ''}
                                 disabled={!allowChanges}
                                 type="text"
                                 id="prenom"
@@ -64,8 +42,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                                 Nom *
                             </label>
                             <input
-                                onChange={handleFormDemandeur}
-                                value={demandeurTmp.nom || ''}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'nom', (e.target as HTMLInputElement).value)}}
+                                value={contextDossier.demandeur.nom || ''}
                                 disabled={!allowChanges}
                                 type="text"
                                 id="nom"
@@ -79,8 +57,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                                 Fonction
                             </label>
                             <input
-                                onChange={handleFormDemandeur}
-                                value={demandeurTmp.fonction || ''}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'fonction', (e.target as HTMLInputElement).value)}}
+                                value={contextDossier.demandeur.fonction || ''}
                                 disabled={!allowChanges}
                                 type="text"
                                 id="fonction"
@@ -94,8 +72,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                                 Mail *
                             </label>
                             <input
-                                onChange={handleFormDemandeur}
-                                value={demandeurTmp.email || ''}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'email', (e.target as HTMLInputElement).value)}}
+                                value={contextDossier.demandeur.email || ''}
                                 disabled={!allowChanges}
                                 type="email"
                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
@@ -110,8 +88,8 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                                 Téléphone
                             </label>
                             <input
-                                onChange={handleFormDemandeur}
-                                value={demandeurTmp.phone || ''}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'phone', (e.target as HTMLInputElement).value)}}
+                                value={contextDossier.demandeur.phone || ''}
                                 disabled={!allowChanges}
                                 type="text"
                                 id="phone"
@@ -128,23 +106,21 @@ const DemandeurForm: React.FC<Props> = ({demandeur, passData, allowChanges}) => 
                             <div className="selectDpt">
                             <Select
                                 id="conventionCollectiveCode"
-                                selected={demandeurTmp.conventionCollectiveCode ? demandeurTmp.conventionCollectiveCode : ""}
+                                selected={contextDossier.demandeur.conventionCollectiveCode ? contextDossier.demandeur.conventionCollectiveCode : ""}
                                 options={[
-                                    { label: demandeurTmp.conventionCollectiveCode ? "" : "Choisir", value: "" },
+                                    { label: contextDossier.demandeur.conventionCollectiveCode ? "" : "Choisir", value: "" },
                                     ].concat(
                                     CONVENTIONS.map((u) => ({
                                         label: `${u.label} - ${u.code}`,
                                         value: u.code,
                                     }))
                                 )}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    handleFormDemandeur(event);
-                                }}
+                                onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'conventionCollectiveCode', (e.target as HTMLInputElement).value)}}
                             />
                             </div>
                         </div>
 
-                        <SocieteProd passSociete={handleSocieteProd} societeProdId={demandeurTmp.societeProductionId}></SocieteProd>
+                        <SocieteProd></SocieteProd>
 
                 </CardDescription>
             </Card>

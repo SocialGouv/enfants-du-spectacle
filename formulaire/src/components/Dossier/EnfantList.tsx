@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardDescription, CardTitle } from "@dataesr/react-dsfr";
 import { Enfant } from "@prisma/client";
-import { DossierData } from "src/fetching/dossiers";
 import { birthDateToFrenchAge, frenchDateText } from "../../lib/helpers";
 import styles from "./EnfantList.module.scss";
 import { ButtonLink } from "src/uiComponents/button";
@@ -13,16 +12,14 @@ import {useRef} from 'react';
 import moment from 'moment';
 import OrderableItem from "../home/OrderableItem";
 import Image from "next/image";
+import useStateContext from "src/context/StateContext";
 
 interface Props {
-    dossier: DossierData
     allowChanges: Boolean
-    enfants: Enfant[]
-    passData: (enfans: Enfant[]) => void;
 }
 
-const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges}) => {
-    const [enfantsTmp, setEnfants] = React.useState<Enfant[]>(enfants)
+const EnfantList: React.FC<Props> = ({ allowChanges }) => {
+    const contextDossier = {...useStateContext()}
     const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>()
     const [page, setPage] = React.useState<number>(0)
     const myRef = useRef(null);
@@ -50,8 +47,8 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
     }
 
     const addEnfant = async () => {
-        let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:'', montantCachet: 0, remunerationTotale: 0} as Enfant)
-        setEnfants([ res, ...enfantsTmp])
+        let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: contextDossier.dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:'', montantCachet: 0, remunerationTotale: 0} as Enfant)
+        contextDossier.processEntity('enfants', [ res, ...contextDossier.enfants])
         setSelectedEnfant(res)
         scrollToRef(myRef)
     }
@@ -69,9 +66,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
     }
 
     const handleRefresh = (enfantUp: Enfant) => {
-        setEnfants(
-            enfantsTmp.map((enfant) => {return enfant.id === enfantUp.id ? enfantUp : enfant})
-        )
+        contextDossier.processEntity('enfants', contextDossier.enfants.map((enfant) => {return enfant.id === enfantUp.id ? enfantUp : enfant}))
     }
 
     const handlePage = (pageToGo: number) => {
@@ -84,7 +79,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
     }
 
     React.useEffect(() => {
-        setEnfants([...enfantsTmp].sort(function (a, b) {
+        contextDossier.processEntity('enfants', [...contextDossier.enfants].sort(function (a, b) {
             if (a[termOrdered] && b[termOrdered] && a[termOrdered] < b[termOrdered]) {
                 return order === 'desc' ? 1 : -1;
             }
@@ -94,10 +89,6 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
             return 0;
         }))
     }, [order, termOrdered])
-
-    React.useEffect(() => {
-        passData(enfantsTmp)
-    }, [enfantsTmp, passData])
 
     return (
         <div className={styles.enfantList}>
@@ -118,7 +109,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
                         Pièces justificatives
                     </div>
                 </div>
-                {enfantsTmp.slice(page * 10, (page * 10) + 10).map((enfant) => (
+                {contextDossier.enfants.slice(page * 10, (page * 10) + 10).map((enfant) => (
                     <Link href={`#row-enfant-${enfant.id}`} className={styles.tableEnfant} key={`table-enfant-${enfant.id}`} onClick={() => {clickEnfant(enfant)}}>
                         <div className={styles.itemDossier}>
                             {enfant.typeEmploi}
@@ -141,7 +132,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
                     </Link>
                 ))}
                 <div className={styles.pagination}>
-                    {[...Array(Math.ceil(enfantsTmp.length/10))].map((e, i) => (
+                    {[...Array(Math.ceil(contextDossier.enfants.length/10))].map((e, i) => (
                         <ButtonLink light={page !== (i)} onClick={() => {handlePage(i)}} key={i}>{i + 1}</ButtonLink>
                     ))}
                 </div>
@@ -153,7 +144,7 @@ const EnfantList: React.FC<Props> = ({dossier, enfants, passData, allowChanges})
             </div>
 
             <div className={styles.listEnfants}>
-            {enfantsTmp.map((enfant) => (
+            {contextDossier.enfants.map((enfant) => (
                 <div className={styles.rowEnfant} key={`row-enfant-${enfant.id}`} id={`row-enfant-${enfant.id}`}>
                     <Card>
                         <CardTitle>

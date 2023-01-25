@@ -3,6 +3,17 @@ generator client {
   previewFeatures = ["fullTextSearch", "referentialActions"]
 }
 
+generator zod {
+  provider              = "zod-prisma"
+  output                = "./zod"
+  relationModel         = true
+  modelCase             = "PascalCase"
+  modelSuffix           = "Model"
+  useDecimalJs          = true
+  imports               = null
+  prismaJsonNullability = true
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -40,7 +51,7 @@ model Demandeur {
   email               String            @unique
   nom                 String
   prenom              String
-  phone               String
+  phone               String?
   fonction            String
   societeProduction   SocieteProduction @relation(fields: [societeProductionId], references: [id])
   societeProductionId Int
@@ -99,10 +110,17 @@ enum JustificatifDossier {
   PLAN_TRAVAIL
   INFOS_COMPLEMENTAIRES
 }
+
 enum StatusNotif {
   NOUVEAU
   MIS_A_JOUR
 }
+
+enum Source {
+  FORM_DS
+  FORM_EDS
+}
+
 model Dossier {
   id                       Int                   @id @default(autoincrement())
   nom                      String
@@ -115,7 +133,7 @@ model Dossier {
   enfants                  Enfant[]
   piecesDossier            PieceDossier[]
   commentaires             Commentaire[]
-  numeroDS                 Int                   @default(0)
+  numeroDS                 Int?                  @default(0)
   userId                   Int?
   user                     User?                 @relation(fields: [userId], references: [id])
   demandeurId              Int
@@ -132,6 +150,7 @@ model Dossier {
   cdc                      Int?
   dateDepot                DateTime?
   statusNotification       StatusNotif?
+  source                   Source?
 }
 
 model Commentaire {
@@ -204,6 +223,7 @@ model Enfant {
   adresseRepresentant2        String?
   nomRepresentant2            String?
   prenomRepresentant2         String?
+  externalId                  String?              @unique
 }
 
 // for next-auth

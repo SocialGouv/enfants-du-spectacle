@@ -2,6 +2,7 @@ import { Demandeur } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import { DemandeurModel } from "prisma/zod";
 import prisma from "../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -42,23 +43,12 @@ const update: NextApiHandler = async (req, res) => {
     res.status(400).end();
     return;
   }
+  const demandeurData = DemandeurModel.omit({id: true})
 
-  delete parsed.societeFound
-  delete parsed.societeProductionId
+  console.log('demandeur to update : ', demandeurData.parse(parsed))
 
   let dempandeurUpdated = await prisma.demandeur.update({
-    data: parsed,
-    where: { id: parsed.id },
-  })
-
-  dempandeurUpdated = await prisma.demandeur.update({
-    data: {
-      societeProduction: {
-        connect: {
-          id: 11
-        },
-      }
-    },
+    data: {...demandeurData.parse(parsed)},
     where: { id: parsed.id },
   })
 

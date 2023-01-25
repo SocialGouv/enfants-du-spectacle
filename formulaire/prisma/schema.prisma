@@ -4,6 +4,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator zod {
+  provider              = "zod-prisma"
+  output                = "./zod"
+  relationModel         = true
+  modelCase             = "PascalCase"
+  modelSuffix           = "Model"
+  useDecimalJs          = true
+  imports               = null
+  prismaJsonNullability = true
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -36,8 +47,8 @@ model Demandeur {
   phone                    String?
   fonction                 String?
   conventionCollectiveCode String?
-  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [siret])
-  societeProductionId      String?
+  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [id])
+  societeProductionId      Int?
   dossiers                 Dossier[]
 }
 
