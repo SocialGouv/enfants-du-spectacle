@@ -1,3 +1,10 @@
+# [1.34.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.6...v1.34.0) (2023-01-26)
+
+
+### Features
+
+* implement full sync ([#415](https://github.com/SocialGouv/enfants-du-spectacle/issues/415)) ([c8a16df](https://github.com/SocialGouv/enfants-du-spectacle/commit/c8a16dfc757d7a4a189293e877967180fa9b3ca8))
+
 ## [1.33.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.5...v1.33.6) (2023-01-20)
 
 
