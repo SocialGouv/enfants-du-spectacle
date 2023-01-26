@@ -35,6 +35,10 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         const name = decoded.path.substring(decoded.path.lastIndexOf('/') + 1)
         const extension: keyof typeof mimes = decoded.path.substring(decoded.path.lastIndexOf('.') + 1)
 
+        console.log('name : ', name)
+        console.log('extension : ', extension)
+        console.log('mime : ', mimes[extension])
+
         const filePath = decoded.path;
         const stat = fs.statSync(filePath);
 
