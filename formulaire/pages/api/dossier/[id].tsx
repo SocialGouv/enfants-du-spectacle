@@ -29,6 +29,7 @@ function getId(req: NextApiRequest): number {
   }
   
   const get: NextApiHandler = async (req, res) => {
+    const session = await getSession({ req });
     const prisma = new PrismaClient()   
     try {
       const dossierId = getId(req);
@@ -49,7 +50,11 @@ function getId(req: NextApiRequest): number {
         },
         where: { id: dossierId }
       });
-      res.status(200).json(dossier);
+      if(dossier?.userId === session?.dbUser.id) {
+        res.status(200).json(dossier);
+      } else {
+        res.status(401).json({message: 'Unauthorized'})
+      }
     } catch (e: unknown) {
       console.log(e);
       res.status(200).json({ message: "Dossier non trouvé" });

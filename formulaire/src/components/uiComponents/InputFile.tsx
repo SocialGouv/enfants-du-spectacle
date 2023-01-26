@@ -1,4 +1,4 @@
-import { JustificatifDossier, JustificatifEnfant, PieceDossier, PieceDossierEnfant } from "@prisma/client";
+import { JustificatifDossier, JustificatifEnfant, PieceDossier, PieceDossierEnfant, STATUT_PIECE } from "@prisma/client";
 import Image from "next/image";
 import { doc } from "prettier";
 import React from "react";
@@ -7,7 +7,8 @@ import styles from "./InputFile.module.scss";
 type Doc = {
     id: number,
     nom: string,
-    type: string
+    type: string,
+    statut: STATUT_PIECE
 }
 
 interface Props {
@@ -46,7 +47,10 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                                         />
                                     </div>
                                 }
-                                <span key={`piece_justificative_${id}_${index}`}>{doc.nom}</span>
+                                <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}>{doc.nom}</span>
+                                {doc.statut &&
+                                        <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused  : doc.statut === 'VALIDE' ? styles.accepted  : ''}`}>{` - ${doc.statut}`}</span>
+                                }
                             </div>
                         </div>
                     ))}
@@ -57,8 +61,7 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                     <input type="file"
                         id={id} name="justificatif"
                         placeholder="Parcourir..."
-                        accept=".doc,.docx,image/jpeg,image/gif,image/png,application/pdf,application/msword,
-                        application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" onChange={handleFile}>
+                        accept="image/jpeg,image/gif,image/png,application/pdf,text/plain" onChange={handleFile}>
                     </input>
                 </div>
             }

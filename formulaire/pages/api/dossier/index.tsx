@@ -40,8 +40,13 @@ const get: NextApiHandler = async (req, res) => {
     const dossiers = await prisma.dossier.findMany({
       include: {
         user: true,
-        enfants: true,
-        Demandeur: true
+        enfants: {
+          include: {
+            piecesDossier: true
+          }
+        },
+        Demandeur: true,
+        piecesDossier: true
       },
       skip: page,
       take: numberByPage,

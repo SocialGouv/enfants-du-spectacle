@@ -6,65 +6,80 @@ import type {
   JustificatifEnfant,
   PieceDossier,
   PieceDossierEnfant,
+  STATUT_PIECE,
 } from "@prisma/client";
 import { endOfDecadeWithOptions } from "date-fns/fp";
+import { Select } from "@dataesr/react-dsfr";
 import _ from "lodash";
 import React from "react";
 import styles from "src/components/Justificatifs.module.scss";
 import { JUSTIFS_DOSSIER } from "src/lib/helpers";
 
-interface JustificatifProps {
+export type Piece = {
+    id: string,
+    statut: STATUT_PIECE
+}
+
+interface ValidationProps {
   subject: Dossier | Enfant;
   value: JustificatifDossier | JustificatifEnfant;
   label: string;
   link?: string | string[];
+  pieces: Piece[]
+  type: 'Enfant' | 'Dossier'
 }
 
-const Justificatif: React.FC<JustificatifProps> = ({
+const Validation: React.FC<ValidationProps> = ({
   subject,
   value,
   label,
   link,
+  pieces,
+  type
 }) => {
-  const isPresent = subject.justificatifs.includes(value);
-
-  const url = isPresent && link;
-  const icon = isPresent ? (
-    <Icon
-      name={"ri-checkbox-circle-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="green"
-    />
-  ) : (
-    <Icon
-      name={"ri-close-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="red"
-    />
-  );
+  const [statePieces, setStatePieces] = React.useState<Piece[]>(pieces)
   return (
     <>
-      {!Array.isArray(url) && icon}
-      {!Array.isArray(url) && !isPresent && label}
-      {isPresent && !Array.isArray(url) && (
-        <a href={url ? url : '/'} target="_blank" rel="noreferrer">
-          {label}
-        </a>
-      )}
-      {isPresent && Array.isArray(url) && 
-        url.map((urlLink) => (
-          <div className={styles.blocLink}>
-            {icon}
-            {!isPresent && label}
-            <a href={urlLink ? urlLink : '/'} target="_blank" rel="noreferrer">
-              {label}
-            </a>
-          </div>
-        ))
-        
-      }
+     {statePieces?.map((piece) => (
+      <div className={styles.validationRow} key={piece.id}>
+        {piece.statut && piece.statut !== 'EN_ATTENTE' &&
+          <span>{piece.statut}</span>
+        }
+        {!piece.statut &&
+          <Select
+              id={`${type}_${piece.id}`}
+              selected={''}
+              options={[
+                {label: 'Choisir', value: ''},
+                {label: 'Valider', value: 'VALIDE'},
+                {label: 'Refuser', value: 'REFUSE'}
+              ]}
+              onChange={async (e: React.FormEvent<HTMLInputElement>) => {
+                setStatePieces([...statePieces].map((state) => {
+                  if(state.id === piece.id) {
+                    return {...state,
+                      statut: e.target.value
+                    }
+                  } else {
+                    return state
+                  }
+                }))
+                const url = "/api/sync/out/pieces";
+                const fetching = await fetch(url, {
+                    body: JSON.stringify({type: type, id: piece.id, statut: e.target.value}),
+                    method: "PUT",
+                }).then(async (r) => {
+                    if (!r.ok) {
+                        return {error: 'Something went wrong'}
+                    }
+                    return r.json();
+                });
+                return fetching;
+              }}
+          />
+        }
+      </div>
+     ))}
     </>
   );
 };
@@ -83,7 +98,7 @@ const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
     { label: "Infos complémentaires", value: "INFOS_COMPLEMENTAIRES" },
   ];
 
-const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
+const ValidationJustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
   const justificatifs = [...JUSTIFICATIFS_DOSSIERS].sort(
     (a, b) =>
       dossier.justificatifs.includes(b.value) -
@@ -94,17 +109,16 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
       {justificatifs.map(({ label, value }) => {
         return (
           <li key={value}>
-            <Justificatif
+            <Validation
               subject={dossier}
               value={value}
               label={label}
-              link={
+              type={'Dossier'}
+              pieces={
                 dossier.source === 'FORM_EDS' ? 
-                dataLinks.dossier?.piecesDossier.filter((piece: PieceDossier) => piece.type === value).map(link => link.link)
+                dataLinks.dossier?.piecesDossier.filter((piece: PieceDossier) => piece.type === value)
                 :
-                _.find(dataLinks.data?.dossier.champs, {
-                  label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
-                })?.file?.url
+                []
               }
             />
           </li>
@@ -123,7 +137,7 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
   { label: "Avis médical", value: "AVIS_MEDICAL" },
 ];
 
-const JustificatifsEnfants: React.FC<{
+const ValidationJustificatifsEnfant: React.FC<{
   enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
   dataLinks: Record<string, unknown>;
   dossier: Dossier
@@ -142,23 +156,16 @@ const JustificatifsEnfants: React.FC<{
       {justificatifs.map(({ label, value }) => {
         return (
           <li key={value}>
-            <Justificatif
+            <Validation
               subject={enfant}
               value={value}
               label={label}
-              link={
+              type={'Enfant'}
+              pieces={
                 dossier.source === 'FORM_EDS' ? 
-                dataLinks.enfants?.find((enfantTmp: Enfant) => { return enfantTmp.id.toString() === enfant.externalId}).piecesDossier.filter((piece: PieceDossier) => piece.type === value).map(link => link.link)
+                dataLinks.enfants?.find((enfantTmp: Enfant) => { return enfantTmp.id.toString() === enfant.externalId}).piecesDossier.filter((piece: PieceDossierEnfant) => piece.type === value)
                 :
-                _.find(
-                  champEnfant,
-                  (champ: Record<string, Record<string, unknown> | null>) => {
-                    return (
-                      champ.file?.checksum ===
-                      _.find(enfant.piecesDossier, { type: value })?.externalId
-                    );
-                  }
-                )?.file?.url
+                []
               }
             />
           </li>
@@ -168,4 +175,4 @@ const JustificatifsEnfants: React.FC<{
   );
 };
 
-export { JustificatifsDossier, JustificatifsEnfants };
+export { ValidationJustificatifsDossier, ValidationJustificatifsEnfant };

@@ -45,7 +45,9 @@ const get: NextApiHandler = async (req, res) => {
                     }
                     let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
                     return {
+                        id: piece.id,
                         type: piece.type,
+                        statut: piece.statut,
                         link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
                     }
                 })
@@ -62,7 +64,9 @@ const get: NextApiHandler = async (req, res) => {
                         }
                         let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
                         return {
+                            id: piece.id,
                             type: piece.type,
+                            statut: piece.statut,
                             link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
                         }
                     })

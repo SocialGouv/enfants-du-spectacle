@@ -93,6 +93,12 @@ enum CategorieDossier {
   AUTRE
 }
 
+enum STATUT_PIECE {
+  VALIDE
+  REFUSE
+  EN_ATTENTE
+}
+
 model PieceDossier {
   id         Int                 @id @default(autoincrement())
   nom        String
@@ -101,6 +107,7 @@ model PieceDossier {
   externalId String?
   type       JustificatifDossier
   link       String?
+  statut     STATUT_PIECE?
 }
 
 enum JustificatifDossier {
@@ -167,6 +174,7 @@ model PieceDossierEnfant {
   externalId String?
   type       JustificatifEnfant
   link       String?
+  statut     STATUT_PIECE?
 }
 
 model Enfant {
