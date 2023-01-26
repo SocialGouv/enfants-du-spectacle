@@ -5,6 +5,7 @@ import { statusGroup } from "src/lib/types";
 import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
+import CountPieces from "../CountPieces";
 import LabelStatus from "../LabelStatus";
 import TableCard from "../TableCard";
 import OrderableItem from "./OrderableItem";
@@ -78,7 +79,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                     <ButtonLink light={true} onClick={() => {router.push(`/dossier/${dossier.id}`)}}>Éditer</ButtonLink>
                                 </div>
                                 <div className={styles.itemDossier}>
-                                    Pièces justificatives
+                                    <CountPieces dossier={dossier}></CountPieces>
                                 </div>
                             </div>
                         ))}

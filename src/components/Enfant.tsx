@@ -1,4 +1,4 @@
-import type { Enfant } from "@prisma/client";
+import type { Dossier, Enfant } from "@prisma/client";
 import _ from "lodash";
 import React, { useCallback, useEffect } from "react";
 import styles from "src/components/Enfant.module.scss";
@@ -11,13 +11,15 @@ import {
   typeEmploiLabel,
 } from "src/lib/helpers";
 import { updateEnfant } from "src/lib/queries";
+import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
   dataLinks: Record<string, unknown>;
+  dossier: Dossier
 }
 
-const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks }) => {
+const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
@@ -117,7 +119,10 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks }) => {
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>
-            <JustificatifsEnfants enfant={enfant} dataLinks={dataLinks} />
+            <JustificatifsEnfants enfant={enfant} dataLinks={dataLinks} dossier={dossier} />
+          </Info>
+          <Info title="Validation" className={styles.info}>
+            <ValidationJustificatifsEnfant enfant={enfant} dossier={dossier} dataLinks={dataLinks} />
           </Info>
         </div>
       </Foldable>

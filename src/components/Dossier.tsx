@@ -16,6 +16,7 @@ import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 import { deleteDossier, sendEmail } from "src/lib/queries";
+import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
 
 interface Props {
   dossierId: number;
@@ -65,6 +66,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         </div>
         <Info title="Pièces justificatives">
           <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+        </Info>
+        <Info title="Validation">
+          <ValidationJustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
         </Info>
         {dossier.statut !== "INSTRUCTION" &&
           dossier.statut !== "CONSTRUCTION" &&
@@ -183,7 +187,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             })
             .map((enfant) => (
               <div key={enfant.id} className={styles.bloc}>
-                <Enfant enfant={enfant} dataLinks={dataLinks} />
+                <Enfant enfant={enfant} dataLinks={dataLinks} dossier={dossier} />
               </div>
             ))}
         </span>

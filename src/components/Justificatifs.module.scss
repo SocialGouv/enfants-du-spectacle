@@ -3,10 +3,30 @@
   padding-left: 0;
 
   li {
-    margin-bottom: .3rem;
+    padding-bottom: 0;
+
+    .blocLink {
+      display: inline-block;
+      margin-bottom: .3rem;
+    }
   }
 }
 
 .iconSpan {
   vertical-align: middle;
+}
+
+.validationRow {
+  height: 27px;
+  margin-bottom: .3rem;
+  div {
+    height: 27px;
+    margin-bottom: .3rem;
+  }
+  select {
+    height: 27px;
+    margin-bottom: .3rem;
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
 }
