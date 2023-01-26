@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.35.0...v1.35.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* fix mime types ([#421](https://github.com/SocialGouv/enfants-du-spectacle/issues/421)) ([99e955c](https://github.com/SocialGouv/enfants-du-spectacle/commit/99e955c5d4cbe22927dde449973578b7c0e3bb69))
+
 # [1.35.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.34.4...v1.35.0) (2023-01-26)
 
 
