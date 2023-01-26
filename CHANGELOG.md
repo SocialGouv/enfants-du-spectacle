@@ -1,3 +1,10 @@
+# [1.36.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.35.2...v1.36.0) (2023-01-26)
+
+
+### Features
+
+* validate justifs ([#423](https://github.com/SocialGouv/enfants-du-spectacle/issues/423)) ([973c4e1](https://github.com/SocialGouv/enfants-du-spectacle/commit/973c4e1d2f9cfbb597514653b3c4a118729ecb06))
+
 ## [1.35.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.35.1...v1.35.2) (2023-01-26)
 
 
