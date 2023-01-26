@@ -54,7 +54,7 @@ const DemandeurForm: React.FC<Props> = ({ allowChanges}) => {
 
                         <div className={styles.blocForm}>
                             <label htmlFor="fonction" className="mb-2 italic">
-                                Fonction
+                                Fonction *
                             </label>
                             <input
                                 onChange={(e: React.FormEvent<HTMLInputElement>) => {contextDossier.processInput('demandeur', 'fonction', (e.target as HTMLInputElement).value)}}

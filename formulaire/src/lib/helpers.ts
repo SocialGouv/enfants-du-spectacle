@@ -41,6 +41,7 @@ const CHECKS = [
           {label : 'Prenom', code: 'prenom'},
           {label : 'Nom', code: 'nom'},
           {label : 'Mail', code: 'email'},
+          {label : 'Fonction', code: 'fonction'},
           {label : 'Convention collective applicable', code: 'conventionCollectiveCode'},
       ]
     },

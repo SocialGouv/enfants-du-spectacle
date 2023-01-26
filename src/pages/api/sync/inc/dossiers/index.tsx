@@ -28,6 +28,8 @@ const post: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
+  console.log('data : ', data)
+
   //console.log('data reveived : ', data)
 
   try {
@@ -121,17 +123,19 @@ const post: NextApiHandler = async (req, res) => {
     })
 
     //HANDLE ENFANTS
-    const EnfantsData = EnfantModel.omit({id: true, dossierId: true})
-    const CreateEnfants = await prisma?.enfant.createMany({
-      data: data.enfants.map((enfant) => {
-        return {
-          ...EnfantsData.parse(enfant), 
-          dossierId: createDossier.id,
-          externalId: enfant.id.toString(),
-          justificatifs: enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
-        }
+    if(data.enfants.length > 0) {
+      const EnfantsData = EnfantModel.omit({id: true, dossierId: true})
+      const CreateEnfants = await prisma?.enfant.createMany({
+        data: data.enfants.map((enfant) => {
+          return {
+            ...EnfantsData.parse(enfant), 
+            dossierId: createDossier.id,
+            externalId: enfant.id.toString(),
+            justificatifs: enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
+          }
+        })
       })
-    })
+    }
 
 
     res.status(200).json({ message: "Dossier created successfully" });
