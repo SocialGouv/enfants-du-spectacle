@@ -24,7 +24,7 @@ const post: NextApiHandler = async (req, res) => {
     console.log('dossier to send : ', data)
 
     if(data.dossier.statut === "BROUILLON" || data.dossier.statut === "CONSTRUCTION") {
-        const url = `${process.env.API_URL_INSTRUCTEUR}/dossiers`;
+        const url = `${process.env.API_URL_INSTRUCTEUR}/inc/dossiers`;
         const fetching = await fetch(url, {
             body: JSON.stringify(data),
             method: data.dossier.statut === "BROUILLON" ? "POST" : "PUT",

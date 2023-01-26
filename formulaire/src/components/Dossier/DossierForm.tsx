@@ -132,7 +132,7 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
                 if(contextDossier.dossier.statut === "BROUILLON") {
                     contextDossier.processInput('dossier', 'statut', 'CONSTRUCTION')
                 }
-                setMessageSuccess('Votre dossier a bien été envoyé')
+                setMessageSuccess(`Votre dossier a bien été ${contextDossier.dossier.statut === "BROUILLON" ? 'envoyé' : 'mis à jour'}`)
                 setTimeout(() => {
                     router.push(`/`)
                 }, 1000)

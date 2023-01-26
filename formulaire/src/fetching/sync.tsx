@@ -3,7 +3,7 @@ import { DemandeurData } from "src/lib/types";
 import { DossierData, EnfantData } from "./dossiers";
 
 const sendDossier = async (dossier: DossierData, demandeur: DemandeurData, societeProduction: SocieteProduction, enfants: EnfantData[]) => {
-    const url = "/api/sync/dossiers";
+    const url = "/api/sync/out/dossiers";
     const fetching = await fetch(url, {
         body: JSON.stringify({dossier: dossier, demandeur: demandeur, societeProduction: societeProduction, enfants: enfants}),
         method: "POST",

@@ -1,4 +1,4 @@
-import type { StatutDossier } from "@prisma/client";
+import type { Dossier, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
@@ -99,7 +99,7 @@ const update: NextApiHandler = async (req, res) => {
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
 
-    const dossier = await prisma.dossier.findUnique({
+    const dossier: Dossier = await prisma.dossier.findUnique({
       where: { id: dossierId },
     });
     if (!dossier) {
@@ -116,122 +116,137 @@ const update: NextApiHandler = async (req, res) => {
     eval(`stateMachine.${transition}()`);
     updates.statut = stateMachine.state;
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
-    if (updates.statut === "INSTRUCTION") {
-      console.log("ok pour instruction");
-      const query = `mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
-        dossierPasserEnInstruction(input: $input) {
-          dossier {
-            id
+    if(dossier.source === 'FORM_EDS') {
+      const url = `${process.env.API_URL_SDP}/inc/dossiers`;
+      const fetching = await fetch(url, {
+          body: JSON.stringify({dossier: dossier, statut: updates.statut}),
+          method: "PUT",
+      }).then(async (r) => {
+          if (!r.ok) {
+              return {error: 'Something went wrong'}
           }
-          errors {
-            message
+          return r.json();
+      });
+      console.log(fetching);
+    } else {
+      if (updates.statut === "INSTRUCTION") {
+        console.log("ok pour instruction");
+        const query = `mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
+          dossierPasserEnInstruction(input: $input) {
+            dossier {
+              id
+            }
+            errors {
+              message
+            }
           }
-        }
-      }`;
-      try {
-        await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
-          body: JSON.stringify({
-            operationName: "dossierPasserEnInstruction",
-            query,
-            variables: {
-              input: {
-                dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
+        }`;
+        try {
+          await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+            body: JSON.stringify({
+              operationName: "dossierPasserEnInstruction",
+              query,
+              variables: {
+                input: {
+                  dossierId: dossier.externalId,
+                  instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
+                },
               },
+            }),
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${String(DS_SECRET)}`,
+              "Content-Type": "application/json",
             },
-          }),
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${String(DS_SECRET)}`,
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        })
-          .then(async (r) => r.json())
-          .then((data: Response) => {
-            console.log(data.data.dossierPasserEnInstruction);
-            return data;
-          });
-      } catch (e: unknown) {
-        console.log(e);
-      }
-    } else if (updates.statut === "ACCEPTE") {
-      const query = `mutation dossierAccepter($input: DossierAccepterInput!) {
-        dossierAccepter(input: $input) {
-          dossier {
-            id
-          }
-          errors {
-            message
-          }
+            method: "POST",
+          })
+            .then(async (r) => r.json())
+            .then((data: Response) => {
+              console.log(data.data.dossierPasserEnInstruction);
+              return data;
+            });
+        } catch (e: unknown) {
+          console.log(e);
         }
-      }`;
-      try {
-        await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
-          body: JSON.stringify({
-            operationName: "dossierAccepter",
-            query,
-            variables: {
-              input: {
-                dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
-                motivation: "J’accepte ce dossier",
+      } else if (updates.statut === "ACCEPTE") {
+        const query = `mutation dossierAccepter($input: DossierAccepterInput!) {
+          dossierAccepter(input: $input) {
+            dossier {
+              id
+            }
+            errors {
+              message
+            }
+          }
+        }`;
+        try {
+          await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+            body: JSON.stringify({
+              operationName: "dossierAccepter",
+              query,
+              variables: {
+                input: {
+                  dossierId: dossier.externalId,
+                  instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
+                  motivation: "J’accepte ce dossier",
+                },
               },
+            }),
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${String(DS_SECRET)}`,
+              "Content-Type": "application/json",
             },
-          }),
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${String(DS_SECRET)}`,
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        })
-          .then(async (r) => r.json())
-          .then((data: Response) => {
-            return data;
-          });
-      } catch (e: unknown) {
-        console.log(e);
-      }
-    } else if (updates.statut === "REFUSE") {
-      const query = `mutation dossierRefuser($input: DossierRefuserInput!) {
-        dossierRefuser(input: $input) {
-          dossier {
-            id
-          }
-          errors {
-            message
-          }
+            method: "POST",
+          })
+            .then(async (r) => r.json())
+            .then((data: Response) => {
+              return data;
+            });
+        } catch (e: unknown) {
+          console.log(e);
         }
-      }`;
-      try {
-        await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
-          body: JSON.stringify({
-            operationName: "dossierRefuser",
-            query,
-            variables: {
-              input: {
-                dossierId: dossier.externalId,
-                instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
-                motivation: "J’accepte ce dossier",
+      } else if (updates.statut === "REFUSE") {
+        const query = `mutation dossierRefuser($input: DossierRefuserInput!) {
+          dossierRefuser(input: $input) {
+            dossier {
+              id
+            }
+            errors {
+              message
+            }
+          }
+        }`;
+        try {
+          await fetch("https://www.demarches-simplifiees.fr/api/v2/graphql", {
+            body: JSON.stringify({
+              operationName: "dossierRefuser",
+              query,
+              variables: {
+                input: {
+                  dossierId: dossier.externalId,
+                  instructeurId: "SW5zdHJ1Y3RldXItNjM1MTM=",
+                  motivation: "J’accepte ce dossier",
+                },
               },
+            }),
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${String(DS_SECRET)}`,
+              "Content-Type": "application/json",
             },
-          }),
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${String(DS_SECRET)}`,
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        })
-          .then(async (r) => r.json())
-          .then((data: Response) => {
-            return data;
-          });
-      } catch (e: unknown) {
-        console.log(e);
+            method: "POST",
+          })
+            .then(async (r) => r.json())
+            .then((data: Response) => {
+              return data;
+            });
+        } catch (e: unknown) {
+          console.log(e);
+        }
       }
     }
+    
   }
 
   if (typeof parsed.userId === "number" || parsed.userId === null) {
