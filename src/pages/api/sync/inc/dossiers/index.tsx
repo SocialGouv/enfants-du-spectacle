@@ -1,4 +1,4 @@
-import { Demandeur, SocieteProduction, Dossier, PrismaClient } from "@prisma/client";
+import { Demandeur, SocieteProduction, Dossier, PrismaClient, Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import enfant from "formulaire/pages/api/piece/enfant";
 import type { EnfantData } from "formulaire/src/fetching/dossiers";
@@ -131,6 +131,7 @@ const post: NextApiHandler = async (req, res) => {
           enfant.montantCachet = typeof enfant.montantCachet === "string" ? parseInt(enfant.montantCachet) : enfant.montantCachet
           enfant.nombreCachets = typeof enfant.nombreCachets === "string" ? parseInt(enfant.nombreCachets) : enfant.nombreCachets
           enfant.remunerationTotale = typeof enfant.remunerationTotale === "string" ? parseInt(enfant.remunerationTotale) : enfant.remunerationTotale
+          enfant.nombreLignes = typeof enfant.nombreLignes === "string" ? parseInt(enfant.nombreLignes) : enfant.nombreLignes
           return {
             ...EnfantsData.parse(enfant), 
             dossierId: createDossier.id,
@@ -160,6 +161,7 @@ const update: NextApiHandler = async (req, res) => {
   };
 
   try {
+    //HANDLE DOSSIER
     const DossierData = DossierModel.omit({id: true, commissionId: true, statut: true, societeProductionId: true, numeroDS: true, userId: true, demandeurId: true, externalId: true})
     const updateDossier = await prisma?.dossier.update({
       data: {
@@ -174,17 +176,41 @@ const update: NextApiHandler = async (req, res) => {
     });
 
     //HANDLE ENFANTS
+    const listEnfant: Enfant[] = await prisma?.enfant.findMany({
+      where: {
+        dossierId: updateDossier.id
+      }
+    })
+    console.log('list enfants : ', listEnfant)
     const EnfantsData = EnfantModel.omit({id: true, dossierId: true, adresseEnfant: true, adresseRepresentant1: true, adresseRepresentant2: true, nomRepresentant1: true, nomRepresentant2: true, prenomRepresentant1: true, prenomRepresentant2: true})
     data.enfants.map(async (enfant) => {
-      const updateenfant = await prisma?.enfant.update({
-        data: {
-          ...EnfantsData.parse(enfant),
-          justificatifs: enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
-        },
-        where: {
-          externalId: enfant.id.toString()
-        }
-      })
+      enfant.nombreJours = typeof enfant.nombreJours === "string" ? parseInt(enfant.nombreJours) : enfant.nombreJours
+      enfant.montantCachet = typeof enfant.montantCachet === "string" ? parseInt(enfant.montantCachet) : enfant.montantCachet
+      enfant.nombreCachets = typeof enfant.nombreCachets === "string" ? parseInt(enfant.nombreCachets) : enfant.nombreCachets
+      enfant.remunerationTotale = typeof enfant.remunerationTotale === "string" ? parseInt(enfant.remunerationTotale) : enfant.remunerationTotale
+      enfant.nombreLignes = typeof enfant.nombreLignes === "string" ? parseInt(enfant.nombreLignes) : enfant.nombreLignes
+      if(listEnfant.find(enfantL => enfantL.externalId === enfant.id.toString() )) {
+        console.log('has to update enfant :', enfant)
+        const updateEnfant = await prisma?.enfant.update({
+          data: {
+            ...EnfantsData.parse(enfant),
+            justificatifs: enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
+          },
+          where: {
+            externalId: enfant.id.toString()
+          }
+        })
+      } else {
+        console.log('has to create enfant :', enfant)
+        const CreateEnfants = await prisma?.enfant.create({
+          data: {
+            ...EnfantsData.parse(enfant), 
+            dossierId: updateDossier.id,
+            externalId: enfant.id.toString(),
+            justificatifs: enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
+          }
+        })
+      }
     })
   
     res.status(200).json({ message: "Dossier updated successfully" });
