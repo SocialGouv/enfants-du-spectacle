@@ -46,8 +46,8 @@ const Justificatif: React.FC<JustificatifProps> = ({
     <>
       {icon}
       {!isPresent && label}
-      {isPresent && url && (
-        <a href={url} target="_blank" rel="noreferrer">
+      {isPresent && (
+        <a href={url ? url : '/'} target="_blank" rel="noreferrer">
           {label}
         </a>
       )}

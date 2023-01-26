@@ -1,4 +1,4 @@
-import type { PieceDossierEnfant, User } from "@prisma/client";
+import type { PieceDossierEnfant, Source, User } from "@prisma/client";
 import type {
   CommentaireData,
   CommissionData,
@@ -71,9 +71,11 @@ function useDataDS() {
   };
 }
 
-function RefreshLinks(dossierExternalId: string) {
+function RefreshLinks(dossierExternalId: string, source: Source) {
+  
   const { data, error } = useSWR(
-    `/api/dslinks?externalid=${dossierExternalId}`,
+    //`${source === 'FORM_EDS' ? `/api/edslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
+    `${source === 'FORM_EDS' ? `/api/dslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<PieceDossierEnfant[]>(await res.text());
