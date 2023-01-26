@@ -20,16 +20,18 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         var decoded = jwt.verify(token, process.env.SECRET_KEY_DOCS);
 
         const mimes = {
-            'bmp':           'image/bmp',
-            'jpe':           'image/jpeg',
-            'jpeg':          'image/jpeg',
-            'jpg':           'image/jpeg',
-            'json':          'application/json',
-            'pdf':           'application/pdf',
-            'png':           'image/png',
-            'svg':           'image/svg+xml',
-            'svgz':          'image/svg+xml',
-            'txt':           'text/plain',
+            'bmp': 'image/bmp',
+            'doc': 'application/msword',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'jpe': 'image/jpeg',
+            'jpeg':  'image/jpeg',
+            'jpg': 'image/jpeg',
+            'json':  'application/json',
+            'pdf': 'application/pdf',
+            'png': 'image/png',
+            'svg': 'image/svg+xml',
+            'svgz':  'image/svg+xml',
+            'txt': 'text/plain',
         };
 
         const name = decoded.path.substring(decoded.path.lastIndexOf('/') + 1)
