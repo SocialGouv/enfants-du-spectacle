@@ -4,6 +4,7 @@ import type {
   Enfant,
   JustificatifDossier,
   JustificatifEnfant,
+  PieceDossier,
   PieceDossierEnfant,
 } from "@prisma/client";
 import _ from "lodash";
@@ -77,20 +78,25 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
   );
   return (
     <ul className={styles.justificatifs}>
-      {justificatifs.map(({ label, value }) => (
-        <li key={value}>
-          <Justificatif
-            subject={dossier}
-            value={value}
-            label={label}
-            link={
-              _.find(dataLinks.data?.dossier.champs, {
-                label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
-              })?.file?.url
-            }
-          />
-        </li>
-      ))}
+      {justificatifs.map(({ label, value }) => {
+        return (
+          <li key={value}>
+            <Justificatif
+              subject={dossier}
+              value={value}
+              label={label}
+              link={
+                dossier.source === 'FORM_EDS' ? 
+                dataLinks.dossier?.piecesDossier.filter((piece: PieceDossier) => piece.type === value)[0]?.link
+                :
+                _.find(dataLinks.data?.dossier.champs, {
+                  label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
+                })?.file?.url
+              }
+            />
+          </li>
+        )
+      })}
     </ul>
   );
 };

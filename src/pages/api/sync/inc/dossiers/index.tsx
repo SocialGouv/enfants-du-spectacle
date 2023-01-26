@@ -109,19 +109,6 @@ const post: NextApiHandler = async (req, res) => {
       },
     });
 
-    //HANDLE PIECES DOSSIER
-    const piecesDossierData = PieceDossierModel.omit({id: true})
-    const piecesDossierCreate = await prisma?.pieceDossier.createMany({
-      data: data.dossier.piecesDossier.map((piece) => {
-        return {
-          ...piecesDossierData.parse(piece),
-          link: '',
-          dossierId: createDossier.id,
-          externalId: piece.id.toString()
-        }
-      })
-    })
-
     //HANDLE ENFANTS
     if(data.enfants.length > 0) {
       const EnfantsData = EnfantModel.omit({id: true, dossierId: true})

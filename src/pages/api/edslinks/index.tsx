@@ -25,15 +25,16 @@ const get: NextApiHandler = async (req, res) => {
   console.log('fetching for : ', dossierExternalId)
 
     const url = `${process.env.API_URL_SDP}/inc/docs?externalId=${dossierExternalId}&token=${process.env.API_KEY_SDP}`;
-    const fetching = await fetch(url, {
+    console.log('url : ', url)
+    const fetching = await fetch(url.split(",").join(""), {
         method: "GET"
     }).then(async (r) => {
         if (!r.ok) {
-        res.status(500).json({ error: `Something went wrong : ${r.status}` })
+            res.status(500).json({ error: `Something went wrong : ${r.status}` })
         }
         return r.json();
     });
-    res.status(200).json({message: fetching})
+    res.status(fetching.errors ? 500 : 200).json(superjson.stringify(fetching));
 };
 
 export default withSentry(handler);

@@ -74,13 +74,14 @@ function useDataDS() {
 function RefreshLinks(dossierExternalId: string, source: Source) {
   
   const { data, error } = useSWR(
-    //`${source === 'FORM_EDS' ? `/api/edslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
-    `${source === 'FORM_EDS' ? `/api/dslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
+    `${source === 'FORM_EDS' ? `/api/edslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
       return superJSONParse<PieceDossierEnfant[]>(await res.text());
     }
   );
+
+  console.log('data : ', data)
 
   return {
     dataLinks: data,
