@@ -8,3 +8,5 @@ data:
   DEMARCHE_NUMBER: "55315"
   API_URL_INSTRUCTEUR: "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync"
   API_URL_SDP: "https://formulaire-enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync"
+  URL_SDP: "https://formulaire-enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr"
+  URL_INSTRUCTEUR: "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr"
