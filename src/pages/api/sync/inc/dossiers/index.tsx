@@ -127,6 +127,10 @@ const post: NextApiHandler = async (req, res) => {
       const EnfantsData = EnfantModel.omit({id: true, dossierId: true})
       const CreateEnfants = await prisma?.enfant.createMany({
         data: data.enfants.map((enfant) => {
+          enfant.nombreJours = typeof enfant.nombreJours === "string" ? parseInt(enfant.nombreJours) : enfant.nombreJours
+          enfant.montantCachet = typeof enfant.montantCachet === "string" ? parseInt(enfant.montantCachet) : enfant.montantCachet
+          enfant.nombreCachets = typeof enfant.nombreCachets === "string" ? parseInt(enfant.nombreCachets) : enfant.nombreCachets
+          enfant.remunerationTotale = typeof enfant.remunerationTotale === "string" ? parseInt(enfant.remunerationTotale) : enfant.remunerationTotale
           return {
             ...EnfantsData.parse(enfant), 
             dossierId: createDossier.id,
