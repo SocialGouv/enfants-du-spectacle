@@ -20,8 +20,8 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
-    "axios": "^1.2.3",
     "DatePicker": "^2.0.0",
+    "axios": "^1.2.3",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
     "formidable": "^2.1.1",
@@ -40,7 +40,8 @@
     "react-tiny-popover": "^7.2.0",
     "sass": "^1.56.1",
     "superjson": "^1.11.0",
-    "typescript": "4.9.3"
+    "typescript": "4.9.3",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@types/formidable": "^2.0.5",

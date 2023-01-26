@@ -40,8 +40,12 @@ function getId(req: NextApiRequest): number {
               piecesDossier: true
             }
           },
-          Demandeur: true ,
-          piecesDossier: true
+          Demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
+          piecesDossier: true,
         },
         where: { id: dossierId }
       });

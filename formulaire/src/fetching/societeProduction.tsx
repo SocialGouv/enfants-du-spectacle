@@ -12,6 +12,20 @@ const getSocieteProd = async (siret_ID: string) => {
     return fetching as SocieteProduction;
 };
 
+const updateSociete = async (societe: SocieteProduction) => {
+    const url = "/api/societe";
+    const fetching = await fetch(url, {
+        body: JSON.stringify(societe),
+        method: "PUT",
+    }).then(async (r) => {
+        if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+        }
+        return r.json();
+    });
+    return fetching as SocieteProduction;
+};
+
 const createSociete = async (societe: Omit<SocieteProduction, "id">) => {
     const url = "/api/societe";
     const fetching = await fetch(url, {
@@ -26,4 +40,4 @@ const createSociete = async (societe: Omit<SocieteProduction, "id">) => {
     return fetching as SocieteProduction;
 };
 
-export { getSocieteProd, createSociete }
+export { getSocieteProd, createSociete, updateSociete }

@@ -36,8 +36,8 @@ model Demandeur {
   phone                    String?
   fonction                 String?
   conventionCollectiveCode String?
-  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [siret])
-  societeProductionId      String?
+  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [id])
+  societeProductionId      Int?
   dossiers                 Dossier[]
 }
 

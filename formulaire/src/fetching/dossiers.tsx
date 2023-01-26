@@ -1,5 +1,5 @@
 import { Demandeur, Dossier, Enfant, PieceDossier, PieceDossierEnfant, SocieteProduction, User } from "@prisma/client";
-import { statusGroup } from "src/lib/types";
+import { DemandeurData, statusGroup } from "src/lib/types";
 
 type EnfantData = Enfant & {
     piecesDossier: PieceDossierEnfant[]
@@ -8,7 +8,7 @@ type EnfantData = Enfant & {
 type DossierData = Dossier & {
     user: User,
     enfants: EnfantData[],
-    Demandeur: Demandeur,
+    Demandeur: DemandeurData,
     piecesDossier: PieceDossier[],
     societeProduction?: SocieteProduction;
 }
