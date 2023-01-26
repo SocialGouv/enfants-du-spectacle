@@ -1,9 +1,8 @@
-import { Demandeur, SocieteProduction, StatutDossier } from "@prisma/client";
+import { StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import dossier from "pages/api/dossier";
-import { DossierData, EnfantData } from "src/fetching/dossiers";
-import { DemandeurData } from "src/lib/types";
+import { DossierData } from "src/fetching/dossiers";
+import prisma from "../../../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
     if (req.method == "PUT") {
