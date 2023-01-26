@@ -4,17 +4,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator zod {
-  provider              = "zod-prisma"
-  output                = "./zod"
-  relationModel         = true
-  modelCase             = "PascalCase"
-  modelSuffix           = "Model"
-  useDecimalJs          = true
-  imports               = null
-  prismaJsonNullability = true
-}
-
 generator client {
   provider = "prisma-client-js"
 }
