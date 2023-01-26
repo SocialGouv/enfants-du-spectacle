@@ -1,3 +1,10 @@
+## [1.34.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.34.0...v1.34.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* fix import prisma ([#416](https://github.com/SocialGouv/enfants-du-spectacle/issues/416)) ([e964a9b](https://github.com/SocialGouv/enfants-du-spectacle/commit/e964a9bfdc4b564efb58cf81bda8c8c314f91498))
+
 # [1.34.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.33.6...v1.34.0) (2023-01-26)
 
 
