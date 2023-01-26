@@ -1,3 +1,10 @@
+## [1.34.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.34.1...v1.34.2) (2023-01-26)
+
+
+### Bug Fixes
+
+* try fixing sync ([#417](https://github.com/SocialGouv/enfants-du-spectacle/issues/417)) ([6847bef](https://github.com/SocialGouv/enfants-du-spectacle/commit/6847bef64053edc0bbb5ed2d360eddcafe96acf7))
+
 ## [1.34.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.34.0...v1.34.1) (2023-01-26)
 
 
