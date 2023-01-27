@@ -113,7 +113,17 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     </div>
 
                     <div className={styles.blocForm}>
+                        <InputFile id={'SYNOPSIS'} 
+                            docs={contextDossier.dossier.piecesDossier} 
+                            label={'Synopsis'} 
+                            allowChanges={!allowChanges}
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={``}
+                        />
+                    </div>
 
+                    <div className={styles.blocForm}>
                         <InputFile id={'SCENARIO'} 
                             docs={contextDossier.dossier.piecesDossier} 
                             label={'Scenario ou script *'} 
@@ -122,11 +132,9 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                             handleDelete={handleDelete}
                             text={`Veuillez accompagner le document d'une note mentionnant les numéros de page sur lesquelles sont décrites les scènes ou intervient l'enfant.`}
                         />
-
                     </div>
 
                     <div className={styles.blocForm}>
-
                         <InputFile id={'MESURES_SECURITE'} 
                             docs={contextDossier.dossier.piecesDossier} 
                             label={'Note précisant les mesures de sécurité *'} 
@@ -135,7 +143,17 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                             handleDelete={handleDelete}
                             text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
                         />
+                    </div>
 
+                    <div className={styles.blocForm}>
+                        <InputFile id={'PLAN_TRAVAIL'} 
+                            docs={contextDossier.dossier.piecesDossier} 
+                            label={'Plan de travail'} 
+                            allowChanges={!allowChanges}
+                            handleFile={handleFile}
+                            handleDelete={handleDelete}
+                            text={``}
+                        />
                     </div>
 
                     <div className={styles.halfForm}>

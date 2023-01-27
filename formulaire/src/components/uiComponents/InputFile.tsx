@@ -1,6 +1,5 @@
-import { JustificatifDossier, JustificatifEnfant, PieceDossier, PieceDossierEnfant, STATUT_PIECE } from "@prisma/client";
+import { JustificatifDossier, JustificatifEnfant, STATUT_PIECE } from "@prisma/client";
 import Image from "next/image";
-import { doc } from "prettier";
 import React from "react";
 import CountPieces from "../CountPieces";
 import styles from "./InputFile.module.scss";
@@ -9,7 +8,7 @@ type Doc = {
     id: number,
     nom: string,
     type: string,
-    statut: STATUT_PIECE
+    statut: STATUT_PIECE | null
 }
 
 interface Props {
@@ -23,7 +22,6 @@ interface Props {
 }
 
 const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handleFile, handleDelete }) => {
-    console.log('docs : ', docs)
 
     return (
         <div className={styles.InputFile}>
@@ -53,9 +51,6 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                                     </div>
                                 }
                                 <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}>{doc.nom}</span>
-                                {doc.statut &&
-                                        <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused  : doc.statut === 'VALIDE' ? styles.accepted  : ''}`}>{` - ${doc.statut}`}</span>
-                                }
                             </div>
                         </div>
                     ))}
@@ -68,6 +63,7 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                         placeholder="Parcourir..."
                         accept="image/jpeg,image/gif,image/png,application/pdf,text/plain" onChange={handleFile}>
                     </input>
+                    <p className={styles.smallText}>Documents acceptés : jpeg, png, pdf</p>
                 </div>
             }
         </div>

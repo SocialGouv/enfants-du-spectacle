@@ -42,7 +42,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
         if(!initialDataPassed) {
             setEnfant({
                 ...enfantTmp,
-                [dataPassed?.nom ? 'nom' : 'prenom'] : dataPassed?.nom ? dataPassed?.nom : dataPassed?.prenom
+                [dataPassed?.nom ? 'nom' : 'prenom'] : dataPassed?.nom ? dataPassed?.nom : dataPassed?.prenom,
             })
         } else {
             setInitialDataPassed(false)
@@ -57,7 +57,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
             nom: enfant.nom,
             prenom: enfant.prenom,
             dateNaissance: enfant.dateNaissance,
-            piecesDossier: enfant.piecesDossier
+            piecesDossier: enfant.piecesDossier.filter((piece) => { return (piece.type === 'LIVRET_FAMILLE' || piece.type === 'CERTIFICAT_SCOLARITE')})
         })
         enfant.piecesDossier.map(async (pieceDossier) => {
             pieceDossier.enfantId = enfantTmp.id
@@ -87,7 +87,8 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
                 enfantId: enfantTmp.id,
                 type: e.target.id as JustificatifEnfant, 
                 externalId: '', 
-                link: upload.filePath
+                link: upload.filePath,
+                statut: null
             }
         )
         setEnfant({

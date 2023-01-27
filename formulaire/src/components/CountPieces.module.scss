@@ -1,9 +1,12 @@
 .countPieces {
+    display: flex;
+    align-items: center;
     .cardRefused {
         color: red;
         background-color: #FFE9E9;
         padding: 0.5rem;
-        display: inline;
+        display: flex;
+        align-items: center;
 
         img {
             margin-right: 0.5rem,
