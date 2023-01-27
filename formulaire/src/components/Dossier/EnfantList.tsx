@@ -128,7 +128,9 @@ const EnfantList: React.FC<Props> = ({ allowChanges }) => {
                             {enfant.dateDerniereModification ? frenchDateText(enfant.dateDerniereModification) : ''}
                         </div>
                         <div className={styles.itemDossier}>
-                            <CountPieces piecesJustif={enfant.piecesDossier.map(piece => piece.statut)}></CountPieces>
+                            {enfant.piecesDossier &&
+                                <CountPieces piecesJustif={enfant.piecesDossier.map(piece => piece.statut)}></CountPieces>
+                            }
                         </div>
                     </Link>
                 ))}
