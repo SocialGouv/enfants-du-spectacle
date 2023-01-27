@@ -13,6 +13,7 @@ import moment from 'moment';
 import OrderableItem from "../home/OrderableItem";
 import Image from "next/image";
 import useStateContext from "src/context/StateContext";
+import CountPieces from "../CountPieces";
 
 interface Props {
     allowChanges: Boolean
@@ -127,7 +128,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges }) => {
                             {enfant.dateDerniereModification ? frenchDateText(enfant.dateDerniereModification) : ''}
                         </div>
                         <div className={styles.itemDossier}>
-                            Pièces justificatives
+                            <CountPieces piecesJustif={enfant.piecesDossier.map(piece => piece.statut)}></CountPieces>
                         </div>
                     </Link>
                 ))}

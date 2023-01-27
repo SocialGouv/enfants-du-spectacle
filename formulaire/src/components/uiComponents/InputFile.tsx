@@ -2,6 +2,7 @@ import { JustificatifDossier, JustificatifEnfant, PieceDossier, PieceDossierEnfa
 import Image from "next/image";
 import { doc } from "prettier";
 import React from "react";
+import CountPieces from "../CountPieces";
 import styles from "./InputFile.module.scss";
 
 type Doc = {
@@ -22,6 +23,7 @@ interface Props {
 }
 
 const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handleFile, handleDelete }) => {
+    console.log('docs : ', docs)
 
     return (
         <div className={styles.InputFile}>
@@ -32,6 +34,9 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
             <p className={styles.smallText}>
                 {text}
             </p>
+            <div>
+                <CountPieces piecesJustif={docs.filter(doc => doc.type === id).map(doc => doc.statut)}></CountPieces>
+            </div>
             {docs.length > 0 &&
                 <div className={styles.fileUploaded}>
                     {docs.filter(doc => {return doc.type === id}).map((doc, index) => (

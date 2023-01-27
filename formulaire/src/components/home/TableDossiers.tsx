@@ -79,7 +79,12 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                     <ButtonLink light={true} onClick={() => {router.push(`/dossier/${dossier.id}`)}}>Éditer</ButtonLink>
                                 </div>
                                 <div className={styles.itemDossier}>
-                                    <CountPieces dossier={dossier}></CountPieces>
+                                    <CountPieces dossier={dossier} 
+                                    piecesJustif={
+                                        dossier.piecesDossier.map(piece => piece.statut).concat(
+                                            dossier.enfants.map(enfant => enfant.piecesDossier).flat().map(piece => piece.statut)
+                                        )
+                                    }></CountPieces>
                                 </div>
                             </div>
                         ))}
