@@ -1,3 +1,10 @@
+## [1.36.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.3...v1.36.4) (2023-01-27)
+
+
+### Bug Fixes
+
+* fix autocomplete ([#427](https://github.com/SocialGouv/enfants-du-spectacle/issues/427)) ([bc13142](https://github.com/SocialGouv/enfants-du-spectacle/commit/bc13142717cbfc0842dc957a5bcc2d71537dc434))
+
 ## [1.36.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.2...v1.36.3) (2023-01-27)
 
 
