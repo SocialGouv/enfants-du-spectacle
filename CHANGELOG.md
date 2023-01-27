@@ -1,3 +1,10 @@
+## [1.37.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.1...v1.37.2) (2023-01-27)
+
+
+### Bug Fixes
+
+* try deploy form ([#430](https://github.com/SocialGouv/enfants-du-spectacle/issues/430)) ([f4122e2](https://github.com/SocialGouv/enfants-du-spectacle/commit/f4122e24babe93baf5fb440feae378575301d313))
+
 ## [1.37.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.0...v1.37.1) (2023-01-27)
 
 
