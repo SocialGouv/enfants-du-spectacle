@@ -1,3 +1,10 @@
+## [1.36.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.1...v1.36.2) (2023-01-27)
+
+
+### Bug Fixes
+
+* fix add enfant ([#425](https://github.com/SocialGouv/enfants-du-spectacle/issues/425)) ([0d3a0f2](https://github.com/SocialGouv/enfants-du-spectacle/commit/0d3a0f2f2b0e508e9d3f29383e5c86126c71e323))
+
 ## [1.36.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.0...v1.36.1) (2023-01-27)
 
 
