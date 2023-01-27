@@ -1,3 +1,10 @@
+## [1.36.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.0...v1.36.1) (2023-01-27)
+
+
+### Bug Fixes
+
+* fix design label refused ([#424](https://github.com/SocialGouv/enfants-du-spectacle/issues/424)) ([641eede](https://github.com/SocialGouv/enfants-du-spectacle/commit/641eede2980a83ebd6e42c220c816bb820f2ee1d))
+
 # [1.36.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.35.2...v1.36.0) (2023-01-26)
 
 
