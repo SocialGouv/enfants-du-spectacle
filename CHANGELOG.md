@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.4...v1.37.0) (2023-01-27)
+
+
+### Features
+
+* prod ready form ([#428](https://github.com/SocialGouv/enfants-du-spectacle/issues/428)) ([f87e2fb](https://github.com/SocialGouv/enfants-du-spectacle/commit/f87e2fb79743cefe926860d330dde6c60f78d2a6))
+
 ## [1.36.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.36.3...v1.36.4) (2023-01-27)
 
 
