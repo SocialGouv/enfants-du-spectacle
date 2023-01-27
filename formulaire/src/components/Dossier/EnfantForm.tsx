@@ -52,6 +52,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
 
     const handleSelect = (enfant: EnfantWithDosier) => {
+        console.log('enfant to handle : ', enfant)
         setEnfant({
             ...enfantTmp,
             nom: enfant.nom,
@@ -60,9 +61,12 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
             piecesDossier: enfant.piecesDossier.filter((piece) => { return (piece.type === 'LIVRET_FAMILLE' || piece.type === 'CERTIFICAT_SCOLARITE')})
         })
         enfant.piecesDossier.map(async (pieceDossier) => {
-            pieceDossier.enfantId = enfantTmp.id
-            delete pieceDossier.id
-            await createPieceEnfant(pieceDossier)
+            console.log()
+            if(pieceDossier.type === 'LIVRET_FAMILLE' || pieceDossier.type === 'CERTIFICAT_SCOLARITE') {
+                pieceDossier.enfantId = enfantTmp.id
+                delete pieceDossier.id
+                await createPieceEnfant(pieceDossier)
+            }
         })
     }
 
