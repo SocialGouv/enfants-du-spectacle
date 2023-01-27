@@ -1,4 +1,3 @@
-import { Icon } from "@dataesr/react-dsfr";
 import type {
   Dossier,
   Enfant,
@@ -8,16 +7,17 @@ import type {
   PieceDossierEnfant,
   STATUT_PIECE,
 } from "@prisma/client";
-import { endOfDecadeWithOptions } from "date-fns/fp";
 import { Select } from "@dataesr/react-dsfr";
 import _ from "lodash";
 import React from "react";
 import styles from "src/components/Justificatifs.module.scss";
-import { JUSTIFS_DOSSIER } from "src/lib/helpers";
+import Image from "next/image";
+import logoAccepted from "src/images/accepted.svg";
+import logoRefused from "src/images/refused.svg";
 
 export type Piece = {
     id: string,
-    statut: STATUT_PIECE
+    statut: STATUT_PIECE | null
 }
 
 interface ValidationProps {
@@ -43,7 +43,39 @@ const Validation: React.FC<ValidationProps> = ({
      {statePieces?.map((piece) => (
       <div className={styles.validationRow} key={piece.id}>
         {piece.statut && piece.statut !== 'EN_ATTENTE' &&
-          <span>{piece.statut}</span>
+          <div className={`${styles.labelStatus} ${piece.statut === 'REFUSE' ? styles.refused : styles.accepted}`}
+          onClick={async () => {
+            setStatePieces([...statePieces].map((state) => {
+              if(state.id === piece.id) {
+                return {...state,
+                  statut: null
+                }
+              } else {
+                return state
+              }
+            }))
+            const url = "/api/sync/out/pieces";
+            const fetching = await fetch(url, {
+                body: JSON.stringify({type: type, id: piece.id, statut: null}),
+                method: "PUT",
+            }).then(async (r) => {
+                if (!r.ok) {
+                    return {error: 'Something went wrong'}
+                }
+                return r.json();
+            });
+            return fetching;
+          }
+          }>
+
+            <Image
+              src={piece.statut === 'REFUSE' ? logoRefused : logoAccepted}
+              alt="Enfants du Spectacle"
+              width={15}
+              height={15}
+            />
+            <span>{piece.statut}</span>
+          </div>
         }
         {!piece.statut &&
           <Select

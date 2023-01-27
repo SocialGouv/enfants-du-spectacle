@@ -29,4 +29,24 @@
     font-size: 0.9rem;
     padding: 0 10px;
   }
+
+  .labelStatus {
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 5px;display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 0.5rem;
+    }
+
+    &.refused {
+      color: red;
+      background-color: #FFE9E9
+    }
+    &.accepted {
+      color: green;
+      background-color: #B8FEC9;
+    }
+  }
 }

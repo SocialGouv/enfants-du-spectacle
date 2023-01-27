@@ -142,9 +142,11 @@ const EnfantList: React.FC<Props> = ({ allowChanges }) => {
                 </CardDescription>
             </Card>
 
-            <div className={styles.actionRow} ref={myRef}>
-                <ButtonLink light={true} onClick={() => {addEnfant()}}>Ajouter un enfant</ButtonLink>
-            </div>
+            {(contextDossier.dossier.statut === 'BROUILLON' || contextDossier.dossier.statut === 'CONSTRUCTION') &&
+                <div className={styles.actionRow} ref={myRef}>
+                    <ButtonLink light={true} onClick={() => {addEnfant()}}>Ajouter un enfant</ButtonLink>
+                </div>
+            }
 
             <div className={styles.listEnfants}>
             {contextDossier.enfants.map((enfant) => (
