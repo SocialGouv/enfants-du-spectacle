@@ -49,7 +49,7 @@ jobs:
     needs: [build-main, build-form]
     environment:
       name: production
-      url: https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/
+      url: https://enfants-du-spectacle.fabrique.social.gouv.fr/
     steps:
       - name: Use autodevops deployment
         uses: SocialGouv/kube-workflow@master
