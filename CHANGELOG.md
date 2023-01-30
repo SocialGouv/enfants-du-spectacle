@@ -1,3 +1,10 @@
+## [1.37.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.3...v1.37.4) (2023-01-30)
+
+
+### Bug Fixes
+
+* fix wording mire login demandeur ([#432](https://github.com/SocialGouv/enfants-du-spectacle/issues/432)) ([4d3b34a](https://github.com/SocialGouv/enfants-du-spectacle/commit/4d3b34a0123f0a0fa51105a26898f955f0c189be))
+
 ## [1.37.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.2...v1.37.3) (2023-01-28)
 
 
