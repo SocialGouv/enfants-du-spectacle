@@ -1,4 +1,3 @@
-import { Icon } from "@dataesr/react-dsfr";
 import type {
   Dossier,
   Enfant,
@@ -8,6 +7,8 @@ import type {
 } from "@prisma/client";
 import _ from "lodash";
 import React from "react";
+import { AiOutlineCheck } from "react-icons/ai";
+import { RxCross2 } from "react-icons/rx";
 import styles from "src/components/Justificatifs.module.scss";
 import { JUSTIFS_DOSSIER } from "src/lib/helpers";
 
@@ -28,25 +29,15 @@ const Justificatif: React.FC<JustificatifProps> = ({
 
   const url = isPresent && link;
   const icon = isPresent ? (
-    <Icon
-      name={"ri-checkbox-circle-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="green"
-    />
+    <AiOutlineCheck color="green" style={{ marginRight: "11px" }} size={20} />
   ) : (
-    <Icon
-      name={"ri-close-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="red"
-    />
+    <RxCross2 color="red" style={{ marginRight: "11px" }} size={20} />
   );
   return (
     <>
       {icon}
-      {!isPresent && label}
-      {isPresent && url && (
+      {!url && label}
+      {url && (
         <a href={url} target="_blank" rel="noreferrer">
           {label}
         </a>
@@ -78,7 +69,7 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
   return (
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => (
-        <li key={value}>
+        <li key={value} style={{ marginBottom: "16px" }}>
           <Justificatif
             subject={dossier}
             value={value}

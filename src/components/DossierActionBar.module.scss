@@ -1,10 +1,9 @@
 .wrapper {
   padding: 16px;
-  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #FEF6E3 !important;
+  background-color: #FEF6E3;
 
   &>div:not(:first-child){
     margin-left: 4rem;

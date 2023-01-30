@@ -18,6 +18,10 @@ const Page: React.FC = () => {
     <Layout
       windowTitle="Commission"
       headerMiddle={<Title as="h1">Commission </Title>}
+      breadcrumbs={[
+        { href: "/dossiers", label: "Accueil" },
+        { label: "Commission" },
+      ]}
     >
       {isLoading && <IconLoader />}
       {isError && <Icon name="ri-error" />}

@@ -33,7 +33,11 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
   return (
     <div className={styles.container}>
       <button
-        className={`${styles.currentStatut} ${className}`}
+        className={`${styles.currentStatut} ${className} ${
+          statutDossierFSM.stateLabel() === "Prêt"
+            ? styles.btnReadyBackground
+            : styles.btnPendingBackground
+        }`}
         onClick={() => {
           setDropdownVisible(!dropdownVisible);
         }}

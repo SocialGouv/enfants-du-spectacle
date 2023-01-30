@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { FaCheckCircle } from "react-icons/fa";
 import { HiClock } from "react-icons/hi";
 import { RiAlertFill, RiDownloadLine, RiInformationFill } from "react-icons/ri";
 import ButtonList from "src/components/ButtonList";
@@ -56,7 +57,7 @@ const Page: React.FC = () => {
   }
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
-  const [showTable, setShowTable] = React.useState<boolean>(false);
+  const [showTable, setShowTable] = React.useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = React.useState<statusGroup>("futur");
 
@@ -213,20 +214,22 @@ const Page: React.FC = () => {
 
     return (
       <div id={commission.id.toString()} className={`${styles.row} card`}>
-        <div>
+        <div className={styles.dossierTitle}>
           <span role="img" aria-label="hammer">
             🔨
           </span>{" "}
-          <b>{frenchDateText(commission.date)}</b> -{" "}
+          <b>Commission du {frenchDateText(commission.date)}</b> -{" "}
           {frenchDepartementName(commission.departement)}
         </div>
-        <div>
-          <b>{dossiersCount}</b> dossiers
+        <div className={styles.flexRow}>
+          <b>
+            {dossiersCount} {dossiersCount > 1 ? "dossiers" : "dossier"} -
+          </b>
+          <b>
+            {enfantsCount} {enfantsCount > 1 ? "enfants" : "enfant"}
+          </b>
         </div>
-        <div>
-          <b>{enfantsCount}</b> enfants
-        </div>
-        <div>
+        <div className={styles.dossierDetails}>
           <Link href={`/commissions/${commission.id}`}>
             <a
               href={`/commissions/${commission.id}`}
@@ -392,7 +395,7 @@ const Page: React.FC = () => {
                             <div
                               className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
                             >
-                              <HiClock size={12} /> {countReady}
+                              <FaCheckCircle size={12} /> {countReady}
                             </div>
                           )}
                         </td>
@@ -403,7 +406,7 @@ const Page: React.FC = () => {
                             <div
                               style={{
                                 display: "flex",
-                                justifyContent: "space-between",
+                                gap: "20px",
                               }}
                             >
                               <ButtonLink
