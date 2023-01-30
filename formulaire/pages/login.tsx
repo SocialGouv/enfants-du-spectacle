@@ -33,7 +33,7 @@ const Home: React.FC = () => {
           <Callout>
             <CalloutTitle as="h3">Interface agents</CalloutTitle>
             <CalloutText>
-              Ce site est destiné aux agences de production qui souhaitent déposer un dossier concernant les enfants du spectacle.
+              Interface demandeur, ce site est destiné aux personnes souhaitant déposer un dossier concernant les enfants du spectacle.
             </CalloutText>
             <div style={{ marginTop: "2rem" }}>
               <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">
