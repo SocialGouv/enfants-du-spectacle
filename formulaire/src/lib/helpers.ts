@@ -154,7 +154,7 @@ const WORDING_MAILING = [
     {
       button: "Connexion",
       bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
-      subject: "Connexion à enfants du spectacle",
+      subject: "Connexion au formulaire enfants du spectacle",
       text: "Connectez-vous en suivant ce lien : ",
       type: "auth",
     },
