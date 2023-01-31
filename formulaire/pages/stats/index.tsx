@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import React, { useEffect, useRef } from "react";
-import LayoutHome from "src/components/Layout";
+import LayoutHome from "../../src/components/Layout";
 
 const Page: React.FC = () => {
   const canvasEl = useRef(null);
