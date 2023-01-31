@@ -1,3 +1,10 @@
+## [1.38.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.38.0...v1.38.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* fix package lock ([#434](https://github.com/SocialGouv/enfants-du-spectacle/issues/434)) ([4be318c](https://github.com/SocialGouv/enfants-du-spectacle/commit/4be318c177329eda73f88600055aa06492a75d77))
+
 # [1.38.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.4...v1.38.0) (2023-01-31)
 
 
