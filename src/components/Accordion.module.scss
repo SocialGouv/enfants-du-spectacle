@@ -1,0 +1,21 @@
+.accordion {
+  background-color: white;
+  padding: 16px;
+  border-top: 1px solid #DDDDDD;
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .content { 
+    margin-top: 28px;
+  }
+  .title {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 28px;
+    color: #161616;
+  }
+}

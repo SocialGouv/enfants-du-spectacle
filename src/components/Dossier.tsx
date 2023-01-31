@@ -15,10 +15,19 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
-import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
+import {
+  birthDateToFrenchAge,
+  EMPLOIS_CATEGORIES,
+  frenchDateText,
+  typeEmploiLabel,
+  TYPES_EMPLOI,
+} from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 import { deleteDossier, sendEmail } from "src/lib/queries";
+
+import Accordion from "./Accordion";
+import Table from "./Table";
 
 interface Props {
   dossierId: number;
@@ -28,7 +37,6 @@ interface Props {
 const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
   const { data: session } = useSession();
-  const [showTable, setShowTable] = React.useState<boolean>(true);
   const [showCommentSection, setShowCommentSection] =
     React.useState<boolean>(false);
   const [showCompanySection, setShowCompanySection] =
@@ -42,7 +50,15 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     { label: "Infos complémentaires", status: "" },
   ];
 
-  console.log("DATA LINKS", dataLinks);
+  const tableChildHeaders: string[] = [
+    "Rôles",
+    "Nom et Prénom",
+    "Age",
+    "Personnage",
+    "Condition de travail",
+    "Pièces justificatives",
+  ];
+
   if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
 
@@ -51,294 +67,310 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       {session.dbUser.role !== "MEMBRE" && (
         <DossierActionBar dossierId={dossierId} />
       )}
-      <div className={styles.dossierSummaryBloc}>
-        <div className={styles.flexRow}>
-          <div className={styles.dossierTitle}>{dossier.nom}</div>
-          {showTable ? (
-            <AiOutlineMinus
-              cursor="pointer"
-              color="black"
-              onClick={() => {
-                setShowTable(false);
-              }}
-            />
-          ) : (
-            <AiOutlinePlus
-              cursor="pointer"
-              color="black"
-              onClick={() => {
-                setShowTable(true);
-              }}
-            />
-          )}
-        </div>
-        {showTable && (
-          <div>
-            <div className={styles.insideWrapper}>
-              <Info title="TYPE DE PROJET">
-                <CategorieDossierTag dossier={dossier} />
+      <Accordion title={dossier.nom} className="accordionSpacing" state={true}>
+        <div className={styles.dossierSummaryBloc}>
+          <div className={styles.insideWrapper}>
+            <Info title="TYPE DE PROJET">
+              <CategorieDossierTag dossier={dossier} />
+            </Info>
+            <Info title="DATE">
+              <div> Du {frenchDateText(dossier.dateDebut)}</div>
+              <div>au {frenchDateText(dossier.dateFin)}</div>
+            </Info>
+            <div>
+              <Info title="PRESENTATION GENERALE" className={`${styles.info}`}>
+                <Foldable>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: dossier.presentation.replace(/\n/g, "<br />"),
+                    }}
+                  />
+                </Foldable>
               </Info>
-              <Info title="DATE">
-                <div> Du {frenchDateText(dossier.dateDebut)}</div>
-                <div>au {frenchDateText(dossier.dateFin)}</div>
-              </Info>
-              <div>
-                <Info
-                  title="PRESENTATION GENERALE"
-                  className={`${styles.info}`}
-                >
-                  <Foldable>
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: dossier.presentation.replace(/\n/g, "<br />"),
-                      }}
-                    />
-                  </Foldable>
-                </Info>
-                <Info
-                  title="SCENES SENSIBLES"
-                  className={styles.infoSuccessive}
-                >
-                  {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
-                  {dossier.scenesSensibles.length > 0 &&
-                    dossier.scenesSensibles.join(", ")}
-                </Info>
-              </div>
-              <Info title="PIECES JUSTIFICATIVES">
-                <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
-              </Info>
-              <Info title="VALIDATION">
-                {JUSTIFICATIFS_DOSSIERS.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`${styles.justificatifStatus} ${
-                      item.status === "VALIDÉ"
-                        ? styles.tagGreen
-                        : item.status === "REFUSÉ"
-                        ? styles.tagRed
-                        : ""
-                    }`}
-                  >
-                    {item.status === "VALIDÉ" ? (
-                      <FaCheckCircle size={12} style={{ marginRight: "5px" }} />
-                    ) : item.status === "REFUSÉ" ? (
-                      <RxCrossCircled
-                        size={12}
-                        style={{ marginRight: "5px" }}
-                      />
-                    ) : (
-                      <select
-                        name="instructors"
-                        className={styles.statusSelected}
-                      >
-                        <option value="Séléctionner">Séléctionner</option>
-                        <option value="validate">VALIDÉ</option>
-                        <option value="refused">REFUSÉ</option>
-                      </select>
-                    )}{" "}
-                    {item.status}
-                  </div>
-                ))}
+              <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
+                {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
+                {dossier.scenesSensibles.length > 0 &&
+                  dossier.scenesSensibles.join(", ")}
               </Info>
             </div>
-            <div style={{ marginTop: "36px" }}>
-              <div
-                className={`${styles.bottomItemFoldable} ${styles.commentItem}`}
-              >
-                <div className={`${styles.flexRow}`}>
-                  <div>Commentaires</div>
-                  {!showCommentSection ? (
-                    <AiOutlinePlus
-                      cursor="pointer"
-                      color="black"
-                      onClick={() => {
-                        setShowCommentSection(true);
-                      }}
-                    />
+            <Info title="PIECES JUSTIFICATIVES">
+              <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+            </Info>
+            <Info title="VALIDATION">
+              {JUSTIFICATIFS_DOSSIERS.map((item, index) => (
+                <div
+                  key={index}
+                  className={`${styles.justificatifStatus} ${
+                    item.status === "VALIDÉ"
+                      ? styles.tagGreen
+                      : item.status === "REFUSÉ"
+                      ? styles.tagRed
+                      : ""
+                  }`}
+                >
+                  {item.status === "VALIDÉ" ? (
+                    <FaCheckCircle size={12} style={{ marginRight: "5px" }} />
+                  ) : item.status === "REFUSÉ" ? (
+                    <RxCrossCircled size={12} style={{ marginRight: "5px" }} />
                   ) : (
-                    <AiOutlineMinus
-                      cursor="pointer"
-                      color="black"
-                      onClick={() => {
-                        setShowCommentSection(false);
-                      }}
-                    />
-                  )}
-                </div>
-                {showCommentSection && (
-                  <>
-                    <textarea
-                      name="comment"
-                      className={styles.commentSection}
-                    />
-                    <button
-                      className="postButton"
-                      onClick={() => {
-                        console.log("Todo Répondre");
-                      }}
+                    <select
+                      name="instructors"
+                      className={styles.statusSelected}
                     >
-                      Répondre
-                    </button>
-                  </>
-                )}
-              </div>
-              <div className={`${styles.bottomItemFoldable}`}>
-                <div className={styles.flexRow}>
-                  <div>Afficher la société et le demandeur</div>
-                  {!showCompanySection ? (
-                    <AiOutlinePlus
-                      cursor="pointer"
-                      color="black"
-                      onClick={() => {
-                        setShowCompanySection(true);
-                      }}
-                    />
-                  ) : (
-                    <AiOutlineMinus
-                      cursor="pointer"
-                      color="black"
-                      onClick={() => {
-                        setShowCompanySection(false);
-                      }}
-                    />
-                  )}
+                      <option value="Séléctionner">Séléctionner</option>
+                      <option value="validate">VALIDÉ</option>
+                      <option value="refused">REFUSÉ</option>
+                    </select>
+                  )}{" "}
+                  {item.status}
                 </div>
-                {showCompanySection && (
-                  <div className={styles.societeSummaryBloc}>
-                    <Info title="SOCIETE">
-                      <InfoSociete
-                        societeProduction={dossier.societeProduction}
-                        conventionCollectiveCode={
-                          dossier.conventionCollectiveCode
-                        }
-                      />
-                    </Info>
-                    <Info title="DEMANDEUR">
-                      <div className={styles.demandeurInfo}>
-                        {dossier.demandeur.prenom} {dossier.demandeur.nom}
-                      </div>
-                      <div className={styles.demandeurInfo} title="Fonction(s)">
-                        {dossier.demandeur.fonction}
-                      </div>
-                      <div className={styles.demandeurInfo}>
-                        <a href={`mailto:${dossier.demandeur.email}`}>
-                          ✉️ {dossier.demandeur.email}
-                        </a>
-                      </div>
-                      <div className={styles.demandeurInfo}>
-                        <a href={`tel:${dossier.demandeur.phone}`}>
-                          📞 {dossier.demandeur.phone}
-                        </a>
-                      </div>
-                      {dossier.statut == "ACCEPTE" &&
-                        session.dbUser.role !== "MEMBRE" && (
-                          <div>
-                            <button
-                              className="postButton"
-                              onClick={() => {
-                                const attachment = generateDA([dossier], true);
-                                sendEmail(
-                                  "dl_decision",
-                                  attachment as string,
-                                  dossier,
-                                  dossier.demandeur.email
-                                );
-                              }}
-                            >
-                              Renvoyer décision autorisation
-                            </button>
-                          </div>
-                        )}
-                    </Info>
-                  </div>
+              ))}
+            </Info>
+          </div>
+          <div style={{ marginTop: "36px" }}>
+            <div
+              className={`${styles.bottomItemFoldable} ${styles.commentItem}`}
+            >
+              <div className={`${styles.flexRow}`}>
+                <div>Commentaires</div>
+                {!showCommentSection ? (
+                  <AiOutlinePlus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCommentSection(true);
+                    }}
+                  />
+                ) : (
+                  <AiOutlineMinus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCommentSection(false);
+                    }}
+                  />
                 )}
               </div>
-              {dossier.statut !== "INSTRUCTION" &&
-                dossier.statut !== "CONSTRUCTION" &&
-                session.dbUser.role !== "MEMBRE" && (
-                  <button
-                    style={{ marginRight: "10px" }}
-                    className="postButton"
-                    onClick={() => {
-                      generateFE([dossier]);
-                    }}
-                  >
-                    Télécharger Fiche Emploi
-                  </button>
-                )}
-              {dossier.statut == "ACCEPTE" &&
-                session.dbUser.role !== "MEMBRE" && (
+              {showCommentSection && (
+                <>
+                  <textarea name="comment" className={styles.commentSection} />
                   <button
                     className="postButton"
-                    style={{ marginRight: "10px" }}
                     onClick={() => {
-                      generateDA([dossier]);
+                      console.log("Todo Répondre");
                     }}
                   >
-                    Télécharger Décision autorisation
+                    Répondre
                   </button>
+                </>
+              )}
+            </div>
+            <div className={`${styles.bottomItemFoldable}`}>
+              <div className={styles.flexRow}>
+                <div>Afficher la société et le demandeur</div>
+                {!showCompanySection ? (
+                  <AiOutlinePlus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCompanySection(true);
+                    }}
+                  />
+                ) : (
+                  <AiOutlineMinus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCompanySection(false);
+                    }}
+                  />
                 )}
-              {session.dbUser.role === "ADMIN" && (
+              </div>
+              {showCompanySection && (
+                <div className={styles.societeSummaryBloc}>
+                  <Info title="SOCIETE">
+                    <InfoSociete
+                      societeProduction={dossier.societeProduction}
+                      conventionCollectiveCode={
+                        dossier.conventionCollectiveCode
+                      }
+                    />
+                  </Info>
+                  <Info title="DEMANDEUR">
+                    <div className={styles.demandeurInfo}>
+                      {dossier.demandeur.prenom} {dossier.demandeur.nom}
+                    </div>
+                    <div className={styles.demandeurInfo} title="Fonction(s)">
+                      {dossier.demandeur.fonction}
+                    </div>
+                    <div className={styles.demandeurInfo}>
+                      <a href={`mailto:${dossier.demandeur.email}`}>
+                        ✉️ {dossier.demandeur.email}
+                      </a>
+                    </div>
+                    <div className={styles.demandeurInfo}>
+                      <a href={`tel:${dossier.demandeur.phone}`}>
+                        📞 {dossier.demandeur.phone}
+                      </a>
+                    </div>
+                    {dossier.statut == "ACCEPTE" &&
+                      session.dbUser.role !== "MEMBRE" && (
+                        <div>
+                          <button
+                            className="postButton"
+                            onClick={() => {
+                              const attachment = generateDA([dossier], true);
+                              sendEmail(
+                                "dl_decision",
+                                attachment as string,
+                                dossier,
+                                dossier.demandeur.email
+                              );
+                            }}
+                          >
+                            Renvoyer décision autorisation
+                          </button>
+                        </div>
+                      )}
+                  </Info>
+                </div>
+              )}
+            </div>
+            {dossier.statut !== "INSTRUCTION" &&
+              dossier.statut !== "CONSTRUCTION" &&
+              session.dbUser.role !== "MEMBRE" && (
                 <button
-                  className="deleteButton"
+                  style={{ marginRight: "10px" }}
+                  className="postButton"
                   onClick={() => {
-                    if (
-                      window.confirm(
-                        "Souhaitez-vous vraiment supprimer ce dossier?"
-                      )
-                    ) {
-                      deleteDossier(dossier.id);
-                      router.push("/dossiers").catch((e) => {
-                        console.log(e);
-                      });
-                    }
+                    generateFE([dossier]);
                   }}
                 >
-                  Supprimer dossier
+                  Télécharger Fiche Emploi
                 </button>
               )}
-              <br />
-            </div>
+            {dossier.statut == "ACCEPTE" &&
+              session.dbUser.role !== "MEMBRE" && (
+                <button
+                  className="postButton"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => {
+                    generateDA([dossier]);
+                  }}
+                >
+                  Télécharger Décision autorisation
+                </button>
+              )}
+            {session.dbUser.role === "ADMIN" && (
+              <button
+                className="deleteButton"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Souhaitez-vous vraiment supprimer ce dossier?"
+                    )
+                  ) {
+                    deleteDossier(dossier.id);
+                    router.push("/dossiers").catch((e) => {
+                      console.log(e);
+                    });
+                  }
+                }}
+              >
+                Supprimer dossier
+              </button>
+            )}
+            <br />
           </div>
-        )}
+        </div>
+      </Accordion>
+      <div>
+        {EMPLOIS_CATEGORIES.map((typeEmploi, index) => (
+          <div key={index}>
+            {dossier.enfants.filter(function (element) {
+              return (
+                typeEmploiLabel(element.typeEmploi) === typeEmploi.label ||
+                typeEmploi.value.includes(element.typeEmploi)
+              );
+            }).length > 0 ? (
+              <Accordion title={typeEmploi.label}>
+                <Table headers={tableChildHeaders}>
+                  {dossier.enfants
+                    .filter(
+                      (e) =>
+                        typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
+                        typeEmploi.value.includes(e.typeEmploi)
+                    )
+                    .map((enf, idx) => (
+                      <tr key={idx}>
+                        {/* <a href={`#` + dossier.id.toString()}> */}
+                        <td>{typeEmploiLabel(enf.typeEmploi)}</td>
+                        {/* </a> */}
+                        <td>
+                          {enf.nom} {enf.prenom}
+                        </td>
+                        <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
+                        <td>{enf.nomPersonnage}</td>
+                        <td>?</td>
+                        <td>{enf.justificatifs.length}</td>
+                      </tr>
+                    ))}
+                </Table>
+              </Accordion>
+            ) : (
+              ""
+            )}
+          </div>
+        ))}
       </div>
 
-      {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
-      {TYPES_EMPLOI.map((typeEmploi, index) => (
-        <span key={index}>
-          {dossier.enfants.filter(function (element) {
-            return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
-          }).length > 0 ? (
-            <h4>{typeEmploi.label}</h4>
-          ) : (
-            ""
-          )}
-          {dossier.enfants
-            .filter(function (element) {
+      <div style={{ padding: "44px 0" }}>
+        {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
+        {TYPES_EMPLOI.map((typeEmploi, index) => (
+          <span key={index}>
+            {dossier.enfants.filter(function (element) {
               return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
-            })
-            .sort(function (a, b) {
-              if (a.nom < b.nom) {
-                return -1;
-              }
-              if (a.nom > b.nom) {
-                return 1;
-              }
-              if (a.prenom < b.prenom) {
-                return -1;
-              }
-              if (a.prenom > b.prenom) {
-                return 1;
-              }
-              return 0;
-            })
-            .map((enfant) => (
-              <div key={enfant.id} className={styles.bloc}>
-                <Enfant enfant={enfant} dataLinks={dataLinks} />
+            }).length > 0 ? (
+              <div style={{ marginBottom: "36px" }}>
+                <Accordion title={typeEmploi.label} className="noBorder">
+                  {dossier.enfants
+                    .filter(function (element) {
+                      return (
+                        typeEmploiLabel(element.typeEmploi) === typeEmploi.label
+                      );
+                    })
+                    .sort(function (a, b) {
+                      if (a.nom < b.nom) {
+                        return -1;
+                      }
+                      if (a.nom > b.nom) {
+                        return 1;
+                      }
+                      if (a.prenom < b.prenom) {
+                        return -1;
+                      }
+                      if (a.prenom > b.prenom) {
+                        return 1;
+                      }
+                      return 0;
+                    })
+                    .map((enfant) => (
+                      <div
+                        id={dossier.id.toString()}
+                        key={enfant.id}
+                        className={styles.bloc}
+                      >
+                        <Enfant enfant={enfant} dataLinks={dataLinks} />
+                      </div>
+                    ))}
+                </Accordion>
               </div>
-            ))}
-        </span>
-      ))}
+            ) : (
+              ""
+            )}
+          </span>
+        ))}
+      </div>
     </>
   );
 };
