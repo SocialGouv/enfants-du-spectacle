@@ -1,3 +1,10 @@
+# [1.38.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.4...v1.38.0) (2023-01-31)
+
+
+### Features
+
+* add stats and accessibility in footer ([#433](https://github.com/SocialGouv/enfants-du-spectacle/issues/433)) ([67e9cde](https://github.com/SocialGouv/enfants-du-spectacle/commit/67e9cde7c0fc7dc62be404dd7696e06f82be2379))
+
 ## [1.37.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.37.3...v1.37.4) (2023-01-30)
 
 
