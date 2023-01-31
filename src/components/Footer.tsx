@@ -32,6 +32,8 @@ export default function Footer(): ReactElement {
       </FooterPartners>
       <FooterBottom>
         <FooterLink href="/mentions">Mentions légales</FooterLink>
+        <FooterLink href="/stats">Statistique</FooterLink>
+        <FooterLink href="#">Accessibilité : non conforme</FooterLink>
       </FooterBottom>
     </FooterDSE>
   );
