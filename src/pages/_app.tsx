@@ -20,8 +20,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     if (
       MATOMO_SITE_AGENT_ID &&
       MATOMO_URL &&
-      process.env.PGDATABASE &&
-      process.env.PGDATABASE === "PROD"
+      process.env.NODE_ENV === "production"
     ) {
       init({ siteId: MATOMO_SITE_AGENT_ID, url: MATOMO_URL });
       if (HJID_AGENT && HJSV_AGENT)
