@@ -6,6 +6,7 @@ import type { ReactElement } from "react";
 import React from "react";
 import IconLoader from "../src/components/IconLoader";
 import { init } from "@socialgouv/matomo-next";
+import { hotjar } from "react-hotjar";
 
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID;
@@ -15,12 +16,7 @@ const HJSV_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   React.useEffect(() => {
-    if (
-      MATOMO_SITE_ID &&
-      MATOMO_URL &&
-      process.env.PGDATABASE &&
-      process.env.PGDATABASE === "PROD"
-    ) {
+    if (MATOMO_SITE_ID && MATOMO_URL && process.env.NODE_ENV === "production") {
       init({ siteId: MATOMO_SITE_ID, url: MATOMO_URL });
       if (HJID_FORMULAIRE && HJSV_FORMULAIRE)
         hotjar.initialize(parseInt(HJID_FORMULAIRE), parseInt(HJSV_FORMULAIRE));
