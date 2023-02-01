@@ -14,7 +14,7 @@ const HJID_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJID;
 const HJSV_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
 
 function App({ Component, pageProps }: AppProps): ReactElement {
-  useEffect(() => {
+  React.useEffect(() => {
     if (
       MATOMO_SITE_ID &&
       MATOMO_URL &&
