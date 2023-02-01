@@ -17,9 +17,12 @@ const HJSV_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
 function App({ Component, pageProps }: AppProps): ReactElement {
   React.useEffect(() => {
     if (MATOMO_SITE_ID && MATOMO_URL && process.env.NODE_ENV === "production") {
+      console.log("INITIALIZING");
       init({ siteId: MATOMO_SITE_ID, url: MATOMO_URL });
       if (HJID_FORMULAIRE && HJSV_FORMULAIRE)
         hotjar.initialize(parseInt(HJID_FORMULAIRE), parseInt(HJSV_FORMULAIRE));
+      console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
+      console.log("HOTJAR INFO", HJID_FORMULAIRE, HJSV_FORMULAIRE);
     }
   }, []);
   return (
