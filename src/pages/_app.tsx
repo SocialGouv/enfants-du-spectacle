@@ -1,13 +1,34 @@
 import "src/styles/globals.scss";
 import "remixicon/fonts/remixicon.css";
 
+import { init } from "@socialgouv/matomo-next";
 import type { AppProps } from "next/app";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import type { ReactElement } from "react";
-import React from "react";
+import React, { useEffect } from "react";
+import { hotjar } from "react-hotjar";
 import IconLoader from "src/components/IconLoader";
 
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID;
+
+const HJID_AGENT = process.env.NEXT_PUBLIC_AGENT_HJID;
+const HJSV_AGENT = process.env.NEXT_PUBLIC_AGENT_HJSV;
+
 function App({ Component, pageProps }: AppProps): ReactElement {
+  useEffect(() => {
+    if (
+      MATOMO_SITE_ID &&
+      MATOMO_URL &&
+      process.env.PGDATABASE &&
+      process.env.PGDATABASE === "PROD"
+    ) {
+      init({ siteId: MATOMO_SITE_ID, url: MATOMO_URL });
+      if (HJID_AGENT && HJSV_AGENT)
+        hotjar.initialize(parseInt(HJID_AGENT), parseInt(HJSV_AGENT));
+    }
+  }, []);
+
   return (
     <SessionProvider session={pageProps.session}>
       {Component.auth ? (
