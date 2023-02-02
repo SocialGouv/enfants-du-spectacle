@@ -8,13 +8,14 @@ import IconLoader from "../src/components/IconLoader";
 import { init } from "@socialgouv/matomo-next";
 import { hotjar } from "react-hotjar";
 
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
+const MATOMO_SITE_FORM_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID;
+const HJID_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJID;
+const HJSV_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
+
 function App({ Component, pageProps }: AppProps): ReactElement {
 
   React.useEffect(() => {
-    const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
-    const MATOMO_SITE_FORM_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID;
-    const HJID_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJID;
-    const HJSV_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
     console.log('INITIALIZING')
     console.log('vars : ', MATOMO_SITE_FORM_ID, process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID)
     if ( MATOMO_SITE_FORM_ID && MATOMO_URL ) {
