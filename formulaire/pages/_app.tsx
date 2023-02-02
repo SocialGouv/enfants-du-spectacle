@@ -8,23 +8,30 @@ import IconLoader from "../src/components/IconLoader";
 import { init } from "@socialgouv/matomo-next";
 import { hotjar } from "react-hotjar";
 
-const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
-const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID;
-
-const HJID_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJID;
-const HJSV_FORMULAIRE = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
-
 function App({ Component, pageProps }: AppProps): ReactElement {
-  React.useEffect(() => {
-    if (MATOMO_SITE_ID && MATOMO_URL && process.env.NODE_ENV === "production") {
-      console.log("INITIALIZING");
-      init({ siteId: MATOMO_SITE_ID, url: MATOMO_URL });
-      if (HJID_FORMULAIRE && HJSV_FORMULAIRE)
-        hotjar.initialize(parseInt(HJID_FORMULAIRE), parseInt(HJSV_FORMULAIRE));
-      console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
-      console.log("HOTJAR INFO", HJID_FORMULAIRE, HJSV_FORMULAIRE);
+
+  const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
+  const MATOMO_SITE_FORM_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID;
+  
+  const HJID_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJID;
+  const HJSV_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
+  
+  useEffect(() => {
+    if ( MATOMO_SITE_FORM_ID && MATOMO_URL ) {
+      console.log("INITIALIZING MATOMO");
+      console.log("MATOMO INFO", MATOMO_SITE_FORM_ID, MATOMO_URL);
+      init({
+        siteId: MATOMO_SITE_FORM_ID,
+        url: MATOMO_URL,
+      });
+    }
+    if (HJID_FORM && HJSV_FORM) {
+      console.log("INITIALIZING HOTJAR");
+      console.log("HOTJAR INFO", HJID_AGENT, HJSV_AGENT);
+      hotjar.initialize(parseInt(HJID_FORM), parseInt(HJSV_FORM));
     }
   }, []);
+
   return (
     <SessionProvider session={pageProps.session}>
       {Component.auth ? (
