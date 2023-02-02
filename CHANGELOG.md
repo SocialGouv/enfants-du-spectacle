@@ -1,3 +1,10 @@
+## [1.40.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.0...v1.40.1) (2023-02-02)
+
+
+### Bug Fixes
+
+* fix init matomo hotjar ([#439](https://github.com/SocialGouv/enfants-du-spectacle/issues/439)) ([3ab26f3](https://github.com/SocialGouv/enfants-du-spectacle/commit/3ab26f3999a18e8ffa4586210a163953786a5b52))
+
 # [1.40.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.39.1...v1.40.0) (2023-02-02)
 
 
