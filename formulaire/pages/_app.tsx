@@ -17,6 +17,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   const HJSV_FORM = process.env.NEXT_PUBLIC_FORMULAIRE_HJSV;
   
   React.useEffect(() => {
+    console.log('INITIALIZING')
     if ( MATOMO_SITE_FORM_ID && MATOMO_URL ) {
       console.log("INITIALIZING MATOMO");
       console.log("MATOMO INFO", MATOMO_SITE_FORM_ID, MATOMO_URL);
