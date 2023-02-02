@@ -1,3 +1,10 @@
+## [1.41.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.41.0...v1.41.1) (2023-02-02)
+
+
+### Bug Fixes
+
+* convention collectives url ([#452](https://github.com/SocialGouv/enfants-du-spectacle/issues/452)) ([52bf5d8](https://github.com/SocialGouv/enfants-du-spectacle/commit/52bf5d8bf11711c2abc689df35d831c65dd48dfd))
+
 # [1.41.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.11...v1.41.0) (2023-02-02)
 
 
