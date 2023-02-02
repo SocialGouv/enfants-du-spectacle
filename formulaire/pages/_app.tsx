@@ -27,10 +27,10 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     }
     if (HJID_FORM && HJSV_FORM) {
       console.log("INITIALIZING HOTJAR");
-      console.log("HOTJAR INFO", HJID_AGENT, HJSV_AGENT);
+      console.log("HOTJAR INFO", HJID_FORM, HJSV_FORM);
       hotjar.initialize(parseInt(HJID_FORM), parseInt(HJSV_FORM));
     }
-  }, []);
+  }, [process.env]);
 
   return (
     <SessionProvider session={pageProps.session}>
