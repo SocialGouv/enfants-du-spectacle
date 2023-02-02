@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.11...v1.41.0) (2023-02-02)
+
+
+### Features
+
+* add classic cookies banner ([#450](https://github.com/SocialGouv/enfants-du-spectacle/issues/450)) ([d6e0c11](https://github.com/SocialGouv/enfants-du-spectacle/commit/d6e0c111f82876629d6977b9d33f4e23fe318dbd))
+
 ## [1.40.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.10...v1.40.11) (2023-02-02)
 
 
