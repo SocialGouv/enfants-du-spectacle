@@ -17,8 +17,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   React.useEffect(() => {
     console.log('INITIALIZING')
-    console.log("MATOMO INFO", MATOMO_SITE_FORM_ID, MATOMO_URL, process.env.NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID, process.env.NEXT_PUBLIC_MATOMO_URL);
-    console.log("HOTJAR INFO", HJID_AGENT, HJSV_AGENT);
     if ( MATOMO_SITE_FORM_ID && MATOMO_URL ) {
       console.log("INITIALIZING MATOMO");
       console.log("MATOMO INFO", MATOMO_SITE_FORM_ID, MATOMO_URL);
