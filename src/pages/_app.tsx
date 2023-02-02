@@ -22,9 +22,15 @@ function App({ Component, pageProps }: AppProps): ReactElement {
       MATOMO_URL &&
       process.env.NODE_ENV === "production"
     ) {
-      init({ siteId: MATOMO_SITE_AGENT_ID, url: MATOMO_URL });
+      console.log("INITIALIZING");
+      init({
+        siteId: MATOMO_SITE_AGENT_ID,
+        url: MATOMO_URL,
+      });
       if (HJID_AGENT && HJSV_AGENT)
         hotjar.initialize(parseInt(HJID_AGENT), parseInt(HJSV_AGENT));
+      console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
+      console.log("HOTJAR INFO", HJID_AGENT, HJSV_AGENT);
     }
   }, []);
 
