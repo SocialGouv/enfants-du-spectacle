@@ -1,3 +1,10 @@
+## [1.40.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.4...v1.40.5) (2023-02-02)
+
+
+### Bug Fixes
+
+* fix envs ([#443](https://github.com/SocialGouv/enfants-du-spectacle/issues/443)) ([61246e7](https://github.com/SocialGouv/enfants-du-spectacle/commit/61246e79ff69c4be507168f56c3b72e26685b433))
+
 ## [1.40.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.3...v1.40.4) (2023-02-02)
 
 
