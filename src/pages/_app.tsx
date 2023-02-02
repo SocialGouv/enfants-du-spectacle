@@ -13,7 +13,8 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
   const MATOMO_SITE_AGENT_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_AGENT_ID;
   
-  useEffect(() => {
+  React.useEffect(() => {
+    console.log('INITIALIZING')
     if (
       MATOMO_SITE_AGENT_ID &&
       MATOMO_URL
