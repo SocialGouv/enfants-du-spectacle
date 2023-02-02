@@ -25,6 +25,8 @@ jobs:
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=production
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             START_SCRIPT=start-prod
+            NEXT_PUBLIC_MATOMO_URL=https://matomo.fabrique.social.gouv.fr/
+            NEXT_PUBLIC_MATOMO_SITE_AGENT_ID=85
 
   build-form:
     name: Build & Register form application
@@ -42,6 +44,10 @@ jobs:
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=production
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             START_SCRIPT=start
+            NEXT_PUBLIC_FORMULAIRE_HJID=3347496
+            NEXT_PUBLIC_FORMULAIRE_HJSV=6
+            NEXT_PUBLIC_MATOMO_URL=https://matomo.fabrique.social.gouv.fr/
+            NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=84
 
   deploy:
     name: Deploy production

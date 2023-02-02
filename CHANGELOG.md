@@ -1,3 +1,31 @@
+## [1.40.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.10...v1.40.11) (2023-02-02)
+
+
+### Bug Fixes
+
+* fix env ([#451](https://github.com/SocialGouv/enfants-du-spectacle/issues/451)) ([da3d063](https://github.com/SocialGouv/enfants-du-spectacle/commit/da3d06341fdba5376f72004653472c7139b707b9))
+
+## [1.40.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.9...v1.40.10) (2023-02-02)
+
+
+### Bug Fixes
+
+* init hotjar and matomo ([#449](https://github.com/SocialGouv/enfants-du-spectacle/issues/449)) ([2004fb1](https://github.com/SocialGouv/enfants-du-spectacle/commit/2004fb1566be1067c8e50fa714801989a30dc83a))
+
+## [1.40.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.8...v1.40.9) (2023-02-02)
+
+
+### Bug Fixes
+
+* envs ([#448](https://github.com/SocialGouv/enfants-du-spectacle/issues/448)) ([1c09576](https://github.com/SocialGouv/enfants-du-spectacle/commit/1c095768cc7de531315318dcd892636ce563a60d))
+
+## [1.40.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.7...v1.40.8) (2023-02-02)
+
+
+### Bug Fixes
+
+* Trigger deploy ([#447](https://github.com/SocialGouv/enfants-du-spectacle/issues/447)) ([9a711d0](https://github.com/SocialGouv/enfants-du-spectacle/commit/9a711d03c17b95c5ef2ee264004ddf4146c43f33))
+
 ## [1.40.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.40.6...v1.40.7) (2023-02-02)
 
 
