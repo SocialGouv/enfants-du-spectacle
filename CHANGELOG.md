@@ -1,3 +1,10 @@
+# [1.40.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.39.1...v1.40.0) (2023-02-02)
+
+
+### Features
+
+* check matomo and hotjar ([#438](https://github.com/SocialGouv/enfants-du-spectacle/issues/438)) ([c816fc6](https://github.com/SocialGouv/enfants-du-spectacle/commit/c816fc60582b0727f683f99026013bf74bd31fed))
+
 ## [1.39.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.39.0...v1.39.1) (2023-02-01)
 
 
