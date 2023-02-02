@@ -5,17 +5,49 @@ import { init } from "@socialgouv/matomo-next";
 import type { AppProps } from "next/app";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import type { ReactElement } from "react";
-import React, { useEffect } from "react";
+import React from "react";
+import CookieConsent from "react-cookie-consent";
 import IconLoader from "src/components/IconLoader";
 
 function App({ Component, pageProps }: AppProps): ReactElement {
-
   const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
   const MATOMO_SITE_AGENT_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_AGENT_ID;
-  
+  const cookieStyle = {
+    alignItems: "center",
+    background: "rgb(74, 89, 99)",
+    padding: "10px",
+  };
+  const acceptButtonStyle = {
+    background: "green",
+    color: "white",
+    fontSize: "16px",
+    padding: "10px",
+  };
+
+  const declineButtonStyle = {
+    color: "white",
+    fontSize: "16px",
+    padding: "10px 15px",
+  };
+
+  const cookieContent = () => {
+    return (
+      <>
+        <div>
+          <b>Enfants du spectacle respecte votre confidentialité</b>
+        </div>
+        <div>
+          En cliquant sur « Accepter», vous acceptez le stockage de cookies sur
+          votre appareil pour améliorer la navigation sur le site et analyser
+          son utilisation.
+        </div>
+      </>
+    );
+  };
+
   React.useEffect(() => {
-    console.log('INITIALIZING')
-    if ( MATOMO_SITE_AGENT_ID && MATOMO_URL ) {
+    console.log("INITIALIZING");
+    if (MATOMO_SITE_AGENT_ID && MATOMO_URL) {
       console.log("INITIALIZING MATOMO");
       console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
       init({
@@ -27,6 +59,20 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   return (
     <SessionProvider session={pageProps.session}>
+      <CookieConsent
+        enableDeclineButton
+        flipButtons
+        location="bottom"
+        buttonText="Accepter"
+        declineButtonText="Refuser"
+        cookieName="enfants-du-spectacle"
+        style={cookieStyle}
+        buttonStyle={acceptButtonStyle}
+        declineButtonStyle={declineButtonStyle}
+        expires={150}
+      >
+        {cookieContent()}
+      </CookieConsent>
       {Component.auth ? (
         <Auth>
           <Component {...pageProps} />
