@@ -335,7 +335,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
                         Rémunérations additionnelles
                     </label>
                     <p className={styles.smallText}>
-                        Veuillez indiquer le montant, le nombre et la nature des éventuelles rémunérations additionnelles.
+                        Veuillez indiquer le montant total des rémunérations additionnelles, cachet de sécurité, de répétition ou de post synchro confondus.
                     </p>
                     <input
                         onChange={handleFormEnfant}
