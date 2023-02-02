@@ -13,20 +13,15 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
   const MATOMO_SITE_AGENT_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_AGENT_ID;
   
-  React.useEffect(() => {
-    console.log('INITIALIZING')
-    if (
-      MATOMO_SITE_AGENT_ID &&
-      MATOMO_URL
-    ) {
-      console.log("INITIALIZING");
-      console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
-      init({
-        siteId: MATOMO_SITE_AGENT_ID,
-        url: MATOMO_URL,
-      });
-    }
-  }, []);
+  console.log('INITIALIZING')
+  if ( MATOMO_SITE_AGENT_ID && MATOMO_URL ) {
+    console.log("INITIALIZING");
+    console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
+    init({
+      siteId: MATOMO_SITE_AGENT_ID,
+      url: MATOMO_URL,
+    });
+  }
 
   return (
     <SessionProvider session={pageProps.session}>
