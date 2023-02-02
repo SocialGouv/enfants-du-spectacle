@@ -9,6 +9,11 @@ const CONVENTIONS = Object.freeze({
     legifranceUrl:
       "https://www.legifrance.gouv.fr/affichIDCC.do?idConvention=KALICONT000005635964",
   },
+  "1518": {
+    label: "entreprises artistiques et culturelles",
+    legifranceUrl: 
+      "https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635177",
+  },
   "1734": {
     label: "artistes interprètes engagés pour des émissions de TV",
     legifranceUrl:

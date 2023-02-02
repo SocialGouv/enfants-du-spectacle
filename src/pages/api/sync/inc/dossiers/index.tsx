@@ -1,11 +1,8 @@
-import { Demandeur, SocieteProduction, Dossier, PrismaClient, Enfant } from "@prisma/client";
+import { Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
-import enfant from "formulaire/pages/api/piece/enfant";
-import type { EnfantData } from "formulaire/src/fetching/dossiers";
-import type { NextApiHandler, NextApiRequest } from "next";
-import { DemandeurModel, DossierModel, EnfantModel, PieceDossierModel, RelatedDossierModel, RelatedEnfantModel, SocieteProductionModel } from "prisma/zod";
+import type { NextApiHandler } from "next";
+import { DemandeurModel, DossierModel, EnfantModel, RelatedDossierModel, RelatedEnfantModel, SocieteProductionModel } from "prisma/zod";
 import prisma from "src/lib/prismaClient";
-import type { DossierData } from "src/lib/types";
 import { z } from "zod";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -105,6 +102,7 @@ const post: NextApiHandler = async (req, res) => {
         justificatifs: data.dossier.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
         statusNotification: "NOUVEAU",
         source: "FORM_EDS",
+        conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
         externalId: data.dossier.id.toString()
       },
     });
@@ -154,6 +152,7 @@ const update: NextApiHandler = async (req, res) => {
       data: {
         ...DossierData.parse(data.dossier),
         statut: "CONSTRUCTION",
+        conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
         justificatifs: data.dossier.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i),
         statusNotification: "MIS_A_JOUR",
       },
