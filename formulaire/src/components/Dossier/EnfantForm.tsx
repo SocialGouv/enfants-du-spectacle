@@ -14,6 +14,7 @@ import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
 import InputAutocomplete from "../uiComponents/InputAutocomplete";
 import { uploadDoc } from "src/fetching/docs";
 import Link from "next/link";
+import useStateContext from "src/context/StateContext";
 
 interface Props {
     enfant: EnfantData;
@@ -26,6 +27,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
     const [dataPassed, setDataPassed] = React.useState<Record<'nom' | 'prenom', string>>()
     const [initialRender, setInitialRender] = React.useState<Boolean>(true)
     const [initialDataPassed, setInitialDataPassed] = React.useState<Boolean>(true)
+    const contextDossier = {...useStateContext()}
 
     const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
       setEnfant({
@@ -374,6 +376,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'LIVRET_FAMILLE'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Livret de Famille *`} 
                         handleFile={handleFile}
@@ -387,6 +390,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'AUTORISATION_PARENTALE'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Autorisation parentale *`} 
                         handleFile={handleFile}
@@ -400,6 +404,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'SITUATION_PARTICULIERE'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Situation particulière relative à l'autorité parentale`} 
                         handleFile={handleFile}
@@ -413,6 +418,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'CONTRAT'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Projet de contrat de travail *`} 
                         handleFile={handleFile}
@@ -426,6 +432,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'CERTIFICAT_SCOLARITE'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Certificat de scolarité ou avis pédagogique`} 
                         handleFile={handleFile}
@@ -440,6 +447,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
 
                     <InputFile id={'AVIS_MEDICAL'} 
                         docs={enfantTmp.piecesDossier || []} 
+                        docsTokenized={contextDossier.docs.enfants.find(enfant => enfant.id === enfantTmp.id)}
                         allowChanges={!allowChanges}
                         label={`Avis médical d'aptitude`} 
                         handleFile={handleFile}

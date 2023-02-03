@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
             'svg': 'image/svg+xml',
             'svgz':  'image/svg+xml',
             'txt': 'text/plain',
+            'xls' : 'application/vnd.ms-excel'
         };
 
         const name = decoded.path.substring(decoded.path.lastIndexOf('/') + 1)

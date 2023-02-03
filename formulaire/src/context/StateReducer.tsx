@@ -1,5 +1,5 @@
 import { Demandeur, Dossier, Enfant, SocieteProduction } from "@prisma/client"
-import { DossierData, EnfantData } from "src/fetching/dossiers"
+import { DossierData, EnfantData, ResDocs } from "src/fetching/dossiers"
 import { DemandeurData } from "src/lib/types"
 
 export type action = 'SET_ENTITY' | 'SET_INPUT_FOR_ENTITY' | 'SET_FILE'
@@ -8,7 +8,8 @@ export const initialState = {
     dossier: {} as DossierData,
     demandeur: {} as DemandeurData,
     enfants: [] as EnfantData[],
-    societeProduction: {} as SocieteProduction
+    societeProduction: {} as SocieteProduction,
+    docs: {} as ResDocs
 }
 
 export type Contextype = typeof initialState

@@ -1,4 +1,4 @@
-import { JustificatifDossier, JustificatifEnfant, STATUT_PIECE } from "@prisma/client";
+import { JustificatifDossier, JustificatifEnfant, PieceDossier, STATUT_PIECE } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 import CountPieces from "../CountPieces";
@@ -16,12 +16,13 @@ interface Props {
     label: string,
     text: string,
     docs: Doc[],
+    docsTokenized?: {id: number, piecesDossier: (PieceDossier & {path: string})[]}
     allowChanges: Boolean,
     handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void,
     handleDelete: (id: string) => void
 }
 
-const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handleFile, handleDelete }) => {
+const InputFile: React.FC<Props> = ({ id, label, text, docs, docsTokenized, allowChanges, handleFile, handleDelete }) => {
 
     return (
         <div className={styles.InputFile}>
@@ -50,7 +51,17 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                                         />
                                     </div>
                                 }
-                                <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}>{doc.nom}</span>
+                                
+                                {docsTokenized &&
+                                    <a href={`${docsTokenized.piecesDossier.find(docTmp => docTmp.id === doc.id)?.link}`} 
+                                    target="_blank"
+                                    key={`piece_justificative_${id}_${index}`} 
+                                    className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}
+                                    >{doc.nom}</a>
+                                }
+                                {!docsTokenized &&
+                                    <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}>{doc.nom}</span>
+                                }
                             </div>
                         </div>
                     ))}
@@ -61,7 +72,7 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, allowChanges, handl
                     <input type="file"
                         id={id} name="justificatif"
                         placeholder="Parcourir..."
-                        accept="image/jpeg,image/gif,image/png,application/pdf,text/plain" onChange={handleFile}>
+                        accept="image/jpeg,image/gif,image/png,application/pdf,text/plain, application/msword, application/vnd.ms-excel" onChange={handleFile}>
                     </input>
                     <p className={styles.smallText}>Documents acceptés : jpeg, png, pdf</p>
                 </div>

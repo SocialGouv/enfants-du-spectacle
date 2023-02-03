@@ -115,6 +115,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     <div className={styles.blocForm}>
                         <InputFile id={'SYNOPSIS'} 
                             docs={contextDossier.dossier.piecesDossier} 
+                            docsTokenized={contextDossier.docs.dossier}
                             label={'Synopsis'} 
                             allowChanges={!allowChanges}
                             handleFile={handleFile}
@@ -126,6 +127,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     <div className={styles.blocForm}>
                         <InputFile id={'SCENARIO'} 
                             docs={contextDossier.dossier.piecesDossier} 
+                            docsTokenized={contextDossier.docs.dossier}
                             label={'Scenario ou script *'} 
                             allowChanges={!allowChanges}
                             handleFile={handleFile}
@@ -137,6 +139,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     <div className={styles.blocForm}>
                         <InputFile id={'MESURES_SECURITE'} 
                             docs={contextDossier.dossier.piecesDossier} 
+                            docsTokenized={contextDossier.docs.dossier}
                             label={'Note précisant les mesures de sécurité *'} 
                             allowChanges={!allowChanges}
                             handleFile={handleFile}
@@ -148,6 +151,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     <div className={styles.blocForm}>
                         <InputFile id={'PLAN_TRAVAIL'} 
                             docs={contextDossier.dossier.piecesDossier} 
+                            docsTokenized={contextDossier.docs.dossier}
                             label={'Plan de travail'} 
                             allowChanges={!allowChanges}
                             handleFile={handleFile}
@@ -204,6 +208,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
 
                         <InputFile id={'INFOS_COMPLEMENTAIRES'} 
                             docs={contextDossier.dossier.piecesDossier} 
+                            docsTokenized={contextDossier.docs.dossier}
                             label={`Éléments d'information complémentaires`} 
                             allowChanges={!allowChanges}
                             handleFile={handleFile}

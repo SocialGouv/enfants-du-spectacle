@@ -13,7 +13,23 @@ type DossierData = Dossier & {
     societeProduction?: SocieteProduction;
 }
 
+type ResDocs = {
+    dossier: {
+        id: number,
+        piecesDossier: (PieceDossier & {path: string})[]
+    }
+    enfants: [{
+        id: number,
+        piecesDossier: (PieceDossier & {path: string})[]
+    }]
+}
+
 type ResDossier = {
+    dossier: DossierData;
+    docs: ResDocs
+}
+
+type ResDossiers = {
     dossiers: DossierData[]
     countCurrent: number,
     countEnCours: number,
@@ -30,7 +46,7 @@ const getDossiers = async (page: number, status: statusGroup, search: string, te
         }
         return r.json();
     });
-    return fetching as ResDossier
+    return fetching as ResDossiers
 };
 
 const getDossier = async (id: string) => {
@@ -44,7 +60,7 @@ const getDossier = async (id: string) => {
         return r.json();
     });
     console.log('fetching : ', fetching)
-    return fetching as DossierData
+    return fetching as ResDossier
 
 }
 
@@ -89,6 +105,6 @@ const deleteDossier = async (id: number) => {
     return fetching
 };
 
-export type { EnfantData, DossierData, ResDossier }
+export type { EnfantData, DossierData, ResDossiers, ResDossier, ResDocs }
 
 export { getDossier, getDossiers, createDossierEds, updateDossier, deleteDossier }

@@ -29,8 +29,12 @@ function getId(req: NextApiRequest): number {
   }
   
   const get: NextApiHandler = async (req, res) => {
+    
     const session = await getSession({ req });
     const prisma = new PrismaClient()   
+
+    var jwt = require('jsonwebtoken');
+
     try {
       const dossierId = getId(req);
       const dossier = await prisma.dossier.findUnique({
@@ -51,7 +55,46 @@ function getId(req: NextApiRequest): number {
         where: { id: dossierId }
       });
       if(dossier?.userId === session?.dbUser.id) {
-        res.status(200).json(dossier);
+        res.status(200).json({dossier: dossier, docs: {
+          dossier: { 
+            id: dossier?.id, 
+            piecesDossier: dossier?.piecesDossier.map((piece) => {
+                let payload = {
+                    iat: new Date().getTime() / 1000,
+                    id: piece.id,
+                    dossierId: dossier.id,
+                    path: piece.link,
+                }
+                let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
+                return {
+                    id: piece.id,
+                    type: piece.type,
+                    statut: piece.statut,
+                    link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
+                }
+            })
+        }, 
+        enfants: dossier?.enfants.map((enfant) => {
+            return {
+                id: enfant.id, 
+                piecesDossier: enfant.piecesDossier.map((piece) => {
+                    let payload = {
+                        iat: new Date().getTime() / 1000,
+                        id: piece.id,
+                        dossierId: dossier.id,
+                        path: piece.link,
+                    }
+                    let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
+                    return {
+                        id: piece.id,
+                        type: piece.type,
+                        statut: piece.statut,
+                        link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
+                    }
+                })
+            }
+        })
+        }});
       } else {
         res.status(401).json({message: 'Unauthorized'})
       }
