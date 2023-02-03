@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.41.1...v1.42.0) (2023-02-03)
+
+
+### Features
+
+* see docs on interface sdp ([#454](https://github.com/SocialGouv/enfants-du-spectacle/issues/454)) ([6029ef5](https://github.com/SocialGouv/enfants-du-spectacle/commit/6029ef535cf835c5d96d45aa5851f72358149181))
+
 ## [1.41.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.41.0...v1.41.1) (2023-02-02)
 
 
