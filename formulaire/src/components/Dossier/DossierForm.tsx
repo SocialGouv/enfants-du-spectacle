@@ -1,7 +1,7 @@
 
 import { Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
-import { DossierData, EnfantData, getDossier, updateDossier } from "../../fetching/dossiers";
+import { DossierData, EnfantData, getDossier, ResDocs, updateDossier } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./DossierForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,24 +15,19 @@ import Image from "next/image";
 import { sendDossier } from "src/fetching/sync";
 import IconLoader from "../IconLoader";
 import useStateContext from "src/context/StateContext";
-import { updateSociete } from "src/fetching/societeProduction";
 
 interface Props {
     dossier: DossierData
+    docs: ResDocs
 }
 
-const DossierForm: React.FC<Props> = ({ dossier }) => {
+const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
     const router = useRouter()
 
     const [toDisplay, setTodisplay] = React.useState<'Demandeur' | 'Projet' | 'Enfants'>('Demandeur')
-    const [enfantsTmp, setEnfants] = React.useState<EnfantData[]>(dossier.enfants)
     const [messageError, setMessageError] = React.useState<string>('')
     const [messageSuccess, setMessageSuccess] = React.useState<string>('')
     const contextDossier = {...useStateContext()}
-
-    const receiveDataEnfants = (received: EnfantData[]) => {
-        setEnfants(received)
-    }
 
     const saveDossier = useDebouncedCallback(() => {
         console.log('saving dossier ... : ', contextDossier.dossier)
@@ -148,7 +143,12 @@ const DossierForm: React.FC<Props> = ({ dossier }) => {
         contextDossier.processEntity('demandeur', dossier.Demandeur)
         contextDossier.processEntity('societeProduction', dossier.Demandeur.societeProduction ?? {})
         contextDossier.processEntity('enfants', dossier.enfants)
+        contextDossier.processEntity('docs', docs)
     }, [])
+
+    React.useEffect(() => {
+        console.log('docs : ', contextDossier.docs)
+    }, [contextDossier.docs])
 
     return (
         <div className={styles.dossierForm}>

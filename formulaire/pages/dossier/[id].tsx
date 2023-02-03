@@ -6,11 +6,11 @@ import { StateProvider } from 'src/context/StateContext';
 import DossierForm from '../../src/components/Dossier/DossierForm';
 import HeadingDossier from '../../src/components/Dossier/HeadingDossier';
 import Layout from '../../src/components/Layout'
-import { DossierData, getDossier } from '../../src/fetching/dossiers';
+import { DossierData, getDossier, ResDossier } from '../../src/fetching/dossiers';
 
 const DossierPage: React.FC = () => {
   const router = useRouter();
-  const [dossier, setDossier] = React.useState<DossierData>()
+  const [dossier, setDossier] = React.useState<ResDossier>()
 
   const fetchDossier = async () => {
     if (router.query.id) {
@@ -28,7 +28,7 @@ const DossierPage: React.FC = () => {
 
       {dossier && 
         <>
-          <HeadingDossier dossier={dossier}></HeadingDossier>
+          <HeadingDossier dossier={dossier.dossier}></HeadingDossier>
         </>
       }
       <Container>
@@ -36,7 +36,7 @@ const DossierPage: React.FC = () => {
         {dossier && 
           <>
             <StateProvider>
-              <DossierForm dossier={dossier}></DossierForm>
+              <DossierForm dossier={dossier.dossier} docs={dossier.docs}></DossierForm>
             </StateProvider>
           </>
         }
