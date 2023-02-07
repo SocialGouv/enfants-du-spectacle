@@ -1,3 +1,10 @@
+## [1.42.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.2...v1.42.3) (2023-02-07)
+
+
+### Bug Fixes
+
+* fix generation pdf ([#456](https://github.com/SocialGouv/enfants-du-spectacle/issues/456)) ([9613d1d](https://github.com/SocialGouv/enfants-du-spectacle/commit/9613d1d04df8acc927bc63bd5024aefa051fa581))
+
 ## [1.42.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.1...v1.42.2) (2023-02-07)
 
 
