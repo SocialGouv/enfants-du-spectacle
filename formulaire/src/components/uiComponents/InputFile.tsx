@@ -72,7 +72,7 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, docsTokenized, allo
                     <input type="file"
                         id={id} name="justificatif"
                         placeholder="Parcourir..."
-                        accept="image/jpeg,image/gif,image/png,application/pdf,text/plain, application/msword, application/vnd.ms-excel" onChange={handleFile}>
+                        accept="image/jpeg,image/gif,image/png,application/pdf,text/plain" onChange={handleFile}>
                     </input>
                     <p className={styles.smallText}>Documents acceptés : jpeg, png, pdf</p>
                 </div>

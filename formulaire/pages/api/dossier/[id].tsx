@@ -1,6 +1,7 @@
 import type { NextApiHandler, NextApiRequest } from "next";
 import { PrismaClient } from '@prisma/client'
 import { getSession } from "next-auth/react";
+import { generateToken } from "src/lib/utils";
 
 
 
@@ -55,46 +56,27 @@ function getId(req: NextApiRequest): number {
         where: { id: dossierId }
       });
       if(dossier?.userId === session?.dbUser.id) {
-        res.status(200).json({dossier: dossier, docs: {
-          dossier: { 
-            id: dossier?.id, 
-            piecesDossier: dossier?.piecesDossier.map((piece) => {
-                let payload = {
-                    iat: new Date().getTime() / 1000,
-                    id: piece.id,
-                    dossierId: dossier.id,
-                    path: piece.link,
-                }
-                let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
-                return {
-                    id: piece.id,
-                    type: piece.type,
-                    statut: piece.statut,
-                    link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
-                }
-            })
-        }, 
-        enfants: dossier?.enfants.map((enfant) => {
-            return {
-                id: enfant.id, 
-                piecesDossier: enfant.piecesDossier.map((piece) => {
-                    let payload = {
-                        iat: new Date().getTime() / 1000,
-                        id: piece.id,
-                        dossierId: dossier.id,
-                        path: piece.link,
-                    }
-                    let tokenSDP = jwt.sign({...payload}, process.env.SECRET_KEY_DOCS, { expiresIn: 60 * 30 });
-                    return {
-                        id: piece.id,
-                        type: piece.type,
-                        statut: piece.statut,
-                        link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`
-                    }
+        res.status(200).json(
+          {
+            dossier: dossier, 
+            docs: {
+              dossier: { 
+                id: dossier?.id, 
+                piecesDossier: dossier?.piecesDossier.map((piece) => {
+                  return generateToken(piece.id, dossier.id, piece.type, piece.link, piece.statut)
                 })
+              }, 
+              enfants: dossier?.enfants.map((enfant) => {
+                  return {
+                      id: enfant.id, 
+                      piecesDossier: enfant.piecesDossier.map((piece) => {
+                        return generateToken(piece.id, dossier.id, piece.type, piece.link, piece.statut)
+                      })
+                  }
+              })
             }
-        })
-        }});
+          }
+        );
       } else {
         res.status(401).json({message: 'Unauthorized'})
       }
