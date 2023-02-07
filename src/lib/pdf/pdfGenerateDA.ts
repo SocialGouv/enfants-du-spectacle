@@ -4,10 +4,66 @@ import autoTable from "jspdf-autotable";
 import logoPrefet from "src/images/logo_prefet.png";
 import { frenchDateText } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
+import commissions from "src/pages/api/commissions";
 
 const generateDA = (dossiers: DossierData[], binary = false) => {
   const doc = new jsPDF();
   const blocs: RowInput[] = [];
+
+  const getObjectDecret = (departement: string) => {
+    switch (departement) {
+      case "75":
+        return {
+          date: "22 juillet 2020",
+          nom: "Monsieur Marc GUILLAUME",
+          prefet: "Préfet de Paris",
+        };
+      case "77":
+        return {
+          date: "30 juin 2021",
+          nom: "M. Lionel BEFFRE",
+          prefet: "préfet de Seine-et-Marne",
+        };
+      case "78":
+        return {
+          date: "4 avril 2018",
+          nom: "Monsieur Jean-Jacques BROT",
+          prefet: "Préfet des Yvelines",
+        };
+      case "91":
+        return {
+          date: "20 juillet 2022",
+          nom: "Monsieur Bertrand GAUME",
+          prefet: "Préfet de l’Essonne",
+        };
+      case "92":
+        return {
+          date: "29 juillet 2020",
+          nom: "Monsieur Laurent HOTTIAUX",
+          prefet: "Préfet des Hauts-de-Seine",
+        };
+      case "93":
+        return {
+          date: "30 juin 2021",
+          nom: "Monsieur Jacques WITKOWSKI ",
+          prefet: "Préfet de la Seine-Saint-Denis",
+        };
+      case "94":
+        return {
+          date: "10 février 2021",
+          nom: "Madame Sophie THIBAUT ",
+          prefet: "Préfète du Val de Marne",
+        };
+      case "95":
+        return {
+          date: "9 mars 2022",
+          nom: "M. Philippe COURT ",
+          prefet: "préfet du Val-d'Oise",
+        };
+      default:
+        break;
+    }
+  };
 
   dossiers.map((dossier: DossierData) => {
     blocs.push([
@@ -34,6 +90,18 @@ const generateDA = (dossiers: DossierData[], binary = false) => {
         content: `Vu l’avis des membres de la commission départementale des enfants du spectacle réunis le ${frenchDateText(
           dossier.commission.date
         )}`,
+        styles: {
+          fontSize: 11,
+          halign: "left",
+        },
+      },
+    ]);
+    blocs.push([
+      {
+        content: `Considérant que la commission des enfants du spectacle, pour autoriser un mineur de moins de 16 ans à travailler dans une entreprise de spectacle, vérifie:
+- L’absence de risque pour la santé, la sécurité et la moralité du mineur;
+- Les conditions d’emploi et de rémunération du mineur; \n
+Considérant qu’après analyse, le projet présenté respecte les conditions de travail et de rémunération;`,
         styles: {
           fontSize: 11,
           halign: "left",
@@ -170,28 +238,18 @@ Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l
 Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l’organisation et à l’action des services de l’État dans les régions et départements ; \n
 Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; \n
 Vu le décret du ${
-            dossiers[0].commission.departement === "92"
-              ? "29 juillet 2020"
-              : "22 juillet 2020"
-          } portant nomination de Monsieur ${
-            dossiers[0].commission.departement === "92"
-              ? "Laurent HOTTIAUX"
-              : "Marc Guillaume"
-          } en qualité de Préfet ${
-            dossiers[0].commission.departement === "92"
-              ? "des Hauts-de-Seine"
-              : "de Paris"
+            getObjectDecret(dossiers[0].commission.departement)?.date
+          } portant nomination de ${
+            getObjectDecret(dossiers[0].commission.departement)?.nom
+          } en qualité de ${
+            getObjectDecret(dossiers[0].commission.departement)?.prefet
           } ; \n
 Vu l’arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Ile-de-France à compter du 1er avril 2021 ; \n
-Vu l’arrêté préfectoral n° ${
-            dossiers[0].commission.departement === "92"
-              ? "PCI n° 2021-018 du 31 mars 2021"
-              : "75-2021-03-31-00003 du 31 mars 2021"
-          } par lequel le Préfet ${
-            dossiers[0].commission.departement === "92"
-              ? "des Hauts-de-Seine"
-              : "de Paris"
-          } délègue sa signature à Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France; \n`,
+${
+  dossiers[0].commission.departement === "75"
+    ? "Vu l’arrêté interministériel du 13 décembre 2022 nommant Monsieur Jean-François DALVAI, directeur régional et interdépartemental adjoint de l’économie, de l’emploi, du travail et des solidarités d’Île-de-France, chargé des fonctions de directeur de l’unité départementale de Paris à compter du 16 janvier 2023;"
+    : ""
+}`,
           styles: {
             fontSize: 11,
             halign: "left",
