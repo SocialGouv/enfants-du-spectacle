@@ -4,6 +4,7 @@ import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "../../../../src/lib/prismaClient";
 import fs from "fs";
+import { generateToken } from "src/lib/utils";
 
 const handler: NextApiHandler = async (req, res) => {
     const session = await getSession({ req });
@@ -23,7 +24,8 @@ const post: NextApiHandler = async (req, res) => {
     const data = JSON.parse(req.body) as PieceDossier
     try {
       const piece = await prisma.pieceDossier.create({ data });
-      res.status(200).json(piece);
+      const tokenizedLink = generateToken(piece.id, piece.dossierId, piece.type, piece.link, piece.statut)
+      res.status(200).json({pieceDossier: piece, tokenizedLink: tokenizedLink});
     } catch (e: unknown) {
       console.log(e);
     }

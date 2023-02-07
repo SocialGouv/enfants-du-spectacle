@@ -1,6 +1,12 @@
 import { PieceDossierEnfant } from "@prisma/client";
+import { TokenizedLink } from "src/lib/types";
 
-const createPieceEnfant = async (piece: Omit<PieceDossierEnfant, "id">) => {
+export type createdPieceEnfantRes = {
+    pieceDossier: PieceDossierEnfant,
+    tokenizedLink: TokenizedLink
+}
+
+const createPieceEnfant = async (piece: Omit<PieceDossierEnfant, "id"> & {dossierId: number}) => {
     const url = "/api/piece/enfant";
     const fetching = await fetch(url, {
         body: JSON.stringify(piece),
@@ -11,7 +17,7 @@ const createPieceEnfant = async (piece: Omit<PieceDossierEnfant, "id">) => {
         }
         return r.json();
     });
-    return fetching as PieceDossierEnfant;
+    return fetching as createdPieceEnfantRes;
 };
 
 const deletePieceEnfant = async (id: number) => {

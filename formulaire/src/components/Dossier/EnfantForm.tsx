@@ -94,13 +94,25 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
                 type: e.target.id as JustificatifEnfant, 
                 externalId: '', 
                 link: upload.filePath,
-                statut: null
+                statut: null,
+                dossierId: contextDossier.dossier.id
             }
         )
+        console.log('res : ', res)
         setEnfant({
             ...enfantTmp,
-            piecesDossier: enfantTmp.piecesDossier ? [...enfantTmp.piecesDossier, res] : [res]
+            piecesDossier: enfantTmp.piecesDossier ? [...enfantTmp.piecesDossier, res.pieceDossier] : [res.pieceDossier]
         })
+        contextDossier.processInput('docs', 'enfants', 
+            [
+                {
+                    id: contextDossier.docs.enfants.find(docEnfant => docEnfant.id === enfantTmp.id)?.id,
+                    piecesDossier: [...contextDossier.docs.enfants.find(docEnfant => docEnfant.id === enfantTmp.id)?.piecesDossier as Array<Object>, res.tokenizedLink]
+                },
+                ...contextDossier.docs.enfants.filter(docEnfant => docEnfant.id !== enfantTmp.id)
+            ]
+        )
+        console.log('test : ', contextDossier.docs)
     }
 
     const handleDelete = async (id: string) => {

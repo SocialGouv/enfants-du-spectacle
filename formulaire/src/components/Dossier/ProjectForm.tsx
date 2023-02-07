@@ -33,7 +33,11 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
                     statut: null
                 }
             )
-            contextDossier.processInput('dossier', 'piecesDossier', [...contextDossier.dossier.piecesDossier, res])
+            contextDossier.processInput('dossier', 'piecesDossier', [...contextDossier.dossier.piecesDossier, res.pieceDossier])
+            contextDossier.processInput('docs', 'dossier', {
+                ...contextDossier.docs.dossier,
+                piecesDossier: [...contextDossier.docs.dossier.piecesDossier as Array<Object>, res.tokenizedLink]
+            })
         }
     }
 
