@@ -1,3 +1,10 @@
+## [1.42.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.1...v1.42.2) (2023-02-07)
+
+
+### Bug Fixes
+
+* allow see docs after pushing ([#455](https://github.com/SocialGouv/enfants-du-spectacle/issues/455)) ([d5407e1](https://github.com/SocialGouv/enfants-du-spectacle/commit/d5407e10ce14f8c28af404dfad0926f62764edfb))
+
 ## [1.42.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.0...v1.42.1) (2023-02-07)
 
 
