@@ -1,3 +1,10 @@
+## [1.42.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.0...v1.42.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* update text rémunérations additionnelles ([#453](https://github.com/SocialGouv/enfants-du-spectacle/issues/453)) ([4d4fe57](https://github.com/SocialGouv/enfants-du-spectacle/commit/4d4fe57b68db909018b5a5599a00ebf0869aec48))
+
 # [1.42.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.41.1...v1.42.0) (2023-02-03)
 
 
