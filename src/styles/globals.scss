@@ -100,7 +100,6 @@ html {
 
 }
 
-
 .state-accepte, .state-favorable, .state-pret,
 .state-accepte select, .state-favorable select, .state-pret select{
   background-color: #3C8058 !important;
@@ -108,7 +107,16 @@ html {
   color: white !important;
   border-color: white !important;
 }
+.accordionSpacing {
+  margin: 28px 0;
+}
+.accordionBorder {
+  border-bottom: 1px solid #DDDDDD;
+  }
 
+.noBorder {
+  border: none !important;
+}
 button.state-accepte, button.state-favorable, button.state-pret{
   &:hover, &:active, &:focus {
     background-color: white !important;

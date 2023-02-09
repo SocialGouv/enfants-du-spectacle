@@ -1,7 +1,8 @@
-import { Icon, Title } from "@dataesr/react-dsfr";
+import { Icon } from "@dataesr/react-dsfr";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 import React from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import styles from "src/components/Dossier.module.scss";
 import DossierActionBar from "src/components/DossierActionBar";
@@ -12,20 +13,43 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
-import { frenchDateText, typeEmploiLabel, TYPES_EMPLOI } from "src/lib/helpers";
+import {
+  birthDateToFrenchAge,
+  EMPLOIS_CATEGORIES,
+  frenchDateText,
+  typeEmploiLabel,
+  TYPES_EMPLOI,
+} from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 import { deleteDossier, sendEmail } from "src/lib/queries";
+import type { DataLinks } from "src/lib/types";
+
+import Accordion from "./Accordion";
+import CountPieces from "./CountPieces";
+import Table from "./Table";
 import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
 
 interface Props {
   dossierId: number;
-  dataLinks: Record<string, unknown>;
+  dataLinks: DataLinks;
 }
 
 const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const { dossier, isLoading, isError } = useDossier(dossierId);
   const { data: session } = useSession();
+  const [showCommentSection, setShowCommentSection] =
+    React.useState<boolean>(false);
+  const [showCompanySection, setShowCompanySection] =
+    React.useState<boolean>(false);
+
+  const tableChildHeaders: string[] = [
+    "Rôles",
+    "Nom et Prénom",
+    "Age",
+    "Personnage",
+    "Pièces justificatives",
+  ];
 
   if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
@@ -35,163 +59,310 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       {session.dbUser.role !== "MEMBRE" && (
         <DossierActionBar dossierId={dossierId} />
       )}
-      <div className={styles.dossierSummaryBloc}>
-        <div>
-          <Info title="Type de projet">
-            <CategorieDossierTag dossier={dossier} />
-          </Info>
-        </div>
-        <div>
-          <Info title="Dates">
-            Du <b>{frenchDateText(dossier.dateDebut)}</b> au{" "}
-            <b>{frenchDateText(dossier.dateFin)}</b>
-          </Info>
-          <Info
-            title="Présentation générale"
-            className={`${styles.info} ${styles.infoSuccessive}`}
-          >
-            <Foldable>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: dossier.presentation.replace(/\n/g, "<br />"),
-                }}
-              />
-            </Foldable>
-          </Info>
-          <Info title="Scènes sensibles" className={styles.infoSuccessive}>
-            {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
-            {dossier.scenesSensibles.length > 0 &&
-              dossier.scenesSensibles.join(", ")}
-          </Info>
-        </div>
-        <Info title="Pièces justificatives">
-          <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
-        </Info>
-        <Info title="Validation">
-          <ValidationJustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
-        </Info>
-        {dossier.statut !== "INSTRUCTION" &&
-          dossier.statut !== "CONSTRUCTION" &&
-          session.dbUser.role !== "MEMBRE" && (
-            <button
-              className="postButton"
-              onClick={() => {
-                generateFE([dossier]);
-              }}
-            >
-              Télécharger Fiche Emploi
-            </button>
-          )}
-        {dossier.statut == "ACCEPTE" && session.dbUser.role !== "MEMBRE" && (
-          <button
-            className="postButton"
-            onClick={() => {
-              generateDA([dossier]);
-            }}
-          >
-            Télécharger Décision autorisation
-          </button>
-        )}
-        {session.dbUser.role === "ADMIN" && (
-          <button
-            className="deleteButton"
-            onClick={() => {
-              if (
-                window.confirm("Souhaitez-vous vraiment supprimer ce dossier?")
-              ) {
-                deleteDossier(dossier.id);
-                router.push("/dossiers").catch((e) => {
-                  console.log(e);
-                });
-              }
-            }}
-          >
-            Supprimer dossier
-          </button>
-        )}
-        <br />
-      </div>
-
-      <div className={styles.societeSummaryBloc}>
-        <Info title="Société">
-          <InfoSociete
-            societeProduction={dossier.societeProduction}
-            conventionCollectiveCode={dossier.conventionCollectiveCode}
-          />
-        </Info>
-        <Info title="Demandeur">
-          <div>
-            {dossier.demandeur.prenom} {dossier.demandeur.nom}
-          </div>
-          <div title="Fonction(s)">{dossier.demandeur.fonction}</div>
-          <div>
-            <a href={`mailto:${dossier.demandeur.email}`}>
-              ✉️ {dossier.demandeur.email}
-            </a>
-          </div>
-          <div>
-            <a href={`tel:${dossier.demandeur.phone}`}>
-              📞 {dossier.demandeur.phone}
-            </a>
-          </div>
-          {dossier.statut == "ACCEPTE" && session.dbUser.role !== "MEMBRE" && (
+      <Accordion title={dossier.nom} className="accordionSpacing" state={true}>
+        <div className={styles.dossierSummaryBloc}>
+          <div className={styles.insideWrapper}>
+            <Info title="TYPE DE PROJET">
+              <CategorieDossierTag dossier={dossier} />
+            </Info>
+            <Info title="DATE">
+              <div> Du {frenchDateText(dossier.dateDebut)}</div>
+              <div>au {frenchDateText(dossier.dateFin)}</div>
+            </Info>
             <div>
+              <Info title="PRESENTATION GENERALE" className={`${styles.info}`}>
+                <Foldable>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: dossier.presentation.replace(/\n/g, "<br />"),
+                    }}
+                  />
+                </Foldable>
+              </Info>
+              <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
+                {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
+                {dossier.scenesSensibles.length > 0 &&
+                  dossier.scenesSensibles.join(", ")}
+              </Info>
+            </div>
+            <Info title="PIECES JUSTIFICATIVES">
+              <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+            </Info>
+            <Info title="VALIDATION">
+              <ValidationJustificatifsDossier
+                dossier={dossier}
+                dataLinks={dataLinks}
+              />
+            </Info>
+          </div>
+          <div style={{ marginTop: "36px" }}>
+            <div
+              className={`${styles.bottomItemFoldable} ${styles.commentItem}`}
+            >
+              <div className={`${styles.flexRow}`}>
+                <div>Commentaires</div>
+                {!showCommentSection ? (
+                  <AiOutlinePlus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCommentSection(true);
+                    }}
+                  />
+                ) : (
+                  <AiOutlineMinus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCommentSection(false);
+                    }}
+                  />
+                )}
+              </div>
+              {showCommentSection && (
+                <>
+                  <textarea name="comment" className={styles.commentSection} />
+                  <button
+                    className="postButton"
+                    onClick={() => {
+                      console.log("Todo");
+                    }}
+                  >
+                    Répondre
+                  </button>
+                </>
+              )}
+            </div>
+            <div className={`${styles.bottomItemFoldable}`}>
+              <div className={styles.flexRow}>
+                <div>Afficher la société et le demandeur</div>
+                {!showCompanySection ? (
+                  <AiOutlinePlus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCompanySection(true);
+                    }}
+                  />
+                ) : (
+                  <AiOutlineMinus
+                    cursor="pointer"
+                    color="black"
+                    onClick={() => {
+                      setShowCompanySection(false);
+                    }}
+                  />
+                )}
+              </div>
+              {showCompanySection && (
+                <div className={styles.societeSummaryBloc}>
+                  <Info title="SOCIETE">
+                    <InfoSociete
+                      societeProduction={dossier.societeProduction}
+                      conventionCollectiveCode={
+                        dossier.conventionCollectiveCode
+                      }
+                    />
+                  </Info>
+                  <Info title="DEMANDEUR">
+                    <div className={styles.demandeurInfo}>
+                      {dossier.demandeur.prenom} {dossier.demandeur.nom}
+                    </div>
+                    <div className={styles.demandeurInfo} title="Fonction(s)">
+                      {dossier.demandeur.fonction}
+                    </div>
+                    <div className={styles.demandeurInfo}>
+                      <a href={`mailto:${dossier.demandeur.email}`}>
+                        ✉️ {dossier.demandeur.email}
+                      </a>
+                    </div>
+                    <div className={styles.demandeurInfo}>
+                      <a href={`tel:${dossier.demandeur.phone}`}>
+                        📞 {dossier.demandeur.phone}
+                      </a>
+                    </div>
+                    {dossier.statut == "ACCEPTE" &&
+                      session.dbUser.role !== "MEMBRE" && (
+                        <div>
+                          <button
+                            className="postButton"
+                            onClick={() => {
+                              const attachment = generateDA([dossier], true);
+                              sendEmail(
+                                "dl_decision",
+                                attachment as string,
+                                dossier,
+                                dossier.demandeur.email
+                              );
+                            }}
+                          >
+                            Renvoyer décision autorisation
+                          </button>
+                        </div>
+                      )}
+                  </Info>
+                </div>
+              )}
+            </div>
+            {dossier.statut !== "INSTRUCTION" &&
+              dossier.statut !== "CONSTRUCTION" &&
+              session.dbUser.role !== "MEMBRE" && (
+                <button
+                  style={{ marginRight: "10px" }}
+                  className="postButton"
+                  onClick={() => {
+                    generateFE([dossier]);
+                  }}
+                >
+                  Télécharger Fiche Emploi
+                </button>
+              )}
+            {dossier.statut == "ACCEPTE" &&
+              session.dbUser.role !== "MEMBRE" && (
+                <button
+                  className="postButton"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => {
+                    generateDA([dossier]);
+                  }}
+                >
+                  Télécharger Décision autorisation
+                </button>
+              )}
+            {session.dbUser.role === "ADMIN" && (
               <button
-                className="postButton"
+                className="deleteButton"
                 onClick={() => {
-                  const attachment = generateDA([dossier], true);
-                  sendEmail(
-                    "dl_decision",
-                    attachment as string,
-                    dossier,
-                    dossier.demandeur.email
-                  );
+                  if (
+                    window.confirm(
+                      "Souhaitez-vous vraiment supprimer ce dossier?"
+                    )
+                  ) {
+                    deleteDossier(dossier.id);
+                    router.push("/dossiers").catch((e) => {
+                      console.log(e);
+                    });
+                  }
                 }}
               >
-                Renvoyer décision autorisation
+                Supprimer dossier
               </button>
-            </div>
-          )}
-        </Info>
+            )}
+            <br />
+          </div>
+        </div>
+      </Accordion>
+      <div>
+        {EMPLOIS_CATEGORIES.map((typeEmploi, index) => (
+          <div key={index}>
+            {dossier.enfants.filter(function (element) {
+              return (
+                typeEmploiLabel(element.typeEmploi) === typeEmploi.label ||
+                typeEmploi.value.includes(element.typeEmploi)
+              );
+            }).length > 0 ? (
+              <Accordion title={typeEmploi.label} className="accordionBorder">
+                <Table headers={tableChildHeaders}>
+                  {dossier.enfants
+                    .filter(
+                      (e) =>
+                        typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
+                        typeEmploi.value.includes(e.typeEmploi)
+                    )
+                    .map((enf, idx) => (
+                      <tr key={idx}>
+                        {/* <a href={`#` + dossier.id.toString()}> */}
+                        <td>{typeEmploiLabel(enf.typeEmploi)}</td>
+                        {/* </a> */}
+                        <td>
+                          {enf.nom} {enf.prenom}
+                        </td>
+                        <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
+                        <td>{enf.nomPersonnage}</td>
+                        <td>
+                          <CountPieces
+                            piecesJustif={dataLinks.enfants
+                              .find(
+                                (data) =>
+                                  data.id === parseInt(enf.externalId ?? "")
+                              )
+                              ?.piecesDossier.map((tmp) => tmp.statut)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                </Table>
+              </Accordion>
+            ) : (
+              ""
+            )}
+          </div>
+        ))}
       </div>
 
-      <Title as="h3">Enfants</Title>
-      {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
-      {TYPES_EMPLOI.map((typeEmploi, index) => (
-        <span key={index}>
-          {dossier.enfants.filter(function (element) {
-            return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
-          }).length > 0 ? (
-            <h4>{typeEmploi.label}</h4>
-          ) : (
-            ""
-          )}
-          {dossier.enfants
-            .filter(function (element) {
+      <div style={{ padding: "44px 0" }}>
+        {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
+        {TYPES_EMPLOI.map((typeEmploi, index) => (
+          <span key={index}>
+            {dossier.enfants.filter(function (element) {
               return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
-            })
-            .sort(function (a, b) {
-              if (a.nom < b.nom) {
-                return -1;
-              }
-              if (a.nom > b.nom) {
-                return 1;
-              }
-              if (a.prenom < b.prenom) {
-                return -1;
-              }
-              if (a.prenom > b.prenom) {
-                return 1;
-              }
-              return 0;
-            })
-            .map((enfant) => (
-              <div key={enfant.id} className={styles.bloc}>
-                <Enfant enfant={enfant} dataLinks={dataLinks} dossier={dossier} />
+            }).length > 0 ? (
+              <div style={{ marginBottom: "36px" }}>
+                {dossier.enfants
+                  .filter(function (element) {
+                    return (
+                      typeEmploiLabel(element.typeEmploi) === typeEmploi.label
+                    );
+                  })
+                  .sort(function (a, b) {
+                    if (a.nom < b.nom) {
+                      return -1;
+                    }
+                    if (a.nom > b.nom) {
+                      return 1;
+                    }
+                    if (a.prenom < b.prenom) {
+                      return -1;
+                    }
+                    if (a.prenom > b.prenom) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .map((enfant) => {
+                    const childInfo = `
+                      ${typeEmploiLabel(enfant.typeEmploi)}
+                      :
+                      ${enfant.nom.toUpperCase()}
+                      ${enfant.prenom}
+                      (${birthDateToFrenchAge(
+                        enfant.dateNaissance
+                      )}) - Personnage:
+                      ${enfant.nomPersonnage}`;
+                    return (
+                      <div
+                        id={dossier.id.toString()}
+                        key={enfant.id}
+                        className={styles.bloc}
+                        style={{ marginBottom: "44px", padding: "15px" }}
+                      >
+                        <Accordion title={childInfo}>
+                          <Enfant
+                            enfant={enfant}
+                            dataLinks={dataLinks}
+                            dossier={dossier}
+                          />
+                        </Accordion>
+                      </div>
+                    );
+                  })}
               </div>
-            ))}
-        </span>
-      ))}
+            ) : (
+              ""
+            )}
+          </span>
+        ))}
+      </div>
     </>
   );
 };

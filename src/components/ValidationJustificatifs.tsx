@@ -1,3 +1,4 @@
+import { Select } from "@dataesr/react-dsfr";
 import type {
   Dossier,
   Enfant,
@@ -7,111 +8,113 @@ import type {
   PieceDossierEnfant,
   STATUT_PIECE,
 } from "@prisma/client";
-import { Select } from "@dataesr/react-dsfr";
-import _ from "lodash";
+import Image from "next/image";
 import React from "react";
 import styles from "src/components/Justificatifs.module.scss";
-import Image from "next/image";
 import logoAccepted from "src/images/accepted.svg";
 import logoRefused from "src/images/refused.svg";
 
-export type Piece = {
-    id: string,
-    statut: STATUT_PIECE | null
+export interface Piece {
+  id: string;
+  statut: STATUT_PIECE | null;
 }
 
 interface ValidationProps {
   subject: Dossier | Enfant;
   value: JustificatifDossier | JustificatifEnfant;
   label: string;
-  link?: string | string[];
-  pieces: Piece[]
-  type: 'Enfant' | 'Dossier'
+  link?: string[] | string;
+  pieces: Piece[];
+  type: "Dossier" | "Enfant";
 }
 
-const Validation: React.FC<ValidationProps> = ({
-  subject,
-  value,
-  label,
-  link,
-  pieces,
-  type
-}) => {
-  const [statePieces, setStatePieces] = React.useState<Piece[]>(pieces)
+const Validation: React.FC<ValidationProps> = ({ pieces, type }) => {
+  const [statePieces, setStatePieces] = React.useState<Piece[]>(pieces);
   return (
     <>
-     {statePieces?.map((piece) => (
-      <div className={styles.validationRow} key={piece.id}>
-        {piece.statut && piece.statut !== 'EN_ATTENTE' &&
-          <div className={`${styles.labelStatus} ${piece.statut === 'REFUSE' ? styles.refused : styles.accepted}`}
-          onClick={async () => {
-            setStatePieces([...statePieces].map((state) => {
-              if(state.id === piece.id) {
-                return {...state,
-                  statut: null
-                }
-              } else {
-                return state
-              }
-            }))
-            const url = "/api/sync/out/pieces";
-            const fetching = await fetch(url, {
-                body: JSON.stringify({type: type, id: piece.id, statut: null}),
-                method: "PUT",
-            }).then(async (r) => {
-                if (!r.ok) {
-                    return {error: 'Something went wrong'}
-                }
-                return r.json();
-            });
-            return fetching;
-          }
-          }>
-
-            <Image
-              src={piece.statut === 'REFUSE' ? logoRefused : logoAccepted}
-              alt="Enfants du Spectacle"
-              width={15}
-              height={15}
-            />
-            <span>{piece.statut}</span>
-          </div>
-        }
-        {!piece.statut &&
-          <Select
-              id={`${type}_${piece.id}`}
-              selected={''}
-              options={[
-                {label: 'Choisir', value: ''},
-                {label: 'Valider', value: 'VALIDE'},
-                {label: 'Refuser', value: 'REFUSE'}
-              ]}
-              onChange={async (e: React.FormEvent<HTMLInputElement>) => {
-                setStatePieces([...statePieces].map((state) => {
-                  if(state.id === piece.id) {
-                    return {...state,
-                      statut: e.target.value
+      {statePieces.map((piece) => (
+        <div className={styles.validationRow} key={piece.id}>
+          {piece.statut && piece.statut !== "EN_ATTENTE" && (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+            <div
+              className={`${styles.labelStatus} ${
+                piece.statut === "REFUSE" ? styles.refused : styles.accepted
+              }`}
+              onClick={async () => {
+                setStatePieces(
+                  [...statePieces].map((state) => {
+                    if (state.id === piece.id) {
+                      return { ...state, statut: null };
+                    } else {
+                      return state;
                     }
-                  } else {
-                    return state
-                  }
-                }))
+                  })
+                );
                 const url = "/api/sync/out/pieces";
                 const fetching = await fetch(url, {
-                    body: JSON.stringify({type: type, id: piece.id, statut: e.target.value}),
-                    method: "PUT",
+                  body: JSON.stringify({
+                    id: piece.id,
+                    statut: null,
+                    type: type,
+                  }),
+                  method: "PUT",
                 }).then(async (r) => {
-                    if (!r.ok) {
-                        return {error: 'Something went wrong'}
-                    }
-                    return r.json();
+                  if (!r.ok) {
+                    return { error: "Something went wrong" };
+                  }
+                  return r.json();
                 });
-                return fetching;
+                return fetching as PieceDossier;
               }}
-          />
-        }
-      </div>
-     ))}
+            >
+              <Image
+                src={piece.statut === "REFUSE" ? logoRefused : logoAccepted}
+                alt="Enfants du Spectacle"
+                width={15}
+                height={15}
+              />
+              <span>{piece.statut}</span>
+            </div>
+          )}
+          {!piece.statut && (
+            <Select
+              id={`${type}_${piece.id}`}
+              selected={""}
+              options={[
+                { label: "Choisir", value: "" },
+                { label: "Valider", value: "VALIDE" },
+                { label: "Refuser", value: "REFUSE" },
+              ]}
+              onChange={async (e: React.FormEvent<HTMLInputElement>) => {
+                setStatePieces(
+                  [...statePieces].map((state) => {
+                    if (state.id === piece.id) {
+                      return { ...state, statut: e.target.value };
+                    } else {
+                      return state;
+                    }
+                  })
+                );
+                const url = "/api/sync/out/pieces";
+                const fetching = await fetch(url, {
+                  body: JSON.stringify({
+                    id: piece.id,
+                    statut: e.target.value,
+                    type: type,
+                  }),
+                  method: "PUT",
+                }).then(async (r) => {
+                  if (!r.ok) {
+                    return { error: "Something went wrong" };
+                  }
+                  return r.json();
+                });
+                return fetching as PieceDossier;
+              }}
+            />
+          )}
+        </div>
+      ))}
     </>
   );
 };
@@ -130,7 +133,10 @@ const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
     { label: "Infos complémentaires", value: "INFOS_COMPLEMENTAIRES" },
   ];
 
-const ValidationJustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
+const ValidationJustificatifsDossier: React.FC<Props> = ({
+  dossier,
+  dataLinks,
+}) => {
   const justificatifs = [...JUSTIFICATIFS_DOSSIERS].sort(
     (a, b) =>
       dossier.justificatifs.includes(b.value) -
@@ -145,16 +151,17 @@ const ValidationJustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks })
               subject={dossier}
               value={value}
               label={label}
-              type={'Dossier'}
+              type={"Dossier"}
               pieces={
-                dossier.source === 'FORM_EDS' ? 
-                dataLinks.dossier?.piecesDossier.filter((piece: PieceDossier) => piece.type === value)
-                :
-                []
+                dossier.source === "FORM_EDS"
+                  ? dataLinks.dossier?.piecesDossier.filter(
+                      (piece: PieceDossier) => piece.type === value
+                    )
+                  : []
               }
             />
           </li>
-        )
+        );
       })}
     </ul>
   );
@@ -172,16 +179,12 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
 const ValidationJustificatifsEnfant: React.FC<{
   enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
   dataLinks: Record<string, unknown>;
-  dossier: Dossier
+  dossier: Dossier;
 }> = ({ enfant, dataLinks, dossier }) => {
   const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
     (a, b) =>
       enfant.justificatifs.includes(b.value) -
       enfant.justificatifs.includes(a.value)
-  );
-  const champEnfant = _.get(
-    _.find(dataLinks.data?.dossier.champs, { label: "Enfant" }),
-    "champs"
   );
   return (
     <ul className={styles.justificatifs}>
@@ -192,17 +195,22 @@ const ValidationJustificatifsEnfant: React.FC<{
               subject={enfant}
               value={value}
               label={label}
-              type={'Enfant'}
+              type={"Enfant"}
               pieces={
-                dossier.source === 'FORM_EDS' ? 
-                dataLinks.enfants?.find((enfantTmp: Enfant) => { return enfantTmp.id.toString() === enfant.externalId}).piecesDossier.filter((piece: PieceDossierEnfant) => piece.type === value)
-                :
-                []
+                dossier.source === "FORM_EDS"
+                  ? dataLinks.enfants
+                      ?.find((enfantTmp: Enfant) => {
+                        return enfantTmp.id.toString() === enfant.externalId;
+                      })
+                      .piecesDossier.filter(
+                        (piece: PieceDossierEnfant) => piece.type === value
+                      )
+                  : []
               }
             />
           </li>
-        )
-})}
+        );
+      })}
     </ul>
   );
 };
