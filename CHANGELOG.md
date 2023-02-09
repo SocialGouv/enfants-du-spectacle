@@ -1,3 +1,10 @@
+# [1.44.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.43.1...v1.44.0) (2023-02-09)
+
+
+### Features
+
+* update integration instructeur ([#459](https://github.com/SocialGouv/enfants-du-spectacle/issues/459)) ([2579093](https://github.com/SocialGouv/enfants-du-spectacle/commit/25790933ff71a225920868e2a5d05f5ff82798f9))
+
 ## [1.43.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.43.0...v1.43.1) (2023-02-09)
 
 
