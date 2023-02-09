@@ -1,0 +1,27 @@
+.tableHeader {
+    padding: 16px;
+    width: 100%;
+    border-collapse: collapse;
+  
+  
+    tr:nth-child(even) {
+      background: #EEEEEE;
+    }
+    tr:nth-child(odd) {
+      background: #F6F6F6;
+    }
+  
+    tr th {
+      width: fit-content;
+      text-align: left;
+      padding: 16px 16px;
+      border-bottom: 2px solid black;
+    }
+    td {
+      padding: 16px 16px;
+      vertical-align: baseline;
+    }
+    tbody tr {
+      width: 100%;
+    }
+  }

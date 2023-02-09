@@ -1,0 +1,15 @@
+.countPieces {
+    display: flex;
+    align-items: center;
+    .cardRefused {
+        color: red;
+        background-color: #FFE9E9;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+
+        img {
+            padding-right: 6px !important,
+        }
+    }
+}

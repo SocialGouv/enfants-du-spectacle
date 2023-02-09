@@ -1,13 +1,24 @@
 button.currentStatut {
-  border-radius: 20px;
   padding: .3rem .8rem .5rem 1.8rem;
   font-size: 1.1rem;
-  border: 2px solid;
-
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  font-size: 14px;
   .chevron {
     vertical-align: bottom;
     font-size: 1.5rem;
   }
+}
+
+.btnReadyBackground {
+  background-color: #3C8058;
+  color: white;
+  border: 1px solid white
+}
+
+.btnPendingBackground {
+  color: #716043 !important;
+  background-color: #FEECC2 !important;
 }
 
 div.container {

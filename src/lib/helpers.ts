@@ -202,6 +202,18 @@ const TYPES_EMPLOI = [
   { label: "Autre", value: "AUTRE" },
 ];
 
+const EMPLOIS_CATEGORIES = [
+  { label: "Rôles", value: ["ROLE_1", "ROLE_2"] },
+  { label: "Figurants", value: "FIGURATION" },
+  { label: "Silhouettes", value: ["SILHOUETTE", "SILHOUETTE_PARLANTE"] },
+  { label: "Doublure", value: "DOUBLURE" },
+  { label: "Doublage", value: "DOUBLAGE" },
+  { label: "Chanteur", value: "CHANT" },
+  { label: "Danseur", value: "DANSE" },
+  { label: "Joueur professionnel de jeux vidéo", value: "JEU_VIDEO" },
+  { label: "Autre", value: "AUTRE" },
+];
+
 const WORDING_MAILING = [
   {
     button: "Télécharger",
@@ -309,6 +321,7 @@ export {
   birthDateToFrenchAge,
   compact,
   delay,
+  EMPLOIS_CATEGORIES,
   filterCommissions,
   filterSearchResults,
   frenchDateHour,

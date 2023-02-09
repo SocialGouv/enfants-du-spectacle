@@ -1,5 +1,6 @@
 import type { Dossier } from "@prisma/client";
 import React from "react";
+import { RiAlertFill, RiInformationFill } from "react-icons/ri";
 
 import styles from "./Tag.module.scss";
 
@@ -18,11 +19,17 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier }) => {
           : ""
       }`}
     >
-      {dossier.statusNotification === "MIS_A_JOUR"
-        ? "MAJ"
-        : dossier.statusNotification === "NOUVEAU"
-        ? "NOUVEAU"
-        : ""}
+      {dossier.statusNotification === "MIS_A_JOUR" ? (
+        <div>
+          <RiAlertFill /> MAJ
+        </div>
+      ) : dossier.statusNotification === "NOUVEAU" ? (
+        <div>
+          <RiInformationFill /> NOUVEAU
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

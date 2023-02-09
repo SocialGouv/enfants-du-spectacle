@@ -2,21 +2,17 @@ import type { Dossier, Enfant } from "@prisma/client";
 import _ from "lodash";
 import React, { useCallback, useEffect } from "react";
 import styles from "src/components/Enfant.module.scss";
-import Foldable from "src/components/Foldable";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
-import {
-  birthDateToFrenchAge,
-  frenchDateText,
-  typeEmploiLabel,
-} from "src/lib/helpers";
 import { updateEnfant } from "src/lib/queries";
+
+import Accordion from "./Accordion";
 import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
   dataLinks: Record<string, unknown>;
-  dossier: Dossier
+  dossier: Dossier;
 }
 
 const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
@@ -52,30 +48,30 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
 
   return (
     <div>
-      <div className={styles.wrapper}>
-        <div className={styles.name}>
-          {enfant.nom} {enfant.prenom}
-        </div>
-        <div
-          title={`${frenchDateText(enfant.dateNaissance)}`}
-          className="hoverableTitle"
-        >
-          {birthDateToFrenchAge(enfant.dateNaissance)}
-        </div>
-        <div>{typeEmploiLabel(enfant.typeEmploi)}</div>
-        <div>
-          Personnage :{" "}
-          {enfant.nomPersonnage ? enfant.nomPersonnage : <i>n/a</i>}
-        </div>
-      </div>
-
-      <Foldable hidden={true}>
+      <Accordion
+        title="Afficher plus d'informations"
+        className="accordionSmallText"
+      >
         <div className={styles.wrapperFoldable}>
           <Info title="Rémunération" className={styles.info}>
-            <div>
-              <b>{enfant.nombreCachets}</b> cachets de{" "}
-              <b>{enfant.montantCachet}€</b>
-            </div>
+            Rémunération:
+            <ul>
+              <li>
+                Cachets: total{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {enfant.nombreCachets * enfant.montantCachet}€
+                </span>{" "}
+                ({" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {enfant.nombreCachets}
+                </span>{" "}
+                cachets x{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {enfant.montantCachet}€
+                </span>
+                {")"}
+              </li>
+            </ul>
             <div>
               {enfant.typeEmploi == "DOUBLAGE" && (
                 <span>
@@ -119,15 +115,25 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>
-            <JustificatifsEnfants enfant={enfant} dataLinks={dataLinks} dossier={dossier} />
+            <JustificatifsEnfants
+              enfant={enfant}
+              dataLinks={dataLinks}
+              dossier={dossier}
+            />
           </Info>
           <Info title="Validation" className={styles.info}>
-            <ValidationJustificatifsEnfant enfant={enfant} dossier={dossier} dataLinks={dataLinks} />
+            <ValidationJustificatifsEnfant
+              enfant={enfant}
+              dossier={dossier}
+              dataLinks={dataLinks}
+            />
           </Info>
         </div>
-      </Foldable>
-      <br />
-      <Foldable hidden={true} text="Renseigner les adresses...">
+      </Accordion>
+      <Accordion title={"Commentaires"} className="accordionSmallText">
+        <textarea name="comment" className={styles.commentSection} />
+      </Accordion>
+      <Accordion title="Afficher les adresses" className="accordionSmallText">
         <div className={styles.adressesGrid}>
           <form
             className={styles.Form}
@@ -268,7 +274,7 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
             </Info>
           </form>
         </div>
-      </Foldable>
+      </Accordion>
     </div>
   );
 };

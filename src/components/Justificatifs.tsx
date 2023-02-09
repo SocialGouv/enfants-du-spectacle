@@ -1,23 +1,23 @@
-import { Icon } from "@dataesr/react-dsfr";
 import type {
   Dossier,
   Enfant,
   JustificatifDossier,
   JustificatifEnfant,
-  PieceDossier,
   PieceDossierEnfant,
 } from "@prisma/client";
-import { endOfDecadeWithOptions } from "date-fns/fp";
 import _ from "lodash";
 import React from "react";
+import { AiOutlineCheck } from "react-icons/ai";
+import { RxCross2 } from "react-icons/rx";
 import styles from "src/components/Justificatifs.module.scss";
 import { JUSTIFS_DOSSIER } from "src/lib/helpers";
+import type { DataLinks } from "src/lib/types";
 
 interface JustificatifProps {
   subject: Dossier | Enfant;
   value: JustificatifDossier | JustificatifEnfant;
   label: string;
-  link?: string | string[];
+  link?: string[] | string;
 }
 
 const Justificatif: React.FC<JustificatifProps> = ({
@@ -30,48 +30,39 @@ const Justificatif: React.FC<JustificatifProps> = ({
 
   const url = isPresent && link;
   const icon = isPresent ? (
-    <Icon
-      name={"ri-checkbox-circle-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="green"
-    />
+    <AiOutlineCheck color="green" style={{ marginRight: "11px" }} size={20} />
   ) : (
-    <Icon
-      name={"ri-close-line"}
-      size="2x"
-      className={styles.iconSpan}
-      color="red"
-    />
+    <RxCross2 color="red" style={{ marginRight: "11px" }} size={20} />
   );
   return (
     <>
       {!Array.isArray(url) && icon}
       {!Array.isArray(url) && !isPresent && label}
       {isPresent && !Array.isArray(url) && (
-        <a href={url ? url : '/'} target="_blank" rel="noreferrer">
+        <a href={url ? url : "/"} target="_blank" rel="noreferrer">
           {label}
         </a>
       )}
-      {isPresent && Array.isArray(url) && 
-        url.map((urlLink) => (
-          <div className={styles.blocLink}>
+      {isPresent &&
+        Array.isArray(url) &&
+        url.map((urlLink, key) => (
+          <div key={key} className={styles.blocLink}>
             {icon}
-            {!isPresent && label}
-            <a href={urlLink ? urlLink : '/'} target="_blank" rel="noreferrer">
-              {label}
-            </a>
+            {!urlLink && label}
+            {urlLink && (
+              <a href={urlLink} target="_blank" rel="noreferrer">
+                {label}
+              </a>
+            )}
           </div>
-        ))
-        
-      }
+        ))}
     </>
   );
 };
 
 interface Props {
   dossier: Dossier & { piecesDossier: PieceDossierEnfant[] };
-  dataLinks: Record<string, unknown>;
+  dataLinks: DataLinks;
 }
 
 const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
@@ -93,22 +84,23 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => {
         return (
-          <li key={value}>
+          <li key={value} style={{ marginBottom: "16px" }}>
             <Justificatif
               subject={dossier}
               value={value}
               label={label}
               link={
-                dossier.source === 'FORM_EDS' ? 
-                dataLinks.dossier?.piecesDossier.filter((piece: PieceDossier) => piece.type === value).map(link => link.link)
-                :
-                _.find(dataLinks.data?.dossier.champs, {
-                  label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
-                })?.file?.url
+                dossier.source === "FORM_EDS"
+                  ? dataLinks.dossier.piecesDossier
+                      .filter((piece) => piece.type === value)
+                      .map((link) => link.link)
+                  : _.find(dataLinks.data.dossier.champs, {
+                      label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
+                    })?.file?.url
               }
             />
           </li>
-        )
+        );
       })}
     </ul>
   );
@@ -125,8 +117,8 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
 
 const JustificatifsEnfants: React.FC<{
   enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
-  dataLinks: Record<string, unknown>;
-  dossier: Dossier
+  dataLinks: DataLinks;
+  dossier: Dossier;
 }> = ({ enfant, dataLinks, dossier }) => {
   const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
     (a, b) =>
@@ -141,29 +133,36 @@ const JustificatifsEnfants: React.FC<{
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => {
         return (
-          <li key={value}>
+          <li key={value} style={{ marginBottom: "16px" }}>
             <Justificatif
               subject={enfant}
               value={value}
               label={label}
               link={
-                dossier.source === 'FORM_EDS' ? 
-                dataLinks.enfants?.find((enfantTmp: Enfant) => { return enfantTmp.id.toString() === enfant.externalId}).piecesDossier.filter((piece: PieceDossier) => piece.type === value).map(link => link.link)
-                :
-                _.find(
-                  champEnfant,
-                  (champ: Record<string, Record<string, unknown> | null>) => {
-                    return (
-                      champ.file?.checksum ===
-                      _.find(enfant.piecesDossier, { type: value })?.externalId
-                    );
-                  }
-                )?.file?.url
+                dossier.source === "FORM_EDS"
+                  ? dataLinks.enfants
+                      .find((enfantTmp) => {
+                        return enfantTmp.id.toString() === enfant.externalId;
+                      })
+                      ?.piecesDossier.filter((piece) => piece.type === value)
+                      .map((link) => link.link)
+                  : _.find(
+                      champEnfant,
+                      (
+                        champ: Record<string, Record<string, unknown> | null>
+                      ) => {
+                        return (
+                          champ.file?.checksum ===
+                          _.find(enfant.piecesDossier, { type: value })
+                            ?.externalId
+                        );
+                      }
+                    )?.file?.url
               }
             />
           </li>
-        )
-})}
+        );
+      })}
     </ul>
   );
 };

@@ -73,6 +73,16 @@
   }
 }
 
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dossierDetails {
+  margin-top: 1rem;
+}
+
 .commissionBloc {
   display: flex;
   flex-direction: column;

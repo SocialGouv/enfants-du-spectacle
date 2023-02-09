@@ -47,12 +47,31 @@ type CommissionData = Commission & { dossiers: DossierData[] };
 
 type SendListData = SendList & { user: User };
 
-type statusGroup = "futur" | "passed";
+type statusGroup = "futur" | "past";
+
+interface linkPiece {
+  id: number;
+  type: string;
+  statut: string;
+  link: string;
+}
+
+interface dossierlinks {
+  id: number;
+  piecesDossier: linkPiece[];
+}
+
+interface DataLinks {
+  id: number;
+  dossier: dossierlinks;
+  enfants: dossierlinks[];
+}
 
 export type {
   CommentaireData,
   CommentaireDataLight,
   CommissionData,
+  DataLinks,
   DossierData,
   DossierDataLight,
   SendListData,
