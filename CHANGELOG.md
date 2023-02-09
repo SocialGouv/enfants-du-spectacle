@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.3...v1.43.0) (2023-02-09)
+
+
+### Features
+
+* encrypt docs ([#457](https://github.com/SocialGouv/enfants-du-spectacle/issues/457)) ([1387440](https://github.com/SocialGouv/enfants-du-spectacle/commit/138744037c7e61ff3d4f10c45cd518c81044606b))
+
 ## [1.42.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.42.2...v1.42.3) (2023-02-07)
 
 
