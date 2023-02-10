@@ -1,4 +1,10 @@
-import { Callout, CalloutText, CalloutTitle, Container, Title } from "@dataesr/react-dsfr";
+import {
+  Callout,
+  CalloutText,
+  CalloutTitle,
+  Container,
+  Title,
+} from "@dataesr/react-dsfr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -31,9 +37,11 @@ const Home: React.FC = () => {
           )}
           {!loading && !session && <ConnexionForm />}
           <Callout>
-            <CalloutTitle as="h3">Interface agents</CalloutTitle>
+            <CalloutTitle as="h3">Interface demandeurs</CalloutTitle>
             <CalloutText>
-              Interface demandeur, ce site est destiné aux personnes souhaitant déposer un dossier concernant les enfants du spectacle.
+              Ce site est destiné aux personnes souhaitant déposer un dossier de
+              demande d’autorisations pour des mineurs de moins de 16 ans dans
+              le secteur du spectacle.
             </CalloutText>
             <div style={{ marginTop: "2rem" }}>
               <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">
