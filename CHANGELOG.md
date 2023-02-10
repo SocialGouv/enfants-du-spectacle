@@ -1,3 +1,10 @@
+## [1.44.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.44.0...v1.44.1) (2023-02-10)
+
+
+### Bug Fixes
+
+* styling and see docs ([#460](https://github.com/SocialGouv/enfants-du-spectacle/issues/460)) ([e7354a6](https://github.com/SocialGouv/enfants-du-spectacle/commit/e7354a6dbfafc4e7fd9ccacdbcec7c0bb836c1ad))
+
 # [1.44.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.43.1...v1.44.0) (2023-02-09)
 
 
