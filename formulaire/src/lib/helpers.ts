@@ -82,6 +82,21 @@ const CHECKS = [
     }
 ]
 
+const SCENES_SENSIBLES = [
+  { label: "Bagarres", value: "Bagarres" },
+  { label: "Nudité / Actes sexuels", value: "Nudité / Actes sexuels" },
+  { label: "Violence psychologique ou physique", value: "Violence psychologique ou physique" },
+  { label: "Animaux", value: "Animaux" },
+  { label: "Eau", value: "Eau" },
+  { label: "Feu", value: "Feu" },
+  { label: "Cascades", value: "Cascades" },
+  { label: "Hauteur", value: "Hauteur" },
+  {
+    label: "Machines dangereuses, produits chimiques ou agents biologiques",
+    value: "Machines dangereuses, produits chimiques ou agents biologiques",
+  },
+];
+
 const STATUS_EN_COURS = [
   'BROUILLON',
   'CONSTRUCTION',
@@ -258,5 +273,6 @@ export {
     TYPE_EMPLOI,
     WORDING_MAILING,
     CATEGORIES,
-    CONVENTIONS
+    CONVENTIONS,
+    SCENES_SENSIBLES
   };
