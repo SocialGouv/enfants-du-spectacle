@@ -99,6 +99,7 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
             }
         )
         console.log('res : ', res)
+        console.log('test before : ', contextDossier.docs)
         setEnfant({
             ...enfantTmp,
             piecesDossier: enfantTmp.piecesDossier ? [...enfantTmp.piecesDossier, res.pieceDossier] : [res.pieceDossier]
@@ -106,8 +107,8 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
         contextDossier.processInput('docs', 'enfants', 
             [
                 {
-                    id: contextDossier.docs.enfants.find(docEnfant => docEnfant.id === enfantTmp.id)?.id,
-                    piecesDossier: [...contextDossier.docs.enfants.find(docEnfant => docEnfant.id === enfantTmp.id)?.piecesDossier as Array<Object>, res.tokenizedLink]
+                    id: enfantTmp.id,
+                    piecesDossier: [...contextDossier.docs.enfants.find(enf => enf.id === enfantTmp.id)?.piecesDossier ?? [], res.tokenizedLink]
                 },
                 ...contextDossier.docs.enfants.filter(docEnfant => docEnfant.id !== enfantTmp.id)
             ]
