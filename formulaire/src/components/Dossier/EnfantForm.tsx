@@ -145,7 +145,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
 
   const handleDeleteChild = async () => {
     await deleteEnfant(enfant.id);
-    console.log(enfant.id);
   };
 
   const saveEnfant = useDebouncedCallback(() => {
