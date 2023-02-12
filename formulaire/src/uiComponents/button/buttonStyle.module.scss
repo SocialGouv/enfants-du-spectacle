@@ -1,6 +1,6 @@
 
 
-a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
+a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight, button.btnRed {
     display: inline-flex;
     text-decoration: none;
     padding: 0;
@@ -79,6 +79,21 @@ a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
       transition: top 0.1s ease 0s;
       top: 2px;
       background-color: var(--blue-fr) !important;
+
+    }
+  }
+
+  button.btnRed {
+    background: rgb(167, 31, 31);
+    color: white;
+    border: solid transparent 1px;
+    position: relative;
+    top: 0px;
+
+    &:hover {
+      transition: top 0.1s ease 0s;
+      top: 2px;
+      background-color:rgb(117, 14, 14) !important;
 
     }
   }
