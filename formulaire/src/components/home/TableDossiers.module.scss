@@ -1,6 +1,7 @@
 .containerDossiers {
     margin-top: 3rem;
     margin-bottom: 3rem;
+    position: relative;
 
     .titleTable {
         color: black;
@@ -23,14 +24,13 @@
 
     .rowDossier {
         display: grid;
-        grid-template-columns: 10% 20% 20% 18% 12% 15%;
+        grid-template-columns: 10% 20% 20% 18% 13% 15%;
         background-color: var(--dark-grey-fr);
         padding: 1rem;
 
         div {
             display: flex;
             align-items: center;
-            padding-right: 0.5rem;
             font-size: 0.9rem;
         }
     }
@@ -45,5 +45,90 @@
 
     .rowDossier:nth-child(2n) {
         background-color: var(--light-grey-fr);
+    }
+    .dropdown {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        position: absolute;
+        background-color: white;
+        top: 0;
+        right: 0;
+        transform: translateY(42px);
+        border: 1px solid #000091;
+        width: 100%;
+        padding: 0 !important;
+        z-index: 999;
+    }
+    .dropdown ul li, ul {
+        list-style-type: none !important;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+    .dropdown ul li {
+        border-bottom: 1px solid lightgray;
+        padding: 10px 20px;
+        font-weight: 600;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+    }
+    .dropdown ul li:nth-last-child(1) {
+        border-bottom: none;
+    }
+    .dropdown ul li:hover {
+        background-color: #EEEEEE;
+    }
+    .actionsItem {
+        position: relative;
+        width: 100%;
+    }
+    .actionsItem button {
+        width: max-content;
+    }
+
+    .confirmDialogueWrapper {
+        width: 100%;
+        color: black;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 16px;
+        position: absolute;
+        top: 50%;
+        opacity: 1;
+        animation-name: fadeInOpacity;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+        animation-duration: .2s;
+        transform: translateY(5%);
+    }
+        @keyframes fadeInOpacity {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    .btnList {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .confirmDialogue {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        padding: 44px;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
 }
