@@ -1,9 +1,8 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient } from "@prisma/client";
+import { Enfant, PrismaClient } from "@prisma/client";
 import { getSession } from "next-auth/react";
 
 const handler: NextApiHandler = async (req, res) => {
-  console.log("ENFANT !");
   const session = await getSession({ req });
   if (!session) {
     res.status(401).end();
@@ -26,11 +25,23 @@ const remove: NextApiHandler = async (req, res) => {
   const prisma = new PrismaClient();
   try {
     const enfantId = getId(req);
-    console.log(enfantId);
     const enfantDeleted = await prisma.enfant.delete({
       where: { id: enfantId },
     });
-    res.status(200).json({ enfantDeleted });
+
+    const url = `${process.env.API_URL_INSTRUCTEUR}/inc/enfant/${enfantId}`;
+
+    const fetching = fetch(url, {
+      body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
+      method: "DELETE",
+    }).then(async (r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r.json();
+    });
+
+    res.status(200).json({ message: fetching });
   } catch (e: unknown) {
     console.log(e);
     res.status(200).json({ message: "Enfant non trouvé" });
