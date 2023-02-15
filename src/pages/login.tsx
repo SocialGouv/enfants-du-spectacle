@@ -30,12 +30,11 @@ const Home: React.FC = () => {
         )}
         {!loading && !session && <ConnexionForm />}
         <Callout>
-          <CalloutTitle as="h3">Interface agents</CalloutTitle>
+          <CalloutTitle as="h3">Interface demandeurs</CalloutTitle>
           <CalloutText>
-            Ce site est destiné aux agents de la DRIEETS dʼÎle-de-France en
-            charge des dossiers de demande dʼemploi d’enfants du spectacle,
-            ainsi quʼaux membres des commissions statuant sur les décisions
-            dʼautorisations desdits dossiers.
+            Ce site est destiné aux personnes souhaitant déposer un dossier de
+            demande d’autorisations pour des mineurs de moins de 16 ans dans le
+            secteur du spectacle.
           </CalloutText>
           <div style={{ marginTop: "2rem" }}>
             <Link href="https://beta.gouv.fr/startups/enfants-du-spectacle.html">

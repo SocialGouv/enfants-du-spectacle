@@ -1,3 +1,10 @@
+# [1.45.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.44.1...v1.45.0) (2023-02-10)
+
+
+### Features
+
+* add scenes type and update login wording ([#461](https://github.com/SocialGouv/enfants-du-spectacle/issues/461)) ([c29cef2](https://github.com/SocialGouv/enfants-du-spectacle/commit/c29cef201237b5e05c6c639a4e8d4bc42b80c7ae))
+
 ## [1.44.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.44.0...v1.44.1) (2023-02-10)
 
 
