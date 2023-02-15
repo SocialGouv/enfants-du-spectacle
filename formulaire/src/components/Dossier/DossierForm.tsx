@@ -1,5 +1,5 @@
 
-import { Demandeur, Enfant, SocieteProduction } from "@prisma/client";
+import { Comments, Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
 import { DossierData, EnfantData, getDossier, ResDocs, updateDossier } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
@@ -19,9 +19,10 @@ import useStateContext from "src/context/StateContext";
 interface Props {
     dossier: DossierData
     docs: ResDocs
+    comments: Comments[]
 }
 
-const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
+const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     const router = useRouter()
 
     const [toDisplay, setTodisplay] = React.useState<'Demandeur' | 'Projet' | 'Enfants'>('Demandeur')
@@ -144,11 +145,12 @@ const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
         contextDossier.processEntity('societeProduction', dossier.Demandeur.societeProduction ?? {})
         contextDossier.processEntity('enfants', dossier.enfants)
         contextDossier.processEntity('docs', docs)
+        contextDossier.processEntity('comments', comments)
     }, [])
 
     React.useEffect(() => {
-        console.log('docs : ', contextDossier.docs)
-    }, [contextDossier.docs])
+        console.log('comments : ', contextDossier.comments)
+    }, [contextDossier.comments])
 
     return (
         <div className={styles.dossierForm}>

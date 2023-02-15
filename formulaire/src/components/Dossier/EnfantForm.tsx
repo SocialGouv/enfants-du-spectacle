@@ -15,6 +15,8 @@ import InputAutocomplete from "../uiComponents/InputAutocomplete";
 import { uploadDoc } from "src/fetching/docs";
 import Link from "next/link";
 import useStateContext from "src/context/StateContext";
+import InputComments from "../uiComponents/inputComments";
+import ListComments from "../ListComments";
 
 interface Props {
     enfant: EnfantData;
@@ -469,6 +471,9 @@ const EnfantForm: React.FC<Props> = ({enfant, allowChanges, refresh}) => {
                     />
 
                 </div>
+
+                <ListComments title={'Commentaires liés à l\'enfant'} comments={contextDossier.comments.filter((comment) => {return comment.enfantId === enfantTmp.id})}></ListComments>
+                <InputComments dossierId={contextDossier.dossier.id} enfantId={enfantTmp.id} parentId={null}></InputComments>
             
         </div>
     );
