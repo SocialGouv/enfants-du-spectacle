@@ -8,6 +8,7 @@ import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
 import { useSWRConfig } from "swr";
 import { updateDossier } from "src/lib/queries";
+import { Source } from "@prisma/client";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const Page: React.FC = () => {
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
-  const { ...swrLinks } = RefreshLinks(dossier?.number?.toString() ?? dossier?.externalId, dossier?.source);
+  const { ...swrLinks } = RefreshLinks(dossier?.number?.toString() ?? dossier?.externalId as string, dossier?.source as Source);
 
   const isLoading = swrDossier.isLoading || swrLinks.isLoading;
   const isError =

@@ -13,6 +13,9 @@ import useStateContext from "src/context/StateContext";
 import { useState } from "react";
 import { MultiSelect } from "react-multi-select-component";
 import dossier from "pages/api/dossier";
+import TableCard from "../TableCard";
+import InputComments from "../uiComponents/inputComments";
+import ListComments from "../ListComments";
 
 interface Props {
   allowChanges: Boolean;
@@ -82,11 +85,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
 
   return (
     <div className={styles.projectForm}>
-      <Card>
-        <CardTitle>
-          <span className={styles.titleCard}>Informations liées au projet</span>
-        </CardTitle>
-        <CardDescription>
+      <TableCard title={'Informations liées au projet'}>
           <div className={styles.byTwoForm}>
             <div className={styles.blocForm}>
               <label htmlFor="nom" className="mb-2 italic">
@@ -311,9 +310,10 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
               handleDelete={handleDelete}
               text={`Veuillez fournir, le cas échéant, tous éléments que vous jugez utiles à la compréhension du dossier (précisions sur les particularités du projet et sur les conditions spécifiques de tournage, de répétition ou de représentation imposées aux enfants, justification de la nécessité de ces conditions, etc)`}
             />
-          </div>
-        </CardDescription>
-      </Card>
+          </div>                
+          <ListComments title={'Commentaires liés au projet'} comments={contextDossier.comments.filter((comment) => {return comment.enfantId === null})}></ListComments>
+        <InputComments dossierId={contextDossier.dossier.id} enfantId={null} parentId={null}></InputComments>
+        </TableCard>
     </div>
   );
 };

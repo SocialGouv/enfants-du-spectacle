@@ -9,16 +9,16 @@ generator client {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String?
   nom           String?
   prenom        String?
-  email         String?   @unique
+  email         String?    @unique
   telephone     String?
   fonction      String?
   emailVerified DateTime?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  createdAt     DateTime   @default(now()) @map(name: "created_at")
+  updatedAt     DateTime   @updatedAt @map(name: "updated_at")
   Account       Account[]
   Session       Session[]
   dossiers      Dossier[]
@@ -26,6 +26,7 @@ model User {
   departement   String?
   departements  String[]
   Enfant        Enfant[]
+  comments      Comments[]
 }
 
 model Demandeur {
@@ -141,6 +142,7 @@ model Dossier {
   dateDepot                DateTime?
   Demandeur                Demandeur?            @relation(fields: [demandeurId], references: [id])
   demandeurId              Int?
+  Comments                 Comments[]
 }
 
 enum TypeEmploi {
@@ -213,6 +215,29 @@ model Enfant {
   dateDerniereModification    DateTime?
   populatedBy                 User?                @relation(fields: [userId], references: [id])
   userId                      Int?
+  Comments                    Comments[]
+}
+
+enum Sourcecomment {
+  INSTRUCTEUR
+  SOCIETE_PROD
+}
+
+model Comments {
+  id             Int           @id @default(autoincrement())
+  text           String
+  source         Sourcecomment
+  dossier        Dossier       @relation(fields: [dossierId], references: [id])
+  dossierId      Int
+  enfant         Enfant?       @relation(fields: [enfantId], references: [id])
+  enfantId       Int?
+  parentComment  Comments?     @relation("ParentComments", fields: [commentsId], references: [id])
+  commentsId     Int?
+  Comments       Comments[]    @relation("ParentComments")
+  User           User?         @relation(fields: [userId], references: [id])
+  userId         Int?
+  externalUserId Int?
+  date           DateTime?
 }
 
 // for next-auth

@@ -17,6 +17,8 @@ import Link from "next/link";
 import useStateContext from "src/context/StateContext";
 import { ButtonLink } from "src/uiComponents/button";
 import { deleteEnfant } from "src/fetching/enfant";
+import InputComments from "../uiComponents/inputComments";
+import ListComments from "../ListComments";
 
 interface Props {
   enfant: EnfantData;
@@ -532,6 +534,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
         />
       </div>
+        <ListComments title={'Commentaires liés à l\'enfant'} comments={contextDossier.comments.filter((comment) => {return comment.enfantId === enfantTmp.id})}></ListComments>
+        <InputComments dossierId={contextDossier.dossier.id} enfantId={enfantTmp.id} parentId={null}></InputComments>
       <div
         style={{
           display: "flex",
