@@ -1,3 +1,10 @@
+## [1.47.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.1...v1.47.2) (2023-02-27)
+
+
+### Bug Fixes
+
+* fix countpieces for DS ([#466](https://github.com/SocialGouv/enfants-du-spectacle/issues/466)) ([1701894](https://github.com/SocialGouv/enfants-du-spectacle/commit/170189421fa0b1763f65e68e428be6399ae7a3ad))
+
 ## [1.47.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.0...v1.47.1) (2023-02-27)
 
 
