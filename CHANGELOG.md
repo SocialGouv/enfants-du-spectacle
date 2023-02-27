@@ -1,3 +1,10 @@
+## [1.47.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.2...v1.47.3) (2023-02-27)
+
+
+### Bug Fixes
+
+* add roles ([#468](https://github.com/SocialGouv/enfants-du-spectacle/issues/468)) ([0e1ff25](https://github.com/SocialGouv/enfants-du-spectacle/commit/0e1ff256656691a920971d97a2ce896028fe9093))
+
 ## [1.47.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.1...v1.47.2) (2023-02-27)
 
 
