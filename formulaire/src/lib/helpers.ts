@@ -157,6 +157,9 @@ const TYPE_EMPLOI = [
   "DOUBLURE",
   "DOUBLAGE",
   "CHANT",
+  "CHORISTE",
+  "CIRCASSIEN",
+  "MUSICIEN",
   "DANSE",
   "JEU_VIDEO",
   "AUTRE"

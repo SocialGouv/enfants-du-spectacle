@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "TypeEmploi" ADD VALUE 'CIRCASSIEN';
