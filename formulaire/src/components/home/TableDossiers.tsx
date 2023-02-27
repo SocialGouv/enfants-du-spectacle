@@ -5,6 +5,7 @@ import {
   PieceDossier,
   SocieteProduction,
 } from "@prisma/client";
+import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
 import React from "react";
 import { statusGroup } from "src/lib/types";
@@ -19,11 +20,7 @@ import styles from "./TableDossiers.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
-import {
-  createDossierEds,
-  deleteDossier,
-  duplicateDossierEds,
-} from "../../fetching/dossiers";
+import { deleteDossier, duplicateDossierEds } from "../../fetching/dossiers";
 import {
   createDemandeur,
   deleteDemandeur,
@@ -31,8 +28,6 @@ import {
   getDemandeur,
 } from "../../fetching/demandeur";
 import { createPiece, getPieces } from "../../fetching/pieces";
-import { uploadDoc } from "src/fetching/docs";
-import { createSociete, getSocieteProd } from "src/fetching/societeProduction";
 
 interface Props {
   search: string;
@@ -43,6 +38,7 @@ interface Props {
 const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const router = useRouter();
   const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
+  const [showLoader, setShowLoader] = React.useState<boolean>(false);
   const [dossiers, setDossiers] = React.useState<DossierData[]>([]);
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
   const [countDossiers, setCountDossiers] = React.useState<number>(0);
@@ -62,6 +58,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const [indexItem, setIndexItem] = React.useState<number>();
 
   const duplicateDossier = async (dossierItem: Dossier) => {
+    setShowLoader(true);
     // create empty demandeur
     let resDemandeur = await createDemandeur({} as Demandeur);
 
@@ -71,33 +68,30 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
       demandeurId: resDemandeur.id,
     } as Dossier);
 
-    //GET PIECE JOINTE
+    //get pieces justificatifs
     let piecesDossier = (await getPieces(
       dossierItem.id.toString()
     )) as PieceDossier[];
 
     await Promise.all(
-      piecesDossier.map(async (piece) => {
+      piecesDossier.map(async (piece: PieceDossier) => {
+        const { id, ...tmpPiece } = piece;
+
         const pieceCreate = await createPiece({
-          ...piece,
+          ...tmpPiece,
           dossierId: resDossier.id,
         });
-        console.log(pieceCreate);
       })
     );
 
-    console.log("PIECES DOSSIER: ", piecesDossier);
-
-    //let resPiecesDossier = await createPiece(piecesDossier as PieceDossier);
-
-    // get demandeur
+    // get and update demandeur
     let demandeur = {} as Demandeur;
     if (dossierItem.demandeurId) {
       demandeur = await getDemandeur(dossierItem.demandeurId.toString());
     }
-
     await updateDemandeur({ ...demandeur, id: resDemandeur.id });
     router.push(`/dossier/${resDossier.id}`);
+    setShowLoader(false);
   };
 
   const removeDossier = async (dossier: Dossier) => {
@@ -123,6 +117,11 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
 
   return (
     <div className={styles.containerDossiers}>
+      {showLoader && (
+        <div className={styles.containerLoader}>
+          <IconLoader />
+        </div>
+      )}
       <TableCard title={"Dossiers en cours"}>
         <div>
           <div className={styles.headRow}>

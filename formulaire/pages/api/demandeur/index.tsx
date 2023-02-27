@@ -44,8 +44,6 @@ const update: NextApiHandler = async (req, res) => {
   }
   const demandeurData = DemandeurModel.omit({ id: true });
 
-  console.log("demandeur to update : ", demandeurData.parse(parsed));
-
   let dempandeurUpdated = await prisma.demandeur.update({
     data: { ...demandeurData.parse(parsed) },
     where: { id: parsed.id },

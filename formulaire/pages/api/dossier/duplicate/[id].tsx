@@ -30,7 +30,7 @@ const create: NextApiHandler = async (req, res) => {
     userId: session?.dbUser.id,
     dateDerniereModification: new Date(),
     demandeurId: dossier.demandeurId,
-    nom: dossier.nom ? dossier.nom : "",
+    nom: dossier.nom ? "Copie de " + dossier.nom : "",
     statut: "BROUILLON" as StatutDossier,
     categorie: dossier.categorie ? dossier.categorie : null,
     justificatifs: dossier.justificatifs ? dossier.justificatifs : [],

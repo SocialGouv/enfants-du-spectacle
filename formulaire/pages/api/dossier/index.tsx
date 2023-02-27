@@ -126,7 +126,6 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  console.log(req, res);
   const session = await getSession({ req });
   const parsed: Dossier = JSON.parse(req.body);
   const data = {

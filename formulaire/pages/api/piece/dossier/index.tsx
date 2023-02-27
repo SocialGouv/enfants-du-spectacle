@@ -22,7 +22,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as PieceDossier;
-  console.log("PIECE UNIQUE !! : ", req.body);
   try {
     const piece = await prisma.pieceDossier.create({ data });
     const tokenizedLink = generateToken(

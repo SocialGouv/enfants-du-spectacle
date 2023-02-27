@@ -75,7 +75,6 @@ const getDossier = async (id: string) => {
     }
     return r.json();
   });
-  console.log("fetching : ", fetching);
   return fetching as ResDossier;
 };
 
