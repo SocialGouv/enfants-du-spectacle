@@ -6,33 +6,32 @@ import { DemandeurModel } from "prisma/zod";
 import prisma from "../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
-    const session = await getSession({ req });
-    if (!session) {
-      res.status(401).end();
-      return;
-    }
-    if (req.method == "POST") {
-      await post(req, res);
-    } else if (req.method == "PUT") {
-      await update(req, res);
-    } else {
-      res.status(405).end();
-      return;
-    }
+  const session = await getSession({ req });
+  if (!session) {
+    res.status(401).end();
+    return;
+  }
+  if (req.method == "POST") {
+    await post(req, res);
+  } else if (req.method == "PUT") {
+    await update(req, res);
+  } else {
+    res.status(405).end();
+    return;
+  }
 };
 
 const post: NextApiHandler = async (req, res) => {
-    const data = {}
-    try {
-      const demandeur = await prisma.demandeur.create({ data });
-      res.status(200).json(demandeur);
-    } catch (e: unknown) {
-      console.log(e);
-    }
+  const data = {};
+  try {
+    const demandeur = await prisma.demandeur.create({ data });
+    res.status(200).json(demandeur);
+  } catch (e: unknown) {
+    console.log(e);
+  }
 };
 
 const update: NextApiHandler = async (req, res) => {
-
   if (typeof req.body !== "string") {
     res.status(400).end();
     return;
@@ -43,14 +42,12 @@ const update: NextApiHandler = async (req, res) => {
     res.status(400).end();
     return;
   }
-  const demandeurData = DemandeurModel.omit({id: true})
-
-  console.log('demandeur to update : ', demandeurData.parse(parsed))
+  const demandeurData = DemandeurModel.omit({ id: true });
 
   let dempandeurUpdated = await prisma.demandeur.update({
-    data: {...demandeurData.parse(parsed)},
+    data: { ...demandeurData.parse(parsed) },
     where: { id: parsed.id },
-  })
+  });
 
   res.status(200).json(dempandeurUpdated);
 };
