@@ -444,7 +444,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             (enfant) => enfant.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
-          label={`Livret de Famille *`}
+          label={`Livret de Famille`}
           handleFile={handleFile}
           handleDelete={handleDelete}
           text={`Ce document doit être à jour`}
@@ -459,7 +459,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             (enfant) => enfant.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
-          label={`Autorisation parentale *`}
+          label={`Autorisation parentale`}
           handleFile={handleFile}
           handleDelete={handleDelete}
           text={`En cas d'absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l'enfant.`}
@@ -489,7 +489,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             (enfant) => enfant.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
-          label={`Projet de contrat de travail *`}
+          label={`Projet de contrat de travail`}
           handleFile={handleFile}
           handleDelete={handleDelete}
           text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
