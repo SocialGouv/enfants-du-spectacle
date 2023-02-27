@@ -29,6 +29,9 @@ import Accordion from "./Accordion";
 import CountPieces from "./CountPieces";
 import Table from "./Table";
 import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
+import { Comments, getCommentsByDossier } from "src/lib/fetching/comments";
+import ListComments from "./ListComments";
+import InputComments from "./inputComments";
 
 interface Props {
   dossierId: number;
@@ -42,6 +45,27 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     React.useState<boolean>(false);
   const [showCompanySection, setShowCompanySection] =
     React.useState<boolean>(false);
+  const [comments, setComments] = React.useState<Comments[]>([])
+
+  const fetchComments = async () => {
+    if(dossier?.source === 'FORM_EDS') {
+      const res = await getCommentsByDossier(dossier?.externalId as string)
+      console.log('res comments : ', res)
+      setComments(res)
+    }
+  }
+
+  const processComment = (comment: Comments) => {
+    setComments([...comments, comment])
+  }
+
+  React.useEffect(() => {
+    fetchComments()
+  }, [])
+
+  React.useEffect(() => {
+    console.log('comments : ', comments)
+  }, comments)
 
   const tableChildHeaders: string[] = [
     "Rôles",
@@ -119,19 +143,15 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 )}
               </div>
-              {showCommentSection && (
+              {dossier.source === 'FORM_EDS' && showCommentSection && (
                 <>
-                  <textarea name="comment" className={styles.commentSection} />
-                  <button
-                    className="postButton"
-                    onClick={() => {
-                      console.log("Todo");
-                    }}
-                  >
-                    Répondre
-                  </button>
+                  <ListComments comments={comments.filter((comment) => {return comment.enfantId === null})}></ListComments>
+                  <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={null} parentId={null} action={processComment}></InputComments>
                 </>
               )}
+              {dossier.source !== 'FORM_EDS' && showCommentSection && 
+                <span>Les commentaires ne sont pas disponibles pour les dossiers déposés sur Démarches Simplifiées.</span>
+              }
             </div>
             <div className={`${styles.bottomItemFoldable}`}>
               <div className={styles.flexRow}>
@@ -271,15 +291,20 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     )
                     .map((enf, idx) => (
                       <tr key={idx}>
-                        {/* <a href={`#` + dossier.id.toString()}> */}
-                        <td>{typeEmploiLabel(enf.typeEmploi)}</td>
-                        {/* </a> */}
                         <td>
-                          {enf.nom} {enf.prenom}
+                          <a href={`#` + enf.id.toString()}>
+                            {typeEmploiLabel(enf.typeEmploi)}
+                          </a>
+                        </td>
+                        <td>
+                          <a href={`#` + enf.id.toString()}>
+                            {enf.nom} {enf.prenom}
+                          </a>
                         </td>
                         <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
                         <td>{enf.nomPersonnage}</td>
                         <td>
+                        {dossier.source === 'FORM_EDS' && (
                           <CountPieces
                             piecesJustif={dataLinks.enfants
                               .find(
@@ -288,6 +313,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               )
                               ?.piecesDossier.map((tmp) => tmp.statut)}
                           />
+                        )}
                         </td>
                       </tr>
                     ))}
@@ -341,7 +367,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       ${enfant.nomPersonnage}`;
                     return (
                       <div
-                        id={dossier.id.toString()}
+                        id={enfant.id.toString()}
                         key={enfant.id}
                         className={styles.bloc}
                         style={{ marginBottom: "44px", padding: "15px" }}
@@ -351,6 +377,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             enfant={enfant}
                             dataLinks={dataLinks}
                             dossier={dossier}
+                            comments={comments}
+                            actionComments={processComment}
                           />
                         </Accordion>
                       </div>

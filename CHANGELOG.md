@@ -1,3 +1,31 @@
+## [1.47.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.1...v1.47.2) (2023-02-27)
+
+
+### Bug Fixes
+
+* fix countpieces for DS ([#466](https://github.com/SocialGouv/enfants-du-spectacle/issues/466)) ([1701894](https://github.com/SocialGouv/enfants-du-spectacle/commit/170189421fa0b1763f65e68e428be6399ae7a3ad))
+
+## [1.47.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.0...v1.47.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* fix comments for demarches simplifiées ([#465](https://github.com/SocialGouv/enfants-du-spectacle/issues/465)) ([37f77aa](https://github.com/SocialGouv/enfants-du-spectacle/commit/37f77aa3335202f5d33c12374d31f3ade520354b))
+
+# [1.47.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.46.0...v1.47.0) (2023-02-27)
+
+
+### Features
+
+* commentaires ([#464](https://github.com/SocialGouv/enfants-du-spectacle/issues/464)) ([8874265](https://github.com/SocialGouv/enfants-du-spectacle/commit/887426574c1483db10d16c8cd5d6ff4ab1a9fe21))
+
+# [1.46.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.45.0...v1.46.0) (2023-02-15)
+
+
+### Features
+
+* feat comments ([#463](https://github.com/SocialGouv/enfants-du-spectacle/issues/463)) ([ae1653a](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae1653ae82a58a71a1a13fbe73ecfa1bf772c38b))
+
 # [1.45.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.44.1...v1.45.0) (2023-02-10)
 
 

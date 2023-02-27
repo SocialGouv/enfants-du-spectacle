@@ -4,18 +4,23 @@ import React, { useCallback, useEffect } from "react";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
+import { Comments } from "src/lib/fetching/comments";
 import { updateEnfant } from "src/lib/queries";
 
 import Accordion from "./Accordion";
+import InputComments from "./inputComments";
+import ListComments from "./ListComments";
 import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
   dataLinks: Record<string, unknown>;
   dossier: Dossier;
+  comments: Comments[]
+  actionComments: (comment: Comments) => void
 }
 
-const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
+const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier, comments, actionComments }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
@@ -131,8 +136,13 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier }) => {
         </div>
       </Accordion>
       <Accordion title={"Commentaires"} className="accordionSmallText">
-        <textarea name="comment" className={styles.commentSection} />
-      </Accordion>
+        {dossier.source === 'FORM_EDS' &&
+          <>
+            <ListComments comments={comments.filter((comment) => {return comment.enfantId === parseInt(enfant.externalId as string)})}></ListComments>
+            <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={parseInt(enfant.externalId as string)} parentId={null} action={actionComments}></InputComments>
+          </>
+        }
+        </Accordion>
       <Accordion title="Afficher les adresses" className="accordionSmallText">
         <div className={styles.adressesGrid}>
           <form

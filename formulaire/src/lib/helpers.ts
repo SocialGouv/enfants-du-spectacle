@@ -9,6 +9,17 @@ function frenchDateText(date: Date): string {
   });
 }
 
+function frenchDateHour(date: Date): string {
+  const newDate = new Date(date);
+  return newDate.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 function birthDateToFrenchAge(birthDate: Date): string {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -265,6 +276,7 @@ const CONVENTIONS = [
 
 export {
     frenchDateText,
+    frenchDateHour,
     birthDateToFrenchAge,
     useDebouncedCallback,
     CHECKS,

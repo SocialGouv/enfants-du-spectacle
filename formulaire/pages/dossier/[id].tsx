@@ -1,21 +1,29 @@
 import { Container, Link } from '@dataesr/react-dsfr';
-import { Dossier } from '@prisma/client';
+import { Comments, Dossier } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React from "react";
+import IconLoader from 'src/components/IconLoader';
 import { StateProvider } from 'src/context/StateContext';
+import { getComments } from 'src/fetching/commentaires';
 import DossierForm from '../../src/components/Dossier/DossierForm';
 import HeadingDossier from '../../src/components/Dossier/HeadingDossier';
 import Layout from '../../src/components/Layout'
-import { DossierData, getDossier, ResDossier } from '../../src/fetching/dossiers';
+import { getDossier, ResDossier } from '../../src/fetching/dossiers';
 
 const DossierPage: React.FC = () => {
   const router = useRouter();
   const [dossier, setDossier] = React.useState<ResDossier>()
+  const [comments, setComments] = React.useState<Comments[]>([])
+  const [loading, setLoading] = React.useState<Boolean>(false)
 
   const fetchDossier = async () => {
     if (router.query.id) {
+      setLoading(true)
       const res = await getDossier(router.query.id as string)
       setDossier(res)
+      const resComments = await getComments(parseInt(router.query.id as string))
+      setComments(resComments)
+      setLoading(false)
     }
   }
   
@@ -36,7 +44,9 @@ const DossierPage: React.FC = () => {
         {dossier && 
           <>
             <StateProvider>
-              <DossierForm dossier={dossier.dossier} docs={dossier.docs}></DossierForm>
+              {!loading &&
+                <DossierForm dossier={dossier.dossier} docs={dossier.docs} comments={comments}></DossierForm>
+              }
             </StateProvider>
           </>
         }

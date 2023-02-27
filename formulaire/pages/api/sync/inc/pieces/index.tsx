@@ -1,7 +1,6 @@
-import { StatutDossier, STATUT_PIECE } from "@prisma/client";
+import { STATUT_PIECE } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { DossierData } from "src/fetching/dossiers";
 import prisma from "../../../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {

@@ -1,4 +1,4 @@
-import { Demandeur, Dossier, Enfant, SocieteProduction } from "@prisma/client"
+import { Comments, Demandeur, Dossier, Enfant, SocieteProduction } from "@prisma/client"
 import { DossierData, EnfantData, ResDocs } from "src/fetching/dossiers"
 import { DemandeurData } from "src/lib/types"
 
@@ -9,7 +9,8 @@ export const initialState = {
     demandeur: {} as DemandeurData,
     enfants: [] as EnfantData[],
     societeProduction: {} as SocieteProduction,
-    docs: {} as ResDocs
+    docs: {} as ResDocs,
+    comments: [] as Comments[]
 }
 
 export type Contextype = typeof initialState

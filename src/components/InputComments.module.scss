@@ -1,0 +1,15 @@
+.InputComments {
+  background-color: white;
+  padding: 2rem 0rem;
+
+  textarea {
+    margin-bottom: 1.5rem;
+    resize: none;
+    width: 100%;
+    background-color: var(--dark-grey-fr);
+    font-size: 1rem;
+    padding: 1rem;
+    min-height: 7rem;
+    border-bottom: solid var(--blue-fr) 2px;
+  }
+}

@@ -1,0 +1,26 @@
+.listComments {
+
+    margin-top: 3rem;
+
+    h5 {
+        margin-bottom: 3rem;
+    }
+    
+    .cardComment {
+        margin-bottom: 1.5rem;
+
+        .textComment {
+            background-color: var(--dark-grey-fr);
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+        }
+
+        &.receivedComment {
+            margin-left: 5rem;
+
+            .textComment {
+                background-color: var(--purple-fr);
+            }
+        }
+    }
+}

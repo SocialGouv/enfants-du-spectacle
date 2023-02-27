@@ -1,5 +1,5 @@
 
-import { Demandeur, Enfant, SocieteProduction } from "@prisma/client";
+import { Comments, Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
 import { DossierData, EnfantData, getDossier, ResDocs, updateDossier } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
@@ -19,9 +19,10 @@ import useStateContext from "src/context/StateContext";
 interface Props {
     dossier: DossierData
     docs: ResDocs
+    comments: Comments[]
 }
 
-const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
+const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     const router = useRouter()
 
     const [toDisplay, setTodisplay] = React.useState<'Demandeur' | 'Projet' | 'Enfants'>('Demandeur')
@@ -80,13 +81,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
                             verif = false
                         }
                     })
-                    entity.mandatory_files?.map((file) => {
-                        if(contextDossier.dossier.piecesDossier.filter(piece => piece.type === file.code).length === 0) {
-                            setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
-                            setMessageError(`Le document '${file.label}' est necessaire sur l'onglet Projet`)
-                            verif = false
-                        }
-                    })
                     break;
                 case 'Enfants': 
                     contextDossier.enfants.map((enfant) => {
@@ -94,13 +88,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
                             if(!enfant[field.code as keyof Enfant] || enfant[field.code as keyof Enfant] === '') {
                                 setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
                                 setMessageError(`Le champ '${field.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`)
-                                verif = false
-                            }
-                        })
-                        entity.mandatory_files?.map((file) => {
-                            if(enfant.piecesDossier.filter(piece => piece.type === file.code).length === 0) {
-                                setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
-                                setMessageError(`Le document '${file.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`)
                                 verif = false
                             }
                         })
@@ -144,11 +131,12 @@ const DossierForm: React.FC<Props> = ({ dossier, docs }) => {
         contextDossier.processEntity('societeProduction', dossier.Demandeur.societeProduction ?? {})
         contextDossier.processEntity('enfants', dossier.enfants)
         contextDossier.processEntity('docs', docs)
+        contextDossier.processEntity('comments', comments)
     }, [])
 
     React.useEffect(() => {
-        console.log('docs : ', contextDossier.docs)
-    }, [contextDossier.docs])
+        console.log('comments : ', contextDossier.comments)
+    }, [contextDossier.comments])
 
     return (
         <div className={styles.dossierForm}>
