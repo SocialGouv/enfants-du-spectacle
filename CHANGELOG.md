@@ -1,3 +1,10 @@
+## [1.47.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.0...v1.47.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* fix comments for demarches simplifiées ([#465](https://github.com/SocialGouv/enfants-du-spectacle/issues/465)) ([37f77aa](https://github.com/SocialGouv/enfants-du-spectacle/commit/37f77aa3335202f5d33c12374d31f3ade520354b))
+
 # [1.47.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.46.0...v1.47.0) (2023-02-27)
 
 
