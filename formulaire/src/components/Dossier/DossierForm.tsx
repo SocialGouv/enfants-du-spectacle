@@ -81,13 +81,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                             verif = false
                         }
                     })
-                    entity.mandatory_files?.map((file) => {
-                        if(contextDossier.dossier.piecesDossier.filter(piece => piece.type === file.code).length === 0) {
-                            setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
-                            setMessageError(`Le document '${file.label}' est necessaire sur l'onglet Projet`)
-                            verif = false
-                        }
-                    })
                     break;
                 case 'Enfants': 
                     contextDossier.enfants.map((enfant) => {
@@ -95,13 +88,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                             if(!enfant[field.code as keyof Enfant] || enfant[field.code as keyof Enfant] === '') {
                                 setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
                                 setMessageError(`Le champ '${field.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`)
-                                verif = false
-                            }
-                        })
-                        entity.mandatory_files?.map((file) => {
-                            if(enfant.piecesDossier.filter(piece => piece.type === file.code).length === 0) {
-                                setTodisplay(entity.entity as 'Demandeur' | 'Projet' | 'Enfants')
-                                setMessageError(`Le document '${file.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`)
                                 verif = false
                             }
                         })

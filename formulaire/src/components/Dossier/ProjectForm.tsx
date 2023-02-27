@@ -213,7 +213,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
               id={"SCENARIO"}
               docs={contextDossier.dossier.piecesDossier}
               docsTokenized={contextDossier.docs.dossier}
-              label={"Scenario ou script *"}
+              label={"Scenario ou script"}
               allowChanges={!allowChanges}
               handleFile={handleFile}
               handleDelete={handleDelete}
@@ -226,7 +226,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
               id={"MESURES_SECURITE"}
               docs={contextDossier.dossier.piecesDossier}
               docsTokenized={contextDossier.docs.dossier}
-              label={"Note précisant les mesures de sécurité *"}
+              label={"Note précisant les mesures de sécurité"}
               allowChanges={!allowChanges}
               handleFile={handleFile}
               handleDelete={handleDelete}

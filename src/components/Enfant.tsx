@@ -136,9 +136,13 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier, comments
         </div>
       </Accordion>
       <Accordion title={"Commentaires"} className="accordionSmallText">
-        <ListComments comments={comments.filter((comment) => {return comment.enfantId === parseInt(enfant.externalId as string)})}></ListComments>
-        <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={parseInt(enfant.externalId as string)} parentId={null} action={actionComments}></InputComments>
-      </Accordion>
+        {dossier.source === 'FORM_EDS' &&
+          <>
+            <ListComments comments={comments.filter((comment) => {return comment.enfantId === parseInt(enfant.externalId as string)})}></ListComments>
+            <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={parseInt(enfant.externalId as string)} parentId={null} action={actionComments}></InputComments>
+          </>
+        }
+        </Accordion>
       <Accordion title="Afficher les adresses" className="accordionSmallText">
         <div className={styles.adressesGrid}>
           <form

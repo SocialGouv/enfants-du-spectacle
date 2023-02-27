@@ -143,12 +143,15 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 )}
               </div>
-              {showCommentSection && (
+              {dossier.source === 'FORM_EDS' && showCommentSection && (
                 <>
                   <ListComments comments={comments.filter((comment) => {return comment.enfantId === null})}></ListComments>
                   <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={null} parentId={null} action={processComment}></InputComments>
                 </>
               )}
+              {dossier.source !== 'FORM_EDS' && showCommentSection && 
+                <span>Les commentaires ne sont pas disponibles pour les dossiers déposés sur Démarches Simplifiées.</span>
+              }
             </div>
             <div className={`${styles.bottomItemFoldable}`}>
               <div className={styles.flexRow}>
@@ -288,11 +291,15 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     )
                     .map((enf, idx) => (
                       <tr key={idx}>
-                        {/* <a href={`#` + dossier.id.toString()}> */}
-                        <td>{typeEmploiLabel(enf.typeEmploi)}</td>
-                        {/* </a> */}
                         <td>
-                          {enf.nom} {enf.prenom}
+                          <a href={`#` + enf.id.toString()}>
+                            {typeEmploiLabel(enf.typeEmploi)}
+                          </a>
+                        </td>
+                        <td>
+                          <a href={`#` + enf.id.toString()}>
+                            {enf.nom} {enf.prenom}
+                          </a>
                         </td>
                         <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
                         <td>{enf.nomPersonnage}</td>
@@ -358,7 +365,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       ${enfant.nomPersonnage}`;
                     return (
                       <div
-                        id={dossier.id.toString()}
+                        id={enfant.id.toString()}
                         key={enfant.id}
                         className={styles.bloc}
                         style={{ marginBottom: "44px", padding: "15px" }}

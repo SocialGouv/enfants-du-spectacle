@@ -50,7 +50,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges }) => {
 
     const addEnfant = async () => {
         let res = await createEnfant({nom: 'Enfant', prenom: 'Nouvel', dossierId: contextDossier.dossier.id, typeEmploi: 'ROLE_1', nomPersonnage:'', montantCachet: 0, remunerationTotale: 0} as Enfant)
-        contextDossier.processEntity('enfants', [ res, ...contextDossier.enfants])
+        contextDossier.processEntity('enfants', [ {...res, piecesDossier: []}, ...contextDossier.enfants])
         setSelectedEnfant(res)
         scrollToRef(myRef)
     }
