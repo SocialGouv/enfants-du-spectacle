@@ -230,7 +230,7 @@ model Comments {
   id             Int           @id @default(autoincrement())
   text           String
   source         Sourcecomment
-  dossier        Dossier       @relation(fields: [dossierId], references: [id])
+  dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   dossierId      Int
   enfant         Enfant?       @relation(fields: [enfantId], references: [id])
   enfantId       Int?
