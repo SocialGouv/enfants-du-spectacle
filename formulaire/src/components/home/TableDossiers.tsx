@@ -1,6 +1,12 @@
-import { Dossier } from "@prisma/client";
+import {
+  Demandeur,
+  Dossier,
+  JustificatifDossier,
+  PieceDossier,
+  SocieteProduction,
+} from "@prisma/client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { statusGroup } from "src/lib/types";
 import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
@@ -13,7 +19,20 @@ import styles from "./TableDossiers.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
-import { createDossierEds, deleteDossier } from "../../fetching/dossiers";
+import {
+  createDossierEds,
+  deleteDossier,
+  duplicateDossierEds,
+} from "../../fetching/dossiers";
+import {
+  createDemandeur,
+  deleteDemandeur,
+  updateDemandeur,
+  getDemandeur,
+} from "../../fetching/demandeur";
+import { createPiece, getPieces } from "../../fetching/pieces";
+import { uploadDoc } from "src/fetching/docs";
+import { createSociete, getSocieteProd } from "src/fetching/societeProduction";
 
 interface Props {
   search: string;
@@ -43,13 +62,48 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const [indexItem, setIndexItem] = React.useState<number>();
 
   const duplicateDossier = async (dossierItem: Dossier) => {
-    console.log("DOSSIER: ", dossierItem);
-    let resDossier = await createDossierEds(dossierItem as Dossier);
+    // create empty demandeur
+    let resDemandeur = await createDemandeur({} as Demandeur);
+
+    // create dossier
+    let resDossier = await duplicateDossierEds({
+      ...dossierItem,
+      demandeurId: resDemandeur.id,
+    } as Dossier);
+
+    //GET PIECE JOINTE
+    let piecesDossier = (await getPieces(
+      dossierItem.id.toString()
+    )) as PieceDossier[];
+
+    await Promise.all(
+      piecesDossier.map(async (piece) => {
+        const pieceCreate = await createPiece({
+          ...piece,
+          dossierId: resDossier.id,
+        });
+        console.log(pieceCreate);
+      })
+    );
+
+    console.log("PIECES DOSSIER: ", piecesDossier);
+
+    //let resPiecesDossier = await createPiece(piecesDossier as PieceDossier);
+
+    // get demandeur
+    let demandeur = {} as Demandeur;
+    if (dossierItem.demandeurId) {
+      demandeur = await getDemandeur(dossierItem.demandeurId.toString());
+    }
+
+    await updateDemandeur({ ...demandeur, id: resDemandeur.id });
+    router.push(`/dossier/${resDossier.id}`);
   };
 
-  const removeDossier = async (dossierId: number) => {
-    let res = await deleteDossier(dossierId);
-    setDossiers(dossiers.filter((d) => d.id !== dossierId));
+  const removeDossier = async (dossier: Dossier) => {
+    let res = await deleteDossier(dossier.id);
+    setDossiers(dossiers.filter((d) => d.id !== dossier.id));
+    let resDemandeur = await deleteDemandeur(dossier.demandeurId as number);
   };
 
   const handleOrder = (termToOrder: string) => {
@@ -147,16 +201,8 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                         Éditer
                       </li>
                       <li
-                        onClick={() => {
-                          const maxId =
-                            Math.max(...dossiers.map((o) => o.id)) + 1;
-                          duplicateDossier({
-                            ...dossier,
-                            id: maxId,
-                          });
-                          setTimeout(() => {
-                            router.push(`/dossier/${maxId}`);
-                          }, 500);
+                        onClick={async () => {
+                          duplicateDossier(dossier);
                         }}
                       >
                         <HiOutlineDocumentDuplicate
@@ -188,7 +234,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                       <ButtonLink
                         onClick={() => {
                           setShowDialogue(false);
-                          removeDossier(dossier.id);
+                          removeDossier(dossier);
                         }}
                       >
                         Oui

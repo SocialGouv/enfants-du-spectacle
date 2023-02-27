@@ -8,11 +8,6 @@ const handler: NextApiHandler = async (req, res) => {
     res.status(401).end();
     return;
   }
-  const { id: articleIdStr } = req.query;
-  if (typeof articleIdStr !== "string") {
-    res.status(404).send(`not a valid piece id`);
-    return;
-  }
 
   if (req.method == "GET") {
     await get(req, res);
@@ -32,14 +27,14 @@ function getId(req: NextApiRequest): number {
 
 const get: NextApiHandler = async (req, res) => {
   const prisma = new PrismaClient();
-  const dossierId = getId(req);
+  const demandeurId = getId(req);
   try {
-    const pieces = await prisma.pieceDossier.findMany({
+    const demandeur = await prisma.demandeur.findFirst({
       where: {
-        dossierId: dossierId,
+        id: demandeurId,
       },
     });
-    res.status(200).json(pieces);
+    res.status(200).json(demandeur);
   } catch (e: unknown) {
     console.log(e);
   }
@@ -48,14 +43,27 @@ const get: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const prisma = new PrismaClient();
   try {
-    const pieceId = getId(req);
-    const dossierDeleted = await prisma.pieceDossier.delete({
-      where: { id: pieceId },
+    const demandeurId = getId(req);
+    await prisma.demandeur.delete({
+      where: { id: demandeurId },
     });
-    res.status(200).json({ dossierDeleted });
+
+    const url = `${process.env.API_URL_INSTRUCTEUR}/inc/demandeurs/${demandeurId}`;
+
+    const fetching = fetch(url, {
+      body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
+      method: "DELETE",
+    }).then(async (r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r.json();
+    });
+
+    res.status(200).json({ message: "Demandeur supprimé" });
   } catch (e: unknown) {
     console.log(e);
-    res.status(200).json({ message: "Piece non trouvée" });
+    res.status(200).json({ message: "Demandeur non trouvé" });
   }
 };
 

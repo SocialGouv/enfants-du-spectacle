@@ -80,8 +80,21 @@ const getDossier = async (id: string) => {
 };
 
 const createDossierEds = async (dossier: Omit<Dossier, "id">) => {
-  console.log("CREATE DOSSIER API: ", dossier);
   const url = "/api/dossier";
+  const fetching = await fetch(url, {
+    body: JSON.stringify(dossier),
+    method: "POST",
+  }).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return fetching as Dossier;
+};
+
+const duplicateDossierEds = async (dossier: Dossier) => {
+  const url = `/api/dossier/duplicate/${dossier.id}`;
   const fetching = await fetch(url, {
     body: JSON.stringify(dossier),
     method: "POST",
@@ -126,6 +139,7 @@ export {
   getDossier,
   getDossiers,
   createDossierEds,
+  duplicateDossierEds,
   updateDossier,
   deleteDossier,
 };

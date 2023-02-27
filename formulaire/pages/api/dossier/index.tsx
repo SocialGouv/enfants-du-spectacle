@@ -133,20 +133,6 @@ const post: NextApiHandler = async (req, res) => {
     userId: session?.dbUser.id,
     dateDerniereModification: new Date(),
     demandeurId: parsed.demandeurId,
-    nom: parsed.nom ? parsed.nom : "",
-    statut: parsed.statut ? parsed.statut : "BROUILLON",
-    categorie: parsed.categorie ? parsed.categorie : null,
-    justificatifs: parsed.justificatifs ? parsed.justificatifs : [],
-    scenesSensibles: parsed.scenesSensibles ? parsed.scenesSensibles : "",
-    presentation: parsed.presentation ? parsed.presentation : "",
-    dateDebut: parsed.dateDebut ? parsed.dateDebut : null,
-    dateFin: parsed.dateFin ? parsed.dateFin : null,
-    number: parsed.number ? parsed.number : null,
-    cdc: parsed.cdc ? parsed.cdc : null,
-    dateDepot: parsed.dateDepot ? parsed.dateDepot : null,
-    complementaire: parsed.complementaire ? parsed.complementaire : "",
-    scenario: parsed.scenario ? parsed.scenario : "",
-    securite: parsed.securite ? parsed.securite : "",
   };
   try {
     const dossier = await prisma.dossier.create({ data });
