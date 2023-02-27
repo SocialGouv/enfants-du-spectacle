@@ -95,9 +95,13 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   };
 
   const removeDossier = async (dossier: Dossier) => {
-    let res = await deleteDossier(dossier.id);
-    setDossiers(dossiers.filter((d) => d.id !== dossier.id));
-    let resDemandeur = await deleteDemandeur(dossier.demandeurId as number);
+    try {
+      let res = await deleteDossier(dossier.id);
+      setDossiers(dossiers.filter((d) => d.id !== dossier.id));
+      console.log('res delete : ', res)
+    } catch (e) {
+      console.log(e)
+    }
   };
 
   const handleOrder = (termToOrder: string) => {
