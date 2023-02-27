@@ -1,3 +1,10 @@
+## [1.47.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.4...v1.47.5) (2023-02-27)
+
+
+### Bug Fixes
+
+* fix delete dossier ([#470](https://github.com/SocialGouv/enfants-du-spectacle/issues/470)) ([8ef7971](https://github.com/SocialGouv/enfants-du-spectacle/commit/8ef797156c2ee75757538593b7278a0b1af73d5b))
+
 ## [1.47.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.3...v1.47.4) (2023-02-27)
 
 
