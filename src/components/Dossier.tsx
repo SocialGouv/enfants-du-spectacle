@@ -304,6 +304,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
                         <td>{enf.nomPersonnage}</td>
                         <td>
+                        {dossier.source === 'FORM_EDS' && (
                           <CountPieces
                             piecesJustif={dataLinks.enfants
                               .find(
@@ -312,6 +313,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               )
                               ?.piecesDossier.map((tmp) => tmp.statut)}
                           />
+                        )}
                         </td>
                       </tr>
                     ))}
