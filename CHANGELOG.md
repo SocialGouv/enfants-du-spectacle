@@ -1,3 +1,10 @@
+## [1.47.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.5...v1.47.6) (2023-02-28)
+
+
+### Bug Fixes
+
+* optimize requests commissions ([#471](https://github.com/SocialGouv/enfants-du-spectacle/issues/471)) ([6aac0fe](https://github.com/SocialGouv/enfants-du-spectacle/commit/6aac0fea8c838509a8e6b276c45bf86d39d7075c))
+
 ## [1.47.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.4...v1.47.5) (2023-02-27)
 
 
