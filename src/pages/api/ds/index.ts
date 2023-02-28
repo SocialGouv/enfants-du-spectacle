@@ -171,10 +171,11 @@ const insertDataFromDs = async (dossier: unknown) => {
       })
       .then(async (societe) => {
         // Search demandeur
+        console.log('societe edited or created : ', societe)
         let demandeur = await searchDemandeur(
           prisma,
           _.get(
-            _.find(dossier.champs, { label: "Mail " }),
+            _.find(dossier.champs, { label: "Mail" }),
             "stringValue"
           ) as string
         );
@@ -184,7 +185,7 @@ const insertDataFromDs = async (dossier: unknown) => {
           // create demandeur if not exists
           const demandeurTmp: Omit<Demandeur, "id"> = {
             email: _.get(
-              _.find(dossier.champs, { label: "Mail " }),
+              _.find(dossier.champs, { label: "Mail" }),
               "stringValue"
             ),
             fonction: _.get(
@@ -211,6 +212,8 @@ const insertDataFromDs = async (dossier: unknown) => {
       })
       .then(async (datas) => {
         const { societe, demandeur } = datas;
+        console.log('societe edited or created : ', societe)
+        console.log('demandeur edited or created : ', demandeur)
 
         // search commission
         const commissions = await getUpcomingCommissionsByLimitDate(
