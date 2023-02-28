@@ -66,6 +66,7 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const getUpcomingCommissions = async () => {
+  console.log('upcoming')
   return prisma.commission.findMany({
     include: {
       dossiers: {
@@ -83,14 +84,12 @@ const getUpcomingCommissions = async () => {
 };
 
 const getUpcomingCommissionsNotEmpty = async () => {
+  console.log('upcoming not empty')
   return prisma.commission.findMany({
     include: {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
-          demandeur: true,
-          enfants: true,
-          piecesDossier: true,
           societeProduction: true,
           user: true,
         },
@@ -106,6 +105,7 @@ const getUpcomingCommissionsNotEmpty = async () => {
 };
 
 const getUpcomingCommissionsByDepartement = async (departements: string) => {
+  console.log('upcoming by departement')
   console.log("departements : ", departements.split(","));
   return prisma.commission.findMany({
     include: {
