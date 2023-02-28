@@ -78,6 +78,7 @@ const get: NextApiHandler = async (req, res) => {
       try {
         console.log("getting file : ", parseInt(dosNumber));
         const fetching = await getDatasFromDS(parseInt(dosNumber));
+        console.log('got from DS : ', fetching)
         const insert = await insertDataFromDs(fetching.data.dossier);
         console.log("inserted : ", insert);
       } catch (e: unknown) {
