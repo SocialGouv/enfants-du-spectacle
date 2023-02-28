@@ -174,6 +174,10 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
   { label: "Contrat de travail", value: "CONTRAT" },
   { label: "Certificat de scolarité", value: "CERTIFICAT_SCOLARITE" },
   { label: "Avis médical", value: "AVIS_MEDICAL" },
+  {
+    label: "Déclaration sur l’honneur de l’enfant âgé de plus de 13 ans",
+    value: "DECLARATION_HONNEUR",
+  },
 ];
 
 const ValidationJustificatifsEnfant: React.FC<{

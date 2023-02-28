@@ -180,6 +180,7 @@ enum JustificatifEnfant {
   CONTRAT
   CERTIFICAT_SCOLARITE
   AVIS_MEDICAL
+  DECLARATION_HONNEUR
 }
 
 model PieceDossierEnfant {

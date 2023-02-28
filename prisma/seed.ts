@@ -126,6 +126,7 @@ function getRandomJustificatifsEnfant(): JustificatifEnfant[] {
     "CONTRAT",
     "CERTIFICAT_SCOLARITE",
     "AVIS_MEDICAL",
+    "DECLARATION_HONNEUR",
   ];
   return requiredJustificatifs.concat(
     faker.random.arrayElements(

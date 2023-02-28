@@ -534,8 +534,31 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
         />
       </div>
-        <ListComments title={'Commentaires liés à l\'enfant'} comments={contextDossier.comments.filter((comment) => {return comment.enfantId === enfantTmp.id})}></ListComments>
-        <InputComments dossierId={contextDossier.dossier.id} enfantId={enfantTmp.id} parentId={null}></InputComments>
+      <div className={styles.blocForm}>
+        <InputFile
+          id={"DECLARATION_HONNEUR"}
+          docs={enfantTmp.piecesDossier || []}
+          docsTokenized={contextDossier.docs.enfants.find(
+            (enfant) => enfant.id === enfantTmp.id
+          )}
+          allowChanges={!allowChanges}
+          label={`Déclaration sur l’honneur de l’enfant âgé de plus de 13 ans`}
+          handleFile={handleFile}
+          handleDelete={handleDelete}
+          text={`Veuillez fournir un document présentant de manière précise et détaillée, la déclaration sur l’honneur de l’enfant âgé de plus de 13 ans.`}
+        />
+      </div>
+      <ListComments
+        title={"Commentaires liés à l'enfant"}
+        comments={contextDossier.comments.filter((comment) => {
+          return comment.enfantId === enfantTmp.id;
+        })}
+      ></ListComments>
+      <InputComments
+        dossierId={contextDossier.dossier.id}
+        enfantId={enfantTmp.id}
+        parentId={null}
+      ></InputComments>
       <div
         style={{
           display: "flex",

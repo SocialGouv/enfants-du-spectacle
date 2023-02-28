@@ -265,6 +265,10 @@ const JUSTIFS_ENFANT: { label: string; value: string }[] = [
     value: "CERTIFICAT_SCOLARITE",
   },
   { label: "Avis médical d'aptitude", value: "AVIS_MEDICAL" },
+  {
+    label: "Déclaration sur l’honneur de l’enfant âgé de plus de 13 ans",
+    value: "DECLARATION_HONNEUR",
+  },
 ];
 
 const STATUS_ODJ = [
