@@ -1,3 +1,10 @@
+## [1.47.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.6...v1.47.7) (2023-02-28)
+
+
+### Bug Fixes
+
+* fix prisma errors commissions ([#472](https://github.com/SocialGouv/enfants-du-spectacle/issues/472)) ([4193674](https://github.com/SocialGouv/enfants-du-spectacle/commit/41936741c8ec4f5f43891b57fcda6124c6544df5))
+
 ## [1.47.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.5...v1.47.6) (2023-02-28)
 
 
