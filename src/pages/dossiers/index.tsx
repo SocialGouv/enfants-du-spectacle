@@ -66,32 +66,13 @@ const Page: React.FC = () => {
     setStatus(status);
   };
 
-  /*const { commissions, ...swrCommissions } = useCommissions(
+  const { commissions, ...swrCommissions } = useCommissions(
     "upcoming",
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     session.data.dbUser.role !== "MEMBRE"
       ? "all"
       : session.data.dbUser.departements
-  );*/
-
-  const [commissions, setCommissions] = React.useState<CommissionData[]>([])
-
-  const fetchCommissions = async () => {
-    const res = await fetch(`/api/commissions?datePeriod=upcoming&departements=${session.data.dbUser.role !== "MEMBRE"
-    ? "all"
-    : session.data.dbUser.departements}&withChild=${true}`).then(async (r) => {
-      if (!r.ok) {
-        throw Error(`got status ${r.status}`);
-      }
-      return r.json();
-    });
-    console.log('res commissions : ', res.json)
-    setCommissions(res.json)
-  }
-
-  React.useEffect(() => {
-    fetchCommissions()
-  }, [])
+  );
 
   const { ...commissionsPast } = useCommissions(
     "past",
@@ -119,12 +100,12 @@ const Page: React.FC = () => {
   );
 
   const filteredCommissions =
-    commissions.length > 0 && filters !== undefined && commissions
+    !swrCommissions.isLoading && filters !== undefined && commissions
       ? filterCommissions(commissions, filters)
       : undefined;
 
   const filteredSearchResults =
-  commissions.length > 0 &&
+    !swrCommissions.isLoading &&
     filters !== undefined &&
     commissions &&
     searchResults
@@ -132,7 +113,7 @@ const Page: React.FC = () => {
       : undefined;
 
   const filterableSocietesProductions =
-  commissions.length > 0 && commissions
+    !swrCommissions.isLoading && !swrCommissions.isError && commissions
       ? getFilterableSocietesProductions(searchResults, commissions)
       : undefined;
 
@@ -265,8 +246,8 @@ const Page: React.FC = () => {
   const currentCommissions =
     status === "futur" ? filteredCommissions : commissionsPast.commissions;
 
-  const isLoading = commissions.length === 0 || loading;
-  const isError = !isLoading && (!commissions);
+  const isLoading = swrCommissions.isLoading || loading;
+  const isError = !isLoading && (swrCommissions.isError || !commissions);
 
   return (
     <Layout
