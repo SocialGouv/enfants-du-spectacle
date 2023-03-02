@@ -1,3 +1,10 @@
+# [1.48.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.10...v1.48.0) (2023-03-02)
+
+
+### Features
+
+* add declaration honneur ([#473](https://github.com/SocialGouv/enfants-du-spectacle/issues/473)) ([1e347a5](https://github.com/SocialGouv/enfants-du-spectacle/commit/1e347a5fa65ac99cc02567ceb2555d038bb2e493))
+
 ## [1.47.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.9...v1.47.10) (2023-02-28)
 
 
