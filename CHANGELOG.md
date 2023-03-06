@@ -1,3 +1,10 @@
+## [1.48.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.48.0...v1.48.1) (2023-03-06)
+
+
+### Bug Fixes
+
+* fix name files uploaded ([#477](https://github.com/SocialGouv/enfants-du-spectacle/issues/477)) ([661300f](https://github.com/SocialGouv/enfants-du-spectacle/commit/661300f7bd34b18844e0124d6f60fac0f3a0053d))
+
 # [1.48.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.47.10...v1.48.0) (2023-03-02)
 
 
