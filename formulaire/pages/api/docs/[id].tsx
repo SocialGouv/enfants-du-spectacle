@@ -40,7 +40,7 @@ const uploadFile = (
   if (saveLocally) {
     options.uploadDir = `/mnt/docs-form/${dossierId}`;
     options.filename = (name, ext, path, form) => {
-      return Date.now().toString() + "_" + path.originalFilename;
+      return Date.now().toString() + "_" + path.originalFilename?.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     };
   }
 
