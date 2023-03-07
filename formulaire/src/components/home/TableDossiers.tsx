@@ -1,10 +1,4 @@
-import {
-  Demandeur,
-  Dossier,
-  JustificatifDossier,
-  PieceDossier,
-  SocieteProduction,
-} from "@prisma/client";
+import { Demandeur, Dossier, PieceDossier } from "@prisma/client";
 import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
 import React from "react";
@@ -98,9 +92,9 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     try {
       let res = await deleteDossier(dossier.id);
       setDossiers(dossiers.filter((d) => d.id !== dossier.id));
-      console.log('res delete : ', res)
+      console.log("res delete : ", res);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
@@ -171,6 +165,30 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                 {dossier.dateDerniereModification
                   ? frenchDateText(dossier.dateDerniereModification)
                   : ""}
+                {showDialogue && indexItem === dossier.id && (
+                  <div className={styles.confirmDialogueWrapper}>
+                    <div className={styles.confirmDialogue}>
+                      <div>Voulez-vous supprimer ce dossier ? </div>
+                      <div className={styles.btnList}>
+                        <ButtonLink
+                          onClick={() => {
+                            setShowDialogue(false);
+                            removeDossier(dossier);
+                          }}
+                        >
+                          Oui
+                        </ButtonLink>
+                        <ButtonLink
+                          onClick={() => {
+                            setShowDialogue(false);
+                          }}
+                        >
+                          Non
+                        </ButtonLink>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className={`${styles.itemDossier} ${styles.actionsItem}`}>
                 <ButtonLink
@@ -229,30 +247,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                   </div>
                 )}
               </div>
-              {showDialogue && indexItem === dossier.id && (
-                <div className={styles.confirmDialogueWrapper}>
-                  <div className={styles.confirmDialogue}>
-                    <div>Voulez-vous supprimer ce dossier ? </div>
-                    <div className={styles.btnList}>
-                      <ButtonLink
-                        onClick={() => {
-                          setShowDialogue(false);
-                          removeDossier(dossier);
-                        }}
-                      >
-                        Oui
-                      </ButtonLink>
-                      <ButtonLink
-                        onClick={() => {
-                          setShowDialogue(false);
-                        }}
-                      >
-                        Non
-                      </ButtonLink>
-                    </div>
-                  </div>
-                </div>
-              )}
               <div className={styles.itemDossier}>
                 <CountPieces
                   dossier={dossier}
