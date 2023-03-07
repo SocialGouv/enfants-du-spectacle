@@ -7,6 +7,8 @@ import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import NotificationDossierTag from "src/components/NotificationDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
+import type { Comments } from "src/lib/fetching/comments";
+import { getCommentsByDossier } from "src/lib/fetching/comments";
 import {
   frenchDateText,
   frenchDepartementName,
@@ -23,6 +25,23 @@ interface DossierProps {
 }
 
 const Dossier: React.FC<DossierProps> = ({ dossier }) => {
+  const [comments, setComments] = React.useState<Comments[]>([]);
+
+  const fetchComments = async () => {
+    if (dossier.source === "FORM_EDS") {
+      const res = await getCommentsByDossier(dossier.externalId!);
+      setComments(res);
+    }
+  };
+
+  console.log("COMMENTS: ! ", comments);
+
+  console.log("DOSSIER: ! ", dossier);
+
+  React.useEffect(() => {
+    fetchComments();
+  }, []);
+
   return (
     <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
@@ -42,7 +61,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
       <div>
-        <NotificationDossierTag dossier={dossier} />
+        <NotificationDossierTag dossier={dossier} comments={comments} />
       </div>
     </div>
   );

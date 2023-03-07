@@ -555,7 +555,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         })}
       ></ListComments>
       <InputComments
-        dossierId={contextDossier.dossier.id}
+        dossier={contextDossier.dossier}
         enfantId={enfantTmp.id}
         parentId={null}
       ></InputComments>

@@ -22,3 +22,27 @@
   background-color: #B8FEC9;
   color: #18753C;
 }
+.tagPurple {
+  background-color: #eab8fe;
+  color: #581875;
+}
+
+.commentTag {
+  display: flex;
+  align-items: center;
+}
+
+.commentTag:hover {
+  cursor: pointer;
+}
+
+.tagWrapper {
+  margin-bottom: 10px;
+}
+
+.notifModal {
+  position: absolute;
+  padding: 15px;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+  background-color: white;
+}

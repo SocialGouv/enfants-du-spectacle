@@ -112,6 +112,11 @@ enum StatusNotif {
   MIS_A_JOUR
 }
 
+enum CommentNotif {
+  COMMENTAIRE_ENFANT
+  COMMENTAIRE_PROJET
+}
+
 enum Source {
   FORM_DS
   FORM_EDS
@@ -146,6 +151,7 @@ model Dossier {
   cdc                      Int?
   dateDepot                DateTime?
   statusNotification       StatusNotif?
+  commentNotification      CommentNotif[]
   source                   Source?
 }
 
