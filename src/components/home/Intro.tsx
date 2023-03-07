@@ -24,7 +24,7 @@ const Intro: React.FC = () => {
               ligne vous permet de déposer votre demande.
             </p>
             <a
-              href="https://www.demarches-simplifiees.fr/commencer/enfants-du-spectacle"
+              href="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/"
               className="postButton"
             >
               <span>Commencez votre démarche en ligne</span>

@@ -98,7 +98,7 @@ const Calendar: React.FC = () => {
                 Voir le calendrier
               </button>
               <a
-                href="https://www.demarches-simplifiees.fr/commencer/enfants-du-spectacle"
+                href="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/"
                 className="postButton"
               >
                 <span>Déposer un dossier</span>
