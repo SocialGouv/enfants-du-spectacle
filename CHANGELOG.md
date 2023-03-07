@@ -1,3 +1,10 @@
+## [1.48.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.48.1...v1.48.2) (2023-03-07)
+
+
+### Bug Fixes
+
+* change url formulaire ([#478](https://github.com/SocialGouv/enfants-du-spectacle/issues/478)) ([99e5e7f](https://github.com/SocialGouv/enfants-du-spectacle/commit/99e5e7fb5fc56b18be5965b2956fad01eac9eb85))
+
 ## [1.48.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.48.0...v1.48.1) (2023-03-06)
 
 
