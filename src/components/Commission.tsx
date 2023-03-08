@@ -36,8 +36,6 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
 
   console.log("COMMENTS: ! ", comments);
 
-  console.log("DOSSIER: ! ", dossier);
-
   React.useEffect(() => {
     fetchComments();
   }, []);

@@ -18,6 +18,8 @@ import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
 import { ButtonLink } from "src/components/uiComponents/button";
 import { useCommissions } from "src/lib/api";
+import type { Comments } from "src/lib/fetching/comments";
+import { getCommentsByDossierIds } from "src/lib/fetching/comments";
 import {
   compact,
   filterCommissions,
@@ -34,7 +36,7 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import type { statusGroup } from "src/lib/types";
+import type { DossierData, statusGroup } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
@@ -170,6 +172,25 @@ const Page: React.FC = () => {
       updateQuerystring({ societeProductionId: undefined });
     }
   }, [filters, filterableSocietesProductions]);
+
+  const [comments, setComments] = React.useState<Comments[]>([]);
+
+  const fetchComments = async () => {
+    if (commissions && commissions.length > 0) {
+      const dossiersIds: string[] = commissions
+        .flatMap((commission: CommissionData) => commission.dossiers)
+        .map((dossier: DossierData) => JSON.stringify(dossier.id));
+      console.log("DOSSIERS IDS!! ", dossiersIds);
+      const res = await getCommentsByDossierIds(dossiersIds);
+      setComments(res);
+    }
+  };
+
+  // console.log("COMMENTS: ! ", comments);
+
+  React.useEffect(() => {
+    fetchComments();
+  }, [commissions]);
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
     event

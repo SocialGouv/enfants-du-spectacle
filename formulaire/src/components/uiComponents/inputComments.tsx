@@ -50,10 +50,6 @@ const InputComments: React.FC<Props> = ({
               ...contextDossier.comments,
               commentSent,
             ]);
-            contextDossier.processEntity("dossier", [
-              ...contextDossier.dossier.commentNotification,
-              ["COMMENTAIRE_PROJET"],
-            ]);
             setComment("");
           }
         }}

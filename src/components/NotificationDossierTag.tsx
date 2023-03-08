@@ -17,8 +17,8 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, comments }) => {
 
   // const commentChild = comments?.filter((com) => com.enfantId !== null).length;
 
-  console.log("COMMENTS NOTIF: ", comments);
-  console.log("DOSSIER : ", dossier);
+  // console.log("COMMENTS NOTIF: ", comments);
+  // console.log("DOSSIER : ", dossier);
 
   const [showNotificationModal, setShowNotificationModal] =
     useState<boolean>(false);

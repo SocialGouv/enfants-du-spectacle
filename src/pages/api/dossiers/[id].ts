@@ -269,7 +269,6 @@ const update: NextApiHandler = async (req, res) => {
   }
 
   if (typeof parsed.commentNotification || parsed.commentNotification) {
-    console.log("UPDAAAAAAAAAATE COMMENTTTTTTTTTTT");
     updates.commentNotification = parsed.commentNotification;
   }
 
