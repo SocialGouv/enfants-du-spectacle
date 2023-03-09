@@ -7,76 +7,78 @@ import styles from "./Tag.module.scss";
 
 interface Props {
   dossier: Dossier;
-  comments?: Commentaire[];
+  commentsInfo: {
+    dossierId: number;
+    commentsChildren: number;
+    commentsProject: number;
+  };
 }
 
-const NotificationDossierTag: React.FC<Props> = ({ dossier, comments }) => {
-  // const commentProject = comments?.filter(
-  //   (com) => com.enfantId === null
-  // ).length;
-
-  // const commentChild = comments?.filter((com) => com.enfantId !== null).length;
-
-  // console.log("COMMENTS NOTIF: ", comments);
-  // console.log("DOSSIER : ", dossier);
-
-  const [showNotificationModal, setShowNotificationModal] =
-    useState<boolean>(false);
+const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  console.log("commentsInfo !!: ", commentsInfo);
 
   return (
-    <div>
-      <div
-        className={`${styles.tag} ${
-          dossier.statusNotification === "MIS_A_JOUR" ||
-          dossier.statusNotification === "NOUVEAU"
-            ? `${styles.tagWrapper}`
-            : ""
-        }  ${
-          dossier.statusNotification === "MIS_A_JOUR"
-            ? `${styles.tagRed}`
-            : dossier.statusNotification === "NOUVEAU"
-            ? `${styles.tagBlue}`
-            : ""
-        }`}
-      >
-        {dossier.statusNotification === "MIS_A_JOUR" ? (
-          <div>
-            <RiAlertFill /> MAJ
-          </div>
-        ) : dossier.statusNotification === "NOUVEAU" ? (
-          <div>
-            <RiInformationFill /> NOUVEAU
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-      {dossier.commentNotification.length > 0 && (
-        <>
-          <div
-            className={`${styles.tag} ${styles.tagPurple}`}
-            onMouseEnter={() => {
-              setShowNotificationModal(true);
-            }}
-            onMouseLeave={() => {
-              setShowNotificationModal(false);
-            }}
-          >
-            <div className={styles.commentTag}>
-              <BiComment style={{ marginRight: "5px" }} /> COMMENTAIRES
+    <div
+      className={`${styles.tag} ${
+        dossier.statusNotification === "MIS_A_JOUR"
+          ? `${styles.tagRed}`
+          : dossier.statusNotification === "NOUVEAU"
+          ? `${styles.tagBlue}`
+          : ""
+      }`}
+    >
+      {dossier.statusNotification === "MIS_A_JOUR" ? (
+        <div
+          onMouseEnter={() => {
+            setShowInfoModal(true);
+          }}
+          onMouseLeave={() => {
+            setShowInfoModal(false);
+          }}
+          className={styles.tagCursor}
+        >
+          <RiAlertFill /> MAJ
+        </div>
+      ) : dossier.statusNotification === "NOUVEAU" ? (
+        <div>
+          <RiInformationFill /> NOUVEAU
+        </div>
+      ) : (
+        ""
+      )}
+      {showInfoModal && (
+        <div className={styles.modalWrapper}>
+          <div className={styles.blocNotif}>
+            <div className={styles.titleNotif}>Projet</div>
+            <div>
+              Une ou plusieurs modifications ont étés apportées au projet
             </div>
           </div>
-          {showNotificationModal && (
-            <div className={styles.notifModal}>
-              {dossier.commentNotification.includes("COMMENTAIRE_PROJET") && (
-                <div>Un nouveau commentaire lié au projet</div>
+          {commentsInfo.dossierId && (
+            <div className={styles.blocNotif}>
+              <div className={styles.titleNotif}>Commentaires </div>
+              {commentsInfo.commentsProject > 0 && (
+                <div>
+                  {commentsInfo.commentsProject}{" "}
+                  {commentsInfo.commentsProject > 1
+                    ? "nouveaux commentaires"
+                    : "nouveau commentaire"}{" "}
+                  sur le projet
+                </div>
               )}
-              {dossier.commentNotification.includes("COMMENTAIRE_ENFANT") && (
-                <div>Un nouveau commentaire lié à un enfant</div>
+              {commentsInfo.commentsChildren > 0 && (
+                <div>
+                  {commentsInfo.commentsChildren}{" "}
+                  {commentsInfo.commentsChildren > 1
+                    ? "nouveaux commentaires"
+                    : "nouveau commentaire"}{" "}
+                  sur un enfant
+                </div>
               )}
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

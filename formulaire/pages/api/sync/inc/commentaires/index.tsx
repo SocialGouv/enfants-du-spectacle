@@ -52,7 +52,7 @@ const get: NextApiHandler = async (req, res) => {
   const data = req.query;
   let ids = data.externalId as string[];
   const externalIds = ids.map((id: string) => parseInt(id)) as number[];
-  console.log("DOSSIERS IDS RECEIVED!!!! : ", data);
+  console.log("data externalIds received : ", data);
 
   if (data.token !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
@@ -64,8 +64,28 @@ const get: NextApiHandler = async (req, res) => {
         },
       },
     });
-    console.log("comments found : ", comments);
-    res.status(200).json(comments);
+
+    const commentsByDossier: {
+      dossierId: number;
+      commentsChildren: number;
+      commentsProject: number;
+    }[] = externalIds.map((externalId) => {
+      const commentsChildren = comments.filter(
+        (comment) =>
+          comment.dossierId === externalId && comment.enfantId !== null
+      ).length;
+      const commentsProject = comments.filter(
+        (comment) =>
+          comment.dossierId === externalId && comment.enfantId === null
+      ).length;
+      return {
+        dossierId: externalId,
+        commentsChildren: commentsChildren,
+        commentsProject: commentsProject,
+      };
+    });
+
+    res.status(200).json(commentsByDossier);
   }
 };
 

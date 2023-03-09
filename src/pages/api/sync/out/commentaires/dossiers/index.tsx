@@ -17,10 +17,8 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const getCommentsByDossiersIds: NextApiHandler = async (req, res) => {
-  console.log("REQ: ", req.query.externalId);
   const dossierIds = req.query.externalId as string[];
-
-  console.log("EXTERNAL IDS to get from : ", dossierIds);
+  console.log("external Ids to get from : ", dossierIds);
 
   const url = `${process.env.API_URL_SDP}/inc/commentaires${
     dossierIds.length > 0 ? "?" : ""
@@ -29,10 +27,6 @@ const getCommentsByDossiersIds: NextApiHandler = async (req, res) => {
   })}&token=${process.env.API_KEY_SDP}`
     .split(",")
     .join("");
-
-  console.log(url);
-
-  // // const url = `${process.env.API_URL_SDP}/inc/docs?externalId=${dossierExternalId}&token=${process.env.API_KEY_SDP}`;
 
   const fetching = await fetch(url, {
     method: "GET",

@@ -7,8 +7,6 @@ import AssignedAgent from "src/components/AssignedAgent";
 import CategorieDossierTag from "src/components/CategorieDossierTag";
 import NotificationDossierTag from "src/components/NotificationDossierTag";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import type { Comments } from "src/lib/fetching/comments";
-import { getCommentsByDossier } from "src/lib/fetching/comments";
 import {
   frenchDateText,
   frenchDepartementName,
@@ -22,24 +20,14 @@ import styles from "./Commission.module.scss";
 
 interface DossierProps {
   dossier: DossierDataLight;
+  commentsInfo: {
+    dossierId: number;
+    commentsChildren: number;
+    commentsProject: number;
+  };
 }
 
-const Dossier: React.FC<DossierProps> = ({ dossier }) => {
-  const [comments, setComments] = React.useState<Comments[]>([]);
-
-  const fetchComments = async () => {
-    if (dossier.source === "FORM_EDS") {
-      const res = await getCommentsByDossier(dossier.externalId!);
-      setComments(res);
-    }
-  };
-
-  console.log("COMMENTS: ! ", comments);
-
-  React.useEffect(() => {
-    fetchComments();
-  }, []);
-
+const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
   return (
     <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
@@ -59,7 +47,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
       <div>
-        <NotificationDossierTag dossier={dossier} comments={comments} />
+        <NotificationDossierTag dossier={dossier} commentsInfo={commentsInfo} />
       </div>
     </div>
   );
@@ -67,9 +55,14 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
 
 interface Props {
   commission: CommissionData;
+  commentsCountInfo: {
+    dossierId: number;
+    commentsChildren: number;
+    commentsProject: number;
+  }[];
 }
 
-const Commission: React.FC<Props> = ({ commission }) => {
+const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
@@ -102,14 +95,29 @@ const Commission: React.FC<Props> = ({ commission }) => {
         <div>Notifications</div>
       </div>
       <div>
-        {commission.dossiers.map((dossier) => (
-          <div
-            style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
-            key={dossier.id}
-          >
-            <Dossier dossier={dossier} />
-          </div>
-        ))}
+        {commission.dossiers.map((dossier) => {
+          const commentsInfo = commentsCountInfo.find(
+            (comment) =>
+              JSON.stringify(comment.dossierId) === dossier.externalId
+          );
+          return (
+            <div
+              style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
+              key={dossier.id}
+            >
+              <Dossier
+                dossier={dossier}
+                commentsInfo={
+                  commentsInfo as {
+                    dossierId: number;
+                    commentsChildren: number;
+                    commentsProject: number;
+                  }
+                }
+              />
+            </div>
+          );
+        })}
       </div>
       <div className={styles.actionGrid}>
         {session && session.dbUser.role !== "MEMBRE" && (

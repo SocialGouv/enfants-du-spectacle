@@ -21,7 +21,6 @@ const getCommentsByDossier = async (externalId: string) => {
 };
 
 const getCommentsByDossierIds = async (externalIds: string[]) => {
-  console.log("EXTERNAL IDS", externalIds);
   const url = `/api/sync/out/commentaires/dossiers${
     externalIds.length > 0 ? "?" : ""
   }${externalIds.map((id, index) => {
@@ -37,7 +36,11 @@ const getCommentsByDossierIds = async (externalIds: string[]) => {
     }
     return r.json();
   });
-  return fetching as Comments[];
+  return fetching as {
+    dossierId: number;
+    commentsChildren: number;
+    commentsProject: number;
+  }[];
 };
 
 const createComment = async (comment: Omit<Comments, "id">) => {

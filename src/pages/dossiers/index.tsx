@@ -173,18 +173,26 @@ const Page: React.FC = () => {
     }
   }, [filters, filterableSocietesProductions]);
 
-  const [comments, setComments] = React.useState<Comments[]>([]);
+  const [commentsInfo, setCommentsInfo] = React.useState<
+    {
+      dossierId: number;
+      commentsChildren: number;
+      commentsProject: number;
+    }[]
+  >([]);
 
   const fetchComments = async () => {
     if (commissions && commissions.length > 0) {
-      const dossiersIds: string[] = commissions
+      const dossiersIds = commissions
         .flatMap((commission: CommissionData) => commission.dossiers)
         .map((dossier: DossierData) => dossier.externalId);
       console.log("DOSSIERS IDS!! ", dossiersIds);
-      const res = await getCommentsByDossierIds(dossiersIds);
-      setComments(res);
+
+      const res = await getCommentsByDossierIds(dossiersIds as string[]);
+      setCommentsInfo(res);
     }
   };
+  console.log("ALL COMMENTS:", commentsInfo);
 
   React.useEffect(() => {
     fetchComments();
@@ -461,14 +469,33 @@ const Page: React.FC = () => {
             )}
           </div>
           {status === "futur" &&
-            filteredCommissions?.map((commission: CommissionData) => (
-              <div
-                key={commission.date.toString()}
-                className={styles.commissionBloc}
-              >
-                <CommissionBloc commission={commission} />
-              </div>
-            ))}
+            filteredCommissions?.map((commission: CommissionData) => {
+              console.log("commissions :", commission);
+              const commissionDossierIds = commission.dossiers.map(
+                (dossier: Dossier) => dossier.externalId
+              );
+              console.log("commissionDossierIds :", commissionDossierIds);
+
+              const commentsCountInfo = commentsInfo.filter((commentInfo) =>
+                commissionDossierIds.includes(
+                  JSON.stringify(commentInfo.dossierId)
+                )
+              );
+
+              console.log("commentsCountInfo :", commentsCountInfo);
+
+              return (
+                <div
+                  key={commission.date.toString()}
+                  className={styles.commissionBloc}
+                >
+                  <CommissionBloc
+                    commission={commission}
+                    commentsCountInfo={commentsCountInfo}
+                  />
+                </div>
+              );
+            })}
           {status === "past" &&
             commissionsPast.commissions?.map((commission: CommissionData) => (
               <div
