@@ -179,14 +179,12 @@ const Page: React.FC = () => {
     if (commissions && commissions.length > 0) {
       const dossiersIds: string[] = commissions
         .flatMap((commission: CommissionData) => commission.dossiers)
-        .map((dossier: DossierData) => JSON.stringify(dossier.id));
+        .map((dossier: DossierData) => dossier.externalId);
       console.log("DOSSIERS IDS!! ", dossiersIds);
       const res = await getCommentsByDossierIds(dossiersIds);
       setComments(res);
     }
   };
-
-  // console.log("COMMENTS: ! ", comments);
 
   React.useEffect(() => {
     fetchComments();
