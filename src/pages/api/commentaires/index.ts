@@ -1,3 +1,4 @@
+import type { Commentaire } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
@@ -13,6 +14,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (req.method == "GET") {
     await get(req, res);
+  } else if (req.method == "PUT") {
+    await update(req, res);
   } else if (req.method == "POST") {
     await post(req, res);
   } else if (req.method == "DELETE") {
@@ -62,6 +65,32 @@ const post: NextApiHandler = async (req, res) => {
     console.log(e);
   }
   res.status(200).json({ message: "Commentaire ajouté" });
+};
+
+const update: NextApiHandler = async (req, res) => {
+  if (typeof req.body !== "string") {
+    res.status(400).end();
+    return;
+  }
+  const parsed = JSON.parse(req.body);
+  if (!parsed) {
+    res.status(400).end();
+    return;
+  }
+  // delete parsed.source;
+  // delete parsed.enfantId;
+  // delete parsed.externalUserId;
+  // delete parsed.commentsId;
+  parsed.date = new Date();
+
+  console.log("PARSED COMMENT: !! ", parsed);
+
+  const commentaireUpdated = await prisma.commentaire.update({
+    data: parsed,
+    where: { id: parsed.id },
+  });
+
+  res.status(200).json(commentaireUpdated);
 };
 
 export default withSentry(handler);

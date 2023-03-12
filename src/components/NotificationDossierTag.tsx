@@ -1,43 +1,36 @@
-import type { Commentaire, Dossier } from "@prisma/client";
+import type { Dossier } from "@prisma/client";
 import React, { useState } from "react";
-import { BiComment } from "react-icons/bi";
 import { RiAlertFill, RiInformationFill } from "react-icons/ri";
+import type { CommentaireNotifications } from "src/lib/types";
 
 import styles from "./Tag.module.scss";
 
 interface Props {
   dossier: Dossier;
-  commentsInfo: {
-    dossierId: number;
-    commentsChildren: number;
-    commentsProject: number;
-  };
+  commentsInfo: CommentaireNotifications;
 }
 
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  console.log("commentsInfo !!: ", commentsInfo);
 
   return (
     <div
+      onMouseEnter={() => {
+        if (dossier.statusNotification === "MIS_A_JOUR") setShowInfoModal(true);
+      }}
+      onMouseLeave={() => {
+        setShowInfoModal(false);
+      }}
       className={`${styles.tag} ${
         dossier.statusNotification === "MIS_A_JOUR"
-          ? `${styles.tagRed}`
-          : dossier.statusNotification === "NOUVEAU"
           ? `${styles.tagBlue}`
+          : dossier.statusNotification === "NOUVEAU"
+          ? `${styles.tagRed}`
           : ""
       }`}
     >
       {dossier.statusNotification === "MIS_A_JOUR" ? (
-        <div
-          onMouseEnter={() => {
-            setShowInfoModal(true);
-          }}
-          onMouseLeave={() => {
-            setShowInfoModal(false);
-          }}
-          className={styles.tagCursor}
-        >
+        <div className={styles.tagCursor}>
           <RiAlertFill /> MAJ
         </div>
       ) : dossier.statusNotification === "NOUVEAU" ? (
@@ -55,25 +48,30 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
               Une ou plusieurs modifications ont étés apportées au projet
             </div>
           </div>
+          <div className={styles.separator} />
           {commentsInfo.dossierId && (
             <div className={styles.blocNotif}>
-              <div className={styles.titleNotif}>Commentaires </div>
-              {commentsInfo.commentsProject > 0 && (
+              <div className={styles.titleNotif}>Commentaires</div>
+              {commentsInfo.notificationsProject > 0 && (
                 <div>
-                  {commentsInfo.commentsProject}{" "}
-                  {commentsInfo.commentsProject > 1
+                  <span className={styles.count}>
+                    {commentsInfo.notificationsProject}
+                  </span>{" "}
+                  {commentsInfo.notificationsProject > 1
                     ? "nouveaux commentaires"
                     : "nouveau commentaire"}{" "}
                   sur le projet
                 </div>
               )}
-              {commentsInfo.commentsChildren > 0 && (
+              {commentsInfo.notificationsChildren > 0 && (
                 <div>
-                  {commentsInfo.commentsChildren}{" "}
-                  {commentsInfo.commentsChildren > 1
+                  <span className={styles.count}>
+                    {commentsInfo.notificationsChildren}
+                  </span>{" "}
+                  {commentsInfo.notificationsChildren > 1
                     ? "nouveaux commentaires"
                     : "nouveau commentaire"}{" "}
-                  sur un enfant
+                  sur un ou plusieurs enfants
                 </div>
               )}
             </div>

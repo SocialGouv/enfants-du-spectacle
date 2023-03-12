@@ -75,6 +75,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
           ...tmpPiece,
           dossierId: resDossier.id,
         });
+        return pieceCreate;
       })
     );
 

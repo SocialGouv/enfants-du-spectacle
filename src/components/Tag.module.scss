@@ -37,19 +37,31 @@
 
 .modalWrapper {
   position: absolute;
+  right: 12%;
   z-index: 99;
   padding: 15px;
   box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
-  background-color: white;
-}
-.blocNotif {
-  font-size: 16px;
-  margin-bottom: 10px;
-  font-weight: normal;
-  color: black;
-  .titleNotif {
-    margin-bottom: 4px;
-    color: #000091;
+  background-color: #E8EDFF;
+
+  .separator {
+    border-bottom: 1px solid rgba(199, 199, 199, 0.267);
+    margin: 10px 0;
+  }
+
+  .count {
     font-weight: 600;
+  }
+
+  .blocNotif {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: normal;
+    color: black;
+    .titleNotif {
+      margin-bottom: 4px;
+      color: #0063CB;
+      font-weight: 600;
+      width: fit-content;
+    }
   }
 }

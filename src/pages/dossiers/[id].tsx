@@ -36,29 +36,31 @@ const Page: React.FC = () => {
     ).catch((e) => {
       throw e;
     });
-    updateDossier(dossier, { statusNotification }, () => {
-      mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
-        throw e;
+    if (dossier.commentNotification.length === 0) {
+      updateDossier(dossier, { statusNotification }, () => {
+        mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
+          throw e;
+        });
       });
-    });
+    }
   }
 
-  if (dossier && dossier.commentNotification?.length > 0) {
-    console.log("dossier COMMENT NOTIF");
-    const commentNotification: never[] = [];
-    mutate(
-      `/api/dossiers/${dossier.id}`,
-      { ...dossier, commentNotification },
-      false
-    ).catch((e) => {
-      throw e;
-    });
-    updateDossier(dossier, { commentNotification: commentNotification }, () => {
-      mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
-        throw e;
-      });
-    });
-  }
+  // if (dossier && dossier.commentNotification.length > 0) {
+  //   console.log("dossier COMMENT NOTIF");
+  //   const commentNotification: never[] = [];
+  //   mutate(
+  //     `/api/dossiers/${dossier.id}`,
+  //     { ...dossier, commentNotification },
+  //     false
+  //   ).catch((e) => {
+  //     throw e;
+  //   });
+  //   updateDossier(dossier, { commentNotification: commentNotification }, () => {
+  //     mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
+  //       throw e;
+  //     });
+  //   });
+  // }
 
   const title = (
     <>

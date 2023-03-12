@@ -1,6 +1,7 @@
 import { Comments } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
+import { CommentaireNotifications } from "src/lib/types";
 import prisma from "../../../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -65,25 +66,37 @@ const get: NextApiHandler = async (req, res) => {
       },
     });
 
-    const commentsByDossier: {
-      dossierId: number;
-      commentsChildren: number;
-      commentsProject: number;
-    }[] = externalIds.map((externalId) => {
-      const commentsChildren = comments.filter(
-        (comment) =>
-          comment.dossierId === externalId && comment.enfantId !== null
-      ).length;
-      const commentsProject = comments.filter(
-        (comment) =>
-          comment.dossierId === externalId && comment.enfantId === null
-      ).length;
-      return {
-        dossierId: externalId,
-        commentsChildren: commentsChildren,
-        commentsProject: commentsProject,
-      };
-    });
+    const commentsByDossier: CommentaireNotifications[] = externalIds.map(
+      (externalId) => {
+        const commentsChildren = comments.filter(
+          (comment) =>
+            comment.dossierId === externalId &&
+            comment.enfantId !== null &&
+            comment.source === "SOCIETE_PROD"
+        );
+        const commentsProject = comments.filter(
+          (comment) =>
+            comment.dossierId === externalId &&
+            comment.enfantId === null &&
+            comment.source === "SOCIETE_PROD"
+        );
+        const commentsProjectSeen = commentsProject.filter(
+          (comment) => comment.seen !== null
+        );
+        const commentsChildrenSeen = commentsChildren.filter(
+          (comment) => comment.seen !== null
+        );
+        const notificationsChildren =
+          commentsChildren.length - commentsChildrenSeen.length;
+        const notificationsProject =
+          commentsProject.length - commentsProjectSeen.length;
+        return {
+          dossierId: externalId,
+          notificationsChildren,
+          notificationsProject,
+        };
+      }
+    );
 
     res.status(200).json(commentsByDossier);
   }

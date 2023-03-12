@@ -15,19 +15,16 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
+import type { CommentaireNotifications } from "src/lib/types";
 
 import styles from "./Commission.module.scss";
 
 interface DossierProps {
   dossier: DossierDataLight;
-  commentsInfo: {
-    dossierId: number;
-    commentsChildren: number;
-    commentsProject: number;
-  };
+  commentsInfo: CommentaireNotifications;
 }
-
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
+  console.log("COMMENTSINFO: ", commentsInfo);
   return (
     <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
@@ -46,9 +43,14 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
       <div>
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
-      <div>
-        <NotificationDossierTag dossier={dossier} commentsInfo={commentsInfo} />
-      </div>
+      {commentsInfo && (
+        <div>
+          <NotificationDossierTag
+            dossier={dossier}
+            commentsInfo={commentsInfo}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -57,8 +59,8 @@ interface Props {
   commission: CommissionData;
   commentsCountInfo: {
     dossierId: number;
-    commentsChildren: number;
-    commentsProject: number;
+    notificationsProject: number;
+    notificationsChildren: number;
   }[];
 }
 
@@ -71,7 +73,11 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
     .reduce((i, b) => i + b, 0);
   const { data: session } = useSession();
   return (
-    <div id={commission.id.toString()} className="card">
+    <div
+      id={commission.id.toString()}
+      className="card"
+      style={{ position: "relative" }}
+    >
       <div className={styles.commissionHeader}>
         <div className={styles.dossierTitle}>
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
@@ -107,13 +113,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
             >
               <Dossier
                 dossier={dossier}
-                commentsInfo={
-                  commentsInfo as {
-                    dossierId: number;
-                    commentsChildren: number;
-                    commentsProject: number;
-                  }
-                }
+                commentsInfo={commentsInfo as CommentaireNotifications}
               />
             </div>
           );

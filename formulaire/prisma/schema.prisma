@@ -241,6 +241,7 @@ model Comments {
   User           User?         @relation(fields: [userId], references: [id])
   userId         Int?
   externalUserId Int?
+  seen           Boolean?
   date           DateTime?
 }
 

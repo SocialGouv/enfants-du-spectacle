@@ -36,7 +36,11 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import type { DossierData, statusGroup } from "src/lib/types";
+import type {
+  CommentaireNotifications,
+  DossierData,
+  statusGroup,
+} from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
@@ -174,11 +178,7 @@ const Page: React.FC = () => {
   }, [filters, filterableSocietesProductions]);
 
   const [commentsInfo, setCommentsInfo] = React.useState<
-    {
-      dossierId: number;
-      commentsChildren: number;
-      commentsProject: number;
-    }[]
+    CommentaireNotifications[]
   >([]);
 
   const fetchComments = async () => {
@@ -186,7 +186,6 @@ const Page: React.FC = () => {
       const dossiersIds = commissions
         .flatMap((commission: CommissionData) => commission.dossiers)
         .map((dossier: DossierData) => dossier.externalId);
-      console.log("DOSSIERS IDS!! ", dossiersIds);
 
       const res = await getCommentsByDossierIds(dossiersIds as string[]);
       setCommentsInfo(res);
@@ -470,11 +469,9 @@ const Page: React.FC = () => {
           </div>
           {status === "futur" &&
             filteredCommissions?.map((commission: CommissionData) => {
-              console.log("commissions :", commission);
               const commissionDossierIds = commission.dossiers.map(
                 (dossier: Dossier) => dossier.externalId
               );
-              console.log("commissionDossierIds :", commissionDossierIds);
 
               const commentsCountInfo = commentsInfo.filter((commentInfo) =>
                 commissionDossierIds.includes(

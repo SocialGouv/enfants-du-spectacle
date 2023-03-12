@@ -11,6 +11,7 @@ import type {
   SocieteProduction,
   User,
 } from "@prisma/client";
+import { CommentaireDataLight } from "formulaire/src/lib/types";
 import type { GrandeCategorieValue } from "src/lib/categories";
 import type {
   CommissionData,
@@ -460,6 +461,9 @@ function updateDossier(
   updates: Record<string, unknown>,
   callback: (updatedDossier: DossierData) => void
 ): void {
+  console.log("UPDATE DOSSIER", dossier);
+  console.log("UPDATES", updates);
+
   window
     .fetch(`/api/dossiers/${dossier.id}`, {
       body: JSON.stringify(updates),
@@ -503,6 +507,26 @@ const createCommentaire = (commentaire: Commentaire) => {
     .fetch(`/api/commentaires`, {
       body: JSON.stringify(commentaire),
       method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const updateCommentaire = (
+  commentaire: CommentaireDataLight
+) => {
+  console.log("UPDATE COMMENTAIRE: ", commentaire);
+  window
+    .fetch(`/api/commentaires`, {
+      body: JSON.stringify(commentaire),
+      method: "PUT",
     })
     .then((r) => {
       if (!r.ok) {
@@ -835,6 +859,7 @@ export {
   searchSocieteProductionBySiret,
   searchUsers,
   sendEmail,
+  updateCommentaire,
   updateCommission,
   updateConstructDossier,
   updateDossier,

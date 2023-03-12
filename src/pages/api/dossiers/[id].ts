@@ -93,7 +93,7 @@ const update: NextApiHandler = async (req, res) => {
     cdc?: number;
     commissionId?: number;
     statusNotification?: string | null;
-    commentNotification?: CommentNotif[];
+    commentNotification?: CommentNotif[] | null;
   } = {};
   const dossierId = getId(req);
 
@@ -268,7 +268,7 @@ const update: NextApiHandler = async (req, res) => {
     updates.statusNotification = parsed.statusNotification;
   }
 
-  if (typeof parsed.commentNotification || parsed.commentNotification) {
+  if (parsed.commentNotification === null) {
     updates.commentNotification = parsed.commentNotification;
   }
 

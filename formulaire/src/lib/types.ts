@@ -12,3 +12,8 @@ export type TokenizedLink = {
     statut: string | null,
     link: string
 }
+export type CommentaireNotifications = {
+    dossierId: number;
+    notificationsProject: number;
+    notificationsChildren: number;
+  }
