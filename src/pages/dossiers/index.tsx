@@ -18,8 +18,7 @@ import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
 import { ButtonLink } from "src/components/uiComponents/button";
 import { useCommissions } from "src/lib/api";
-import type { Comments } from "src/lib/fetching/comments";
-import { getCommentsByDossierIds } from "src/lib/fetching/comments";
+import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import {
   compact,
   filterCommissions,
@@ -187,11 +186,12 @@ const Page: React.FC = () => {
         .flatMap((commission: CommissionData) => commission.dossiers)
         .map((dossier: DossierData) => dossier.externalId);
 
-      const res = await getCommentsByDossierIds(dossiersIds as string[]);
+      const res = await getCommentsNotificationsByDossierIds(
+        dossiersIds as string[]
+      );
       setCommentsInfo(res);
     }
   };
-  console.log("ALL COMMENTS:", commentsInfo);
 
   React.useEffect(() => {
     fetchComments();
@@ -478,9 +478,6 @@ const Page: React.FC = () => {
                   JSON.stringify(commentInfo.dossierId)
                 )
               );
-
-              console.log("commentsCountInfo :", commentsCountInfo);
-
               return (
                 <div
                   key={commission.date.toString()}

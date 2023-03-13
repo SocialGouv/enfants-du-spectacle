@@ -8,9 +8,18 @@ interface Props {
   children: React.ReactNode;
   className?: string;
   state?: boolean;
+  type?: string;
+  updateComments?: (type: string) => void;
 }
 
-const Accordion: React.FC<Props> = ({ title, children, className, state }) => {
+const Accordion: React.FC<Props> = ({
+  title,
+  children,
+  className,
+  state,
+  type,
+  updateComments,
+}) => {
   const [showContent, setShowContent] = React.useState<boolean>(false);
 
   useEffect(() => {
@@ -38,6 +47,9 @@ const Accordion: React.FC<Props> = ({ title, children, className, state }) => {
             color="black"
             onClick={() => {
               setShowContent(true);
+              if (type === "commentChildren" && updateComments) {
+                updateComments("children");
+              }
             }}
           />
         ) : (

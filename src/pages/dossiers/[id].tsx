@@ -7,7 +7,9 @@ import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
+import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import { updateDossier } from "src/lib/queries";
+import { CommentaireNotifications } from "src/lib/types";
 import { useSWRConfig } from "swr";
 
 const Page: React.FC = () => {
@@ -26,6 +28,24 @@ const Page: React.FC = () => {
   const isError =
     !isLoading &&
     (swrDossier.isError || !dossierId || !dossier || swrLinks.isError);
+
+  const [commentsInfo, setCommentsInfo] = React.useState<
+    CommentaireNotifications[]
+  >([]);
+
+  const fetchComments = async () => {
+    if (dossier && dossier.externalId) {
+      const dossierIds: string[] = [dossier.externalId];
+      console.log("DOSSIER IDS: ", dossierIds);
+      const res = await getCommentsNotificationsByDossierIds(dossierIds);
+      setCommentsInfo(res);
+    }
+    console.log("COMMENTS POUR CE DOSSIER: ", commentsInfo);
+  };
+
+  React.useEffect(() => {
+    fetchComments();
+  }, [dossier]);
 
   if (dossier && dossier.statusNotification !== null) {
     const statusNotification = null;

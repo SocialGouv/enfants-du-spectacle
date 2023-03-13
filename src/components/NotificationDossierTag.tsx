@@ -48,10 +48,15 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
               Une ou plusieurs modifications ont étés apportées au projet
             </div>
           </div>
-          <div className={styles.separator} />
-          {commentsInfo.dossierId && (
+          <>
             <div className={styles.blocNotif}>
-              <div className={styles.titleNotif}>Commentaires</div>
+              {commentsInfo.notificationsChildren > 0 &&
+                commentsInfo.notificationsProject > 0 && (
+                  <>
+                    <div className={styles.separator} />
+                    <div className={styles.titleNotif}>Commentaires</div>
+                  </>
+                )}
               {commentsInfo.notificationsProject > 0 && (
                 <div>
                   <span className={styles.count}>
@@ -75,7 +80,7 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
                 </div>
               )}
             </div>
-          )}
+          </>
         </div>
       )}
     </div>

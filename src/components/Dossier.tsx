@@ -1,5 +1,4 @@
 import { Icon } from "@dataesr/react-dsfr";
-import { Commentaire } from "@prisma/client";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -25,7 +24,11 @@ import {
 } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
-import { deleteDossier, sendEmail, updateCommentaire } from "src/lib/queries";
+import {
+  deleteDossier,
+  sendEmail,
+  updateCommentairesNotifications,
+} from "src/lib/queries";
 import type { DataLinks } from "src/lib/types";
 import { useSWRConfig } from "swr";
 
@@ -55,7 +58,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const fetchComments = async () => {
     if (dossier?.source === "FORM_EDS") {
       const res = await getCommentsByDossier(dossier.externalId!);
-      console.log("res comments : ", res);
       setComments(res);
     }
   };
@@ -65,19 +67,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
 
   const updateComments = () => {
-    mutate(`/api/dossiers/${dossier?.id}`, dossier, false).catch((e) => {
-      throw e;
-    });
-    const commentsProject = comments.filter(
-      (comment) =>
-        comment.enfantId === null && comment.source === "SOCIETE_PROD"
-    );
-
-    commentsProject.forEach((comment: Commentaire) => {
-      comment.seen = true;
-      updateCommentaire(comment);
-    });
-    console.log("COMMENTS LIST:", comments);
+    const commentsProjectIds: string[] = comments
+      .filter(
+        (comment) =>
+          comment.enfantId === null && comment.source === "SOCIETE_PROD"
+      )
+      .map((com) => JSON.stringify(com.id));
+    updateCommentairesNotifications(commentsProjectIds);
   };
 
   React.useEffect(() => {

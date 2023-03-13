@@ -1,4 +1,4 @@
-import { CommentaireNotifications } from "../types";
+import type { CommentaireNotifications } from "../types";
 
 export interface Comments {
   id: number;
@@ -23,8 +23,7 @@ const getCommentsByDossier = async (externalId: string) => {
   return fetching as Comments[];
 };
 
-const getCommentsByDossierIds = async (externalIds: string[]) => {
-  console.log("externalIds", externalIds);
+const getCommentsNotificationsByDossierIds = async (externalIds: string[]) => {
   const url = `/api/sync/out/commentaires/dossiers${
     externalIds.length > 0 ? "?" : ""
   }${externalIds.map((id, index) => {
@@ -57,4 +56,8 @@ const createComment = async (comment: Omit<Comments, "id">) => {
   return fetching as Comments;
 };
 
-export { createComment, getCommentsByDossier, getCommentsByDossierIds };
+export {
+  createComment,
+  getCommentsByDossier,
+  getCommentsNotificationsByDossierIds,
+};

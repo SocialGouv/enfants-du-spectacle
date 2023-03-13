@@ -24,7 +24,6 @@ interface DossierProps {
   commentsInfo: CommentaireNotifications;
 }
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
-  console.log("COMMENTSINFO: ", commentsInfo);
   return (
     <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
@@ -43,14 +42,9 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
       <div>
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
-      {commentsInfo && (
-        <div>
-          <NotificationDossierTag
-            dossier={dossier}
-            commentsInfo={commentsInfo}
-          />
-        </div>
-      )}
+      <div>
+        <NotificationDossierTag dossier={dossier} commentsInfo={commentsInfo} />
+      </div>
     </div>
   );
 };

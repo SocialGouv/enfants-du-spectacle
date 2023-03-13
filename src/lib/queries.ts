@@ -11,7 +11,6 @@ import type {
   SocieteProduction,
   User,
 } from "@prisma/client";
-import { CommentaireDataLight } from "formulaire/src/lib/types";
 import type { GrandeCategorieValue } from "src/lib/categories";
 import type {
   CommissionData,
@@ -519,13 +518,17 @@ const createCommentaire = (commentaire: Commentaire) => {
     });
 };
 
-const updateCommentaire = (
-  commentaire: CommentaireDataLight
-) => {
-  console.log("UPDATE COMMENTAIRE: ", commentaire);
+const updateCommentairesNotifications = (commentaireIds: string[]) => {
+  const url = `/api/sync/out/commentaires/notifications${
+    commentaireIds.length > 0 ? "?" : ""
+  }${commentaireIds.map((id, index) => {
+    return `${index !== 0 ? "&" : ""}commentIds=${id}`;
+  })}`
+    .split(",")
+    .join("");
   window
-    .fetch(`/api/commentaires`, {
-      body: JSON.stringify(commentaire),
+    .fetch(url, {
+      // body: JSON.stringify(commentaireIds),
       method: "PUT",
     })
     .then((r) => {
@@ -859,7 +862,7 @@ export {
   searchSocieteProductionBySiret,
   searchUsers,
   sendEmail,
-  updateCommentaire,
+  updateCommentairesNotifications,
   updateCommission,
   updateConstructDossier,
   updateDossier,
