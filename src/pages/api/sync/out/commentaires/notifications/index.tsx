@@ -17,7 +17,9 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const updateComments: NextApiHandler = async (req, res) => {
-  const commentIds = req.query.commentIds as string[];
+  const commentIds = Array.isArray(req.query.commentIds)
+    ? req.query.commentIds
+    : [req.query.commentIds];
   console.log("comment Ids to get from : ", commentIds);
 
   const url = `${process.env.API_URL_SDP}/inc/commentaires/notifications${

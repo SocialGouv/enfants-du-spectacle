@@ -148,7 +148,12 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     color="black"
                     onClick={() => {
                       setShowCommentSection(true);
-                      updateComments();
+                      const commentsProject = comments.filter(
+                        (comment) =>
+                          comment.enfantId === null &&
+                          comment.source === "SOCIETE_PROD"
+                      );
+                      if (commentsProject.length) updateComments();
                     }}
                   />
                 ) : (

@@ -58,7 +58,8 @@ const EnfantComponent: React.FC<Props> = ({
           comment.source === "SOCIETE_PROD"
       )
       .map((com) => JSON.stringify(com.id));
-    updateCommentairesNotifications(commentsChildrenIds);
+    if (commentsChildrenIds.length)
+      updateCommentairesNotifications(commentsChildrenIds);
   };
 
   const lauchUpdate = useCallback(
