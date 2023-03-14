@@ -1,3 +1,10 @@
+# [1.49.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.48.2...v1.49.0) (2023-03-14)
+
+
+### Features
+
+* notifications hover ([#480](https://github.com/SocialGouv/enfants-du-spectacle/issues/480)) ([c700137](https://github.com/SocialGouv/enfants-du-spectacle/commit/c700137a805113ce0fb85ed2efb72accaf09c804))
+
 ## [1.48.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.48.1...v1.48.2) (2023-03-07)
 
 
