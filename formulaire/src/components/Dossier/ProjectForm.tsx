@@ -318,7 +318,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
           })}
         ></ListComments>
         <InputComments
-          dossier={contextDossier.dossier}
+          dossierId={contextDossier.dossier.id}
           enfantId={null}
           parentId={null}
         ></InputComments>

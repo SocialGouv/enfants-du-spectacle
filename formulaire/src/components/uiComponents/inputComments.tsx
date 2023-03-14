@@ -7,14 +7,14 @@ import useStateContext from "src/context/StateContext";
 import { DossierData } from "src/fetching/dossiers";
 
 interface Props {
-  dossier: DossierData;
+  dossierId: number;
   enfantId: number | null;
   parentId: number | null;
 }
 
 const InputComments: React.FC<Props> = ({
   title,
-  dossier,
+  dossierId,
   enfantId,
   parentId,
 }) => {
@@ -34,15 +34,17 @@ const InputComments: React.FC<Props> = ({
 
       <ButtonLink
         onClick={() => {
-          let commentSent: Omit<Comments, "id" | "userId" | "externalUserId"> =
-            {
-              text: comment,
-              source: "SOCIETE_PROD",
-              dossierId: dossier.id,
-              enfantId: enfantId,
-              commentsId: parentId,
-              date: new Date(),
-            };
+          let commentSent: Omit<
+            Comments,
+            "id" | "userId" | "externalUserId" | "seen"
+          > = {
+            text: comment,
+            source: "SOCIETE_PROD",
+            dossierId: dossierId,
+            enfantId: enfantId,
+            commentsId: parentId,
+            date: new Date(),
+          };
           console.log("length : ", comment.length);
           if (comment.length > 2) {
             createComment(commentSent);
