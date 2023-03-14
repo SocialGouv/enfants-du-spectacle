@@ -14,16 +14,26 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const update: NextApiHandler = async (req, res) => {
-  const data = req.query as {
+  let data = req.query as {
     commentIds: string[];
     token: string;
   };
+
+  if (req.query.commentIds) {
+    if (Array.isArray(req.query.commentIds)) {
+      data.commentIds = req.query.commentIds;
+    } else {
+      data.commentIds = [req.query.commentIds];
+    }
+  }
+
+  console.log("data received : ", data.commentIds);
 
   const commentIds = data.commentIds.map((id: string) =>
     parseInt(id)
   ) as number[];
 
-  console.log("data received : ", data.commentIds);
+  console.log("commentIds : ", commentIds);
 
   if (data.token !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
