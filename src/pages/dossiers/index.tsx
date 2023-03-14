@@ -383,7 +383,7 @@ const Page: React.FC = () => {
                           </div>
                           {countNew !== 0 && (
                             <div
-                              className={`${tagStyle.tag} ${tagStyle.tagBlue}`}
+                              className={`${tagStyle.tag} ${tagStyle.tagRed}`}
                               style={{ marginRight: "6px" }}
                             >
                               <RiInformationFill /> {countNew} NOUVEAU
@@ -391,7 +391,7 @@ const Page: React.FC = () => {
                           )}
                           {countMaj !== 0 && (
                             <div
-                              className={`${tagStyle.tag} ${tagStyle.tagRed}`}
+                              className={`${tagStyle.tag} ${tagStyle.tagBlue}`}
                             >
                               <RiAlertFill /> {countMaj} MAJ
                             </div>

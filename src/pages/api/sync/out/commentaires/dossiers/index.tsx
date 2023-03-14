@@ -20,17 +20,8 @@ const getCommentsNotificationsByDossierIds: NextApiHandler = async (
   req,
   res
 ) => {
-  const dossierIds =
-    req.query.externalId.length > 1
-      ? (req.query.externalId as string[])
-      : [req.query.externalId];
-
-  console.log(
-    "external Ids to get from : ",
-    req.query.externalId.length > 1
-      ? req.query.externalId
-      : [req.query.externalId]
-  );
+  const dossierIds = req.query.externalId as string[];
+  console.log("external Ids to get from : ", dossierIds);
 
   const url = `${process.env.API_URL_SDP}/inc/commentaires${
     dossierIds.length > 0 ? "?" : ""

@@ -9,7 +9,7 @@ import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
 import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import { updateDossier } from "src/lib/queries";
-import { CommentaireNotifications } from "src/lib/types";
+import type { CommentaireNotifications } from "src/lib/types";
 import { useSWRConfig } from "swr";
 
 const Page: React.FC = () => {
@@ -29,24 +29,6 @@ const Page: React.FC = () => {
     !isLoading &&
     (swrDossier.isError || !dossierId || !dossier || swrLinks.isError);
 
-  const [commentsInfo, setCommentsInfo] = React.useState<
-    CommentaireNotifications[]
-  >([]);
-
-  const fetchComments = async () => {
-    if (dossier && dossier.externalId) {
-      const dossierIds: string[] = [dossier.externalId];
-      console.log("DOSSIER IDS: ", dossierIds);
-      const res = await getCommentsNotificationsByDossierIds(dossierIds);
-      setCommentsInfo(res);
-    }
-    console.log("COMMENTS POUR CE DOSSIER: ", commentsInfo);
-  };
-
-  React.useEffect(() => {
-    fetchComments();
-  }, [dossier]);
-
   if (dossier && dossier.statusNotification !== null) {
     const statusNotification = null;
     mutate(
@@ -56,31 +38,12 @@ const Page: React.FC = () => {
     ).catch((e) => {
       throw e;
     });
-    if (dossier.commentNotification.length === 0) {
-      updateDossier(dossier, { statusNotification }, () => {
-        mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
-          throw e;
-        });
+    updateDossier(dossier, { statusNotification }, () => {
+      mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
+        throw e;
       });
-    }
+    });
   }
-
-  // if (dossier && dossier.commentNotification.length > 0) {
-  //   console.log("dossier COMMENT NOTIF");
-  //   const commentNotification: never[] = [];
-  //   mutate(
-  //     `/api/dossiers/${dossier.id}`,
-  //     { ...dossier, commentNotification },
-  //     false
-  //   ).catch((e) => {
-  //     throw e;
-  //   });
-  //   updateDossier(dossier, { commentNotification: commentNotification }, () => {
-  //     mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
-  //       throw e;
-  //     });
-  //   });
-  // }
 
   const title = (
     <>

@@ -12,29 +12,27 @@ interface Props {
 
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const hasNotifications =
+    commentsInfo?.notificationsChildren !== 0 ||
+    commentsInfo?.notificationsProject !== 0;
 
   return (
-    <div
-      onMouseEnter={() => {
-        if (dossier.statusNotification === "MIS_A_JOUR") setShowInfoModal(true);
-      }}
-      onMouseLeave={() => {
-        setShowInfoModal(false);
-      }}
-      className={`${styles.tag} ${
-        dossier.statusNotification === "MIS_A_JOUR"
-          ? `${styles.tagBlue}`
-          : dossier.statusNotification === "NOUVEAU"
-          ? `${styles.tagRed}`
-          : ""
-      }`}
-    >
-      {dossier.statusNotification === "MIS_A_JOUR" ? (
-        <div className={styles.tagCursor}>
+    <div>
+      {dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
+        <div
+          className={`${styles.tag} ${styles.tagCursor} ${styles.tagBlue}`}
+          onMouseEnter={() => {
+            if (dossier.statusNotification === "MIS_A_JOUR" || hasNotifications)
+              setShowInfoModal(true);
+          }}
+          onMouseLeave={() => {
+            setShowInfoModal(false);
+          }}
+        >
           <RiAlertFill /> MAJ
         </div>
       ) : dossier.statusNotification === "NOUVEAU" ? (
-        <div>
+        <div className={`${styles.tag} ${styles.tagRed}`}>
           <RiInformationFill /> NOUVEAU
         </div>
       ) : (
@@ -42,21 +40,22 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
       )}
       {showInfoModal && (
         <div className={styles.modalWrapper}>
-          <div className={styles.blocNotif}>
-            <div className={styles.titleNotif}>Projet</div>
-            <div>
-              Une ou plusieurs modifications ont étés apportées au projet
+          {dossier.statusNotification === "MIS_A_JOUR" && (
+            <div className={styles.blocNotif}>
+              <div className={styles.titleNotif}>Projet</div>
+              <div>
+                Une ou plusieurs modifications ont étés apportées au projet
+              </div>
             </div>
-          </div>
+          )}
           <>
             <div className={styles.blocNotif}>
-              {commentsInfo.notificationsChildren > 0 &&
-                commentsInfo.notificationsProject > 0 && (
-                  <>
-                    <div className={styles.separator} />
-                    <div className={styles.titleNotif}>Commentaires</div>
-                  </>
-                )}
+              {(commentsInfo.notificationsChildren > 0 ||
+                commentsInfo.notificationsProject > 0) && (
+                <>
+                  <div className={styles.titleNotif}>Commentaires</div>
+                </>
+              )}
               {commentsInfo.notificationsProject > 0 && (
                 <div>
                   <span className={styles.count}>

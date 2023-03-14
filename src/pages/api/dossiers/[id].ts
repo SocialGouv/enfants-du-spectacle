@@ -1,4 +1,4 @@
-import type { CommentNotif, Dossier, StatutDossier } from "@prisma/client";
+import type { Dossier, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
@@ -93,7 +93,6 @@ const update: NextApiHandler = async (req, res) => {
     cdc?: number;
     commissionId?: number;
     statusNotification?: string | null;
-    commentNotification?: CommentNotif[] | null;
   } = {};
   const dossierId = getId(req);
 
@@ -266,10 +265,6 @@ const update: NextApiHandler = async (req, res) => {
     parsed.statusNotification === null
   ) {
     updates.statusNotification = parsed.statusNotification;
-  }
-
-  if (parsed.commentNotification === null) {
-    updates.commentNotification = parsed.commentNotification;
   }
 
   console.log("updates : ", updates);
