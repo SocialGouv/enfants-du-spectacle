@@ -4,8 +4,8 @@ import React, { useCallback, useEffect } from "react";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
-import { Comments } from "src/lib/fetching/comments";
-import { updateEnfant } from "src/lib/queries";
+import type { Comments } from "src/lib/fetching/comments";
+import { updateCommentairesNotifications, updateEnfant } from "src/lib/queries";
 
 import Accordion from "./Accordion";
 import InputComments from "./inputComments";
@@ -16,11 +16,17 @@ interface Props {
   enfant: Enfant;
   dataLinks: Record<string, unknown>;
   dossier: Dossier;
-  comments: Comments[]
-  actionComments: (comment: Comments) => void
+  comments: Comments[];
+  actionComments: (comment: Comments) => void;
 }
 
-const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier, comments, actionComments }) => {
+const EnfantComponent: React.FC<Props> = ({
+  enfant,
+  dataLinks,
+  dossier,
+  comments,
+  actionComments,
+}) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
@@ -43,6 +49,18 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier, comments
   useEffect(() => {
     setMountedRef(true);
   });
+
+  const updateComments = () => {
+    const commentsChildrenIds: string[] = comments
+      .filter(
+        (comment) =>
+          comment.enfantId === parseInt(enfant.externalId!) &&
+          comment.source === "SOCIETE_PROD"
+      )
+      .map((com) => JSON.stringify(com.id));
+    if (commentsChildrenIds.length)
+      updateCommentairesNotifications(commentsChildrenIds);
+  };
 
   const lauchUpdate = useCallback(
     _.debounce((enfantToUpdate: Enfant) => {
@@ -135,14 +153,28 @@ const EnfantComponent: React.FC<Props> = ({ enfant, dataLinks, dossier, comments
           </Info>
         </div>
       </Accordion>
-      <Accordion title={"Commentaires"} className="accordionSmallText">
-        {dossier.source === 'FORM_EDS' &&
+      <Accordion
+        title={"Commentaires"}
+        className="accordionSmallText"
+        type="commentChildren"
+        updateComments={updateComments}
+      >
+        {dossier.source === "FORM_EDS" && (
           <>
-            <ListComments comments={comments.filter((comment) => {return comment.enfantId === parseInt(enfant.externalId as string)})}></ListComments>
-            <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={parseInt(enfant.externalId as string)} parentId={null} action={actionComments}></InputComments>
+            <ListComments
+              comments={comments.filter((comment) => {
+                return comment.enfantId === parseInt(enfant.externalId!);
+              })}
+            />
+            <InputComments
+              dossierId={parseInt(dossier.externalId!)}
+              enfantId={parseInt(enfant.externalId!)}
+              parentId={null}
+              action={actionComments}
+            />
           </>
-        }
-        </Accordion>
+        )}
+      </Accordion>
       <Accordion title="Afficher les adresses" className="accordionSmallText">
         <div className={styles.adressesGrid}>
           <form

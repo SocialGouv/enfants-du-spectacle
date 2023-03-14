@@ -1,3 +1,4 @@
+import type { Commentaire } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";

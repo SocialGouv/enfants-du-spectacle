@@ -157,6 +157,7 @@ model Commentaire {
   user      User?    @relation(fields: [userId], references: [id])
   dossierId Int
   dossier   Dossier? @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  seen      Boolean?
 }
 
 enum TypeEmploi {

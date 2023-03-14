@@ -116,16 +116,16 @@ const update: NextApiHandler = async (req, res) => {
     eval(`stateMachine.${transition}()`);
     updates.statut = stateMachine.state;
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
-    if(dossier.source === 'FORM_EDS') {
+    if (dossier.source === "FORM_EDS") {
       const url = `${process.env.API_URL_SDP}/inc/dossiers`;
       const fetching = await fetch(url, {
-          body: JSON.stringify({dossier: dossier, statut: updates.statut}),
-          method: "PUT",
+        body: JSON.stringify({ dossier: dossier, statut: updates.statut }),
+        method: "PUT",
       }).then(async (r) => {
-          if (!r.ok) {
-              return {error: 'Something went wrong'}
-          }
-          return r.json();
+        if (!r.ok) {
+          return { error: "Something went wrong" };
+        }
+        return r.json();
       });
       console.log(fetching);
     } else {
@@ -246,7 +246,6 @@ const update: NextApiHandler = async (req, res) => {
         }
       }
     }
-    
   }
 
   if (typeof parsed.userId === "number" || parsed.userId === null) {
@@ -261,7 +260,10 @@ const update: NextApiHandler = async (req, res) => {
     updates.cdc = parsed.cdc;
   }
 
-  if (typeof parsed.statusNotification === null || parsed.statusNotification === null) {
+  if (
+    typeof parsed.statusNotification === null ||
+    parsed.statusNotification === null
+  ) {
     updates.statusNotification = parsed.statusNotification;
   }
 

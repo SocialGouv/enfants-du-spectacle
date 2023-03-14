@@ -15,14 +15,15 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
+import type { CommentaireNotifications } from "src/lib/types";
 
 import styles from "./Commission.module.scss";
 
 interface DossierProps {
   dossier: DossierDataLight;
+  commentsInfo: CommentaireNotifications;
 }
-
-const Dossier: React.FC<DossierProps> = ({ dossier }) => {
+const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
   return (
     <div className={`${styles.dossierGrid} itemGrid`}>
       <div>
@@ -42,7 +43,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
       </div>
       <div>
-        <NotificationDossierTag dossier={dossier} />
+        <NotificationDossierTag dossier={dossier} commentsInfo={commentsInfo} />
       </div>
     </div>
   );
@@ -50,9 +51,14 @@ const Dossier: React.FC<DossierProps> = ({ dossier }) => {
 
 interface Props {
   commission: CommissionData;
+  commentsCountInfo: {
+    dossierId: number;
+    notificationsProject: number;
+    notificationsChildren: number;
+  }[];
 }
 
-const Commission: React.FC<Props> = ({ commission }) => {
+const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
@@ -61,7 +67,11 @@ const Commission: React.FC<Props> = ({ commission }) => {
     .reduce((i, b) => i + b, 0);
   const { data: session } = useSession();
   return (
-    <div id={commission.id.toString()} className="card">
+    <div
+      id={commission.id.toString()}
+      className="card"
+      style={{ position: "relative" }}
+    >
       <div className={styles.commissionHeader}>
         <div className={styles.dossierTitle}>
           Commission du <b>{frenchDateText(commission.date)}</b> -{" "}
@@ -85,14 +95,23 @@ const Commission: React.FC<Props> = ({ commission }) => {
         <div>Notifications</div>
       </div>
       <div>
-        {commission.dossiers.map((dossier) => (
-          <div
-            style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
-            key={dossier.id}
-          >
-            <Dossier dossier={dossier} />
-          </div>
-        ))}
+        {commission.dossiers.map((dossier) => {
+          const commentsInfo = commentsCountInfo.find(
+            (comment) =>
+              JSON.stringify(comment.dossierId) === dossier.externalId
+          );
+          return (
+            <div
+              style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
+              key={dossier.id}
+            >
+              <Dossier
+                dossier={dossier}
+                commentsInfo={commentsInfo as CommentaireNotifications}
+              />
+            </div>
+          );
+        })}
       </div>
       <div className={styles.actionGrid}>
         {session && session.dbUser.role !== "MEMBRE" && (

@@ -13,6 +13,8 @@ import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
 import { useDossier } from "src/lib/api";
+import type { Comments } from "src/lib/fetching/comments";
+import { getCommentsByDossier } from "src/lib/fetching/comments";
 import {
   birthDateToFrenchAge,
   EMPLOIS_CATEGORIES,
@@ -22,16 +24,20 @@ import {
 } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
-import { deleteDossier, sendEmail } from "src/lib/queries";
+import {
+  deleteDossier,
+  sendEmail,
+  updateCommentairesNotifications,
+} from "src/lib/queries";
 import type { DataLinks } from "src/lib/types";
+import { useSWRConfig } from "swr";
 
 import Accordion from "./Accordion";
 import CountPieces from "./CountPieces";
+import InputComments from "./inputComments";
+import ListComments from "./ListComments";
 import Table from "./Table";
 import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
-import { Comments, getCommentsByDossier } from "src/lib/fetching/comments";
-import ListComments from "./ListComments";
-import InputComments from "./inputComments";
 
 interface Props {
   dossierId: number;
@@ -45,27 +51,38 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     React.useState<boolean>(false);
   const [showCompanySection, setShowCompanySection] =
     React.useState<boolean>(false);
-  const [comments, setComments] = React.useState<Comments[]>([])
+  const { mutate } = useSWRConfig();
+
+  const [comments, setComments] = React.useState<Comments[]>([]);
 
   const fetchComments = async () => {
-    if(dossier?.source === 'FORM_EDS') {
-      const res = await getCommentsByDossier(dossier?.externalId as string)
-      console.log('res comments : ', res)
-      setComments(res)
+    if (dossier?.source === "FORM_EDS") {
+      const res = await getCommentsByDossier(dossier.externalId!);
+      setComments(res);
     }
-  }
+  };
 
   const processComment = (comment: Comments) => {
-    setComments([...comments, comment])
-  }
+    setComments([...comments, comment]);
+  };
+
+  const updateComments = () => {
+    const commentsProjectIds: string[] = comments
+      .filter(
+        (comment) =>
+          comment.enfantId === null && comment.source === "SOCIETE_PROD"
+      )
+      .map((com) => JSON.stringify(com.id));
+    updateCommentairesNotifications(commentsProjectIds);
+  };
 
   React.useEffect(() => {
-    fetchComments()
-  }, [])
+    fetchComments();
+  }, []);
 
   React.useEffect(() => {
-    console.log('comments : ', comments)
-  }, comments)
+    console.log("comments : ", comments);
+  }, comments);
 
   const tableChildHeaders: string[] = [
     "Rôles",
@@ -131,6 +148,12 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     color="black"
                     onClick={() => {
                       setShowCommentSection(true);
+                      const commentsProject = comments.filter(
+                        (comment) =>
+                          comment.enfantId === null &&
+                          comment.source === "SOCIETE_PROD"
+                      );
+                      if (commentsProject.length) updateComments();
                     }}
                   />
                 ) : (
@@ -143,15 +166,27 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 )}
               </div>
-              {dossier.source === 'FORM_EDS' && showCommentSection && (
+              {dossier.source === "FORM_EDS" && showCommentSection && (
                 <>
-                  <ListComments comments={comments.filter((comment) => {return comment.enfantId === null})}></ListComments>
-                  <InputComments dossierId={parseInt(dossier.externalId as string)} enfantId={null} parentId={null} action={processComment}></InputComments>
+                  <ListComments
+                    comments={comments.filter((comment) => {
+                      return comment.enfantId === null;
+                    })}
+                  />
+                  <InputComments
+                    dossierId={parseInt(dossier.externalId!)}
+                    enfantId={null}
+                    parentId={null}
+                    action={processComment}
+                  />
                 </>
               )}
-              {dossier.source !== 'FORM_EDS' && showCommentSection && 
-                <span>Les commentaires ne sont pas disponibles pour les dossiers déposés sur Démarches Simplifiées.</span>
-              }
+              {dossier.source !== "FORM_EDS" && showCommentSection && (
+                <span>
+                  Les commentaires ne sont pas disponibles pour les dossiers
+                  déposés sur Démarches Simplifiées.
+                </span>
+              )}
             </div>
             <div className={`${styles.bottomItemFoldable}`}>
               <div className={styles.flexRow}>
@@ -304,16 +339,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
                         <td>{enf.nomPersonnage}</td>
                         <td>
-                        {dossier.source === 'FORM_EDS' && (
-                          <CountPieces
-                            piecesJustif={dataLinks.enfants
-                              .find(
-                                (data) =>
-                                  data.id === parseInt(enf.externalId ?? "")
-                              )
-                              ?.piecesDossier.map((tmp) => tmp.statut)}
-                          />
-                        )}
+                          {dossier.source === "FORM_EDS" && (
+                            <CountPieces
+                              piecesJustif={dataLinks.enfants
+                                .find(
+                                  (data) =>
+                                    data.id === parseInt(enf.externalId ?? "")
+                                )
+                                ?.piecesDossier.map((tmp) => tmp.statut)}
+                            />
+                          )}
                         </td>
                       </tr>
                     ))}

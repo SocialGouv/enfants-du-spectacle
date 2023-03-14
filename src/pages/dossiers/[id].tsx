@@ -1,4 +1,5 @@
 import { Icon, Title } from "@dataesr/react-dsfr";
+import { Source } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import { FaHome } from "react-icons/fa";
@@ -6,9 +7,10 @@ import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
-import { useSWRConfig } from "swr";
+import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import { updateDossier } from "src/lib/queries";
-import { Source } from "@prisma/client";
+import type { CommentaireNotifications } from "src/lib/types";
+import { useSWRConfig } from "swr";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -17,15 +19,18 @@ const Page: React.FC = () => {
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
-  const { ...swrLinks } = RefreshLinks(dossier?.number?.toString() ?? dossier?.externalId as string, dossier?.source as Source);
+  const { ...swrLinks } = RefreshLinks(
+    dossier?.number?.toString() ?? dossier?.externalId!,
+    dossier?.source!
+  );
 
   const isLoading = swrDossier.isLoading || swrLinks.isLoading;
   const isError =
     !isLoading &&
     (swrDossier.isError || !dossierId || !dossier || swrLinks.isError);
 
-  if( dossier && dossier?.statusNotification !== null) {
-    let statusNotification = null
+  if (dossier && dossier.statusNotification !== null) {
+    const statusNotification = null;
     mutate(
       `/api/dossiers/${dossier.id}`,
       { ...dossier, statusNotification },
@@ -34,7 +39,7 @@ const Page: React.FC = () => {
       throw e;
     });
     updateDossier(dossier, { statusNotification }, () => {
-      mutate(`/api/dossiers/${dossier?.id}`).catch((e) => {
+      mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
         throw e;
       });
     });

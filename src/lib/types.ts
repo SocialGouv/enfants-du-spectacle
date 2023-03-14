@@ -43,6 +43,12 @@ interface CommentaireDataLight {
   dossierId: number;
 }
 
+interface CommentaireNotifications {
+  dossierId: number;
+  notificationsProject: number;
+  notificationsChildren: number;
+}
+
 type CommissionData = Commission & { dossiers: DossierData[] };
 
 type SendListData = SendList & { user: User };
@@ -70,6 +76,7 @@ interface DataLinks {
 export type {
   CommentaireData,
   CommentaireDataLight,
+  CommentaireNotifications,
   CommissionData,
   DataLinks,
   DossierData,

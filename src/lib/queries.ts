@@ -460,6 +460,9 @@ function updateDossier(
   updates: Record<string, unknown>,
   callback: (updatedDossier: DossierData) => void
 ): void {
+  console.log("UPDATE DOSSIER", dossier);
+  console.log("UPDATES", updates);
+
   window
     .fetch(`/api/dossiers/${dossier.id}`, {
       body: JSON.stringify(updates),
@@ -503,6 +506,30 @@ const createCommentaire = (commentaire: Commentaire) => {
     .fetch(`/api/commentaires`, {
       body: JSON.stringify(commentaire),
       method: "POST",
+    })
+    .then((r) => {
+      if (!r.ok) {
+        throw Error(`got status ${r.status}`);
+      }
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const updateCommentairesNotifications = (commentaireIds: string[]) => {
+  const url = `/api/sync/out/commentaires/notifications${
+    commentaireIds.length > 0 ? "?" : ""
+  }${commentaireIds.map((id, index) => {
+    return `${index !== 0 ? "&" : ""}commentIds=${id}`;
+  })}`
+    .split(",")
+    .join("");
+  window
+    .fetch(url, {
+      // body: JSON.stringify(commentaireIds),
+      method: "PUT",
     })
     .then((r) => {
       if (!r.ok) {
@@ -835,6 +862,7 @@ export {
   searchSocieteProductionBySiret,
   searchUsers,
   sendEmail,
+  updateCommentairesNotifications,
   updateCommission,
   updateConstructDossier,
   updateDossier,

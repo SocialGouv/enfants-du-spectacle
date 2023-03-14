@@ -7,6 +7,10 @@
         color: black;
     }
 
+    .itemDossier {
+        position: relative;
+    }
+
     .headRow {
         display: grid;
         grid-template-columns: 10% 20% 20% 18% 12% 15%;
@@ -100,13 +104,15 @@
         flex-direction: column;
         font-size: 16px;
         position: absolute;
-        top: 50%;
+        top: 5%;
+        left: 0;
+        transform: translateX(-20%);
         opacity: 1;
         animation-name: fadeInOpacity;
         animation-iteration-count: 1;
         animation-timing-function: ease-in;
         animation-duration: .2s;
-        transform: translateY(5%);
+        z-index: 9999;
     }
         @keyframes fadeInOpacity {
             0% {
@@ -130,6 +136,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        text-align: center;
     }
     .containerLoader {
         position: absolute;
