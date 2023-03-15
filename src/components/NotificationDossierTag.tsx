@@ -13,16 +13,19 @@ interface Props {
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const hasNotifications =
-    commentsInfo?.notificationsChildren !== 0 ||
-    commentsInfo?.notificationsProject !== 0;
-
+    (commentsInfo?.notificationsChildren !== 0 ||
+      commentsInfo?.notificationsProject !== 0) &&
+    dossier.source === "FORM_EDS";
   return (
     <div>
       {dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
         <div
           className={`${styles.tag} ${styles.tagCursor} ${styles.tagBlue}`}
           onMouseEnter={() => {
-            if (dossier.statusNotification === "MIS_A_JOUR" || hasNotifications)
+            if (
+              dossier.source === "FORM_EDS" &&
+              (dossier.statusNotification === "MIS_A_JOUR" || hasNotifications)
+            )
               setShowInfoModal(true);
           }}
           onMouseLeave={() => {
