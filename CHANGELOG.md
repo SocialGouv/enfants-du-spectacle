@@ -1,3 +1,10 @@
+# [1.50.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.49.2...v1.50.0) (2023-03-16)
+
+
+### Features
+
+* add notifications for demandeur + getNotif only for EDS dossiers ([#484](https://github.com/SocialGouv/enfants-du-spectacle/issues/484)) ([2c7b3de](https://github.com/SocialGouv/enfants-du-spectacle/commit/2c7b3de9c7487ed84dd3918522ed4f281ff08640))
+
 ## [1.49.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.49.1...v1.49.2) (2023-03-15)
 
 
