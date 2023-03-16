@@ -1,8 +1,8 @@
-import { Demandeur, Dossier, PieceDossier } from "@prisma/client";
+import { Comments, Demandeur, Dossier, PieceDossier } from "@prisma/client";
 import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
 import React from "react";
-import { statusGroup } from "src/lib/types";
+import { CommentaireNotifications, statusGroup } from "src/lib/types";
 import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
@@ -15,9 +15,10 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import { deleteDossier, duplicateDossierEds } from "../../fetching/dossiers";
+import { getComments } from "src/fetching/commentaires";
+
 import {
   createDemandeur,
-  deleteDemandeur,
   updateDemandeur,
   getDemandeur,
 } from "../../fetching/demandeur";
@@ -48,6 +49,24 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     setCountDossiers(res.countCurrent);
     action(res.countEnCours, res.countTermines);
   };
+
+  const [comments, setComments] = React.useState<Comments[]>([]);
+
+  const fetchComments = async () => {
+    if (dossiers && dossiers.length > 0) {
+      const commentsList = await Promise.all(
+        dossiers.map(async (dossier: DossierData) => {
+          const resComments = await getComments(dossier.id as number);
+          return resComments;
+        })
+      );
+      setComments(commentsList.flat());
+    }
+  };
+
+  React.useEffect(() => {
+    fetchComments();
+  }, [dossiers]);
 
   const [indexItem, setIndexItem] = React.useState<number>();
 
@@ -153,116 +172,136 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
               order={order}
             ></OrderableItem>
             <div className={styles.itemHead}>Actions</div>
-            <div className={styles.itemHead}>Pièces justificatives</div>
+            <div className={styles.itemHead}>Notifications</div>
           </div>
-          {dossiers.map((dossier, index) => (
-            <div className={styles.rowDossier} key={index}>
-              <div className={styles.itemDossier}>{dossier.id}</div>
-              <div className={styles.itemDossier}>{dossier.nom}</div>
-              <div className={styles.itemDossier}>
-                <LabelStatus status={dossier.statut}></LabelStatus>
-              </div>
-              <div className={styles.itemDossier}>
-                {dossier.dateDerniereModification
-                  ? frenchDateText(dossier.dateDerniereModification)
-                  : ""}
-                {showDialogue && indexItem === dossier.id && (
-                  <div className={styles.confirmDialogueWrapper}>
-                    <div className={styles.confirmDialogue}>
-                      <div>Voulez-vous supprimer ce dossier ? </div>
-                      <div className={styles.btnList}>
-                        <ButtonLink
-                          onClick={() => {
-                            setShowDialogue(false);
-                            removeDossier(dossier);
-                          }}
-                        >
-                          Oui
-                        </ButtonLink>
-                        <ButtonLink
-                          onClick={() => {
-                            setShowDialogue(false);
-                          }}
-                        >
-                          Non
-                        </ButtonLink>
+          {dossiers.map((dossier, index) => {
+            const commentsNotifications: CommentaireNotifications = {
+              dossierId: dossier.id,
+              notificationsProject: comments?.filter(
+                (comment) =>
+                  comment.dossierId === dossier.id &&
+                  comment.seen !== true &&
+                  comment.source === "INSTRUCTEUR" &&
+                  comment.enfantId === null
+              ).length,
+              notificationsChildren: comments?.filter(
+                (comment) =>
+                  comment.dossierId === dossier.id &&
+                  comment.seen !== true &&
+                  comment.source === "INSTRUCTEUR" &&
+                  comment.enfantId !== null
+              ).length,
+            };
+            return (
+              <div className={styles.rowDossier} key={index}>
+                <div className={styles.itemDossier}>{dossier.id}</div>
+                <div className={styles.itemDossier}>{dossier.nom}</div>
+                <div className={styles.itemDossier}>
+                  <LabelStatus status={dossier.statut}></LabelStatus>
+                </div>
+                <div className={styles.itemDossier}>
+                  {dossier.dateDerniereModification
+                    ? frenchDateText(dossier.dateDerniereModification)
+                    : ""}
+                  {showDialogue && indexItem === dossier.id && (
+                    <div className={styles.confirmDialogueWrapper}>
+                      <div className={styles.confirmDialogue}>
+                        <div>Voulez-vous supprimer ce dossier ? </div>
+                        <div className={styles.btnList}>
+                          <ButtonLink
+                            onClick={() => {
+                              setShowDialogue(false);
+                              removeDossier(dossier);
+                            }}
+                          >
+                            Oui
+                          </ButtonLink>
+                          <ButtonLink
+                            onClick={() => {
+                              setShowDialogue(false);
+                            }}
+                          >
+                            Non
+                          </ButtonLink>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              <div className={`${styles.itemDossier} ${styles.actionsItem}`}>
-                <ButtonLink
-                  light={true}
-                  onClick={() => {
-                    setDropdownVisible(!dropdownVisible);
-                    setIndexItem(dossier.id);
-                  }}
-                >
-                  Actions
-                  <TiArrowSortedDown
-                    size={"20px"}
-                    style={{
-                      marginLeft: "6px",
-                      marginTop: "2px",
+                  )}
+                </div>
+                <div className={`${styles.itemDossier} ${styles.actionsItem}`}>
+                  <ButtonLink
+                    light={true}
+                    onClick={() => {
+                      setDropdownVisible(!dropdownVisible);
+                      setIndexItem(dossier.id);
                     }}
-                  />
-                </ButtonLink>
-                {dropdownVisible && indexItem === dossier.id && (
-                  <div className={styles.dropdown}>
-                    <ul>
-                      <li
-                        onClick={() => {
-                          router.push(`/dossier/${dossier.id}`);
-                        }}
-                      >
-                        <BiEditAlt
-                          size={"20px"}
-                          style={{ marginRight: "10px" }}
-                        />
-                        Éditer
-                      </li>
-                      <li
-                        onClick={async () => {
-                          duplicateDossier(dossier);
-                        }}
-                      >
-                        <HiOutlineDocumentDuplicate
-                          size={"20px"}
-                          style={{ marginRight: "10px" }}
-                        />
-                        Dupliquer
-                      </li>
-                      <li
-                        onClick={() => {
-                          setShowDialogue(true);
-                        }}
-                      >
-                        <BiTrash
-                          size={"20px"}
-                          style={{ marginRight: "10px" }}
-                        />
-                        Supprimer
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                  >
+                    Actions
+                    <TiArrowSortedDown
+                      size={"20px"}
+                      style={{
+                        marginLeft: "6px",
+                        marginTop: "2px",
+                      }}
+                    />
+                  </ButtonLink>
+                  {dropdownVisible && indexItem === dossier.id && (
+                    <div className={styles.dropdown}>
+                      <ul>
+                        <li
+                          onClick={() => {
+                            router.push(`/dossier/${dossier.id}`);
+                          }}
+                        >
+                          <BiEditAlt
+                            size={"20px"}
+                            style={{ marginRight: "10px" }}
+                          />
+                          Éditer
+                        </li>
+                        <li
+                          onClick={async () => {
+                            duplicateDossier(dossier);
+                          }}
+                        >
+                          <HiOutlineDocumentDuplicate
+                            size={"20px"}
+                            style={{ marginRight: "10px" }}
+                          />
+                          Dupliquer
+                        </li>
+                        <li
+                          onClick={() => {
+                            setShowDialogue(true);
+                          }}
+                        >
+                          <BiTrash
+                            size={"20px"}
+                            style={{ marginRight: "10px" }}
+                          />
+                          Supprimer
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.itemDossier}>
+                  <CountPieces
+                    commentsNotifications={commentsNotifications}
+                    dossier={dossier}
+                    piecesJustif={dossier.piecesDossier
+                      .map((piece) => piece.statut)
+                      .concat(
+                        dossier.enfants
+                          .map((enfant) => enfant.piecesDossier)
+                          .flat()
+                          .map((piece) => piece.statut)
+                      )}
+                  ></CountPieces>
+                </div>
               </div>
-              <div className={styles.itemDossier}>
-                <CountPieces
-                  dossier={dossier}
-                  piecesJustif={dossier.piecesDossier
-                    .map((piece) => piece.statut)
-                    .concat(
-                      dossier.enfants
-                        .map((enfant) => enfant.piecesDossier)
-                        .flat()
-                        .map((piece) => piece.statut)
-                    )}
-                ></CountPieces>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className={styles.pagination}>
           {[...Array(Math.ceil(countDossiers / 10))].map((e, i) => (
