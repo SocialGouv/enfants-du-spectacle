@@ -7,9 +7,44 @@
         padding: 0.5rem;
         display: flex;
         align-items: center;
+        cursor: pointer;
 
         img {
-            margin-right: 0.5rem,
+            padding-right: 6px !important
         }
     }
+    .modalWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start !important;
+        position: absolute;
+        right: 9%;
+        transform: translateY(75%);
+        z-index: 99;
+        padding: 15px;
+        box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+        background-color: #E8EDFF;
+        .count {
+          font-weight: 600;
+            margin-right: 4px;
+        }
+      
+        .bloc {
+          margin-bottom: 10px;
+        }
+        .blocNotif {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+          font-size: 16px;
+          font-weight: normal;
+          color: #0063CB;
+          .titleNotif {
+            margin-bottom: 4px;
+            font-weight: 600;
+            width: fit-content;
+          }
+        }
+      }
 }
