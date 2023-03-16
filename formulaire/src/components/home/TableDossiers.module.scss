@@ -8,7 +8,6 @@
     }
 
     .itemDossier {
-        position: relative;
     }
 
     .headRow {
@@ -27,6 +26,7 @@
     }
 
     .rowDossier {
+        position: relative;
         display: grid;
         grid-template-columns: 10% 20% 20% 18% 13% 15%;
         background-color: var(--dark-grey-fr);

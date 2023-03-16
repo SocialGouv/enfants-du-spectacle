@@ -184,6 +184,7 @@ const Page: React.FC = () => {
     if (commissions && commissions.length > 0) {
       const dossiersIds = commissions
         .flatMap((commission: CommissionData) => commission.dossiers)
+        .filter((dossier) => dossier.source === "FORM_EDS")
         .map((dossier: DossierData) => dossier.externalId);
 
       const res = await getCommentsNotificationsByDossierIds(

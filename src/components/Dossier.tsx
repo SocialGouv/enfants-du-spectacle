@@ -51,7 +51,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     React.useState<boolean>(false);
   const [showCompanySection, setShowCompanySection] =
     React.useState<boolean>(false);
-  const { mutate } = useSWRConfig();
 
   const [comments, setComments] = React.useState<Comments[]>([]);
 
@@ -89,7 +88,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     "Nom et Prénom",
     "Age",
     "Personnage",
-    "Pièces justificatives",
+    "Notifications",
   ];
 
   if (isLoading) return <IconLoader />;
@@ -324,34 +323,48 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
                         typeEmploi.value.includes(e.typeEmploi)
                     )
-                    .map((enf, idx) => (
-                      <tr key={idx}>
-                        <td>
-                          <a href={`#` + enf.id.toString()}>
-                            {typeEmploiLabel(enf.typeEmploi)}
-                          </a>
-                        </td>
-                        <td>
-                          <a href={`#` + enf.id.toString()}>
-                            {enf.nom} {enf.prenom}
-                          </a>
-                        </td>
-                        <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
-                        <td>{enf.nomPersonnage}</td>
-                        <td>
-                          {dossier.source === "FORM_EDS" && (
-                            <CountPieces
-                              piecesJustif={dataLinks.enfants
-                                .find(
-                                  (data) =>
-                                    data.id === parseInt(enf.externalId ?? "")
-                                )
-                                ?.piecesDossier.map((tmp) => tmp.statut)}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                    .map((enf, idx) => {
+                      let countCommentsNotification = 0;
+                      if (enf.externalId !== null) {
+                        countCommentsNotification = comments.filter(
+                          (comment) =>
+                            comment.enfantId === parseInt(enf.externalId) &&
+                            comment.source === "SOCIETE_PROD" &&
+                            comment.seen !== true
+                        ).length;
+                      }
+                      return (
+                        <tr key={idx}>
+                          <td>
+                            <a href={`#` + enf.id.toString()}>
+                              {typeEmploiLabel(enf.typeEmploi)}
+                            </a>
+                          </td>
+                          <td>
+                            <a href={`#` + enf.id.toString()}>
+                              {enf.nom} {enf.prenom}
+                            </a>
+                          </td>
+                          <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
+                          <td>{enf.nomPersonnage}</td>
+                          <td>
+                            {dossier.source === "FORM_EDS" && (
+                              <CountPieces
+                                countCommentsNotification={
+                                  countCommentsNotification
+                                }
+                                piecesJustif={dataLinks.enfants
+                                  .find(
+                                    (data) =>
+                                      data.id === parseInt(enf.externalId ?? "")
+                                  )
+                                  ?.piecesDossier.map((tmp) => tmp.statut)}
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </Table>
               </Accordion>
             ) : (
@@ -407,7 +420,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         className={styles.bloc}
                         style={{ marginBottom: "44px", padding: "15px" }}
                       >
-                        <Accordion title={childInfo}>
+                        <Accordion title={childInfo} type={"commentChildren"}>
                           <Enfant
                             enfant={enfant}
                             dataLinks={dataLinks}
