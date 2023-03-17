@@ -1,6 +1,7 @@
-import { Comments } from "@prisma/client";
+import { Comments, PieceDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
+import { getPieces } from "src/fetching/pieces";
 import { CommentaireNotifications } from "src/lib/types";
 import prisma from "../../../../../src/lib/prismaClient";
 
@@ -58,6 +59,26 @@ const get: NextApiHandler = async (req, res) => {
   if (data.token !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
+    //get pieces justificatifs
+    const piecesJustifDossier = await prisma.pieceDossier.findMany({
+      where: {
+        dossierId: {
+          in: externalIds,
+        },
+      },
+    });
+
+    const enfants = await prisma.enfant.findMany({
+      include: {
+        piecesDossier: true,
+      },
+      where: {
+        dossierId: {
+          in: externalIds,
+        },
+      },
+    });
+
     const comments = await prisma.comments.findMany({
       where: {
         dossierId: {
@@ -66,8 +87,24 @@ const get: NextApiHandler = async (req, res) => {
       },
     });
 
-    const commentsByDossier: CommentaireNotifications[] = externalIds.map(
+    const notificationsByDossier: CommentaireNotifications[] = externalIds.map(
       (externalId) => {
+        const piecesDossier = piecesJustifDossier.filter(
+          (piece) =>
+            piece.dossierId === externalId &&
+            piece.statut !== "REFUSE" &&
+            piece.statut !== "VALIDE"
+        ).length;
+
+        const piecesEnfant = enfants
+          .filter((enfant) => enfant.dossierId === externalId)
+          .flatMap((enfant) => {
+            const piecesUnseen = enfant.piecesDossier.filter(
+              (piece) => piece.statut !== "REFUSE" && piece.statut !== "VALIDE"
+            );
+            return piecesUnseen;
+          }).length;
+
         const commentsChildren = comments.filter(
           (comment) =>
             comment.dossierId === externalId &&
@@ -94,11 +131,13 @@ const get: NextApiHandler = async (req, res) => {
           dossierId: externalId,
           notificationsChildren,
           notificationsProject,
+          newPiecesEnfant: piecesEnfant,
+          newPiecesDossier: piecesDossier,
         };
       }
     );
 
-    res.status(200).json(commentsByDossier);
+    res.status(200).json(notificationsByDossier);
   }
 };
 

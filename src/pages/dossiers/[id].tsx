@@ -1,5 +1,4 @@
 import { Icon, Title } from "@dataesr/react-dsfr";
-import { Source } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import { FaHome } from "react-icons/fa";
@@ -7,9 +6,7 @@ import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import { RefreshLinks, useDossier } from "src/lib/api";
-import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import { updateDossier } from "src/lib/queries";
-import type { CommentaireNotifications } from "src/lib/types";
 import { useSWRConfig } from "swr";
 
 const Page: React.FC = () => {
