@@ -1,3 +1,10 @@
+# [1.51.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.50.1...v1.51.0) (2023-03-17)
+
+
+### Features
+
+* add notifications for pieces justificatives in instructeur view ([#485](https://github.com/SocialGouv/enfants-du-spectacle/issues/485)) ([7735e66](https://github.com/SocialGouv/enfants-du-spectacle/commit/7735e66947452a9173bc4d0d28da5f1219493c2e))
+
 ## [1.50.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.50.0...v1.50.1) (2023-03-17)
 
 
