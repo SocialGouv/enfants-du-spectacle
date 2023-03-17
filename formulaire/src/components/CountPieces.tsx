@@ -1,8 +1,8 @@
 import { STATUT_PIECE } from "@prisma/client";
-import Image from "next/image";
 import React from "react";
 import { CommentaireNotifications } from "src/lib/types";
 import styles from "./CountPieces.module.scss";
+import { RiAlertFill } from "react-icons/ri";
 
 interface Props {
   piecesJustif: (STATUT_PIECE | null)[];
@@ -34,13 +34,8 @@ const CountPieces: React.FC<Props> = ({
           }}
           className={styles.cardRefused}
         >
-          <Image
-            src={`/images/refused.svg`}
-            alt="Supprimer"
-            width={20}
-            height={20}
-          />
-          Informations
+          <RiAlertFill style={{ marginRight: "4px" }} />
+          MAJ
         </div>
       )}
       {showInfoModal && (

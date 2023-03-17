@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
   .cardRefused {
-      color: red;
-      background-color: #FFE9E9;
-      padding: 0.5rem;
+      color: #0063CB;
+      font-weight: bold;
+      background-color: #E8EDFF;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px !important;
       display: flex;
       align-items: center;
       cursor: pointer;
