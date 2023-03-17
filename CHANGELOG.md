@@ -1,3 +1,10 @@
+# [1.52.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.51.0...v1.52.0) (2023-03-17)
+
+
+### Features
+
+* add styles and change tag name ([#487](https://github.com/SocialGouv/enfants-du-spectacle/issues/487)) ([77931e1](https://github.com/SocialGouv/enfants-du-spectacle/commit/77931e153bd24d49079f54066a2f0cfdf1d382b6))
+
 # [1.51.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.50.1...v1.51.0) (2023-03-17)
 
 
