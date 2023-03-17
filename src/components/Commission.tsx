@@ -51,11 +51,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
 
 interface Props {
   commission: CommissionData;
-  commentsCountInfo: {
-    dossierId: number;
-    notificationsProject: number;
-    notificationsChildren: number;
-  }[];
+  commentsCountInfo: CommentaireNotifications[];
 }
 
 const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {

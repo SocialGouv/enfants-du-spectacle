@@ -47,6 +47,8 @@ interface CommentaireNotifications {
   dossierId: number;
   notificationsProject: number;
   notificationsChildren: number;
+  newPiecesEnfant: number;
+  newPiecesDossier: number;
 }
 
 type CommissionData = Commission & { dossiers: DossierData[] };
