@@ -107,6 +107,18 @@
   }
 }
 
+.buttonUp {
+  margin: 20px 0;
+  position: sticky;
+  text-align: right;
+  padding: 0 0.5rem;
+  float: right;
+  bottom: 25px;
+  img {
+      cursor: pointer;
+  }
+}
+
 .societeSummaryBloc {
   @extend .bloc;
   padding-top: 0;
