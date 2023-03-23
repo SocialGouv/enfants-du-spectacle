@@ -1,3 +1,10 @@
+# [1.53.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.52.0...v1.53.0) (2023-03-23)
+
+
+### Features
+
+* add button arrow up ([#488](https://github.com/SocialGouv/enfants-du-spectacle/issues/488)) ([3eca4eb](https://github.com/SocialGouv/enfants-du-spectacle/commit/3eca4eb558fdc53c11f69ff5339b66fd488867d4))
+
 # [1.52.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.51.0...v1.52.0) (2023-03-17)
 
 
