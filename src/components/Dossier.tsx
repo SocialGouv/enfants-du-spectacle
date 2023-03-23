@@ -1,4 +1,6 @@
 import { Icon } from "@dataesr/react-dsfr";
+import Image from "next/image";
+import Link from "next/link";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -12,6 +14,7 @@ import IconLoader from "src/components/IconLoader";
 import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
 import { JustificatifsDossier } from "src/components/Justificatifs";
+import logoArrowUp from "src/images/arrow-up.svg";
 import { useDossier } from "src/lib/api";
 import type { Comments } from "src/lib/fetching/comments";
 import { getCommentsByDossier } from "src/lib/fetching/comments";
@@ -30,7 +33,6 @@ import {
   updateCommentairesNotifications,
 } from "src/lib/queries";
 import type { DataLinks } from "src/lib/types";
-import { useSWRConfig } from "swr";
 
 import Accordion from "./Accordion";
 import CountPieces from "./CountPieces";
@@ -51,6 +53,11 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     React.useState<boolean>(false);
   const [showCompanySection, setShowCompanySection] =
     React.useState<boolean>(false);
+  const [scrollPosition, setScrollPosition] = React.useState(0);
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+  };
 
   const [comments, setComments] = React.useState<Comments[]>([]);
 
@@ -83,6 +90,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     console.log("comments : ", comments);
   }, comments);
 
+  React.useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const tableChildHeaders: string[] = [
     "Rôles",
     "Nom et Prénom",
@@ -97,7 +112,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   return (
     <>
       {session.dbUser.role !== "MEMBRE" && (
-        <DossierActionBar dossierId={dossierId} />
+        <div id="summaryBloc">
+          <DossierActionBar dossierId={dossierId} />
+        </div>
       )}
       <Accordion title={dossier.nom} className="accordionSpacing" state={true}>
         <div className={styles.dossierSummaryBloc}>
@@ -374,7 +391,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         ))}
       </div>
 
-      <div style={{ padding: "44px 0" }}>
+      <div style={{ padding: "44px 0 10px 0" }}>
         {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
         {TYPES_EMPLOI.map((typeEmploi, index) => (
           <span key={index}>
@@ -439,6 +456,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
           </span>
         ))}
       </div>
+      {scrollPosition > 400 && (
+        <div className={styles.buttonUp}>
+          <Link href={`#summaryBloc`}>
+            <Image src={logoArrowUp} alt="Supprimer" width={30} height={30} />
+          </Link>
+        </div>
+      )}
     </>
   );
 };
