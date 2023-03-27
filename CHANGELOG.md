@@ -1,3 +1,10 @@
+# [1.55.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.54.0...v1.55.0) (2023-03-27)
+
+
+### Features
+
+* deploy metabase ([#493](https://github.com/SocialGouv/enfants-du-spectacle/issues/493)) ([43f9996](https://github.com/SocialGouv/enfants-du-spectacle/commit/43f9996466383dd27008138039b284a351d40511))
+
 # [1.54.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.53.0...v1.54.0) (2023-03-27)
 
 
