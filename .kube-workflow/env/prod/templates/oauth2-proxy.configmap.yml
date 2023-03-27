@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: oauth2-proxy-configmap
-  namespace: enfants-du-spectable
+  namespace: enfants-du-spectacle
 data:
   OAUTH2_PROXY_PROVIDER: github
   OAUTH2_PROXY_GITHUB_ORG: SocialGouv
