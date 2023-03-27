@@ -1,3 +1,10 @@
+## [1.55.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.1...v1.55.2) (2023-03-27)
+
+
+### Bug Fixes
+
+* **k8s:** typo ([#494](https://github.com/SocialGouv/enfants-du-spectacle/issues/494)) ([d74fef0](https://github.com/SocialGouv/enfants-du-spectacle/commit/d74fef089de12746a70681fae712b3430c6e2859))
+
 ## [1.55.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.0...v1.55.1) (2023-03-27)
 
 
