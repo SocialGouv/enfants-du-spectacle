@@ -55,9 +55,6 @@ const get: NextApiHandler = async (req, res) => {
       where: {
         AND: [
           {
-            userId: session?.dbUser.id,
-          },
-          {
             nom: {
               contains: req.query.search as string,
               mode: "insensitive",
@@ -70,6 +67,16 @@ const get: NextApiHandler = async (req, res) => {
                   (STATUS_EN_COURS as StatutDossier[])) ||
                 (STATUS_TERMINES as StatutDossier[]),
             },
+          },
+        ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
           },
         ],
       },

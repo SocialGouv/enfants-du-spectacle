@@ -3,7 +3,12 @@ import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
 import React from "react";
 import { CommentaireNotifications, statusGroup } from "src/lib/types";
-import { DossierData, getDossiers } from "../../fetching/dossiers";
+import {
+  DossierData,
+  getDossier,
+  getDossiers,
+  updateDossier,
+} from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
 import CountPieces from "../CountPieces";
@@ -14,6 +19,7 @@ import styles from "./TableDossiers.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
+import { FiUsers } from "react-icons/fi";
 import { deleteDossier, duplicateDossierEds } from "../../fetching/dossiers";
 import { getComments } from "src/fetching/commentaires";
 
@@ -23,6 +29,8 @@ import {
   getDemandeur,
 } from "../../fetching/demandeur";
 import { createPiece, getPieces } from "../../fetching/pieces";
+import { Button } from "@dataesr/react-dsfr";
+import { getUserByEmail } from "src/fetching/users";
 
 interface Props {
   search: string;
@@ -33,11 +41,14 @@ interface Props {
 const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const router = useRouter();
   const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
+  const [type, setType] = React.useState<"delete" | "share" | "">("");
   const [showLoader, setShowLoader] = React.useState<boolean>(false);
   const [dossiers, setDossiers] = React.useState<DossierData[]>([]);
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
+  const [emailExists, setEmailExists] = React.useState<boolean>(false);
   const [countDossiers, setCountDossiers] = React.useState<number>(0);
   const [page, setPage] = React.useState<number>(1);
+  const [collaboratorEmail, setCollaboratorEmail] = React.useState<string>("");
   const [termOrdered, setTermToOrder] = React.useState<keyof Dossier>(
     "dateDerniereModification"
   );
@@ -48,6 +59,42 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     setDossiers(res.dossiers);
     setCountDossiers(res.countCurrent);
     action(res.countEnCours, res.countTermines);
+  };
+
+  const shareDossier = async (dossier: Dossier) => {
+    setShowLoader(true);
+    setEmailExists(false);
+
+    // getDossier
+    const res = await getDossier(dossier.id.toString());
+    const currentDossier = res.dossier;
+
+    // check if user exists
+    let userId = await getUserByEmail(collaboratorEmail);
+
+    if (userId) {
+      if (!currentDossier.collaboratorIds.includes(userId)) {
+        updateDossier({
+          ...currentDossier,
+          collaboratorIds: [...currentDossier.collaboratorIds, userId],
+        } as Dossier);
+        setShowDialogue(false);
+      } else {
+        setEmailExists(true);
+        setShowLoader(false);
+      }
+    }
+    setShowLoader(false);
+  };
+
+  const checkEmail = () => {
+    let re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (collaboratorEmail && re.test(collaboratorEmail)) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const [comments, setComments] = React.useState<Comments[]>([]);
@@ -205,26 +252,89 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                     : ""}
                   {showDialogue && indexItem === dossier.id && (
                     <div className={styles.confirmDialogueWrapper}>
-                      <div className={styles.confirmDialogue}>
-                        <div>Voulez-vous supprimer ce dossier ? </div>
-                        <div className={styles.btnList}>
-                          <ButtonLink
-                            onClick={() => {
-                              setShowDialogue(false);
-                              removeDossier(dossier);
-                            }}
-                          >
-                            Oui
-                          </ButtonLink>
-                          <ButtonLink
-                            onClick={() => {
-                              setShowDialogue(false);
-                            }}
-                          >
-                            Non
-                          </ButtonLink>
+                      {type === "delete" ? (
+                        <div className={styles.confirmDialogue}>
+                          <div>{`Voulez-vous supprimer le dossier`}</div>
+                          <div className={styles.dossierName}>
+                            {dossier.nom} ?
+                          </div>
+                          <div className={styles.btnList}>
+                            <ButtonLink
+                              onClick={() => {
+                                setShowDialogue(false);
+                                removeDossier(dossier);
+                              }}
+                            >
+                              Oui
+                            </ButtonLink>
+                            <ButtonLink
+                              onClick={() => {
+                                setShowDialogue(false);
+                              }}
+                            >
+                              Non
+                            </ButtonLink>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className={styles.confirmDialogue}>
+                          <div className={styles.titleModal}>
+                            Partager le dossier
+                            <span className={styles.dossierName}>
+                              {dossier.nom}
+                            </span>
+                            avec un collaborateur
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              position: "relative",
+                              width: "100%",
+                            }}
+                          >
+                            <input
+                              value={collaboratorEmail}
+                              onChange={(e) => {
+                                setCollaboratorEmail(e.target.value);
+                              }}
+                              type="email"
+                              id="prenom"
+                              name="prenom"
+                              placeholder="email du collaborateur"
+                              className="inputText"
+                            />
+                            {showLoader && (
+                              <div className={styles.loaderEmailCheck}>
+                                <IconLoader />
+                              </div>
+                            )}
+                          </div>
+                          {emailExists && (
+                            <div className={styles.warningMessage}>
+                              Le dossier est déjà partagé avec ce collaborateur
+                            </div>
+                          )}
+                          <div className={styles.btnList}>
+                            <Button
+                              disabled={!checkEmail()}
+                              onClick={async () => {
+                                setCollaboratorEmail("");
+                                shareDossier(dossier);
+                              }}
+                            >
+                              Partager le dossier
+                            </Button>
+                            <ButtonLink
+                              onClick={() => {
+                                setShowDialogue(false);
+                                setEmailExists(false);
+                              }}
+                            >
+                              Annuler
+                            </ButtonLink>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -234,6 +344,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                     onClick={() => {
                       setDropdownVisible(!dropdownVisible);
                       setIndexItem(dossier.id);
+                      setShowDialogue(false);
                     }}
                   >
                     Actions
@@ -271,8 +382,24 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           Dupliquer
                         </li>
                         <li
+                          onClick={async () => {
+                            setShowDialogue(true);
+                            setType("share");
+                            setDropdownVisible(false);
+                            console.log(dossier.collaboratorIds);
+                          }}
+                        >
+                          <FiUsers
+                            size={"20px"}
+                            style={{ marginRight: "10px" }}
+                          />
+                          Partager
+                        </li>
+                        <li
                           onClick={() => {
                             setShowDialogue(true);
+                            setType("delete");
+                            setDropdownVisible(false);
                           }}
                         >
                           <BiTrash
