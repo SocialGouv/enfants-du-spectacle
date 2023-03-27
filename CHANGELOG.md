@@ -1,3 +1,15 @@
+# [1.54.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.53.0...v1.54.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* remove cronjob ([#492](https://github.com/SocialGouv/enfants-du-spectacle/issues/492)) ([950a5ff](https://github.com/SocialGouv/enfants-du-spectacle/commit/950a5ff6a57691dca71c6d00dc7772e680359abe))
+
+
+### Features
+
+* add metabase for production ([#489](https://github.com/SocialGouv/enfants-du-spectacle/issues/489)) ([fc6d0df](https://github.com/SocialGouv/enfants-du-spectacle/commit/fc6d0df6fd5cb6ef945230a3befd981ae2b3a0b5))
+
 # [1.53.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.52.0...v1.53.0) (2023-03-23)
 
 
