@@ -184,6 +184,7 @@ const ROLES_USERS = [
   { label: "Administrateur", value: "ADMIN" },
   { label: "Instructeur", value: "INSTRUCTEUR" },
   { label: "Membre commission", value: "MEMBRE" },
+  { label: "Médecin travail", value: "MEDECIN" },
 ];
 
 const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];

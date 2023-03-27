@@ -198,6 +198,12 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
 }
 
+enum TypeConsultation {
+  THALIE
+  GENERALISTE
+  UNNEEDED
+}
+
 model Enfant {
   id                          Int                  @id @default(autoincrement())
   prenom                      String
@@ -226,6 +232,7 @@ model Enfant {
   nomRepresentant2            String?
   prenomRepresentant2         String?
   externalId                  String?              @unique
+  typeConsultation            TypeConsultation?
 }
 
 // for next-auth
@@ -234,6 +241,7 @@ enum Role {
   ADMIN
   INSTRUCTEUR
   MEMBRE
+  MEDECIN
 }
 
 model SendList {

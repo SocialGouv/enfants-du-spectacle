@@ -59,6 +59,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
       prenom: "Nouvel",
       dossierId: contextDossier.dossier.id,
       typeEmploi: "ROLE_1",
+      typeConsultation: "UNNEEDED",
       nomPersonnage: "",
       montantCachet: 0,
       remunerationTotale: 0,
@@ -302,14 +303,14 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
 
       {scrollPosition > 450 && (
         <div className={styles.buttonUp}>
-          <Link href={`#menu-dossier`}>
+          <a href={`#menu-dossier`}>
             <Image
               src={`/images/arrow-up.svg`}
               alt="Supprimer"
               width={30}
               height={30}
             />
-          </Link>
+          </a>
         </div>
       )}
     </div>

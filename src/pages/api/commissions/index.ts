@@ -10,7 +10,8 @@ const handler: NextApiHandler = async (req, res) => {
     !session ||
     (session.dbUser.role !== "ADMIN" &&
       session.dbUser.role !== "INSTRUCTEUR" &&
-      session.dbUser.role !== "MEMBRE")
+      session.dbUser.role !== "MEMBRE" &&
+      session.dbUser.role !== "MEDECIN")
   ) {
     res.status(401).end();
     return;
@@ -36,7 +37,7 @@ const get: NextApiHandler = async (req, res) => {
       ? await getPastCommissions()
       : departements == "all"
       ? withChild == "true"
-        ? await getUpcomingCommissionsNotEmpty()
+        ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
   res.status(200).json(superjson.stringify(commissions));
@@ -83,8 +84,9 @@ const getUpcomingCommissions = async () => {
   });
 };
 
-const getUpcomingCommissionsNotEmpty = async () => {
-  console.log('upcoming not empty')
+const getUpcomingCommissionsNotEmpty = async (req) => {
+  const session = await getSession({ req });
+  console.log('upcoming not empty !!!')
   return prisma.commission.findMany({
     include: {
       dossiers: {
@@ -93,7 +95,11 @@ const getUpcomingCommissionsNotEmpty = async () => {
           societeProduction: true,
           user: true,
           demandeur: true,
-          enfants: true,
+          enfants: {
+            select: {
+              typeConsultation: 'THALIE'
+            }
+          },
           piecesDossier: true,
         },
         orderBy: { id: "desc" },
@@ -102,9 +108,23 @@ const getUpcomingCommissionsNotEmpty = async () => {
     orderBy: { date: "asc" },
     where: {
       date: { gte: new Date() },
-      dossiers: { some: {} },
+      dossiers: {
+        some: 
+        session.dbUser.role !== "MEDECIN" ? 
+        {}
+        :
+        {
+          enfants: {
+            some: {
+              typeConsultation: {
+                equals: "THALIE"
+              }
+            }
+          }
+        }
+      }
     },
-  });
+  })
 };
 
 const getUpcomingCommissionsByDepartement = async (departements: string) => {

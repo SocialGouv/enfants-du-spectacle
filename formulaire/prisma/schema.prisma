@@ -183,6 +183,12 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
 }
 
+enum TypeConsultation {
+  THALIE
+  GENERALISTE
+  UNNEEDED
+}
+
 model Enfant {
   id                          Int                  @id @default(autoincrement())
   prenom                      String?
@@ -220,6 +226,7 @@ model Enfant {
   populatedBy                 User?                @relation(fields: [userId], references: [id])
   userId                      Int?
   Comments                    Comments[]
+  typeConsultation            TypeConsultation?
 }
 
 enum Sourcecomment {

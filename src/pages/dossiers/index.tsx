@@ -52,7 +52,8 @@ const Page: React.FC = () => {
     session.status === "authenticated" &&
     session.data.dbUser.role !== "ADMIN" &&
     session.data.dbUser.role !== "INSTRUCTEUR" &&
-    session.data.dbUser.role !== "MEMBRE"
+    session.data.dbUser.role !== "MEMBRE" &&
+    session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({
       callbackUrl: "",

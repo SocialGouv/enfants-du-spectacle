@@ -195,6 +195,8 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
           </div>
         </div>
 
+        <h5 className={styles.h5Spacer}>Pièces justificatives du projet</h5>
+
         <div className={styles.blocForm}>
           <InputFile
             id={"SYNOPSIS"}

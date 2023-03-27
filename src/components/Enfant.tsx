@@ -135,6 +135,9 @@ const EnfantComponent: React.FC<Props> = ({
                 }}
               />
             </div>
+            <div>
+              {enfant.typeConsultation}
+            </div>
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>

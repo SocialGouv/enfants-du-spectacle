@@ -44,6 +44,7 @@
 
         .blocForm {
             margin-top:4rem;
+            padding: 0 2rem;
         }
 
         textarea {
@@ -61,8 +62,8 @@
 
         .byThreeForm {
             display: grid;
-            grid-template-columns: 31% 31% 31%;
-            grid-gap: 2%;
+            grid-template-columns: 33% 33% 33%;
+            grid-gap: 0%;
 
             .blocForm {
                 margin-top:2rem;
@@ -79,6 +80,16 @@
             }
         }
 
+        .h5Spacer {
+            margin-top: 4rem;
+        }
+
+    }
+
+    .radioMedecine {
+        input {
+            margin-right: 1rem;
+        }
     }
 
     label {

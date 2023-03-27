@@ -12,17 +12,18 @@ interface Props {
 const ListComments: React.FC<Props> = ({ comments, title }) => {
 
     return (
-        <div className={styles.listComments}>
-        
-            <h5>{title}</h5>
+        <>
+            <h5 className={styles.h5Spacer}>{title}</h5>
+            <div className={styles.listComments}>
 
-            {comments.length === 0 ?
-            <span>Aucun commentaire.</span>
-            :
-            comments.map((comment) => (
-                <CardComment comment={comment} key={comment.id}></CardComment>
-            ))}
-        </div>
+                {comments.length === 0 ?
+                <span>Aucun commentaire.</span>
+                :
+                comments.map((comment) => (
+                    <CardComment comment={comment} key={comment.id}></CardComment>
+                ))}
+            </div>
+        </>
     );
 };
 

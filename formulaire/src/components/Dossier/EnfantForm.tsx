@@ -255,7 +255,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
 
         <div className={styles.blocForm}>
           <label htmlFor="nomPersonnage" className="mb-2 italic">
-            Nom du personnage incarné par l&apos;enfant
+            Nom du personnage incarné
           </label>
           <input
             onChange={handleFormEnfant}
@@ -287,6 +287,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
+
+      <h5 className={styles.h5Spacer}>Périodes de travail liées à l'enfant</h5>
 
       <div className={styles.blocForm}>
         <label htmlFor="periodeTravail" className="mb-2 italic">
@@ -331,8 +333,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
-      <br />
-      <br />
+
+      <h5 className={styles.h5Spacer}>Rémunérations</h5>
 
       <div className={styles.byThreeForm}>
         <div className={styles.blocForm}>
@@ -435,6 +437,148 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
+
+      <h5 className={styles.h5Spacer}>Avis médical d'aptitude</h5>
+
+      <div className={styles.blocForm}>
+          <label htmlFor="remunerationTotale" className="mb-2 italic">
+            L'enfant doit consulter : 
+          </label>
+          <br />
+          <br />
+          <label className={styles.radioMedecine}>
+            <input
+              type="radio"
+              value="Male"
+              checked={enfantTmp.typeConsultation === "UNNEEDED"}
+              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "UNNEEDED"})}}
+            />
+            Consultation inutile
+            <p className={styles.smallText}>Cet enfant ne nécessite pas la visite d'un médecin.</p>
+          </label>
+          <label className={styles.radioMedecine}>
+            <input
+              type="radio"
+              value="Male"
+              checked={enfantTmp.typeConsultation === "THALIE"}
+              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "THALIE"})}}
+            />
+            Un médecin de Thalie Santé
+            <p className={styles.smallText}>L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative.</p>
+          </label>
+          <label className={styles.radioMedecine}>
+            <input
+              type="radio"
+              value="Male"
+              checked={enfantTmp.typeConsultation === "GENERALISTE"}
+              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "GENERALISTE"})}}
+            />
+            Un médecin généraliste
+            <p className={styles.smallText}>Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative.</p>
+          </label>
+      </div>
+
+      <h5 className={styles.h5Spacer}>Informations de contact liées à l'enfant</h5>
+
+      <div className={styles.byTwoForm}>
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant1" className="mb-2 italic">
+            Nom du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.nomRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="nomRepresentant1"
+            name="nomRepresentant1"
+            className="inputText"
+          />
+        </div>
+
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant2" className="mb-2 italic">
+            Nom du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.nomRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="nomRepresentant2"
+            name="nomRepresentant2"
+            className="inputText"
+          />
+        </div>
+
+
+        <div className={styles.blocForm}>
+          <label htmlFor="prenomRepresentant1" className="mb-2 italic">
+            Prénom du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.prenomRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="prenomRepresentant1"
+            name="prenomRepresentant1"
+            className="inputText"
+          />
+        </div>
+
+
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant2" className="mb-2 italic">
+            Prénom du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.prenomRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="prenomRepresentant2"
+            name="prenomRepresentant2"
+            className="inputText"
+          />
+        </div>
+
+
+        <div className={styles.blocForm}>
+          <label htmlFor="adresseRepresentant1" className="mb-2 italic">
+            Adresse du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.adresseRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="adresseRepresentant1"
+            name="adresseRepresentant1"
+            className="inputText"
+          />
+        </div>
+
+
+        <div className={styles.blocForm}>
+          <label htmlFor="adresseRepresentant2" className="mb-2 italic">
+            Adresse du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.adresseRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="adresseRepresentant2"
+            name="adresseRepresentant2"
+            className="inputText"
+          />
+        </div>
+
+
+      </div>
+
+      <h5 className={styles.h5Spacer}>Pièces justificatives liées à l'enfant</h5>
 
       <div className={styles.blocForm}>
         <InputFile
