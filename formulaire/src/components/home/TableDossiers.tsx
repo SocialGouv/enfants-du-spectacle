@@ -46,6 +46,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const [dossiers, setDossiers] = React.useState<DossierData[]>([]);
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
   const [emailExists, setEmailExists] = React.useState<boolean>(false);
+  const [dossierSent, setDossierSent] = React.useState<boolean>(false);
   const [countDossiers, setCountDossiers] = React.useState<number>(0);
   const [page, setPage] = React.useState<number>(1);
   const [collaboratorEmail, setCollaboratorEmail] = React.useState<string>("");
@@ -78,7 +79,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
           ...currentDossier,
           collaboratorIds: [...currentDossier.collaboratorIds, userId],
         } as Dossier);
-        setShowDialogue(false);
+        setDossierSent(true);
       } else {
         setEmailExists(true);
         setShowLoader(false);
@@ -314,6 +315,12 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                               Le dossier est déjà partagé avec ce collaborateur
                             </div>
                           )}
+                          {dossierSent && !emailExists && (
+                            <div className={styles.successMessage}>
+                              Le dossier a bien été partagé avec le
+                              collaborateur
+                            </div>
+                          )}
                           <div className={styles.btnList}>
                             <Button
                               disabled={!checkEmail()}
@@ -330,7 +337,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                                 setEmailExists(false);
                               }}
                             >
-                              Annuler
+                              Fermer
                             </ButtonLink>
                           </div>
                         </div>
@@ -386,7 +393,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                             setShowDialogue(true);
                             setType("share");
                             setDropdownVisible(false);
-                            console.log(dossier.collaboratorIds);
+                            setDossierSent(false);
                           }}
                         >
                           <FiUsers
