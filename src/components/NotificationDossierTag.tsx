@@ -22,7 +22,11 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
 
   return (
     <div>
-      {dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
+      {dossier.statusNotification === "NOUVEAU" ? (
+        <div className={`${styles.tag} ${styles.tagRed}`}>
+          <RiInformationFill /> NOUVEAU
+        </div>
+      ) : dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
         <div
           className={`${styles.tag} ${styles.tagCursor} ${styles.tagBlue}`}
           onMouseEnter={() => {
@@ -34,10 +38,6 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
           }}
         >
           <RiAlertFill /> MAJ
-        </div>
-      ) : dossier.statusNotification === "NOUVEAU" ? (
-        <div className={`${styles.tag} ${styles.tagRed}`}>
-          <RiInformationFill /> NOUVEAU
         </div>
       ) : (
         ""
