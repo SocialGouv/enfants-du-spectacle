@@ -7,16 +7,17 @@ import styles from "./Tag.module.scss";
 
 interface Props {
   dossier: Dossier;
-  commentsInfo: CommentaireNotifications;
+  commentsInfo: CommentaireNotifications | null;
 }
 
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const hasNotifications =
-    (commentsInfo?.notificationsChildren > 0 ||
-      commentsInfo?.notificationsProject > 0 ||
-      commentsInfo?.newPiecesDossier > 0 ||
-      commentsInfo?.newPiecesEnfant > 0 ||
+    commentsInfo &&
+    (commentsInfo.notificationsChildren > 0 ||
+      commentsInfo.notificationsProject > 0 ||
+      commentsInfo.newPiecesDossier > 0 ||
+      commentsInfo.newPiecesEnfant > 0 ||
       dossier.statusNotification === "MIS_A_JOUR") &&
     dossier.source === "FORM_EDS";
 
