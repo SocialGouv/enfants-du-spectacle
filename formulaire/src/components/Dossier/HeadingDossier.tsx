@@ -16,25 +16,27 @@ const HeadingDossier: React.FC<Props> = ({ dossier }) => {
 
   return (
     <div className={styles.headingDossier}>
-      <Container>
-        <div className={styles.topRow}>
-          <h4>Enfants du spectacle</h4>
-          <div className={styles.rightSection}>
-            <LabelStatus
-              status={dossier.statut}
-              wihteBackground={true}
-            ></LabelStatus>
-            {dossier.userId === session?.dbUser.id &&
-              dossier.collaboratorIds.length > 0 && (
-                <CollaboratorsList dossier={dossier} />
-              )}
+      {dossier && (
+        <Container>
+          <div className={styles.topRow}>
+            <h4>Enfants du spectacle</h4>
+            <div className={styles.rightSection}>
+              <LabelStatus
+                status={dossier.statut}
+                wihteBackground={true}
+              ></LabelStatus>
+              {dossier.userId === session?.dbUser.id &&
+                dossier.collaboratorIds.length > 0 && (
+                  <CollaboratorsList dossier={dossier} />
+                )}
+            </div>
           </div>
-        </div>
-        <h2>
-          Dossier n° {dossier.id} en brouillon depuis le{" "}
-          {frenchDateText(dossier.dateDerniereModification)}
-        </h2>
-      </Container>
+          <h2>
+            Dossier n° {dossier.id} en brouillon depuis le{" "}
+            {frenchDateText(dossier.dateDerniereModification)}
+          </h2>
+        </Container>
+      )}
     </div>
   );
 };

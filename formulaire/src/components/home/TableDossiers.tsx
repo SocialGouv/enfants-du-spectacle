@@ -324,7 +324,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           <div className={styles.btnList}>
                             <Button
                               disabled={!checkEmail()}
-                              onClick={async () => {
+                              onClick={() => {
                                 setCollaboratorEmail("");
                                 shareDossier(dossier);
                               }}
