@@ -1,3 +1,10 @@
+# [1.56.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.2...v1.56.0) (2023-03-29)
+
+
+### Features
+
+* ouverture dossier ([#496](https://github.com/SocialGouv/enfants-du-spectacle/issues/496)) ([0d3bbd4](https://github.com/SocialGouv/enfants-du-spectacle/commit/0d3bbd4a4d8b005b0518ad19bb0459581af01517))
+
 ## [1.55.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.1...v1.55.2) (2023-03-27)
 
 
