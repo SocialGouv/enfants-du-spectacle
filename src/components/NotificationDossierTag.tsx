@@ -7,22 +7,27 @@ import styles from "./Tag.module.scss";
 
 interface Props {
   dossier: Dossier;
-  commentsInfo: CommentaireNotifications;
+  commentsInfo: CommentaireNotifications | null;
 }
 
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const hasNotifications =
-    (commentsInfo?.notificationsChildren > 0 ||
-      commentsInfo?.notificationsProject > 0 ||
-      commentsInfo?.newPiecesDossier > 0 ||
-      commentsInfo?.newPiecesEnfant > 0 ||
+    commentsInfo &&
+    (commentsInfo.notificationsChildren > 0 ||
+      commentsInfo.notificationsProject > 0 ||
+      commentsInfo.newPiecesDossier > 0 ||
+      commentsInfo.newPiecesEnfant > 0 ||
       dossier.statusNotification === "MIS_A_JOUR") &&
     dossier.source === "FORM_EDS";
 
   return (
     <div>
-      {dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
+      {dossier.statusNotification === "NOUVEAU" ? (
+        <div className={`${styles.tag} ${styles.tagRed}`}>
+          <RiInformationFill /> NOUVEAU
+        </div>
+      ) : dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
         <div
           className={`${styles.tag} ${styles.tagCursor} ${styles.tagBlue}`}
           onMouseEnter={() => {
@@ -34,10 +39,6 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
           }}
         >
           <RiAlertFill /> MAJ
-        </div>
-      ) : dossier.statusNotification === "NOUVEAU" ? (
-        <div className={`${styles.tag} ${styles.tagRed}`}>
-          <RiInformationFill /> NOUVEAU
         </div>
       ) : (
         ""
