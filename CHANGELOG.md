@@ -1,3 +1,10 @@
+# [1.57.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.56.0...v1.57.0) (2023-03-29)
+
+
+### Features
+
+* link metabase to stats page ([#497](https://github.com/SocialGouv/enfants-du-spectacle/issues/497)) ([51d848c](https://github.com/SocialGouv/enfants-du-spectacle/commit/51d848cf62265d1446c77a08c32f9e849f796c71))
+
 # [1.56.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.2...v1.56.0) (2023-03-29)
 
 
