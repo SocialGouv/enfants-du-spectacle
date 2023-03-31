@@ -11,6 +11,7 @@
       -webkit-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
       -moz-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
       box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      margin-top: -20px !important;
       }
     </mj-style>
     <mj-style inline="inline">
