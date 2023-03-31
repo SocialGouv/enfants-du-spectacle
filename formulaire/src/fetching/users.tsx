@@ -1,9 +1,10 @@
-import { User } from "@prisma/client";
+import { Dossier, User } from "@prisma/client";
 
-const getUserByEmail = async (email: string) => {
+const getUserByEmail = async (email: string, dossier: Dossier) => {
   const url = `/api/users/${email}`;
   const fetching = await fetch(url.split(",").join(""), {
-    method: "GET",
+    method: "POST",
+    body: JSON.stringify(dossier),
   }).then(async (r) => {
     if (!r.ok) {
       throw Error(`got status ${r.status}`);

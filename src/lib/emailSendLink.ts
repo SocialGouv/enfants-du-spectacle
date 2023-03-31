@@ -3,7 +3,7 @@ import type { Awaitable } from "next-auth";
 import nodemailer from "nodemailer";
 
 const templateSignin = fs
-  .readFileSync(`${process.cwd()}/src/mails/signin.html`)
+  .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
   .toString();
 
 function html({ url }: { url: string }): string {

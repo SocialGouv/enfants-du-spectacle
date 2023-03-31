@@ -20,11 +20,7 @@ function sendVerificationRequest({
   // token: string;
 }): Awaitable<void> {
   const templateSignin = fs
-    .readFileSync(
-      url.includes("secured_download")
-        ? `${process.cwd()}/src/mails/mailgeneric.html`
-        : `${process.cwd()}/src/mails/signin.html`
-    )
+    .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
     .toString();
 
   const type = url.includes("dl_commission") ? "dl_commission" : "auth";
@@ -33,21 +29,12 @@ function sendVerificationRequest({
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   function html({ url }: { url: string }): string {
-    return (
-      templateSignin
-        .replace("__TEXT__", wording.text as string)
-        /*.replace(
-        "__ELEMENT__",
-        type === "dl_commission"
-          ? `${frenchDepartementName(
-              commission.departement as string
-            )} - ${date}`
-          : ``
-      )*/
-        .replace("__URL__", url)
-        .replace("__BUTTON__", wording.button as string)
-        .replace("__BYE__", wording.bye as string)
-    );
+    return templateSignin
+      .replace("__TEXT__", wording.text as string)
+      .replace("__TITLE__", wording?.title as string)
+      .replace("__URL__", url)
+      .replace("__BUTTON__", wording.button as string)
+      .replace("__BYE__", wording.bye as string);
   }
 
   return new Promise((resolve, reject) => {
