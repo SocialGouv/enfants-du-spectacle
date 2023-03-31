@@ -1,3 +1,10 @@
+# [1.58.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.57.0...v1.58.0) (2023-03-31)
+
+
+### Features
+
+* parcours medecine travail ([#498](https://github.com/SocialGouv/enfants-du-spectacle/issues/498)) ([afa9df3](https://github.com/SocialGouv/enfants-du-spectacle/commit/afa9df3836453ad893cc1f9674519e6b32671663))
+
 # [1.57.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.56.0...v1.57.0) (2023-03-29)
 
 
