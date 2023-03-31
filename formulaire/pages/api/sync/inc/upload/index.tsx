@@ -28,15 +28,12 @@ const sendDoc: NextApiHandler = async (req, res) => {
 
     console.log('------ INC FROM SDP ------')
 
-    console.log('dossier id : ', req.query.dossierId)
-    console.log('api_key : ', req.query.api_key)
-
     if(req.query.api_key !== process.env.API_KEY_SDP) {
         res.status(401).json({message: 'Unauthorized'})
     } else {
 
         const dossierId = getId(req);
-        console.log('body : ', req.body)
+        console.log('req : ', req)
         try {
             await fsp.readdir(`/mnt/docs-form/${dossierId}`);
         } catch (error) {

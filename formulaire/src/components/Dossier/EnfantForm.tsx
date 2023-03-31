@@ -479,16 +479,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           <input
             type="radio"
             value="Male"
-            checked={enfantTmp.typeConsultation === "UNNEEDED"}
-            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "UNNEEDED"})}}
-          />
-          Consultation inutile
-          <p className={styles.smallText}>Cet enfant ne nécessite pas la visite d'un médecin.</p>
-        </label>
-        <label className={styles.radioMedecine}>
-          <input
-            type="radio"
-            value="Male"
             checked={enfantTmp.typeConsultation === "THALIE"}
             onChange={() => {setEnfant({...enfantTmp, typeConsultation: "THALIE"})}}
           />
@@ -501,7 +491,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
               {label: 'Autorisation de prise en charge', value: 'AUTORISATION_PRISE_EN_CHARGE'}
             ].map((justif) => (
               <>
-                {enfantTmp.piecesDossier.filter(doc => {return doc.type === justif.value}).length > 0 &&
+                {enfantTmp.typeConsultation === "THALIE" && enfantTmp.piecesDossier.filter(doc => {return doc.type === justif.value}).length > 0 &&
                   <>
                     <div className={styles.blocForm}>
                       <InputFile

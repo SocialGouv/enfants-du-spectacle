@@ -6,7 +6,6 @@ import { ButtonLink } from "src/uiComponents/button";
 import Foldable from "../FoldableItem";
 import EnfantForm from "./EnfantForm";
 import { createEnfant } from "src/fetching/enfant";
-import Link from "next/link";
 import { useRef } from "react";
 import moment from "moment";
 import OrderableItem from "../home/OrderableItem";
@@ -15,7 +14,6 @@ import useStateContext from "src/context/StateContext";
 import CountPieces from "../CountPieces";
 import TableCard from "../TableCard";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
-import { useRouter } from "next/router";
 import { CommentaireNotifications } from "src/lib/types";
 
 interface Props {
@@ -59,7 +57,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
       prenom: "Nouvel",
       dossierId: contextDossier.dossier.id,
       typeEmploi: "ROLE_1",
-      typeConsultation: "UNNEEDED",
+      typeConsultation: "GENERALISTE",
       nomPersonnage: "",
       montantCachet: 0,
       remunerationTotale: 0,
