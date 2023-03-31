@@ -44,6 +44,7 @@
 
         .blocForm {
             margin-top:4rem;
+            padding: 0 2rem;
         }
 
         textarea {
@@ -61,8 +62,8 @@
 
         .byThreeForm {
             display: grid;
-            grid-template-columns: 31% 31% 31%;
-            grid-gap: 2%;
+            grid-template-columns: 33% 33% 33%;
+            grid-gap: 0%;
 
             .blocForm {
                 margin-top:2rem;
@@ -79,6 +80,17 @@
             }
         }
 
+        .h5Spacer {
+            margin-top: 4rem;
+        }
+
+    }
+
+    .radioMedecine {
+        cursor: pointer;
+        input {
+            margin-right: 1rem;
+        }
     }
 
     label {
@@ -99,11 +111,13 @@
         justify-content: space-between;
         position: sticky;
         bottom: 0%;
-        .textSaveBar {
-        }
         p {
             margin-bottom: 0;
         }
+    }
+
+    .buttonDeleteBar {
+        padding: 2rem 2rem;
     }
 
     .confirmDialogueWrapper {

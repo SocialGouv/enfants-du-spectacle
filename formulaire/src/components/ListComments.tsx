@@ -5,24 +5,31 @@ import useStateContext from "src/context/StateContext";
 import { frenchDateHour } from "src/lib/helpers";
 
 interface Props {
-    title: string,
     comments: Comments[]
 }
 
 const ListComments: React.FC<Props> = ({ comments, title }) => {
 
     return (
-        <div className={styles.listComments}>
-        
-            <h5>{title}</h5>
+        <>
+            <div className={styles.listComments}>
 
-            {comments.length === 0 ?
-            <span>Aucun commentaire.</span>
-            :
-            comments.map((comment) => (
-                <CardComment comment={comment} key={comment.id}></CardComment>
-            ))}
-        </div>
+                {comments.length === 0 ?
+                <span>Aucun commentaire.</span>
+                :
+                comments.sort((a, b) => {
+                    if (a.date < b.date) {
+                      return 1;
+                    }
+                    if (a.date > b.date) {
+                      return -1;
+                    }
+                    return 0;
+                  }).map((comment) => (
+                    <CardComment comment={comment} key={comment.id}></CardComment>
+                ))}
+            </div>
+        </>
     );
 };
 

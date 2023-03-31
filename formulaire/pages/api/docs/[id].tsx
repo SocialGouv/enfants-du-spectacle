@@ -30,7 +30,7 @@ function getId(req: NextApiRequest): number {
   return Number(req.query.id as string);
 }
 
-const uploadFile = (
+export const uploadFile = (
   req: NextApiRequest,
   saveLocally?: boolean
 ): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {

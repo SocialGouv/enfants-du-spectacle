@@ -171,6 +171,8 @@ enum JustificatifEnfant {
   CERTIFICAT_SCOLARITE
   AVIS_MEDICAL
   DECLARATION_HONNEUR
+  BON_PRISE_EN_CHARGE
+  AUTORISATION_PRISE_EN_CHARGE
 }
 
 model PieceDossierEnfant {
@@ -182,6 +184,12 @@ model PieceDossierEnfant {
   type       JustificatifEnfant
   link       String?
   statut     STATUT_PIECE?
+}
+
+enum TypeConsultation {
+  THALIE
+  GENERALISTE
+  UNNEEDED
 }
 
 model Enfant {
@@ -208,9 +216,13 @@ model Enfant {
   nomRepresentant1            String?
   prenomRepresentant1         String?
   adresseRepresentant1        String?
-  adresseRepresentant2        String?
+  telRepresentant1            String?
+  mailRepresentant1           String?
   nomRepresentant2            String?
   prenomRepresentant2         String?
+  adresseRepresentant2        String?
+  telRepresentant2            String?
+  mailRepresentant2           String?
   livret                      String?
   autorisation                String?
   situation                   String?
@@ -221,6 +233,9 @@ model Enfant {
   populatedBy                 User?                @relation(fields: [userId], references: [id])
   userId                      Int?
   Comments                    Comments[]
+  typeConsultation            TypeConsultation?
+  checkTravailNuit            Boolean?
+  textTravailNuit             String?
 }
 
 enum Sourcecomment {

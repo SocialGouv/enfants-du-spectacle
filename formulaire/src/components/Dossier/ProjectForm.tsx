@@ -195,6 +195,8 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
           </div>
         </div>
 
+        <h5 className={styles.h5Spacer}>Pièces justificatives du projet</h5>
+
         <div className={styles.blocForm}>
           <InputFile
             id={"SYNOPSIS"}
@@ -311,17 +313,17 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
             text={`Veuillez fournir, le cas échéant, tous éléments que vous jugez utiles à la compréhension du dossier (précisions sur les particularités du projet et sur les conditions spécifiques de tournage, de répétition ou de représentation imposées aux enfants, justification de la nécessité de ces conditions, etc)`}
           />
         </div>
-        <ListComments
-          title={"Commentaires liés au projet"}
-          comments={contextDossier.comments.filter((comment) => {
-            return comment.enfantId === null;
-          })}
-        ></ListComments>
         <InputComments
+          title={"Commentaires liés au projet"}
           dossierId={contextDossier.dossier.id}
           enfantId={null}
           parentId={null}
         ></InputComments>
+        <ListComments
+          comments={contextDossier.comments.filter((comment) => {
+            return comment.enfantId === null;
+          })}
+        ></ListComments>
       </TableCard>
     </div>
   );

@@ -7,20 +7,24 @@ import { shortUserName } from "src/lib/helpers";
 import styles from "./AssignedAgent.module.scss";
 
 interface Props {
-  dossier: Dossier & { user?: User | null };
+  dossier: Dossier & { 
+    user?: User | null
+    medecin?: User | null
+   };
 }
 
 const AssignedAgent: React.FC<Props> = ({ dossier }) => {
   const session = useSession();
+  console.log('dossier in agent select : ', dossier)
   return (
     <>
-      {!dossier.user && session.data.dbUser.role !== "MEMBRE" && (
+      {!dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'] && session.data.dbUser.role !== "MEMBRE" && (
         <span className={styles.na}>
           <AssignedAgentSelect dossierId={dossier.id} />
         </span>
       )}
-      {dossier.user && (
-        <span className={styles.nomUser}>{shortUserName(dossier.user)}</span>
+      {dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'] && (
+        <span className={styles.nomUser}>{shortUserName(dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'])}</span>
       )}
     </>
   );

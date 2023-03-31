@@ -20,6 +20,7 @@ type DossierDataLight = Dossier & {
 
 type DossierData = Dossier & {
   user: User | null;
+  medecin: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;
   enfants: Enfant[];

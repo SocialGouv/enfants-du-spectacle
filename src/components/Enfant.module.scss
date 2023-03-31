@@ -30,3 +30,26 @@
   }
 }
 
+.avisMedicalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  .radioMedecine {
+    display: block;
+    cursor: pointer;
+    margin-bottom: 1rem;
+      input {
+          margin-right: 1rem;
+          appearance: auto;
+      }
+  }
+
+
+  .datePickerWrapper {
+    padding: 0 !important;
+    div {
+      padding: 0 !important;
+    }
+  }
+}
+

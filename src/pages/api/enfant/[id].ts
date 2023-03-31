@@ -51,6 +51,9 @@ const update: NextApiHandler = async (req, res) => {
       nomRepresentant2: parsed.nomRepresentant2,
       prenomRepresentant1: parsed.prenomRepresentant1,
       prenomRepresentant2: parsed.prenomRepresentant2,
+      typeConsultationMedecin: parsed.typeConsultationMedecin,
+      dateConsultation: parsed.dateConsultation,
+      justificatifs: parsed.justificatifs
     },
     where: { id: enfantId },
   });

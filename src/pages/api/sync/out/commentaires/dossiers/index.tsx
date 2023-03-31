@@ -22,14 +22,17 @@ const getCommentsNotificationsByDossierIds: NextApiHandler = async (
 ) => {
   const dossierIds = req.query.externalId as string[];
   console.log("external Ids to get from : ", dossierIds);
+  console.log('check : ', Array.isArray(dossierIds))
 
   const url = `${process.env.API_URL_SDP}/inc/commentaires${
     dossierIds.length > 0 ? "?" : ""
-  }${dossierIds.map((id, index) => {
+  }${Array.isArray(dossierIds) ? dossierIds.map((id, index) => {
     return `${index !== 0 ? "&" : ""}externalId=${id}`;
-  })}&token=${process.env.API_KEY_SDP}`
+  }) : `externalId=${dossierIds}`}&token=${process.env.API_KEY_SDP}`
     .split(",")
     .join("");
+
+    console.log('url : ', url)
 
   const fetching = await fetch(url, {
     method: "GET",

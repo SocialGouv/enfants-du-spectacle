@@ -1,0 +1,43 @@
+.InputFile {
+
+    .smallText {
+        color: var(--light-dark-fr);
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+
+    .accepted {
+        color: green;
+    }
+
+    .refused {
+        color: red;
+    }
+
+    .fileUploaded {
+        margin-top: 1rem;
+
+        .rowDoc {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+
+            .deleteDoc {
+                padding: 7px 10px 2px 10px;
+                margin-right: 0.5rem;
+                background-color: var(--dark-grey-fr);
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    input::file-selector-button {
+        background-color: var(--dark-grey-fr);
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+}

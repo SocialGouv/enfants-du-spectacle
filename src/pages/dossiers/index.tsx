@@ -1,5 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
-import type { Commission, Dossier } from "@prisma/client";
+import type { Commission, Dossier, Enfant } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -52,7 +52,8 @@ const Page: React.FC = () => {
     session.status === "authenticated" &&
     session.data.dbUser.role !== "ADMIN" &&
     session.data.dbUser.role !== "INSTRUCTEUR" &&
-    session.data.dbUser.role !== "MEMBRE"
+    session.data.dbUser.role !== "MEMBRE" &&
+    session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({
       callbackUrl: "",
@@ -78,6 +79,8 @@ const Page: React.FC = () => {
       ? "all"
       : session.data.dbUser.departements
   );
+
+  console.log('commissions : ', commissions)
 
   const { ...commissionsPast } = useCommissions(
     "past",
@@ -313,7 +316,11 @@ const Page: React.FC = () => {
       {isError && <Icon name="ri-error" />}
       {!isLoading && !isError && !searchValueEffective && (
         <>
-          <ButtonList action={handleStatus} />
+          {session.data.dbUser.role !== "MEDECIN" &&
+            <>
+              <ButtonList action={handleStatus} />
+            </>
+          }
           <div className={styles.commissionWrapper}>
             <div className={styles.dossierTitleContainer}>
               <div>Commissions</div>
@@ -340,8 +347,12 @@ const Page: React.FC = () => {
                     <th>Département</th>
                     <th>Dossiers</th>
                     <th>Enfants</th>
-                    <th>Etat</th>
-                    <th>Télécharger</th>
+                    {session.data.dbUser.role !== "MEDECIN" &&
+                      <>
+                        <th>Etat</th>
+                        <th>Télécharger</th>
+                      </>
+                    }
                   </tr>
                 </thead>
                 <tbody>
@@ -401,66 +412,71 @@ const Page: React.FC = () => {
                         <td>
                           {commission.dossiers
                             .map((p) => {
-                              return p._count?.enfants ?? 0;
+                              return p.enfants.length ?? 0;
                             })
                             .reduce((i, b) => i + b, 0)}
                         </td>
-                        <td
-                          style={{
-                            display: "flex",
-                          }}
-                        >
-                          {countPending !== 0 && (
-                            <div
-                              className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
-                              style={{ marginRight: "15px" }}
-                            >
-                              <FaCheckCircle size={12} /> {countPending}
-                            </div>
-                          )}
-                          {countReady !== 0 && (
-                            <div
-                              className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
-                            >
-                              <HiClock size={12} /> {countReady}
-                            </div>
-                          )}
-                        </td>
-                        <td>
-                          {commission.dossiers.filter(
-                            (dossier) => dossier.statut === "PRET"
-                          ).length > 0 && (
-                            <div
+                        {session.data.dbUser.role !== "MEDECIN" &&
+                          <>
+                            <td
                               style={{
                                 display: "flex",
-                                gap: "20px",
                               }}
                             >
-                              <ButtonLink
-                                light={true}
-                                onClick={() => {
-                                  generateOdj(commission);
-                                }}
-                              >
-                                <RiDownloadLine
-                                  style={{ marginRight: "10px" }}
-                                />
-                                Ordre du jour
-                              </ButtonLink>
-                              <ButtonLink
-                                light={true}
-                                onClick={() => {
-                                  generatePV(commission);
-                                }}
-                              >
-                                <RiDownloadLine
-                                  style={{ marginRight: "10px" }}
-                                />
-                                Procès Verbal
-                              </ButtonLink>
-                            </div>
-                          )}
-                        </td>
+                              {countPending !== 0 && (
+                                <div
+                                  className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
+                                  style={{ marginRight: "15px" }}
+                                >
+                                  <FaCheckCircle size={12} /> {countPending}
+                                </div>
+                              )}
+                              {countReady !== 0 && (
+                                <div
+                                  className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
+                                >
+                                  <HiClock size={12} /> {countReady}
+                                </div>
+                              )}
+                            </td>
+                            <td>
+                              {commission.dossiers.filter(
+                                (dossier) => dossier.statut === "PRET"
+                              ).length > 0 && (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    gap: "20px",
+                                  }}
+                                >
+                                  <ButtonLink
+                                    light={true}
+                                    onClick={() => {
+                                      generateOdj(commission);
+                                    }}
+                                  >
+                                    <RiDownloadLine
+                                      style={{ marginRight: "10px" }}
+                                    />
+                                    Ordre du jour
+                                  </ButtonLink>
+                                  <ButtonLink
+                                    light={true}
+                                    onClick={() => {
+                                      generatePV(commission);
+                                    }}
+                                  >
+                                    <RiDownloadLine
+                                      style={{ marginRight: "10px" }}
+                                    />
+                                    Procès Verbal
+                                  </ButtonLink>
+                                </div>
+                              )}
+                            </td>
+                          </>
+                        }
+                        
                       </tr>
                     );
                   })}

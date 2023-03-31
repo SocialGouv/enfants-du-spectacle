@@ -73,7 +73,7 @@ const update: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const role = req.query.role;
+  const role: string = req.query.role as string;
   const allUsers =
     role == "all"
       ? await prisma.user.findMany({
@@ -81,7 +81,7 @@ const get: NextApiHandler = async (req, res) => {
         })
       : await prisma.user.findMany({
           orderBy: { name: "asc" },
-          where: { role: "INSTRUCTEUR" },
+          where: { role: role.toUpperCase() },
         });
   res.status(200).json(superjson.stringify(allUsers));
 };

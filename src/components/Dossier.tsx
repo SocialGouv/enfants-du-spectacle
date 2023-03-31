@@ -69,7 +69,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
 
   const processComment = (comment: Comments) => {
-    setComments([...comments, comment]);
+    setComments([comment, ...comments]);
   };
 
   const updateComments = () => {
@@ -111,7 +111,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return (
     <>
-      {session.dbUser.role !== "MEMBRE" && (
+      {session.dbUser.role !== "MEMBRE" && session.dbUser.role !== "MEDECIN" && (
         <div id="summaryBloc">
           <DossierActionBar dossierId={dossierId} />
         </div>
@@ -184,16 +184,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </div>
               {dossier.source === "FORM_EDS" && showCommentSection && (
                 <>
-                  <ListComments
-                    comments={comments.filter((comment) => {
-                      return comment.enfantId === null;
-                    })}
-                  />
                   <InputComments
                     dossierId={parseInt(dossier.externalId!)}
                     enfantId={null}
                     parentId={null}
                     action={processComment}
+                  />
+                  <ListComments
+                    comments={comments.filter((comment) => {
+                      return comment.enfantId === null;
+                    })}
                   />
                 </>
               )}
