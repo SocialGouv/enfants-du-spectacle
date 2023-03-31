@@ -71,7 +71,10 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
 
     const html = ({ url }: { url: string }): string => {
       return templateSignin
-        .replace("__TITLE__", (wording?.title + " " + dossier.nom) as string)
+        .replace(
+          "__TITLE__",
+          (wording?.title + " «" + dossier.nom + "»") as string
+        )
         .replace("__TEXT__", wording?.text as string)
         .replace("__URL__", url)
         .replace("__BUTTON__", wording?.button as string)
