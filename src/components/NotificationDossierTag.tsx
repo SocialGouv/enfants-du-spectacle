@@ -7,25 +7,31 @@ import styles from "./Tag.module.scss";
 
 interface Props {
   dossier: Dossier;
-  commentsInfo: CommentaireNotifications;
+  commentsInfo: CommentaireNotifications | null;
 }
 
 const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const hasNotifications =
-    (commentsInfo?.notificationsChildren !== 0 ||
-      commentsInfo?.notificationsProject !== 0) &&
+    commentsInfo &&
+    (commentsInfo.notificationsChildren > 0 ||
+      commentsInfo.notificationsProject > 0 ||
+      commentsInfo.newPiecesDossier > 0 ||
+      commentsInfo.newPiecesEnfant > 0 ||
+      dossier.statusNotification === "MIS_A_JOUR") &&
     dossier.source === "FORM_EDS";
+
   return (
     <div>
-      {dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
+      {dossier.statusNotification === "NOUVEAU" ? (
+        <div className={`${styles.tag} ${styles.tagRed}`}>
+          <RiInformationFill /> NOUVEAU
+        </div>
+      ) : dossier.statusNotification === "MIS_A_JOUR" || hasNotifications ? (
         <div
           className={`${styles.tag} ${styles.tagCursor} ${styles.tagBlue}`}
           onMouseEnter={() => {
-            if (
-              dossier.source === "FORM_EDS" &&
-              (dossier.statusNotification === "MIS_A_JOUR" || hasNotifications)
-            )
+            if (dossier.source === "FORM_EDS" && hasNotifications)
               setShowInfoModal(true);
           }}
           onMouseLeave={() => {
@@ -34,14 +40,10 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
         >
           <RiAlertFill /> MAJ
         </div>
-      ) : dossier.statusNotification === "NOUVEAU" ? (
-        <div className={`${styles.tag} ${styles.tagRed}`}>
-          <RiInformationFill /> NOUVEAU
-        </div>
       ) : (
         ""
       )}
-      {showInfoModal && (
+      {showInfoModal && hasNotifications && (
         <div className={styles.modalWrapper}>
           {dossier.statusNotification === "MIS_A_JOUR" && (
             <div className={styles.blocNotif}>
@@ -51,38 +53,62 @@ const NotificationDossierTag: React.FC<Props> = ({ dossier, commentsInfo }) => {
               </div>
             </div>
           )}
-          <>
+          <div className={styles.blocNotif}>
+            {(commentsInfo.notificationsChildren > 0 ||
+              commentsInfo.notificationsProject > 0) && (
+              <>
+                <div className={styles.titleNotif}>Commentaires</div>
+              </>
+            )}
+            {commentsInfo.notificationsProject > 0 && (
+              <div>
+                <span className={styles.count}>
+                  {commentsInfo.notificationsProject}
+                </span>{" "}
+                {commentsInfo.notificationsProject > 1
+                  ? "nouveaux commentaires"
+                  : "nouveau commentaire"}{" "}
+                sur le projet
+              </div>
+            )}
+            {commentsInfo.notificationsChildren > 0 && (
+              <div>
+                <span className={styles.count}>
+                  {commentsInfo.notificationsChildren}
+                </span>{" "}
+                {commentsInfo.notificationsChildren > 1
+                  ? "nouveaux commentaires sur un ou plusieurs enfants"
+                  : "nouveau commentaire sur un enfant"}{" "}
+              </div>
+            )}
+          </div>
+          {(commentsInfo.newPiecesDossier > 0 ||
+            commentsInfo.newPiecesEnfant > 0) && (
             <div className={styles.blocNotif}>
-              {(commentsInfo.notificationsChildren > 0 ||
-                commentsInfo.notificationsProject > 0) && (
-                <>
-                  <div className={styles.titleNotif}>Commentaires</div>
-                </>
-              )}
-              {commentsInfo.notificationsProject > 0 && (
+              <div className={styles.titleNotif}>Pièces justificatives</div>
+              {commentsInfo.newPiecesDossier > 0 && (
                 <div>
                   <span className={styles.count}>
-                    {commentsInfo.notificationsProject}
+                    {commentsInfo.newPiecesDossier}
                   </span>{" "}
-                  {commentsInfo.notificationsProject > 1
-                    ? "nouveaux commentaires"
-                    : "nouveau commentaire"}{" "}
+                  {commentsInfo.newPiecesDossier > 1
+                    ? "nouvelles pièces justificatives"
+                    : "nouvelle pièce justificative"}{" "}
                   sur le projet
                 </div>
               )}
-              {commentsInfo.notificationsChildren > 0 && (
+              {commentsInfo.newPiecesEnfant > 0 && (
                 <div>
                   <span className={styles.count}>
-                    {commentsInfo.notificationsChildren}
+                    {commentsInfo.newPiecesEnfant}
                   </span>{" "}
-                  {commentsInfo.notificationsChildren > 1
-                    ? "nouveaux commentaires"
-                    : "nouveau commentaire"}{" "}
-                  sur un ou plusieurs enfants
+                  {commentsInfo.newPiecesEnfant > 1
+                    ? "nouvelles pièces justificatives sur un ou plusieurs enfants"
+                    : "nouvelle pièce justificative sur un enfant"}{" "}
                 </div>
               )}
             </div>
-          </>
+          )}
         </div>
       )}
     </div>

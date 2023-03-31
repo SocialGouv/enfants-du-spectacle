@@ -1,6 +1,5 @@
-import Image from "next/image";
 import React from "react";
-import logoRefused from "src/images/refused.svg";
+import { RiAlertFill } from "react-icons/ri";
 
 import styles from "./CountPieces.module.scss";
 
@@ -13,10 +12,6 @@ const CountPieces: React.FC<Props> = ({
   piecesJustif,
   countCommentsNotification,
 }) => {
-  const countPiecesRefused =
-    piecesJustif !== undefined
-      ? piecesJustif.filter((piece) => piece === "REFUSE").length
-      : 0;
   const countNewPiece =
     piecesJustif !== undefined
       ? piecesJustif.filter((piece) => piece !== "REFUSE" && piece !== "VALIDE")
@@ -27,8 +22,7 @@ const CountPieces: React.FC<Props> = ({
 
   return (
     <div className={styles.countPieces}>
-      {(countPiecesRefused > 0 ||
-        countNewPiece > 0 ||
+      {(countNewPiece > 0 ||
         (!!countCommentsNotification && countCommentsNotification > 0)) && (
         <div
           onMouseEnter={() => {
@@ -39,35 +33,23 @@ const CountPieces: React.FC<Props> = ({
           }}
           className={styles.cardRefused}
         >
-          <Image src={logoRefused} alt="Supprimer" width={20} height={20} />
-          Informations
+          <RiAlertFill style={{ marginRight: "4px" }} />
+          MAJ
         </div>
       )}
       {showInfoModal && (
         <div className={styles.modalWrapper}>
-          {(countPiecesRefused > 0 || countNewPiece > 0) && (
+          {countNewPiece > 0 && (
             <div
               className={`${styles.blocNotif} ${
-                countPiecesRefused > 0 ||
-                (countNewPiece > 0 &&
-                  !!countCommentsNotification &&
-                  countCommentsNotification > 0)
+                countNewPiece > 0 &&
+                !!countCommentsNotification &&
+                countCommentsNotification > 0
                   ? styles.bloc
                   : ""
               }`}
             >
               <div className={styles.titleNotif}>Pièces justificatives</div>
-              {countPiecesRefused > 0 && (
-                <div>
-                  <span className={styles.count}>
-                    {"• "}
-                    {countPiecesRefused}
-                  </span>{" "}
-                  {`${
-                    countPiecesRefused > 1 ? "pièces refusées" : "pièce refusée"
-                  }`}{" "}
-                </div>
-              )}
               {countNewPiece > 0 && (
                 <div>
                   <span className={styles.count}>

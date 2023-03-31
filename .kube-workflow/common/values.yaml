@@ -44,3 +44,9 @@ app-form:
   probesPath: /api/healthz
   replicas: 1
   imagePackage: form
+
+metabase:
+  enabled: false
+
+oauth2-proxy:
+  enabled: false

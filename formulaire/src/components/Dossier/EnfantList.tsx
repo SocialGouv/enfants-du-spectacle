@@ -166,7 +166,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
             termOrdered={termOrdered}
             order={order}
           ></OrderableItem>
-          <div className={styles.itemHead}>Pièces justificatives</div>
+          <div className={styles.itemHead}>Notifications</div>
         </div>
         {contextDossier.enfants
           .slice(page * 10, page * 10 + 10)

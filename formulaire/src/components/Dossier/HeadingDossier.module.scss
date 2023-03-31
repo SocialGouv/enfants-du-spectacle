@@ -2,7 +2,11 @@
     padding: 2rem 0rem;
     margin-bottom: 1rem;
     background-color: var(--purple-fr);
-
+    .rightSection {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
     .topRow {
         display: flex;
         justify-content: space-between;
@@ -16,5 +20,60 @@
     h2 {
         color: var(--light-dark-fr);
         margin-bottom: 0;
+    }
+    .dropdownWrapper {
+        position: relative;
+        .defaultOption {
+            padding: 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            background-color: #313178;
+            color: white;
+            cursor: pointer;
+        }
+        .collaboratorsWrapper {
+            position: absolute;
+            right: 0;
+            width: max-content;
+            background-color: #f5f5fe;
+            border-top-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+            // transform: translateX(-45%);
+            z-index: 10;
+            min-width: 300px;
+
+            .deleteBtnGroup{
+                display: flex;
+                font-size: 12px;
+                gap: 5px;
+                .confirmBtn, .cancelBtn {
+                    cursor: pointer;
+                }
+                .confirmBtn:hover, .cancelBtn:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+        .collaboratorItem {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid rgb(241, 241, 241);
+            font-size: 14px;
+        }
+        .collaboratorItem:hover {
+            background-color: #ececfe;
+        }
+
+        .trashIcon {
+            cursor: pointer;
+        }
+        .trashIcon:hover {
+            color: #313178;
+        }
     }
 }

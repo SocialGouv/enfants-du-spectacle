@@ -82,7 +82,10 @@ const get: NextApiHandler = async (req, res) => {
       },
       where: { id: dossierId },
     });
-    if (dossier?.userId === session?.dbUser.id) {
+    if (
+      dossier?.userId === session?.dbUser.id ||
+      dossier?.collaboratorIds.includes(session?.dbUser.id)
+    ) {
       res.status(200).json({
         dossier: dossier,
         docs: {

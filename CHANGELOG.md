@@ -1,3 +1,71 @@
+# [1.57.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.56.0...v1.57.0) (2023-03-29)
+
+
+### Features
+
+* link metabase to stats page ([#497](https://github.com/SocialGouv/enfants-du-spectacle/issues/497)) ([51d848c](https://github.com/SocialGouv/enfants-du-spectacle/commit/51d848cf62265d1446c77a08c32f9e849f796c71))
+
+# [1.56.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.2...v1.56.0) (2023-03-29)
+
+
+### Features
+
+* ouverture dossier ([#496](https://github.com/SocialGouv/enfants-du-spectacle/issues/496)) ([0d3bbd4](https://github.com/SocialGouv/enfants-du-spectacle/commit/0d3bbd4a4d8b005b0518ad19bb0459581af01517))
+
+## [1.55.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.1...v1.55.2) (2023-03-27)
+
+
+### Bug Fixes
+
+* **k8s:** typo ([#494](https://github.com/SocialGouv/enfants-du-spectacle/issues/494)) ([d74fef0](https://github.com/SocialGouv/enfants-du-spectacle/commit/d74fef089de12746a70681fae712b3430c6e2859))
+
+## [1.55.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.55.0...v1.55.1) (2023-03-27)
+
+
+### Bug Fixes
+
+* typo ([ab7aa34](https://github.com/SocialGouv/enfants-du-spectacle/commit/ab7aa34282b6ffa4aec04697a17a3d9ee94a34bd))
+
+# [1.55.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.54.0...v1.55.0) (2023-03-27)
+
+
+### Features
+
+* deploy metabase ([#493](https://github.com/SocialGouv/enfants-du-spectacle/issues/493)) ([43f9996](https://github.com/SocialGouv/enfants-du-spectacle/commit/43f9996466383dd27008138039b284a351d40511))
+
+# [1.54.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.53.0...v1.54.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* remove cronjob ([#492](https://github.com/SocialGouv/enfants-du-spectacle/issues/492)) ([950a5ff](https://github.com/SocialGouv/enfants-du-spectacle/commit/950a5ff6a57691dca71c6d00dc7772e680359abe))
+
+
+### Features
+
+* add metabase for production ([#489](https://github.com/SocialGouv/enfants-du-spectacle/issues/489)) ([fc6d0df](https://github.com/SocialGouv/enfants-du-spectacle/commit/fc6d0df6fd5cb6ef945230a3befd981ae2b3a0b5))
+
+# [1.53.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.52.0...v1.53.0) (2023-03-23)
+
+
+### Features
+
+* add button arrow up ([#488](https://github.com/SocialGouv/enfants-du-spectacle/issues/488)) ([3eca4eb](https://github.com/SocialGouv/enfants-du-spectacle/commit/3eca4eb558fdc53c11f69ff5339b66fd488867d4))
+
+# [1.52.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.51.0...v1.52.0) (2023-03-17)
+
+
+### Features
+
+* add styles and change tag name ([#487](https://github.com/SocialGouv/enfants-du-spectacle/issues/487)) ([77931e1](https://github.com/SocialGouv/enfants-du-spectacle/commit/77931e153bd24d49079f54066a2f0cfdf1d382b6))
+
+# [1.51.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.50.1...v1.51.0) (2023-03-17)
+
+
+### Features
+
+* add notifications for pieces justificatives in instructeur view ([#485](https://github.com/SocialGouv/enfants-du-spectacle/issues/485)) ([7735e66](https://github.com/SocialGouv/enfants-du-spectacle/commit/7735e66947452a9173bc4d0d28da5f1219493c2e))
+
 ## [1.50.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.50.0...v1.50.1) (2023-03-17)
 
 

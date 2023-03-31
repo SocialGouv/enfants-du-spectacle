@@ -126,6 +126,7 @@ model Dossier {
   categorie                CategorieDossier?
   enfants                  Enfant[]
   piecesDossier            PieceDossier[]
+  collaboratorIds          Int[]
   userId                   Int
   user                     User                  @relation(fields: [userId], references: [id])
   justificatifs            JustificatifDossier[]
