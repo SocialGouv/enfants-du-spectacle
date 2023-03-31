@@ -1,3 +1,10 @@
+## [1.58.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.1...v1.58.2) (2023-03-31)
+
+
+### Bug Fixes
+
+* logs file data ([#500](https://github.com/SocialGouv/enfants-du-spectacle/issues/500)) ([e886a7f](https://github.com/SocialGouv/enfants-du-spectacle/commit/e886a7fb7544b2dee4c8d221f7f8c8d03ce1fbb9))
+
 ## [1.58.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.0...v1.58.1) (2023-03-31)
 
 
