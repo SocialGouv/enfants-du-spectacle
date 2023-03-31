@@ -15,7 +15,15 @@ const ListComments: React.FC<Props> = ({ comments, title }) => {
             {comments.length === 0 ?
             <span>Aucun commentaire.</span>
             :
-            comments.map((comment) => (
+            comments.sort((a, b) => {
+                if (a.date < b.date) {
+                  return 1;
+                }
+                if (a.date > b.date) {
+                  return -1;
+                }
+                return 0;
+              }).map((comment) => (
                 <CardComment comment={comment} key={comment.id}></CardComment>
             ))}
         </div>

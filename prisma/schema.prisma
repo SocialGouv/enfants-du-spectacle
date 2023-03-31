@@ -131,7 +131,9 @@ model Dossier {
   commentaires             Commentaire[]
   numeroDS                 Int?                  @default(0)
   userId                   Int?
-  user                     User?                 @relation(fields: [userId], references: [id])
+  user                     User?                 @relation(fields: [userId], references: [id], name: "instructeur")
+  medecinId                Int?
+  medecin                  User?                 @relation(fields: [medecinId], references: [id], name: "medecin")
   demandeurId              Int
   demandeur                Demandeur             @relation(fields: [demandeurId], references: [id])
   justificatifs            JustificatifDossier[]
@@ -185,6 +187,8 @@ enum JustificatifEnfant {
   CERTIFICAT_SCOLARITE
   AVIS_MEDICAL
   DECLARATION_HONNEUR
+  BON_PRISE_EN_CHARGE
+  AUTORISATION_PRISE_EN_CHARGE
 }
 
 model PieceDossierEnfant {
@@ -204,8 +208,15 @@ enum TypeConsultation {
   UNNEEDED
 }
 
+enum TypeConsultationMedecin {
+  PHYSIQUE
+  PIECE
+  PRISE_EN_CHARGE
+  MEDECIN_TRAITANT
+}
+
 model Enfant {
-  id                          Int                  @id @default(autoincrement())
+  id                          Int                      @id @default(autoincrement())
   prenom                      String
   nom                         String
   dateNaissance               DateTime
@@ -215,24 +226,32 @@ model Enfant {
   nombreJours                 Int
   contexteTravail             String?
   montantCachet               Float
-  nombreCachets               Int                  @default(0)
-  nombreLignes                Int                  @default(0)
+  nombreCachets               Int                      @default(0)
+  nombreLignes                Int                      @default(0)
   remunerationsAdditionnelles String?
   remunerationTotale          Float
   justificatifs               JustificatifEnfant[]
   piecesDossier               PieceDossierEnfant[]
   dossierId                   Int
-  dossier                     Dossier              @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  dossier                     Dossier                  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   cdc                         Int?
   adresseEnfant               String?
   nomRepresentant1            String?
   prenomRepresentant1         String?
   adresseRepresentant1        String?
+  telRepresentant1            String?
+  mailRepresentant1           String?
   adresseRepresentant2        String?
   nomRepresentant2            String?
   prenomRepresentant2         String?
-  externalId                  String?              @unique
+  telRepresentant2            String?
+  mailRepresentant2           String?
+  externalId                  String?                  @unique
   typeConsultation            TypeConsultation?
+  typeConsultationMedecin     TypeConsultationMedecin?
+  dateConsultation            DateTime?
+  checkTravailNuit            Boolean?
+  textTravailNuit             String?
 }
 
 // for next-auth
@@ -255,21 +274,22 @@ model SendList {
 }
 
 model User {
-  id            Int           @id @default(autoincrement())
-  name          String?
-  nom           String?
-  prenom        String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  dossiers      Dossier[]
-  commentaires  Commentaire[]
-  role          Role?
-  departement   String?
-  departements  String[]
-  SendList      SendList[]
+  id              Int           @id @default(autoincrement())
+  name            String?
+  nom             String?
+  prenom          String?
+  email           String?       @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  dossiers        Dossier[]     @relation(name: "instructeur")
+  dossiersMedecin Dossier[]     @relation(name: "medecin")
+  commentaires    Commentaire[]
+  role            Role?
+  departement     String?
+  departements    String[]
+  SendList        SendList[]
 }
 
 model Session {

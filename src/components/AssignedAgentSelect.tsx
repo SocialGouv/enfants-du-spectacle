@@ -1,4 +1,5 @@
 import { Icon, Select } from "@dataesr/react-dsfr";
+import { useSession } from "next-auth/react";
 import React from "react";
 import IconLoader from "src/components/IconLoader";
 import { useAllUsers, useDossier } from "src/lib/api";
@@ -14,8 +15,9 @@ interface Props {
 
 const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
   const { mutate } = useSWRConfig();
+  const session = useSession()
   const { dossier, ...swrDossier } = useDossier(dossierId);
-  const { allUsers, ...swrUsers } = useAllUsers("instructeurs");
+  const { allUsers, ...swrUsers } = useAllUsers(session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
 
   if (swrDossier.isLoading || swrUsers.isLoading) return <IconLoader />;
   if (swrDossier.isError || swrUsers.isError || !allUsers || !dossier)
@@ -23,8 +25,8 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
 
   return (
     <Select
-      selected={dossier.userId ? String(dossier.userId) : ""}
-      options={[{ label: dossier.userId ? "" : "Choisir", value: "" }].concat(
+      selected={dossier[session.data?.dbUser.role !== "MEDECIN" ? 'userId' : 'medecinId'] ? String(dossier[session.data?.dbUser.role !== "MEDECIN" ? 'userId' : 'medecinId']) : ""}
+      options={[{ label: "Choisir", value: "" }].concat(
         allUsers.map((u) => ({
           label: shortUserName(u),
           value: String(u.id),
@@ -33,14 +35,15 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         const rawUserId = event.target.value;
         const userId = rawUserId ? Number(rawUserId) : null;
+        const medecinId = rawUserId ? Number(rawUserId) : null;
         mutate(
           `/api/dossiers/${dossier.id}`,
-          { ...dossier, userId },
+          session.data?.dbUser.role !== "MEDECIN" ? { ...dossier, userId } : { ...dossier, medecinId },
           false
         ).catch((e) => {
           throw e;
         });
-        updateDossier(dossier, { userId }, () => {
+        updateDossier(dossier, session.data?.dbUser.role !== "MEDECIN" ? { userId } : { medecinId }, () => {
           mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
             throw e;
           });

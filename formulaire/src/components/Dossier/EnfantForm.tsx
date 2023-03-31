@@ -111,8 +111,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       statut: null,
       dossierId: contextDossier.dossier.id,
     });
-    console.log("res : ", res);
-    console.log("test before : ", contextDossier.docs);
     setEnfant({
       ...enfantTmp,
       piecesDossier: enfantTmp.piecesDossier
@@ -334,6 +332,36 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         </div>
       </div>
 
+      <div className={styles.blocForm}>
+        <label  className={styles.radioMedecine}>
+          <input
+            type="checkbox"
+            checked={enfantTmp.checkTravailNuit}
+            onChange={() => {setEnfant({...enfantTmp, checkTravailNuit: !enfantTmp.checkTravailNuit})}}
+          />
+          Travail de nuit
+        </label>
+
+        {enfantTmp.checkTravailNuit &&
+          <>
+            <p className={styles.smallText}>
+              Veuillez préciser les modalités du travail de nuit
+            </p>
+
+            <div className="Form--field">
+              <textarea
+                onChange={handleFormEnfant}
+                disabled={!allowChanges}
+                type="textarea"
+                id="textTravailNuit"
+                value={enfantTmp?.textTravailNuit || ""}
+                className={styles.areaText}
+              />
+            </div>
+          </>
+        }
+      </div>
+
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
 
       <div className={styles.byThreeForm}>
@@ -441,41 +469,70 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       <h5 className={styles.h5Spacer}>Avis médical d'aptitude</h5>
 
       <div className={styles.blocForm}>
-          <label htmlFor="remunerationTotale" className="mb-2 italic">
-            L'enfant doit consulter : 
-          </label>
-          <br />
-          <br />
-          <label className={styles.radioMedecine}>
-            <input
-              type="radio"
-              value="Male"
-              checked={enfantTmp.typeConsultation === "UNNEEDED"}
-              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "UNNEEDED"})}}
-            />
-            Consultation inutile
-            <p className={styles.smallText}>Cet enfant ne nécessite pas la visite d'un médecin.</p>
-          </label>
-          <label className={styles.radioMedecine}>
-            <input
-              type="radio"
-              value="Male"
-              checked={enfantTmp.typeConsultation === "THALIE"}
-              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "THALIE"})}}
-            />
-            Un médecin de Thalie Santé
-            <p className={styles.smallText}>L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative.</p>
-          </label>
-          <label className={styles.radioMedecine}>
-            <input
-              type="radio"
-              value="Male"
-              checked={enfantTmp.typeConsultation === "GENERALISTE"}
-              onChange={() => {setEnfant({...enfantTmp, typeConsultation: "GENERALISTE"})}}
-            />
-            Un médecin généraliste
-            <p className={styles.smallText}>Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative.</p>
-          </label>
+        <label htmlFor="remunerationTotale" className="mb-2 italic">
+          L'enfant doit consulter : 
+        </label>
+        <br />
+        <br />
+        <label className={styles.radioMedecine}>
+          <input
+            type="radio"
+            value="Male"
+            checked={enfantTmp.typeConsultation === "UNNEEDED"}
+            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "UNNEEDED"})}}
+          />
+          Consultation inutile
+          <p className={styles.smallText}>Cet enfant ne nécessite pas la visite d'un médecin.</p>
+        </label>
+        <label className={styles.radioMedecine}>
+          <input
+            type="radio"
+            value="Male"
+            checked={enfantTmp.typeConsultation === "THALIE"}
+            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "THALIE"})}}
+          />
+          Un médecin de Thalie Santé
+          <p className={styles.smallText}>L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative.</p>
+          {
+            [
+              {label: 'Avis médical', value: 'AVIS_MEDICAL'},
+              {label: 'Bon de prise en charge', value: 'BON_PRISE_EN_CHARGE'},
+              {label: 'Autorisation de prise en charge', value: 'AUTORISATION_PRISE_EN_CHARGE'}
+            ].map((justif) => (
+              <>
+                {enfantTmp.piecesDossier.filter(doc => {return doc.type === justif.value}).length > 0 &&
+                  <>
+                    <div className={styles.blocForm}>
+                      <InputFile
+                        id={justif.value as JustificatifEnfant}
+                        docs={enfantTmp.piecesDossier || []}
+                        docsTokenized={contextDossier.docs.enfants.find(
+                          (enfant) => enfant.id === enfantTmp.id
+                        )}
+                        allowChanges={true}
+                        label={justif.label}
+                        handleFile={handleFile}
+                        handleDelete={handleDelete}
+                        text={``}
+                      />
+                    </div>
+                    <br />
+                  </>
+                }
+              </>
+            ))
+          }
+        </label>
+        <label className={styles.radioMedecine}>
+          <input
+            type="radio"
+            value="Male"
+            checked={enfantTmp.typeConsultation === "GENERALISTE"}
+            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "GENERALISTE"})}}
+          />
+          Un médecin généraliste
+          <p className={styles.smallText}>Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative.</p>
+        </label>
       </div>
 
       <h5 className={styles.h5Spacer}>Informations de contact liées à l'enfant</h5>
@@ -511,7 +568,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
 
-
         <div className={styles.blocForm}>
           <label htmlFor="prenomRepresentant1" className="mb-2 italic">
             Prénom du représentant légal 1
@@ -526,7 +582,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             className="inputText"
           />
         </div>
-
 
         <div className={styles.blocForm}>
           <label htmlFor="nomRepresentant2" className="mb-2 italic">
@@ -543,7 +598,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
 
-
         <div className={styles.blocForm}>
           <label htmlFor="adresseRepresentant1" className="mb-2 italic">
             Adresse du représentant légal 1
@@ -558,7 +612,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             className="inputText"
           />
         </div>
-
 
         <div className={styles.blocForm}>
           <label htmlFor="adresseRepresentant2" className="mb-2 italic">
@@ -575,9 +628,70 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
 
+        <div className={styles.blocForm}>
+          <label htmlFor="mailRepresentant1" className="mb-2 italic">
+            Email du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.mailRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="mailRepresentant1"
+            name="mailRepresentant1"
+            className="inputText"
+          />
+        </div>
+
+        <div className={styles.blocForm}>
+          <label htmlFor="mailRepresentant2" className="mb-2 italic">
+            Email du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.mailRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="mailRepresentant2"
+            name="mailRepresentant2"
+            className="inputText"
+          />
+        </div>
+
+        <div className={styles.blocForm}>
+          <label htmlFor="telRepresentant1" className="mb-2 italic">
+            Téléphone du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.telRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="telRepresentant1"
+            name="telRepresentant1"
+            className="inputText"
+          />
+        </div>
+
+        <div className={styles.blocForm}>
+          <label htmlFor="telRepresentant2" className="mb-2 italic">
+            Téléphone du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.telRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="telRepresentant2"
+            name="telRepresentant2"
+            className="inputText"
+          />
+        </div>
 
       </div>
 
+      <br />
+      <br />
       <h5 className={styles.h5Spacer}>Pièces justificatives liées à l'enfant</h5>
 
       <div className={styles.blocForm}>
@@ -663,21 +777,22 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </Link>
         </div>
       </div>
-
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"AVIS_MEDICAL"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Avis médical d'aptitude`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
-        />
-      </div>
+      {enfantTmp.typeConsultation !== 'THALIE' || (enfantTmp.typeConsultation === 'THALIE' && (enfantTmp.piecesDossier.filter(doc => {return doc.type === "AUTORISATION_PRISE_EN_CHARGE"}).length > 0 || enfantTmp.piecesDossier.filter(doc => {return doc.type === "BON_PRISE_EN_CHARGE"}).length > 0)) &&
+        <div className={styles.blocForm}>
+          <InputFile
+            id={"AVIS_MEDICAL"}
+            docs={enfantTmp.piecesDossier || []}
+            docsTokenized={contextDossier.docs.enfants.find(
+              (enfant) => enfant.id === enfantTmp.id
+            )}
+            allowChanges={!allowChanges}
+            label={`Avis médical d'aptitude`}
+            handleFile={handleFile}
+            handleDelete={handleDelete}
+            text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
+          />
+        </div>
+      }
       <div className={styles.blocForm}>
         <InputFile
           id={"DECLARATION_HONNEUR"}
@@ -692,17 +807,17 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Veuillez fournir un document présentant de manière précise et détaillée, la déclaration sur l’honneur de l’enfant âgé de plus de 13 ans.`}
         />
       </div>
-      <ListComments
-        title={"Commentaires liés à l'enfant"}
-        comments={contextDossier.comments.filter((comment) => {
-          return comment.enfantId === enfantTmp.id;
-        })}
-      ></ListComments>
       <InputComments
+        title={"Commentaires liés à l'enfant"}
         dossierId={contextDossier.dossier.id}
         enfantId={enfantTmp.id}
         parentId={null}
       ></InputComments>
+      <ListComments
+        comments={contextDossier.comments.filter((comment) => {
+          return comment.enfantId === enfantTmp.id;
+        })}
+      ></ListComments>
       <div
         style={{
           display: "flex",
@@ -711,7 +826,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           alignItems: "center",
         }}
       >
-        <div className={styles.buttonSaveBar}>
+        <div className={styles.buttonDeleteBar}>
           <ButtonLink
             red
             onClick={() => {

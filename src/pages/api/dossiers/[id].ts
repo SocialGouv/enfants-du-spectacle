@@ -36,9 +36,10 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
+  const session = await getSession({ req });
   const dossierId = getId(req);
 
-  const dossier = await prisma.dossier.findUnique({
+  const dossier = await prisma?.dossier.findUnique({
     include: {
       commentaires: {
         include: {
@@ -48,6 +49,14 @@ const get: NextApiHandler = async (req, res) => {
       commission: true,
       demandeur: true,
       enfants: {
+        where: session?.dbUser.role !== "MEDECIN" ?
+        {}
+        :
+        {
+          typeConsultation: {
+            equals: "THALIE"
+          }
+        },
         include: {
           piecesDossier: true,
         },
@@ -55,6 +64,7 @@ const get: NextApiHandler = async (req, res) => {
       piecesDossier: true,
       societeProduction: true,
       user: true,
+      medecin: true,
     },
     where: { id: dossierId },
   });
@@ -90,6 +100,7 @@ const update: NextApiHandler = async (req, res) => {
   const updates: {
     statut?: StatutDossier;
     userId?: number;
+    medecinId?: number,
     cdc?: number;
     commissionId?: number;
     statusNotification?: string | null;
@@ -250,6 +261,10 @@ const update: NextApiHandler = async (req, res) => {
 
   if (typeof parsed.userId === "number" || parsed.userId === null) {
     updates.userId = parsed.userId;
+  }
+
+  if (typeof parsed.medecinId === "number" || parsed.medecinId === null) {
+    updates.medecinId = parsed.medecinId;
   }
 
   if (typeof parsed.commissionId === "number" || parsed.commissionId === null) {

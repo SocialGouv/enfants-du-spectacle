@@ -15,26 +15,29 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import type { CommentaireNotifications } from "src/lib/types";
+import type { CommentaireNotifications, DossierData } from "src/lib/types";
 
 import styles from "./Commission.module.scss";
 
 interface DossierProps {
-  dossier: DossierDataLight;
+  dossier: DossierData;
   commentsInfo: CommentaireNotifications;
 }
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
+  const { data: session } = useSession();
   return (
-    <div className={`${styles.dossierGrid} itemGrid`}>
-      <div>
-        <StatutDossierTag dossier={dossier} />
-      </div>
+    <div className={`${session?.dbUser.role !== "MEDECIN" ? styles.dossierGrid : styles.dossierGridMedecin} itemGrid`}>
+      {session?.dbUser.role !== "MEDECIN" &&
+        <div>
+          <StatutDossierTag dossier={dossier} />
+        </div>
+      }
       <div className={styles.nomDossier} title={dossier.nom}>
         <Link href={`/dossiers/${dossier.id}`}>{dossier.nom}</Link>
       </div>
       <div>{dossier.societeProduction.nom}</div>
       <div>
-        <b>{dossier._count?.enfants}</b>&nbsp;enfants
+        <b>{dossier.enfants.length}</b>&nbsp;enfants
       </div>
       <div>
         <AssignedAgent dossier={dossier} />
@@ -62,7 +65,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
-      return p._count?.enfants ?? 0;
+      return p.enfants.length ?? 0;
     })
     .reduce((i, b) => i + b, 0);
   const { data: session } = useSession();
@@ -83,14 +86,16 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
       </div>
 
       <div
-        className={`${styles.dossierGrid} itemGrid headGrid`}
+        className={`${session?.dbUser.role !== "MEDECIN" ? styles.dossierGrid : styles.dossierGridMedecin} itemGrid headGrid`}
         style={{ borderBottom: "1px solid #DDDDDD", paddingBottom: "12px" }}
       >
-        <div>Etats</div>
+        {session?.dbUser.role !== "MEDECIN" &&
+          <div>Etats</div>
+        }
         <div>Dossier</div>
         <div>Société</div>
         <div>Enfants</div>
-        <div>Suivi par</div>
+        <div>{`${session?.dbUser.role !== "MEDECIN" ? "Suivi par" : "MÉDECIN"}`}</div>
         <div>Catégorie</div>
         <div>Notifications</div>
       </div>

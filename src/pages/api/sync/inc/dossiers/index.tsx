@@ -168,7 +168,7 @@ const update: NextApiHandler = async (req, res) => {
       }
     })
     console.log('list enfants : ', listEnfant)
-    const EnfantsData = EnfantModel.omit({id: true, dossierId: true, adresseEnfant: true, adresseRepresentant1: true, adresseRepresentant2: true, nomRepresentant1: true, nomRepresentant2: true, prenomRepresentant1: true, prenomRepresentant2: true, cdc: true})
+    const EnfantsData = EnfantModel.omit({id: true, dossierId: true, adresseEnfant: true, cdc: true})
     data.enfants.map(async (enfant) => {
       enfant.nombreJours = typeof enfant.nombreJours === "string" ? parseInt(enfant.nombreJours) : enfant.nombreJours
       enfant.montantCachet = typeof enfant.montantCachet === "string" ? parseInt(enfant.montantCachet) : enfant.montantCachet

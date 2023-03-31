@@ -8,6 +8,7 @@ import { DossierData } from "src/fetching/dossiers";
 
 interface Props {
   dossierId: number;
+  title: string,
   enfantId: number | null;
   parentId: number | null;
 }
@@ -22,43 +23,46 @@ const InputComments: React.FC<Props> = ({
   const contextDossier = { ...useStateContext() };
 
   return (
-    <div className={styles.InputComments}>
-      <textarea
-        onChange={(e: React.FormEvent<HTMLTextAreaElement>) => {
-          setComment((e.target as HTMLTextAreaElement).value);
-        }}
-        id="presentation"
-        value={comment}
-        className={styles.areaText}
-      />
+    <>
+      <h5 className={styles.h5Spacer}>{title}</h5>
+      <div className={styles.InputComments}>
+        <textarea
+          onChange={(e: React.FormEvent<HTMLTextAreaElement>) => {
+            setComment((e.target as HTMLTextAreaElement).value);
+          }}
+          id="presentation"
+          value={comment}
+          className={styles.areaText}
+        />
 
-      <ButtonLink
-        onClick={() => {
-          let commentSent: Omit<
-            Comments,
-            "id" | "userId" | "externalUserId" | "seen"
-          > = {
-            text: comment,
-            source: "SOCIETE_PROD",
-            dossierId: dossierId,
-            enfantId: enfantId,
-            commentsId: parentId,
-            date: new Date(),
-          };
-          console.log("length : ", comment.length);
-          if (comment.length > 2) {
-            createComment(commentSent);
-            contextDossier.processEntity("comments", [
-              ...contextDossier.comments,
-              commentSent,
-            ]);
-            setComment("");
-          }
-        }}
-      >
-        Ajouter un nouveau commentaire
-      </ButtonLink>
-    </div>
+        <ButtonLink
+          onClick={() => {
+            let commentSent: Omit<
+              Comments,
+              "id" | "userId" | "externalUserId" | "seen"
+            > = {
+              text: comment,
+              source: "SOCIETE_PROD",
+              dossierId: dossierId,
+              enfantId: enfantId,
+              commentsId: parentId,
+              date: new Date(),
+            };
+            console.log("length : ", comment.length);
+            if (comment.length > 2) {
+              createComment(commentSent);
+              contextDossier.processEntity("comments", [
+                commentSent,
+                ...contextDossier.comments,
+              ]);
+              setComment("");
+            }
+          }}
+        >
+          Ajouter un nouveau commentaire
+        </ButtonLink>
+      </div>
+    </>
   );
 };
 

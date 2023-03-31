@@ -1,6 +1,9 @@
 import type {
   Dossier,
+  Enfant,
+  JustificatifEnfant,
   SocieteProduction,
+  TypeConsultationMedecin,
   TypeEmploi,
   User,
 } from "@prisma/client";
@@ -187,6 +190,42 @@ const ROLES_USERS = [
   { label: "Médecin travail", value: "MEDECIN" },
 ];
 
+const TYPE_CONSULTATION_MEDECIN: {label: string, value: TypeConsultationMedecin, labelCol2: string, typeJustif: JustificatifEnfant}[] = [
+  { label: "En physique", value: "PHYSIQUE", labelCol2: 'Date du rdv ', typeJustif: 'AVIS_MEDICAL'},
+  { label: "Sur pièce", value: "PIECE", labelCol2: 'Avis médical', typeJustif: 'AVIS_MEDICAL'},
+  { label: "Bon de prise en charge", value: "PRISE_EN_CHARGE", labelCol2: 'Bon de prise en charge', typeJustif: 'BON_PRISE_EN_CHARGE'},
+  { label: "Par le médecin traitant", value: "MEDECIN_TRAITANT", labelCol2: 'Autorisation de prise en charge', typeJustif: 'AUTORISATION_PRISE_EN_CHARGE'},
+]
+
+const INFOS_REPRESENTANTS: {col: string, rows: {label: string, value: keyof Enfant}[]}[] = [
+  {
+    col: 'ENFANT', 
+    rows: [
+      {label: 'Adresse', value: 'adresseEnfant'}
+    ]
+  },
+  {
+    col: 'REPRÉSENTANT LÉGAL 1', 
+    rows: [
+      {label: 'Nom', value: 'nomRepresentant1'},
+      {label: 'Prénom', value: 'prenomRepresentant1'},
+      {label: 'Adresse', value: 'adresseRepresentant1'},
+      {label: 'Email', value: 'mailRepresentant1'},
+      {label: 'Téléphone', value: 'telRepresentant1'},
+    ]
+  },
+  {
+    col: 'REPRÉSENTANT LÉGAL 2', 
+    rows: [
+      {label: 'Nom', value: 'nomRepresentant2'},
+      {label: 'Prénom', value: 'prenomRepresentant2'},
+      {label: 'Adresse', value: 'adresseRepresentant2'},
+      {label: 'Email', value: 'mailRepresentant2'},
+      {label: 'Téléphone', value: 'telRepresentant2'},
+    ]
+  },
+]
+
 const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
 
 const TYPES_EMPLOI = [
@@ -332,6 +371,8 @@ export {
   compact,
   delay,
   EMPLOIS_CATEGORIES,
+  TYPE_CONSULTATION_MEDECIN,
+  INFOS_REPRESENTANTS,
   filterCommissions,
   filterSearchResults,
   frenchDateHour,

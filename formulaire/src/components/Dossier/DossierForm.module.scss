@@ -87,6 +87,7 @@
     }
 
     .radioMedecine {
+        cursor: pointer;
         input {
             margin-right: 1rem;
         }
@@ -110,11 +111,13 @@
         justify-content: space-between;
         position: sticky;
         bottom: 0%;
-        .textSaveBar {
-        }
         p {
             margin-bottom: 0;
         }
+    }
+
+    .buttonDeleteBar {
+        padding: 2rem 2rem;
     }
 
     .confirmDialogueWrapper {

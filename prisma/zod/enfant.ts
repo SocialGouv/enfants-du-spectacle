@@ -24,11 +24,17 @@ export const EnfantModel = z.object({
   nomRepresentant1: z.string().nullish(),
   prenomRepresentant1: z.string().nullish(),
   adresseRepresentant1: z.string().nullish(),
+  mailRepresentant1: z.string().nullish(),
+  telRepresentant1: z.string().nullish(),
   adresseRepresentant2: z.string().nullish(),
   nomRepresentant2: z.string().nullish(),
   prenomRepresentant2: z.string().nullish(),
+  mailRepresentant2: z.string().nullish(),
+  telRepresentant2: z.string().nullish(),
   externalId: z.string().nullish(),
-  typeConsultation: z.nativeEnum(TypeConsultation || null)
+  typeConsultation: z.nativeEnum(TypeConsultation || null),
+  checkTravailNuit: z.boolean().nullish(),
+  textTravailNuit: z.string().nullish(),
 })
 
 export interface CompleteEnfant extends z.infer<typeof EnfantModel> {

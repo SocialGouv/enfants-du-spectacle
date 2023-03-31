@@ -62,7 +62,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
 
   const processComment = (comment: Comments) => {
-    setComments([...comments, comment]);
+    setComments([comment, ...comments]);
   };
 
   const updateComments = () => {
@@ -96,7 +96,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return (
     <>
-      {session.dbUser.role !== "MEMBRE" && (
+      {session.dbUser.role !== "MEMBRE" && session.dbUser.role !== "MEDECIN" && (
         <DossierActionBar dossierId={dossierId} />
       )}
       <Accordion title={dossier.nom} className="accordionSpacing" state={true}>
@@ -167,16 +167,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </div>
               {dossier.source === "FORM_EDS" && showCommentSection && (
                 <>
-                  <ListComments
-                    comments={comments.filter((comment) => {
-                      return comment.enfantId === null;
-                    })}
-                  />
                   <InputComments
                     dossierId={parseInt(dossier.externalId!)}
                     enfantId={null}
                     parentId={null}
                     action={processComment}
+                  />
+                  <ListComments
+                    comments={comments.filter((comment) => {
+                      return comment.enfantId === null;
+                    })}
                   />
                 </>
               )}

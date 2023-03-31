@@ -11,6 +11,7 @@ import {
   shortUserName,
   stringToNumberOrNull,
 } from "src/lib/helpers";
+import { useSession } from "next-auth/react";
 import type { DossiersFilters } from "src/lib/queries";
 
 interface Props {
@@ -30,7 +31,8 @@ const FilterBar: React.FC<Props> = ({
   allSocieteProductions,
   onChangeFilters,
 }) => {
-  const { allUsers, isLoading, isError } = useAllUsers("instructeurs");
+  const session = useSession();
+  const { allUsers, isLoading, isError } = useAllUsers(session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
 
   if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;
@@ -92,19 +94,21 @@ const FilterBar: React.FC<Props> = ({
             onChange={onChangeDepartement}
           />
         </span>
-        <span className={styles.filterContainer || ""}>
-          <Select
-            id="userId"
-            selected={String(filters.userId)}
-            options={[defaultUserOption].concat(
-              allUsers.map((u) => ({
-                label: shortUserName(u),
-                value: String(u.id),
-              }))
-            )}
-            onChange={onChangeUserId}
-          />
-        </span>
+        {session.data?.dbUser.role !== "MEDECIN" &&
+          <span className={styles.filterContainer || ""}>
+            <Select
+              id="userId"
+              selected={String(filters.userId)}
+              options={[defaultUserOption].concat(
+                allUsers.map((u) => ({
+                  label: shortUserName(u),
+                  value: String(u.id),
+                }))
+              )}
+              onChange={onChangeUserId}
+            />
+          </span>
+        }
         <span className={styles.filterContainer}>
           <Select
             id="societeId"
