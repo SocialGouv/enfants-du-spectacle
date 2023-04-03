@@ -17,8 +17,9 @@ const DossierPage: React.FC = () => {
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
-  const [updateCollaboratorList, setUpdateCollaboratorList] =
-    React.useState<number>(0);
+  const [updateCollaboratorList, setUpdateCollaboratorList] = React.useState<
+    number[]
+  >([]);
 
   const fetchDossier = async () => {
     if (router.query.id) {
@@ -50,7 +51,6 @@ const DossierPage: React.FC = () => {
             dossier={dossier.dossier}
             showDialogue={showDialogue}
             setShowDialogue={setShowDialogue}
-            updateCollaboratorList={updateCollaboratorList}
             setUpdateCollaboratorList={setUpdateCollaboratorList}
           />
         </>

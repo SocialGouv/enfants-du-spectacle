@@ -15,8 +15,7 @@ interface Props {
   dossier: DossierData;
   showDialogue: Boolean;
   setShowDialogue: (showDialogue: boolean) => void;
-  setUpdateCollaboratorList: (updateCollaboratorList: number) => void;
-  updateCollaboratorList: number;
+  setUpdateCollaboratorList: (updateCollaboratorList: number[]) => void;
 }
 
 const ShareDossierModal: React.FC<Props> = ({
@@ -24,7 +23,6 @@ const ShareDossierModal: React.FC<Props> = ({
   showDialogue,
   setShowDialogue,
   setUpdateCollaboratorList,
-  updateCollaboratorList,
 }) => {
   const [showLoader, setShowLoader] = React.useState<boolean>(false);
   const [emailExists, setEmailExists] = React.useState<boolean>(false);
@@ -47,7 +45,7 @@ const ShareDossierModal: React.FC<Props> = ({
           collaboratorIds: [...currentDossier.collaboratorIds, userId],
         } as Dossier);
         setResetMessage(true);
-        setUpdateCollaboratorList((updateCollaboratorList as number) + 1);
+        setUpdateCollaboratorList(currentDossier.collaboratorIds);
       } else {
         setEmailExists(true);
         setShowLoader(false);

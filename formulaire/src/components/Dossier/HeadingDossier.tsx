@@ -10,7 +10,7 @@ import styles from "./HeadingDossier.module.scss";
 interface Props {
   dossier: DossierData;
   setShowDialogue?: (showDialogue: boolean) => void;
-  updateCollaboratorList: number;
+  updateCollaboratorList: number[];
 }
 
 const HeadingDossier: React.FC<Props> = ({

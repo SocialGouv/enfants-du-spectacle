@@ -10,7 +10,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 interface Props {
   dossier: Dossier;
   setShowDialogue: (showDialogue: boolean) => void;
-  updateCollaboratorList: number;
+  updateCollaboratorList: number[];
 }
 
 const CollaboratorsList: React.FC<Props> = ({
