@@ -47,7 +47,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     "dateDerniereModification"
   );
   const [order, setOrder] = React.useState<"asc" | "desc">("desc");
-  const [collaboratorId, setCollaboratorId] = React.useState<number>(0);
 
   const fetchDossiers = async () => {
     let res = await getDossiers(page, status, search, termOrdered, order);
@@ -240,7 +239,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           dossier={dossier}
                           showDialogue={showDialogue}
                           setShowDialogue={setShowDialogue}
-                          setCollaboratorId={setCollaboratorId}
                         />
                       )}
                     </div>

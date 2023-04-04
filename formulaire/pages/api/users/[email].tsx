@@ -105,7 +105,7 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
     const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(
       options
     );
-    // res.status(200).end(JSON.stringify({ message: "Send Mail : ", result }));
+
     res.status(200).json(user.id);
   } catch (e: unknown) {
     console.log(e);

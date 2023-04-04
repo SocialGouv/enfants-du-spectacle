@@ -1,9 +1,8 @@
 import { Container, Link } from "@dataesr/react-dsfr";
-import { Comments, Dossier } from "@prisma/client";
+import { Comments } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import ShareDossierModal from "src/components/Dossier/ShareDossierModal";
-import IconLoader from "src/components/IconLoader";
 import { StateProvider } from "src/context/StateContext";
 import { getComments } from "src/fetching/commentaires";
 import DossierForm from "../../src/components/Dossier/DossierForm";
