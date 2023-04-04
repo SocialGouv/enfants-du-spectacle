@@ -10,14 +10,9 @@ import styles from "./HeadingDossier.module.scss";
 interface Props {
   dossier: DossierData;
   setShowDialogue?: (showDialogue: boolean) => void;
-  updateCollaboratorList: number[];
 }
 
-const HeadingDossier: React.FC<Props> = ({
-  dossier,
-  setShowDialogue,
-  updateCollaboratorList,
-}) => {
+const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
   const { data: session } = useSession();
 
   return (
@@ -37,7 +32,6 @@ const HeadingDossier: React.FC<Props> = ({
                   setShowDialogue={
                     setShowDialogue as (showDialogue: boolean) => void
                   }
-                  updateCollaboratorList={updateCollaboratorList}
                 />
               )}
             </div>

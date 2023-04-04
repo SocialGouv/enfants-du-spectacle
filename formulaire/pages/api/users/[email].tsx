@@ -40,8 +40,6 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       user = await prisma.user.create({ data });
     }
 
-    res.status(200).json(user.id);
-
     //SEND EMAIL
     if (typeof req.body !== "string") {
       res.status(400).end();
@@ -85,33 +83,30 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       return `test \n${url}\n`;
     };
 
-    try {
-      const url = `${req.headers.host}`;
+    const url = `${req.headers.host}`;
 
-      const transporter: Transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_SERVER_HOST,
-        port: 1025,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
-      });
+    const transporter: Transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: 1025,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    });
 
-      const options = {
-        from: process.env.EMAIL_FROM,
-        html: html({ url }),
-        subject: wording.subject,
-        text: text({ url }),
-        to: to,
-      };
+    const options = {
+      from: process.env.EMAIL_FROM,
+      html: html({ url }),
+      subject: wording.subject,
+      text: text({ url }),
+      to: to,
+    };
 
-      const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(
-        options
-      );
-      res.status(200).end(JSON.stringify({ message: "Send Mail : ", result }));
-    } catch (error: unknown) {
-      res.status(400);
-    }
+    const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(
+      options
+    );
+    // res.status(200).end(JSON.stringify({ message: "Send Mail : ", result }));
+    res.status(200).json(user.id);
   } catch (e: unknown) {
     console.log(e);
   }

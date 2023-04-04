@@ -9,7 +9,11 @@ import { getComments } from "src/fetching/commentaires";
 import DossierForm from "../../src/components/Dossier/DossierForm";
 import HeadingDossier from "../../src/components/Dossier/HeadingDossier";
 import Layout from "../../src/components/Layout";
-import { getDossier, ResDossier } from "../../src/fetching/dossiers";
+import {
+  DossierData,
+  getDossier,
+  ResDossier,
+} from "../../src/fetching/dossiers";
 
 const DossierPage: React.FC = () => {
   const router = useRouter();
@@ -17,9 +21,6 @@ const DossierPage: React.FC = () => {
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
-  const [updateCollaboratorList, setUpdateCollaboratorList] = React.useState<
-    number[]
-  >([]);
 
   const fetchDossier = async () => {
     if (router.query.id) {
@@ -38,6 +39,20 @@ const DossierPage: React.FC = () => {
     fetchDossier();
   }, [router]);
 
+  function handleCollaboratorIdsChange(newCollaboratorId: number) {
+    const d = dossier?.dossier;
+    if (d) {
+      const dossierUpdated: ResDossier = {
+        dossier: {
+          ...d,
+          collaboratorIds: [...d.collaboratorIds, newCollaboratorId],
+        } as DossierData,
+        docs: dossier?.docs,
+      };
+      setDossier(dossierUpdated);
+    }
+  }
+
   return (
     <Layout windowTitle="Mes dossiers">
       {dossier && (
@@ -45,13 +60,12 @@ const DossierPage: React.FC = () => {
           <HeadingDossier
             dossier={dossier.dossier}
             setShowDialogue={setShowDialogue}
-            updateCollaboratorList={updateCollaboratorList}
           ></HeadingDossier>
           <ShareDossierModal
             dossier={dossier.dossier}
             showDialogue={showDialogue}
             setShowDialogue={setShowDialogue}
-            setUpdateCollaboratorList={setUpdateCollaboratorList}
+            setCollaboratorId={handleCollaboratorIdsChange}
           />
         </>
       )}

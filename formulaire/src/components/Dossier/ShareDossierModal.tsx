@@ -4,6 +4,7 @@ import React from "react";
 import {
   DossierData,
   getDossier,
+  ResDossier,
   updateDossier,
 } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
@@ -15,14 +16,14 @@ interface Props {
   dossier: DossierData;
   showDialogue: Boolean;
   setShowDialogue: (showDialogue: boolean) => void;
-  setUpdateCollaboratorList: (updateCollaboratorList: number[]) => void;
+  setCollaboratorId: (collaboratorId: number) => void;
 }
 
 const ShareDossierModal: React.FC<Props> = ({
   dossier,
   showDialogue,
   setShowDialogue,
-  setUpdateCollaboratorList,
+  setCollaboratorId,
 }) => {
   const [showLoader, setShowLoader] = React.useState<boolean>(false);
   const [emailExists, setEmailExists] = React.useState<boolean>(false);
@@ -33,10 +34,8 @@ const ShareDossierModal: React.FC<Props> = ({
     setShowLoader(true);
     setEmailExists(false);
 
-    const res = await getDossier(dossier.id.toString());
-    const currentDossier = res.dossier;
-
-    let userId = await getUserByEmail(collaboratorEmail, dossier);
+    const currentDossier = dossier;
+    let userId = await getUserByEmail(collaboratorEmail, currentDossier);
 
     if (userId) {
       if (!currentDossier.collaboratorIds.includes(userId)) {
@@ -45,7 +44,7 @@ const ShareDossierModal: React.FC<Props> = ({
           collaboratorIds: [...currentDossier.collaboratorIds, userId],
         } as Dossier);
         setResetMessage(true);
-        setUpdateCollaboratorList(currentDossier.collaboratorIds);
+        setCollaboratorId(userId);
       } else {
         setEmailExists(true);
         setShowLoader(false);

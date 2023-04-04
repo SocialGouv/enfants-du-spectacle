@@ -10,14 +10,9 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 interface Props {
   dossier: Dossier;
   setShowDialogue: (showDialogue: boolean) => void;
-  updateCollaboratorList: number[];
 }
 
-const CollaboratorsList: React.FC<Props> = ({
-  dossier,
-  setShowDialogue,
-  updateCollaboratorList,
-}) => {
+const CollaboratorsList: React.FC<Props> = ({ dossier, setShowDialogue }) => {
   const [collaborators, setCollaborators] = React.useState<User[]>();
   const [showCollabList, setShowCollabList] = React.useState<Boolean>(false);
   const [index, setIndex] = React.useState<number>();
@@ -38,18 +33,13 @@ const CollaboratorsList: React.FC<Props> = ({
   };
 
   const getUsers = async () => {
-    if (dossier.collaboratorIds.length) {
-      const resDossier = await getDossier(dossier.id.toString());
-      const resCollaborators = await getUsersById(
-        resDossier.dossier.collaboratorIds
-      );
-      setCollaborators(resCollaborators);
-    }
+    const resCollaborators = await getUsersById(dossier.collaboratorIds);
+    setCollaborators(resCollaborators);
   };
 
   React.useEffect(() => {
     getUsers();
-  }, [updateCollaboratorList]);
+  }, [dossier]);
 
   return (
     <div className={styles.dropdownWrapper}>
