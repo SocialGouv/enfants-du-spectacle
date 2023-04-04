@@ -54,7 +54,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
 
 interface Props {
   commission: CommissionData;
-  commentsCountInfo: CommentaireNotifications[];
+  commentsCountInfo?: CommentaireNotifications[];
 }
 
 const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
@@ -97,7 +97,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
       </div>
       <div>
         {commission.dossiers.map((dossier) => {
-          const commentsInfo = commentsCountInfo.find(
+          const commentsInfo = commentsCountInfo?.find(
             (comment) =>
               JSON.stringify(comment.dossierId) === dossier.externalId
           );

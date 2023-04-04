@@ -175,6 +175,7 @@ const getUpcomingCommissionsByDepartement = async (departements: string) => {
 };
 
 const getPastCommissions = async () => {
+  console.log('past commissions')
   return prisma.commission.findMany({
     include: {
       dossiers: {
