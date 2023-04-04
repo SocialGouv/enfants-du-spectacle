@@ -58,8 +58,8 @@ export const uploadFile = (
 
         //@ts-ignore
         const input = fs.createReadStream(files.justificatif.filepath);
-        //@ts-ignore
         const output = fs.createWriteStream(
+          //@ts-ignore
           files.justificatif.filepath + ".encrypted"
         );
 
@@ -92,6 +92,7 @@ const post: NextApiHandler = async (req, res) => {
   //@ts-ignore
   res
     .status(200)
+    //@ts-ignore
     .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
 };
 

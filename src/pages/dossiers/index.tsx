@@ -50,9 +50,13 @@ const Page: React.FC = () => {
   const session = useSession();
   if (
     session.status === "authenticated" &&
+    //@ts-ignore
     session.data.dbUser.role !== "ADMIN" &&
+    //@ts-ignore
     session.data.dbUser.role !== "INSTRUCTEUR" &&
+    //@ts-ignore
     session.data.dbUser.role !== "MEMBRE" &&
+    //@ts-ignore
     session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({
@@ -74,9 +78,10 @@ const Page: React.FC = () => {
 
   const { commissions, ...swrCommissions } = useCommissions(
     "upcoming",
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    //@ts-ignore
     session.data.dbUser.role !== "MEMBRE"
       ? "all"
+      //@ts-ignore
       : session.data.dbUser.departements
   );
 
@@ -84,9 +89,10 @@ const Page: React.FC = () => {
 
   const { ...commissionsPast } = useCommissions(
     "past",
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    //@ts-ignore
     session.data.dbUser.role !== "MEMBRE"
       ? "all"
+      //@ts-ignore
       : session.data.dbUser.departements
   );
 
@@ -316,7 +322,9 @@ const Page: React.FC = () => {
       {isError && <Icon name="ri-error" />}
       {!isLoading && !isError && !searchValueEffective && (
         <>
-          {session.data.dbUser.role !== "MEDECIN" &&
+          {
+          //@ts-ignore
+          session.data.dbUser.role !== "MEDECIN" &&
             <>
               <ButtonList action={handleStatus} />
             </>
@@ -347,7 +355,9 @@ const Page: React.FC = () => {
                     <th>Département</th>
                     <th>Dossiers</th>
                     <th>Enfants</th>
-                    {session.data.dbUser.role !== "MEDECIN" &&
+                    {
+                    //@ts-ignore
+                    session.data.dbUser.role !== "MEDECIN" &&
                       <>
                         <th>Etat</th>
                         <th>Télécharger</th>
@@ -412,11 +422,14 @@ const Page: React.FC = () => {
                         <td>
                           {commission.dossiers
                             .map((p) => {
-                              return p.enfants.length ?? 0;
+                              console.log(p)
+                              return p._count ? p._count.enfants : p.enfants ? p.enfants.length : 0;
                             })
                             .reduce((i, b) => i + b, 0)}
                         </td>
-                        {session.data.dbUser.role !== "MEDECIN" &&
+                        {
+                        //@ts-ignore
+                        session.data.dbUser.role !== "MEDECIN" &&
                           <>
                             <td
                               style={{
@@ -528,6 +541,7 @@ const Page: React.FC = () => {
   );
 };
 
+//@ts-ignore
 Page.auth = true;
 
 export default Page;
