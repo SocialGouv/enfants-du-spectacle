@@ -1,3 +1,10 @@
+# [1.60.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.59.0...v1.60.0) (2023-04-05)
+
+
+### Features
+
+* add warning message only in preprod ([#503](https://github.com/SocialGouv/enfants-du-spectacle/issues/503)) ([3e8e92e](https://github.com/SocialGouv/enfants-du-spectacle/commit/3e8e92e3f9ced6e264e3a6fb6c7b21197ab7a792))
+
 # [1.59.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.4...v1.59.0) (2023-04-05)
 
 
