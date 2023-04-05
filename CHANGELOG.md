@@ -1,3 +1,10 @@
+## [1.60.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.0...v1.60.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* fix name preproduction ([#504](https://github.com/SocialGouv/enfants-du-spectacle/issues/504)) ([69d2dac](https://github.com/SocialGouv/enfants-du-spectacle/commit/69d2dac878979227a7dee7a3b88e3eeb8e760a9b))
+
 # [1.60.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.59.0...v1.60.0) (2023-04-05)
 
 
