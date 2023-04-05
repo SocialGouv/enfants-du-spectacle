@@ -1,3 +1,10 @@
+# [1.59.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.4...v1.59.0) (2023-04-05)
+
+
+### Features
+
+* send generic email ([#502](https://github.com/SocialGouv/enfants-du-spectacle/issues/502)) ([101a3bc](https://github.com/SocialGouv/enfants-du-spectacle/commit/101a3bc62632ef1bf5e1d597c3a358da57a7869c))
+
 ## [1.58.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.3...v1.58.4) (2023-04-05)
 
 
