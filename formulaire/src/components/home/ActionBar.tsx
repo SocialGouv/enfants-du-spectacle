@@ -59,7 +59,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           </div>
         </ButtonLink>
       </div>
-      {process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT === "preprod" && (
+      {process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT === "preproduction" && (
         <div className={styles.warningMessageWrapper}>
           <div className={styles.iconWrapper}>
             <FiAlertCircle className={styles.alertIcon} size={24} />
