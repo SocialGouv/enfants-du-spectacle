@@ -1,3 +1,10 @@
+## [1.58.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.3...v1.58.4) (2023-04-05)
+
+
+### Bug Fixes
+
+* fix interface membres ([9654a70](https://github.com/SocialGouv/enfants-du-spectacle/commit/9654a702109a1b803cfeed6b6eda657c4724708b))
+
 ## [1.58.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.58.2...v1.58.3) (2023-04-04)
 
 
