@@ -37,7 +37,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
       </div>
       <div>{dossier.societeProduction.nom}</div>
       <div>
-        <b>{dossier.enfants.length}</b>&nbsp;enfants
+        <b>{dossier.enfants ? dossier.enfants.length : dossier._count?.enfants ? dossier._count.enfants : 0}</b>&nbsp;enfants
       </div>
       <div>
         <AssignedAgent dossier={dossier} />
@@ -61,7 +61,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
-      return p.enfants.length ?? 0;
+      return p.enfants ? p.enfants.length : p._count?.enfants ? p._count.enfants : 0;
     })
     .reduce((i, b) => i + b, 0);
   const { data: session } = useSession();
