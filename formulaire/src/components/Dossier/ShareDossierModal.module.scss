@@ -1,0 +1,84 @@
+.confirmDialogueWrapper {
+    width: 100%;
+    max-width: 500px;
+    color: black;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: .2s;
+    z-index: 9999;
+}
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+.btnList {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+.warningMessage {
+    color: red;
+    text-align: left;
+    width: 100%;
+    font-style: italic;
+}
+.successMessage {
+    color: green;
+    text-align: left;
+    width: 100%;
+    font-style: italic;
+}
+.titleModal {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px !important;
+}
+.dossierName {
+    font-weight: bold;
+    padding: 0 5px;
+}
+.confirmDialogue {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    padding: 44px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+.containerLoader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.loaderEmailCheck {
+    position: absolute;
+    right: 0;
+    span, span::after {
+        width: 30px;
+        height: 30px;
+    }
+}

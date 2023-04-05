@@ -64,21 +64,12 @@ const sendMail: NextApiHandler = async (req, res) => {
     .toString();
 
   function html({ url }: { url: string }): string {
-    return (
-      templateSignin
-        .replace("__TEXT__", wording.text as string)
-        /*.replace(
-        "__ELEMENT__",
-        type === "dl_commission"
-          ? `${frenchDepartementName(
-              commission.departement as string
-            )} - ${date}`
-          : ``
-      )*/
-        .replace("__URL__", url)
-        .replace("__BUTTON__", wording.button as string)
-        .replace("__BYE__", wording.bye as string)
-    );
+    return templateSignin
+      .replace("__TEXT__", wording.text as string)
+      .replace("__URL__", url)
+      .replace("__BUTTON__", wording.button as string)
+      .replace("__TITLE__", wording.title as string)
+      .replace("__BYE__", wording.bye as string);
   }
 
   function text({ url }: { url: string }) {

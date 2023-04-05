@@ -3,12 +3,7 @@ import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
 import React from "react";
 import { CommentaireNotifications, statusGroup } from "src/lib/types";
-import {
-  DossierData,
-  getDossier,
-  getDossiers,
-  updateDossier,
-} from "../../fetching/dossiers";
+import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
 import { ButtonLink } from "../../uiComponents/button";
 import CountPieces from "../CountPieces";
@@ -29,8 +24,8 @@ import {
   getDemandeur,
 } from "../../fetching/demandeur";
 import { createPiece, getPieces } from "../../fetching/pieces";
-import { Button } from "@dataesr/react-dsfr";
-import { getUserByEmail } from "src/fetching/users";
+import { useSession } from "next-auth/react";
+import ShareDossierModal from "../Dossier/ShareDossierModal";
 
 interface Props {
   search: string;
@@ -40,16 +35,14 @@ interface Props {
 
 const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
   const [type, setType] = React.useState<"delete" | "share" | "">("");
   const [showLoader, setShowLoader] = React.useState<boolean>(false);
   const [dossiers, setDossiers] = React.useState<DossierData[]>([]);
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
-  const [emailExists, setEmailExists] = React.useState<boolean>(false);
-  const [dossierSent, setDossierSent] = React.useState<boolean>(false);
   const [countDossiers, setCountDossiers] = React.useState<number>(0);
   const [page, setPage] = React.useState<number>(1);
-  const [collaboratorEmail, setCollaboratorEmail] = React.useState<string>("");
   const [termOrdered, setTermToOrder] = React.useState<keyof Dossier>(
     "dateDerniereModification"
   );
@@ -60,42 +53,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     setDossiers(res.dossiers);
     setCountDossiers(res.countCurrent);
     action(res.countEnCours, res.countTermines);
-  };
-
-  const shareDossier = async (dossier: Dossier) => {
-    setShowLoader(true);
-    setEmailExists(false);
-
-    // getDossier
-    const res = await getDossier(dossier.id.toString());
-    const currentDossier = res.dossier;
-
-    // check if user exists
-    let userId = await getUserByEmail(collaboratorEmail);
-
-    if (userId) {
-      if (!currentDossier.collaboratorIds.includes(userId)) {
-        updateDossier({
-          ...currentDossier,
-          collaboratorIds: [...currentDossier.collaboratorIds, userId],
-        } as Dossier);
-        setDossierSent(true);
-      } else {
-        setEmailExists(true);
-        setShowLoader(false);
-      }
-    }
-    setShowLoader(false);
-  };
-
-  const checkEmail = () => {
-    let re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (collaboratorEmail && re.test(collaboratorEmail)) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   const [comments, setComments] = React.useState<Comments[]>([]);
@@ -278,69 +235,11 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           </div>
                         </div>
                       ) : (
-                        <div className={styles.confirmDialogue}>
-                          <div className={styles.titleModal}>
-                            Partager le dossier
-                            <span className={styles.dossierName}>
-                              {dossier.nom}
-                            </span>
-                            avec un collaborateur
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              position: "relative",
-                              width: "100%",
-                            }}
-                          >
-                            <input
-                              value={collaboratorEmail}
-                              onChange={(e) => {
-                                setCollaboratorEmail(e.target.value);
-                              }}
-                              type="email"
-                              id="prenom"
-                              name="prenom"
-                              placeholder="email du collaborateur"
-                              className="inputText"
-                            />
-                            {showLoader && (
-                              <div className={styles.loaderEmailCheck}>
-                                <IconLoader />
-                              </div>
-                            )}
-                          </div>
-                          {emailExists && (
-                            <div className={styles.warningMessage}>
-                              Le dossier est déjà partagé avec ce collaborateur
-                            </div>
-                          )}
-                          {dossierSent && !emailExists && (
-                            <div className={styles.successMessage}>
-                              Le dossier a bien été partagé avec le
-                              collaborateur
-                            </div>
-                          )}
-                          <div className={styles.btnList}>
-                            <Button
-                              disabled={!checkEmail()}
-                              onClick={() => {
-                                setCollaboratorEmail("");
-                                shareDossier(dossier);
-                              }}
-                            >
-                              Partager le dossier
-                            </Button>
-                            <ButtonLink
-                              onClick={() => {
-                                setShowDialogue(false);
-                                setEmailExists(false);
-                              }}
-                            >
-                              Fermer
-                            </ButtonLink>
-                          </div>
-                        </div>
+                        <ShareDossierModal
+                          dossier={dossier}
+                          showDialogue={showDialogue}
+                          setShowDialogue={setShowDialogue}
+                        />
                       )}
                     </div>
                   )}
@@ -377,44 +276,47 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           />
                           Éditer
                         </li>
-                        <li
-                          onClick={async () => {
-                            duplicateDossier(dossier);
-                          }}
-                        >
-                          <HiOutlineDocumentDuplicate
-                            size={"20px"}
-                            style={{ marginRight: "10px" }}
-                          />
-                          Dupliquer
-                        </li>
-                        <li
-                          onClick={async () => {
-                            setShowDialogue(true);
-                            setType("share");
-                            setDropdownVisible(false);
-                            setDossierSent(false);
-                          }}
-                        >
-                          <FiUsers
-                            size={"20px"}
-                            style={{ marginRight: "10px" }}
-                          />
-                          Partager
-                        </li>
-                        <li
-                          onClick={() => {
-                            setShowDialogue(true);
-                            setType("delete");
-                            setDropdownVisible(false);
-                          }}
-                        >
-                          <BiTrash
-                            size={"20px"}
-                            style={{ marginRight: "10px" }}
-                          />
-                          Supprimer
-                        </li>
+                        {session?.dbUser.id === dossier.userId && (
+                          <>
+                            <li
+                              onClick={async () => {
+                                duplicateDossier(dossier);
+                              }}
+                            >
+                              <HiOutlineDocumentDuplicate
+                                size={"20px"}
+                                style={{ marginRight: "10px" }}
+                              />
+                              Dupliquer
+                            </li>
+                            <li
+                              onClick={async () => {
+                                setShowDialogue(true);
+                                setType("share");
+                                setDropdownVisible(false);
+                              }}
+                            >
+                              <FiUsers
+                                size={"20px"}
+                                style={{ marginRight: "10px" }}
+                              />
+                              Partager
+                            </li>
+                            <li
+                              onClick={() => {
+                                setShowDialogue(true);
+                                setType("delete");
+                                setDropdownVisible(false);
+                              }}
+                            >
+                              <BiTrash
+                                size={"20px"}
+                                style={{ marginRight: "10px" }}
+                              />
+                              Supprimer
+                            </li>
+                          </>
+                        )}
                       </ul>
                     </div>
                   )}

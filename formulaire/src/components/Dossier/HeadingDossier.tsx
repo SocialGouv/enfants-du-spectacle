@@ -9,9 +9,10 @@ import styles from "./HeadingDossier.module.scss";
 
 interface Props {
   dossier: DossierData;
+  setShowDialogue?: (showDialogue: boolean) => void;
 }
 
-const HeadingDossier: React.FC<Props> = ({ dossier }) => {
+const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
   const { data: session } = useSession();
 
   return (
@@ -25,14 +26,18 @@ const HeadingDossier: React.FC<Props> = ({ dossier }) => {
                 status={dossier.statut}
                 wihteBackground={true}
               ></LabelStatus>
-              {dossier.userId === session?.dbUser.id &&
-                dossier.collaboratorIds.length > 0 && (
-                  <CollaboratorsList dossier={dossier} />
-                )}
+              {dossier.userId === session?.dbUser.id && (
+                <CollaboratorsList
+                  dossier={dossier}
+                  setShowDialogue={
+                    setShowDialogue as (showDialogue: boolean) => void
+                  }
+                />
+              )}
             </div>
           </div>
           <h2>
-            Dossier n° {dossier.id} en brouillon depuis le{" "}
+            Dossier n° {dossier.id} crée le{" "}
             {frenchDateText(dossier.dateDerniereModification)}
           </h2>
         </Container>

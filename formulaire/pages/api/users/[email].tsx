@@ -1,6 +1,12 @@
-import type { NextApiHandler, NextApiRequest } from "next";
+import type { NextApiHandler } from "next";
 import { PrismaClient, User } from "@prisma/client";
 import { getSession } from "next-auth/react";
+import { WORDING_MAILING } from "src/lib/helpers";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
+import type { Transporter } from "nodemailer";
+import nodemailer from "nodemailer";
+import fs from "fs";
+import _ from "lodash";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -8,7 +14,7 @@ const handler: NextApiHandler = async (req, res) => {
     res.status(401).end();
     return;
   }
-  if (req.method == "GET") {
+  if (req.method == "POST") {
     await getUserByEmail(req, res);
   } else {
     res.status(405).end();
@@ -19,7 +25,6 @@ const handler: NextApiHandler = async (req, res) => {
 const getUserByEmail: NextApiHandler = async (req, res) => {
   const prisma = new PrismaClient();
   const userEmail = req.query.email as string;
-  console.log("email:", userEmail);
   try {
     let user: User | null = null;
     user = await prisma.user.findFirst({
@@ -29,12 +34,77 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
     });
 
     if (!user) {
-      console.log("create user: ", userEmail);
       const data = {
         email: userEmail as string,
       };
       user = await prisma.user.create({ data });
     }
+
+    //SEND EMAIL
+    if (typeof req.body !== "string") {
+      res.status(400).end();
+      return;
+    }
+
+    const parsed = JSON.parse(req.body);
+    if (!parsed) {
+      res.status(400).end();
+      return;
+    }
+
+    const dossier = parsed;
+    const type = "share_dossier";
+    const to = userEmail;
+
+    const wording = _.find(WORDING_MAILING, { type: type });
+
+    if (!wording) {
+      res.status(400).end();
+      return;
+    }
+
+    const templateSignin = fs
+      .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
+      .toString();
+
+    const html = ({ url }: { url: string }): string => {
+      return templateSignin
+        .replace(
+          "__TITLE__",
+          (wording?.title + " «" + dossier.nom + "»") as string
+        )
+        .replace("__TEXT__", wording?.text as string)
+        .replace("__URL__", url)
+        .replace("__BUTTON__", wording?.button as string)
+        .replace("__BYE__", wording?.bye as string);
+    };
+
+    const text = ({ url }: { url: string }) => {
+      return `test \n${url}\n`;
+    };
+
+    const url = `${process.env.NEXTAUTH_URL}`;
+
+    const transporter: Transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: Number(process.env.EMAIL_SERVER_PORT) || 0,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    });
+
+    const options = {
+      from: process.env.EMAIL_FROM,
+      html: html({ url }),
+      subject: wording.subject,
+      text: text({ url }),
+      to: to,
+    };
+
+    const result: SMTPTransport.SentMessageInfo = await transporter.sendMail(
+      options
+    );
 
     res.status(200).json(user.id);
   } catch (e: unknown) {

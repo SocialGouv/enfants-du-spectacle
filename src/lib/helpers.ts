@@ -274,11 +274,13 @@ const WORDING_MAILING = [
     text: "Votre dossier a été accepté. Vous trouverez en pièce jointe de ce mail la décision d'autorisation.",
     type: "dl_decision",
   },
+
   {
     button: "Connexion",
     bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
-    subject: "Connexion à enfants du spectacle",
+    subject: "Connexion au formulaire enfants du spectacle",
     text: "Connectez-vous en suivant ce lien : ",
+    title: "Bonjour,",
     type: "auth",
   },
 ];

@@ -65,11 +65,39 @@
             border-bottom: 1px solid rgb(241, 241, 241);
             font-size: 14px;
         }
+        .addCollaborator {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .loaderEmailCheck {
+            position: absolute;
+            right: 0;
+            span, span::after {
+                width: 30px;
+                height: 30px;
+            }
+        }
+        .warningMessage, .successMessage {
+            padding: 5px;
+        }
+        .warningMessage {
+            color: red;
+            text-align: left;
+            width: 100%;
+            font-style: italic;
+        }
+        .successMessage {
+            color: green;
+            text-align: left;
+            width: 100%;
+            font-style: italic;
+        }
         .collaboratorItem:hover {
             background-color: #ececfe;
         }
 
-        .trashIcon {
+        .trashIcon, .plusIcon, .dropDownIcon {
             cursor: pointer;
         }
         .trashIcon:hover {
