@@ -83,11 +83,11 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       return `test \n${url}\n`;
     };
 
-    const url = `${req.headers.host}`;
+    const url = `${process.env.NEXTAUTH_URL}`;
 
     const transporter: Transporter = nodemailer.createTransport({
       host: process.env.EMAIL_SERVER_HOST,
-      port: 1025,
+      port: Number(process.env.EMAIL_SERVER_PORT) || 0,
       auth: {
         user: process.env.EMAIL_SERVER_USER,
         pass: process.env.EMAIL_SERVER_PASSWORD,
