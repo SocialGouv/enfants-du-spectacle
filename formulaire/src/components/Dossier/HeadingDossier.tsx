@@ -37,7 +37,7 @@ const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
             </div>
           </div>
           <h2>
-            Dossier n° {dossier.id} crée depuis le{" "}
+            Dossier n° {dossier.id} crée le{" "}
             {frenchDateText(dossier.dateDerniereModification)}
           </h2>
         </Container>
