@@ -22,10 +22,34 @@
         }
     }
 
+    .warningMessageWrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px;
+        background-color: white;
+        border: 1px solid rgb(161, 0, 0);
+        border-radius: 2px;
+        margin-top: 2rem;
+    }
+
+    .iconWrapper {
+        background-color: rgb(161, 0, 0);
+        padding: 12px;
+
+        .alertIcon {
+            color: white;
+        }
+    }
+    .formLink {
+        font-weight: bold;
+    }
     .inactiveStatus {
         .countNumber {
             background-color: var(--blue-fr);
             color: white;
         }
     }
+
+
 }
