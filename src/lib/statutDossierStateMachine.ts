@@ -140,6 +140,21 @@ const transitions: TransitionObject[] = [
     name: "passerRefuse",
     to: "REFUSE",
   },
+  {
+    from: ["ACCEPTE", "REFUSE"],
+    name: "passerFavorable",
+    to: "AVIS_FAVORABLE",
+  },
+  {
+    from: ["ACCEPTE", "REFUSE"],
+    name: "passerDefavorable",
+    to: "AVIS_DEFAVORABLE",
+  },
+  {
+    from: ["ACCEPTE", "REFUSE"],
+    name: "passerFavorableSousReserve",
+    to: "AVIS_FAVORABLE_SOUS_RESERVE",
+  },
 ];
 
 const factory = (init = "CONSTRUCTION"): StatutDossierStateMachine => {
