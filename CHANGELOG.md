@@ -1,3 +1,10 @@
+## [1.60.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.1...v1.60.2) (2023-04-06)
+
+
+### Bug Fixes
+
+* allow roolback from dossier accepte ([#505](https://github.com/SocialGouv/enfants-du-spectacle/issues/505)) ([5bbf386](https://github.com/SocialGouv/enfants-du-spectacle/commit/5bbf3867d5d4814df55da4b3fae006e33bbeb328))
+
 ## [1.60.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.0...v1.60.1) (2023-04-05)
 
 
