@@ -170,7 +170,7 @@ const update: NextApiHandler = async (req, res) => {
     data: parsed,
     where: { id: parsed.id },
   });
-
+  console.log("DOSSIER UPDATED: ", produitupdated);
   res.status(200).json(produitupdated);
 };
 

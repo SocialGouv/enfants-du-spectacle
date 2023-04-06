@@ -1,4 +1,10 @@
-import type { Dossier, Enfant, JustificatifEnfant, TypeConsultationMedecin, User } from "@prisma/client";
+import type {
+  Dossier,
+  Enfant,
+  JustificatifEnfant,
+  TypeConsultationMedecin,
+  User,
+} from "@prisma/client";
 import _ from "lodash";
 import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect } from "react";
@@ -6,7 +12,10 @@ import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
 import type { Comments } from "src/lib/fetching/comments";
-import { INFOS_REPRESENTANTS, TYPE_CONSULTATION_MEDECIN } from "src/lib/helpers";
+import {
+  INFOS_REPRESENTANTS,
+  TYPE_CONSULTATION_MEDECIN,
+} from "src/lib/helpers";
 import { updateCommentairesNotifications, updateEnfant } from "src/lib/queries";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -37,7 +46,7 @@ const EnfantComponent: React.FC<Props> = ({
     ...enfant,
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
-  const session = useSession()
+  const session = useSession();
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
@@ -57,15 +66,26 @@ const EnfantComponent: React.FC<Props> = ({
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const data = new FormData();
     data.append(e.target.name, e.target.files[0]);
-    let upload = await uploadDoc(data, dossier.externalId ?? '', formData.externalId ?? '', TYPE_CONSULTATION_MEDECIN.find(type => type.value === formData.typeConsultationMedecin)?.typeJustif);
+    let upload = await uploadDoc(
+      data,
+      dossier.externalId ?? "",
+      formData.externalId ?? "",
+      TYPE_CONSULTATION_MEDECIN.find(
+        (type) => type.value === formData.typeConsultationMedecin
+      )?.typeJustif
+    );
     setFormData({
       ...formData,
-      ['justificatifs']: [...formData.justificatifs, TYPE_CONSULTATION_MEDECIN.find(type => type.value === formData.typeConsultationMedecin)?.typeJustif]
-    })
-  }
+      ["justificatifs"]: [
+        ...formData.justificatifs,
+        TYPE_CONSULTATION_MEDECIN.find(
+          (type) => type.value === formData.typeConsultationMedecin
+        )?.typeJustif,
+      ],
+    });
+  };
 
-  const handleDelete = async (id: string) => {
-  }
+  const handleDelete = async (id: string) => {};
 
   useEffect(() => {
     if (mountedRef) {
@@ -168,7 +188,7 @@ const EnfantComponent: React.FC<Props> = ({
               />
             </div>
             <div>
-              {enfant.checkTravailNuit &&
+              {enfant.checkTravailNuit && (
                 <>
                   Travail de nuit :{" "}
                   <span
@@ -179,7 +199,7 @@ const EnfantComponent: React.FC<Props> = ({
                     }}
                   />
                 </>
-              }
+              )}
             </div>
           </Info>
 
@@ -190,7 +210,8 @@ const EnfantComponent: React.FC<Props> = ({
               dossier={dossier}
             />
           </Info>
-          {(session.data?.dbUser.role === "INSTRUCTEUR" || session.data?.dbUser.role === "ADMIN") &&
+          {(session.data?.dbUser.role === "INSTRUCTEUR" ||
+            session.data?.dbUser.role === "ADMIN") && (
             <Info title="Validation" className={styles.info}>
               <ValidationJustificatifsEnfant
                 enfant={enfant}
@@ -198,7 +219,7 @@ const EnfantComponent: React.FC<Props> = ({
                 dataLinks={dataLinks}
               />
             </Info>
-          }
+          )}
         </div>
       </Accordion>
       <Accordion
@@ -223,8 +244,11 @@ const EnfantComponent: React.FC<Props> = ({
           </>
         )}
       </Accordion>
-      
-      <Accordion title="Afficher les informations des représentants légaux" className="accordionSmallText">
+
+      <Accordion
+        title="Afficher les informations des représentants légaux"
+        className="accordionSmallText"
+      >
         <div className={styles.adressesGrid}>
           <form
             className={styles.Form}
@@ -243,7 +267,9 @@ const EnfantComponent: React.FC<Props> = ({
                       onChange={(e) => {
                         handleForm(e);
                       }}
-                      disabled={(session.data?.dbUser as User).role === "MEDECIN"}
+                      disabled={
+                        (session.data?.dbUser as User).role === "MEDECIN"
+                      }
                       type="text"
                       id={row.value}
                       name={row.value}
@@ -257,15 +283,14 @@ const EnfantComponent: React.FC<Props> = ({
           </form>
         </div>
       </Accordion>
-      
-      {(session.data?.dbUser as User).role === "MEDECIN" && 
+
+      {(session.data?.dbUser as User).role === "MEDECIN" && (
         <Accordion
           title={"Avis médical "}
           className="accordionSmallText"
           type="commentChildren"
         >
           <div className={styles.avisMedicalGrid}>
-
             <Info title="Type de consultation">
               {TYPE_CONSULTATION_MEDECIN.map((typeConsult) => (
                 <label className={styles.radioMedecine} key={typeConsult.value}>
@@ -273,24 +298,30 @@ const EnfantComponent: React.FC<Props> = ({
                     type="radio"
                     value="Male"
                     id="typeConsultationMedecin"
-                    checked={formData.typeConsultationMedecin === typeConsult.value}
+                    checked={
+                      formData.typeConsultationMedecin === typeConsult.value
+                    }
                     onChange={(e) => {
                       setFormData({
                         ...formData,
-                        ['typeConsultationMedecin']: typeConsult.value,
+                        ["typeConsultationMedecin"]: typeConsult.value,
                       });
                     }}
                   />
                   <span>{typeConsult.label}</span>
-              </label>
+                </label>
               ))}
             </Info>
 
-            {formData.typeConsultationMedecin !== null &&
-              <Info 
-                title={TYPE_CONSULTATION_MEDECIN.find(type => type.value === formData.typeConsultationMedecin)?.labelCol2.toUpperCase() ?? ''}
+            {formData.typeConsultationMedecin !== null && (
+              <Info
+                title={
+                  TYPE_CONSULTATION_MEDECIN.find(
+                    (type) => type.value === formData.typeConsultationMedecin
+                  )?.labelCol2.toUpperCase() ?? ""
+                }
               >
-                {formData.typeConsultationMedecin === 'PHYSIQUE' &&
+                {formData.typeConsultationMedecin === "PHYSIQUE" && (
                   <>
                     <label htmlFor="dateLimiteDepot" className="mb-2 italic">
                       Date du rdv
@@ -306,40 +337,50 @@ const EnfantComponent: React.FC<Props> = ({
                       />
                     </div>
                   </>
-                }
-                {formData.typeConsultationMedecin !== 'PHYSIQUE' &&
+                )}
+                {formData.typeConsultationMedecin !== "PHYSIQUE" && (
                   <>
                     <InputFile
-                      id={`${TYPE_CONSULTATION_MEDECIN.find(type => type.value === formData.typeConsultationMedecin)?.typeJustif as JustificatifEnfant}`}
+                      id={`${
+                        TYPE_CONSULTATION_MEDECIN.find(
+                          (type) =>
+                            type.value === formData.typeConsultationMedecin
+                        )?.typeJustif as JustificatifEnfant
+                      }`}
                       docs={formData.piecesDossier || []}
                       allowChanges={false}
-                      label={`${TYPE_CONSULTATION_MEDECIN.find(type => type.value === formData.typeConsultationMedecin)?.labelCol2}`}
+                      label={`${
+                        TYPE_CONSULTATION_MEDECIN.find(
+                          (type) =>
+                            type.value === formData.typeConsultationMedecin
+                        )?.labelCol2
+                      }`}
                       handleFile={handleFile}
                       handleDelete={handleDelete}
                       text={``}
                     />
                   </>
-                }
+                )}
               </Info>
-            }
+            )}
 
-            {formData.typeConsultationMedecin === 'PHYSIQUE' && formData.dateConsultation &&
-              <Info title='AVIS MÉDICAL'>
-                <InputFile
-                  id={"AVIS_MEDICAL"}
-                  docs={formData.piecesDossier || []}
-                  allowChanges={false}
-                  label={`Avis médical`}
-                  handleFile={handleFile}
-                  handleDelete={handleDelete}
-                  text={``}
-                />
-              </Info>
-            }
-
+            {formData.typeConsultationMedecin === "PHYSIQUE" &&
+              formData.dateConsultation && (
+                <Info title="AVIS MÉDICAL">
+                  <InputFile
+                    id={"AVIS_MEDICAL"}
+                    docs={formData.piecesDossier || []}
+                    allowChanges={false}
+                    label={`Avis médical`}
+                    handleFile={handleFile}
+                    handleDelete={handleDelete}
+                    text={``}
+                  />
+                </Info>
+              )}
           </div>
         </Accordion>
-      }
+      )}
     </div>
   );
 };

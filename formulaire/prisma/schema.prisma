@@ -144,6 +144,7 @@ model Dossier {
   Demandeur                Demandeur?            @relation(fields: [demandeurId], references: [id])
   demandeurId              Int?
   Comments                 Comments[]
+  commissionDate           DateTime? 
 }
 
 enum TypeEmploi {
