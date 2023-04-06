@@ -526,160 +526,165 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         </label>
       </div>
 
-      <h5 className={styles.h5Spacer}>Informations de contact liées à l'enfant</h5>
 
-      <div className={styles.byTwoForm}>
-        <div className={styles.blocForm}>
-          <label htmlFor="nomRepresentant1" className="mb-2 italic">
-            Nom du représentant légal 1
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.nomRepresentant1 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="nomRepresentant1"
-            name="nomRepresentant1"
-            className="inputText"
-          />
-        </div>
+      {enfantTmp?.typeConsultation === "THALIE" &&
+        <>
+          <h5 className={styles.h5Spacer}>Informations de contact liées à l'enfant</h5>
+          <div className={styles.byTwoForm}>
+            <div className={styles.blocForm}>
+              <label htmlFor="nomRepresentant1" className="mb-2 italic">
+                Nom du représentant légal 1
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.nomRepresentant1 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="nomRepresentant1"
+                name="nomRepresentant1"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="nomRepresentant2" className="mb-2 italic">
-            Nom du représentant légal 2
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.nomRepresentant2 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="nomRepresentant2"
-            name="nomRepresentant2"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="nomRepresentant2" className="mb-2 italic">
+                Nom du représentant légal 2
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.nomRepresentant2 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="nomRepresentant2"
+                name="nomRepresentant2"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="prenomRepresentant1" className="mb-2 italic">
-            Prénom du représentant légal 1
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.prenomRepresentant1 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="prenomRepresentant1"
-            name="prenomRepresentant1"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="prenomRepresentant1" className="mb-2 italic">
+                Prénom du représentant légal 1
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.prenomRepresentant1 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="prenomRepresentant1"
+                name="prenomRepresentant1"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="nomRepresentant2" className="mb-2 italic">
-            Prénom du représentant légal 2
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.prenomRepresentant2 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="prenomRepresentant2"
-            name="prenomRepresentant2"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="nomRepresentant2" className="mb-2 italic">
+                Prénom du représentant légal 2
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.prenomRepresentant2 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="prenomRepresentant2"
+                name="prenomRepresentant2"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="adresseRepresentant1" className="mb-2 italic">
-            Adresse du représentant légal 1
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.adresseRepresentant1 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="adresseRepresentant1"
-            name="adresseRepresentant1"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="adresseRepresentant1" className="mb-2 italic">
+                Adresse du représentant légal 1
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.adresseRepresentant1 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="adresseRepresentant1"
+                name="adresseRepresentant1"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="adresseRepresentant2" className="mb-2 italic">
-            Adresse du représentant légal 2
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.adresseRepresentant2 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="adresseRepresentant2"
-            name="adresseRepresentant2"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="adresseRepresentant2" className="mb-2 italic">
+                Adresse du représentant légal 2
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.adresseRepresentant2 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="adresseRepresentant2"
+                name="adresseRepresentant2"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="mailRepresentant1" className="mb-2 italic">
-            Email du représentant légal 1
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.mailRepresentant1 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="mailRepresentant1"
-            name="mailRepresentant1"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="mailRepresentant1" className="mb-2 italic">
+                Email du représentant légal 1
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.mailRepresentant1 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="mailRepresentant1"
+                name="mailRepresentant1"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="mailRepresentant2" className="mb-2 italic">
-            Email du représentant légal 2
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.mailRepresentant2 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="mailRepresentant2"
-            name="mailRepresentant2"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="mailRepresentant2" className="mb-2 italic">
+                Email du représentant légal 2
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.mailRepresentant2 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="mailRepresentant2"
+                name="mailRepresentant2"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="telRepresentant1" className="mb-2 italic">
-            Téléphone du représentant légal 1
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.telRepresentant1 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="telRepresentant1"
-            name="telRepresentant1"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="telRepresentant1" className="mb-2 italic">
+                Téléphone du représentant légal 1
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.telRepresentant1 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="telRepresentant1"
+                name="telRepresentant1"
+                className="inputText"
+              />
+            </div>
 
-        <div className={styles.blocForm}>
-          <label htmlFor="telRepresentant2" className="mb-2 italic">
-            Téléphone du représentant légal 2
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.telRepresentant2 || ""}
-            disabled={!allowChanges}
-            type="text"
-            id="telRepresentant2"
-            name="telRepresentant2"
-            className="inputText"
-          />
-        </div>
+            <div className={styles.blocForm}>
+              <label htmlFor="telRepresentant2" className="mb-2 italic">
+                Téléphone du représentant légal 2
+              </label>
+              <input
+                onChange={handleFormEnfant}
+                value={enfantTmp?.telRepresentant2 || ""}
+                disabled={!allowChanges}
+                type="text"
+                id="telRepresentant2"
+                name="telRepresentant2"
+                className="inputText"
+              />
+            </div>
 
-      </div>
+          </div>
+        </>
+      }
+      
 
       <br />
       <br />
