@@ -1,3 +1,10 @@
+## [1.60.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.4...v1.60.5) (2023-04-07)
+
+
+### Bug Fixes
+
+* adapt parcours medecine ([#508](https://github.com/SocialGouv/enfants-du-spectacle/issues/508)) ([7d4bddf](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d4bddf92e5ef60f51fcf892a40be18cde3099ae))
+
 ## [1.60.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.3...v1.60.4) (2023-04-06)
 
 
