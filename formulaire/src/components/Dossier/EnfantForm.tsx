@@ -773,7 +773,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </Link>
         </div>
       </div>
-      {enfantTmp.typeConsultation !== 'THALIE' || (enfantTmp.typeConsultation === 'THALIE' && (enfantTmp.piecesDossier.filter(doc => {return doc.type === "AUTORISATION_PRISE_EN_CHARGE"}).length > 0 || enfantTmp.piecesDossier.filter(doc => {return doc.type === "BON_PRISE_EN_CHARGE"}).length > 0)) ?
         <div className={styles.blocForm}>
           <InputFile
             id={"AVIS_MEDICAL"}
@@ -788,9 +787,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
           />
         </div>
-        :
-        <></>
-      }
       <div className={styles.blocForm}>
         <InputFile
           id={"DECLARATION_HONNEUR"}
