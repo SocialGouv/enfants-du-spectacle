@@ -35,7 +35,7 @@ const Justificatif: React.FC<JustificatifProps> = ({
     <RxCross2 color="red" style={{ marginRight: "11px" }} size={20} />
   );
   return (
-    <>
+    <div style={{ marginBottom: "35px" }}>
       {!Array.isArray(url) && icon}
       {!Array.isArray(url) && !isPresent && label}
       {isPresent && !Array.isArray(url) && (
@@ -51,12 +51,12 @@ const Justificatif: React.FC<JustificatifProps> = ({
             {!urlLink && label}
             {urlLink && (
               <a href={urlLink} target="_blank" rel="noreferrer">
-                {label}
+                {label.length > 50 ? label.slice(0, 50) + "..." : label}
               </a>
             )}
           </div>
         ))}
-    </>
+    </div>
   );
 };
 

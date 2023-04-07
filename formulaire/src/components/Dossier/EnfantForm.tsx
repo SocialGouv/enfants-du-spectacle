@@ -1,7 +1,7 @@
-import React, { KeyboardEventHandler, useState } from "react";
+import React, { useState } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
-import { Enfant, JustificatifEnfant, PieceDossierEnfant } from "@prisma/client";
+import { Enfant, JustificatifEnfant } from "@prisma/client";
 import { TYPE_EMPLOI, useDebouncedCallback } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
@@ -169,7 +169,17 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   ]);
 
   React.useEffect(() => {
-    console.log('test enfant : ', enfantTmp.typeConsultation !== 'THALIE' || (enfantTmp.typeConsultation === 'THALIE' && (enfantTmp.piecesDossier.filter(doc => {return doc.type === "AUTORISATION_PRISE_EN_CHARGE"}).length > 0 || enfantTmp.piecesDossier.filter(doc => {return doc.type === "BON_PRISE_EN_CHARGE"}).length > 0)))
+    console.log(
+      "test enfant : ",
+      enfantTmp.typeConsultation !== "THALIE" ||
+        (enfantTmp.typeConsultation === "THALIE" &&
+          (enfantTmp.piecesDossier.filter((doc) => {
+            return doc.type === "AUTORISATION_PRISE_EN_CHARGE";
+          }).length > 0 ||
+            enfantTmp.piecesDossier.filter((doc) => {
+              return doc.type === "BON_PRISE_EN_CHARGE";
+            }).length > 0))
+    );
     if (initialRender) {
       setInitialRender(false);
     } else {
@@ -334,16 +344,21 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       </div>
 
       <div className={styles.blocForm}>
-        <label  className={styles.radioMedecine}>
+        <label className={styles.radioMedecine}>
           <input
             type="checkbox"
             checked={enfantTmp.checkTravailNuit}
-            onChange={() => {setEnfant({...enfantTmp, checkTravailNuit: !enfantTmp.checkTravailNuit})}}
+            onChange={() => {
+              setEnfant({
+                ...enfantTmp,
+                checkTravailNuit: !enfantTmp.checkTravailNuit,
+              });
+            }}
           />
           Travail de nuit
         </label>
 
-        {enfantTmp.checkTravailNuit &&
+        {enfantTmp.checkTravailNuit && (
           <>
             <p className={styles.smallText}>
               Veuillez préciser les modalités du travail de nuit
@@ -360,7 +375,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
               />
             </div>
           </>
-        }
+        )}
       </div>
 
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
@@ -467,11 +482,11 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         </div>
       </div>
 
-      <h5 className={styles.h5Spacer}>Avis médical d'aptitude</h5>
+      <h5 className={styles.h5Spacer}>{"Avis médical d'aptitude"}</h5>
 
       <div className={styles.blocForm}>
         <label htmlFor="remunerationTotale" className="mb-2 italic">
-          L'enfant doit consulter : 
+          {"L'enfant doit consulter :"}
         </label>
         <br />
         <br />
@@ -480,18 +495,29 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             type="radio"
             value="Male"
             checked={enfantTmp.typeConsultation === "THALIE"}
-            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "THALIE"})}}
+            onChange={() => {
+              setEnfant({ ...enfantTmp, typeConsultation: "THALIE" });
+            }}
           />
           Un médecin de Thalie Santé
-          <p className={styles.smallText}>L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative.</p>
-          {
-            [
-              {label: 'Avis médical', value: 'AVIS_MEDICAL'},
-              {label: 'Bon de prise en charge', value: 'BON_PRISE_EN_CHARGE'},
-              {label: 'Autorisation de prise en charge', value: 'AUTORISATION_PRISE_EN_CHARGE'}
-            ].map((justif) => (
-              <>
-                {enfantTmp.typeConsultation === "THALIE" && enfantTmp.piecesDossier.filter(doc => {return doc.type === justif.value}).length > 0 &&
+          <p className={styles.smallText}>
+            {
+              "L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative."
+            }
+          </p>
+          {[
+            { label: "Avis médical", value: "AVIS_MEDICAL" },
+            { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
+            {
+              label: "Autorisation de prise en charge",
+              value: "AUTORISATION_PRISE_EN_CHARGE",
+            },
+          ].map((justif) => (
+            <>
+              {enfantTmp.typeConsultation === "THALIE" &&
+                enfantTmp.piecesDossier.filter((doc) => {
+                  return doc.type === justif.value;
+                }).length > 0 && (
                   <>
                     <div className={styles.blocForm}>
                       <InputFile
@@ -509,186 +535,188 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                     </div>
                     <br />
                   </>
-                }
-              </>
-            ))
-          }
+                )}
+            </>
+          ))}
         </label>
         <label className={styles.radioMedecine}>
           <input
             type="radio"
             value="Male"
             checked={enfantTmp.typeConsultation === "GENERALISTE"}
-            onChange={() => {setEnfant({...enfantTmp, typeConsultation: "GENERALISTE"})}}
+            onChange={() => {
+              setEnfant({ ...enfantTmp, typeConsultation: "GENERALISTE" });
+            }}
           />
           Un médecin généraliste
-          <p className={styles.smallText}>Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative.</p>
+          <p className={styles.smallText}>
+            {
+              "Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative."
+            }
+          </p>
         </label>
       </div>
 
+      <h5 className={styles.h5Spacer}>
+        {"Informations de contact liées à l'enfant"}
+      </h5>
 
-      {enfantTmp?.typeConsultation === "THALIE" &&
-        <>
-          <h5 className={styles.h5Spacer}>Informations de contact liées à l'enfant</h5>
-          <div className={styles.byTwoForm}>
-            <div className={styles.blocForm}>
-              <label htmlFor="nomRepresentant1" className="mb-2 italic">
-                Nom du représentant légal 1
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.nomRepresentant1 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="nomRepresentant1"
-                name="nomRepresentant1"
-                className="inputText"
-              />
-            </div>
+      <div className={styles.byTwoForm}>
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant1" className="mb-2 italic">
+            Nom du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.nomRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="nomRepresentant1"
+            name="nomRepresentant1"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="nomRepresentant2" className="mb-2 italic">
-                Nom du représentant légal 2
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.nomRepresentant2 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="nomRepresentant2"
-                name="nomRepresentant2"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant2" className="mb-2 italic">
+            Nom du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.nomRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="nomRepresentant2"
+            name="nomRepresentant2"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="prenomRepresentant1" className="mb-2 italic">
-                Prénom du représentant légal 1
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.prenomRepresentant1 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="prenomRepresentant1"
-                name="prenomRepresentant1"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="prenomRepresentant1" className="mb-2 italic">
+            Prénom du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.prenomRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="prenomRepresentant1"
+            name="prenomRepresentant1"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="nomRepresentant2" className="mb-2 italic">
-                Prénom du représentant légal 2
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.prenomRepresentant2 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="prenomRepresentant2"
-                name="prenomRepresentant2"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="nomRepresentant2" className="mb-2 italic">
+            Prénom du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.prenomRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="prenomRepresentant2"
+            name="prenomRepresentant2"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="adresseRepresentant1" className="mb-2 italic">
-                Adresse du représentant légal 1
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.adresseRepresentant1 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="adresseRepresentant1"
-                name="adresseRepresentant1"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="adresseRepresentant1" className="mb-2 italic">
+            Adresse du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.adresseRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="adresseRepresentant1"
+            name="adresseRepresentant1"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="adresseRepresentant2" className="mb-2 italic">
-                Adresse du représentant légal 2
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.adresseRepresentant2 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="adresseRepresentant2"
-                name="adresseRepresentant2"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="adresseRepresentant2" className="mb-2 italic">
+            Adresse du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.adresseRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="adresseRepresentant2"
+            name="adresseRepresentant2"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="mailRepresentant1" className="mb-2 italic">
-                Email du représentant légal 1
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.mailRepresentant1 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="mailRepresentant1"
-                name="mailRepresentant1"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="mailRepresentant1" className="mb-2 italic">
+            Email du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.mailRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="mailRepresentant1"
+            name="mailRepresentant1"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="mailRepresentant2" className="mb-2 italic">
-                Email du représentant légal 2
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.mailRepresentant2 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="mailRepresentant2"
-                name="mailRepresentant2"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="mailRepresentant2" className="mb-2 italic">
+            Email du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.mailRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="mailRepresentant2"
+            name="mailRepresentant2"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="telRepresentant1" className="mb-2 italic">
-                Téléphone du représentant légal 1
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.telRepresentant1 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="telRepresentant1"
-                name="telRepresentant1"
-                className="inputText"
-              />
-            </div>
+        <div className={styles.blocForm}>
+          <label htmlFor="telRepresentant1" className="mb-2 italic">
+            Téléphone du représentant légal 1
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.telRepresentant1 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="telRepresentant1"
+            name="telRepresentant1"
+            className="inputText"
+          />
+        </div>
 
-            <div className={styles.blocForm}>
-              <label htmlFor="telRepresentant2" className="mb-2 italic">
-                Téléphone du représentant légal 2
-              </label>
-              <input
-                onChange={handleFormEnfant}
-                value={enfantTmp?.telRepresentant2 || ""}
-                disabled={!allowChanges}
-                type="text"
-                id="telRepresentant2"
-                name="telRepresentant2"
-                className="inputText"
-              />
-            </div>
-
-          </div>
-        </>
-      }
-      
-
+        <div className={styles.blocForm}>
+          <label htmlFor="telRepresentant2" className="mb-2 italic">
+            Téléphone du représentant légal 2
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.telRepresentant2 || ""}
+            disabled={!allowChanges}
+            type="text"
+            id="telRepresentant2"
+            name="telRepresentant2"
+            className="inputText"
+          />
+        </div>
+      </div>
       <br />
       <br />
-      <h5 className={styles.h5Spacer}>Pièces justificatives liées à l'enfant</h5>
+      <h5 className={styles.h5Spacer}>
+        {"Pièces justificatives liées à l'enfant"}
+      </h5>
 
       <div className={styles.blocForm}>
         <InputFile
@@ -701,7 +729,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           label={`Livret de Famille`}
           handleFile={handleFile}
           handleDelete={handleDelete}
-          text={`Ce document doit être à jour`}
+          text={`Ce document doit être à jour.`}
         />
       </div>
 
@@ -731,7 +759,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           label={`Situation particulière relative à l'autorité parentale`}
           handleFile={handleFile}
           handleDelete={handleDelete}
-          text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc)`}
+          text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc).`}
         />
       </div>
 
@@ -746,7 +774,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           label={`Projet de contrat de travail`}
           handleFile={handleFile}
           handleDelete={handleDelete}
-          text={`Veuillez fournir un document présentant de manière précise et détaillée, la façon dont sont réalisées les scène susceptibles d'exposer l'enfant à un risque, ainsi que les mesures prises pour l'éviter.`}
+          text={`Veuillez fournir un document présentant de manière précise et détaillée, le projet de contrat de travail.`}
         />
       </div>
 
@@ -773,6 +801,14 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </Link>
         </div>
       </div>
+      {enfantTmp.typeConsultation !== "THALIE" ||
+      (enfantTmp.typeConsultation === "THALIE" &&
+        (enfantTmp.piecesDossier.filter((doc) => {
+          return doc.type === "AUTORISATION_PRISE_EN_CHARGE";
+        }).length > 0 ||
+          enfantTmp.piecesDossier.filter((doc) => {
+            return doc.type === "BON_PRISE_EN_CHARGE";
+          }).length > 0)) ? (
         <div className={styles.blocForm}>
           <InputFile
             id={"AVIS_MEDICAL"}
@@ -787,6 +823,9 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             text={`Un avis d'un médecin du travail de Thalie Santé (à minima, veuillez fournir un document justifiant d'une prise de rendez-vous). Pour les figurants et les silhouettes, un avis d'un médecin généraliste (enfant à partir de 3 ans) ou d'un pédiatre (enfant de moins de 3 ans) est accepté.`}
           />
         </div>
+      ) : (
+        <></>
+      )}
       <div className={styles.blocForm}>
         <InputFile
           id={"DECLARATION_HONNEUR"}

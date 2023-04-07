@@ -31,7 +31,7 @@ interface ValidationProps {
 const Validation: React.FC<ValidationProps> = ({ pieces, type }) => {
   const [statePieces, setStatePieces] = React.useState<Piece[]>(pieces);
   return (
-    <>
+    <div style={{ marginBottom: "35px" }}>
       {statePieces.map((piece) => (
         <div className={styles.validationRow} key={piece.id}>
           {piece.statut && piece.statut !== "EN_ATTENTE" && (
@@ -115,7 +115,7 @@ const Validation: React.FC<ValidationProps> = ({ pieces, type }) => {
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
@@ -191,7 +191,7 @@ const ValidationJustificatifsEnfant: React.FC<{
       enfant.justificatifs.includes(a.value)
   );
   return (
-    <ul className={styles.justificatifs}>
+    <ul className={styles.justificatifs} style={{ marginBottom: "40px" }}>
       {justificatifs.map(({ label, value }) => {
         return (
           <li key={value}>

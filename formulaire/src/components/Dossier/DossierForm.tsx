@@ -1,12 +1,6 @@
 import { Comments, Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
-import {
-  DossierData,
-  EnfantData,
-  getDossier,
-  ResDocs,
-  updateDossier,
-} from "../../fetching/dossiers";
+import { DossierData, ResDocs, updateDossier } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./DossierForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -160,6 +154,13 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
               : "mis à jour"
           }`
         );
+
+        contextDossier.processInput(
+          "dossier",
+          "commissionDate",
+          dossierSent.message.message
+        );
+
         setTimeout(() => {
           router.push(`/`);
         }, 1000);
