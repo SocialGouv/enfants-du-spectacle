@@ -31,7 +31,7 @@ interface ValidationProps {
 const Validation: React.FC<ValidationProps> = ({ pieces, type }) => {
   const [statePieces, setStatePieces] = React.useState<Piece[]>(pieces);
   return (
-    <div style={{ marginBottom: "40px" }}>
+    <div style={{ marginBottom: "35px" }}>
       {statePieces.map((piece) => (
         <div className={styles.validationRow} key={piece.id}>
           {piece.statut && piece.statut !== "EN_ATTENTE" && (
