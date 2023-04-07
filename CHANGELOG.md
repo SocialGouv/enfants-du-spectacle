@@ -1,3 +1,38 @@
+## [1.60.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.4...v1.60.5) (2023-04-07)
+
+
+### Bug Fixes
+
+* adapt parcours medecine ([#508](https://github.com/SocialGouv/enfants-du-spectacle/issues/508)) ([7d4bddf](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d4bddf92e5ef60f51fcf892a40be18cde3099ae))
+
+## [1.60.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.3...v1.60.4) (2023-04-06)
+
+
+### Bug Fixes
+
+* fix parcours medecine ([#507](https://github.com/SocialGouv/enfants-du-spectacle/issues/507)) ([96abffb](https://github.com/SocialGouv/enfants-du-spectacle/commit/96abffbe89c636dafc0660e264eb3ee0e7b8fcdd))
+
+## [1.60.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.2...v1.60.3) (2023-04-06)
+
+
+### Bug Fixes
+
+* update transitions ([#506](https://github.com/SocialGouv/enfants-du-spectacle/issues/506)) ([a558e5d](https://github.com/SocialGouv/enfants-du-spectacle/commit/a558e5d13130d008bfa14a61bc7673da53e57156))
+
+## [1.60.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.1...v1.60.2) (2023-04-06)
+
+
+### Bug Fixes
+
+* allow roolback from dossier accepte ([#505](https://github.com/SocialGouv/enfants-du-spectacle/issues/505)) ([5bbf386](https://github.com/SocialGouv/enfants-du-spectacle/commit/5bbf3867d5d4814df55da4b3fae006e33bbeb328))
+
+## [1.60.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.0...v1.60.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* fix name preproduction ([#504](https://github.com/SocialGouv/enfants-du-spectacle/issues/504)) ([69d2dac](https://github.com/SocialGouv/enfants-du-spectacle/commit/69d2dac878979227a7dee7a3b88e3eeb8e760a9b))
+
 # [1.60.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.59.0...v1.60.0) (2023-04-05)
 
 
