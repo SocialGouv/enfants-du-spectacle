@@ -1,3 +1,10 @@
+# [1.61.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.5...v1.61.0) (2023-04-07)
+
+
+### Features
+
+* update text description ([#509](https://github.com/SocialGouv/enfants-du-spectacle/issues/509)) ([56ec1ec](https://github.com/SocialGouv/enfants-du-spectacle/commit/56ec1ec727b5c915c46fa5cbc7a6fb7ecbe205aa))
+
 ## [1.60.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.60.4...v1.60.5) (2023-04-07)
 
 
