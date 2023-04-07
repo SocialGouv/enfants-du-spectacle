@@ -191,7 +191,7 @@ const ROLES_USERS = [
 ];
 
 const TYPE_CONSULTATION_MEDECIN: {label: string, value: TypeConsultationMedecin, labelCol2: string, typeJustif: JustificatifEnfant}[] = [
-  { label: "En physique", value: "PHYSIQUE", labelCol2: 'Date du rdv ', typeJustif: 'AVIS_MEDICAL'},
+  { label: "En physique ou en téléconsultation", value: "PHYSIQUE", labelCol2: 'Date du rdv ', typeJustif: 'AVIS_MEDICAL'},
   { label: "Sur pièce", value: "PIECE", labelCol2: 'Avis médical', typeJustif: 'AVIS_MEDICAL'},
   { label: "Bon de prise en charge", value: "PRISE_EN_CHARGE", labelCol2: 'Bon de prise en charge', typeJustif: 'BON_PRISE_EN_CHARGE'},
   { label: "Par le médecin traitant", value: "MEDECIN_TRAITANT", labelCol2: 'Autorisation de prise en charge', typeJustif: 'AUTORISATION_PRISE_EN_CHARGE'},
