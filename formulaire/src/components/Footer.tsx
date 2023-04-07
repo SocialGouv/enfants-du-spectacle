@@ -23,6 +23,7 @@ export default function Footer(): ReactElement {
       </FooterBody>
       <FooterBottom>
         <FooterLink href="/mentions">Mentions légales</FooterLink>
+        <FooterLink href="/politique">Politique de confidentialité</FooterLink>
         <FooterLink href="https://metabase-eds.fabrique.social.gouv.fr/public/dashboard/70ae0640-d606-419a-83c9-fe6b0069049d">
           Statistique
         </FooterLink>

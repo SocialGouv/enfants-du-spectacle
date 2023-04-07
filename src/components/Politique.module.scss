@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    padding: 30px 0;
+  }
+  
+  .subtitle {
+    font-weight: bold;
+  }
+  ul li {
+    margin-left: 15px;
+  }
+  table {
+    text-align: left;
+    border-collapse: collapse; 
+    margin-bottom: 40px;
+  }
+  table, table tr {
+    border: 1px solid black
+  }
+  table td {
+    padding: 10px 20px;
+    border-right: 1px solid black;
+  }
+}
