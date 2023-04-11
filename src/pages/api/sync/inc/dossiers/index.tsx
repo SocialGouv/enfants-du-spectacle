@@ -227,6 +227,12 @@ const update: NextApiHandler = async (req, res) => {
       cdc: true,
       dossierId: true,
       id: true,
+      adresseRepresentant1: true,
+      adresseRepresentant2: true,
+      nomRepresentant1: true,
+      nomRepresentant2: true,
+      prenomRepresentant1: true,
+      prenomRepresentant2: true
     });
     data.enfants.map(async (enfant) => {
       enfant.nombreJours =
