@@ -83,6 +83,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     // create dossier
     let resDossier = await duplicateDossierEds({
       ...dossierItem,
+      dateCreation: new Date(),
       demandeurId: resDemandeur.id,
     } as Dossier);
 

@@ -135,6 +135,7 @@ model Dossier {
   dateDebut                DateTime?
   dateFin                  DateTime?
   number                   Int?
+  dateCreation             DateTime?
   dateDerniereModification DateTime?
   cdc                      Int?
   scenario                 String?
@@ -144,7 +145,8 @@ model Dossier {
   Demandeur                Demandeur?            @relation(fields: [demandeurId], references: [id])
   demandeurId              Int?
   Comments                 Comments[]
-  commissionDate           DateTime? 
+  commissionDate           DateTime?
+  commissionString         String?
 }
 
 enum TypeEmploi {
