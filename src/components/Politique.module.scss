@@ -1,21 +1,29 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 100%;
   justify-content: center;
   align-items: center;
   padding: 30px 0;
+  width: 100%;
+  position: relative;
 
   .contentWrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: flex-start;
-    padding: 30px 0;
+    padding: 20px 0;
   }
   
   .subtitle {
     font-weight: bold;
+  }
+  h5{
+    margin-top: 20px;
+  }
+  h1{margin-bottom: 40px;}
+  ul {
+    margin-bottom: 20px;
   }
   ul li {
     margin-left: 15px;
@@ -31,5 +39,9 @@
   table td {
     padding: 10px 20px;
     border-right: 1px solid black;
+  }
+  .checkboxWrapper {
+    margin-top: 40px;
+    font-size: 22px;
   }
 }

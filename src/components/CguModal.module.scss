@@ -1,0 +1,13 @@
+.cguModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  background-color: white;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+  max-height: 600px;
+  overflow-y: scroll;
+  padding: 20px;
+  border-radius: 3px;
+}
