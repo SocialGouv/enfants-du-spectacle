@@ -1,3 +1,10 @@
+## [1.61.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.1...v1.61.2) (2023-04-12)
+
+
+### Bug Fixes
+
+* fix conditional display of infos representants, fix dates shown on dossier demandeur ([#511](https://github.com/SocialGouv/enfants-du-spectacle/issues/511)) ([023bfd5](https://github.com/SocialGouv/enfants-du-spectacle/commit/023bfd5fc9051a2c2c2bbcb532838496f175859a))
+
 ## [1.61.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.0...v1.61.1) (2023-04-11)
 
 
