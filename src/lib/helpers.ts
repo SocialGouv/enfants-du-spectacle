@@ -153,6 +153,7 @@ function getFormatedTypeDossier(type: string): string {
       Téléfilm: "TELEFILM",
       "Émission radio": "RADIO",
       "Émission télé": "EMISSION_TV",
+      "Documentaire fictionnel": "DOCUMENTAIRE_FICTIONNEL",
     }[type] ?? "AUTRE"
   );
 }
