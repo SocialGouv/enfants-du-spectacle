@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    padding: 30px 20px;
+    max-width: 1280px;
+  }
+  h5{
+    margin-top: 20px;
+  }
+  h1{margin-bottom: 40px;}
+  ul {
+    margin-bottom: 20px;
+  }
+  ul li {
+    margin-left: 15px;
+  }
+  .subtitle {
+    font-weight: bold;
+  }
+  table {
+    text-align: left;
+    border-collapse: collapse; 
+    margin-bottom: 40px;
+  }
+  table, table tr {
+    border: 1px solid black
+  }
+  table td {
+    padding: 10px 20px;
+    border-right: 1px solid black;
+  }
+}

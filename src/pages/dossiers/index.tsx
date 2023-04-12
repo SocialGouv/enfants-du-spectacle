@@ -1,5 +1,5 @@
 import { Icon } from "@dataesr/react-dsfr";
-import type { Commission, Dossier, Enfant } from "@prisma/client";
+import type { Commission, Dossier } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -50,13 +50,13 @@ const Page: React.FC = () => {
   const session = useSession();
   if (
     session.status === "authenticated" &&
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "ADMIN" &&
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "INSTRUCTEUR" &&
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "MEMBRE" &&
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({
@@ -78,22 +78,22 @@ const Page: React.FC = () => {
 
   const { commissions, ...swrCommissions } = useCommissions(
     "upcoming",
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "MEMBRE"
       ? "all"
-      //@ts-ignore
-      : session.data.dbUser.departements
+      : //@ts-expect-error
+        session.data.dbUser.departements
   );
 
-  console.log('commissions : ', commissions)
+  console.log("commissions : ", commissions);
 
   const { ...commissionsPast } = useCommissions(
     "past",
-    //@ts-ignore
+    //@ts-expect-error
     session.data.dbUser.role !== "MEMBRE"
       ? "all"
-      //@ts-ignore
-      : session.data.dbUser.departements
+      : //@ts-expect-error
+        session.data.dbUser.departements
   );
 
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
@@ -323,11 +323,12 @@ const Page: React.FC = () => {
       {!isLoading && !isError && !searchValueEffective && (
         <>
           {
-          //@ts-ignore
-          session.data.dbUser.role !== "MEDECIN" &&
-            <>
-              <ButtonList action={handleStatus} />
-            </>
+            //@ts-expect-error
+            session.data.dbUser.role !== "MEDECIN" && (
+              <>
+                <ButtonList action={handleStatus} />
+              </>
+            )
           }
           <div className={styles.commissionWrapper}>
             <div className={styles.dossierTitleContainer}>
@@ -356,12 +357,13 @@ const Page: React.FC = () => {
                     <th>Dossiers</th>
                     <th>Enfants</th>
                     {
-                    //@ts-ignore
-                    session.data.dbUser.role !== "MEDECIN" &&
-                      <>
-                        <th>Etat</th>
-                        <th>Télécharger</th>
-                      </>
+                      //@ts-expect-error
+                      session.data.dbUser.role !== "MEDECIN" && (
+                        <>
+                          <th>Etat</th>
+                          <th>Télécharger</th>
+                        </>
+                      )
                     }
                   </tr>
                 </thead>
@@ -422,74 +424,78 @@ const Page: React.FC = () => {
                         <td>
                           {commission.dossiers
                             .map((p) => {
-                              console.log(p)
-                              return p._count ? p._count.enfants : p.enfants ? p.enfants.length : 0;
+                              console.log(p);
+                              return p._count
+                                ? p._count.enfants
+                                : p.enfants
+                                ? p.enfants.length
+                                : 0;
                             })
                             .reduce((i, b) => i + b, 0)}
                         </td>
                         {
-                        //@ts-ignore
-                        session.data.dbUser.role !== "MEDECIN" &&
-                          <>
-                            <td
-                              style={{
-                                display: "flex",
-                              }}
-                            >
-                              {countPending !== 0 && (
-                                <div
-                                  className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
-                                  style={{ marginRight: "15px" }}
-                                >
-                                  <FaCheckCircle size={12} /> {countPending}
-                                </div>
-                              )}
-                              {countReady !== 0 && (
-                                <div
-                                  className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
-                                >
-                                  <HiClock size={12} /> {countReady}
-                                </div>
-                              )}
-                            </td>
-                            <td>
-                              {commission.dossiers.filter(
-                                (dossier) => dossier.statut === "PRET"
-                              ).length > 0 && (
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    gap: "20px",
-                                  }}
-                                >
-                                  <ButtonLink
-                                    light={true}
-                                    onClick={() => {
-                                      generateOdj(commission);
+                          //@ts-expect-error
+                          session.data.dbUser.role !== "MEDECIN" && (
+                            <>
+                              <td
+                                style={{
+                                  display: "flex",
+                                }}
+                              >
+                                {countPending !== 0 && (
+                                  <div
+                                    className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
+                                    style={{ marginRight: "15px" }}
+                                  >
+                                    <FaCheckCircle size={12} /> {countPending}
+                                  </div>
+                                )}
+                                {countReady !== 0 && (
+                                  <div
+                                    className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
+                                  >
+                                    <HiClock size={12} /> {countReady}
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                {commission.dossiers.filter(
+                                  (dossier) => dossier.statut === "PRET"
+                                ).length > 0 && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      gap: "20px",
                                     }}
                                   >
-                                    <RiDownloadLine
-                                      style={{ marginRight: "10px" }}
-                                    />
-                                    Ordre du jour
-                                  </ButtonLink>
-                                  <ButtonLink
-                                    light={true}
-                                    onClick={() => {
-                                      generatePV(commission);
-                                    }}
-                                  >
-                                    <RiDownloadLine
-                                      style={{ marginRight: "10px" }}
-                                    />
-                                    Procès Verbal
-                                  </ButtonLink>
-                                </div>
-                              )}
-                            </td>
-                          </>
+                                    <ButtonLink
+                                      light={true}
+                                      onClick={() => {
+                                        generateOdj(commission);
+                                      }}
+                                    >
+                                      <RiDownloadLine
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      Ordre du jour
+                                    </ButtonLink>
+                                    <ButtonLink
+                                      light={true}
+                                      onClick={() => {
+                                        generatePV(commission);
+                                      }}
+                                    >
+                                      <RiDownloadLine
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      Procès Verbal
+                                    </ButtonLink>
+                                  </div>
+                                )}
+                              </td>
+                            </>
+                          )
                         }
-                        
                       </tr>
                     );
                   })}
@@ -541,7 +547,7 @@ const Page: React.FC = () => {
   );
 };
 
-//@ts-ignore
+//@ts-expect-error
 Page.auth = true;
 
 export default Page;
