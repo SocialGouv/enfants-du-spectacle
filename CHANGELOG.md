@@ -1,3 +1,10 @@
+# [1.62.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.3...v1.62.0) (2023-04-12)
+
+
+### Features
+
+* add cgu ([#513](https://github.com/SocialGouv/enfants-du-spectacle/issues/513)) ([b046a5c](https://github.com/SocialGouv/enfants-du-spectacle/commit/b046a5c4c876bd95a2cdc6e0af4cb6e6e58d6987))
+
 ## [1.61.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.2...v1.61.3) (2023-04-12)
 
 
