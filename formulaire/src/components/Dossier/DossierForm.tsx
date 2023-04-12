@@ -157,7 +157,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
 
         contextDossier.processInput(
           "dossier",
-          "commissionDate",
+          "commissionString",
           dossierSent.message.message
         );
 

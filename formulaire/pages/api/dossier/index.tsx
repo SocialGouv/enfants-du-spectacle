@@ -138,6 +138,7 @@ const post: NextApiHandler = async (req, res) => {
   const data = {
     userId: session?.dbUser.id,
     dateDerniereModification: new Date(),
+    dateCreation: parsed.dateCreation,
     demandeurId: parsed.demandeurId,
   };
   try {

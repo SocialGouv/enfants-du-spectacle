@@ -1,4 +1,4 @@
-import type { Enfant } from "@prisma/client";
+import type { Commission, Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import type { RelatedDossierModel, RelatedEnfantModel } from "prisma/zod";
@@ -8,6 +8,7 @@ import {
   EnfantModel,
   SocieteProductionModel,
 } from "prisma/zod";
+import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import prisma from "src/lib/prismaClient";
 import type { z } from "zod";
 
@@ -79,7 +80,7 @@ const post: NextApiHandler = async (req, res) => {
     }
 
     //SEARCHING FOR COMMISSION
-    const commissions = await prisma?.commission.findMany({
+    const commissions: Commission[] = await prisma?.commission.findMany({
       orderBy: { date: "asc" },
       where: {
         dateLimiteDepot: { gte: new Date() },
@@ -165,7 +166,7 @@ const post: NextApiHandler = async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: commissions[0].date });
+    res.status(200).json({ message: `${frenchDepartementName(commissions[0].departement)}, ${frenchDateText(commissions[0].date)}`});
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });
@@ -286,7 +287,7 @@ const update: NextApiHandler = async (req, res) => {
         });
       }
     });
-    res.status(200).json({ message: commissions[0].date });
+    res.status(200).json({ message: `${frenchDepartementName(commissions[0].departement)}, ${frenchDateText(commissions[0].date)}`});
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });

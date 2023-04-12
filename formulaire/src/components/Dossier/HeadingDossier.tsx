@@ -37,13 +37,18 @@ const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
             </div>
           </div>
           <h2>
-            Dossier n° {dossier.id} créé le{" "}
-            {frenchDateText(dossier.dateDerniereModification)}
+            Dossier n° {dossier.id}{`${dossier.commissionString ? ` pour la commission: ${dossier.commissionString}` : ''}`}
           </h2>
-          {dossier.commissionDate && (
+          {dossier.dateCreation && (
             <div className={styles.commissionTitle}>
-              Déposé pour la commission du{" "}
-              {frenchDateText(dossier.commissionDate)}
+              Dossier créé le{" "}
+              {frenchDateText(dossier.dateCreation)}
+            </div>
+          )}
+          {dossier.dateDerniereModification && (
+            <div className={styles.commissionTitle}>
+              Dossier modifié le{" "}
+              {frenchDateText(dossier.dateDerniereModification)}
             </div>
           )}
         </Container>
