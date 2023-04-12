@@ -1,3 +1,10 @@
+## [1.61.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.2...v1.61.3) (2023-04-12)
+
+
+### Bug Fixes
+
+* add forgotten migrations ([#512](https://github.com/SocialGouv/enfants-du-spectacle/issues/512)) ([9d099e3](https://github.com/SocialGouv/enfants-du-spectacle/commit/9d099e335b3b5f772cd1d9c2961251fb09225a90))
+
 ## [1.61.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.61.1...v1.61.2) (2023-04-12)
 
 
