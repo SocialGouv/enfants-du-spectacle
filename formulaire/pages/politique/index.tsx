@@ -24,30 +24,27 @@ const Politic: React.FC = () => {
             ou d’un doublage, dans les conditions prévues aux articles L 7124-1
             et R. 7124-1 du code du travail.
           </p>
-          <p>
-            <div className={styles.subtitle}>
-              Enfants du spectacle manipule des données à caractère personnel
-              pour les raisons suivantes :
-            </div>
-            <ul>
-              <li>
-                assurer la transmission des demandes d’autorisation individuelle
-                de travail;
-              </li>
-              <li>
-                centraliser l’ensemble des documents relatifs à ladite
-                procédure;
-              </li>
-              <li>
-                rendre possible l’accès des documents à l’ensemble des acteurs
-                concernés (agent de la DRIEETS, médecins, demandeurs) ;
-              </li>
-              <li>permettre le suivi de la demande;</li>
-              <li>
-                mettre en place un service unique d’instruction des dossiers.
-              </li>
-            </ul>
-          </p>
+          <div className={styles.subtitle}>
+            Enfants du spectacle manipule des données à caractère personnel pour
+            les raisons suivantes :
+          </div>
+          <ul>
+            <li>
+              assurer la transmission des demandes d’autorisation individuelle
+              de travail;
+            </li>
+            <li>
+              centraliser l’ensemble des documents relatifs à ladite procédure;
+            </li>
+            <li>
+              rendre possible l’accès des documents à l’ensemble des acteurs
+              concernés (agent de la DRIEETS, médecins, demandeurs) ;
+            </li>
+            <li>permettre le suivi de la demande;</li>
+            <li>
+              mettre en place un service unique d’instruction des dossiers.
+            </li>
+          </ul>
           <h5>Quelles sont les données que nous manipulons ?</h5>
           <div className={styles.subtitle}>
             Enfants du spectacle manipule les données personnelles suivantes :

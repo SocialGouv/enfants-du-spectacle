@@ -24,30 +24,27 @@ const Politic: React.FC = () => {
             ou d’un doublage, dans les conditions prévues aux articles L 7124-1
             et R. 7124-1 du code du travail.
           </p>
-          <p>
-            <div className={styles.subtitle}>
-              Enfants du spectacle manipule des données à caractère personnel
-              pour les raisons suivantes :
-            </div>
-            <ul>
-              <li>
-                assurer la transmission des demandes d’autorisation individuelle
-                de travail;
-              </li>
-              <li>
-                centraliser l’ensemble des documents relatifs à ladite
-                procédure;
-              </li>
-              <li>
-                rendre possible l’accès des documents à l’ensemble des acteurs
-                concernés (agent de la DRIEETS, médecins, demandeurs) ;
-              </li>
-              <li>permettre le suivi de la demande;</li>
-              <li>
-                mettre en place un service unique d’instruction des dossiers.
-              </li>
-            </ul>
-          </p>
+          <div className={styles.subtitle}>
+            Enfants du spectacle manipule des données à caractère personnel pour
+            les raisons suivantes :
+          </div>
+          <ul>
+            <li>
+              assurer la transmission des demandes d’autorisation individuelle
+              de travail;
+            </li>
+            <li>
+              centraliser l’ensemble des documents relatifs à ladite procédure;
+            </li>
+            <li>
+              rendre possible l’accès des documents à l’ensemble des acteurs
+              concernés (agent de la DRIEETS, médecins, demandeurs) ;
+            </li>
+            <li>permettre le suivi de la demande;</li>
+            <li>
+              mettre en place un service unique d’instruction des dossiers.
+            </li>
+          </ul>
           <h5>Quelles sont les données que nous manipulons ?</h5>
           <div className={styles.subtitle}>
             Enfants du spectacle manipule les données personnelles suivantes :
@@ -132,9 +129,11 @@ const Politic: React.FC = () => {
             preuve d’identité.
           </p>
           <p>
-            Pour vous aider dans votre démarche, vous trouverez ici
-            https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces, un
-            modèle de courrier élaboré par la CNIL.
+            Pour vous aider dans votre démarche, vous trouverez ici{" "}
+            <a href="https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces">
+              https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces
+            </a>
+            , un modèle de courrier élaboré par la CNIL.
           </p>
           <p>
             Nous nous engageons à vous répondre dans un délai raisonnable qui ne
