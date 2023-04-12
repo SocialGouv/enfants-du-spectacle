@@ -1,5 +1,5 @@
 import React from "react";
-import LayoutHome from "src/components/LayoutHome";
+import LayoutHome from "src/components/Layout";
 import styles from "src/components/Politique.module.scss";
 
 const Conditions: React.FC = () => {
@@ -8,14 +8,12 @@ const Conditions: React.FC = () => {
       <div className={`${styles.container} fr-container`}>
         <div className={styles.contentWrapper}>
           <h1>Conditions générales d’utilisation</h1>
-          <h2>Enfants du Spectacle - CGU DRIEETS</h2>
+          <h2>Enfants du Spectacle - CGU Public</h2>
           <p>
             Les présentes conditions générales d’utilisation (dites « CGU »)
             fixent le cadre juridique de la plateforme Enfants du spectacle
             (ci-après « la plateforme ») et définissent les conditions d’accès
-            et d’utilisation des services par les agents de la Direction
-            régionale interdépartementale de l’économie, de l’emploi, du travail
-            et des solidarités (DRIEETS).
+            et d’utilisation des services par le public.
           </p>
           <h5>Article 1 – Champ d’application</h5>
           <div>La plateforme est ouverte :</div>
@@ -65,14 +63,13 @@ const Conditions: React.FC = () => {
           <div>
             « L’Instructeur » désigne un agent public de la DRIEETS chargé
             d’instruire les demandes d’autorisations de travail pour des mineurs
-            de moins de 16 ans déposés par les Demandeurs (définit ci-dessous).{" "}
+            de moins de 16 ans déposés par les Demandeurs (définit ci-dessous).
           </div>
           <div>
             « Les Membres d’une commission » désignent les membres d’une
             commission dont la composition est définie à l’article R.7124-20 du
             code du travail.
           </div>
-          <div>« L’Enfant » est l’enfant concerné par la demande.</div>
           <div>
             « Le Médecin » désigne la personne en charge de l’examen médical
             réalisé dans les conditions prévues par l’arrêté du 14 avril 2009
@@ -82,6 +79,7 @@ const Conditions: React.FC = () => {
             agissant pour son compte, à savoir les assistantes médicales chargés
             de prendre rendez-vous avec les enfants.
           </div>
+          <div>« L’Enfant » est l’enfant concerné par la demande.</div>
           <div>
             « Le Demandeur », désigne toute personne effectuant, pour le compte
             d’une société de production, une demande d’autorisation de travail
@@ -92,34 +90,43 @@ const Conditions: React.FC = () => {
             pour répondre à ces besoins.
           </div>
           <h5>Article 4 – Fonctionnalités</h5>
-          <div>Les Services permettent aux Instructeurs de :</div>
+          <h5>Article 4.1. Fonctionnalités ouvertes aux Demandeurs</h5>
+          <div>Les Services permettent aux Demandeurs de :</div>
           <ul>
             <li>
-              accéder via le formulaire de demande d’autorisation, aux
-              informations fournies par les Demandeurs et aux pièces
-              justificatives afin d’instruire la demande ;
+              créer un dossier de demande d’autorisation en complétant le
+              formulaire ;
             </li>
-            <li>valider ou refuser une pièce justificative ;</li>
             <li>
-              laisser un commentaire au niveau du projet ou d’un Enfant pour
-              expliciter le refus d’une pièce justificative ou apporter tous
-              types d’informations complémentaires (pièce illisible, format non
-              compatible…) ;
+              référencer les informations nécessaires ainsi que les pièces
+              justificatives ;
             </li>
-            <li>avoir une visibilité sur le suivi de la demande ;</li>
-            <li>
-              modifier le statut d’un dossier (“En construction”, “En
-              instruction”, “Prêt pour la Commission”, “Ajourné”, “Avis
-              favorable”, “Avis favorable sous réserve”, “Avis défavorable”)
-            </li>
-            <li>valider un dossier pour envoyer l’avis ;</li>
-            <li>conserver les documents, objet de la demande.</li>
+            <li>avoir une visibilité sur le suivi de la procédure ;</li>
+            <li>recevoir l’avis de la commission ;</li>
+            <li>recevoir l’autorisation individuelle de travail.</li>
           </ul>
+          <h5>
+            Article 4.2. Fonctionnalités ouvertes aux Membres d’une commission
+          </h5>
           <div>
-            L’un des Instructeurs (l’administrateur des Instructeurs) bénéficie
-            de fonctionnalités supplémentaires : il peut répartir les dossiers
-            aux Instructeurs.
+            Les Services permettent aux Membres de la commission de consulter
+            les pièces justificatives en ligne en amont d’une commission.
           </div>
+          <h5>Article 4.3 Fonctionnalités ouvertes aux Médecins</h5>
+          <div>Les Services permettent aux Médecins :</div>
+          <ul>
+            <li>
+              identifier les Enfants pour lesquels un examen médical est
+              nécessaire ;
+            </li>
+            <li>
+              renseigner si l’examen médical se fera sur pièce, en physique (ou
+              téléconsultation), ou sur bon de prise en charge ;
+            </li>
+            <li>renseigner la date du rendez-vous ;</li>
+            <li>déposer l’avis médical ;</li>
+            <li>avoir une visibilité sur le suivi de la procédure.</li>
+          </ul>
           <h5>Article 5. Responsabilités</h5>
           <h5>Article 5.1. L’éditeur de la plateforme Enfants du spectacle</h5>
           <div>
@@ -151,11 +158,11 @@ const Conditions: React.FC = () => {
             sans préavis, la plateforme pour des raisons de maintenance ou pour
             tout autre motif jugé nécessaire.
           </div>
-          <h5>Article 5.2. Les Instructeurs</h5>
+          <h5>Article 5.2. Les Demandeurs</h5>
           <div>
-            Les Instructeurs s’engagent à ne pas commercialiser les données
-            reçues et à ne pas les communiquer à des tiers en dehors des cas
-            prévus par la loi.
+            Les Demandeurs s’engagent à ne pas commercialiser les données reçues
+            et à ne pas les communiquer à des tiers en dehors des cas prévus par
+            la loi.
           </div>
           <div>
             Toute information transmise par lui est de sa seule responsabilité.
@@ -166,9 +173,45 @@ const Conditions: React.FC = () => {
             d’amende.
           </div>
           <div>
-            {`Les Instructeurs s'engagent à ne pas mettre en ligne de contenus
-          ou informations contraires aux dispositions légales et
-          réglementaires en vigueur.`}
+            {`Les Demandeurs s'engagent à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et réglementaires en vigueur.`}
+          </div>
+          <h5>Article 5.3. Les Membres d’une commission</h5>
+          <div>
+            Les Membres d’une commission s’engagent à ne pas commercialiser les
+            données reçues et à ne pas les communiquer à des tiers en dehors des
+            cas prévus par la loi.
+          </div>
+          <div>
+            Toute information transmise par lui est de sa seule responsabilité.
+            Il est rappelé que toute personne procédant à une fausse déclaration
+            pour elle-même ou pour autrui s’expose, notamment, aux sanctions
+            prévues à l’article 441-1 du code pénal, prévoyant des peines
+            pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros
+            d’amende.
+          </div>
+          <div>
+            Les Membres d’une commission s'engagent à ne pas mettre en ligne de
+            contenus ou informations contraires aux dispositions légales et
+            réglementaires en vigueur.
+          </div>
+          <h5>Article 5.4. Les Médecins</h5>
+          <div>
+            Les Médecins s’engagent à ne pas commercialiser les données reçues
+            et à ne pas les communiquer à des tiers en dehors des cas prévus par
+            la loi.
+          </div>
+          <div>
+            Toute information transmise par lui est de sa seule responsabilité.
+            Il est rappelé que toute personne procédant à une fausse déclaration
+            pour elle-même ou pour autrui s’expose, notamment, aux sanctions
+            prévues à l’article 441-1 du code pénal, prévoyant des peines
+            pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros
+            d’amende.
+          </div>
+          <div>
+            Les Médecins s'engagent à ne pas mettre en ligne de contenus ou
+            informations contraires aux dispositions légales et réglementaires
+            en vigueur.
           </div>
           <h5>Article 6. Mise à jour des conditions d’utilisation</h5>
           <div>

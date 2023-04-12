@@ -6,8 +6,8 @@ const Politic: React.FC = () => {
   return (
     <LayoutHome windowTitle="politique de confidentialité">
       <div className={styles.container}>
-        <h2>Politique de confidentialité</h2>
         <div className={styles.contentWrapper}>
+          <h1>Politique de confidentialité</h1>
           <h5>Qui est responsable de la plateforme Enfants du spectacle ?</h5>
           <p>
             La plateforme, dénommée « Enfants du spectacle » est portée par la

@@ -9,8 +9,6 @@ import { FaCheckCircle } from "react-icons/fa";
 import { HiClock } from "react-icons/hi";
 import { RiAlertFill, RiDownloadLine, RiInformationFill } from "react-icons/ri";
 import ButtonList from "src/components/ButtonList";
-import Cgu from "src/components/Cgu";
-import CguModal from "src/components/CguModal";
 import CommissionBloc from "src/components/Commission";
 import FilterBar from "src/components/FilterBar";
 import FilterBarText from "src/components/FilterBarText";
@@ -114,7 +112,6 @@ const Page: React.FC = () => {
   const [filters, setFilters] = useState<DossiersFilters | undefined>(
     undefined
   );
-  const [showModal, setShowModal] = useState<boolean>(false);
 
   const filteredCommissions =
     !swrCommissions.isLoading && filters !== undefined && commissions
@@ -233,34 +230,6 @@ const Page: React.FC = () => {
       });
   }
 
-  React.useEffect(() => {
-    setShowModal(true);
-  }, []);
-
-  const handleCheckChange = (isCheckedValue: boolean) => {
-    setShowModal(isCheckedValue);
-  };
-  const edsCgu = localStorage.getItem("enfants-du-spectacle-cgu");
-
-  React.useEffect(() => {
-    if (showModal && !edsCgu) {
-      const disableScroll = (event: WheelEvent) => {
-        const target = event.target as HTMLElement;
-        const isScrollable = target.scrollHeight > target.clientHeight;
-        if (isScrollable) {
-          return;
-        }
-        event.preventDefault();
-      };
-      document.documentElement.style.overflow = "hidden";
-      return () => {
-        document.documentElement.removeEventListener("wheel", disableScroll);
-      };
-    } else {
-      document.documentElement.style.overflow = "scroll";
-    }
-  }, [showModal]);
-
   type CommissionWithCounts = Commission & {
     dossiers: (Dossier & {
       _count: {
@@ -353,238 +322,219 @@ const Page: React.FC = () => {
       {isError && <Icon name="ri-error" />}
       {!isLoading && !isError && !searchValueEffective && (
         <>
-          {showModal && !localStorage.getItem("enfants-du-spectacle-cgu") ? (
-            <>
-              <div className={styles.overlay} />
-              <CguModal
-                component={
-                  <Cgu isModal={true} onCheckChange={handleCheckChange} />
-                }
-              />
-            </>
-          ) : (
-            <>
-              {
-                //@ts-expect-error
-                session.data.dbUser.role !== "MEDECIN" && (
-                  <>
-                    <ButtonList action={handleStatus} />
-                  </>
-                )
-              }
-              <div className={styles.commissionWrapper}>
-                <div className={styles.dossierTitleContainer}>
-                  <div>Commissions</div>
-                  {!showTable && !edsCgu ? (
-                    <AiOutlinePlus
-                      cursor="pointer"
-                      onClick={() => {
-                        setShowTable(true);
-                      }}
-                    />
-                  ) : (
-                    <AiOutlineMinus
-                      cursor="pointer"
-                      onClick={() => {
-                        setShowTable(false);
-                      }}
-                    />
-                  )}
-                </div>
-                {showTable && (
-                  <table cellSpacing={0} className={styles.tableHeader}>
-                    <thead>
-                      <tr>
-                        <th>Département</th>
-                        <th>Dossiers</th>
-                        <th>Enfants</th>
+          {
+            //@ts-expect-error
+            session.data.dbUser.role !== "MEDECIN" && (
+              <>
+                <ButtonList action={handleStatus} />
+              </>
+            )
+          }
+          <div className={styles.commissionWrapper}>
+            <div className={styles.dossierTitleContainer}>
+              <div>Commissions</div>
+              {!showTable ? (
+                <AiOutlinePlus
+                  cursor="pointer"
+                  onClick={() => {
+                    setShowTable(true);
+                  }}
+                />
+              ) : (
+                <AiOutlineMinus
+                  cursor="pointer"
+                  onClick={() => {
+                    setShowTable(false);
+                  }}
+                />
+              )}
+            </div>
+            {showTable && (
+              <table cellSpacing={0} className={styles.tableHeader}>
+                <thead>
+                  <tr>
+                    <th>Département</th>
+                    <th>Dossiers</th>
+                    <th>Enfants</th>
+                    {
+                      //@ts-expect-error
+                      session.data.dbUser.role !== "MEDECIN" && (
+                        <>
+                          <th>Etat</th>
+                          <th>Télécharger</th>
+                        </>
+                      )
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentCommissions?.map((commission, index) => {
+                    const countNew = commission.dossiers
+                      .map((dossier) => dossier.statusNotification)
+                      .filter((x) => x === "NOUVEAU").length;
+
+                    const countMaj = commission.dossiers
+                      .map((dossier) => dossier.statusNotification)
+                      .filter((x) => x === "MIS_A_JOUR").length;
+
+                    const countPending = commission.dossiers
+                      .map((dossier) => dossier.statut)
+                      .filter(
+                        (d) => d === "INSTRUCTION" || d === "CONSTRUCTION"
+                      ).length;
+
+                    const countReady = commission.dossiers
+                      .map((dossier) => dossier.statut)
+                      .filter(
+                        (d) => d !== "CONSTRUCTION" && d !== "INSTRUCTION"
+                      ).length;
+
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <a href={`#` + commission.id.toString()}>
+                            {frenchDateText(commission.date)} -{" "}
+                            {frenchDepartementName(commission.departement)}
+                          </a>
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <div style={{ marginRight: "15px" }}>
+                            {commission.dossiers.length}{" "}
+                          </div>
+                          {countNew !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagRed}`}
+                              style={{ marginRight: "6px" }}
+                            >
+                              <RiInformationFill /> {countNew} NOUVEAU
+                            </div>
+                          )}
+                          {countMaj !== 0 && (
+                            <div
+                              className={`${tagStyle.tag} ${tagStyle.tagBlue}`}
+                            >
+                              <RiAlertFill /> {countMaj} MAJ
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {commission.dossiers
+                            .map((p) => {
+                              console.log(p);
+                              return p._count
+                                ? p._count.enfants
+                                : p.enfants
+                                ? p.enfants.length
+                                : 0;
+                            })
+                            .reduce((i, b) => i + b, 0)}
+                        </td>
                         {
                           //@ts-expect-error
                           session.data.dbUser.role !== "MEDECIN" && (
                             <>
-                              <th>Etat</th>
-                              <th>Télécharger</th>
+                              <td
+                                style={{
+                                  display: "flex",
+                                }}
+                              >
+                                {countPending !== 0 && (
+                                  <div
+                                    className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
+                                    style={{ marginRight: "15px" }}
+                                  >
+                                    <FaCheckCircle size={12} /> {countPending}
+                                  </div>
+                                )}
+                                {countReady !== 0 && (
+                                  <div
+                                    className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
+                                  >
+                                    <HiClock size={12} /> {countReady}
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                {commission.dossiers.filter(
+                                  (dossier) => dossier.statut === "PRET"
+                                ).length > 0 && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      gap: "20px",
+                                    }}
+                                  >
+                                    <ButtonLink
+                                      light={true}
+                                      onClick={() => {
+                                        generateOdj(commission);
+                                      }}
+                                    >
+                                      <RiDownloadLine
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      Ordre du jour
+                                    </ButtonLink>
+                                    <ButtonLink
+                                      light={true}
+                                      onClick={() => {
+                                        generatePV(commission);
+                                      }}
+                                    >
+                                      <RiDownloadLine
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      Procès Verbal
+                                    </ButtonLink>
+                                  </div>
+                                )}
+                              </td>
                             </>
                           )
                         }
                       </tr>
-                    </thead>
-                    <tbody>
-                      {currentCommissions?.map((commission, index) => {
-                        const countNew = commission.dossiers
-                          .map((dossier) => dossier.statusNotification)
-                          .filter((x) => x === "NOUVEAU").length;
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+          {status === "futur" &&
+            filteredCommissions?.map((commission: CommissionData) => {
+              const commissionDossierIds = commission.dossiers.map(
+                (dossier: Dossier) => dossier.externalId
+              );
 
-                        const countMaj = commission.dossiers
-                          .map((dossier) => dossier.statusNotification)
-                          .filter((x) => x === "MIS_A_JOUR").length;
-
-                        const countPending = commission.dossiers
-                          .map((dossier) => dossier.statut)
-                          .filter(
-                            (d) => d === "INSTRUCTION" || d === "CONSTRUCTION"
-                          ).length;
-
-                        const countReady = commission.dossiers
-                          .map((dossier) => dossier.statut)
-                          .filter(
-                            (d) => d !== "CONSTRUCTION" && d !== "INSTRUCTION"
-                          ).length;
-
-                        return (
-                          <tr key={index}>
-                            <td>
-                              <a href={`#` + commission.id.toString()}>
-                                {frenchDateText(commission.date)} -{" "}
-                                {frenchDepartementName(commission.departement)}
-                              </a>
-                            </td>
-                            <td
-                              style={{
-                                display: "flex",
-                              }}
-                            >
-                              <div style={{ marginRight: "15px" }}>
-                                {commission.dossiers.length}{" "}
-                              </div>
-                              {countNew !== 0 && (
-                                <div
-                                  className={`${tagStyle.tag} ${tagStyle.tagRed}`}
-                                  style={{ marginRight: "6px" }}
-                                >
-                                  <RiInformationFill /> {countNew} NOUVEAU
-                                </div>
-                              )}
-                              {countMaj !== 0 && (
-                                <div
-                                  className={`${tagStyle.tag} ${tagStyle.tagBlue}`}
-                                >
-                                  <RiAlertFill /> {countMaj} MAJ
-                                </div>
-                              )}
-                            </td>
-                            <td>
-                              {commission.dossiers
-                                .map((p) => {
-                                  console.log(p);
-                                  return p._count
-                                    ? p._count.enfants
-                                    : p.enfants
-                                    ? p.enfants.length
-                                    : 0;
-                                })
-                                .reduce((i, b) => i + b, 0)}
-                            </td>
-                            {
-                              //@ts-expect-error
-                              session.data.dbUser.role !== "MEDECIN" && (
-                                <>
-                                  <td
-                                    style={{
-                                      display: "flex",
-                                    }}
-                                  >
-                                    {countPending !== 0 && (
-                                      <div
-                                        className={`${tagStyle.tag} ${tagStyle.tagYellow}`}
-                                        style={{ marginRight: "15px" }}
-                                      >
-                                        <FaCheckCircle size={12} />{" "}
-                                        {countPending}
-                                      </div>
-                                    )}
-                                    {countReady !== 0 && (
-                                      <div
-                                        className={`${tagStyle.tag} ${tagStyle.tagGreen}`}
-                                      >
-                                        <HiClock size={12} /> {countReady}
-                                      </div>
-                                    )}
-                                  </td>
-                                  <td>
-                                    {commission.dossiers.filter(
-                                      (dossier) => dossier.statut === "PRET"
-                                    ).length > 0 && (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          gap: "20px",
-                                        }}
-                                      >
-                                        <ButtonLink
-                                          light={true}
-                                          onClick={() => {
-                                            generateOdj(commission);
-                                          }}
-                                        >
-                                          <RiDownloadLine
-                                            style={{ marginRight: "10px" }}
-                                          />
-                                          Ordre du jour
-                                        </ButtonLink>
-                                        <ButtonLink
-                                          light={true}
-                                          onClick={() => {
-                                            generatePV(commission);
-                                          }}
-                                        >
-                                          <RiDownloadLine
-                                            style={{ marginRight: "10px" }}
-                                          />
-                                          Procès Verbal
-                                        </ButtonLink>
-                                      </div>
-                                    )}
-                                  </td>
-                                </>
-                              )
-                            }
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                )}
+              const commentsCountInfo = commentsInfo.filter((commentInfo) =>
+                commissionDossierIds.includes(
+                  JSON.stringify(commentInfo.dossierId)
+                )
+              );
+              return (
+                <div
+                  key={commission.date.toString()}
+                  className={styles.commissionBloc}
+                >
+                  <CommissionBloc
+                    commission={commission}
+                    commentsCountInfo={commentsCountInfo}
+                  />
+                </div>
+              );
+            })}
+          {status === "past" &&
+            commissionsPast.commissions?.map((commission: CommissionData) => (
+              <div
+                key={commission.date.toString()}
+                className={styles.commissionBloc}
+              >
+                <CommissionRow key={commission.id} commission={commission} />
               </div>
-              {status === "futur" &&
-                filteredCommissions?.map((commission: CommissionData) => {
-                  const commissionDossierIds = commission.dossiers.map(
-                    (dossier: Dossier) => dossier.externalId
-                  );
-
-                  const commentsCountInfo = commentsInfo.filter((commentInfo) =>
-                    commissionDossierIds.includes(
-                      JSON.stringify(commentInfo.dossierId)
-                    )
-                  );
-                  return (
-                    <div
-                      key={commission.date.toString()}
-                      className={styles.commissionBloc}
-                    >
-                      <CommissionBloc
-                        commission={commission}
-                        commentsCountInfo={commentsCountInfo}
-                      />
-                    </div>
-                  );
-                })}
-              {status === "past" &&
-                commissionsPast.commissions?.map(
-                  (commission: CommissionData) => (
-                    <div
-                      key={commission.date.toString()}
-                      className={styles.commissionBloc}
-                    >
-                      <CommissionRow
-                        key={commission.id}
-                        commission={commission}
-                      />
-                    </div>
-                  )
-                )}
-            </>
-          )}
+            ))}
         </>
       )}
       {!isLoading &&
