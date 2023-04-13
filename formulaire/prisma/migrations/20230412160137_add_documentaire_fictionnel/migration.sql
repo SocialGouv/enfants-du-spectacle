@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "CategorieDossier" ADD VALUE 'DOCUMENTAIRE_FICTIONNEL';
