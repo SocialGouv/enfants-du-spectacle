@@ -82,8 +82,6 @@ const sendMail: NextApiHandler = async (req, res) => {
         ? `${process.env.URL_SDP}`
         : `${process.env.NEXTAUTH_URL}`;
 
-    console.log(url);
-
     const transporter: Transporter = nodemailer.createTransport({
       auth: {
         pass: process.env.EMAIL_SERVER_PASSWORD,

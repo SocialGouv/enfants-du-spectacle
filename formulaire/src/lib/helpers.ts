@@ -187,7 +187,7 @@ const WORDING_MAILING = [
       bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
       subject: "Décision d'autorisation Enfants du spectacle",
       title: "Bonjour, vous avez été invité à télécharger la décision d'autorisation",
-      text: "Votre dossier a été accepté.",
+      text: "Votre dossier a été accepté. Vous trouverez en pièce jointe de ce mail la décision d'autorisation.",
       type: "dl_decision",
     },
     {
