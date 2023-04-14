@@ -30,16 +30,17 @@ model User {
 }
 
 model Demandeur {
-  id                       Int                @id @default(autoincrement())
-  email                    String?
-  nom                      String?
-  prenom                   String?
-  phone                    String?
-  fonction                 String?
-  conventionCollectiveCode String?
-  societeProduction        SocieteProduction? @relation(fields: [societeProductionId], references: [id])
-  societeProductionId      Int?
-  dossiers                 Dossier[]
+  id                        Int                @id @default(autoincrement())
+  email                     String?
+  nom                       String?
+  prenom                    String?
+  phone                     String?
+  fonction                  String?
+  conventionCollectiveCode  String?
+  otherConventionCollective String?
+  societeProduction         SocieteProduction? @relation(fields: [societeProductionId], references: [id])
+  societeProductionId       Int?
+  dossiers                  Dossier[]
 }
 
 model SocieteProduction {

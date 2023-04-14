@@ -119,37 +119,38 @@ enum Source {
 }
 
 model Dossier {
-  id                       Int                   @id @default(autoincrement())
-  nom                      String
-  statut                   StatutDossier         @default(CONSTRUCTION)
-  categorie                CategorieDossier
-  commissionId             Int
-  commission               Commission            @relation(fields: [commissionId], references: [id], onDelete: Cascade)
-  societeProductionId      Int
-  societeProduction        SocieteProduction     @relation(fields: [societeProductionId], references: [id])
-  enfants                  Enfant[]
-  piecesDossier            PieceDossier[]
-  commentaires             Commentaire[]
-  numeroDS                 Int?                  @default(0)
-  userId                   Int?
-  user                     User?                 @relation(fields: [userId], references: [id], name: "instructeur")
-  medecinId                Int?
-  medecin                  User?                 @relation(fields: [medecinId], references: [id], name: "medecin")
-  demandeurId              Int
-  demandeur                Demandeur             @relation(fields: [demandeurId], references: [id])
-  justificatifs            JustificatifDossier[]
-  scenesSensibles          String[]
-  presentation             String
-  conventionCollectiveCode String?
-  dateDebut                DateTime
-  dateFin                  DateTime
-  externalId               String?               @unique
-  number                   Int?
-  dateDerniereModification DateTime?
-  cdc                      Int?
-  dateDepot                DateTime?
-  statusNotification       StatusNotif?
-  source                   Source?
+  id                        Int                   @id @default(autoincrement())
+  nom                       String
+  statut                    StatutDossier         @default(CONSTRUCTION)
+  categorie                 CategorieDossier
+  commissionId              Int
+  commission                Commission            @relation(fields: [commissionId], references: [id], onDelete: Cascade)
+  societeProductionId       Int
+  societeProduction         SocieteProduction     @relation(fields: [societeProductionId], references: [id])
+  enfants                   Enfant[]
+  piecesDossier             PieceDossier[]
+  commentaires              Commentaire[]
+  numeroDS                  Int?                  @default(0)
+  userId                    Int?
+  user                      User?                 @relation(fields: [userId], references: [id], name: "instructeur")
+  medecinId                 Int?
+  medecin                   User?                 @relation(fields: [medecinId], references: [id], name: "medecin")
+  demandeurId               Int
+  demandeur                 Demandeur             @relation(fields: [demandeurId], references: [id])
+  justificatifs             JustificatifDossier[]
+  scenesSensibles           String[]
+  presentation              String
+  conventionCollectiveCode  String?
+  otherConventionCollective String?
+  dateDebut                 DateTime
+  dateFin                   DateTime
+  externalId                String?               @unique
+  number                    Int?
+  dateDerniereModification  DateTime?
+  cdc                       Int?
+  dateDepot                 DateTime?
+  statusNotification        StatusNotif?
+  source                    Source?
 }
 
 model Commentaire {

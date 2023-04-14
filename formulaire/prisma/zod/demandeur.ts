@@ -10,6 +10,7 @@ export const DemandeurModel = z.object({
   phone: z.string().nullish(),
   fonction: z.string().nullish(),
   conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish(),
   societeProductionId: z.number().int().nullish(),
 })
 

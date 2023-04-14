@@ -45,6 +45,7 @@ interface SocieteCSV {
   formeJuridique: string;
   naf: string;
   conventionCollectiveCode: string;
+  otherConventionCollective: string;
 }
 interface DossierCSV {
   nom: string;

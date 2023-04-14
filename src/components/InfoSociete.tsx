@@ -9,6 +9,7 @@ import {
 interface Props {
   societeProduction: SocieteProduction;
   conventionCollectiveCode: string | null;
+  otherConventionCollective?: string | null;
 }
 
 const InfoSociete: React.FC<Props> = ({
@@ -23,10 +24,14 @@ const InfoSociete: React.FC<Props> = ({
     siren,
   },
   conventionCollectiveCode,
+  otherConventionCollective,
 }) => {
-  const conventionStr = `CCN ${conventionCollectiveCode} (${getConventionLabel(
-    conventionCollectiveCode ?? "missing"
-  )})`;
+  const conventionStr = `CCN ${conventionCollectiveCode} 
+  (${
+    conventionCollectiveCode !== "0000"
+      ? `${getConventionLabel(conventionCollectiveCode ?? "missing")}`
+      : otherConventionCollective
+  })`;
   const conventionLegifranceUrl = getConventionLegifranceUrl(
     conventionCollectiveCode ?? "missing"
   );

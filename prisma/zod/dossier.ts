@@ -17,6 +17,7 @@ export const DossierModel = z.object({
   scenesSensibles: z.string().array(),
   presentation: z.string(),
   conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish(),
   dateDebut: z.string(),
   dateFin: z.string(),
   externalId: z.string().nullish(),

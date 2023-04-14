@@ -39,12 +39,14 @@ const post: NextApiHandler = async (req, res) => {
     //HANDLE SOCIETE PROD
     const SocieteData = SocieteProductionModel.omit({
       conventionCollectiveCode: true,
+      otherConventionCollective: true,
       id: true,
     });
     const createSociete = await prisma?.societeProduction.create({
       data: {
         ...SocieteData.parse(data.societeProduction),
         ["conventionCollectiveCode"]: data.demandeur.conventionCollectiveCode,
+        ["otherConventionCollective"]: data.demandeur.otherConventionCollective,
       },
     });
     //console.log('societe created')
@@ -108,6 +110,7 @@ const post: NextApiHandler = async (req, res) => {
           },
         },
         conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
+        otherConventionCollective: data.demandeur.otherConventionCollective,
         dateDepot: new Date(),
         demandeur: {
           connect: {
@@ -166,7 +169,13 @@ const post: NextApiHandler = async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: `${frenchDepartementName(commissions[0].departement)}, ${frenchDateText(commissions[0].date)}`});
+    res
+      .status(200)
+      .json({
+        message: `${frenchDepartementName(
+          commissions[0].departement
+        )}, ${frenchDateText(commissions[0].date)}`,
+      });
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });
@@ -205,6 +214,7 @@ const update: NextApiHandler = async (req, res) => {
       data: {
         ...DossierData.parse(data.dossier),
         conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
+        otherConventionCollective: data.demandeur.otherConventionCollective,
         justificatifs: data.dossier.piecesDossier
           .map((piece) => piece.type)
           .filter((item, i, ar) => ar.indexOf(item) === i),
@@ -233,7 +243,7 @@ const update: NextApiHandler = async (req, res) => {
       nomRepresentant1: true,
       nomRepresentant2: true,
       prenomRepresentant1: true,
-      prenomRepresentant2: true
+      prenomRepresentant2: true,
     });
     data.enfants.map(async (enfant) => {
       enfant.nombreJours =
@@ -287,7 +297,13 @@ const update: NextApiHandler = async (req, res) => {
         });
       }
     });
-    res.status(200).json({ message: `${frenchDepartementName(commissions[0].departement)}, ${frenchDateText(commissions[0].date)}`});
+    res
+      .status(200)
+      .json({
+        message: `${frenchDepartementName(
+          commissions[0].departement
+        )}, ${frenchDateText(commissions[0].date)}`,
+      });
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });
