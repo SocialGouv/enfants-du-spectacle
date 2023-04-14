@@ -15,6 +15,7 @@ export const SocieteProductionModel = z.object({
   adresseCodeCommune: z.string(),
   formeJuridique: z.string(),
   conventionCollectiveCode: z.string(),
+  otherConventionCollective: z.string(),
 })
 
 export interface CompleteSocieteProduction extends z.infer<typeof SocieteProductionModel> {

@@ -111,11 +111,12 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return (
     <>
-      {session.dbUser.role !== "MEMBRE" && session.dbUser.role !== "MEDECIN" && (
-        <div id="summaryBloc">
-          <DossierActionBar dossierId={dossierId} />
-        </div>
-      )}
+      {session.dbUser.role !== "MEMBRE" &&
+        session.dbUser.role !== "MEDECIN" && (
+          <div id="summaryBloc">
+            <DossierActionBar dossierId={dossierId} />
+          </div>
+        )}
       <Accordion title={dossier.nom} className="accordionSpacing" state={true}>
         <div className={styles.dossierSummaryBloc}>
           <div className={styles.insideWrapper}>
@@ -232,6 +233,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       societeProduction={dossier.societeProduction}
                       conventionCollectiveCode={
                         dossier.conventionCollectiveCode
+                      }
+                      otherConventionCollective={
+                        dossier.otherConventionCollective
                       }
                     />
                   </Info>
