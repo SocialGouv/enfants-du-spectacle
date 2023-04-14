@@ -54,7 +54,6 @@ const CHECKS = [
           {label : 'Mail', code: 'email'},
           {label : 'Fonction', code: 'fonction'},
           {label : 'Convention collective applicable', code: 'conventionCollectiveCode'},
-          {label : 'Autre convention collective applicable', code: 'otherConventionCollective'},
       ]
     },
     {
@@ -185,11 +184,10 @@ const WORDING_MAILING = [
       type: "share_dossier",
     },
     {
-      button: "Télécharger",
       bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
       subject: "Décision d'autorisation Enfants du spectacle",
       title: "Bonjour, vous avez été invité à télécharger la décision d'autorisation",
-      text: "Votre dossier a été accepté. Vous trouverez en pièce jointe de ce mail la décision d'autorisation.",
+      text: "Votre dossier a été accepté.",
       type: "dl_decision",
     },
     {
