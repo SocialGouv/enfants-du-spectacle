@@ -1,3 +1,10 @@
+# [1.64.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.63.0...v1.64.0) (2023-04-14)
+
+
+### Features
+
+* add other convention collective ([#515](https://github.com/SocialGouv/enfants-du-spectacle/issues/515)) ([4ffcaa5](https://github.com/SocialGouv/enfants-du-spectacle/commit/4ffcaa5078a235978588b06abe502cbadca58ee0))
+
 # [1.63.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.62.0...v1.63.0) (2023-04-13)
 
 
