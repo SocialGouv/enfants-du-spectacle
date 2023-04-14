@@ -77,7 +77,12 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const url = `${req.headers.host}`;
+    const url =
+      type === "auth_access"
+        ? `${process.env.URL_SDP}`
+        : `${process.env.NEXTAUTH_URL}`;
+
+    console.log(url);
 
     const transporter: Transporter = nodemailer.createTransport({
       auth: {
