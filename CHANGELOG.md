@@ -1,3 +1,10 @@
+# [1.65.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.64.0...v1.65.0) (2023-04-14)
+
+
+### Features
+
+* update checks demandeur and add condition email ([#516](https://github.com/SocialGouv/enfants-du-spectacle/issues/516)) ([6ff2bef](https://github.com/SocialGouv/enfants-du-spectacle/commit/6ff2bef0bc0fddbbdf16885ffb2a858f7a3cbfbd))
+
 # [1.64.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.63.0...v1.64.0) (2023-04-14)
 
 
