@@ -142,6 +142,7 @@ function getFormatedTypeDossier(type: string): string {
       "Enregistrement doublage": "DOUBLAGE",
       "Enregistrement musique en studio": "MUSIQUE_STUDIO",
       "Film institutionnel": "FILM_INSTITUTIONNEL",
+      "Documentaire fictionnel": "DOCUMENTAIRE_FICTIONNEL",
       "Film long métrage": "LONG_METRAGE",
       "Film moyen ou court métrage": "COURT_METRAGE",
       Opéra: "OPERA",
@@ -153,7 +154,6 @@ function getFormatedTypeDossier(type: string): string {
       Téléfilm: "TELEFILM",
       "Émission radio": "RADIO",
       "Émission télé": "EMISSION_TV",
-      "Documentaire fictionnel": "DOCUMENTAIRE_FICTIONNEL",
     }[type] ?? "AUTRE"
   );
 }
@@ -191,41 +191,67 @@ const ROLES_USERS = [
   { label: "Médecin travail", value: "MEDECIN" },
 ];
 
-const TYPE_CONSULTATION_MEDECIN: {label: string, value: TypeConsultationMedecin, labelCol2: string, typeJustif: JustificatifEnfant}[] = [
-  { label: "En physique ou en téléconsultation", value: "PHYSIQUE", labelCol2: 'Date du rdv ', typeJustif: 'AVIS_MEDICAL'},
-  { label: "Sur pièce", value: "PIECE", labelCol2: 'Avis médical', typeJustif: 'AVIS_MEDICAL'},
-  { label: "Bon de prise en charge", value: "PRISE_EN_CHARGE", labelCol2: 'Bon de prise en charge', typeJustif: 'BON_PRISE_EN_CHARGE'},
-  { label: "Par le médecin traitant", value: "MEDECIN_TRAITANT", labelCol2: 'Autorisation de prise en charge', typeJustif: 'AUTORISATION_PRISE_EN_CHARGE'},
-]
+const TYPE_CONSULTATION_MEDECIN: {
+  label: string;
+  value: TypeConsultationMedecin;
+  labelCol2: string;
+  typeJustif: JustificatifEnfant;
+}[] = [
+  {
+    label: "En physique ou en téléconsultation",
+    labelCol2: "Date du rdv ",
+    typeJustif: "AVIS_MEDICAL",
+    value: "PHYSIQUE",
+  },
+  {
+    label: "Sur pièce",
+    labelCol2: "Avis médical",
+    typeJustif: "AVIS_MEDICAL",
+    value: "PIECE",
+  },
+  {
+    label: "Bon de prise en charge",
+    labelCol2: "Bon de prise en charge",
+    typeJustif: "BON_PRISE_EN_CHARGE",
+    value: "PRISE_EN_CHARGE",
+  },
+  {
+    label: "Par le médecin traitant",
+    labelCol2: "Autorisation de prise en charge",
+    typeJustif: "AUTORISATION_PRISE_EN_CHARGE",
+    value: "MEDECIN_TRAITANT",
+  },
+];
 
-const INFOS_REPRESENTANTS: {col: string, rows: {label: string, value: keyof Enfant}[]}[] = [
+const INFOS_REPRESENTANTS: {
+  col: string;
+  rows: { label: string; value: keyof Enfant }[];
+}[] = [
   {
-    col: 'ENFANT', 
-    rows: [
-      {label: 'Adresse', value: 'adresseEnfant'}
-    ]
+    col: "ENFANT",
+    rows: [{ label: "Adresse", value: "adresseEnfant" }],
   },
   {
-    col: 'REPRÉSENTANT LÉGAL 1', 
+    col: "REPRÉSENTANT LÉGAL 1",
     rows: [
-      {label: 'Nom', value: 'nomRepresentant1'},
-      {label: 'Prénom', value: 'prenomRepresentant1'},
-      {label: 'Adresse', value: 'adresseRepresentant1'},
-      {label: 'Email', value: 'mailRepresentant1'},
-      {label: 'Téléphone', value: 'telRepresentant1'},
-    ]
+      { label: "Nom", value: "nomRepresentant1" },
+      { label: "Prénom", value: "prenomRepresentant1" },
+      { label: "Adresse", value: "adresseRepresentant1" },
+      { label: "Email", value: "mailRepresentant1" },
+      { label: "Téléphone", value: "telRepresentant1" },
+    ],
   },
   {
-    col: 'REPRÉSENTANT LÉGAL 2', 
+    col: "REPRÉSENTANT LÉGAL 2",
     rows: [
-      {label: 'Nom', value: 'nomRepresentant2'},
-      {label: 'Prénom', value: 'prenomRepresentant2'},
-      {label: 'Adresse', value: 'adresseRepresentant2'},
-      {label: 'Email', value: 'mailRepresentant2'},
-      {label: 'Téléphone', value: 'telRepresentant2'},
-    ]
+      { label: "Nom", value: "nomRepresentant2" },
+      { label: "Prénom", value: "prenomRepresentant2" },
+      { label: "Adresse", value: "adresseRepresentant2" },
+      { label: "Email", value: "mailRepresentant2" },
+      { label: "Téléphone", value: "telRepresentant2" },
+    ],
   },
-]
+];
 
 const ALL_DEPARTEMENTS = ["75", "92", "93", "94", "78", "77", "91", "95", ""];
 
@@ -266,14 +292,16 @@ const WORDING_MAILING = [
     bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
     subject: "Téléchargement commission Enfants du spectacle",
     text: "Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission via un lien sécurisé.",
+    title: "Bonjour,",
     type: "dl_commission",
   },
   {
-    button: "Télécharger",
+    button: "Accéder à la plate-forme",
     bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
     subject: "Décision d'autorisation Enfants du spectacle",
-    text: "Votre dossier a été accepté. Vous trouverez en pièce jointe de ce mail la décision d'autorisation.",
-    type: "dl_decision",
+    text: "Votre dossier a été accepté. Vous trouverez la décision d'autorisation en pièce jointe. Vous pouvez également accéder à la plate-forme afin d'y télécharger la décision d'autorisation.",
+    title: "Bonjour,",
+    type: "auth_access",
   },
 
   {
@@ -374,8 +402,6 @@ export {
   compact,
   delay,
   EMPLOIS_CATEGORIES,
-  TYPE_CONSULTATION_MEDECIN,
-  INFOS_REPRESENTANTS,
   filterCommissions,
   filterSearchResults,
   frenchDateHour,
@@ -383,6 +409,7 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  INFOS_REPRESENTANTS,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,
   ROLES_USERS,
@@ -391,6 +418,7 @@ export {
   STATUS_ODJ,
   stringToNumberOrNull,
   strNoAccent,
+  TYPE_CONSULTATION_MEDECIN,
   typeEmploiLabel,
   typeEmploiValue,
   TYPES_EMPLOI,

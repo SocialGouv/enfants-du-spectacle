@@ -77,6 +77,16 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
             verif = false;
           }
           if (
+            contextDossier.demandeur.conventionCollectiveCode === "0000" &&
+            !contextDossier.demandeur.otherConventionCollective
+          ) {
+            setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
+            setMessageError(
+              `Le champ 'Nom de la convention' est necessaire sur l'onglet Demandeur`
+            );
+            verif = false;
+          }
+          if (
             !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
               contextDossier.demandeur.email ?? ""
             )

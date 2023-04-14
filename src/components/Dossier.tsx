@@ -264,7 +264,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             onClick={() => {
                               const attachment = generateDA([dossier], true);
                               sendEmail(
-                                "dl_decision",
+                                "auth_access",
                                 attachment as string,
                                 dossier,
                                 dossier.demandeur.email

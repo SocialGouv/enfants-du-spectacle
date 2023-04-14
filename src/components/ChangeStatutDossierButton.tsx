@@ -71,7 +71,7 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
               if (transition.name === "passerAccepte") {
                 const attachment = generateDA([dossier as DossierData], true);
                 sendEmail(
-                  "dl_decision",
+                  "auth_access",
                   attachment as string,
                   dossier,
                   demandeur.email

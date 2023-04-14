@@ -175,7 +175,7 @@ const DemandeurForm: React.FC<Props> = ({ allowChanges }) => {
                 htmlFor="otherConventionCollective"
                 className="mb-2 italic"
               >
-                Nom de la convention
+                Nom de la convention *
               </label>
               <input
                 onChange={(e: React.FormEvent<HTMLInputElement>) => {
