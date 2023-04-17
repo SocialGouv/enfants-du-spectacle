@@ -51,8 +51,12 @@
 
     .actionRow {
         margin-top: 2rem;
+        display: flex;
+        gap: 10px;
     }
-
+    .btnImport {
+        background: blue;
+    }
     .buttonUp {
         margin-top: 2rem;
         text-align: right;
@@ -63,6 +67,30 @@
         img {
             cursor: pointer;
         }
+    }
+
+    .listBtn {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .modalWrapper {
+        background-color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 50%;
+        z-index: 99;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 40px;
+        border-radius: 3px;
     }
 
     .rowEnfant {

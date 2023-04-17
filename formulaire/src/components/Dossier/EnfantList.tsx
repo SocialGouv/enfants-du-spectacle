@@ -5,7 +5,7 @@ import styles from "./EnfantList.module.scss";
 import { ButtonLink } from "src/uiComponents/button";
 import Foldable from "../FoldableItem";
 import EnfantForm from "./EnfantForm";
-import { createEnfant } from "src/fetching/enfant";
+import { createEnfant, importEnfants } from "src/fetching/enfant";
 import { useRef } from "react";
 import moment from "moment";
 import OrderableItem from "../home/OrderableItem";
@@ -15,6 +15,9 @@ import CountPieces from "../CountPieces";
 import TableCard from "../TableCard";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { CommentaireNotifications } from "src/lib/types";
+import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
+import { FaUserPlus, FaFileDownload } from "react-icons/fa";
+import readXlsxFile, { Row } from "read-excel-file";
 
 interface Props {
   allowChanges: Boolean;
@@ -26,6 +29,99 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>();
   const [page, setPage] = React.useState<number>(0);
   const myRef = useRef(null);
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [enfantInfo, setEnfantInfo] = React.useState<string[]>([]);
+
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [enfantsList, setEnfantsList] = React.useState<Record<string, any>[]>(
+    []
+  );
+
+  const input = document.getElementById("import-enfants") as HTMLInputElement;
+  if (input) {
+    input.addEventListener("change", () => {
+      if (input.files) {
+        console.log("INSIDE! ");
+        console.log("SCHEMA:", schema);
+        readXlsxFile(input.files[0], {
+          sheet: "Enfants",
+          schema,
+          // transformData(data: any) {
+          //   let enfants: string[] = [];
+          //   const child: Record<string, any> = {};
+          //   // const child: Record<string, any> = {};
+          //   return data.filter((row: Row, rowIndex: number) => {
+          //     if (rowIndex > 0) {
+          //       // get enfant lastname & firstname
+          //       // let nomEnfant = "";
+          //       // let prenomEnfant = "";
+          //       // row.forEach((column, colIndex) => {
+          //       //   if (colIndex === 1) {
+          //       //     prenomEnfant = column.toString();
+          //       //   } else if (colIndex === 2) {
+          //       //     nomEnfant = column.toString();
+          //       //   }
+          //       // });
+          //       // enfants.push(`${nomEnfant} ${prenomEnfant}`);
+          //       // setEnfantInfo(enfants);
+
+          //       // map values by schema props
+          //       Object.entries(schema).forEach(([key, value], objIndex) => {
+          //         child[value.prop] = row[objIndex];
+          //       });
+
+          //       if (!enfantsList.includes(JSON.parse(JSON.stringify(child)))) {
+          //         enfantsList.push(JSON.parse(JSON.stringify(child)));
+          //       }
+
+          //       // setEnfantsList([
+          //       //   ...enfantsList,
+          //       //   JSON.parse(JSON.stringify(child)),
+          //       // ]);
+          //     }
+          //     return false;
+          //   });
+          // },
+        }).then(async (rows) => {
+          setEnfantsList(rows.rows);
+          console.log("ROWS", rows);
+          await importEnfants(rows.rows, contextDossier.dossier.id);
+        });
+        // .then(async () => {
+        //   setTimeout(async () => {
+        //   }, 500);
+        // });
+      }
+    });
+  }
+
+  const handleFileSelectClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+      setShowModal(true);
+    }
+  };
+
+  const handleDownload = () => {
+    fetch("/template/template-enfants-v1.xlsx")
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "template-enfants-v1.xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>(
     "dateDerniereModification"
   );
@@ -125,8 +221,66 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
     );
   }, [order, termOrdered]);
 
+  // if (enfantInfo.length) console.log(enfantInfo);
+  if (enfantsList.length) {
+    console.log(
+      "ENFANTS LISTS FINAL:",
+      JSON.parse(JSON.stringify(enfantsList))
+    );
+  }
+
   return (
     <div className={styles.enfantList}>
+      {(contextDossier.dossier.statut === "BROUILLON" ||
+        contextDossier.dossier.statut === "CONSTRUCTION") && (
+        <div className={styles.listBtn}>
+          <div>
+            <ButtonLink onClick={handleFileSelectClick}>
+              <FaUserPlus style={{ marginRight: "8px" }} /> Importer le fichier
+              d'enfants
+            </ButtonLink>
+            <input
+              id="import-enfants"
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileInputChange}
+            />
+          </div>
+          <div>
+            <ButtonLink light={true} onClick={handleDownload}>
+              <FaFileDownload style={{ marginRight: "8px" }} /> Télécharger le
+              modèle (csv excel)
+            </ButtonLink>
+          </div>
+        </div>
+      )}
+      {showModal && (
+        <div className={styles.modalWrapper}>
+          <div className={styles.importTitle}>Import des enfants</div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {enfantsList.length > 0
+              ? enfantsList.map((child, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        marginRight: "10px",
+                      }}
+                    >
+                      {child.prenom}
+                    </div>
+                  );
+                })
+              : ""}
+          </div>
+        </div>
+      )}
       <TableCard title={"Enfants"}>
         <div className={styles.headRow}>
           <OrderableItem

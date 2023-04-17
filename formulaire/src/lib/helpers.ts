@@ -1,4 +1,5 @@
 import React from "react";
+import { Email } from "read-excel-file";
 
 function frenchDateText(date: Date): string {
   const newDate = new Date(date);
@@ -287,6 +288,154 @@ const CONVENTIONS = [
   }
 ];
 
+const SCHEMA_ENFANTS = {
+  'Date de création': {
+    prop: 'date',
+    type: Date
+  },
+  'Prénom(s)': {
+    prop: 'prenom',
+    type: String
+  },
+  'Nom': {
+    prop: 'nom',
+    type: String
+  },
+  'Né(e) le ': {
+    prop: 'dateNaissance',
+    type: Date
+  },
+  "Type d'emploi": {
+    prop: 'typeEmploi',
+    type: String
+  },
+  'Nom du personnage incarné': {
+    prop: 'nomPersonnage',
+    type: String
+  },
+  'Nombre de jours de travail': {
+    prop: 'nombreJours',
+    type: Number
+  },
+  'Période de travail': {
+    prop: 'periodeTravail',
+    type: String
+  },
+  'Temps et lieu de travail': {
+    prop: 'contexteTravail',
+    type: String
+  },
+  'Montant du cachet': {
+    prop: 'montantCachet',
+    type: Number
+  },
+  'Nombre de cachets': {
+    prop: 'nombreCachets',
+    type: Number
+  },
+  'Nombre de lignes': {
+    prop: 'nombreLignes',
+    type: Number
+  },
+  'Rémunérations additionnelles': {
+    prop: 'remunerationsAdditionnelles',
+    type: Number
+  },
+  'Rémunération total': {
+    prop: "remunerationTotale",
+    type: Number
+  },
+  "L'enfant doit consulter": {
+    prop: "typeConsultation",
+    type: String
+  },
+  'Qualité du représentant légal 1': {
+    prop: 'repQuality',
+    type: String
+  },
+  'Nom du représentant légal 1': {
+    prop: "nomRepresentant1",
+    type: String
+  },
+  'Prénom du représentant légal 1': {
+    prop: "prenomRepresentant1",
+    type: String
+  },
+  'N° de rue': {
+    prop: 'roadNumber',
+    type: Number
+  },
+  'Libellé de voie': {
+    prop: 'streetName',
+    type: String
+  },
+  'Code postal': {
+    prop: 'postalCode',
+    type: Number
+  },
+  'Ville': {
+    prop: 'city',
+    type: String
+  },
+  'Email du représentant légal 1': {
+    prop: "mailRepresentant1",
+    type: Email
+  },
+  'Téléphone du réprésentant légal 1': {
+    prop: "telRepresentant1",
+    type: Number
+  },
+  'Qualité du représentant légal 2': {
+    prop: 'repQualityTwo',
+    type: String
+  },
+  'Nom du représentant légal 2': {
+    prop: "nomRepresentant2",
+    type: String
+  },
+  'Prénom du représentant légal 2': {
+    prop: "prenomRepresentant2",
+    type: String
+  },
+  'N° de rue du représentant légal 2': {
+    prop: 'roadNumberTwo',
+    type: Number
+  },
+  'Libellé de voie du représentant légal 2': {
+    prop: 'streetNameTwo',
+    type: String
+  },
+  'Code postal du représentant légal 2': {
+    prop: 'postalCodeTwo',
+    type: Number
+  },
+  'Ville du représentant légal 2': {
+    prop: 'cityTwo',
+    type: String
+  },
+  'Email du représentant légal 2': {
+    prop: "mailRepresentant2",
+    type: Email
+  },
+  'Téléphone du réprésentant légal 2': {
+    prop: "telRepresentant2",
+    type: Number
+  },
+  'Etablissement scolaire': {
+    prop: 'school',
+    type: String
+  },
+  // 'STATUS': {
+  //   prop: 'status',
+  //   type: String,
+  //   oneOf: [
+  //     'SCHEDULED',
+  //     'STARTED',
+  //     'FINISHED'
+  //   ]
+  // }
+}
+
 
 export {
     frenchDateText,
@@ -300,5 +449,6 @@ export {
     WORDING_MAILING,
     CATEGORIES,
     CONVENTIONS,
-    SCENES_SENSIBLES
+    SCENES_SENSIBLES,
+    SCHEMA_ENFANTS
   };
