@@ -1,5 +1,4 @@
 import { Dossier, Enfant, PieceDossierEnfant } from "@prisma/client";
-import { ParsedObjectsResult } from "read-excel-file";
 
 export type EnfantWithDosier = Enfant & {
   dossier: Dossier;
@@ -63,7 +62,7 @@ const searchEnfants = async (infosEnfant: Record<"nom" | "prenom", string>) => {
 
 const importEnfants = async (
   enfants: Record<string, any>[],
-  dossierId: string
+  dossierId: number
 ) => {
   const url = "/api/enfants/import";
   const fetching = await fetch(url, {
@@ -75,7 +74,7 @@ const importEnfants = async (
     }
     return r.json();
   });
-  return fetching as Enfant;
+  return fetching as Enfant[];
 };
 
 export {

@@ -17,7 +17,8 @@ import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { CommentaireNotifications } from "src/lib/types";
 import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
 import { FaUserPlus, FaFileDownload } from "react-icons/fa";
-import readXlsxFile, { Row } from "read-excel-file";
+import readXlsxFile from "read-excel-file";
+import { RxCross2 } from "react-icons/rx";
 
 interface Props {
   allowChanges: Boolean;
@@ -30,70 +31,40 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const [page, setPage] = React.useState<number>(0);
   const myRef = useRef(null);
   const [showModal, setShowModal] = React.useState<boolean>(false);
-  const [enfantInfo, setEnfantInfo] = React.useState<string[]>([]);
-
+  const [activeOnce, setActiveOnce] = React.useState<boolean>(false);
+  const [errorsRows, setErrorsRows] = React.useState<Record<string, any>[]>([]);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [enfantsList, setEnfantsList] = React.useState<Record<string, any>[]>(
     []
   );
+  const [currentEnfant, setCurrentEnfant] = React.useState<Enfant>();
 
-  const input = document.getElementById("import-enfants") as HTMLInputElement;
-  if (input) {
-    input.addEventListener("change", () => {
-      if (input.files) {
-        console.log("INSIDE! ");
-        console.log("SCHEMA:", schema);
-        readXlsxFile(input.files[0], {
-          sheet: "Enfants",
-          schema,
-          // transformData(data: any) {
-          //   let enfants: string[] = [];
-          //   const child: Record<string, any> = {};
-          //   // const child: Record<string, any> = {};
-          //   return data.filter((row: Row, rowIndex: number) => {
-          //     if (rowIndex > 0) {
-          //       // get enfant lastname & firstname
-          //       // let nomEnfant = "";
-          //       // let prenomEnfant = "";
-          //       // row.forEach((column, colIndex) => {
-          //       //   if (colIndex === 1) {
-          //       //     prenomEnfant = column.toString();
-          //       //   } else if (colIndex === 2) {
-          //       //     nomEnfant = column.toString();
-          //       //   }
-          //       // });
-          //       // enfants.push(`${nomEnfant} ${prenomEnfant}`);
-          //       // setEnfantInfo(enfants);
+  if (selectedFile && activeOnce) {
+    console.log("SCHEMA:", schema);
+    readXlsxFile(selectedFile, {
+      sheet: "Enfants",
+      schema,
+    }).then(async (rows) => {
+      console.log("ROWS", rows);
+      setErrorsRows(rows.errors);
+      const rowParsed = rows.rows.filter(
+        (row, index) => !rows.errors.some((err) => err.row - 1 === index + 1)
+      );
 
-          //       // map values by schema props
-          //       Object.entries(schema).forEach(([key, value], objIndex) => {
-          //         child[value.prop] = row[objIndex];
-          //       });
-
-          //       if (!enfantsList.includes(JSON.parse(JSON.stringify(child)))) {
-          //         enfantsList.push(JSON.parse(JSON.stringify(child)));
-          //       }
-
-          //       // setEnfantsList([
-          //       //   ...enfantsList,
-          //       //   JSON.parse(JSON.stringify(child)),
-          //       // ]);
-          //     }
-          //     return false;
-          //   });
-          // },
-        }).then(async (rows) => {
-          setEnfantsList(rows.rows);
-          console.log("ROWS", rows);
-          await importEnfants(rows.rows, contextDossier.dossier.id);
-        });
-        // .then(async () => {
-        //   setTimeout(async () => {
-        //   }, 500);
-        // });
+      let start = 0;
+      while (start < rowParsed.length) {
+        const end = Math.min(start + 10, rowParsed.length);
+        const batch = rowParsed.slice(start, end);
+        const resImport = await importEnfants(batch, contextDossier.dossier.id);
+        setTimeout(() => {
+          setEnfantsList(resImport);
+          start += 10;
+        }, 2000);
+        console.error("CURRENT ENFANT", resImport);
       }
     });
+    setActiveOnce(false);
   }
 
   const handleFileSelectClick = () => {
@@ -103,12 +74,22 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setActiveOnce(false);
     if (event.target.files && event.target.files.length > 0) {
       setSelectedFile(event.target.files[0]);
+      window.scrollTo({ top: 0, left: 0 });
       setShowModal(true);
+      setActiveOnce(true);
     }
   };
 
+  const handleErrors = (error: Record<string, any>) => {
+    return error.reason === "not_an_email" || error.reason === "not an email"
+      ? "Le format de l'email est invalide"
+      : error.reason === "not_a_number"
+      ? "Le format du numéro de téléphone est invalide"
+      : "Format invalide";
+  };
   const handleDownload = () => {
     fetch("/template/template-enfants-v1.xlsx")
       .then((response) => response.blob())
@@ -221,16 +202,11 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
     );
   }, [order, termOrdered]);
 
-  // if (enfantInfo.length) console.log(enfantInfo);
-  if (enfantsList.length) {
-    console.log(
-      "ENFANTS LISTS FINAL:",
-      JSON.parse(JSON.stringify(enfantsList))
-    );
-  }
-
   return (
-    <div className={styles.enfantList}>
+    <div
+      className={styles.enfantList}
+      style={showModal ? { overflowY: "hidden" } : { overflowY: "scroll" }}
+    >
       {(contextDossier.dossier.statut === "BROUILLON" ||
         contextDossier.dossier.statut === "CONSTRUCTION") && (
         <div className={styles.listBtn}>
@@ -255,17 +231,25 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
           </div>
         </div>
       )}
+      {showModal && <div className={styles.overlay} />}
+
       {showModal && (
-        <div className={styles.modalWrapper}>
-          <div className={styles.importTitle}>Import des enfants</div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-            }}
-          >
-            {enfantsList.length > 0
-              ? enfantsList.map((child, index) => {
+        <>
+          <div className={styles.modalWrapper}>
+            <RxCross2
+              className={styles.closeBtn}
+              size={24}
+              onClick={() => setShowModal(false)}
+            />
+            <div className={styles.importTitle}>Import des enfants</div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+              }}
+            >
+              {enfantsList.length > 0 ? (
+                enfantsList.map((child, index) => {
                   return (
                     <div
                       key={index}
@@ -277,9 +261,31 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                     </div>
                   );
                 })
-              : ""}
+              ) : (
+                <>{`Il n'y a pas d'enfants à importer.`}</>
+              )}
+            </div>
+            {currentEnfant && <div>{currentEnfant.prenom}</div>}
+            <div className={styles.errorsListWrapper}>
+              {errorsRows.length && enfantsList.length ? (
+                <div className="">
+                  <div className={styles.importTitle}>Erreurs</div>
+                  {errorsRows.map((error, index) => {
+                    return (
+                      <div key={index} className={styles.errorRow}>
+                        Ligne{" "}
+                        <span style={{ fontWeight: "bold" }}>{error.row}</span>{" "}
+                        : {error.column} {`=>`} {handleErrors(error)}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
       <TableCard title={"Enfants"}>
         <div className={styles.headRow}>

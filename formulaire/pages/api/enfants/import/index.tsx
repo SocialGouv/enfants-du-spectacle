@@ -23,6 +23,10 @@ const post: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
   let dataList = JSON.parse(req.body);
   console.log("ENFANTS LIST:", dataList);
+  //  dataList.enfants = dataList.enfants.filter(
+  //  (v, i, a) =>
+  //  a.findIndex((v2) => v2.mailRepresentant1 === v.mailRepresentant1) === i
+  //  );
   try {
     dataList.enfants.forEach(async (data: any) => {
       console.log("ENFANT UNIQUE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:", data);
@@ -72,9 +76,10 @@ const post: NextApiHandler = async (req, res) => {
       delete data.school;
 
       // data.userId = session?.dbUser.id;
+
       const enfant = await prisma.enfant.create({ data });
-      res.status(200).json(enfant);
     });
+    res.status(200).json(dataList.enfants);
   } catch (e: unknown) {
     console.log(e);
   }
