@@ -19,6 +19,7 @@ import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
 import { FaUserPlus, FaFileDownload } from "react-icons/fa";
 import readXlsxFile from "read-excel-file";
 import { RxCross2 } from "react-icons/rx";
+import ProgressBar from "../ProgressBar";
 
 interface Props {
   allowChanges: Boolean;
@@ -38,29 +39,26 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const [enfantsList, setEnfantsList] = React.useState<Record<string, any>[]>(
     []
   );
-  const [currentEnfant, setCurrentEnfant] = React.useState<Enfant>();
+  const [progress, setProgress] = React.useState(0);
 
   if (selectedFile && activeOnce) {
-    console.log("SCHEMA:", schema);
     readXlsxFile(selectedFile, {
       sheet: "Enfants",
       schema,
     }).then(async (rows) => {
-      console.log("ROWS", rows);
       setErrorsRows(rows.errors);
       const rowParsed = rows.rows.filter(
         (row, index) => !rows.errors.some((err) => err.row - 1 === index + 1)
       );
-
       let start = 0;
       while (start < rowParsed.length) {
         const end = Math.min(start + 10, rowParsed.length);
         const batch = rowParsed.slice(start, end);
         const resImport = await importEnfants(batch, contextDossier.dossier.id);
-        setTimeout(() => {
-          setEnfantsList(resImport);
-          start += 10;
-        }, 2000);
+        setEnfantsList(resImport);
+        start += 10;
+        if (rowParsed.length <= start) setProgress(100);
+        else setProgress((start / rowParsed.length) * 100);
         console.error("CURRENT ENFANT", resImport);
       }
     });
@@ -232,14 +230,16 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
         </div>
       )}
       {showModal && <div className={styles.overlay} />}
-
       {showModal && (
         <>
           <div className={styles.modalWrapper}>
             <RxCross2
               className={styles.closeBtn}
               size={24}
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setProgress(0);
+                setShowModal(false);
+              }}
             />
             <div className={styles.importTitle}>Import des enfants</div>
             <div
@@ -249,27 +249,23 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
               }}
             >
               {enfantsList.length > 0 ? (
-                enfantsList.map((child, index) => {
-                  return (
-                    <div
-                      key={index}
-                      style={{
-                        marginRight: "10px",
-                      }}
-                    >
-                      {child.prenom}
-                    </div>
-                  );
-                })
+                "Importation en cours..."
               ) : (
                 <>{`Il n'y a pas d'enfants à importer.`}</>
               )}
             </div>
-            {currentEnfant && <div>{currentEnfant.prenom}</div>}
+            <div className={styles.percentage}>{Math.trunc(progress)}%</div>
+            <ProgressBar progress={progress} />
             <div className={styles.errorsListWrapper}>
               {errorsRows.length && enfantsList.length ? (
                 <div className="">
-                  <div className={styles.importTitle}>Erreurs</div>
+                  <div className={styles.importTitle}>
+                    Erreurs{" "}
+                    <span className={styles.errorDescription}>
+                      (certains enfants n'ont pas été importés)
+                    </span>
+                  </div>
+
                   {errorsRows.map((error, index) => {
                     return (
                       <div key={index} className={styles.errorRow}>
