@@ -19,8 +19,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
           width: `${barWidth}%`,
           maxWidth: "100%",
           height: "10px",
-          backgroundColor: "#e84c26",
+          background: "#e84c26",
           transition: "width 0.2s ease-in-out",
+          //   background: "linear-gradient(0.25turn, #e84c26, #ffe3dc, #e84c26)",
         }}
       ></div>
     </div>

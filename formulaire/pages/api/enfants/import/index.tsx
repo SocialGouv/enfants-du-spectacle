@@ -20,16 +20,9 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
   let dataList = JSON.parse(req.body);
-  console.log("ENFANTS LIST:", dataList);
-  //  dataList.enfants = dataList.enfants.filter(
-  //  (v, i, a) =>
-  //  a.findIndex((v2) => v2.mailRepresentant1 === v.mailRepresentant1) === i
-  //  );
   try {
     dataList.enfants.forEach(async (data: any) => {
-      console.log("ENFANT UNIQUE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:", data);
       if (data.typeConsultation === "Un médecin Thalie Santé") {
         data.typeConsultation = "THALIE";
       }
@@ -75,9 +68,27 @@ const post: NextApiHandler = async (req, res) => {
       delete data.cityTwo;
       delete data.school;
 
-      // data.userId = session?.dbUser.id;
-
-      const enfant = await prisma.enfant.create({ data });
+      // find existing enfants first
+      const existingEnfants = await prisma.enfant.findMany({
+        where: {
+          dossierId: dataList.dossierId,
+          nom: data.nom,
+          prenom: data.prenom,
+          dateNaissance: data.dateNaissance,
+        },
+      });
+      if (existingEnfants.length === 0) {
+        const enfant = await prisma.enfant.create({ data });
+      } else {
+        await prisma.enfant.updateMany({
+          where: {
+            nom: data.nom,
+            prenom: data.prenom,
+            dateNaissance: data.dateNaissance,
+          },
+          data: data,
+        });
+      }
     });
     res.status(200).json(dataList.enfants);
   } catch (e: unknown) {

@@ -291,19 +291,22 @@ const CONVENTIONS = [
 const SCHEMA_ENFANTS = {
   'Date de création': {
     prop: 'date',
-    type: Date
+    type: Date,
+    required: true
   },
   'Prénom(s)': {
     prop: 'prenom',
-    type: String
+    type: String,
+    required: true
   },
   'Nom': {
     prop: 'nom',
-    type: String
+    type: String,
+    required: true
   },
   'Né(e) le ': {
     prop: 'dateNaissance',
-    type: Date
+    type: Date,
   },
   "Type d'emploi": {
     prop: 'typeEmploi',

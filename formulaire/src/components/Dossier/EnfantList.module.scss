@@ -89,16 +89,16 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70%;
-        height: 50%;
-        z-index: 99;
+        transform: translate(-50%, -40%);
+        width: 60%;
+        height: 60%;
+        z-index: 999;
         display: flex;
         gap: 10px;
         align-items: center;
         flex-direction: column;
         justify-content: flex-start;
-        padding: 40px;
+        padding: 40px 40px 15px 40px;
         border-radius: 3px;
         box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
 
@@ -126,7 +126,7 @@
     .errorRow {
         padding: 5px 0;
     }
-    .errorsListWrapper {
+    .summaryWrapper {
         overflow-y: auto;
         height: 100%;
         width: 100%;
@@ -134,6 +134,10 @@
         background-color: #ececfc;
         padding: 20px;
         border-radius: 3px;
+
+        .summary {
+            margin-bottom: 20px;
+        }
 
         .errorDescription {
             font-weight: normal;

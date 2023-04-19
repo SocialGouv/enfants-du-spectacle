@@ -20,6 +20,7 @@ import { FaUserPlus, FaFileDownload } from "react-icons/fa";
 import readXlsxFile from "read-excel-file";
 import { RxCross2 } from "react-icons/rx";
 import ProgressBar from "../ProgressBar";
+import { useRouter } from "next/router";
 
 interface Props {
   allowChanges: Boolean;
@@ -28,12 +29,14 @@ interface Props {
 
 const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const contextDossier = { ...useStateContext() };
+  const router = useRouter();
   const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>();
   const [page, setPage] = React.useState<number>(0);
   const myRef = useRef(null);
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [activeOnce, setActiveOnce] = React.useState<boolean>(false);
   const [errorsRows, setErrorsRows] = React.useState<Record<string, any>[]>([]);
+  const [enfantRefused, setEnfantRefused] = React.useState<number>(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [enfantsList, setEnfantsList] = React.useState<Record<string, any>[]>(
@@ -48,19 +51,26 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
     }).then(async (rows) => {
       setErrorsRows(rows.errors);
       const rowParsed = rows.rows.filter(
-        (row, index) => !rows.errors.some((err) => err.row - 1 === index + 1)
+        (v: any, index, a) =>
+          !rows.errors.some((err) => err.row - 1 === index + 1) &&
+          a.findIndex(
+            (v2: any) =>
+              v2.nom === v.nom &&
+              v2.prenom === v.prenom &&
+              v2.dateNaissance === v.dateNaissance
+          ) === index
       );
       let start = 0;
       while (start < rowParsed.length) {
         const end = Math.min(start + 10, rowParsed.length);
         const batch = rowParsed.slice(start, end);
         const resImport = await importEnfants(batch, contextDossier.dossier.id);
-        setEnfantsList(resImport);
+        setEnfantsList(rowParsed);
         start += 10;
         if (rowParsed.length <= start) setProgress(100);
         else setProgress((start / rowParsed.length) * 100);
-        console.error("CURRENT ENFANT", resImport);
       }
+      setEnfantRefused(new Set(rows.errors.map((obj) => obj.row)).size);
     });
     setActiveOnce(false);
   }
@@ -86,7 +96,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
       ? "Le format de l'email est invalide"
       : error.reason === "not_a_number"
       ? "Le format du numéro de téléphone est invalide"
-      : "Format invalide";
+      : "Ce champ est obligatoire";
   };
   const handleDownload = () => {
     fetch("/template/template-enfants-v1.xlsx")
@@ -210,12 +220,13 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
         <div className={styles.listBtn}>
           <div>
             <ButtonLink onClick={handleFileSelectClick}>
-              <FaUserPlus style={{ marginRight: "8px" }} /> Importer le fichier
-              d'enfants
+              <FaUserPlus style={{ marginRight: "8px" }} />
+              {`Importer le fichier d'enfants`}
             </ButtonLink>
             <input
               id="import-enfants"
               type="file"
+              accept="xls, xlsx"
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileInputChange}
@@ -249,20 +260,37 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
               }}
             >
               {enfantsList.length > 0 ? (
-                "Importation en cours..."
+                <div>
+                  {progress === 100
+                    ? "Importation terminée"
+                    : "Importation en cours..."}
+                </div>
               ) : (
-                <>{`Il n'y a pas d'enfants à importer.`}</>
+                <>{`Aucun enfant n'a été importé.`}</>
               )}
             </div>
             <div className={styles.percentage}>{Math.trunc(progress)}%</div>
             <ProgressBar progress={progress} />
-            <div className={styles.errorsListWrapper}>
-              {errorsRows.length && enfantsList.length ? (
-                <div className="">
+            <div className={styles.summaryWrapper}>
+              <div className={styles.importTitle}>Résumé:</div>
+              <div style={{ marginBottom: "20px" }}>
+                <div>
+                  <span style={{ fontWeight: "bold" }}>
+                    {enfantsList.length}
+                  </span>{" "}
+                  {enfantsList.length > 1 ? "enfants crées" : "enfant créé"}
+                </div>
+                <div>
+                  <span style={{ fontWeight: "bold" }}>{enfantRefused}</span>{" "}
+                  {enfantRefused ? "enfants refusés" : "enfant refusé"}
+                </div>
+              </div>
+              {errorsRows.length ? (
+                <div>
                   <div className={styles.importTitle}>
                     Erreurs{" "}
                     <span className={styles.errorDescription}>
-                      (certains enfants n'ont pas été importés)
+                      ({`certains enfants n'ont pas été importés`})
                     </span>
                   </div>
 
@@ -280,6 +308,15 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                 ""
               )}
             </div>
+            {/* {progress === 100 && (
+              <ButtonLink
+                onClick={() => {
+                  router.push(`/dossier/${contextDossier.dossier.id}`);
+                }}
+              >
+                Fermer
+              </ButtonLink>
+            )} */}
           </div>
         </>
       )}
