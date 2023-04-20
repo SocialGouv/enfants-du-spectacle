@@ -5,7 +5,7 @@ import styles from "./EnfantList.module.scss";
 import { ButtonLink } from "src/uiComponents/button";
 import Foldable from "../FoldableItem";
 import EnfantForm from "./EnfantForm";
-import { createEnfant } from "src/fetching/enfant";
+import { createEnfant, importEnfants } from "src/fetching/enfant";
 import { useRef } from "react";
 import moment from "moment";
 import OrderableItem from "../home/OrderableItem";
@@ -15,6 +15,12 @@ import CountPieces from "../CountPieces";
 import TableCard from "../TableCard";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { CommentaireNotifications } from "src/lib/types";
+import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
+import { FaUserPlus, FaFileDownload } from "react-icons/fa";
+import readXlsxFile from "read-excel-file";
+import { RxCross2 } from "react-icons/rx";
+import ProgressBar from "../ProgressBar";
+import { useRouter } from "next/router";
 
 interface Props {
   allowChanges: Boolean;
@@ -23,9 +29,109 @@ interface Props {
 
 const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const contextDossier = { ...useStateContext() };
+  const router = useRouter();
   const [selectedEnfant, setSelectedEnfant] = React.useState<Enfant>();
   const [page, setPage] = React.useState<number>(0);
   const myRef = useRef(null);
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [activeOnce, setActiveOnce] = React.useState<boolean>(false);
+  const [errorsRows, setErrorsRows] = React.useState<Record<string, any>[]>([]);
+  const [enfantRefused, setEnfantRefused] = React.useState<number>(0);
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [enfantsList, setEnfantsList] = React.useState<Record<string, any>[]>(
+    []
+  );
+  const [progress, setProgress] = React.useState(0);
+
+  if (selectedFile && activeOnce) {
+    readXlsxFile(selectedFile, {
+      sheet: "Enfants",
+      schema,
+    }).then(async (rows) => {
+      setErrorsRows(rows.errors);
+      const rowParsed = rows.rows.filter(
+        (v: any, index, a) =>
+          !rows.errors.some((err) => err.row - 1 === index + 1) &&
+          a.findIndex(
+            (v2: any) =>
+              v2.nom === v.nom &&
+              v2.prenom === v.prenom &&
+              Date.parse(v2.dateNaissance) === Date.parse(v.dateNaissance)
+          ) === index
+      );
+      let start = 0;
+      while (start < rowParsed.length) {
+        const end = Math.min(start + 10, rowParsed.length);
+        const batch = rowParsed.slice(start, end);
+        const resImport = await importEnfants(batch, contextDossier.dossier.id);
+        setEnfantsList(rowParsed);
+        start += 10;
+        if (rowParsed.length <= start) setProgress(100);
+        else setProgress((start / rowParsed.length) * 100);
+      }
+      setEnfantRefused(new Set(rows.errors.map((obj) => obj.row)).size);
+    });
+    setActiveOnce(false);
+  }
+
+  React.useEffect(() => {
+    if (showModal) {
+      const disableScroll = (event: WheelEvent) => {
+        const target = event.target as HTMLElement;
+        const isScrollable = target.scrollHeight > target.clientHeight;
+        if (isScrollable) {
+          return;
+        }
+        event.preventDefault();
+      };
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.documentElement.removeEventListener("wheel", disableScroll);
+      };
+    } else {
+      document.documentElement.style.overflow = "scroll";
+    }
+  }, [showModal]);
+
+  const handleFileSelectClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setActiveOnce(false);
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+      window.scrollTo({ top: 0, left: 0 });
+      setShowModal(true);
+      setActiveOnce(true);
+      setEnfantsList([]);
+      setEnfantRefused(0);
+    }
+  };
+
+  const handleErrors = (error: Record<string, any>) => {
+    return error.reason === "not_an_email" || error.reason === "not an email"
+      ? "Le format de l'email est invalide"
+      : error.reason === "not_a_number"
+      ? "Le format du numéro de téléphone est invalide"
+      : "Ce champ est obligatoire";
+  };
+  const handleDownload = () => {
+    fetch("/template/template-enfants-v1.xlsx")
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "template-enfants-v1.xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>(
     "dateDerniereModification"
   );
@@ -127,6 +233,114 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
 
   return (
     <div className={styles.enfantList}>
+      {(contextDossier.dossier.statut === "BROUILLON" ||
+        contextDossier.dossier.statut === "CONSTRUCTION") && (
+        <div className={styles.listBtn}>
+          <div>
+            <ButtonLink onClick={handleFileSelectClick}>
+              <FaUserPlus style={{ marginRight: "8px" }} />
+              {`Importer le fichier d'enfants`}
+            </ButtonLink>
+            <input
+              id="import-enfants"
+              type="file"
+              accept="xls, xlsx"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileInputChange}
+            />
+          </div>
+          <div>
+            <ButtonLink light={true} onClick={handleDownload}>
+              <FaFileDownload style={{ marginRight: "8px" }} /> Télécharger le
+              modèle (csv excel)
+            </ButtonLink>
+          </div>
+        </div>
+      )}
+      {showModal && <div className={styles.overlay} />}
+      {showModal && (
+        <>
+          <div className={styles.modalWrapper}>
+            <RxCross2
+              className={styles.closeBtn}
+              size={24}
+              onClick={() => {
+                setProgress(0);
+                setShowModal(false);
+                router.push(`/dossier/${contextDossier.dossier.id}`);
+              }}
+            />
+            <div className={styles.importTitle}>
+              Import des informations enfants
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+              }}
+            >
+              {enfantsList.length > 0 ? (
+                <div>
+                  {progress === 100
+                    ? "Importation terminée"
+                    : "Importation en cours..."}
+                </div>
+              ) : (
+                <>{`Aucune information n'a été importée.`}</>
+              )}
+            </div>
+            <div className={styles.percentage}>{Math.trunc(progress)}%</div>
+            <ProgressBar progress={progress} />
+            <div className={styles.summaryWrapper}>
+              <div className={styles.importTitle}>Résumé:</div>
+              <div style={{ marginBottom: "20px" }}>
+                <div>
+                  <span style={{ fontWeight: "bold" }}>
+                    {enfantsList.length}
+                  </span>{" "}
+                  {enfantsList.length > 1 ? "enfants crées" : "enfant créé"}
+                </div>
+                <div>
+                  <span style={{ fontWeight: "bold" }}>{enfantRefused}</span>{" "}
+                  {enfantRefused > 1 ? "enfants refusés" : "enfant refusé"}
+                </div>
+              </div>
+              {errorsRows.length ? (
+                <div>
+                  <div className={styles.importTitle}>
+                    Erreurs{" "}
+                    <span className={styles.errorDescription}>
+                      ({`certains enfants n'ont pas été importés`})
+                    </span>
+                  </div>
+
+                  {errorsRows.map((error, index) => {
+                    return (
+                      <div key={index} className={styles.errorRow}>
+                        Ligne{" "}
+                        <span style={{ fontWeight: "bold" }}>{error.row}</span>{" "}
+                        : {error.column} {`=>`} {handleErrors(error)}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            {/* {progress === 100 && (
+              <ButtonLink
+                onClick={() => {
+                  router.push(`/dossier/${contextDossier.dossier.id}`);
+                }}
+              >
+                Fermer
+              </ButtonLink>
+            )} */}
+          </div>
+        </>
+      )}
       <TableCard title={"Enfants"}>
         <div className={styles.headRow}>
           <OrderableItem
