@@ -57,7 +57,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
             (v2: any) =>
               v2.nom === v.nom &&
               v2.prenom === v.prenom &&
-              v2.dateNaissance === v.dateNaissance
+              Date.parse(v2.dateNaissance) === Date.parse(v.dateNaissance)
           ) === index
       );
       let start = 0;

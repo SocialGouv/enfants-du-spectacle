@@ -304,7 +304,7 @@ const SCHEMA_ENFANTS = {
     type: String,
     required: true
   },
-  'Né(e) le ': {
+  'Né(e) le': {
     prop: 'dateNaissance',
     type: Date,
   },
