@@ -12,9 +12,10 @@ import styles from "./AssignedAgentSelect.module.scss";
 
 interface Props {
   dossierId: number;
+  commission: Commission
 }
 
-const AssignCommissionSelect: React.FC<Props> = ({ dossierId }) => {
+const AssignCommissionSelect: React.FC<Props> = ({ dossierId, commission }) => {
   const { mutate } = useSWRConfig();
   const { dossier, ...swrDossier } = useDossier(dossierId);
   const [commissions, setCommissions] = React.useState<Commission[]>([]);
@@ -36,10 +37,12 @@ const AssignCommissionSelect: React.FC<Props> = ({ dossierId }) => {
   return (
     <Select
       selected={dossier.commission ? dossier.commission.id : ""}
-      options={commissions.map((u) => ({
+      options={[
+        { label: frenchDateText(commission.date), value: String(commission.id) },
+      ].concat(commissions.map((u) => ({
         label: frenchDateText(u.date),
         value: String(u.id),
-      }))}
+      })))}
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         const rawCommissionId = event.target.value;
         const commissionId = rawCommissionId ? Number(rawCommissionId) : null;

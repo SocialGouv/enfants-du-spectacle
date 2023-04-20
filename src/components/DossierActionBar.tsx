@@ -55,7 +55,7 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
       )}
       {session.dbUser.role === "ADMIN" && (
         <Item label="Commission">
-          <AssignCommissionSelect dossierId={dossierId} />
+          <AssignCommissionSelect dossierId={dossierId} commission={dossier.commission} />
         </Item>
       )}
       <Item label="Suivi par">
