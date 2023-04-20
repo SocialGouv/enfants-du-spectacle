@@ -143,7 +143,7 @@ const post: NextApiHandler = async (req, res) => {
               : enfant.nombreJours;
           enfant.montantCachet =
             typeof enfant.montantCachet === "string"
-              ? parseInt(enfant.montantCachet)
+              ? parseFloat(enfant.montantCachet)
               : enfant.montantCachet;
           enfant.nombreCachets =
             typeof enfant.nombreCachets === "string"
@@ -169,13 +169,11 @@ const post: NextApiHandler = async (req, res) => {
       });
     }
 
-    res
-      .status(200)
-      .json({
-        message: `${frenchDepartementName(
-          commissions[0].departement
-        )}, ${frenchDateText(commissions[0].date)}`,
-      });
+    res.status(200).json({
+      message: `${frenchDepartementName(
+        commissions[0].departement
+      )}, ${frenchDateText(commissions[0].date)}`,
+    });
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });
@@ -252,7 +250,7 @@ const update: NextApiHandler = async (req, res) => {
           : enfant.nombreJours;
       enfant.montantCachet =
         typeof enfant.montantCachet === "string"
-          ? parseInt(enfant.montantCachet)
+          ? parseFloat(enfant.montantCachet)
           : enfant.montantCachet;
       enfant.nombreCachets =
         typeof enfant.nombreCachets === "string"
@@ -297,13 +295,11 @@ const update: NextApiHandler = async (req, res) => {
         });
       }
     });
-    res
-      .status(200)
-      .json({
-        message: `${frenchDepartementName(
-          commissions[0].departement
-        )}, ${frenchDateText(commissions[0].date)}`,
-      });
+    res.status(200).json({
+      message: `${frenchDepartementName(
+        commissions[0].departement
+      )}, ${frenchDateText(commissions[0].date)}`,
+    });
   } catch (e) {
     console.log("error : ", e);
     res.status(500).json({ error: e });
