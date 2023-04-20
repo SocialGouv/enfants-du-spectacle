@@ -1,3 +1,15 @@
+# [1.66.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.65.0...v1.66.0) (2023-04-20)
+
+
+### Bug Fixes
+
+* fix display date commission on dossier ([#518](https://github.com/SocialGouv/enfants-du-spectacle/issues/518)) ([f5e4d39](https://github.com/SocialGouv/enfants-du-spectacle/commit/f5e4d397356dbdaebfd11a3a662a94e397fd5324))
+
+
+### Features
+
+* import figurants ([#517](https://github.com/SocialGouv/enfants-du-spectacle/issues/517)) ([9fe9e67](https://github.com/SocialGouv/enfants-du-spectacle/commit/9fe9e67e0a8baf7b7f53f5873473da46a2f59ce9))
+
 # [1.65.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.64.0...v1.65.0) (2023-04-14)
 
 
