@@ -19,20 +19,21 @@ model Commission {
 }
 
 model SocieteProduction {
-  id                       Int         @id @default(autoincrement())
-  nom                      String
-  siret                    String
-  siren                    String
-  departement              String
-  naf                      String
-  raisonSociale            String
-  adresse                  String
-  adresseCodePostal        String
-  adresseCodeCommune       String
-  formeJuridique           String
-  conventionCollectiveCode String
-  demandeurs               Demandeur[]
-  dossiers                 Dossier[]
+  id                        Int         @id @default(autoincrement())
+  nom                       String
+  siret                     String
+  siren                     String
+  departement               String
+  naf                       String
+  raisonSociale             String
+  adresse                   String
+  adresseCodePostal         String
+  adresseCodeCommune        String
+  formeJuridique            String
+  conventionCollectiveCode  String
+  otherConventionCollective String?
+  demandeurs                Demandeur[]
+  dossiers                  Dossier[]
 }
 
 model Demandeur {
