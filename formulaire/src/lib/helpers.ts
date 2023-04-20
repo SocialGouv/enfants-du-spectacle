@@ -386,7 +386,7 @@ const SCHEMA_ENFANTS = {
   },
   'Téléphone du réprésentant légal 1': {
     prop: "telRepresentant1",
-    type: Number
+    type: String
   },
   'Qualité du représentant légal 2': {
     prop: 'repQualityTwo',
@@ -422,21 +422,12 @@ const SCHEMA_ENFANTS = {
   },
   'Téléphone du réprésentant légal 2': {
     prop: "telRepresentant2",
-    type: Number
+    type: String
   },
   'Etablissement scolaire': {
     prop: 'school',
     type: String
   },
-  // 'STATUS': {
-  //   prop: 'status',
-  //   type: String,
-  //   oneOf: [
-  //     'SCHEDULED',
-  //     'STARTED',
-  //     'FINISHED'
-  //   ]
-  // }
 }
 
 

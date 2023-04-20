@@ -75,6 +75,25 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
     setActiveOnce(false);
   }
 
+  React.useEffect(() => {
+    if (showModal) {
+      const disableScroll = (event: WheelEvent) => {
+        const target = event.target as HTMLElement;
+        const isScrollable = target.scrollHeight > target.clientHeight;
+        if (isScrollable) {
+          return;
+        }
+        event.preventDefault();
+      };
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.documentElement.removeEventListener("wheel", disableScroll);
+      };
+    } else {
+      document.documentElement.style.overflow = "scroll";
+    }
+  }, [showModal]);
+
   const handleFileSelectClick = () => {
     fileInputRef.current?.click();
   };
@@ -88,6 +107,8 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
       window.scrollTo({ top: 0, left: 0 });
       setShowModal(true);
       setActiveOnce(true);
+      setEnfantsList([]);
+      setEnfantRefused(0);
     }
   };
 
@@ -211,10 +232,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   }, [order, termOrdered]);
 
   return (
-    <div
-      className={styles.enfantList}
-      style={showModal ? { overflowY: "hidden" } : { overflowY: "scroll" }}
-    >
+    <div className={styles.enfantList}>
       {(contextDossier.dossier.statut === "BROUILLON" ||
         contextDossier.dossier.statut === "CONSTRUCTION") && (
         <div className={styles.listBtn}>
@@ -250,6 +268,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
               onClick={() => {
                 setProgress(0);
                 setShowModal(false);
+                router.push(`/dossier/${contextDossier.dossier.id}`);
               }}
             />
             <div className={styles.importTitle}>
@@ -268,7 +287,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                     : "Importation en cours..."}
                 </div>
               ) : (
-                <>{`Aucune information des enfants n'a été importée.`}</>
+                <>{`Aucune information n'a été importée.`}</>
               )}
             </div>
             <div className={styles.percentage}>{Math.trunc(progress)}%</div>
@@ -284,7 +303,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                 </div>
                 <div>
                   <span style={{ fontWeight: "bold" }}>{enfantRefused}</span>{" "}
-                  {enfantRefused ? "enfants refusés" : "enfant refusé"}
+                  {enfantRefused > 1 ? "enfants refusés" : "enfant refusé"}
                 </div>
               </div>
               {errorsRows.length ? (
