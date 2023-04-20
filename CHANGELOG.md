@@ -1,3 +1,10 @@
+# [1.67.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.66.0...v1.67.0) (2023-04-20)
+
+
+### Features
+
+* get float value for remuneration ([#519](https://github.com/SocialGouv/enfants-du-spectacle/issues/519)) ([efa24cb](https://github.com/SocialGouv/enfants-du-spectacle/commit/efa24cbf7af8c4a0f86ffdbf9537e1dfb4cb0e7c))
+
 # [1.66.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.65.0...v1.66.0) (2023-04-20)
 
 
