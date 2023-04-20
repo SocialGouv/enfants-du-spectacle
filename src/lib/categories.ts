@@ -36,6 +36,7 @@ const grandesCategories: GrandeCategorie[] = [
       { label: "Tournage téléfilm", value: "TELEFILM" },
       { label: "Tournage série", value: "SERIE" },
       { label: "Émission TV", value: "EMISSION_TV" },
+      { label: "Documentaire fictionnel", value: "DOCUMENTAIRE_FICTIONNEL" },
       { label: "Clip", value: "CLIP" },
     ],
     className: "television",
