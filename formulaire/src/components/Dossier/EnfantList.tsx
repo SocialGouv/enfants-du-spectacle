@@ -252,7 +252,9 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                 setShowModal(false);
               }}
             />
-            <div className={styles.importTitle}>Import des enfants</div>
+            <div className={styles.importTitle}>
+              Import des informations enfants
+            </div>
             <div
               style={{
                 display: "flex",
@@ -266,7 +268,7 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                     : "Importation en cours..."}
                 </div>
               ) : (
-                <>{`Aucun enfant n'a été importé.`}</>
+                <>{`Aucune information des enfants n'a été importée.`}</>
               )}
             </div>
             <div className={styles.percentage}>{Math.trunc(progress)}%</div>
