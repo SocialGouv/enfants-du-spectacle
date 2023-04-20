@@ -1,3 +1,10 @@
+# [1.68.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.67.0...v1.68.0) (2023-04-20)
+
+
+### Features
+
+* add doc fictionnel in categories ([#520](https://github.com/SocialGouv/enfants-du-spectacle/issues/520)) ([d4f1a0f](https://github.com/SocialGouv/enfants-du-spectacle/commit/d4f1a0f4901814f27a8489a1d8118a02fd0b142d))
+
 # [1.67.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.66.0...v1.67.0) (2023-04-20)
 
 
