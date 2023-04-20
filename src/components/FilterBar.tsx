@@ -32,7 +32,16 @@ const FilterBar: React.FC<Props> = ({
   onChangeFilters,
 }) => {
   const session = useSession();
-  const { allUsers, isLoading, isError } = useAllUsers(session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
+  const { allUsers, isLoading, isError } = useAllUsers(
+    session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN"
+  );
+
+  React.useEffect(() => {
+    if (session.data?.dbUser.role === "INSTRUCTEUR")
+      onChangeFilters({
+        userId: stringToNumberOrNull(session.data?.dbUser.id),
+      });
+  }, []);
 
   if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;
@@ -94,7 +103,7 @@ const FilterBar: React.FC<Props> = ({
             onChange={onChangeDepartement}
           />
         </span>
-        {session.data?.dbUser.role !== "MEDECIN" &&
+        {session.data?.dbUser.role !== "MEDECIN" && (
           <span className={styles.filterContainer || ""}>
             <Select
               id="userId"
@@ -108,7 +117,7 @@ const FilterBar: React.FC<Props> = ({
               onChange={onChangeUserId}
             />
           </span>
-        }
+        )}
         <span className={styles.filterContainer}>
           <Select
             id="societeId"
