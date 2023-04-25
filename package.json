@@ -85,7 +85,7 @@
     "faker": "^5.5.3",
     "husky": "^7.0.4",
     "jest": "^27.4.3",
-    "lint-staged": "^12.1.2",
+    "lint-staged": "^13.0.0",
     "maildev": "^1.1.0",
     "mjml": "^4.11.0",
     "prettier": "^2.5.1",
