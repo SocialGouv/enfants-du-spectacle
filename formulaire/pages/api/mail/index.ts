@@ -43,15 +43,11 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { type, dossier, to, attachment } = parsed;
+  const { type, dossier, to } = parsed;
   const wording = _.find(WORDING_MAILING, { type: type });
   if (!wording) {
     res.status(400).end();
     return;
-  }
-
-  if (type === "status_changed") {
-    wording.subject = wording.subject.replace("___DOSSIERID___", dossier.id);
   }
 
   const templateSignin = fs
@@ -59,6 +55,10 @@ const sendMail: NextApiHandler = async (req, res) => {
     .toString();
 
   function html({ url }: { url: string }): string {
+    if (type === "update_dossier" || type === "depot_dossier") 
+    {      
+      wording.text = wording.text.replace("___DOSSIERID____", "n° " + dossier.id)
+    }
     return templateSignin
       .replace("__TEXT__", wording.text as string)
       .replace("__URL__", url)
@@ -72,10 +72,7 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const url =
-      type === "auth_access" || type === "status_changed"
-        ? `${process.env.URL_SDP}`
-        : `${process.env.NEXTAUTH_URL}`;
+    const url =`${process.env.NEXTAUTH_URL}`
 
     const transporter: Transporter = nodemailer.createTransport({
       auth: {
@@ -87,15 +84,6 @@ const sendMail: NextApiHandler = async (req, res) => {
     });
 
     const options = {
-      attachments: attachment
-        ? [
-            {
-              // utf-8 string as an attachment
-              filename: `Décision autorisation ${dossier.nom}.pdf`,
-              path: attachment,
-            },
-          ]
-        : "",
       from: process.env.EMAIL_FROM,
       html: html({ url }),
       subject: wording.subject,
