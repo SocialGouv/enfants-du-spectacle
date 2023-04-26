@@ -51,7 +51,10 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   if (type === "status_changed") {
-    wording.subject = wording.subject.replace("___DOSSIERID___", dossier.id);
+    wording.subject = wording.subject.replace(
+      "___DOSSIERID___",
+      `n° ${dossier.id}`
+    );
   }
 
   const templateSignin = fs
