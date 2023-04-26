@@ -1,3 +1,10 @@
+# [1.72.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.71.0...v1.72.0) (2023-04-26)
+
+
+### Features
+
+* update condition errors ([#525](https://github.com/SocialGouv/enfants-du-spectacle/issues/525)) ([3cfc22a](https://github.com/SocialGouv/enfants-du-spectacle/commit/3cfc22a6acfab53feef1a26e2496a28c12f61737))
+
 # [1.71.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.70.0...v1.71.0) (2023-04-26)
 
 
