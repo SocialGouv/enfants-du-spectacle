@@ -1,3 +1,10 @@
+# [1.71.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.70.0...v1.71.0) (2023-04-26)
+
+
+### Features
+
+* add calendar and faq ([#524](https://github.com/SocialGouv/enfants-du-spectacle/issues/524)) ([a30d577](https://github.com/SocialGouv/enfants-du-spectacle/commit/a30d577338711cacde30c35487506dacd44088b3))
+
 # [1.70.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.69.0...v1.70.0) (2023-04-26)
 
 
