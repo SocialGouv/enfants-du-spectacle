@@ -19,6 +19,7 @@ import { ButtonLink } from "src/uiComponents/button";
 import { deleteEnfant } from "src/fetching/enfant";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
+import { RiInformationFill } from "react-icons/ri";
 
 interface Props {
   enfant: EnfantData;
@@ -34,7 +35,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   const [initialDataPassed, setInitialDataPassed] =
     React.useState<Boolean>(true);
   const contextDossier = { ...useStateContext() };
-  const [showDialogue, setShowDialogue] = useState(false);
+  const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
     setEnfant({
@@ -423,8 +425,16 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
 
         <div className={styles.blocForm}>
           <label htmlFor="nombreLignes" className="mb-2 italic">
-            Nombre de lignes
+            Nombre de lignes{" "}
+            <RiInformationFill
+              cursor={"pointer"}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
           </label>
+          {showTooltip && (
+            <div className={styles.tooltip}>Pour le doublage uniquement</div>
+          )}
           <input
             onChange={handleFormEnfant}
             value={enfantTmp?.nombreLignes || 0}
@@ -557,9 +567,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         </label>
       </div>
 
-      {enfantTmp.typeConsultation === "THALIE" &&
+      {enfantTmp.typeConsultation === "THALIE" && (
         <>
-
           <h5 className={styles.h5Spacer}>
             {"Informations de contact liées à l'enfant"}
           </h5>
@@ -718,9 +727,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           <br />
           <br />
         </>
-      }
+      )}
 
-      
       <h5 className={styles.h5Spacer}>
         {"Pièces justificatives liées à l'enfant"}
       </h5>

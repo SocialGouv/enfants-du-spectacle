@@ -21,6 +21,7 @@ import readXlsxFile from "read-excel-file";
 import { RxCross2 } from "react-icons/rx";
 import ProgressBar from "../ProgressBar";
 import { useRouter } from "next/router";
+import Accordion from "../Accordion";
 
 interface Props {
   allowChanges: Boolean;
@@ -479,36 +480,19 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
             key={`row-enfant-${enfant.id}`}
             id={`row-enfant-${enfant.id}`}
           >
-            <TableCard
+            <Accordion
               title={`${enfant.typeEmploi} : ${enfant.nom} ${enfant.prenom} (${
                 enfant.dateNaissance
                   ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate())
                   : ""
               }) - Personnage : ${enfant.nomPersonnage}`}
             >
-              <Foldable
-                hidden={true}
-                folded={!(selectedEnfant?.id === enfant.id)}
-                action={() => {
-                  handleFolded(enfant);
-                  const commentsChildrenIds = comments
-                    ?.filter(
-                      (comment) =>
-                        comment.enfantId === enfant.id &&
-                        comment.source === "INSTRUCTEUR"
-                    )
-                    .map((com) => JSON.stringify(com.id));
-                  if (commentsChildrenIds?.length)
-                    updateCommentairesNotifications(commentsChildrenIds);
-                }}
-              >
-                <EnfantForm
-                  enfant={enfant}
-                  refresh={handleRefresh}
-                  allowChanges={allowChanges}
-                ></EnfantForm>
-              </Foldable>
-            </TableCard>
+              <EnfantForm
+                enfant={enfant}
+                refresh={handleRefresh}
+                allowChanges={allowChanges}
+              ></EnfantForm>
+            </Accordion>
           </div>
         ))}
       </div>
