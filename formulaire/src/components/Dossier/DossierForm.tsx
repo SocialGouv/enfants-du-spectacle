@@ -15,6 +15,7 @@ import { sendDossier } from "src/fetching/sync";
 import IconLoader from "../IconLoader";
 import useStateContext from "src/context/StateContext";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
+import { sendEmail } from "src/fetching/email";
 
 interface Props {
   dossier: DossierData;
@@ -169,6 +170,15 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           "dossier",
           "commissionString",
           dossierSent.message.message
+        );
+
+        sendEmail(
+          contextDossier.dossier.statut === "BROUILLON"
+            ? "depot_dossier"
+            : "update_dossier",
+          "",
+          contextDossier.dossier,
+          contextDossier.demandeur.email?.toString()
         );
 
         setTimeout(() => {

@@ -312,6 +312,14 @@ const WORDING_MAILING = [
     title: "Bonjour,",
     type: "auth",
   },
+  {
+    button: "Accéder à la plate-forme",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
+    subject: "Votre dossier ___DOSSIERID___ est passé “En instruction“",
+    text: "Les services d’instruction de la DRIEETS ont passé votre dossier au statut “En instruction”. Il n’est plus modifiable d’ici la commission.",
+    title: "Bonjour,",
+    type: "status_changed",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
