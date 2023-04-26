@@ -1,3 +1,10 @@
+# [1.73.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.72.0...v1.73.0) (2023-04-26)
+
+
+### Features
+
+* email status changed ([#527](https://github.com/SocialGouv/enfants-du-spectacle/issues/527)) ([3996eae](https://github.com/SocialGouv/enfants-du-spectacle/commit/3996eae10bca26caea745485f9ef8b704a4f861b))
+
 # [1.72.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.71.0...v1.72.0) (2023-04-26)
 
 
