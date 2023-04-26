@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import React from "react";
+import IconLoader from "src/components/IconLoader";
 import { ButtonLink } from "src/components/uiComponents/button";
 
 const Logout: React.FC = () => {
   const router = useRouter();
+  const [showLoader, setShowLoader] = React.useState<boolean>(false);
   return (
     <div>
       <div className="modalOverlay" />
@@ -15,6 +17,7 @@ const Logout: React.FC = () => {
           <div className="btnList">
             <ButtonLink
               onClick={() => {
+                setShowLoader(true);
                 signOut({
                   callbackUrl:
                     "https://enfants-du-spectacle.fabrique.social.gouv.fr/",
@@ -28,12 +31,14 @@ const Logout: React.FC = () => {
             <ButtonLink
               light={true}
               onClick={() => {
+                setShowLoader(true);
                 void router.push("/dossiers");
               }}
             >
               Non
             </ButtonLink>
           </div>
+          {showLoader && <IconLoader />}
         </div>
       </div>
     </div>
