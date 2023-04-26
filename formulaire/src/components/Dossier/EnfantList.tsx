@@ -116,8 +116,10 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   const handleErrors = (error: Record<string, any>) => {
     return error.reason === "not_an_email" || error.reason === "not an email"
       ? "Le format de l'email est invalide"
+      : error.reason === "not_a_date"
+      ? "Le format de la date est invalide"
       : error.reason === "not_a_number"
-      ? "Le format du numéro de téléphone est invalide"
+      ? "Le format est invalide"
       : "Ce champ est obligatoire";
   };
   const handleDownload = () => {
