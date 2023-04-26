@@ -151,3 +151,55 @@ button.state-refuse {
 .hoverableTitle {
   text-decoration: underline dotted;
 }
+
+.modalOverlay {
+  background-color: rgb(0 0 0 / 50%);
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.modalWrapper {
+  background-color: #f5f5fe;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  width: 30%;
+  height: 35%;
+  z-index: 999;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 40px 40px 15px 40px;
+  border-radius: 3px;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+
+  .btnList {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .modalContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 40px;
+    font-size: 18px;
+  }
+  .title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+  }
+}

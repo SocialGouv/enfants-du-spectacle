@@ -28,6 +28,7 @@ export default NextAuth({
   pages: {
     error: "/",
     signIn: "/login",
+    signOut: "/logout",
     verifyRequest: "/verifyRequest",
   },
   providers: [
