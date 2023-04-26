@@ -1,3 +1,10 @@
+# [1.70.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.69.0...v1.70.0) (2023-04-26)
+
+
+### Features
+
+* add accordion component ([#523](https://github.com/SocialGouv/enfants-du-spectacle/issues/523)) ([ba25e65](https://github.com/SocialGouv/enfants-du-spectacle/commit/ba25e65aaca1d9e01d84949d32e38432c4f1cac3))
+
 # [1.69.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.68.0...v1.69.0) (2023-04-26)
 
 
