@@ -1,3 +1,10 @@
+# [1.69.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.68.0...v1.69.0) (2023-04-26)
+
+
+### Features
+
+* update excel template ([#522](https://github.com/SocialGouv/enfants-du-spectacle/issues/522)) ([eb10a4f](https://github.com/SocialGouv/enfants-du-spectacle/commit/eb10a4fafc3215dbcb087cb68f559a7956bbdfdb))
+
 # [1.68.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.67.0...v1.68.0) (2023-04-20)
 
 
