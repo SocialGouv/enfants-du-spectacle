@@ -340,8 +340,12 @@ const SCHEMA_ENFANTS = {
     prop: 'periodeTravail',
     type: String
   },
-  'Temps et lieu de travail': {
-    prop: 'contexteTravail',
+  'Temps de travail': {
+    prop: 'tempsTravail',
+    type: String
+  },
+  'Lieu de travail': {
+    prop: 'lieuTravail',
     type: String
   },
   'Montant du cachet': {
@@ -358,10 +362,6 @@ const SCHEMA_ENFANTS = {
   },
   'Rémunérations additionnelles': {
     prop: 'remunerationsAdditionnelles',
-    type: Number
-  },
-  'Rémunération total': {
-    prop: "remunerationTotale",
     type: Number
   },
   "L'enfant doit consulter": {
