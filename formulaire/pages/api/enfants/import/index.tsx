@@ -30,6 +30,8 @@ const post: NextApiHandler = async (req, res) => {
         data.typeConsultation = "GENERALISTE";
       }
 
+      data.contexteTravail = data.tempsTravail + " - " + data.lieuTravail;
+
       data.adresseRepresentant1 =
         data.roadNumber +
         " " +
@@ -51,6 +53,10 @@ const post: NextApiHandler = async (req, res) => {
       data.remunerationsAdditionnelles = JSON.stringify(
         data.remunerationsAdditionnelles
       );
+      data.remunerationTotale =
+        data.montantCachet * data.nombreCachets +
+        JSON.parse(data.remunerationsAdditionnelles);
+
       data.telRepresentant1 = JSON.stringify(data.telRepresentant1);
       data.telRepresentant2 = JSON.stringify(data.telRepresentant2);
       data.dossierId = dataList.dossierId;
@@ -67,6 +73,8 @@ const post: NextApiHandler = async (req, res) => {
       delete data.postalCodeTwo;
       delete data.cityTwo;
       delete data.school;
+      delete data.tempsTravail;
+      delete data.lieuTravail;
 
       // find existing enfants first
       const existingEnfants = await prisma.enfant.findMany({
