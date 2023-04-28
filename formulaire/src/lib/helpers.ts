@@ -356,7 +356,7 @@ const SCHEMA_ENFANTS = {
     prop: 'nombreCachets',
     type: Number
   },
-  'Nombre de lignes': {
+  'Nombre de lignes (pour les doublages uniquement)': {
     prop: 'nombreLignes',
     type: Number
   },
