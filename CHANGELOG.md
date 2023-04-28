@@ -1,3 +1,11 @@
+# [1.74.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.73.0...v1.74.0) (2023-04-28)
+
+
+### Features
+
+* translate logout page ([#528](https://github.com/SocialGouv/enfants-du-spectacle/issues/528)) ([c851104](https://github.com/SocialGouv/enfants-du-spectacle/commit/c8511045b0292ad359cbdd949e4f6de9a9e65c01))
+* update template excel + update schema ([#529](https://github.com/SocialGouv/enfants-du-spectacle/issues/529)) ([ad77a71](https://github.com/SocialGouv/enfants-du-spectacle/commit/ad77a71053881af8a48b4743ddb6148e5c05b745))
+
 # [1.73.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.72.0...v1.73.0) (2023-04-26)
 
 
