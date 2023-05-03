@@ -147,8 +147,8 @@ const Header: React.FC<Props> = ({
                     <a
                       href={"/"}
                       style={{
-                        display: "flex",
                         alignItems: "center",
+                        display: "flex",
                       }}
                       onClick={() => {
                         setShowDropdown(!showDropdown);
@@ -166,17 +166,18 @@ const Header: React.FC<Props> = ({
                     <ul className={styles.calendarDropDown}>
                       {calendar_list.map((calendar, index) => {
                         return (
-                          <li key={index} className={styles.calendarItem}>
-                            <a
-                              href={`./calendar_commission/${calendar.value}.pdf`}
-                              target="blank"
-                              onClick={() => {
-                                setShowDropdown(false);
-                              }}
-                            >
+                          <a
+                            href={`./calendar_commission/${calendar.value}.pdf`}
+                            key={index}
+                            target="blank"
+                            onClick={() => {
+                              setShowDropdown(false);
+                            }}
+                          >
+                            <li className={styles.calendarItem}>
                               {calendar.name}
-                            </a>
-                          </li>
+                            </li>
+                          </a>
                         );
                       })}
                     </ul>
