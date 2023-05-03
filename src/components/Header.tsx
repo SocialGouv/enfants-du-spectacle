@@ -183,9 +183,7 @@ const Header: React.FC<Props> = ({
                     </ul>
                   )}
                 </div>
-                <ToolItem link="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/faq">
-                  FAQ
-                </ToolItem>
+                <ToolItem link="/faq">FAQ</ToolItem>
               </div>
             </Container>
           </div>

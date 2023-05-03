@@ -14,7 +14,15 @@
     align-items: flex-start;
     padding: 20px 0;
   }
-  
+  .imageWrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .images {
+    margin: 20px 0;
+  }
   .subtitle {
     font-weight: bold;
   }
