@@ -1,3 +1,15 @@
+# [1.76.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.75.1...v1.76.0) (2023-05-04)
+
+
+### Bug Fixes
+
+* test upload medecine ([#534](https://github.com/SocialGouv/enfants-du-spectacle/issues/534)) ([aeb88c2](https://github.com/SocialGouv/enfants-du-spectacle/commit/aeb88c2a00de08b0059799cf08f8c867c7b2be45))
+
+
+### Features
+
+* update email texts ([#532](https://github.com/SocialGouv/enfants-du-spectacle/issues/532)) ([6450800](https://github.com/SocialGouv/enfants-du-spectacle/commit/64508003973f2ee536b72b0c374c4fc4ffa17294))
+
 ## [1.75.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.75.0...v1.75.1) (2023-05-04)
 
 
