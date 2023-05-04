@@ -239,6 +239,7 @@ model Enfant {
   userId                      Int?
   Comments                    Comments[]
   typeConsultation            TypeConsultation?
+  dateConsultation            DateTime?
   checkTravailNuit            Boolean?
   textTravailNuit             String?
 }

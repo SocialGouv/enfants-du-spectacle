@@ -34,6 +34,13 @@ const FilterBar: React.FC<Props> = ({
   const session = useSession();
   const { allUsers, isLoading, isError } = useAllUsers(session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
 
+  React.useEffect(() => {
+    if (session.data?.dbUser.role === "INSTRUCTEUR")
+      onChangeFilters({
+        userId: stringToNumberOrNull(session.data?.dbUser.id),
+      });
+  }, []);
+
   if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;
 
