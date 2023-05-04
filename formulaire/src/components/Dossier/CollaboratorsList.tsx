@@ -1,10 +1,10 @@
 import { Dossier, User } from "@prisma/client";
-import React from "react";
+import React, { useRef } from "react";
 import { getUsersById } from "src/fetching/users";
 import styles from "./HeadingDossier.module.scss";
 import { BiTrash } from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { getDossier, updateDossier } from "src/fetching/dossiers";
+import { updateDossier } from "src/fetching/dossiers";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 
 interface Props {
@@ -17,6 +17,7 @@ const CollaboratorsList: React.FC<Props> = ({ dossier, setShowDialogue }) => {
   const [showCollabList, setShowCollabList] = React.useState<Boolean>(false);
   const [index, setIndex] = React.useState<number>();
   const [showTrashIcon, setShowTrashIcon] = React.useState<Boolean>(true);
+  const collabRef = useRef<HTMLDivElement>(null);
 
   const deleteCollaborator = async (collaboratorId: number) => {
     await updateDossier({
@@ -41,18 +42,36 @@ const CollaboratorsList: React.FC<Props> = ({ dossier, setShowDialogue }) => {
     getUsers();
   }, [dossier]);
 
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        collabRef.current &&
+        !collabRef.current.contains(event.target as Node)
+      ) {
+        setShowCollabList(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className={styles.dropdownWrapper}>
       <div
         className={styles.defaultOption}
-        onClick={() => {
+        onClick={(event) => {
+          event.stopPropagation();
           setShowCollabList(!showCollabList);
         }}
       >
         collaborateurs <IoMdArrowDropdown />
       </div>
       {showCollabList && (
-        <div className={styles.collaboratorsWrapper}>
+        <div className={styles.collaboratorsWrapper} ref={collabRef}>
           {collaborators &&
             collaborators.map((collab, indexItem) => {
               return (
@@ -63,7 +82,8 @@ const CollaboratorsList: React.FC<Props> = ({ dossier, setShowDialogue }) => {
                       <BiTrash
                         size={20}
                         className={styles.trashIcon}
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
                           setShowTrashIcon(false);
                           setIndex(collab.id);
                         }}
@@ -72,13 +92,19 @@ const CollaboratorsList: React.FC<Props> = ({ dossier, setShowDialogue }) => {
                       <div className={styles.deleteBtnGroup}>
                         <div
                           className={styles.confirmBtn}
-                          onClick={() => deleteCollaborator(collab.id)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            deleteCollaborator(collab.id);
+                          }}
                         >
                           Confirmer
                         </div>
                         <div
                           className={styles.cancelBtn}
-                          onClick={() => setShowTrashIcon(true)}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setShowTrashIcon(true);
+                          }}
                         >
                           Annuler
                         </div>

@@ -89,6 +89,13 @@
     .actionsItem {
         position: relative;
         width: 100%;
+    .actionsBtn {
+        cursor: pointer;
+        color: #313178;
+        border: 1px solid #313178 !important;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
     }
     .actionsItem button {
         width: max-content;

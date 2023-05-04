@@ -1,7 +1,7 @@
 import { Comments, Demandeur, Dossier, PieceDossier } from "@prisma/client";
 import IconLoader from "../IconLoader";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useRef } from "react";
 import { CommentaireNotifications, statusGroup } from "src/lib/types";
 import { DossierData, getDossiers } from "../../fetching/dossiers";
 import { frenchDateText } from "../../lib/helpers";
@@ -47,6 +47,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     "dateDerniereModification"
   );
   const [order, setOrder] = React.useState<"asc" | "desc">("desc");
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchDossiers = async () => {
     let res = await getDossiers(page, status, search, termOrdered, order);
@@ -68,6 +69,23 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
       setComments(commentsList.flat());
     }
   };
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   React.useEffect(() => {
     fetchComments();
@@ -246,9 +264,10 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                   )}
                 </div>
                 <div className={`${styles.itemDossier} ${styles.actionsItem}`}>
-                  <ButtonLink
-                    light={true}
-                    onClick={() => {
+                  <div
+                    className={styles.actionsBtn}
+                    onClick={(event) => {
+                      event.stopPropagation();
                       setDropdownVisible(!dropdownVisible);
                       setIndexItem(dossier.id);
                       setShowDialogue(false);
@@ -262,9 +281,12 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                         marginTop: "2px",
                       }}
                     />
-                  </ButtonLink>
+                  </div>
                   {dropdownVisible && indexItem === dossier.id && (
-                    <div className={styles.dropdown}>
+                    <div
+                      ref={dropdownRef}
+                      className={`${styles.dropdown} dropdownWrapper`}
+                    >
                       <ul>
                         <li
                           onClick={() => {
