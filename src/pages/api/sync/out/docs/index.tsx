@@ -40,7 +40,6 @@ const sendDoc: NextApiHandler = async (req, res) => {
 
     const fileData = new FormData();
     fileData.append('justificatif', fs.createReadStream(data.files.justificatif.filepath), data.files.justificatif.originalFilename)
-    console.log('fileData : ', fileData)
 
     const url = `${process.env.API_URL_SDP}/inc/upload?id=${req.query.dossierId}&api_key=${process.env.API_KEY_SDP}&typeJustif=${req.query.typeJustif}&enfantId=${req.query.enfantId}`;
     const fetching = await fetch(url, {
@@ -48,7 +47,6 @@ const sendDoc: NextApiHandler = async (req, res) => {
         method: "POST",
     }).then(async (r) => {
         if (!r.ok) {
-            console.log('r : ', r.status)
             res.status(500).json({ error: `Something went wrong : ${r.status}` })
         }
         return r.json();
