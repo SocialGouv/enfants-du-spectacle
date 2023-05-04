@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
 import { Enfant, JustificatifEnfant } from "@prisma/client";
-import { TYPE_EMPLOI, useDebouncedCallback } from "../../lib/helpers";
+import { TYPE_EMPLOI, frenchDateText, useDebouncedCallback } from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
@@ -515,39 +515,45 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
               "L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative."
             }
           </p>
-          {[
-            { label: "Avis médical", value: "AVIS_MEDICAL" },
-            { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
-            {
-              label: "Autorisation de prise en charge",
-              value: "AUTORISATION_PRISE_EN_CHARGE",
-            },
-          ].map((justif) => (
-            <>
-              {enfantTmp.typeConsultation === "THALIE" &&
-                enfantTmp.piecesDossier.filter((doc) => {
-                  return doc.type === justif.value;
-                }).length > 0 && (
-                  <>
-                    <div className={styles.blocForm}>
-                      <InputFile
-                        id={justif.value as JustificatifEnfant}
-                        docs={enfantTmp.piecesDossier || []}
-                        docsTokenized={contextDossier.docs.enfants.find(
-                          (enfant) => enfant.id === enfantTmp.id
-                        )}
-                        allowChanges={true}
-                        label={justif.label}
-                        handleFile={handleFile}
-                        handleDelete={handleDelete}
-                        text={``}
-                      />
-                    </div>
-                    <br />
-                  </>
-                )}
-            </>
-          ))}
+          <div className={styles.margedInfos}>
+            {enfantTmp.dateConsultation &&
+              <div>Date de rendez-vous : {frenchDateText(enfantTmp.dateConsultation)}</div>
+            }
+            {[
+              { label: "Avis médical", value: "AVIS_MEDICAL" },
+              { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
+              {
+                label: "Autorisation de prise en charge",
+                value: "AUTORISATION_PRISE_EN_CHARGE",
+              },
+            ].map((justif) => (
+              <>
+                {enfantTmp.typeConsultation === "THALIE" &&
+                  enfantTmp.piecesDossier.filter((doc) => {
+                    return doc.type === justif.value;
+                  }).length > 0 && (
+                    <>
+                      <div className={styles.docPushed}>
+                        <InputFile
+                          id={justif.value as JustificatifEnfant}
+                          docs={enfantTmp.piecesDossier || []}
+                          docsTokenized={contextDossier.docs.enfants.find(
+                            (enfant) => enfant.id === enfantTmp.id
+                          )}
+                          allowChanges={true}
+                          label={justif.label}
+                          handleFile={handleFile}
+                          handleDelete={handleDelete}
+                          text={``}
+                        />
+                      </div>
+                      <br />
+                    </>
+                  )}
+              </>
+            ))}
+          </div>
+          
         </label>
         <label className={styles.radioMedecine}>
           <input

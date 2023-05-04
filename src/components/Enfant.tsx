@@ -26,6 +26,7 @@ import ListComments from "./ListComments";
 import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 import InputFile from "./uiComponents/InputFile";
 import { uploadDoc } from "src/lib/fetching/docs";
+import { passEnfant } from "src/lib/fetching/enfants";
 
 interface Props {
   enfant: Enfant;
@@ -61,6 +62,7 @@ const EnfantComponent: React.FC<Props> = ({
       ...formData,
       [wichDate]: date,
     });
+    passEnfant(formData)
   };
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +82,7 @@ const EnfantComponent: React.FC<Props> = ({
         ...formData.justificatifs,
         TYPE_CONSULTATION_MEDECIN.find(
           (type) => type.value === formData.typeConsultationMedecin
-        )?.typeJustif,
+        )?.typeJustif as JustificatifEnfant,
       ],
     });
   };
