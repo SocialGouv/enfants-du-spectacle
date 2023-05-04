@@ -137,54 +137,56 @@ const Header: React.FC<Props> = ({
             </HeaderBody>
             <div style={{ borderTop: "1px solid #E5E5E5" }} />
             <Container>
-              <div className={styles.subNav}>
-                <ToolItem link="/">Accueil</ToolItem>
-                <ToolItem link="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr">
-                  Commencer une démarche en ligne
-                </ToolItem>
-                <div>
-                  <ToolItem>
-                    <a
-                      href={"/"}
-                      style={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                      onClick={() => {
-                        setShowDropdown(!showDropdown);
-                      }}
-                    >
-                      <a href={"/"}>Calendrier des commissions 2023</a>
-                      {!showDropdown ? (
-                        <TiArrowSortedDown style={{ margin: "4px" }} />
-                      ) : (
-                        <TiArrowSortedUp style={{ margin: "4px" }} />
-                      )}
-                    </a>
+              {!session &&
+                <div className={styles.subNav}>
+                  <ToolItem link="/">Accueil</ToolItem>
+                  <ToolItem link="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr">
+                    Commencer une démarche en ligne
                   </ToolItem>
-                  {showDropdown && (
-                    <ul className={styles.calendarDropDown}>
-                      {calendar_list.map((calendar, index) => {
-                        return (
-                          <a
-                            href={`./calendar_commission/${calendar.value}.pdf`}
-                            key={index}
-                            target="blank"
-                            onClick={() => {
-                              setShowDropdown(false);
-                            }}
-                          >
-                            <li className={styles.calendarItem}>
-                              {calendar.name}
-                            </li>
-                          </a>
-                        );
-                      })}
-                    </ul>
-                  )}
+                  <div>
+                    <ToolItem>
+                      <a
+                        href={"/"}
+                        style={{
+                          alignItems: "center",
+                          display: "flex",
+                        }}
+                        onClick={() => {
+                          setShowDropdown(!showDropdown);
+                        }}
+                      >
+                        <a href={"/"}>Calendrier des commissions 2023</a>
+                        {!showDropdown ? (
+                          <TiArrowSortedDown style={{ margin: "4px" }} />
+                        ) : (
+                          <TiArrowSortedUp style={{ margin: "4px" }} />
+                        )}
+                      </a>
+                    </ToolItem>
+                    {showDropdown && (
+                      <ul className={styles.calendarDropDown}>
+                        {calendar_list.map((calendar, index) => {
+                          return (
+                            <a
+                              href={`./calendar_commission/${calendar.value}.pdf`}
+                              key={index}
+                              target="blank"
+                              onClick={() => {
+                                setShowDropdown(false);
+                              }}
+                            >
+                              <li className={styles.calendarItem}>
+                                {calendar.name}
+                              </li>
+                            </a>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                  <ToolItem link="/faq">FAQ</ToolItem>
                 </div>
-                <ToolItem link="/faq">FAQ</ToolItem>
-              </div>
+              }
             </Container>
           </div>
         </HeaderSDE>

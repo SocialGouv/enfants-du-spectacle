@@ -21,6 +21,7 @@ const SocieteProd: React.FC<Props> = ({ }) => {
 
     const processSiret = useDebouncedCallback(async () => {
         let res = await getSocieteInfos(contextDossier.societeProduction.siret ?? '')
+        console.log('res sirene : ', res)
         setResSirene(res)
     }, 1000);
 

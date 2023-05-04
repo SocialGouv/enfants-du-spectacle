@@ -33,14 +33,12 @@ const sendDoc: NextApiHandler = async (req, res) => {
     } else {
 
         const dossierId = getId(req);
-        console.log('req : ', req)
         try {
             await fsp.readdir(`/mnt/docs-form/${dossierId}`);
         } catch (error) {
             await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
         }
         const upload = await uploadFile(req, true);
-        console.log('upload : ', upload)
 
         const data = {
             nom: upload.files.justificatif.originalFilename,
@@ -52,7 +50,6 @@ const sendDoc: NextApiHandler = async (req, res) => {
         }
 
         const pieceEnfant = await prisma.pieceDossierEnfant.create({data})
-        console.log('piece enfant : ', pieceEnfant)
         //@ts-ignore
         res
             .status(200)

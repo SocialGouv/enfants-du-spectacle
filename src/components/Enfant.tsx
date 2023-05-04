@@ -62,7 +62,6 @@ const EnfantComponent: React.FC<Props> = ({
       ...formData,
       [wichDate]: date,
     });
-    passEnfant(formData)
   };
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +93,12 @@ const EnfantComponent: React.FC<Props> = ({
       lauchUpdate(formData);
     }
   }, [formData]);
+
+  useEffect(() => {
+    if (mountedRef) {
+      passEnfant(formData)
+    }
+  }, [formData.dateConsultation])
 
   useEffect(() => {
     setMountedRef(true);
