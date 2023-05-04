@@ -40,25 +40,29 @@ const sendDoc: NextApiHandler = async (req, res) => {
 
     console.log('data : ', data)
 
-    const fileData = new FormData();
-    fileData.append('justificatif', fs.createReadStream(data.files.justificatif.filepath), data.files.justificatif.originalFilename)
+    try {
 
-    console.log('fileData : ', fileData)
+      const fileData = new FormData();
+      fileData.append('justificatif', fs.createReadStream(data.files.justificatif.filepath), data.files.justificatif.originalFilename)
+  
+      console.log('fileData : ', fileData)
+  
+      const url = `${process.env.API_URL_SDP}/inc/upload?id=${req.query.dossierId}&api_key=${process.env.API_KEY_SDP}&typeJustif=${req.query.typeJustif}&enfantId=${req.query.enfantId}`;
+      const fetching = await fetch(url, {
+          body: fileData,
+          method: "POST",
+      }).then(async (r) => {
+          if (!r.ok) {
+              res.status(500).json({ error: `Something went wrong : ${r.status}` })
+          }
+          return r.json();
+      });
+      console.log('fetching : ', fetching)
+      res.status(200).json({message: 'ok'})
 
-    const datab = new URLSearchParams()
-
-    const url = `${process.env.API_URL_SDP}/inc/upload?id=${req.query.dossierId}&api_key=${process.env.API_KEY_SDP}&typeJustif=${req.query.typeJustif}&enfantId=${req.query.enfantId}`;
-    const fetching = await fetch(url, {
-        body: fileData,
-        method: "POST",
-    }).then(async (r) => {
-        if (!r.ok) {
-            res.status(500).json({ error: `Something went wrong : ${r.status}` })
-        }
-        return r.json();
-    });
-    console.log('fetching : ', fetching)
-    res.status(200).json({message: 'ok'})
+    } catch (e) {
+      console.log(e)
+    }
 
 };
 
