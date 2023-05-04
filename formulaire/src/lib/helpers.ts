@@ -204,7 +204,7 @@ const WORDING_MAILING = [
       bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
       subject: "Transmission de votre dossier aux services d’instructions de la DRIEETS",
       title: "Bonjour,",
-      text: "Votre dossier ___DOSSIERID____ a été transmis aux services d’instructions de la DRIEETS. Il est en statut “En construction” et reste modifiable jusqu’à une semaine avant la commission afin que vous puissiez ajouter les pièces justificatives au fil de l’eau. C’est ensuite les services d’instruction de la DRIEETS qui changeront le statut de votre dossier pour le passer “En instruction” et bloquer toute modification avant la commission.",
+      text: "Votre dossier ___DOSSIERID____ a été transmis aux services d’instructions de la DRIEETS. Il est en statut “En construction” et reste modifiable. C’est ensuite les services d’instruction de la DRIEETS qui changeront le statut de votre dossier pour le passer “En instruction” et bloquer toute modification avant la commission.",
       type: "depot_dossier",
     },
     {
@@ -212,7 +212,7 @@ const WORDING_MAILING = [
       bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
       subject: "Mise à jour de votre dossier auprès des services d’instruction de la DRIEETS",
       title: "Bonjour,",
-      text: "Les mises à jour apportées à votre dossier ___DOSSIERID____ ont bien été transmises aux services d’instruction de la DRIEETS. Votre dossier est toujours en statut “En construction” et reste modifiable jusqu’à une semaine avant la commission.”",
+      text: "Les mises à jour apportées à votre dossier ___DOSSIERID____ ont bien été transmises aux services d’instruction de la DRIEETS. Votre dossier est toujours en statut “En construction” et reste modifiable.”",
       type: "update_dossier",
     },
 ];
