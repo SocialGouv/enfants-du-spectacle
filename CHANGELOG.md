@@ -1,3 +1,10 @@
+## [1.76.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.1...v1.76.2) (2023-05-04)
+
+
+### Bug Fixes
+
+* console.logs formData doc medecine ([#536](https://github.com/SocialGouv/enfants-du-spectacle/issues/536)) ([8b2913f](https://github.com/SocialGouv/enfants-du-spectacle/commit/8b2913f4f374b6290c1b9c429bbd6f4db78f4db8))
+
 ## [1.76.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.0...v1.76.1) (2023-05-04)
 
 
