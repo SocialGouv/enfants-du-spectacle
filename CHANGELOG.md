@@ -1,3 +1,11 @@
+# [1.75.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.74.0...v1.75.0) (2023-05-04)
+
+
+### Features
+
+* add navbar faq calendar ([#530](https://github.com/SocialGouv/enfants-du-spectacle/issues/530)) ([d848185](https://github.com/SocialGouv/enfants-du-spectacle/commit/d8481855d75b8c5a9e4e786e565d738f7c1db7a1))
+* prod medecine travail ([#531](https://github.com/SocialGouv/enfants-du-spectacle/issues/531)) ([92ba4e4](https://github.com/SocialGouv/enfants-du-spectacle/commit/92ba4e47ae537cf6356941923b6fcf95ae89d322))
+
 # [1.74.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.73.0...v1.74.0) (2023-04-28)
 
 
