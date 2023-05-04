@@ -1,3 +1,10 @@
+## [1.75.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.75.0...v1.75.1) (2023-05-04)
+
+
+### Bug Fixes
+
+* fix upload doc medecine ([#533](https://github.com/SocialGouv/enfants-du-spectacle/issues/533)) ([202eda9](https://github.com/SocialGouv/enfants-du-spectacle/commit/202eda90cdb37c5214e55dc52780c61d4822ee98))
+
 # [1.75.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.74.0...v1.75.0) (2023-05-04)
 
 
