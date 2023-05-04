@@ -26,36 +26,37 @@ function getId(req: NextApiRequest): number {
 
 const sendDoc: NextApiHandler = async (req, res) => {
 
-    console.log('------ INC FROM SDP ------')
+  console.log('------ INC FROM SDP ------')
 
-    if(req.query.api_key !== process.env.API_KEY_SDP) {
-        res.status(401).json({message: 'Unauthorized'})
-    } else {
+  if(req.query.api_key !== process.env.API_KEY_SDP) {
+      res.status(401).json({message: 'Unauthorized'})
+  } else {
 
-        const dossierId = getId(req);
-        try {
-            await fsp.readdir(`/mnt/docs-form/${dossierId}`);
-        } catch (error) {
-            await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
-        }
-        const upload = await uploadFile(req, true);
+  const dossierId = getId(req);
+  try {
+      await fsp.readdir(`/mnt/docs-form/${dossierId}`);
+  } catch (error) {
+      await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
+  }
+  const upload = await uploadFile(req, true);
 
-        const data = {
-            nom: upload.files.justificatif.originalFilename,
-            enfantId: parseInt(req.query.enfantId as string),
-            type: req.query.typeJustif as JustificatifEnfant,
-            externalId: "",
-            link: upload.files.justificatif.filepath + ".encrypted",
-            statut: null
-        }
+  const data = {
+      nom: upload.files.justificatif.originalFilename,
+      enfantId: parseInt(req.query.enfantId as string),
+      type: req.query.typeJustif as JustificatifEnfant,
+      externalId: "",
+      link: upload.files.justificatif.filepath + ".encrypted",
+      statut: null
+  }
 
-        const pieceEnfant = await prisma.pieceDossierEnfant.create({data})
-        //@ts-ignore
-        res
-            .status(200)
-            .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
+  const pieceEnfant = await prisma.pieceDossierEnfant.create({data})
+  //@ts-ignore
+  res
+      .status(200)
+      .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
 
-    }
+  }
+  
 };
 
 export default withSentry(handler);

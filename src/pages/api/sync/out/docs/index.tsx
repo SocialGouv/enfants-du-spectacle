@@ -38,8 +38,12 @@ const sendDoc: NextApiHandler = async (req, res) => {
       }) 
     })
 
+    console.log('data : ', data)
+
     const fileData = new FormData();
     fileData.append('justificatif', fs.createReadStream(data.files.justificatif.filepath), data.files.justificatif.originalFilename)
+
+    const datab = new URLSearchParams()
 
     const url = `${process.env.API_URL_SDP}/inc/upload?id=${req.query.dossierId}&api_key=${process.env.API_KEY_SDP}&typeJustif=${req.query.typeJustif}&enfantId=${req.query.enfantId}`;
     const fetching = await fetch(url, {
