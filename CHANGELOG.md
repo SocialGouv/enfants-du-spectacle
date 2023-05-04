@@ -1,3 +1,10 @@
+## [1.76.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.0...v1.76.1) (2023-05-04)
+
+
+### Bug Fixes
+
+* console logs ([#535](https://github.com/SocialGouv/enfants-du-spectacle/issues/535)) ([0beea54](https://github.com/SocialGouv/enfants-du-spectacle/commit/0beea543dc9b800c9cb0941a9b3ddf0955180787))
+
 # [1.76.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.75.1...v1.76.0) (2023-05-04)
 
 
