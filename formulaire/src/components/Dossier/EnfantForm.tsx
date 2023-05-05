@@ -839,6 +839,12 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             {`l'Académie de Paris`}
           </Link>
         </div>
+        <div className={styles.smallText}>
+          Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
+          <Link href="https://mon-administration.com/dsden/" target={"_blank"}>
+            https://mon-administration.com/dsden/
+          </Link>
+        </div>
       </div>
       {enfantTmp.typeConsultation !== "THALIE" ||
       (enfantTmp.typeConsultation === "THALIE" &&
