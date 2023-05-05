@@ -5,6 +5,7 @@ import styles from "src/components/Accordion.module.scss";
 
 interface Props {
   title: string;
+  subtitle?: string;
   children: React.ReactNode;
   className?: string;
   state?: boolean;
@@ -14,6 +15,7 @@ interface Props {
 
 const Accordion: React.FC<Props> = ({
   title,
+  subtitle,
   children,
   className,
   state,
@@ -32,14 +34,17 @@ const Accordion: React.FC<Props> = ({
       className={`${styles.accordion} ${className} ${styles.accordionBorder}`}
     >
       <div className={styles.wrapper}>
-        <div
-          className={
-            className === "accordionSmallText"
-              ? styles.accordionSmallText
-              : styles.title
-          }
-        >
-          {title}
+        <div className={styles.mainTitles}>
+          <div
+            className={
+              className === "accordionSmallText"
+                ? styles.accordionSmallText
+                : styles.title
+            }
+          >
+            {title}
+          </div>
+          <div className={styles.subtitle}>{subtitle ? subtitle : ""}</div>
         </div>
         {!showContent ? (
           <AiOutlinePlus
