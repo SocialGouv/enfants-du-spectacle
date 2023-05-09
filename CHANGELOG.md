@@ -1,3 +1,12 @@
+# [1.77.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.2...v1.77.0) (2023-05-09)
+
+
+### Features
+
+* add click outside ([#537](https://github.com/SocialGouv/enfants-du-spectacle/issues/537)) ([d09393d](https://github.com/SocialGouv/enfants-du-spectacle/commit/d09393dd7f679474a1093486bb2c8c4b5eb39a0b))
+* count typeEmploi ([#539](https://github.com/SocialGouv/enfants-du-spectacle/issues/539)) ([675aaa7](https://github.com/SocialGouv/enfants-du-spectacle/commit/675aaa7aefdeae6f37c1b52b5b9aec189f02f219))
+* update description ([#538](https://github.com/SocialGouv/enfants-du-spectacle/issues/538)) ([3692f81](https://github.com/SocialGouv/enfants-du-spectacle/commit/3692f81044c3f1a99987dd8f2c0e3d5c26105d80))
+
 ## [1.76.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.1...v1.76.2) (2023-05-04)
 
 
