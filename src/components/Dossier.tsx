@@ -82,6 +82,27 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     updateCommentairesNotifications(commentsProjectIds);
   };
 
+  const filterTypeEmploi = (
+    typeEmploi:
+      | {
+          label: string;
+          value: string;
+        }
+      | {
+          label: string;
+          value: string[];
+        }
+  ) => {
+    if (dossier) {
+      return dossier.enfants.filter(
+        (e) =>
+          typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
+          typeEmploi.value.includes(e.typeEmploi)
+      );
+    }
+    return [];
+  };
+
   React.useEffect(() => {
     fetchComments();
   }, []);
@@ -330,62 +351,57 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       <div>
         {EMPLOIS_CATEGORIES.map((typeEmploi, index) => (
           <div key={index}>
-            {dossier.enfants.filter(function (element) {
-              return (
-                typeEmploiLabel(element.typeEmploi) === typeEmploi.label ||
-                typeEmploi.value.includes(element.typeEmploi)
-              );
-            }).length > 0 ? (
-              <Accordion title={typeEmploi.label} className="accordionBorder">
+            {filterTypeEmploi(typeEmploi).length > 0 ? (
+              <Accordion
+                title={typeEmploi.label}
+                subtitle={`: ${filterTypeEmploi(typeEmploi).length} ${
+                  filterTypeEmploi(typeEmploi).length > 1 ? "enfants" : "enfant"
+                }`}
+                className="accordionBorder"
+              >
                 <Table headers={tableChildHeaders}>
-                  {dossier.enfants
-                    .filter(
-                      (e) =>
-                        typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
-                        typeEmploi.value.includes(e.typeEmploi)
-                    )
-                    .map((enf, idx) => {
-                      let countCommentsNotification = 0;
-                      if (enf.externalId !== null) {
-                        countCommentsNotification = comments.filter(
-                          (comment) =>
-                            comment.enfantId === parseInt(enf.externalId) &&
-                            comment.source === "SOCIETE_PROD" &&
-                            comment.seen !== true
-                        ).length;
-                      }
-                      return (
-                        <tr key={idx}>
-                          <td>
-                            <a href={`#` + enf.id.toString()}>
-                              {typeEmploiLabel(enf.typeEmploi)}
-                            </a>
-                          </td>
-                          <td>
-                            <a href={`#` + enf.id.toString()}>
-                              {enf.nom} {enf.prenom}
-                            </a>
-                          </td>
-                          <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
-                          <td>{enf.nomPersonnage}</td>
-                          <td>
-                            {dossier.source === "FORM_EDS" && (
-                              <CountPieces
-                                countCommentsNotification={
-                                  countCommentsNotification
-                                }
-                                piecesJustif={dataLinks.enfants
-                                  .find(
-                                    (data) =>
-                                      data.id === parseInt(enf.externalId ?? "")
-                                  )
-                                  ?.piecesDossier.map((tmp) => tmp.statut)}
-                              />
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                  {filterTypeEmploi(typeEmploi).map((enf, idx) => {
+                    let countCommentsNotification = 0;
+                    if (enf.externalId !== null) {
+                      countCommentsNotification = comments.filter(
+                        (comment) =>
+                          comment.enfantId === parseInt(enf.externalId) &&
+                          comment.source === "SOCIETE_PROD" &&
+                          comment.seen !== true
+                      ).length;
+                    }
+                    return (
+                      <tr key={idx}>
+                        <td>
+                          <a href={`#` + enf.id.toString()}>
+                            {typeEmploiLabel(enf.typeEmploi)}
+                          </a>
+                        </td>
+                        <td>
+                          <a href={`#` + enf.id.toString()}>
+                            {enf.nom} {enf.prenom}
+                          </a>
+                        </td>
+                        <td>{birthDateToFrenchAge(enf.dateNaissance)}</td>
+                        <td>{enf.nomPersonnage}</td>
+                        <td>
+                          {dossier.source === "FORM_EDS" && (
+                            <CountPieces
+                              countCommentsNotification={
+                                countCommentsNotification
+                              }
+                              piecesJustif={dataLinks.enfants
+                                .find(
+                                  (data) =>
+                                    data.id === parseInt(enf.externalId ?? "")
+                                )
+                                ?.piecesDossier.map((tmp) => tmp.statut)}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </Table>
               </Accordion>
             ) : (
