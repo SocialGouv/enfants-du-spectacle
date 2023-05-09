@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
 import { Enfant, JustificatifEnfant } from "@prisma/client";
-import { TYPE_EMPLOI, frenchDateText, useDebouncedCallback } from "../../lib/helpers";
+import {
+  TYPE_EMPLOI,
+  frenchDateText,
+  useDebouncedCallback,
+} from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
@@ -511,14 +515,29 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
           Un médecin de Thalie Santé
           <p className={styles.smallText}>
-            {
-              "L'avis du médecin sera visible sur la plateforme. Vous n'aurez pas besoin de l'ajouter en pièce justificative."
-            }
+            L’avis médical sera visible sur la plateforme, Thalie Santé le
+            chargera directement sur la plateforme pour vous le transmettre.
+            <br /> Dans le cas où l’enfant est en région, ils vous transmettrons
+            via la plateforme un bon de prise en charge, vous trouverez le
+            centre à solliciter avec votre bon de prise en charge à ce lien{" "}
+            <a
+              href="https://thalie-sante.org/nos-centres-partenaires-en-region"
+              target="blank"
+            >
+              https://thalie-sante.org/nos-centres-partenaires-en-region
+            </a>
+            . <br />
+            Dans le cas où vous disposez d’une dérogation pour un 2nd rôle, ils
+            vous transmettront un bon de prise en charge par un médecin traitant
+            via la plateforme.
           </p>
           <div className={styles.margedInfos}>
-            {enfantTmp.dateConsultation &&
-              <div>Date de rendez-vous : {frenchDateText(enfantTmp.dateConsultation)}</div>
-            }
+            {enfantTmp.dateConsultation && (
+              <div>
+                Date de rendez-vous :{" "}
+                {frenchDateText(enfantTmp.dateConsultation)}
+              </div>
+            )}
             {[
               { label: "Avis médical", value: "AVIS_MEDICAL" },
               { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
@@ -553,7 +572,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
               </>
             ))}
           </div>
-          
         </label>
         <label className={styles.radioMedecine}>
           <input
@@ -567,7 +585,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           Un médecin généraliste
           <p className={styles.smallText}>
             {
-              "Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajoouter en pièce justificative."
+              "Après avoir reçu l'avis médical d'aptitude, vous devrez l'ajouter en pièce justificative."
             }
           </p>
         </label>
@@ -819,6 +837,12 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             target={"_blank"}
           >
             {`l'Académie de Paris`}
+          </Link>
+        </div>
+        <div className={styles.smallText}>
+          Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
+          <Link href="https://mon-administration.com/dsden/" target={"_blank"}>
+            https://mon-administration.com/dsden/
           </Link>
         </div>
       </div>
