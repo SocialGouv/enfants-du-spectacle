@@ -101,10 +101,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         await createPieceEnfant(pieceDossier);
       }
     });
-    setTimeout(() => {
-      console.log("ENFANT TMP", enfantTmp);
-    }, 1000);
-    console.log("enfant: ", enfantTmp);
   };
 
   const handleDateEnfant = (wichDate: string, date: Date): void => {
