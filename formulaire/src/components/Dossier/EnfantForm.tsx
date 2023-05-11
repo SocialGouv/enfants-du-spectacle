@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
 import { Enfant, JustificatifEnfant } from "@prisma/client";
-import { TYPE_EMPLOI, frenchDateText, useDebouncedCallback } from "../../lib/helpers";
+import {
+  TYPE_EMPLOI,
+  frenchDateText,
+  useDebouncedCallback,
+} from "../../lib/helpers";
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
 import _ from "lodash";
@@ -69,6 +73,16 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       nom: enfant.nom,
       prenom: enfant.prenom,
       dateNaissance: enfant.dateNaissance,
+      nomRepresentant1: enfant.nomRepresentant1,
+      nomRepresentant2: enfant.nomRepresentant2,
+      prenomRepresentant1: enfant.prenomRepresentant1,
+      prenomRepresentant2: enfant.prenomRepresentant2,
+      adresseRepresentant1: enfant.adresseRepresentant1,
+      adresseRepresentant2: enfant.adresseRepresentant2,
+      mailRepresentant1: enfant.mailRepresentant1,
+      mailRepresentant2: enfant.mailRepresentant2,
+      telRepresentant1: enfant.telRepresentant1,
+      telRepresentant2: enfant.telRepresentant2,
       piecesDossier: enfant.piecesDossier.filter((piece) => {
         return (
           piece.type === "LIVRET_FAMILLE" ||
@@ -87,6 +101,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         await createPieceEnfant(pieceDossier);
       }
     });
+    setTimeout(() => {
+      console.log("ENFANT TMP", enfantTmp);
+    }, 1000);
+    console.log("enfant: ", enfantTmp);
   };
 
   const handleDateEnfant = (wichDate: string, date: Date): void => {
@@ -516,9 +534,12 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             }
           </p>
           <div className={styles.margedInfos}>
-            {enfantTmp.dateConsultation &&
-              <div>Date de rendez-vous : {frenchDateText(enfantTmp.dateConsultation)}</div>
-            }
+            {enfantTmp.dateConsultation && (
+              <div>
+                Date de rendez-vous :{" "}
+                {frenchDateText(enfantTmp.dateConsultation)}
+              </div>
+            )}
             {[
               { label: "Avis médical", value: "AVIS_MEDICAL" },
               { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
@@ -553,7 +574,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
               </>
             ))}
           </div>
-          
         </label>
         <label className={styles.radioMedecine}>
           <input
