@@ -23,7 +23,45 @@
       color: #313178;
     }
   }
+  .subNav {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 15px 0;
+    position: relative;
+  }
+  .subNav li {
+    list-style-type: none;
+  }
+  .calendarTitle{
+    align-items: center;
+    display: flex;
+    color: #000091;
+    cursor: pointer;
+  }
+  .calendarDropDown {
+    position: absolute;
+    width: 25%;
+    top: 100%;
+    margin: 5px 5px;
+    background-color: white;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.1),
+    0 8px 16px -16px rgba(0, 0, 0, 0.32);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-top: 0px;
+    color: #000091;
   
+    .calendarItem {
+      padding: 5px 10px !important;
+      cursor: pointer;
+      border-top: 1px solid rgb(240, 240, 240);;
+    }
+    .calendarItem:hover {
+      background-color: rgb(240, 240, 240);
+    }
+  }
+
   .middle {
     background-color: #313178;
     padding: 2rem 0 1rem 0;
