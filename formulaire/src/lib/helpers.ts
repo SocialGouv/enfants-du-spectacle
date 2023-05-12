@@ -180,7 +180,7 @@ const WORDING_MAILING = [
       button: "Accéder au dossier",
       bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
       subject: "Invitation à collaborer sur un dossier",
-      title: "Bonjour, vous avez été invité à modifiter le dossier",
+      title: "Bonjour, vous avez été invité à modifier le dossier",
       text: "Vous pouvez accéder au dossier en cliquant sur le bouton suivant :",
       type: "share_dossier",
     },
