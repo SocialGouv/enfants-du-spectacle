@@ -380,19 +380,19 @@ const SCHEMA_ENFANTS = {
     prop: "prenomRepresentant1",
     type: String
   },
-  'N° de rue': {
+  'N° de rue du représentant légal 1': {
     prop: 'roadNumber',
     type: Number
   },
-  'Libellé de voie': {
+  'Libellé de voie du représentant légal 1': {
     prop: 'streetName',
     type: String
   },
-  'Code postal': {
+  'Code postal du représentant légal 1': {
     prop: 'postalCode',
     type: Number
   },
-  'Ville': {
+  'Ville du représentant légal 1': {
     prop: 'city',
     type: String
   },
