@@ -1,3 +1,10 @@
+# [1.78.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.77.0...v1.78.0) (2023-05-16)
+
+
+### Features
+
+* add autocompletion representants ([#540](https://github.com/SocialGouv/enfants-du-spectacle/issues/540)) ([31fd6b3](https://github.com/SocialGouv/enfants-du-spectacle/commit/31fd6b3cca174574eb46a378020bb2d83b06a952))
+
 # [1.77.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.76.2...v1.77.0) (2023-05-09)
 
 
