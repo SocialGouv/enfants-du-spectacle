@@ -1,3 +1,12 @@
+# [1.79.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.78.0...v1.79.0) (2023-05-16)
+
+
+### Features
+
+* navbar demandeur ([#542](https://github.com/SocialGouv/enfants-du-spectacle/issues/542)) ([4526cb5](https://github.com/SocialGouv/enfants-du-spectacle/commit/4526cb5f17058821aa79af16414900a51c6e72c8))
+* update email subject dossier ID ([#541](https://github.com/SocialGouv/enfants-du-spectacle/issues/541)) ([8d82f7d](https://github.com/SocialGouv/enfants-du-spectacle/commit/8d82f7dc7e3a4969c769552aed627615f2639f44))
+* update excel wording + update helpers values ([#543](https://github.com/SocialGouv/enfants-du-spectacle/issues/543)) ([bece3ad](https://github.com/SocialGouv/enfants-du-spectacle/commit/bece3ad91407cf9dd0d72db6649e209c37151231))
+
 # [1.78.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.77.0...v1.78.0) (2023-05-16)
 
 
