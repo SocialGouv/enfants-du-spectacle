@@ -3,9 +3,6 @@ import {
   FooterBody,
   FooterBottom,
   FooterLink,
-  FooterPartners,
-  FooterPartnersLogo,
-  FooterPartnersTitle,
   Logo,
 } from "@dataesr/react-dsfr";
 import type { ReactElement } from "react";
@@ -17,10 +14,19 @@ export default function Footer(): ReactElement {
     <FooterDSE className={styles.footer}>
       <FooterBody description="Simplifier la démarche de demande d’autorisation d’emplois d’enfants du spectacle tout en garantissant une plus grande protection des mineurs de moins de 16 ans travaillant dans ce secteur">
         <Logo>Préfet de la région Île-de-France</Logo>
-        {/* <FooterBodyItem>
-            <a href="https://next-auth.js.org">Documentation</a>
-          </FooterBodyItem> */}
       </FooterBody>
+      <div className={styles.contactText}>
+        En cas de problème avec la plateforme, merci d’envoyer un email à{" "}
+        <span>
+          {" "}
+          <a
+            href="mailto:enfantsduspectacle@fabrique.social.gouv.fr"
+            style={{ marginLeft: "4px" }}
+          >
+            enfantsduspectacle@fabrique.social.gouv.fr
+          </a>
+        </span>
+      </div>
       <FooterBottom>
         <FooterLink href="/mentions">Mentions légales</FooterLink>
         <FooterLink href="/conditions-generales">
