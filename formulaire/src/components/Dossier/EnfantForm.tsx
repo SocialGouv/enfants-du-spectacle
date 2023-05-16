@@ -73,6 +73,16 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       nom: enfant.nom,
       prenom: enfant.prenom,
       dateNaissance: enfant.dateNaissance,
+      nomRepresentant1: enfant.nomRepresentant1,
+      nomRepresentant2: enfant.nomRepresentant2,
+      prenomRepresentant1: enfant.prenomRepresentant1,
+      prenomRepresentant2: enfant.prenomRepresentant2,
+      adresseRepresentant1: enfant.adresseRepresentant1,
+      adresseRepresentant2: enfant.adresseRepresentant2,
+      mailRepresentant1: enfant.mailRepresentant1,
+      mailRepresentant2: enfant.mailRepresentant2,
+      telRepresentant1: enfant.telRepresentant1,
+      telRepresentant2: enfant.telRepresentant2,
       piecesDossier: enfant.piecesDossier.filter((piece) => {
         return (
           piece.type === "LIVRET_FAMILLE" ||

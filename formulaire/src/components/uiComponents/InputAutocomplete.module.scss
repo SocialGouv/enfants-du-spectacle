@@ -1,4 +1,6 @@
 .InputAutocomplete {
+    z-index: 9999;
+    position: relative !important;
 
     input {
         height: 3rem;
@@ -9,9 +11,11 @@
 }
 
 .rowResult {
+    z-index: 9999;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
     cursor: pointer;
     .infos {
-        display: block;
+        display: flex;
         font-size: 0.8rem;
         color: var(--light-dark-fr);
     }

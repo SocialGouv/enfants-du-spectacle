@@ -116,6 +116,7 @@
         margin-top: 2rem;
         background-color: var(--dark-grey-fr);
         box-shadow: 0 0 0 1px #c7c7c7;
+        z-index: 999;
         display: flex;
         padding: 1rem;
         justify-content: space-between;
@@ -175,4 +176,7 @@
         transform: translateY(-50px);
         border-radius: 3px;
     }
+}
+.enfantForm {
+    position: relative;
 }
