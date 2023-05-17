@@ -1,5 +1,5 @@
 import { Container, Link } from "@dataesr/react-dsfr";
-import { Comments } from "@prisma/client";
+import { Comments, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import ShareDossierModal from "src/components/Dossier/ShareDossierModal";
@@ -13,6 +13,7 @@ import {
   getDossier,
   ResDossier,
 } from "../../src/fetching/dossiers";
+import { getAgentByDossierId } from "src/fetching/instructeur";
 
 const DossierPage: React.FC = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const DossierPage: React.FC = () => {
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
+  const [agent, setAgent] = React.useState<User>();
 
   const fetchDossier = async () => {
     if (router.query.id) {
@@ -30,6 +32,9 @@ const DossierPage: React.FC = () => {
         parseInt(router.query.id as string)
       );
       setComments(resComments);
+      const resAgent = await getAgentByDossierId(res.dossier.id.toString());
+      if (resAgent) setAgent(resAgent);
+
       setLoading(false);
     }
   };
@@ -59,6 +64,7 @@ const DossierPage: React.FC = () => {
           <HeadingDossier
             dossier={dossier.dossier}
             setShowDialogue={setShowDialogue}
+            agent={agent}
           ></HeadingDossier>
           <ShareDossierModal
             dossier={dossier.dossier}

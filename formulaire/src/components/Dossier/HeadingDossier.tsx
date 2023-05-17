@@ -6,13 +6,19 @@ import { frenchDateText } from "../../lib/helpers";
 import LabelStatus from "../LabelStatus";
 import CollaboratorsList from "./CollaboratorsList";
 import styles from "./HeadingDossier.module.scss";
+import { User } from "@prisma/client";
 
 interface Props {
   dossier: DossierData;
   setShowDialogue?: (showDialogue: boolean) => void;
+  agent?: User;
 }
 
-const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
+const HeadingDossier: React.FC<Props> = ({
+  dossier,
+  setShowDialogue,
+  agent,
+}) => {
   const { data: session } = useSession();
 
   return (
@@ -37,18 +43,28 @@ const HeadingDossier: React.FC<Props> = ({ dossier, setShowDialogue }) => {
             </div>
           </div>
           <h2>
-            Dossier n° {dossier.id}{`${dossier.commissionString ? ` pour la commission: ${dossier.commissionString}` : ''}`}
+            Dossier n° {dossier.id}
+            {`${
+              dossier.commissionString
+                ? ` pour la commission: ${dossier.commissionString}`
+                : ""
+            }`}
           </h2>
           {dossier.dateCreation && (
             <div className={styles.commissionTitle}>
-              Dossier créé le{" "}
-              {frenchDateText(dossier.dateCreation)}
+              Dossier créé le {frenchDateText(dossier.dateCreation)}
             </div>
           )}
           {dossier.dateDerniereModification && (
             <div className={styles.commissionTitle}>
               Dossier modifié le{" "}
               {frenchDateText(dossier.dateDerniereModification)}
+            </div>
+          )}
+          {agent?.id && (
+            <div style={{ marginTop: "10px" }}>
+              <span className={styles.commissionTitle}>Suivi par </span>
+              {agent.nom + " " + agent.prenom + " - " + agent.email}
             </div>
           )}
         </Container>
