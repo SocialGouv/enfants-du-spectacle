@@ -377,7 +377,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         {enfantTmp.checkTravailNuit && (
           <>
             <p className={styles.smallText}>
-              Veuillez préciser les modalités du travail de nuit
+              Préciser le nombre de nuits de travail et les horaires associés.
             </p>
 
             <div className="Form--field">
