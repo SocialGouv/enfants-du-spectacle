@@ -52,7 +52,10 @@ const post: NextApiHandler = async (req, res) => {
         " " +
         data.cityTwo;
 
-      if (data.remunerationsAdditionnelles) {
+      if (
+        data.remunerationsAdditionnelles ||
+        data.remunerationsAdditionnelles === 0
+      ) {
         data.remunerationsAdditionnelles = JSON.stringify(
           data.remunerationsAdditionnelles
         );
