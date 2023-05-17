@@ -1,3 +1,11 @@
+# [1.80.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.79.0...v1.80.0) (2023-05-17)
+
+
+### Features
+
+* add footer text ([#544](https://github.com/SocialGouv/enfants-du-spectacle/issues/544)) ([06a8639](https://github.com/SocialGouv/enfants-du-spectacle/commit/06a8639dbd48b14e7940ecaf895d45b398097c08))
+* update description ([#545](https://github.com/SocialGouv/enfants-du-spectacle/issues/545)) ([ff94254](https://github.com/SocialGouv/enfants-du-spectacle/commit/ff94254a3d95d2eaa9561b2c7d2186e0cc21277d))
+
 # [1.79.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.78.0...v1.79.0) (2023-05-16)
 
 
