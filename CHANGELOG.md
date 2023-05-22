@@ -1,3 +1,11 @@
+# [1.81.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.80.0...v1.81.0) (2023-05-22)
+
+
+### Features
+
+* add instructor info on dossier header ([#546](https://github.com/SocialGouv/enfants-du-spectacle/issues/546)) ([ae9aa5c](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae9aa5c3e6b6256dd6fdc1b50b66acc6a03e0cbc))
+* update remuneration if equal to 0 ([#547](https://github.com/SocialGouv/enfants-du-spectacle/issues/547)) ([75e881e](https://github.com/SocialGouv/enfants-du-spectacle/commit/75e881e23fefc066d2acb4adfd3b0590b814ed78))
+
 # [1.80.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.79.0...v1.80.0) (2023-05-17)
 
 
