@@ -3,7 +3,10 @@ import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 
 const handler: NextApiHandler = async (req, res) => {
-  if (req.method == "DELETE") {
+  if (req.method === "GET") {
+    await get(req, res);
+  }
+  if (req.method === "DELETE") {
     await remove(req, res);
   } else {
     res.status(405).end();
@@ -28,6 +31,38 @@ const remove: NextApiHandler = async (req, res) => {
         where: { externalId: dossierId.toString() },
       });
     } catch (e: unknown) {
+      console.log(e);
+    }
+  }
+};
+
+const get: NextApiHandler = async (req, res) => {
+  const reqData = req.query as { id: string };
+  const match = /id=([^&]+)&token=([^&]+)/.exec(reqData.id);
+  const id = match ? match[1] : "";
+  const token = match ? match[2] : "";
+  const data = { id, token };
+  const prisma = new PrismaClient();
+
+  if (data.token !== process.env.API_KEY_INSTRUCTEUR) {
+    res.status(401).json({ error: "Unauthorized" });
+  } else {
+    try {
+      if (data.id) {
+        const dossier = await prisma.dossier.findFirst({
+          where: { externalId: data.id.toString() },
+        });
+        if (dossier?.userId) {
+          const instructeur = await prisma.user.findFirst({
+            where: { id: dossier.userId },
+          });
+          res.status(200).json(instructeur);
+        } else {
+          res.json({});
+        }
+      }
+    } catch (e: unknown) {
+      res.status(500).json({ message: "Internal server error" });
       console.log(e);
     }
   }
