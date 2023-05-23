@@ -1,8 +1,29 @@
 /** @type {import('next').NextConfig} */
 const { withSentryConfig } = require("@sentry/nextjs");
 
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: "/api/(.*)",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr" },
+          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+        ]
+      },
+    ];
+  },
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+};
 
-module.exports = withSentryConfig(
+/*module.exports = withSentryConfig(
   {
     typescript: {
       // !! WARN !!
@@ -15,8 +36,8 @@ module.exports = withSentryConfig(
       disableClientWebpackPlugin: true,
       disableServerWebpackPlugin: true,
     },
-  }
-  , {
+  }, 
+  {
     // Additional config options for the Sentry Webpack plugin. Keep in mind that
     // the following options are set automatically, and overriding them is not
     // recommended:
@@ -29,5 +50,18 @@ module.exports = withSentryConfig(
   },
   {
     reactStrictMode: false,
-  }
-)
+  },
+  async headers() {
+    return [
+      {
+        source: "/api/(.*)",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+        ]
+      }
+    ]
+  },
+)*/

@@ -28,9 +28,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
 
   console.log('------ INC FROM SDP ------')
 
-  if(req.query.api_key !== process.env.API_KEY_SDP) {
-      res.status(401).json({message: 'Unauthorized'})
-  } else {
+  
 
   const dossierId = getId(req);
   try {
@@ -55,7 +53,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
       .status(200)
       .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
 
-  }
+  
   
 };
 
