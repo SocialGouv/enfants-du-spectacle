@@ -1,3 +1,10 @@
+## [1.81.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.1...v1.81.2) (2023-05-23)
+
+
+### Bug Fixes
+
+* test upload docs medecine ([#549](https://github.com/SocialGouv/enfants-du-spectacle/issues/549)) ([1bb31e0](https://github.com/SocialGouv/enfants-du-spectacle/commit/1bb31e0bd8f995cb1aee03ba18a497d8bc77fbcf))
+
 ## [1.81.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.0...v1.81.1) (2023-05-23)
 
 
