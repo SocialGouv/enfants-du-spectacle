@@ -59,11 +59,20 @@ const post: NextApiHandler = async (req, res) => {
         data.remunerationsAdditionnelles = JSON.stringify(
           data.remunerationsAdditionnelles
         );
+      }
+
+      if (
+        data.montantCachet &&
+        data.nombreCachets &&
+        data.remunerationsAdditionnelles
+      ) {
         data.remunerationTotale =
           data.montantCachet * data.nombreCachets +
           JSON.parse(data.remunerationsAdditionnelles);
-      } else {
+      } else if (data.montantCachet && data.nombreCachets) {
         data.remunerationTotale = data.montantCachet * data.nombreCachets;
+      } else if (data.remunerationsAdditionnelles) {
+        data.remunerationTotale = JSON.parse(data.remunerationsAdditionnelles);
       }
 
       data.telRepresentant1 = JSON.stringify(data.telRepresentant1);
