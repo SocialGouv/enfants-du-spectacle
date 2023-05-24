@@ -39,6 +39,7 @@ const update: NextApiHandler = async (req, res) => {
     },
     where: { dossierId: dossierId },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updatedEnfant));
 };
