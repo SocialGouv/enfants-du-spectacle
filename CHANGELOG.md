@@ -1,3 +1,10 @@
+## [1.82.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.0...v1.82.1) (2023-05-24)
+
+
+### Bug Fixes
+
+* lower number replicas prod ([#552](https://github.com/SocialGouv/enfants-du-spectacle/issues/552)) ([3e18a45](https://github.com/SocialGouv/enfants-du-spectacle/commit/3e18a4565f200ccd449bb1ee7f8a352fb5b656a8))
+
 # [1.82.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.2...v1.82.0) (2023-05-24)
 
 
