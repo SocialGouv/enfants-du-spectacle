@@ -31,8 +31,10 @@ const get: NextApiHandler = async (req, res) => {
           siret: siret
         }
       })
+      await prisma?.$disconnect()
       res.status(200).json(societe)
     } catch (e: unknown) {
+      await prisma?.$disconnect()
       console.log(e);
     }
 };
@@ -48,8 +50,10 @@ const update: NextApiHandler = async (req, res) => {
           id: data.id
         } 
       });
+      await prisma?.$disconnect()
       res.status(200).json(societe);
     } catch (e: unknown) {
+      await prisma?.$disconnect()
       console.log(e);
     }
 };
@@ -61,8 +65,10 @@ const post: NextApiHandler = async (req, res) => {
     try {
       const societe = await prisma.societeProduction.create({ data: {...societeData.parse(data)} });
       console.log('societe created : ', societe)
+      await prisma?.$disconnect()
       res.status(200).json(societe);
     } catch (e: unknown) {
+      await prisma?.$disconnect()
       console.log(e);
     }
 };

@@ -37,9 +37,10 @@ const get: NextApiHandler = async (req, res) => {
       ? await getPastCommissions()
       : departements == "all"
       ? withChild == "true"
-        ? await getUpcomingCommissionsNotEmpty(req)
+        ? await getUpcomingCommissionsNotEmpty(req, res)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
+  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
@@ -50,6 +51,7 @@ const post: NextApiHandler = async (req, res) => {
   } catch (e: unknown) {
     console.log(e);
   }
+  await prisma?.$disconnect()
   res.status(200).json({ message: "Commission ajoutée" });
 };
 
@@ -59,6 +61,7 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma?.commission.delete({
       where: { id: commissionId },
     });
+    await prisma?.$disconnect()
     res.status(200).json({ message: "Commission supprimée" });
   } catch (e: unknown) {
     console.log(e);
@@ -84,10 +87,10 @@ const getUpcomingCommissions = async () => {
   });
 };
 
-const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
+const getUpcomingCommissionsNotEmpty: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
   console.log('upcoming not empty !!!')
-  return await prisma?.commission.findMany({
+  const commissions =  await prisma?.commission.findMany({
     include: {
       dossiers: {
         where: session?.dbUser.role !== "MEDECIN" ? 
@@ -146,6 +149,8 @@ const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
       }
     },
   })
+  await prisma?.$disconnect()
+  res.status(200).json(superjson.stringify(commissions));
 };
 
 const getUpcomingCommissionsByDepartement = async (departements: string) => {

@@ -57,6 +57,7 @@ const update: NextApiHandler = async (req, res) => {
     },
     where: { id: enfantId },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updatedEnfant));
 };

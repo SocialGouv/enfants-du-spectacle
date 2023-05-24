@@ -47,6 +47,7 @@ const get: NextApiHandler = async (req, res) => {
     },
     where: { id },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(commission));
 };
@@ -81,6 +82,7 @@ const update: NextApiHandler = async (req, res) => {
     data: updates,
     where: { id: parsed.id },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updateCommission));
 };

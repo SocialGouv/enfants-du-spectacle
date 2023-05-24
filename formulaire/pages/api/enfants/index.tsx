@@ -53,8 +53,10 @@ const get: NextApiHandler = async (req, res) => {
         ],
       },
     });
+    await prisma?.$disconnect()
     res.status(200).json(enfants);
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -65,8 +67,10 @@ const post: NextApiHandler = async (req, res) => {
   data.userId = session?.dbUser.id;
   try {
     const enfant = await prisma.enfant.create({ data });
+    await prisma?.$disconnect()
     res.status(200).json(enfant);
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -98,6 +102,7 @@ const update: NextApiHandler = async (req, res) => {
     data: parsed as Enfant,
     where: { id: parsed.id },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(enfantUpdated);
 };
