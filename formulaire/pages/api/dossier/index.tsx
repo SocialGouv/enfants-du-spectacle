@@ -121,7 +121,6 @@ const get: NextApiHandler = async (req, res) => {
         ],
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json({
       dossiers: dossiers,
       countCurrent: countCurrent,
@@ -129,7 +128,6 @@ const get: NextApiHandler = async (req, res) => {
       countTermines: countTermines,
     });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -145,10 +143,8 @@ const post: NextApiHandler = async (req, res) => {
   };
   try {
     const dossier = await prisma.dossier.create({ data });
-    await prisma?.$disconnect()
     res.status(200).json(dossier);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -175,7 +171,6 @@ const update: NextApiHandler = async (req, res) => {
     data: parsed,
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
   res.status(200).json(produitupdated);
 };
 

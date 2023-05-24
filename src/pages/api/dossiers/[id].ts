@@ -68,7 +68,6 @@ const get: NextApiHandler = async (req, res) => {
     },
     where: { id: dossierId },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(dossier));
 };
@@ -79,11 +78,9 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma.dossier.delete({
       where: { id: dossierId },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Dossier supprimé" });
   } catch (e: unknown) {
     console.log(e);
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Dossier non trouvé" });
   }
 };

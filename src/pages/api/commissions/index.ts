@@ -40,7 +40,6 @@ const get: NextApiHandler = async (req, res) => {
         ? await getUpcomingCommissionsNotEmpty(req, res)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
-  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
@@ -51,7 +50,6 @@ const post: NextApiHandler = async (req, res) => {
   } catch (e: unknown) {
     console.log(e);
   }
-  await prisma?.$disconnect()
   res.status(200).json({ message: "Commission ajoutée" });
 };
 
@@ -61,7 +59,6 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma?.commission.delete({
       where: { id: commissionId },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Commission supprimée" });
   } catch (e: unknown) {
     console.log(e);

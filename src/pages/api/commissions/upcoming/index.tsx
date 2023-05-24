@@ -28,7 +28,6 @@ const get: NextApiHandler = async (req, res) => {
       departement: departement,
     },
   });
-  await prisma?.$disconnect()
   res.status(200).json(commissions);
 };
 

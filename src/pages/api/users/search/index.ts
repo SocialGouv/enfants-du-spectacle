@@ -30,10 +30,8 @@ const get: NextApiHandler = async (req, res) => {
         },
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json(superjson.stringify(allUsers));
   } else {
-    await prisma?.$disconnect()
     res
       .status(401)
       .json(superjson.stringify({ error: "No departement provided" }));
