@@ -40,6 +40,7 @@ const get: NextApiHandler = async (req, res) => {
         ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
+  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
