@@ -169,12 +169,14 @@ const post: NextApiHandler = async (req, res) => {
       });
     }
 
+    await prisma?.$disconnect()
     res.status(200).json({
       message: `${frenchDepartementName(
         commissions[0].departement
       )}, ${frenchDateText(commissions[0].date)}`,
     });
   } catch (e) {
+    await prisma?.$disconnect()
     console.log("error : ", e);
     res.status(500).json({ error: e });
   }
@@ -295,12 +297,14 @@ const update: NextApiHandler = async (req, res) => {
         });
       }
     });
+    await prisma?.$disconnect()
     res.status(200).json({
       message: `${frenchDepartementName(
         commissions[0].departement
       )}, ${frenchDateText(commissions[0].date)}`,
     });
   } catch (e) {
+    await prisma?.$disconnect()
     console.log("error : ", e);
     res.status(500).json({ error: e });
   }

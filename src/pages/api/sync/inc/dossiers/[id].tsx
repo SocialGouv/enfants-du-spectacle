@@ -59,6 +59,7 @@ const get: NextApiHandler = async (req, res) => {
           const instructeur = await prisma.user.findFirst({
             where: { id: dossier.userId },
           });
+          await prisma?.$disconnect()
 
           res.status(200).json({
             commissionDate: commission?.date,
@@ -69,6 +70,7 @@ const get: NextApiHandler = async (req, res) => {
         }
       }
     } catch (e: unknown) {
+      await prisma?.$disconnect()
       res.status(500).json({ message: "Internal server error" });
       console.log(e);
     }
