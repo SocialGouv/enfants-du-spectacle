@@ -37,7 +37,7 @@ const get: NextApiHandler = async (req, res) => {
       ? await getPastCommissions()
       : departements == "all"
       ? withChild == "true"
-        ? await getUpcomingCommissionsNotEmpty(req, res)
+        ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
   res.status(200).json(superjson.stringify(commissions));
@@ -84,10 +84,10 @@ const getUpcomingCommissions = async () => {
   });
 };
 
-const getUpcomingCommissionsNotEmpty: NextApiHandler = async (req, res) => {
+const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
   const session = await getSession({ req });
   console.log('upcoming not empty !!!')
-  const commissions =  await prisma?.commission.findMany({
+  return await prisma?.commission.findMany({
     include: {
       dossiers: {
         where: session?.dbUser.role !== "MEDECIN" ? 
@@ -146,7 +146,6 @@ const getUpcomingCommissionsNotEmpty: NextApiHandler = async (req, res) => {
       }
     },
   })
-  res.status(200).json(superjson.stringify(commissions));
 };
 
 const getUpcomingCommissionsByDepartement = async (departements: string) => {
