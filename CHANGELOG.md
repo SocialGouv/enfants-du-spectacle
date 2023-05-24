@@ -1,3 +1,11 @@
+## [1.82.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.3...v1.82.4) (2023-05-24)
+
+
+### Bug Fixes
+
+* remove disconnects ([#555](https://github.com/SocialGouv/enfants-du-spectacle/issues/555)) ([be65ed1](https://github.com/SocialGouv/enfants-du-spectacle/commit/be65ed156d7ac32d2a528a1bb62c6a564f95b224))
+* Trigger deploy ([#556](https://github.com/SocialGouv/enfants-du-spectacle/issues/556)) ([2372aef](https://github.com/SocialGouv/enfants-du-spectacle/commit/2372aefc32bb2adccbecfe3d0e387a594452f1df))
+
 ## [1.82.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.2...v1.82.3) (2023-05-24)
 
 
