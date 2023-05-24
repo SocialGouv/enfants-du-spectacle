@@ -1,3 +1,10 @@
+## [1.82.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.4...v1.82.5) (2023-05-24)
+
+
+### Bug Fixes
+
+* dossiers empty ([#557](https://github.com/SocialGouv/enfants-du-spectacle/issues/557)) ([c07c0e3](https://github.com/SocialGouv/enfants-du-spectacle/commit/c07c0e3e9ddbd4124d6f4af2a285b73c9b88c289))
+
 ## [1.82.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.3...v1.82.4) (2023-05-24)
 
 
