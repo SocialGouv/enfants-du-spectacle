@@ -149,7 +149,6 @@ const getUpcomingCommissionsNotEmpty: NextApiHandler = async (req, res) => {
       }
     },
   })
-  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
