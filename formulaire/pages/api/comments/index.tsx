@@ -30,8 +30,10 @@ const get: NextApiHandler = async (req, res) => {
         dossierId: parseInt(dossierId),
       },
     });
+    await prisma?.$disconnect()
     res.status(200).json(comments);
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -65,6 +67,7 @@ const updateCommentairesNotifications: NextApiHandler = async (req, res) => {
       },
     },
   });
+  await prisma?.$disconnect()
   res.status(200).json(updateComments);
 };
 
@@ -76,8 +79,10 @@ const post: NextApiHandler = async (req, res) => {
   console.log("comment to create : ", data);
   try {
     const comment = await prisma.comments.create({ data });
+    await prisma?.$disconnect()
     res.status(200).json(comment);
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };

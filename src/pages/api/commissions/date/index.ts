@@ -13,6 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 const get: NextApiHandler = async (req, res) => {
   const commissions = await getUpcomingCommissions();
+  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 

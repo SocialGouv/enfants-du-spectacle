@@ -31,8 +31,10 @@ const post: NextApiHandler = async (req, res) => {
       piece.link,
       piece.statut
     );
+    await prisma?.$disconnect()
     res.status(200).json({ pieceDossier: piece, tokenizedLink: tokenizedLink });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };

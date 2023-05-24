@@ -48,6 +48,7 @@ const update: NextApiHandler = async (req, res) => {
     data: { ...demandeurData.parse(parsed) },
     where: { id: parsed.id },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(dempandeurUpdated);
 };

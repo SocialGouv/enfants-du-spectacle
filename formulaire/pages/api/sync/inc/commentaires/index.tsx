@@ -45,6 +45,7 @@ const post: NextApiHandler = async (req, res) => {
     const comment = await prisma.comments.create({
       data: data.comment,
     });
+    await prisma?.$disconnect()
     console.log("comments created : ", comment);
     res.status(200).json(comment);
   }

@@ -34,8 +34,10 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma.commentaire.delete({
       where: { id: commentId },
     });
+    await prisma?.$disconnect()
     res.status(200).json({ message: "Commentaire supprimé" });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Commentaire non trouve" });
   }
@@ -52,6 +54,7 @@ const get: NextApiHandler = async (req, res) => {
       dossierId: dossierId,
     },
   });
+  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(allComments));
 };
 

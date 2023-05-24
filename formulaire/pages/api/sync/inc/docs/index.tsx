@@ -33,6 +33,7 @@ const get: NextApiHandler = async (req, res) => {
                 }
             }
         })
+        await prisma?.$disconnect()
         res.status(200).json({
             dossier: { 
                 id: dossier?.id, 
