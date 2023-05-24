@@ -1,3 +1,10 @@
+## [1.82.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.8...v1.82.9) (2023-05-24)
+
+
+### Bug Fixes
+
+* add more disconnects prisma ([#561](https://github.com/SocialGouv/enfants-du-spectacle/issues/561)) ([4e6ee97](https://github.com/SocialGouv/enfants-du-spectacle/commit/4e6ee97b13a893713bdc628d7656da57604103b1))
+
 ## [1.82.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.7...v1.82.8) (2023-05-24)
 
 
