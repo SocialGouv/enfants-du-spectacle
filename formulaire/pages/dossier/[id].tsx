@@ -22,6 +22,7 @@ const DossierPage: React.FC = () => {
   const [loading, setLoading] = React.useState<Boolean>(false);
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
   const [agent, setAgent] = React.useState<User>();
+  const [commissionDate, setCommissionDate] = React.useState<Date>();
 
   const fetchDossier = async () => {
     if (router.query.id) {
@@ -32,8 +33,13 @@ const DossierPage: React.FC = () => {
         parseInt(router.query.id as string)
       );
       setComments(resComments);
-      const resAgent = await getAgentByDossierId(res.dossier.id.toString());
-      if (resAgent) setAgent(resAgent);
+      const resAgentCommission = await getAgentByDossierId(
+        res.dossier.id.toString()
+      );
+      if (resAgentCommission.instructeur)
+        setAgent(resAgentCommission.instructeur);
+      if (resAgentCommission.commissionDate)
+        setCommissionDate(resAgentCommission.commissionDate);
 
       setLoading(false);
     }
@@ -65,6 +71,7 @@ const DossierPage: React.FC = () => {
             dossier={dossier.dossier}
             setShowDialogue={setShowDialogue}
             agent={agent}
+            commissionDate={commissionDate}
           ></HeadingDossier>
           <ShareDossierModal
             dossier={dossier.dossier}

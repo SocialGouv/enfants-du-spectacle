@@ -52,11 +52,18 @@ const get: NextApiHandler = async (req, res) => {
         const dossier = await prisma.dossier.findFirst({
           where: { externalId: data.id.toString() },
         });
+        const commission = await prisma.commission.findFirst({
+          where: { id: dossier?.commissionId },
+        });
         if (dossier?.userId) {
           const instructeur = await prisma.user.findFirst({
             where: { id: dossier.userId },
           });
-          res.status(200).json(instructeur);
+
+          res.status(200).json({
+            commissionDate: commission?.date,
+            instructeur: instructeur,
+          });
         } else {
           res.json({});
         }
