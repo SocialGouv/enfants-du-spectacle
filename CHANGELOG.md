@@ -1,3 +1,10 @@
+## [1.82.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.7...v1.82.8) (2023-05-24)
+
+
+### Bug Fixes
+
+* disconnects users queries ([#560](https://github.com/SocialGouv/enfants-du-spectacle/issues/560)) ([ae468ae](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae468ae13b01a61b42f1f136d6ba2a590ce729c9))
+
 ## [1.82.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.6...v1.82.7) (2023-05-24)
 
 
