@@ -39,6 +39,7 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       };
       user = await prisma.user.create({ data });
     }
+    await prisma?.$disconnect()
 
     //SEND EMAIL
     if (typeof req.body !== "string") {

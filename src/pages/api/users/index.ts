@@ -41,8 +41,10 @@ const remove: NextApiHandler = async (req, res) => {
     await prisma.user.delete({
       where: { id: userId },
     });
+    await prisma?.$disconnect()
     res.status(200).json({ message: "Utilisateur supprimé" });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Utilisateur non trouvé" });
   }
@@ -68,6 +70,7 @@ const update: NextApiHandler = async (req, res) => {
     },
     where: { id: userId },
   });
+  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updatedUser));
 };
@@ -83,6 +86,7 @@ const get: NextApiHandler = async (req, res) => {
           orderBy: { name: "asc" },
           where: { role: role.toUpperCase() },
         });
+  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(allUsers));
 };
 
