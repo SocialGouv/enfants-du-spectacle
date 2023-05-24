@@ -48,7 +48,6 @@ const update: NextApiHandler = async (req, res) => {
         },
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json(updateComments);
   }
 };

@@ -31,7 +31,6 @@ const update: NextApiHandler = async (req, res) => {
       },
     });
     console.log("comments found : ", comments);
-    await prisma?.$disconnect()
     res.status(200).json(comments);
   }
 };
@@ -47,7 +46,6 @@ const post: NextApiHandler = async (req, res) => {
       data: data.comment,
     });
     console.log("comments created : ", comment);
-    await prisma?.$disconnect()
     res.status(200).json(comment);
   }
 };
@@ -138,7 +136,6 @@ const get: NextApiHandler = async (req, res) => {
         };
       }
     );
-    await prisma?.$disconnect()
 
     res.status(200).json(notificationsByDossier);
   }

@@ -48,10 +48,8 @@ const create: NextApiHandler = async (req, res) => {
 
   try {
     const dossier = await prisma.dossier.create({ data });
-    await prisma?.$disconnect()
     res.status(200).json(dossier);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Dossier non trouvé" });
   }

@@ -25,10 +25,8 @@ const post: NextApiHandler = async (req, res) => {
   const data = {};
   try {
     const demandeur = await prisma.demandeur.create({ data });
-    await prisma?.$disconnect()
     res.status(200).json(demandeur);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -50,7 +48,6 @@ const update: NextApiHandler = async (req, res) => {
     data: { ...demandeurData.parse(parsed) },
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(dempandeurUpdated);
 };

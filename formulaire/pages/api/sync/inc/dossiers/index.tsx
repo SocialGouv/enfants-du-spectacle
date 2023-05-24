@@ -27,10 +27,8 @@ const update: NextApiHandler = async (req, res) => {
         id: parseInt(data.dossier.externalId),
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Dossier created successfully" });
   } catch (e) {
-    await prisma?.$disconnect()
     console.log("error : ", e);
     res.status(500).json({ error: e });
   }
