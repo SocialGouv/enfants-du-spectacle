@@ -1,3 +1,11 @@
+# [1.82.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.2...v1.82.0) (2023-05-24)
+
+
+### Features
+
+* get commissionDate from Instructeur side ([#550](https://github.com/SocialGouv/enfants-du-spectacle/issues/550)) ([5b0a1ac](https://github.com/SocialGouv/enfants-du-spectacle/commit/5b0a1ac98cd9870f4e1b82b09a138f1a5c927bea))
+* make date of birth required ([#551](https://github.com/SocialGouv/enfants-du-spectacle/issues/551)) ([693f6e3](https://github.com/SocialGouv/enfants-du-spectacle/commit/693f6e30afb50868c9b623328e6580019b5dd9fe))
+
 ## [1.81.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.1...v1.81.2) (2023-05-23)
 
 
