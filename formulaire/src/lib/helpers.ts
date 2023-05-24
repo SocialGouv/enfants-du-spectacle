@@ -323,6 +323,7 @@ const SCHEMA_ENFANTS = {
   'Né(e) le': {
     prop: 'dateNaissance',
     type: Date,
+    required: true
   },
   "Type d'emploi": {
     prop: 'typeEmploi',
