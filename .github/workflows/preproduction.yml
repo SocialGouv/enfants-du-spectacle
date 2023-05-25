@@ -27,6 +27,7 @@ jobs:
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=preproduction
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             START_SCRIPT=start-prod
+            NEXT_PUBLIC_API_URL_SDP=https://formulaire-enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync
 
   build-form:
     name: Build & Register form application
