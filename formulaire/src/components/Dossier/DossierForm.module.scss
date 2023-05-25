@@ -47,6 +47,9 @@
             padding: 0 2rem;
             position: relative;
         }
+        .addCachetBtn {
+            margin: 2rem;
+        }
 
         textarea {
             width: 100%;
@@ -176,6 +179,10 @@
         transform: translateY(-50px);
         border-radius: 3px;
     }
+    .closeBtn {
+        cursor: pointer;
+    }
+
 }
 .enfantForm {
     position: relative;
