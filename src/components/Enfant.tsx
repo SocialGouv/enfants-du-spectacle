@@ -48,6 +48,8 @@ const EnfantComponent: React.FC<Props> = ({
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
+  console.log('datalinks : ', dataLinks)
+  console.log('enfant : ', enfant)
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
@@ -354,7 +356,7 @@ const EnfantComponent: React.FC<Props> = ({
                             type.value === formData.typeConsultationMedecin
                         )?.typeJustif as JustificatifEnfant
                       }`}
-                      docs={formData.piecesDossier || []}
+                      docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
                       allowChanges={false}
                       label={`${
                         TYPE_CONSULTATION_MEDECIN.find(
@@ -376,8 +378,8 @@ const EnfantComponent: React.FC<Props> = ({
                 <Info title="AVIS MÉDICAL">
                   <InputFile
                     id={"AVIS_MEDICAL"}
-                    docs={formData.piecesDossier || []}
-                    allowChanges={false}
+                    docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
+                    allowChanges={true}
                     label={`Avis médical`}
                     handleFile={handleFile}
                     handleDelete={handleDelete}
