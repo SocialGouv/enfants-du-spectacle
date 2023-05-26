@@ -4,10 +4,10 @@ import React from "react";
 import styles from "./InputFile.module.scss";
 
 type Doc = {
-    id: number,
     nom: string,
     type: string,
-    statut: STATUT_PIECE | null
+    statut: STATUT_PIECE | null,
+    link: string
 }
 
 interface Props {
@@ -23,6 +23,8 @@ interface Props {
 
 const InputFile: React.FC<Props> = ({ id, label, text, docs, docsTokenized, allowChanges, handleFile, handleDelete }) => {
 
+    console.log('docs : ', docs)
+
     return (
         <div className={styles.InputFile}>
             <label htmlFor={id} className="mb-2 italic">
@@ -37,33 +39,17 @@ const InputFile: React.FC<Props> = ({ id, label, text, docs, docsTokenized, allo
                     {docs.filter(doc => {return doc.type === id}).map((doc, index) => (
                         <div key={`${doc.nom}_${index}`}>
                             <div className={styles.rowDoc}>
-                                {!allowChanges &&
-                                    <div className={styles.deleteDoc} onClick={() => {handleDelete(doc.id.toString())}}>
-                                        <Image
-                                            src={`/images/trash.svg`}
-                                            alt="Supprimer"
-                                            width={20}
-                                            height={20}
-                                        />
-                                    </div>
-                                }
-                                
-                                {docsTokenized &&
-                                    <a href={`${docsTokenized.piecesDossier.find(docTmp => docTmp.id === doc.id)?.link}`} 
+                                <a href={`${doc.link}`} 
                                     target="_blank"
                                     key={`piece_justificative_${id}_${index}`} 
                                     className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}
-                                    >{doc.nom}</a>
-                                }
-                                {!docsTokenized &&
-                                    <span key={`piece_justificative_${id}_${index}`} className={`${doc.statut === 'REFUSE' ? styles.refused : doc.statut === 'VALIDE' ? styles.accepted : ''}`}>{doc.nom}</span>
-                                }
+                                    >{doc.type}</a>
                             </div>
                         </div>
                     ))}
                 </div>
             }
-            {docs.filter(doc => {return doc.type === id}).length < 3 && !allowChanges &&
+            {docs.length === 0 &&
                 <div className="Form--field">
                     <input type="file"
                         id={id} name="justificatif"

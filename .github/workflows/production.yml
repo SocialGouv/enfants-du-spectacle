@@ -27,6 +27,7 @@ jobs:
             START_SCRIPT=start-prod
             NEXT_PUBLIC_MATOMO_URL=https://matomo.fabrique.social.gouv.fr/
             NEXT_PUBLIC_MATOMO_SITE_AGENT_ID=85
+            NEXT_PUBLIC_API_URL_SDP=https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/api/sync
 
   build-form:
     name: Build & Register form application
