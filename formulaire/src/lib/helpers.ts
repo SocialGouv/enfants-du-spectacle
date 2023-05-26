@@ -468,7 +468,6 @@ const SCHEMA_ENFANTS = {
   },
 }
 
-
 export {
     frenchDateText,
     frenchDateHour,

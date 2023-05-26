@@ -233,15 +233,17 @@ enum NatureCachet {
 }
 
 model Remuneration {
-  id               Int           @id @default(autoincrement())
-  typeRemuneration String?
-  natureCachet     NatureCachet?
-  montant          Float?
-  nombre           Int?          @default(0)
-  nombreLignes     Int?          @default(0)
-  totalDadr        Float?
-  Enfant           Enfant?       @relation(fields: [enfantId], references: [id])
-  enfantId         Int?
+  id                Int           @id @default(autoincrement())
+  typeRemuneration  String?
+  natureCachet      NatureCachet?
+  autreNatureCachet String?
+  montant           Float?
+  nombre            Int?          @default(0)
+  nombreLignes      Int?          @default(0)
+  totalDadr         Float?
+  comment           String?
+  Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
+  enfantId          Int?
 }
 
 model Enfant {
