@@ -1,3 +1,10 @@
+## [1.83.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.0...v1.83.1) (2023-05-26)
+
+
+### Bug Fixes
+
+* fix cors ([#563](https://github.com/SocialGouv/enfants-du-spectacle/issues/563)) ([7d3119a](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d3119a6dad740b1664004b727024657e856ab30))
+
 # [1.83.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.9...v1.83.0) (2023-05-26)
 
 
