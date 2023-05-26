@@ -1,3 +1,10 @@
+# [1.83.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.9...v1.83.0) (2023-05-26)
+
+
+### Features
+
+* parcours medecine doc correctly uploaded ([#562](https://github.com/SocialGouv/enfants-du-spectacle/issues/562)) ([50f967a](https://github.com/SocialGouv/enfants-du-spectacle/commit/50f967a6a13070e28ed1919c8d07d06fad94c0a7))
+
 ## [1.82.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.8...v1.82.9) (2023-05-24)
 
 
