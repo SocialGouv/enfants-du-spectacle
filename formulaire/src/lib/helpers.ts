@@ -311,7 +311,7 @@ const REMUNERATIONS = [{
     {label: "Cachet de représentation", value: "CACHET_REPRESENTATION"},
     {label: "Cachet de répétition", value: "CACHET_REPETITION"},
     {label: "Cachet de horaire", value: "CACHET_HORAIRE"},
-    {label: "Autre", value: "AUTRE"},
+    {label: "Autre", value: "AUTRE_GARANTIE"},
     
   ],
 },
@@ -322,7 +322,7 @@ const REMUNERATIONS = [{
     {label: "Cachet de captation", value: "CACHET_CAPTATION"},
     {label: "Cachet spectacle vivant", value: "CACHET_SPECTACLE_VIVANT"},
     {label: "Cachet RETAKE", value: "CACHET_RETAKE"},
-    {label: "Autre", value: "AUTRE"},
+    {label: "Autre", value: "AUTRE_ADDITIONNELLE"},
    ]}
 ]
 

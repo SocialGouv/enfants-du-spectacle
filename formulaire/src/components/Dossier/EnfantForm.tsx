@@ -30,6 +30,7 @@ import { deleteEnfant } from "src/fetching/enfant";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
 import { BiTrash } from "react-icons/bi";
+import { createRemuneration } from "src/fetching/remuneration";
 
 interface Props {
   enfant: EnfantData;
@@ -238,6 +239,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     handleTotalRemuneration();
   }, [remunerationList]);
 
+  // const saveRemuneration = useDebouncedCallback(() => {
+  //   createRemuneration(remunerationList);
+  // }, 1000);
+
   const saveEnfant = useDebouncedCallback(() => {
     updateEnfant(enfantTmp);
     refresh(enfantTmp);
@@ -246,6 +251,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   interface Option {
     label: string;
     value: string;
+    disabled?: boolean;
   }
 
   const defaultValue: Option = {
@@ -255,11 +261,22 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
 
   const options: Option[] = [
     defaultValue,
-    ...(
-      REMUNERATIONS.flatMap(
-        (group) => group[Object.keys(group)[0] as keyof typeof group]
-      ) as Option[]
-    ).filter(Boolean),
+    {
+      label: "Rémunérations garanties",
+      value: "",
+      disabled: true,
+    },
+    ...(REMUNERATIONS.find(
+      (group) => Object.keys(group)[0] === "Rémunérations garanties"
+    )?.["Rémunérations garanties"] ?? []),
+    {
+      label: "Rémunérations additionnelles",
+      value: "",
+      disabled: true,
+    },
+    ...(REMUNERATIONS.find(
+      (group) => Object.keys(group)[0] === "Rémunérations additionnelles"
+    )?.["Rémunérations additionnelles"] ?? []),
   ];
 
   React.useEffect(() => {
@@ -502,7 +519,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           <div className={styles.blocForm} key={index}>
             {index === 0 && (
               <div
-                style={{ marginBottom: "20px" }}
+                style={{
+                  marginBottom: "20px",
+                  maxWidth: rem.typeRemuneration === null ? "100%" : "15rem",
+                }}
                 className={`${styles.inputItem}`}
               >
                 <label htmlFor="typeRemuneration" className={styles.inputLabel}>
@@ -597,7 +617,14 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         natureCachetValue !== ""
                           ? (natureCachetValue as NatureCachet)
                           : null;
-                      updatedRemunerations[index].natureCachet = natureCachet;
+                      updatedRemunerations[index] = {
+                        ...updatedRemunerations[index],
+                        nombreLignes: null,
+                        totalDadr: null,
+                        autreNatureCachet: null,
+                        comment: null,
+                        natureCachet: natureCachet,
+                      };
                       setRemunerationList(updatedRemunerations);
                     }}
                   />
@@ -613,8 +640,15 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  {rem.natureCachet === "AUTRE" && (
-                    <div style={{ display: "flex", gap: "20px" }}>
+                  {(rem.natureCachet === "AUTRE_GARANTIE" ||
+                    rem.natureCachet === "AUTRE_ADDITIONNELLE") && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "20px",
+                        alignItems: "center",
+                      }}
+                    >
                       <div>
                         <label
                           htmlFor="autreNatureCachet"
@@ -630,7 +664,9 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                               e.currentTarget.value
                             )
                           }
-                          value={remunerationList[index].autreNatureCachet}
+                          value={
+                            remunerationList[index]?.autreNatureCachet ?? ""
+                          }
                           disabled={!allowChanges}
                           type="text"
                           lang="en-US"
@@ -657,7 +693,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                               e.currentTarget.value
                             )
                           }
-                          value={remunerationList[index].comment}
+                          value={remunerationList[index]?.comment ?? ""}
                           disabled={!allowChanges}
                           type="text"
                           lang="en-US"
@@ -682,10 +718,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         handleRemunerationChange(
                           index,
                           "montant",
-                          e.currentTarget.value
+                          parseFloat(e.currentTarget.value)
                         )
                       }
-                      value={remunerationList[index].montant}
+                      value={remunerationList[index]?.montant ?? ""}
                       disabled={!allowChanges}
                       type="number"
                       min="0"
@@ -710,10 +746,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         handleRemunerationChange(
                           index,
                           "nombre",
-                          e.currentTarget.value
+                          parseInt(e.currentTarget.value)
                         )
                       }
-                      value={remunerationList[index].nombre}
+                      value={remunerationList[index]?.nombre ?? ""}
                       disabled={!allowChanges}
                       type="number"
                       min="0"
@@ -728,7 +764,9 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                 </div>
               )}
               {rem.natureCachet === "CACHET_DOUBLAGE" && (
-                <div style={{ display: "flex", gap: "20px" }}>
+                <div
+                  style={{ display: "flex", gap: "20px", alignItems: "center" }}
+                >
                   <div>
                     <label htmlFor="nombreLignes" className="mb-2 italic">
                       Nombre de lignes *
@@ -738,10 +776,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         handleRemunerationChange(
                           index,
                           "nombreLignes",
-                          e.currentTarget.value
+                          parseInt(e.currentTarget.value)
                         )
                       }
-                      value={remunerationList[index].nombreLignes}
+                      value={remunerationList[index]?.nombreLignes ?? ""}
                       disabled={!allowChanges}
                       type="number"
                       min="0"
@@ -764,10 +802,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         handleRemunerationChange(
                           index,
                           "totalDadr",
-                          e.currentTarget.value
+                          parseFloat(e.currentTarget.value)
                         )
                       }
-                      value={remunerationList[index].totalDadr}
+                      value={remunerationList[index]?.totalDadr ?? ""}
                       disabled={!allowChanges}
                       type="number"
                       min="0"
