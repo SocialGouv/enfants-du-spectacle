@@ -276,9 +276,7 @@ const EnfantComponent: React.FC<Props> = ({
                       onChange={(e) => {
                         handleForm(e);
                       }}
-                      disabled={
-                        (session.data?.dbUser as User).role === "MEDECIN"
-                      }
+                      disabled={true}
                       type="text"
                       id={row.value}
                       name={row.value}
