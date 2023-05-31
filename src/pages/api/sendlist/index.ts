@@ -1,8 +1,10 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -30,7 +32,7 @@ function getId(req: NextApiRequest): number {
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body as string);
   try {
-    const sendList = await prisma.sendList.create({ data });
+    const sendList = await client.sendList.create({ data });
     res.status(200).json(superjson.stringify(sendList));
   } catch (e: unknown) {
     console.log(e);
@@ -39,7 +41,7 @@ const post: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const commissionId = getId(req);
-  const sendList = await prisma.sendList.findMany({
+  const sendList = await client.sendList.findMany({
     include: {
       user: true,
     },
@@ -72,7 +74,7 @@ const update: NextApiHandler = async (req, res) => {
     updates.send = false;
   }
 
-  const updateSendList = await prisma.sendList.update({
+  const updateSendList = await client.sendList.update({
     data: updates,
     where: { id: parsed.id },
   });

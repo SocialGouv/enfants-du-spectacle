@@ -1,8 +1,10 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -40,14 +42,14 @@ const get: NextApiHandler = async (req, res) => {
         ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
-  await prisma?.$disconnect()
+  await client?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body as string);
   try {
-    await prisma?.commission.create({ data });
+    await client?.commission.create({ data });
   } catch (e: unknown) {
     console.log(e);
   }
@@ -57,7 +59,7 @@ const post: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const commissionId = Number(req.body as string);
   try {
-    await prisma?.commission.delete({
+    await client?.commission.delete({
       where: { id: commissionId },
     });
     res.status(200).json({ message: "Commission supprimée" });
@@ -69,7 +71,7 @@ const remove: NextApiHandler = async (req, res) => {
 
 const getUpcomingCommissions = async () => {
   console.log('upcoming')
-  return prisma?.commission.findMany({
+  return client?.commission.findMany({
     include: {
       dossiers: {
         include: {
@@ -88,7 +90,7 @@ const getUpcomingCommissions = async () => {
 const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
   const session = await getSession({ req });
   console.log('upcoming not empty !!!')
-  return await prisma?.commission.findMany({
+  return await client?.commission.findMany({
     include: {
       dossiers: {
         where: session?.dbUser.role !== "MEDECIN" ? 
@@ -152,7 +154,7 @@ const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
 const getUpcomingCommissionsByDepartement = async (departements: string) => {
   console.log('upcoming by departement')
   console.log("departements : ", departements.split(","));
-  return prisma.commission.findMany({
+  return client.commission.findMany({
     include: {
       dossiers: {
         include: {
@@ -177,7 +179,7 @@ const getUpcomingCommissionsByDepartement = async (departements: string) => {
 
 const getPastCommissions = async () => {
   console.log('past commissions')
-  return prisma.commission.findMany({
+  return client.commission.findMany({
     include: {
       dossiers: {
         include: {

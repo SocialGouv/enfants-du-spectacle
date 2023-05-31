@@ -1,9 +1,11 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import { searchDossiers, searchEnfants } from "src/lib/queries";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {
@@ -22,8 +24,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   const tsquery = req.query.search.trim().replace(/ +/g, " & ");
 
-  const enfants = await searchEnfants(prisma, tsquery);
-  const dossiers = await searchDossiers(prisma, tsquery);
+  const enfants = await searchEnfants(client, tsquery);
+  const dossiers = await searchDossiers(client, tsquery);
   res.status(200).json(superjson.stringify({ dossiers, enfants }));
 };
 

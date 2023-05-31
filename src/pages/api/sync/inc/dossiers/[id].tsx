@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "GET") {
@@ -19,7 +21,6 @@ function getId(req: NextApiRequest): number {
 }
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const parsed = JSON.parse(req.body as string);
   const dossierId = getId(req);
 
@@ -27,7 +28,7 @@ const remove: NextApiHandler = async (req, res) => {
     res.status(401).json({ error: `Unauthorized` });
   } else {
     try {
-      await prisma.dossier.delete({
+      await client.dossier.delete({
         where: { externalId: dossierId.toString() },
       });
     } catch (e: unknown) {
@@ -42,24 +43,22 @@ const get: NextApiHandler = async (req, res) => {
   const id = match ? match[1] : "";
   const token = match ? match[2] : "";
   const data = { id, token };
-  const prisma = new PrismaClient();
 
   if (data.token !== process.env.API_KEY_INSTRUCTEUR) {
     res.status(401).json({ error: "Unauthorized" });
   } else {
     try {
       if (data.id) {
-        const dossier = await prisma.dossier.findFirst({
+        const dossier = await client.dossier.findFirst({
           where: { externalId: data.id.toString() },
         });
-        const commission = await prisma.commission.findFirst({
+        const commission = await client.commission.findFirst({
           where: { id: dossier?.commissionId },
         });
         if (dossier?.userId) {
-          const instructeur = await prisma.user.findFirst({
+          const instructeur = await client.user.findFirst({
             where: { id: dossier.userId },
           });
-          await prisma?.$disconnect()
 
           res.status(200).json({
             commissionDate: commission?.date,
@@ -70,7 +69,6 @@ const get: NextApiHandler = async (req, res) => {
         }
       }
     } catch (e: unknown) {
-      await prisma?.$disconnect()
       res.status(500).json({ message: "Internal server error" });
       console.log(e);
     }

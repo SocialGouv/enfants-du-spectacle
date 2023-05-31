@@ -1,15 +1,11 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
-//import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
 
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
+
 const handler: NextApiHandler = async (req, res) => {
-  /*const session = await getSession({ req });
-  if (!session) {
-    res.status(401).end();
-    return;
-  }*/
   const { id: commissionIdStr } = req.query;
   if (typeof commissionIdStr !== "string") {
     res.status(404).send(`not a valid commission id`);
@@ -32,7 +28,7 @@ function getId(req: NextApiRequest): number {
 
 const get: NextApiHandler = async (req, res) => {
   const id = getId(req);
-  const commission = await prisma.commission.findUnique({
+  const commission = await client.commission.findUnique({
     include: {
       dossiers: {
         include: {
@@ -47,7 +43,6 @@ const get: NextApiHandler = async (req, res) => {
     },
     where: { id },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(commission));
 };
@@ -78,11 +73,10 @@ const update: NextApiHandler = async (req, res) => {
     updates.dateLimiteDepot = parsed.dateLimiteDepot;
   }
 
-  const updateCommission = await prisma.commission.update({
+  const updateCommission = await client.commission.update({
     data: updates,
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updateCommission));
 };

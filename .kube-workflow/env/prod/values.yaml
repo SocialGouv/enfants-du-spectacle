@@ -1,11 +1,9 @@
 app:
   addVolumes:
     - docs
-  replicas: 1 # temporary, need to delete when swr fixed
 app-form:
   addVolumes:
     - docs-form
-  replicas: 1 # temporary, need to delete when swr fixed
 
 metabase:
   enabled: true
