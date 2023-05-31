@@ -1,3 +1,10 @@
+## [1.83.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.1...v1.83.2) (2023-05-31)
+
+
+### Bug Fixes
+
+* fix infos representants, condition affichage ([#564](https://github.com/SocialGouv/enfants-du-spectacle/issues/564)) ([937101c](https://github.com/SocialGouv/enfants-du-spectacle/commit/937101cf34bf894f5b4047dae5fa372b2b8cf674))
+
 ## [1.83.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.0...v1.83.1) (2023-05-26)
 
 
