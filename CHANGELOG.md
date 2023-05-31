@@ -1,3 +1,10 @@
+## [1.83.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.2...v1.83.3) (2023-05-31)
+
+
+### Bug Fixes
+
+* instantiate once for each handler ([#565](https://github.com/SocialGouv/enfants-du-spectacle/issues/565)) ([42f2f80](https://github.com/SocialGouv/enfants-du-spectacle/commit/42f2f80339a789f2ff79daca1e81c3fa3c91447d))
+
 ## [1.83.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.1...v1.83.2) (2023-05-31)
 
 
