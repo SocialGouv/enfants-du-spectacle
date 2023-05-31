@@ -1,8 +1,10 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma, Role } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -28,7 +30,7 @@ const handler: NextApiHandler = async (req, res) => {
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body as string);
   try {
-    await prisma.user.create({ data });
+    await client.user.create({ data });
   } catch (e: unknown) {
     console.log(e);
   }
@@ -38,13 +40,11 @@ const post: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const userId = Number(req.body as string);
   try {
-    await prisma.user.delete({
+    await client.user.delete({
       where: { id: userId },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Utilisateur supprimé" });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Utilisateur non trouvé" });
   }
@@ -64,13 +64,12 @@ const update: NextApiHandler = async (req, res) => {
 
   const userId = parsed.id;
 
-  const updatedUser = await prisma.user.update({
+  const updatedUser = await client.user.update({
     data: {
       departements: parsed.departements,
     },
     where: { id: userId },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(superjson.stringify(updatedUser));
 };
@@ -79,14 +78,13 @@ const get: NextApiHandler = async (req, res) => {
   const role: string = req.query.role as string;
   const allUsers =
     role == "all"
-      ? await prisma.user.findMany({
+      ? await client.user.findMany({
           orderBy: { name: "asc" },
         })
-      : await prisma.user.findMany({
+      : await client.user.findMany({
           orderBy: { name: "asc" },
-          where: { role: role.toUpperCase() },
+          where: { role: role.toUpperCase() as Role },
         });
-  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(allUsers));
 };
 

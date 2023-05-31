@@ -1,9 +1,10 @@
-import type { Commentaire } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -31,13 +32,11 @@ function getId(req: NextApiRequest): number {
 const remove: NextApiHandler = async (req, res) => {
   const commentId = Number(req.body as string);
   try {
-    await prisma.commentaire.delete({
+    await client.commentaire.delete({
       where: { id: commentId },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Commentaire supprimé" });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Commentaire non trouve" });
   }
@@ -45,7 +44,7 @@ const remove: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const dossierId = getId(req);
-  const allComments = await prisma.commentaire.findMany({
+  const allComments = await client.commentaire.findMany({
     include: {
       user: true,
     },
@@ -54,14 +53,13 @@ const get: NextApiHandler = async (req, res) => {
       dossierId: dossierId,
     },
   });
-  await prisma?.$disconnect()
   res.status(200).json(superjson.stringify(allComments));
 };
 
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body as string);
   try {
-    await prisma.commentaire.create({ data });
+    await client.commentaire.create({ data });
   } catch (e: unknown) {
     console.log(e);
   }
