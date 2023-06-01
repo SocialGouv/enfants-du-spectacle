@@ -83,6 +83,8 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
+  console.log("ENFANT UPDATED: ", parsed);
+
   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || "0");
   parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || "0");
   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || "0");
@@ -93,6 +95,7 @@ const update: NextApiHandler = async (req, res) => {
   parsed.dateDerniereModification = new Date();
 
   delete parsed.piecesDossier;
+  delete parsed.remuneration;
 
   const enfantUpdated = await prisma.enfant.update({
     data: parsed as Enfant,

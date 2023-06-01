@@ -71,6 +71,7 @@ const get: NextApiHandler = async (req, res) => {
         enfants: {
           include: {
             piecesDossier: true,
+            remuneration: true,
           },
         },
         Demandeur: {

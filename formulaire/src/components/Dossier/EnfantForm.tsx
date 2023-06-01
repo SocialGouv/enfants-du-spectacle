@@ -180,6 +180,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     await deleteEnfant(enfant.id);
   };
 
+  React.useEffect(() => {
+    if (enfant.remuneration.length) setRemunerationList(enfant.remuneration);
+  }, []);
+
   const handleRemunerationChange = (
     index: number,
     field: keyof Remuneration,
@@ -190,9 +194,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     setRemunerationList(updatedRemunerations);
   };
 
-  const addCachet = () => {
-    const newRemuneration: Remuneration = {
-      id: remunerationList.length + 1,
+  const addCachet = async () => {
+    const newRemuneration = {
       typeRemuneration: "cachet",
       natureCachet: null,
       autreNatureCachet: null,
@@ -202,8 +205,9 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       totalDadr: null,
       comment: null,
       enfantId: enfantTmp.id,
-    };
+    } as Remuneration;
     setRemunerationList([...remunerationList, newRemuneration]);
+    await createRemuneration(newRemuneration);
   };
 
   const deleteRemuneration = (index: number) => {
@@ -557,7 +561,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       ) : null}
-      {remunerationList.length > 0 && defaultTypeRemuneration !== null && (
+      {remunerationList.length > 0 && (
         <div
           className={styles.byThreeForm}
           style={{
@@ -597,14 +601,22 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                         "typeRemuneration",
                         e.currentTarget.value
                       );
+                      setRemunerationList([
+                        {
+                          id: 0,
+                          typeRemuneration: e.currentTarget.value,
+                          natureCachet: null,
+                          autreNatureCachet: null,
+                          montant: null,
+                          nombre: null,
+                          nombreLignes: null,
+                          totalDadr: null,
+                          comment: null,
+                          enfantId: enfantTmp.id,
+                        },
+                      ]);
                       if (rem.typeRemuneration === "forfait") {
                         rem.natureCachet = null;
-                        setRemunerationList(
-                          remunerationList.filter(
-                            (remuneration) =>
-                              remuneration.typeRemuneration === "forfait"
-                          )
-                        );
                       }
                       if (
                         rem.typeRemuneration === "" ||
@@ -612,23 +624,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                       ) {
                         setDefaultTypeRemuneration(null);
                         setRemunerationList([]);
+                      } else {
+                        createRemuneration(rem);
                       }
-                      if (rem.typeRemuneration === "cachet") {
-                        setRemunerationList([
-                          {
-                            id: 0,
-                            typeRemuneration: "cachet",
-                            natureCachet: null,
-                            autreNatureCachet: null,
-                            montant: null,
-                            nombre: null,
-                            nombreLignes: null,
-                            totalDadr: null,
-                            comment: null,
-                            enfantId: enfantTmp.id,
-                          },
-                        ]);
-                      }
+
                       rem.montant = 0;
                       rem.nombre = 0;
                     }}
