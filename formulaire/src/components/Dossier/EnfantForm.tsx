@@ -181,7 +181,25 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   };
 
   React.useEffect(() => {
-    if (enfant.remuneration.length) setRemunerationList(enfant.remuneration);
+    if (enfant.remuneration.length) {
+      const hasForfait = enfant.remuneration.some(
+        (remuneration) => remuneration.typeRemuneration === "forfait"
+      );
+      if (hasForfait) {
+        setDefaultTypeRemuneration("forfait");
+      } else {
+        setDefaultTypeRemuneration("cachet");
+      }
+
+      // Mettre l'objet "forfait" en première position du tableau
+      const sortedRemunerations = [...enfant.remuneration].sort((a, b) => {
+        if (a.typeRemuneration === "forfait") return -1;
+        if (b.typeRemuneration === "forfait") return 1;
+        return 0;
+      });
+
+      setRemunerationList(sortedRemunerations);
+    }
   }, []);
 
   const handleRemunerationChange = (
@@ -504,48 +522,45 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       </div>
 
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
-      {(remunerationList.length > 0 &&
-        (remunerationList[0].typeRemuneration === "" ||
-          remunerationList[0].typeRemuneration === null)) ||
-      remunerationList.length === 0 ? (
+      <div
+        className={styles.blocForm}
+        style={{
+          marginBottom: "20px",
+          maxWidth: "18rem",
+        }}
+      >
         <div
-          className={styles.blocForm}
           style={{
             marginBottom: "20px",
-            maxWidth: "18rem",
+            maxWidth: "15rem",
           }}
+          className={`${styles.inputItem}`}
         >
-          <label
-            htmlFor="typeRemunerationDefault"
-            className={styles.inputLabel}
-          >
+          <label htmlFor="typeRemuneration" className={styles.inputLabel}>
             Type de rémunérations *
           </label>
           <Select
-            id="typeRemunerationDefault"
+            id="typeRemuneration"
             selected={defaultTypeRemuneration ?? defaultValue.value}
             options={[
               defaultValue,
               { label: "Cachet", value: "cachet" },
               { label: "Forfait", value: "forfait" },
             ]}
-            onChange={(e) => {
+            onChange={(e: React.FormEvent<HTMLInputElement>) => {
               const selectedValue = e.currentTarget.value;
               setDefaultTypeRemuneration(selectedValue);
-              if (remunerationList.length > 0) {
-                setRemunerationList((prevRemunerationList) => {
-                  const updatedRemunerationList = [...prevRemunerationList];
-                  if (updatedRemunerationList.length > 0) {
-                    const firstRemuneration = updatedRemunerationList[0];
-                    firstRemuneration.typeRemuneration = selectedValue;
-                  }
-                  return updatedRemunerationList;
-                });
+              if (selectedValue === "forfait" && remunerationList.length > 0) {
+                remunerationList[0].natureCachet = null;
+              }
+              if (selectedValue === "" || selectedValue === null) {
+                setDefaultTypeRemuneration(null);
+                setRemunerationList([]);
               } else {
                 setRemunerationList([
                   {
                     id: 0,
-                    typeRemuneration: selectedValue,
+                    typeRemuneration: e.currentTarget.value,
                     natureCachet: null,
                     autreNatureCachet: null,
                     montant: null,
@@ -556,11 +571,14 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                     enfantId: enfantTmp.id,
                   },
                 ]);
+                // remunerationList[0].montant = 0;
+                // remunerationList[0].nombre = 0;
+                // createRemuneration(rem);
               }
             }}
           />
         </div>
-      ) : null}
+      </div>
       {remunerationList.length > 0 && (
         <div
           className={styles.byThreeForm}
@@ -568,72 +586,12 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             width: "100%",
             display: "flex",
             flexWrap: "wrap",
-            alignItems: "center",
+            alignItems: "start",
+            flexDirection: "column",
           }}
         >
           {remunerationList.map((rem, index) => (
             <div className={styles.blocForm} key={index}>
-              {index === 0 && (
-                <div
-                  style={{
-                    marginBottom: "20px",
-                    maxWidth: rem.typeRemuneration === null ? "100%" : "15rem",
-                  }}
-                  className={`${styles.inputItem}`}
-                >
-                  <label
-                    htmlFor="typeRemuneration"
-                    className={styles.inputLabel}
-                  >
-                    Type de rémunérations *
-                  </label>
-                  <Select
-                    id="typeRemuneration"
-                    selected={rem.typeRemuneration ?? defaultValue.value}
-                    options={[
-                      defaultValue,
-                      { label: "Cachet", value: "cachet" },
-                      { label: "Forfait", value: "forfait" },
-                    ]}
-                    onChange={(e: React.FormEvent<HTMLInputElement>) => {
-                      handleRemunerationChange(
-                        index,
-                        "typeRemuneration",
-                        e.currentTarget.value
-                      );
-                      setRemunerationList([
-                        {
-                          id: 0,
-                          typeRemuneration: e.currentTarget.value,
-                          natureCachet: null,
-                          autreNatureCachet: null,
-                          montant: null,
-                          nombre: null,
-                          nombreLignes: null,
-                          totalDadr: null,
-                          comment: null,
-                          enfantId: enfantTmp.id,
-                        },
-                      ]);
-                      if (rem.typeRemuneration === "forfait") {
-                        rem.natureCachet = null;
-                      }
-                      if (
-                        rem.typeRemuneration === "" ||
-                        rem.typeRemuneration === null
-                      ) {
-                        setDefaultTypeRemuneration(null);
-                        setRemunerationList([]);
-                      } else {
-                        createRemuneration(rem);
-                      }
-
-                      rem.montant = 0;
-                      rem.nombre = 0;
-                    }}
-                  />
-                </div>
-              )}
               <div
                 style={{
                   display: "flex",
@@ -890,7 +848,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           ))}
         </div>
       )}
-      {remunerationList[0] && remunerationList[0].typeRemuneration !== null && (
+      {defaultTypeRemuneration !== null && (
         <div className={styles.addCachetBtn}>
           <ButtonLink light={true} onClick={addCachet}>
             Ajouter un cachet{" "}
@@ -899,7 +857,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         </div>
       )}
 
-      {remunerationList[0] && remunerationList[0].typeRemuneration !== null && (
+      {defaultTypeRemuneration !== null && (
         <div className={styles.halfForm}>
           <div className={styles.addCachetBtn}>
             <label htmlFor="remunerationTotale" className="mb-2 italic">
