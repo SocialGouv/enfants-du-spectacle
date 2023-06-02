@@ -14,6 +14,32 @@ const createRemuneration = async (remuneration: Omit<Remuneration, "id">) => {
   return fetching as Remuneration;
 };
 
+const deleteRemunerationsByEnfantId = async (enfantId: number) => {
+  const fetching = fetch(`/api/remunerations/`, {
+    body: JSON.stringify(enfantId),
+    method: "DELETE",
+  }).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return fetching;
+};
+
+const deleteRemunerationById = async (remunerationId: number) => {
+  const fetching = fetch(`/api/remunerations/${remunerationId}`, {
+    body: JSON.stringify(remunerationId),
+    method: "DELETE",
+  }).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return fetching;
+};
+
 // const updateRemuneration = async (enfant: Enfant) => {
 //   const fetching = await fetch(`/api/enfants`, {
 //     body: JSON.stringify(enfant),
@@ -29,5 +55,7 @@ const createRemuneration = async (remuneration: Omit<Remuneration, "id">) => {
 
 export {
   createRemuneration,
+  deleteRemunerationsByEnfantId,
+  deleteRemunerationById,
   // updateRemuneration,
 };
