@@ -19,6 +19,14 @@
   padding-bottom: 2rem;
 }
 
+.remunerationBloc {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
 .adressesGrid form{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

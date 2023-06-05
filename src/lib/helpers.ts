@@ -139,10 +139,10 @@ function getFormatedTypeDossier(type: string): string {
       "Compétition de jeux vidéos": "JEU_VIDEO",
       "Comédie musicale": "COMEDIE_MUSICALE",
       Concert: "CONCERT",
+      "Documentaire fictionnel": "DOCUMENTAIRE_FICTIONNEL",
       "Enregistrement doublage": "DOUBLAGE",
       "Enregistrement musique en studio": "MUSIQUE_STUDIO",
       "Film institutionnel": "FILM_INSTITUTIONNEL",
-      "Documentaire fictionnel": "DOCUMENTAIRE_FICTIONNEL",
       "Film long métrage": "LONG_METRAGE",
       "Film moyen ou court métrage": "COURT_METRAGE",
       Opéra: "OPERA",
@@ -376,6 +376,29 @@ const BINDING_DS_STATUS = [
   { ds: "refuse", eds: "REFUSE" },
 ];
 
+const REMUNERATIONS = [
+  {
+    "Rémunérations garanties": [
+      { label: "Cachet de tournage", value: "CACHET_TOURNAGE" },
+      { label: "Cachet de doublage", value: "CACHET_DOUBLAGE" },
+      { label: "Cachet de représentation", value: "CACHET_REPRESENTATION" },
+      { label: "Cachet de répétition", value: "CACHET_REPETITION" },
+      { label: "Cachet de horaire", value: "CACHET_HORAIRE" },
+      { label: "Autre", value: "AUTRE_GARANTIE" },
+    ],
+  },
+  {
+    "Rémunérations additionnelles": [
+      { label: "Cachet de sécurité", value: "CACHET_SECURITE" },
+      { label: "Cachet de post-synchro", value: "CACHET_POST_SYNCHRO" },
+      { label: "Cachet de captation", value: "CACHET_CAPTATION" },
+      { label: "Cachet spectacle vivant", value: "CACHET_SPECTACLE_VIVANT" },
+      { label: "Cachet RETAKE", value: "CACHET_RETAKE" },
+      { label: "Autre", value: "AUTRE_ADDITIONNELLE" },
+    ],
+  },
+];
+
 function typeEmploiLabel(typeEmploi: TypeEmploi): string {
   const found = TYPES_EMPLOI.find((t) => t.value == typeEmploi);
   if (!found) throw Error(`invalid type emploi ${typeEmploi} `);
@@ -420,6 +443,7 @@ export {
   INFOS_REPRESENTANTS,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,
+  REMUNERATIONS,
   ROLES_USERS,
   searchResultsToSocieteProductions,
   shortUserName,
