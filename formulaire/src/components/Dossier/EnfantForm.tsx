@@ -85,7 +85,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   }, [dataPassed]);
 
   const handleSelect = (enfant: EnfantWithDosier) => {
-    console.log("enfant to handle : ", enfant);
     setEnfant({
       ...enfantTmp,
       nom: enfant.nom,
@@ -166,7 +165,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           (docEnfant) => docEnfant.id !== enfantTmp.id
         ),
       ]);
-      console.log("test : ", contextDossier.docs);
     }
   };
 
@@ -214,6 +212,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     const updatedRemunerations = [...remunerationList];
     (updatedRemunerations[index] as any)[field] = value;
     setRemunerationList(updatedRemunerations);
+    setEnfant({ ...enfantTmp, remuneration: updatedRemunerations });
   };
 
   const addCachet = async (value?: string) => {
@@ -281,6 +280,20 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     });
 
     if (remunerationList.length === 0) setDefaultTypeRemuneration(null);
+  };
+
+  const selectTypeRemunerationValue = (): string => {
+    if (remunerationList.length > 0) {
+      if (
+        remunerationList.some(
+          (remuneration) => remuneration.typeRemuneration === "forfait"
+        )
+      ) {
+        return "forfait";
+      } else {
+        return "cachet";
+      }
+    } else return "";
   };
 
   const handleTotalRemuneration = () => {
@@ -559,8 +572,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         )}
       </div>
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
-      {JSON.stringify(remunerationList)}
-      DEFAULT TYPE: {JSON.stringify(defaultTypeRemuneration)}
       <div
         className={styles.blocForm}
         style={{
@@ -580,7 +591,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </label>
           <Select
             id="typeRemuneration"
-            selected={defaultTypeRemuneration ?? defaultValue.value}
+            selected={selectTypeRemunerationValue()}
             options={[
               defaultValue,
               { label: "Cachet", value: "cachet" },
@@ -641,6 +652,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                           natureCachet: natureCachet,
                         };
                         setRemunerationList(updatedRemunerations);
+                        setEnfant({
+                          ...enfantTmp,
+                          remuneration: updatedRemunerations,
+                        });
                       }}
                     />
                   </div>
@@ -868,7 +883,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           <div className={styles.halfForm}>
             <div className={styles.addCachetBtn}>
               <label htmlFor="remunerationTotale" className="mb-2 italic">
-                Rémunération totale
+                Rémunération totale (€)
               </label>
               <input
                 value={totalRemuneration}

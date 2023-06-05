@@ -94,6 +94,15 @@ const update: NextApiHandler = async (req, res) => {
   );
   parsed.dateDerniereModification = new Date();
 
+  if (parsed.remuneration) {
+    parsed.remuneration.forEach(async (rem) => {
+      await prisma.remuneration.update({
+        data: rem,
+        where: { id: rem.id },
+      });
+    });
+  }
+
   delete parsed.piecesDossier;
   delete parsed.remuneration;
 
