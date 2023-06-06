@@ -18,6 +18,7 @@ import logoArrowUp from "src/images/arrow-up.svg";
 import { useDossier } from "src/lib/api";
 import type { Comments } from "src/lib/fetching/comments";
 import { getCommentsByDossier } from "src/lib/fetching/comments";
+import { getRemunerationsByEnfantsIds } from "src/lib/fetching/remunerations";
 import {
   birthDateToFrenchAge,
   EMPLOIS_CATEGORIES,
@@ -32,7 +33,7 @@ import {
   sendEmail,
   updateCommentairesNotifications,
 } from "src/lib/queries";
-import type { DataLinks } from "src/lib/types";
+import type { DataLinks, Remuneration } from "src/lib/types";
 
 import Accordion from "./Accordion";
 import CountPieces from "./CountPieces";
@@ -58,9 +59,20 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
+  const [remunerations, setRemunerations] = React.useState<Remuneration[]>([]);
+
+  const fetchRemunerations = async () => {
+    const enfantIds = dossier?.enfants.map((enfant) => enfant.externalId);
+    if (enfantIds && enfantIds.length > 0) {
+      const resRemuneration = await getRemunerationsByEnfantsIds(
+        enfantIds as string[]
+      );
+      setRemunerations(resRemuneration);
+      console.log("Remunerations: ", remunerations);
+    }
+  };
 
   const [comments, setComments] = React.useState<Comments[]>([]);
-
   const fetchComments = async () => {
     if (dossier?.source === "FORM_EDS") {
       const res = await getCommentsByDossier(dossier.externalId!);
@@ -105,6 +117,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   React.useEffect(() => {
     fetchComments();
+    fetchRemunerations();
   }, []);
 
   React.useEffect(() => {
@@ -464,6 +477,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
+                            remunerations={remunerations}
                           />
                         </Accordion>
                       </div>
