@@ -67,7 +67,13 @@ const EnfantComponent: React.FC<Props> = ({
 
     return (
       <div>
-        {matchingLabel}:{" "}
+        <span
+          className={
+            matchingLabel === "Forfait" ? styles.remunerationTitle : ""
+          }
+        >
+          {matchingLabel}:{" "}
+        </span>
         <span style={{ fontWeight: "bold" }}>{formattedTotal}€</span>{" "}
         {`(${nombre} ${nombre > 1 ? "cachets" : "cachet"} de ${montant}€) ${
           remuneration.comment ? `- ${remuneration.comment}` : ""
@@ -114,7 +120,9 @@ const EnfantComponent: React.FC<Props> = ({
           )}
         </div>
         <div style={{ paddingBottom: "20px" }}>
-          <div style={{ paddingBottom: "10px" }}>Rémunérations garanties</div>
+          <div className={styles.remunerationTitle}>
+            Rémunérations garanties
+          </div>
           {remunerations.map((remuneration) => {
             const matchingLabelGuarantee = REMUNERATIONS.flatMap(
               (category) => category["Rémunérations garanties"]
@@ -141,7 +149,7 @@ const EnfantComponent: React.FC<Props> = ({
             );
           })}
         </div>
-        <div style={{ paddingBottom: "10px" }}>
+        <div className={styles.remunerationTitle}>
           Rémunérations additionnelles
         </div>
         {hasAdditionalRemunerations ? (
