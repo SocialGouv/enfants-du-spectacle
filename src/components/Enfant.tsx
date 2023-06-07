@@ -53,6 +53,9 @@ const EnfantComponent: React.FC<Props> = ({
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
+  const nombreDeLignes = remunerations.find(
+    (remuneration) => remuneration.nombreLignes
+  )?.nombreLignes;
 
   const RemunerationsDetails: React.FC<{
     remuneration: Remuneration;
@@ -118,16 +121,14 @@ const EnfantComponent: React.FC<Props> = ({
     );
     return (
       <div className={styles.remunerationBloc}>
-        <div style={{ paddingBottom: "20px" }}>
-          {remunerationForfait && (
-            <div>
-              <RemunerationsDetails
-                remuneration={remunerationForfait}
-                matchingLabel={"Forfait"}
-              />
-            </div>
-          )}
-        </div>
+        {remunerationForfait && (
+          <div style={{ paddingBottom: "20px" }}>
+            <RemunerationsDetails
+              remuneration={remunerationForfait}
+              matchingLabel={"Forfait"}
+            />
+          </div>
+        )}
         <div style={{ paddingBottom: "20px" }}>
           <div className={styles.remunerationTitle}>
             Rémunérations garanties
@@ -318,7 +319,7 @@ const EnfantComponent: React.FC<Props> = ({
             </div>
             <div>
               Nombre de lignes :{" "}
-              <b>{enfant.nombreLignes ? enfant.nombreLignes : <i>n/a</i>}</b>
+              <b>{nombreDeLignes ? nombreDeLignes : <i>n/a</i>}</b>
             </div>
             <div>
               Période :{" "}
