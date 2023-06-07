@@ -41,54 +41,11 @@ const remove: NextApiHandler = async (req, res) => {
       where: { enfantId: enfantId },
     });
 
-    // const url = `${process.env.API_URL_INSTRUCTEUR}/inc/remuneration/${remunerationId}`;
-
-    // const fetching = fetch(url, {
-    //   body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
-    //   method: "DELETE",
-    // }).then(async (r) => {
-    //   if (!r.ok) {
-    //     throw Error(`got status ${r.status}`);
-    //   }
-    //   return r.json();
-    // });
-
     res.status(200).json({ message: "Rémunérations supprimées" });
   } catch (e: unknown) {
     console.log(e);
     res.status(200).json({ message: "Rémunérations non trouvées" });
   }
 };
-
-// const update: NextApiHandler = async (req, res) => {
-//   if (typeof req.body !== "string") {
-//     res.status(400).end();
-//     return;
-//   }
-
-//   const parsed: EnfantData = JSON.parse(req.body);
-//   if (!parsed) {
-//     res.status(400).end();
-//     return;
-//   }
-
-//   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || "0");
-//   parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || "0");
-//   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || "0");
-//   parsed.nombreLignes = parseInt(parsed.nombreLignes?.toString() || "0");
-//   parsed.remunerationTotale = parseFloat(
-//     parsed.remunerationTotale?.toString() || "0"
-//   );
-//   parsed.dateDerniereModification = new Date();
-
-//   delete parsed.piecesDossier;
-
-//   const enfantUpdated = await prisma.enfant.update({
-//     data: parsed as Enfant,
-//     where: { id: parsed.id },
-//   });
-
-//   res.status(200).json(enfantUpdated);
-// };
 
 export default withSentry(handler);

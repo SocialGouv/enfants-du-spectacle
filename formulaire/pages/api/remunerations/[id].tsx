@@ -26,18 +26,6 @@ const remove: NextApiHandler = async (req, res) => {
       where: { id: remunerationId },
     });
 
-    // const url = `${process.env.API_URL_INSTRUCTEUR}/inc/remuneration/${remunerationId}`;
-
-    // const fetching = fetch(url, {
-    //   body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
-    //   method: "DELETE",
-    // }).then(async (r) => {
-    //   if (!r.ok) {
-    //     throw Error(`got status ${r.status}`);
-    //   }
-    //   return r.json();
-    // });
-
     res.status(200).json({ message: "Rémunération supprimée" });
   } catch (e: unknown) {
     console.log(e);

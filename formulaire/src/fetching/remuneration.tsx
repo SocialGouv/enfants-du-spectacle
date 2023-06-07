@@ -40,22 +40,8 @@ const deleteRemunerationById = async (remunerationId: number) => {
   return fetching;
 };
 
-// const updateRemuneration = async (enfant: Enfant) => {
-//   const fetching = await fetch(`/api/enfants`, {
-//     body: JSON.stringify(enfant),
-//     method: "PUT",
-//   }).then(async (r) => {
-//     if (!r.ok) {
-//       throw Error(`got status ${r.status}`);
-//     }
-//     return r.json();
-//   });
-//   return fetching as Enfant;
-// };
-
 export {
   createRemuneration,
   deleteRemunerationsByEnfantId,
   deleteRemunerationById,
-  // updateRemuneration,
 };
