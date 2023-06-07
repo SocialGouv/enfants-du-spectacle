@@ -107,6 +107,15 @@ const EnfantComponent: React.FC<Props> = ({
           );
         })
     );
+    const hasGuaranteeRemunerations: boolean = remunerations.some(
+      (remuneration) =>
+        REMUNERATIONS.some((category) => {
+          const guaranteeRemunerations = category["Rémunérations garanties"];
+          return guaranteeRemunerations?.some(
+            (item) => item.value === remuneration.natureCachet
+          );
+        })
+    );
     return (
       <div className={styles.remunerationBloc}>
         <div style={{ paddingBottom: "20px" }}>
@@ -123,31 +132,39 @@ const EnfantComponent: React.FC<Props> = ({
           <div className={styles.remunerationTitle}>
             Rémunérations garanties
           </div>
-          {remunerations.map((remuneration) => {
-            const matchingLabelGuarantee = REMUNERATIONS.flatMap(
-              (category) => category["Rémunérations garanties"]
-            ).find((item) => item?.value === remuneration.natureCachet)?.label;
-            return (
-              <div key={remuneration.id}>
-                {matchingLabelGuarantee && (
-                  <ul>
-                    {remuneration.typeRemuneration === "cachet" && (
-                      <li>
-                        <RemunerationsDetails
-                          remuneration={remuneration}
-                          matchingLabel={
-                            remuneration.autreNatureCachet
-                              ? remuneration.autreNatureCachet
-                              : matchingLabelGuarantee
-                          }
-                        />
-                      </li>
+          {hasGuaranteeRemunerations ? (
+            <div>
+              {remunerations.map((remuneration) => {
+                const matchingLabelGuarantee = REMUNERATIONS.flatMap(
+                  (category) => category["Rémunérations garanties"]
+                ).find(
+                  (item) => item?.value === remuneration.natureCachet
+                )?.label;
+                return (
+                  <div key={remuneration.id}>
+                    {matchingLabelGuarantee && (
+                      <ul>
+                        {remuneration.typeRemuneration === "cachet" && (
+                          <li>
+                            <RemunerationsDetails
+                              remuneration={remuneration}
+                              matchingLabel={
+                                remuneration.autreNatureCachet
+                                  ? remuneration.autreNatureCachet
+                                  : matchingLabelGuarantee
+                              }
+                            />
+                          </li>
+                        )}
+                      </ul>
                     )}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div>Pas de rémunérations garanties</div>
+          )}
         </div>
         <div className={styles.remunerationTitle}>
           Rémunérations additionnelles
