@@ -1,5 +1,5 @@
 app:
-  needs: [build-app, db]
+  ~needs: [build-app, db]
   envFrom:
     - secretRef:
         name: pg-user-{{ .Values.global.branchSlug }}
@@ -15,7 +15,7 @@ app:
       name: docs
 
 form:
-  needs: [build-app, db-form]
+  ~needs: [build-app, db-form]
   envFrom:
     - secretRef:
         name: pg-user-form
