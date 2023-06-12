@@ -1,5 +1,6 @@
 app:
   ~chart: app
+  ~needs: [build-app]
   imagePackage: app
   resources:
     requests:
@@ -23,6 +24,7 @@ app:
 
 form:
   ~chart: app
+  ~needs: [build-form]
   imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
   resources:
