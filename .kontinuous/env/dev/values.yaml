@@ -2,7 +2,7 @@ app:
   ~needs: [build-app, db]
   envFrom:
     - secretRef:
-        name: pg-user-{{ .Values.global.branchSlug }}
+        name: pg-user
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
