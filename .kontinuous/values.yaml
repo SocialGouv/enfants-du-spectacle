@@ -56,25 +56,26 @@ oauth2-proxy:
 
 jobs:
   ~chart: jobs
-  build-app:
-    use: build
-    with:
-      imagePackage: app
-      buildArgs:
-        NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
-      secrets:
-        sentry_auth_token:
-          secretName: app-sealed-secret
-          secretKey: SENTRY_AUTH_TOKEN
+  runs:
+    build-app:
+      use: build
+      with:
+        imagePackage: app
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        secrets:
+          sentry_auth_token:
+            secretName: app-sealed-secret
+            secretKey: SENTRY_AUTH_TOKEN
 
-  build-form:
-    use: build
-    with:
-      imagePackage: form
-      context: formulaire
-      buildArgs:
-        NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
-      secrets:
-        sentry_auth_token:
-          secretName: app-sealed-secret
-          secretKey: SENTRY_AUTH_TOKEN
+    build-form:
+      use: build
+      with:
+        imagePackage: form
+        context: formulaire
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        secrets:
+          sentry_auth_token:
+            secretName: app-sealed-secret
+            secretKey: SENTRY_AUTH_TOKEN
