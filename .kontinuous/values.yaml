@@ -1,5 +1,5 @@
 app:
-  enabled: true
+  ~chart: app
   resources:
     requests:
       cpu: 0.2
@@ -22,7 +22,7 @@ app:
   imagePackage: app
 
 app-form:
-  enabled: true
+  ~chart: app
   host: "formulaire-{{ $.Values.global.host }}"
   resources:
     requests:

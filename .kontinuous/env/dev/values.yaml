@@ -18,7 +18,7 @@ app-form:
   needs: [db-form]
   envFrom:
     - secretRef:
-        name: pg-user-form-{{ .Values.global.branchSlug32 }}
+        name: pg-user-form
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
@@ -31,16 +31,13 @@ app-form:
       name: docs-form
 
 jobs:
-  enabled: true
+  ~chart: jobs
   runs:
     - name: db
-      use: SocialGouv/kube-workflow/jobs/create-db@master
-      with:
-        pgAdminSecretRefName: azure-pg-admin-user
+      use: create-db
     - name: db-form
-      use: SocialGouv/kube-workflow/jobs/create-db@master
+      use: create-db
       with:
         database: "form_{{.Values.global.branchSlug32}}"
-        pgSecretName: pg-user-form-{{ .Values.global.branchSlug32 }}
+        pgSecretName: pg-user-form
         pgUser: form_{{ .Values.global.branchSlug32 }}
-        pgAdminSecretRefName: azure-pg-admin-user
