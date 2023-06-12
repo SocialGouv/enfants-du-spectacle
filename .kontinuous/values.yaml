@@ -71,6 +71,7 @@ jobs:
     use: build
     with:
       imagePackage: form
+      context: formulaire
       buildArgs:
         NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
       secrets:
