@@ -14,7 +14,7 @@ app:
     - mountPath: /mnt/docs
       name: docs
 
-app-form:
+form:
   needs: [db-form]
   envFrom:
     - secretRef:
@@ -31,11 +31,20 @@ app-form:
       name: docs-form
 
 jobs:
-  ~chart: jobs
   runs:
-    - name: db
+    build-app:
+      with:
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
+          START_SCRIPT: start-review
+    build-form:
+      with:
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
+          START_SCRIPT: start-review
+    db:
       use: create-db
-    - name: db-form
+    db-form:
       use: create-db
       with:
         database: "form_{{.Values.global.branchSlug32}}"

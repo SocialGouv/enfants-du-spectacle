@@ -1,5 +1,6 @@
 app:
   ~chart: app
+  imagePackage: app
   resources:
     requests:
       cpu: 0.2
@@ -19,10 +20,10 @@ app:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
-  imagePackage: app
 
-app-form:
+form:
   ~chart: app
+  imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
   resources:
     requests:
@@ -43,10 +44,28 @@ app-form:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
-  imagePackage: form
 
 metabase:
   enabled: false
 
 oauth2-proxy:
   enabled: false
+
+
+jobs:
+  ~chart: jobs
+  build-app:
+    use: build
+    with:
+      imagePackage: app
+      buildArgs:
+        NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+
+  build-form:
+    use: build
+    with:
+      imagePackage: form
+      buildArgs:
+        NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"

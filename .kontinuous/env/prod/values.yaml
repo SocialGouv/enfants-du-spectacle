@@ -1,7 +1,7 @@
 app:
   addVolumes:
     - docs
-app-form:
+form:
   addVolumes:
     - docs-form
 
@@ -27,3 +27,26 @@ oauth2-proxy:
   # additionalArgs:
   #   - --skip-auth-route
   #   - ^/public/.*,^/app/dist/.*,^/api/public/.*,^/api/session/.*,^/app/assets/.*
+
+jobs:
+  runs:
+    build-app:
+      with:
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: production
+          START_SCRIPT: start-prod
+          NEXT_PUBLIC_MATOMO_URL: https://matomo.fabrique.social.gouv.fr/
+          NEXT_PUBLIC_MATOMO_SITE_AGENT_ID: 85
+          NEXT_PUBLIC_API_URL_SDP: https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/api/sync
+
+    build-form:
+      with:
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: production
+          START_SCRIPT=start
+          NEXT_PUBLIC_FORMULAIRE_HJID: 3347496
+          NEXT_PUBLIC_FORMULAIRE_HJS: 6
+          NEXT_PUBLIC_MATOMO_URL: https://matomo.fabrique.social.gouv.fr/
+          NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID: 84
