@@ -1,3 +1,10 @@
+## [1.84.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.2...v1.84.3) (2023-06-13)
+
+
+### Bug Fixes
+
+* deactivate drop db and db2 ([f61dd03](https://github.com/SocialGouv/enfants-du-spectacle/commit/f61dd03a4d69d48bb9bdd1e805dd8716af35a523))
+
 ## [1.84.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.1...v1.84.2) (2023-06-13)
 
 
