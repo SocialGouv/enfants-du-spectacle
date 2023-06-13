@@ -1,3 +1,10 @@
+## [1.84.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.1...v1.84.2) (2023-06-13)
+
+
+### Bug Fixes
+
+* missing config for oauth2-proxy ([608aafb](https://github.com/SocialGouv/enfants-du-spectacle/commit/608aafb0f67d8f8679f4b62f7f62befadc7bdee7))
+
 ## [1.84.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.0...v1.84.1) (2023-06-13)
 
 
