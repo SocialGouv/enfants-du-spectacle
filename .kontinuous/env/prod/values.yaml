@@ -45,7 +45,7 @@ jobs:
         buildArgs:
           NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: production
-          START_SCRIPT=start
+          START_SCRIPT: start
           NEXT_PUBLIC_FORMULAIRE_HJID: 3347496
           NEXT_PUBLIC_FORMULAIRE_HJS: 6
           NEXT_PUBLIC_MATOMO_URL: https://matomo.fabrique.social.gouv.fr/
