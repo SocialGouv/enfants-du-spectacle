@@ -1,3 +1,10 @@
+## [1.84.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.0...v1.84.1) (2023-06-13)
+
+
+### Bug Fixes
+
+* typo ([15c38cc](https://github.com/SocialGouv/enfants-du-spectacle/commit/15c38cc01f417cb9e2339b2f9ec1f00abdab41bf))
+
 # [1.84.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.3...v1.84.0) (2023-06-13)
 
 
