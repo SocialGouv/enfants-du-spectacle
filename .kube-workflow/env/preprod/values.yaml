@@ -1,6 +1,0 @@
-app:
-  addVolumes:
-    - docs
-app-form:
-  addVolumes:
-    - docs-form
