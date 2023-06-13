@@ -1,3 +1,10 @@
+# [1.84.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.3...v1.84.0) (2023-06-13)
+
+
+### Features
+
+* ci on kontinuous ([#566](https://github.com/SocialGouv/enfants-du-spectacle/issues/566)) ([d52c9d2](https://github.com/SocialGouv/enfants-du-spectacle/commit/d52c9d2c6a7b8766e6ff9406789f652f00be10b8))
+
 ## [1.83.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.2...v1.83.3) (2023-05-31)
 
 
