@@ -4,12 +4,14 @@ import {
   Enfant,
   PieceDossier,
   PieceDossierEnfant,
+  Remuneration,
   SocieteProduction,
   User,
 } from "@prisma/client";
 import { DemandeurData, statusGroup } from "src/lib/types";
 
 type EnfantData = Enfant & {
+  remuneration: Remuneration[];
   piecesDossier: PieceDossierEnfant[];
 };
 

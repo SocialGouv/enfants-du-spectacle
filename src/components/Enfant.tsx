@@ -1,3 +1,5 @@
+import "react-datepicker/dist/react-datepicker.css";
+
 import type {
   Dossier,
   Enfant,
@@ -7,26 +9,27 @@ import type {
 } from "@prisma/client";
 import _ from "lodash";
 import { useSession } from "next-auth/react";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
 import type { Comments } from "src/lib/fetching/comments";
+import { uploadDoc } from "src/lib/fetching/docs";
+import { passEnfant } from "src/lib/fetching/enfants";
 import {
   INFOS_REPRESENTANTS,
+  REMUNERATIONS,
   TYPE_CONSULTATION_MEDECIN,
 } from "src/lib/helpers";
 import { updateCommentairesNotifications, updateEnfant } from "src/lib/queries";
-import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import type { Remuneration } from "src/lib/types";
 
 import Accordion from "./Accordion";
 import InputComments from "./inputComments";
 import ListComments from "./ListComments";
-import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 import InputFile from "./uiComponents/InputFile";
-import { uploadDoc } from "src/lib/fetching/docs";
-import { passEnfant } from "src/lib/fetching/enfants";
+import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
@@ -34,6 +37,7 @@ interface Props {
   dossier: Dossier;
   comments: Comments[];
   actionComments: (comment: Comments) => void;
+  remunerations: Remuneration[];
 }
 
 const EnfantComponent: React.FC<Props> = ({
@@ -42,14 +46,181 @@ const EnfantComponent: React.FC<Props> = ({
   dossier,
   comments,
   actionComments,
+  remunerations,
 }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
-  console.log('datalinks : ', dataLinks)
-  console.log('enfant : ', enfant)
+  
+  const nombreDeLignes = remunerations.find(
+    (remuneration) => remuneration.nombreLignes
+  )?.nombreLignes;
+
+  const RemunerationsDetails: React.FC<{
+    remuneration: Remuneration;
+    matchingLabel: string | undefined;
+  }> = ({ remuneration, matchingLabel }): JSX.Element => {
+    const montant = remuneration.montant ?? 0;
+    const nombre = remuneration.nombre ?? 0;
+    const total = montant * nombre;
+    const formattedTotal = Number.isInteger(total)
+      ? total.toString()
+      : total.toFixed(2);
+
+    return (
+      <div>
+        <span
+          className={
+            matchingLabel === "Forfait" ? styles.remunerationTitle : ""
+          }
+        >
+          {matchingLabel}:{" "}
+        </span>
+        <span style={{ fontWeight: "bold" }}>{formattedTotal}€</span>{" "}
+        {`(${nombre} ${nombre > 1 ? "cachets" : "cachet"} de ${montant}€) ${
+          remuneration.comment ? `- ${remuneration.comment}` : ""
+        }`}
+        {remuneration.totalDadr && (
+          <ul style={{ padding: 0 }}>
+            <li>
+              Montant total DADR:{" "}
+              <span style={{ fontWeight: "bold" }}>
+                {remuneration.totalDadr}€
+              </span>
+            </li>
+          </ul>
+        )}
+      </div>
+    );
+  };
+
+  const RemunerationsList: React.FC = () => {
+    const remunerationForfait = remunerations.find(
+      (rem) => rem.typeRemuneration === "forfait"
+    );
+
+    const hasAdditionalRemunerations: boolean = remunerations.some(
+      (remuneration) =>
+        REMUNERATIONS.some((category) => {
+          const additionalRemunerations =
+            category["Rémunérations additionnelles"];
+          return additionalRemunerations?.some(
+            (item) => item.value === remuneration.natureCachet
+          );
+        })
+    );
+    const hasGuaranteeRemunerations: boolean = remunerations.some(
+      (remuneration) =>
+        REMUNERATIONS.some((category) => {
+          const guaranteeRemunerations = category["Rémunérations garanties"];
+          return guaranteeRemunerations?.some(
+            (item) => item.value === remuneration.natureCachet
+          );
+        })
+    );
+    return (
+      <div className={styles.remunerationBloc}>
+        {remunerationForfait && (
+          <div style={{ paddingBottom: "20px" }}>
+            <RemunerationsDetails
+              remuneration={remunerationForfait}
+              matchingLabel={"Forfait"}
+            />
+          </div>
+        )}
+        <div style={{ paddingBottom: "20px" }}>
+          <div className={styles.remunerationTitle}>
+            Rémunérations garanties
+          </div>
+          {hasGuaranteeRemunerations ? (
+            <div>
+              {remunerations.map((remuneration) => {
+                const matchingLabelGuarantee = REMUNERATIONS.flatMap(
+                  (category) => category["Rémunérations garanties"]
+                ).find(
+                  (item) => item?.value === remuneration.natureCachet
+                )?.label;
+                return (
+                  <div key={remuneration.id}>
+                    {matchingLabelGuarantee && (
+                      <ul>
+                        {remuneration.typeRemuneration === "cachet" && (
+                          <li>
+                            <RemunerationsDetails
+                              remuneration={remuneration}
+                              matchingLabel={
+                                remuneration.autreNatureCachet
+                                  ? remuneration.autreNatureCachet
+                                  : matchingLabelGuarantee
+                              }
+                            />
+                          </li>
+                        )}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div>Pas de rémunérations garanties</div>
+          )}
+        </div>
+        <div className={styles.remunerationTitle}>
+          Rémunérations additionnelles
+        </div>
+        {hasAdditionalRemunerations ? (
+          <div>
+            {remunerations.map((remuneration) => {
+              const matchingLabelMore = REMUNERATIONS.flatMap(
+                (category) => category["Rémunérations additionnelles"]
+              ).find(
+                (item) => item?.value === remuneration.natureCachet
+              )?.label;
+              return (
+                <div key={remuneration.id}>
+                  {matchingLabelMore && (
+                    <ul>
+                      {remuneration.typeRemuneration === "cachet" && (
+                        <li>
+                          <RemunerationsDetails
+                            remuneration={remuneration}
+                            matchingLabel={
+                              remuneration.autreNatureCachet
+                                ? remuneration.autreNatureCachet
+                                : matchingLabelMore
+                            }
+                          />
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div>Pas de rémunérations additionnelles</div>
+        )}
+      </div>
+    );
+  };
+
+  const totalRemunerations = () => {
+    const total = remunerations.reduce((acc, obj) => {
+      const montant = obj.montant ? obj.montant : 0;
+      const nombre = obj.nombre ? obj.nombre : 1;
+      const totalDadr = obj.totalDadr
+        ? parseFloat(obj.totalDadr.toString())
+        : 0;
+
+      const calculatedValue = montant * nombre + totalDadr;
+      return acc + calculatedValue;
+    }, 0);
+    return total.toFixed(2);
+  };
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     setFormData({
@@ -69,7 +240,7 @@ const EnfantComponent: React.FC<Props> = ({
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const data = new FormData();
     data.append(e.target.name, e.target.files[0]);
-    let upload = await uploadDoc(
+    const upload = await uploadDoc(
       data,
       dossier.externalId ?? "",
       formData.externalId ?? "",
@@ -83,7 +254,7 @@ const EnfantComponent: React.FC<Props> = ({
         ...formData.justificatifs,
         TYPE_CONSULTATION_MEDECIN.find(
           (type) => type.value === formData.typeConsultationMedecin
-        )?.typeJustif as JustificatifEnfant,
+        )?.typeJustif!,
       ],
     });
   };
@@ -98,9 +269,9 @@ const EnfantComponent: React.FC<Props> = ({
 
   useEffect(() => {
     if (mountedRef) {
-      passEnfant(formData)
+      passEnfant(formData);
     }
-  }, [formData.dateConsultation])
+  }, [formData.dateConsultation]);
 
   useEffect(() => {
     setMountedRef(true);
@@ -133,45 +304,14 @@ const EnfantComponent: React.FC<Props> = ({
       >
         <div className={styles.wrapperFoldable}>
           <Info title="Rémunération" className={styles.info}>
-            Rémunération:
-            <ul>
-              <li>
-                Cachets: total{" "}
-                <span style={{ fontWeight: "bold" }}>
-                  {enfant.nombreCachets * enfant.montantCachet}€
-                </span>{" "}
-                ({" "}
-                <span style={{ fontWeight: "bold" }}>
-                  {enfant.nombreCachets}
-                </span>{" "}
-                cachets x{" "}
-                <span style={{ fontWeight: "bold" }}>
-                  {enfant.montantCachet}€
-                </span>
-                {")"}
-              </li>
-            </ul>
-            <div>
-              {enfant.typeEmploi == "DOUBLAGE" && (
-                <span>
-                  nombre de lignes : <b>{enfant.nombreLignes}</b>
-                </span>
-              )}
-            </div>
-            <div>
-              {!enfant.remunerationsAdditionnelles && (
-                <i>Pas de rémunération additionnelle</i>
-              )}
-              {enfant.remunerationsAdditionnelles && (
-                <>
-                  Rémunérations additionnelles:{" "}
-                  {enfant.remunerationsAdditionnelles}
-                </>
-              )}
-            </div>
-            <div>
-              Total: <b>{enfant.remunerationTotale}€</b>
-            </div>
+            {remunerations.length > 0 ? (
+              <div>
+                <RemunerationsList />
+                Total: <b>{totalRemunerations()}€</b>
+              </div>
+            ) : (
+              <div>Pas de rémunérations</div>
+            )}
           </Info>
           <Info title="Conditions de travail" className={styles.info}>
             <div>
@@ -180,7 +320,7 @@ const EnfantComponent: React.FC<Props> = ({
             </div>
             <div>
               Nombre de lignes :{" "}
-              <b>{enfant.nombreLignes ? enfant.nombreLignes : <i>n/a</i>}</b>
+              <b>{nombreDeLignes ? nombreDeLignes : <i>n/a</i>}</b>
             </div>
             <div>
               Période :{" "}

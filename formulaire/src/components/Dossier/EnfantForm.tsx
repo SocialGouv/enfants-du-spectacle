@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./DossierForm.module.scss";
 import { Select } from "@dataesr/react-dsfr";
-import { Enfant, JustificatifEnfant } from "@prisma/client";
 import {
+  Enfant,
+  JustificatifEnfant,
+  NatureCachet,
+  Remuneration,
+} from "@prisma/client";
+import {
+  REMUNERATIONS,
   TYPE_EMPLOI,
   frenchDateText,
   useDebouncedCallback,
@@ -23,7 +29,12 @@ import { ButtonLink } from "src/uiComponents/button";
 import { deleteEnfant } from "src/fetching/enfant";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
-import { RiInformationFill } from "react-icons/ri";
+import { BiTrash } from "react-icons/bi";
+import {
+  createRemuneration,
+  deleteRemunerationsByEnfantId,
+  deleteRemunerationById,
+} from "src/fetching/remuneration";
 
 interface Props {
   enfant: EnfantData;
@@ -40,12 +51,19 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     React.useState<Boolean>(true);
   const contextDossier = { ...useStateContext() };
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [defaultTypeRemuneration, setDefaultTypeRemuneration] = React.useState<
+    string | null
+  >(null);
+  const [remunerationList, setRemunerationList] = useState<Remuneration[]>([]);
+  const [totalRemuneration, setTotalRemuneration] = useState<
+    number | undefined
+  >(0);
 
   const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
+    const target = e.target as HTMLInputElement;
     setEnfant({
       ...enfantTmp,
-      [e.target.id]: e.currentTarget.value,
+      [target.id]: target.value,
     });
   };
 
@@ -67,7 +85,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   }, [dataPassed]);
 
   const handleSelect = (enfant: EnfantWithDosier) => {
-    console.log("enfant to handle : ", enfant);
     setEnfant({
       ...enfantTmp,
       nom: enfant.nom,
@@ -115,38 +132,40 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   };
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const data = new FormData();
-    data.append(e.target.name, e.target.files[0]);
-    let upload = await uploadDoc(data, enfantTmp.dossierId);
-    let res = await createPieceEnfant({
-      nom: e.target.files[0].name,
-      enfantId: enfantTmp.id,
-      type: e.target.id as JustificatifEnfant,
-      externalId: "",
-      link: upload.filePath,
-      statut: null,
-      dossierId: contextDossier.dossier.id,
-    });
-    setEnfant({
-      ...enfantTmp,
-      piecesDossier: enfantTmp.piecesDossier
-        ? [...enfantTmp.piecesDossier, res.pieceDossier]
-        : [res.pieceDossier],
-    });
-    contextDossier.processInput("docs", "enfants", [
-      {
-        id: enfantTmp.id,
-        piecesDossier: [
-          ...(contextDossier.docs.enfants.find((enf) => enf.id === enfantTmp.id)
-            ?.piecesDossier ?? []),
-          res.tokenizedLink,
-        ],
-      },
-      ...contextDossier.docs.enfants.filter(
-        (docEnfant) => docEnfant.id !== enfantTmp.id
-      ),
-    ]);
-    console.log("test : ", contextDossier.docs);
+    if (e.target.files) {
+      const data = new FormData();
+      data.append(e.target.name, e.target.files[0]);
+      let upload = await uploadDoc(data, enfantTmp.dossierId);
+      let res = await createPieceEnfant({
+        nom: e.target.files[0].name,
+        enfantId: enfantTmp.id,
+        type: e.target.id as JustificatifEnfant,
+        externalId: "",
+        link: upload.filePath,
+        statut: null,
+        dossierId: contextDossier.dossier.id,
+      });
+      setEnfant({
+        ...enfantTmp,
+        piecesDossier: enfantTmp.piecesDossier
+          ? [...enfantTmp.piecesDossier, res.pieceDossier]
+          : [res.pieceDossier],
+      });
+      contextDossier.processInput("docs", "enfants", [
+        {
+          id: enfantTmp.id,
+          piecesDossier: [
+            ...(contextDossier.docs.enfants.find(
+              (enf) => enf.id === enfantTmp.id
+            )?.piecesDossier ?? []),
+            res.tokenizedLink,
+          ],
+        },
+        ...contextDossier.docs.enfants.filter(
+          (docEnfant) => docEnfant.id !== enfantTmp.id
+        ),
+      ]);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -163,10 +182,173 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     await deleteEnfant(enfant.id);
   };
 
+  React.useEffect(() => {
+    if (enfant.remuneration && enfant.remuneration.length) {
+      const hasForfait = enfant.remuneration.some(
+        (remuneration) => remuneration.typeRemuneration === "forfait"
+      );
+      if (hasForfait) {
+        setDefaultTypeRemuneration("forfait");
+      } else {
+        setDefaultTypeRemuneration("cachet");
+      }
+
+      // Mettre l'objet "forfait" en première position du tableau
+      const sortedRemunerations = [...enfant.remuneration].sort((a, b) => {
+        if (a.typeRemuneration === "forfait") return -1;
+        if (b.typeRemuneration === "forfait") return 1;
+        return 0;
+      });
+
+      setRemunerationList(sortedRemunerations);
+    }
+  }, []);
+
+  const handleRemunerationChange = (
+    index: number,
+    field: keyof Remuneration,
+    value: string | number | null
+  ) => {
+    const updatedRemunerations = [...remunerationList];
+    (updatedRemunerations[index] as any)[field] = value;
+    setRemunerationList(updatedRemunerations);
+    setEnfant({ ...enfantTmp, remuneration: updatedRemunerations });
+  };
+
+  const addCachet = async (value?: string) => {
+    const newRemuneration = {
+      typeRemuneration: value === "forfait" ? "forfait" : "cachet",
+      natureCachet: null,
+      autreNatureCachet: null,
+      montant: null,
+      nombre: null,
+      nombreLignes: null,
+      totalDadr: null,
+      comment: null,
+      enfantId: enfantTmp.id,
+    } as Remuneration;
+
+    const resRemuneration = await createRemuneration(newRemuneration);
+
+    setEnfant((enfant) => ({
+      ...enfant,
+      remuneration: [...enfant.remuneration, resRemuneration],
+    }));
+
+    setRemunerationList((prevRemunerationList) => [
+      ...prevRemunerationList,
+      resRemuneration,
+    ]);
+  };
+  const handleDeleteRemuneration = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setDefaultTypeRemuneration(selectedValue);
+    deleteAllRemunerations(selectedValue);
+  };
+
+  const deleteAllRemunerations = async (value: string) => {
+    setEnfant({
+      ...enfantTmp,
+      remuneration: [],
+    });
+    setRemunerationList([]);
+
+    await deleteRemunerationsByEnfantId(enfant.id);
+    if (value === "forfait" || value === "cachet") await addCachet(value);
+  };
+
+  const deleteRemuneration = async (index: number, remunerationId: number) => {
+    await deleteRemunerationById(remunerationId);
+
+    setRemunerationList((prevList) => {
+      const newList = [...prevList];
+      newList.splice(index, 1);
+      return newList;
+    });
+
+    setEnfant((prevEnfant) => {
+      const updatedRemuneration = prevEnfant.remuneration.filter(
+        (remuneration) => remuneration.id !== remunerationId
+      );
+
+      return {
+        ...prevEnfant,
+        remuneration: updatedRemuneration,
+      };
+    });
+
+    if (remunerationList.length === 0) setDefaultTypeRemuneration(null);
+  };
+
+  const selectTypeRemunerationValue = (): string => {
+    if (remunerationList.length > 0) {
+      if (
+        remunerationList.some(
+          (remuneration) => remuneration.typeRemuneration === "forfait"
+        )
+      ) {
+        return "forfait";
+      } else {
+        return "cachet";
+      }
+    } else return "";
+  };
+
+  const handleTotalRemuneration = () => {
+    const total = remunerationList.reduce((acc, obj) => {
+      const montant = obj.montant ? obj.montant : 0;
+      const nombre = obj.nombre ? obj.nombre : 1;
+      const totalDadr = obj.totalDadr
+        ? parseFloat(obj.totalDadr.toString())
+        : 0;
+
+      const calculatedValue = montant * nombre + totalDadr;
+      return acc + calculatedValue;
+    }, 0);
+    setTotalRemuneration(total);
+  };
+
+  React.useEffect(() => {
+    handleTotalRemuneration();
+  }, [remunerationList]);
+
   const saveEnfant = useDebouncedCallback(() => {
     updateEnfant(enfantTmp);
     refresh(enfantTmp);
   }, 1000);
+
+  interface Option {
+    label: string;
+    value: string;
+    disabled?: boolean;
+  }
+
+  const defaultValue: Option = {
+    label: "Sélectionner",
+    value: "",
+  };
+
+  const options: Option[] = [
+    defaultValue,
+    {
+      label: "Rémunérations garanties",
+      value: "",
+      disabled: true,
+    },
+    ...(REMUNERATIONS.find(
+      (group) => Object.keys(group)[0] === "Rémunérations garanties"
+    )?.["Rémunérations garanties"] ?? []),
+    {
+      label: "Rémunérations additionnelles",
+      value: "",
+      disabled: true,
+    },
+    ...(REMUNERATIONS.find(
+      (group) => Object.keys(group)[0] === "Rémunérations additionnelles"
+    )?.["Rémunérations additionnelles"] ?? []),
+  ];
 
   React.useEffect(() => {
     let total = 0;
@@ -312,9 +494,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
-
       <h5 className={styles.h5Spacer}>Périodes de travail liées à l'enfant</h5>
-
       <div className={styles.blocForm}>
         <label htmlFor="periodeTravail" className="mb-2 italic">
           Période de travail *
@@ -335,7 +515,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           className="inputText"
         />
       </div>
-
       <div className={styles.blocForm}>
         <label htmlFor="contexteTravail" className="mb-2 italic">
           Temps et lieu de travail *
@@ -358,12 +537,11 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
-
       <div className={styles.blocForm}>
         <label className={styles.radioMedecine}>
           <input
             type="checkbox"
-            checked={enfantTmp.checkTravailNuit}
+            checked={enfantTmp.checkTravailNuit ?? false}
             onChange={() => {
               setEnfant({
                 ...enfantTmp,
@@ -393,121 +571,338 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </>
         )}
       </div>
-
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
-
-      <div className={styles.byThreeForm}>
-        <div className={styles.blocForm}>
-          <label htmlFor="montantCachet" className="mb-2 italic">
-            Montant du cachet *
+      <div
+        className={styles.blocForm}
+        style={{
+          marginBottom: "20px",
+          maxWidth: "18rem",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "20px",
+            maxWidth: "15rem",
+          }}
+          className={`${styles.inputItem}`}
+        >
+          <label htmlFor="typeRemuneration" className={styles.inputLabel}>
+            Type de rémunérations *
           </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.montantCachet}
-            disabled={!allowChanges}
-            type="number"
-            min="0"
-            step="0.01"
-            lang="en-US"
-            id="montantCachet"
-            name="montantCachet"
-            className="inputText"
-            onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
-              handleFocus(e)
-            }
-          />
-        </div>
-
-        <div className={styles.blocForm}>
-          <label htmlFor="nombreCachets" className="mb-2 italic">
-            Nombre de cachets *
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.nombreCachets || 0}
-            disabled={!allowChanges}
-            type="number"
-            min="0"
-            id="nombreCachets"
-            name="nombreCachets"
-            className="inputText"
-            onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
-              handleFocus(e)
-            }
-          />
-        </div>
-
-        <div className={styles.blocForm}>
-          <label htmlFor="nombreLignes" className="mb-2 italic">
-            Nombre de lignes{" "}
-            <RiInformationFill
-              cursor={"pointer"}
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            />
-          </label>
-          {showTooltip && (
-            <div className={styles.tooltip}>Pour le doublage uniquement</div>
-          )}
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.nombreLignes || 0}
-            disabled={!allowChanges}
-            type="number"
-            min="0"
-            id="nombreLignes"
-            name="nombreLignes"
-            className="inputText"
-            onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
-              handleFocus(e)
-            }
+          <Select
+            id="typeRemuneration"
+            selected={selectTypeRemunerationValue()}
+            options={[
+              defaultValue,
+              { label: "Cachet", value: "cachet" },
+              { label: "Forfait", value: "forfait" },
+            ]}
+            onChange={handleDeleteRemuneration}
           />
         </div>
       </div>
+      {remunerationList.length > 0 && (
+        <div
+          className={styles.byThreeForm}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "start",
+            flexDirection: "column",
+          }}
+        >
+          {remunerationList.map((rem, index) => (
+            <div className={styles.blocForm} key={index}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "end",
+                  justifyContent: "flex-start",
+                  gap: "20px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {rem.typeRemuneration === "cachet" && (
+                  <div>
+                    <label htmlFor="natureCachet" className="mb-2 italic">
+                      Nature du cachet *
+                    </label>
+                    <Select
+                      id="natureCachet"
+                      selected={
+                        remunerationList[index].natureCachet ??
+                        defaultValue.value
+                      }
+                      options={options}
+                      onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                        const updatedRemunerations = [...remunerationList];
+                        const natureCachetValue = (e.target as HTMLInputElement)
+                          .value;
+                        const natureCachet: NatureCachet | null =
+                          natureCachetValue !== ""
+                            ? (natureCachetValue as NatureCachet)
+                            : null;
+                        updatedRemunerations[index] = {
+                          ...updatedRemunerations[index],
+                          nombreLignes: null,
+                          totalDadr: null,
+                          autreNatureCachet: null,
+                          comment: null,
+                          natureCachet: natureCachet,
+                        };
+                        setRemunerationList(updatedRemunerations);
+                        setEnfant({
+                          ...enfantTmp,
+                          remuneration: updatedRemunerations,
+                        });
+                      }}
+                    />
+                  </div>
+                )}
+                {rem.typeRemuneration !== null && (
+                  <>
+                    {(rem.natureCachet === "AUTRE_GARANTIE" ||
+                      rem.natureCachet === "AUTRE_ADDITIONNELLE") && (
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "20px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div>
+                          <label
+                            htmlFor="autreNatureCachet"
+                            className="mb-2 italic"
+                          >
+                            Nom du cachet *
+                          </label>
+                          <input
+                            onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                              handleRemunerationChange(
+                                index,
+                                "autreNatureCachet",
+                                e.currentTarget.value
+                              )
+                            }
+                            value={
+                              remunerationList[index]?.autreNatureCachet ?? ""
+                            }
+                            disabled={!allowChanges}
+                            type="text"
+                            lang="en-US"
+                            id="autreNatureCachet"
+                            name="autreNatureCachet"
+                            className="inputText"
+                            onFocus={(
+                              e: React.FocusEvent<HTMLInputElement, Element>
+                            ) => handleFocus(e)}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="commentaireCachet"
+                            className="mb-2 italic"
+                          >
+                            Commentaire
+                          </label>
+                          <input
+                            onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                              handleRemunerationChange(
+                                index,
+                                "comment",
+                                e.currentTarget.value
+                              )
+                            }
+                            value={remunerationList[index]?.comment ?? ""}
+                            disabled={!allowChanges}
+                            type="text"
+                            lang="en-US"
+                            id="commentaireCachet"
+                            name="commentaireCachet"
+                            className="inputText"
+                            onFocus={(
+                              e: React.FocusEvent<HTMLInputElement, Element>
+                            ) => handleFocus(e)}
+                          />
+                        </div>
+                      </div>
+                    )}
 
-      <div className={styles.blocForm}>
-        <label htmlFor="remunerationsAdditionnelles" className="mb-2 italic">
-          Rémunérations additionnelles
-        </label>
-        <p className={styles.smallText}>
-          Veuillez indiquer le montant total des rémunérations additionnelles,
-          cachet de sécurité, de répétition ou de post synchro confondus.
-        </p>
-        <input
-          onChange={handleFormEnfant}
-          value={enfantTmp?.remunerationsAdditionnelles || ""}
-          disabled={!allowChanges}
-          type="number"
-          min="0"
-          id="remunerationsAdditionnelles"
-          name="remunerationsAdditionnelles"
-          className="inputText"
-        />
-      </div>
-
-      <div className={styles.halfForm}>
-        <div className={styles.blocForm}>
-          <label htmlFor="remunerationTotale" className="mb-2 italic">
-            Rémunération totale *
-          </label>
-          <input
-            onChange={handleFormEnfant}
-            value={enfantTmp?.remunerationTotale}
-            disabled={!allowChanges}
-            type="number"
-            min="0"
-            id="remunerationTotale"
-            name="remunerationTotale"
-            className="inputText"
-            onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
-              handleFocus(e)
-            }
-          />
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "end",
+                        justifyContent: "flex-start",
+                        gap: "20px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <label htmlFor="montant" className="mb-2 italic">
+                          Montant du{" "}
+                          {rem.typeRemuneration === "cachet"
+                            ? "cachet"
+                            : "forfait"}{" "}
+                          *
+                        </label>
+                        <input
+                          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                            handleRemunerationChange(
+                              index,
+                              "montant",
+                              parseFloat(e.currentTarget.value)
+                            )
+                          }
+                          value={remunerationList[index]?.montant ?? ""}
+                          disabled={!allowChanges}
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          lang="en-US"
+                          id="montant"
+                          name="montant"
+                          className="inputText"
+                          onFocus={(
+                            e: React.FocusEvent<HTMLInputElement, Element>
+                          ) => handleFocus(e)}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="nombre" className="mb-2 italic">
+                          Nombre de{" "}
+                          {rem.typeRemuneration === "cachet"
+                            ? "cachet"
+                            : "forfait"}{" "}
+                          *
+                        </label>
+                        <input
+                          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                            handleRemunerationChange(
+                              index,
+                              "nombre",
+                              parseInt(e.currentTarget.value)
+                            )
+                          }
+                          value={remunerationList[index]?.nombre ?? ""}
+                          disabled={!allowChanges}
+                          type="number"
+                          min="0"
+                          id="nombre"
+                          name="nombre"
+                          className="inputText"
+                          onFocus={(
+                            e: React.FocusEvent<HTMLInputElement, Element>
+                          ) => handleFocus(e)}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {rem.natureCachet === "CACHET_DOUBLAGE" && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "20px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <label htmlFor="nombreLignes" className="mb-2 italic">
+                        Nombre de lignes *
+                      </label>
+                      <input
+                        onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                          handleRemunerationChange(
+                            index,
+                            "nombreLignes",
+                            parseInt(e.currentTarget.value)
+                          )
+                        }
+                        value={remunerationList[index]?.nombreLignes ?? ""}
+                        disabled={!allowChanges}
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        lang="en-US"
+                        id="nombreLignes"
+                        name="nombreLignes"
+                        className="inputText"
+                        onFocus={(
+                          e: React.FocusEvent<HTMLInputElement, Element>
+                        ) => handleFocus(e)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="totalDadr" className="mb-2 italic">
+                        Montant total DADR *
+                      </label>
+                      <input
+                        onChange={(e: React.FormEvent<HTMLInputElement>) =>
+                          handleRemunerationChange(
+                            index,
+                            "totalDadr",
+                            parseFloat(e.currentTarget.value)
+                          )
+                        }
+                        value={remunerationList[index]?.totalDadr ?? ""}
+                        disabled={!allowChanges}
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        lang="en-US"
+                        id="totalDadr"
+                        name="totalDadr"
+                        className="inputText"
+                        onFocus={(
+                          e: React.FocusEvent<HTMLInputElement, Element>
+                        ) => handleFocus(e)}
+                      />
+                    </div>
+                  </div>
+                )}
+                <BiTrash
+                  className={styles.closeBtn}
+                  size={18}
+                  onClick={() => deleteRemuneration(index, rem.id)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-
+      )}
+      {remunerationList.length ? (
+        <div>
+          <div className={styles.addCachetBtn}>
+            <ButtonLink light={true} onClick={addCachet}>
+              Ajouter un cachet{" "}
+              {defaultTypeRemuneration === "forfait" ? "isolé" : ""}
+            </ButtonLink>
+          </div>
+          <div className={styles.halfForm}>
+            <div className={styles.addCachetBtn}>
+              <label htmlFor="remunerationTotale" className="mb-2 italic">
+                Rémunération totale (€)
+              </label>
+              <input
+                value={totalRemuneration}
+                type="number"
+                min="0"
+                id="remunerationTotale"
+                name="remunerationTotale"
+                className="inputText"
+                onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
+                  handleFocus(e)
+                }
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <h5 className={styles.h5Spacer}>{"Avis médical d'aptitude"}</h5>
-
       <div className={styles.blocForm}>
         <label htmlFor="remunerationTotale" className="mb-2 italic">
           {"L'enfant doit consulter :"}
@@ -725,7 +1120,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
             className="inputText"
           />
         </div>
-
+        
         <div className={styles.blocForm}>
           <label htmlFor="telRepresentant1" className="mb-2 italic">
             Téléphone du représentant légal 1
@@ -758,11 +1153,10 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       </div>
       <br />
       <br />
-
+      
       <h5 className={styles.h5Spacer}>
         {"Pièces justificatives liées à l'enfant"}
       </h5>
-
       <div className={styles.blocForm}>
         <InputFile
           id={"LIVRET_FAMILLE"}
@@ -777,7 +1171,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Ce document doit être à jour.`}
         />
       </div>
-
       <div className={styles.blocForm}>
         <InputFile
           id={"AUTORISATION_PARENTALE"}
@@ -792,7 +1185,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`En cas d'absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l'enfant.`}
         />
       </div>
-
       <div className={styles.blocForm}>
         <InputFile
           id={"SITUATION_PARTICULIERE"}
@@ -807,7 +1199,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc).`}
         />
       </div>
-
       <div className={styles.blocForm}>
         <InputFile
           id={"CONTRAT"}
@@ -822,7 +1213,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           text={`Veuillez fournir un document présentant de manière précise et détaillée, le projet de contrat de travail.`}
         />
       </div>
-
       <div className={styles.blocForm}>
         <InputFile
           id={"CERTIFICAT_SCOLARITE"}

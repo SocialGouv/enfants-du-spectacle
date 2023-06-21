@@ -19,6 +19,40 @@
   padding-bottom: 2rem;
 }
 
+.remunerationBloc {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-bottom: 20px;
+  font-size: 16px !important; 
+}
+
+.remunerationBloc ul {
+  margin: 0; 
+  list-style: none; 
+}
+.remunerationBloc ul li {
+  margin: 0; 
+  position: relative;
+}
+
+.remunerationBloc ul li::before {
+  content: ""; 
+  display: inline-block;
+  width: 0.2em; 
+  height: 0.2em; 
+  background-color: black; 
+  border-radius: 50%; 
+  position: absolute;
+  top: 0.7em; 
+  left: -0.5em; 
+}
+
+.remunerationTitle {
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
 .adressesGrid form{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

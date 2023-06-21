@@ -304,6 +304,28 @@ const CONVENTIONS = [
   }
 ];
 
+const REMUNERATIONS = [{
+    "Rémunérations garanties": [
+    {label: "Cachet de tournage", value: "CACHET_TOURNAGE"},
+    {label: "Cachet de doublage", value: "CACHET_DOUBLAGE"},
+    {label: "Cachet de représentation", value: "CACHET_REPRESENTATION"},
+    {label: "Cachet de répétition", value: "CACHET_REPETITION"},
+    {label: "Cachet de horaire", value: "CACHET_HORAIRE"},
+    {label: "Autre", value: "AUTRE_GARANTIE"},
+    
+  ],
+},
+{
+  "Rémunérations additionnelles": [
+    {label: "Cachet de sécurité", value: "CACHET_SECURITE"},
+    {label: "Cachet de post-synchro", value: "CACHET_POST_SYNCHRO"},
+    {label: "Cachet de captation", value: "CACHET_CAPTATION"},
+    {label: "Cachet spectacle vivant", value: "CACHET_SPECTACLE_VIVANT"},
+    {label: "Cachet RETAKE", value: "CACHET_RETAKE"},
+    {label: "Autre", value: "AUTRE_ADDITIONNELLE"},
+   ]}
+]
+
 const SCHEMA_ENFANTS = {
   'Date de création': {
     prop: 'date',
@@ -447,7 +469,6 @@ const SCHEMA_ENFANTS = {
   },
 }
 
-
 export {
     frenchDateText,
     frenchDateHour,
@@ -461,5 +482,6 @@ export {
     CATEGORIES,
     CONVENTIONS,
     SCENES_SENSIBLES,
+    REMUNERATIONS,
     SCHEMA_ENFANTS
   };

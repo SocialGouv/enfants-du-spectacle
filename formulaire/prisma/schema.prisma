@@ -197,6 +197,35 @@ enum TypeConsultation {
   UNNEEDED
 }
 
+enum NatureCachet {
+  CACHET_TOURNAGE
+  CACHET_DOUBLAGE
+  CACHET_REPRESENTATION
+  CACHET_REPETITION
+  CACHET_HORAIRE
+  CACHET_SECURITE
+  CACHET_POST_SYNCHRO
+  CACHET_CAPTATION
+  CACHET_SPECTACLE_VIVANT
+  CACHET_RETAKE
+  AUTRE_GARANTIE
+  AUTRE_ADDITIONNELLE
+}
+
+model Remuneration {
+  id                Int           @id @default(autoincrement())
+  typeRemuneration  String?
+  natureCachet      NatureCachet?
+  autreNatureCachet String?
+  montant           Float?
+  nombre            Int?          @default(0)
+  nombreLignes      Int?          @default(0)
+  totalDadr         Float?
+  comment           String?
+  Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
+  enfantId          Int?
+}
+
 model Enfant {
   id                          Int                  @id @default(autoincrement())
   prenom                      String?
@@ -211,6 +240,7 @@ model Enfant {
   nombreCachets               Int?                 @default(0)
   nombreLignes                Int?                 @default(0)
   remunerationsAdditionnelles String?
+  remuneration                Remuneration[]
   remunerationTotale          Float?
   justificatifs               JustificatifEnfant[]
   piecesDossier               PieceDossierEnfant[]

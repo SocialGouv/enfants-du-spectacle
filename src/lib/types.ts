@@ -76,6 +76,19 @@ interface DataLinks {
   enfants: dossierlinks[];
 }
 
+interface Remuneration {
+  id: number;
+  typeRemuneration: string | null;
+  natureCachet: string | null;
+  autreNatureCachet: string | null;
+  montant: number | null;
+  nombre: number | null;
+  nombreLignes: number | null;
+  totalDadr: number | null;
+  comment: string | null;
+  enfantId: number | null;
+}
+
 export type {
   CommentaireData,
   CommentaireDataLight,
@@ -84,6 +97,7 @@ export type {
   DataLinks,
   DossierData,
   DossierDataLight,
+  Remuneration,
   SendListData,
   statusGroup,
 };
