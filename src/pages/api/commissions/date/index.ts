@@ -1,7 +1,9 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
@@ -17,7 +19,7 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const getUpcomingCommissions = async () => {
-  return prisma.commission.findMany({
+  return client.commission.findMany({
     orderBy: { date: "asc" },
     where: {
       date: { gte: new Date() },

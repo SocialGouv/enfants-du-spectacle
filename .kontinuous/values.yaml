@@ -1,0 +1,94 @@
+app:
+  ~chart: app
+  ~needs: [build-app]
+  imagePackage: app
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 4Gi
+  env:
+    - name: APP_BASE_URL
+      value: "https://{{ $.Values.global.host }}"
+  envFrom:
+    - secretRef:
+        name: pg-user
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+  probesPath: /api/healthz
+  replicas: 1
+
+form:
+  ~chart: app
+  ~needs: [build-form]
+  imagePackage: form
+  host: "formulaire-{{ $.Values.global.host }}"
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 4Gi
+  env:
+    - name: APP_BASE_URL
+      value: "https://formulaire-{{ $.Values.global.host }}"
+  envFrom:
+    - secretRef:
+        name: pg-user-form
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+  probesPath: /api/healthz
+  replicas: 1
+
+metabase:
+  enabled: false
+
+oauth2-proxy:
+  enabled: false
+
+
+jobs:
+  ~chart: jobs
+  runs:
+    build-app:
+      use: build
+      with:
+        imagePackage: app
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        secrets:
+          sentry_auth_token:
+            secretName: app-sealed-secret
+            secretKey: SENTRY_AUTH_TOKEN
+
+    build-form:
+      use: build
+      with:
+        imagePackage: form
+        context: formulaire
+        buildArgs:
+          NEXT_PUBLIC_SENTRY_DSN: https://11777d054b3c41c782ebced992346b39@sentry.fabrique.social.gouv.fr/59
+        secrets:
+          sentry_auth_token:
+            secretName: app-sealed-secret
+            secretKey: SENTRY_AUTH_TOKEN
+
+deactivate:
+  jobs-deactivate:
+    runs:
+      deactivate:
+        with:
+          db: true
+      drop-db2:
+        use: drop-db
+        with:
+          database: "form_{{.Values.global.branchSlug32}}"
+          databaseUser: "form_{{ .Values.global.branchSlug32 }}"
+        

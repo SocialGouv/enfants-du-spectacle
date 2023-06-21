@@ -9,8 +9,10 @@ import {
   SocieteProductionModel,
 } from "prisma/zod";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
-import prisma from "src/lib/prismaClient";
 import type { z } from "zod";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "POST") {
@@ -42,7 +44,7 @@ const post: NextApiHandler = async (req, res) => {
       otherConventionCollective: true,
       id: true,
     });
-    const createSociete = await prisma?.societeProduction.create({
+    const createSociete = await client.societeProduction.create({
       data: {
         ...SocieteData.parse(data.societeProduction),
         ["conventionCollectiveCode"]: data.demandeur.conventionCollectiveCode,
@@ -52,7 +54,7 @@ const post: NextApiHandler = async (req, res) => {
     //console.log('societe created')
 
     //HANDLE FINDING DEMANDEUR
-    const demandeurFound = await prisma?.demandeur.findUnique({
+    const demandeurFound = await client.demandeur.findUnique({
       where: {
         email: data.demandeur.email,
       },
@@ -68,7 +70,7 @@ const post: NextApiHandler = async (req, res) => {
         id: true,
         societeProductionId: true,
       });
-      createDemandeur = await prisma?.demandeur.create({
+      createDemandeur = await client.demandeur.create({
         data: {
           ...DemandeurData.parse(data.demandeur),
           fonction: "",
@@ -82,7 +84,7 @@ const post: NextApiHandler = async (req, res) => {
     }
 
     //SEARCHING FOR COMMISSION
-    const commissions: Commission[] = await prisma?.commission.findMany({
+    const commissions: Commission[] = await client.commission.findMany({
       orderBy: { date: "asc" },
       where: {
         dateLimiteDepot: { gte: new Date() },
@@ -101,7 +103,7 @@ const post: NextApiHandler = async (req, res) => {
       statut: true,
       userId: true,
     });
-    const createDossier = await prisma?.dossier.create({
+    const createDossier = await client.dossier.create({
       data: {
         ...DossierData.parse(data.dossier),
         commission: {
@@ -135,7 +137,7 @@ const post: NextApiHandler = async (req, res) => {
     //HANDLE ENFANTS
     if (data.enfants.length > 0) {
       const EnfantsData = EnfantModel.omit({ dossierId: true, id: true });
-      const CreateEnfants = await prisma?.enfant.createMany({
+      const CreateEnfants = await client.enfant.createMany({
         data: data.enfants.map((enfant) => {
           enfant.nombreJours =
             typeof enfant.nombreJours === "string"
@@ -189,7 +191,7 @@ const update: NextApiHandler = async (req, res) => {
   };
 
   try {
-    const commissions = await prisma?.commission.findMany({
+    const commissions = await client.commission.findMany({
       orderBy: { date: "asc" },
       where: {
         dateLimiteDepot: { gte: new Date() },
@@ -208,7 +210,7 @@ const update: NextApiHandler = async (req, res) => {
       statut: true,
       userId: true,
     });
-    const updateDossier = await prisma?.dossier.update({
+    const updateDossier = await client.dossier.update({
       data: {
         ...DossierData.parse(data.dossier),
         conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
@@ -225,7 +227,7 @@ const update: NextApiHandler = async (req, res) => {
     });
 
     //HANDLE ENFANTS
-    const listEnfant: Enfant[] = await prisma?.enfant.findMany({
+    const listEnfant: Enfant[] = await client.enfant.findMany({
       where: {
         dossierId: updateDossier.id,
       },
@@ -235,13 +237,7 @@ const update: NextApiHandler = async (req, res) => {
       adresseEnfant: true,
       cdc: true,
       dossierId: true,
-      id: true,
-      adresseRepresentant1: true,
-      adresseRepresentant2: true,
-      nomRepresentant1: true,
-      nomRepresentant2: true,
-      prenomRepresentant1: true,
-      prenomRepresentant2: true,
+      id: true
     });
     data.enfants.map(async (enfant) => {
       enfant.nombreJours =
@@ -270,7 +266,7 @@ const update: NextApiHandler = async (req, res) => {
         )
       ) {
         console.log("has to update enfant :", enfant);
-        const updateEnfant = await prisma?.enfant.update({
+        const updateEnfant = await client.enfant.update({
           data: {
             ...EnfantsData.parse(enfant),
             justificatifs: enfant.piecesDossier
@@ -283,7 +279,7 @@ const update: NextApiHandler = async (req, res) => {
         });
       } else {
         console.log("has to create enfant :", enfant);
-        const CreateEnfants = await prisma?.enfant.create({
+        const CreateEnfants = await client.enfant.create({
           data: {
             ...EnfantsData.parse(enfant),
             dossierId: updateDossier.id,

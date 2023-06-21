@@ -1,3 +1,4 @@
+import { Enfant } from "@prisma/client";
 import * as React from "react";
 import { useEffect } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -9,7 +10,10 @@ interface Props {
   className?: string;
   state?: boolean;
   type?: string;
+  enfant: Enfant;
+  selectedEnfant: Enfant | undefined; 
   updateComments?: (type: string) => void;
+  action: (enfant: Enfant) => void;
 }
 
 const Accordion: React.FC<Props> = ({
@@ -18,14 +22,16 @@ const Accordion: React.FC<Props> = ({
   className,
   state,
   type,
+  enfant,
+  selectedEnfant,
   updateComments,
+  action
 }) => {
   const [showContent, setShowContent] = React.useState<boolean>(false);
 
   useEffect(() => {
-    if (state) setShowContent(true);
-    else setShowContent(false);
-  }, []);
+    setShowContent(enfant.id === selectedEnfant?.id)
+  }, [selectedEnfant]);
 
   return (
     <div
@@ -46,7 +52,7 @@ const Accordion: React.FC<Props> = ({
             cursor="pointer"
             color="black"
             onClick={() => {
-              setShowContent(true);
+              action(enfant)
               if (type === "commentChildren" && updateComments) {
                 updateComments("children");
               }

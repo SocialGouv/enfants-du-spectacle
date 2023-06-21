@@ -10,6 +10,9 @@ const getAgentByDossierId = async (id: string) => {
     }
     return r.json();
   });
-  return fetching as User;
+  return fetching as {
+    instructeur: User;
+    commissionDate: Date;
+  };
 };
 export { getAgentByDossierId };

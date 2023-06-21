@@ -35,8 +35,10 @@ const remove: NextApiHandler = async (req, res) => {
     const pieceDeleted = await prisma.pieceDossierEnfant.delete({
       where: { id: pieceId }
     })
+    await prisma?.$disconnect()
     res.status(200).json({ pieceDeleted });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Piece non trouvée" });
   }

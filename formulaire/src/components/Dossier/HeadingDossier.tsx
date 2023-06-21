@@ -12,12 +12,14 @@ interface Props {
   dossier: DossierData;
   setShowDialogue?: (showDialogue: boolean) => void;
   agent?: User;
+  commissionDate?: Date;
 }
 
 const HeadingDossier: React.FC<Props> = ({
   dossier,
   setShowDialogue,
   agent,
+  commissionDate,
 }) => {
   const { data: session } = useSession();
 
@@ -45,8 +47,8 @@ const HeadingDossier: React.FC<Props> = ({
           <h2>
             Dossier n° {dossier.id}
             {`${
-              dossier.commissionString
-                ? ` pour la commission: ${dossier.commissionString}`
+              commissionDate
+                ? ` pour la commission: ${frenchDateText(commissionDate)}`
                 : ""
             }`}
           </h2>

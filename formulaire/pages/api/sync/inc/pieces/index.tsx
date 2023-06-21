@@ -45,6 +45,7 @@ const update: NextApiHandler = async (req, res) => {
           });
     console.log("piece trouvee : ", piece);
   }
+  await prisma?.$disconnect()
 
   res.status(200).json({ message: "OK" });
 };

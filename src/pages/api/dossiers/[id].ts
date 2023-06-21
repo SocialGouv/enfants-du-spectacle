@@ -2,10 +2,12 @@ import type { Dossier, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -39,7 +41,7 @@ const get: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
   const dossierId = getId(req);
 
-  const dossier = await prisma?.dossier.findUnique({
+  const dossier = await client.dossier.findUnique({
     include: {
       commentaires: {
         include: {
@@ -75,7 +77,7 @@ const get: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const dossierId = getId(req);
   try {
-    await prisma.dossier.delete({
+    await client.dossier.delete({
       where: { id: dossierId },
     });
     res.status(200).json({ message: "Dossier supprimé" });
@@ -110,7 +112,7 @@ const update: NextApiHandler = async (req, res) => {
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
 
-    const dossier: Dossier = await prisma.dossier.findUnique({
+    const dossier: Dossier | null = await client.dossier.findUnique({
       where: { id: dossierId },
     });
     if (!dossier) {
@@ -284,7 +286,7 @@ const update: NextApiHandler = async (req, res) => {
 
   console.log("updates : ", updates);
 
-  const updatedDossier = await prisma.dossier.update({
+  const updatedDossier = await client.dossier.update({
     data: updates,
     include: {
       commission: true,

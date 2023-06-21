@@ -39,8 +39,10 @@ const get: NextApiHandler = async (req, res) => {
         dossierId: dossierId,
       },
     });
+    await prisma?.$disconnect()
     res.status(200).json(pieces);
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -52,9 +54,11 @@ const remove: NextApiHandler = async (req, res) => {
     const dossierDeleted = await prisma.pieceDossier.delete({
       where: { id: pieceId },
     });
+    await prisma?.$disconnect()
     res.status(200).json({ dossierDeleted });
   } catch (e: unknown) {
     console.log(e);
+    await prisma?.$disconnect()
     res.status(200).json({ message: "Piece non trouvée" });
   }
 };

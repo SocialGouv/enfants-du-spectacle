@@ -49,6 +49,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
 
   const pieceEnfant = await prisma.pieceDossierEnfant.create({data})
   //@ts-ignore
+  await prisma?.$disconnect()
   res
       .status(200)
       .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });

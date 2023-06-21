@@ -1,3 +1,131 @@
+## [1.84.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.2...v1.84.3) (2023-06-13)
+
+
+### Bug Fixes
+
+* deactivate drop db and db2 ([f61dd03](https://github.com/SocialGouv/enfants-du-spectacle/commit/f61dd03a4d69d48bb9bdd1e805dd8716af35a523))
+
+## [1.84.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.1...v1.84.2) (2023-06-13)
+
+
+### Bug Fixes
+
+* missing config for oauth2-proxy ([608aafb](https://github.com/SocialGouv/enfants-du-spectacle/commit/608aafb0f67d8f8679f4b62f7f62befadc7bdee7))
+
+## [1.84.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.0...v1.84.1) (2023-06-13)
+
+
+### Bug Fixes
+
+* typo ([15c38cc](https://github.com/SocialGouv/enfants-du-spectacle/commit/15c38cc01f417cb9e2339b2f9ec1f00abdab41bf))
+
+# [1.84.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.3...v1.84.0) (2023-06-13)
+
+
+### Features
+
+* ci on kontinuous ([#566](https://github.com/SocialGouv/enfants-du-spectacle/issues/566)) ([d52c9d2](https://github.com/SocialGouv/enfants-du-spectacle/commit/d52c9d2c6a7b8766e6ff9406789f652f00be10b8))
+
+## [1.83.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.2...v1.83.3) (2023-05-31)
+
+
+### Bug Fixes
+
+* instantiate once for each handler ([#565](https://github.com/SocialGouv/enfants-du-spectacle/issues/565)) ([42f2f80](https://github.com/SocialGouv/enfants-du-spectacle/commit/42f2f80339a789f2ff79daca1e81c3fa3c91447d))
+
+## [1.83.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.1...v1.83.2) (2023-05-31)
+
+
+### Bug Fixes
+
+* fix infos representants, condition affichage ([#564](https://github.com/SocialGouv/enfants-du-spectacle/issues/564)) ([937101c](https://github.com/SocialGouv/enfants-du-spectacle/commit/937101cf34bf894f5b4047dae5fa372b2b8cf674))
+
+## [1.83.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.83.0...v1.83.1) (2023-05-26)
+
+
+### Bug Fixes
+
+* fix cors ([#563](https://github.com/SocialGouv/enfants-du-spectacle/issues/563)) ([7d3119a](https://github.com/SocialGouv/enfants-du-spectacle/commit/7d3119a6dad740b1664004b727024657e856ab30))
+
+# [1.83.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.9...v1.83.0) (2023-05-26)
+
+
+### Features
+
+* parcours medecine doc correctly uploaded ([#562](https://github.com/SocialGouv/enfants-du-spectacle/issues/562)) ([50f967a](https://github.com/SocialGouv/enfants-du-spectacle/commit/50f967a6a13070e28ed1919c8d07d06fad94c0a7))
+
+## [1.82.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.8...v1.82.9) (2023-05-24)
+
+
+### Bug Fixes
+
+* add more disconnects prisma ([#561](https://github.com/SocialGouv/enfants-du-spectacle/issues/561)) ([4e6ee97](https://github.com/SocialGouv/enfants-du-spectacle/commit/4e6ee97b13a893713bdc628d7656da57604103b1))
+
+## [1.82.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.7...v1.82.8) (2023-05-24)
+
+
+### Bug Fixes
+
+* disconnects users queries ([#560](https://github.com/SocialGouv/enfants-du-spectacle/issues/560)) ([ae468ae](https://github.com/SocialGouv/enfants-du-spectacle/commit/ae468ae13b01a61b42f1f136d6ba2a590ce729c9))
+
+## [1.82.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.6...v1.82.7) (2023-05-24)
+
+
+### Bug Fixes
+
+* add more disconnects ([#559](https://github.com/SocialGouv/enfants-du-spectacle/issues/559)) ([630f18b](https://github.com/SocialGouv/enfants-du-spectacle/commit/630f18b95f51aaad9f248cc7a8f6bbd1f82f14a7))
+
+## [1.82.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.5...v1.82.6) (2023-05-24)
+
+
+### Bug Fixes
+
+* manage connections prisma ([#558](https://github.com/SocialGouv/enfants-du-spectacle/issues/558)) ([55a24b0](https://github.com/SocialGouv/enfants-du-spectacle/commit/55a24b07a24875a5c2378f376de37b2ebd86e296))
+
+## [1.82.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.4...v1.82.5) (2023-05-24)
+
+
+### Bug Fixes
+
+* dossiers empty ([#557](https://github.com/SocialGouv/enfants-du-spectacle/issues/557)) ([c07c0e3](https://github.com/SocialGouv/enfants-du-spectacle/commit/c07c0e3e9ddbd4124d6f4af2a285b73c9b88c289))
+
+## [1.82.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.3...v1.82.4) (2023-05-24)
+
+
+### Bug Fixes
+
+* remove disconnects ([#555](https://github.com/SocialGouv/enfants-du-spectacle/issues/555)) ([be65ed1](https://github.com/SocialGouv/enfants-du-spectacle/commit/be65ed156d7ac32d2a528a1bb62c6a564f95b224))
+* Trigger deploy ([#556](https://github.com/SocialGouv/enfants-du-spectacle/issues/556)) ([2372aef](https://github.com/SocialGouv/enfants-du-spectacle/commit/2372aefc32bb2adccbecfe3d0e387a594452f1df))
+
+## [1.82.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.2...v1.82.3) (2023-05-24)
+
+
+### Bug Fixes
+
+* Trigger deploy ([7f44381](https://github.com/SocialGouv/enfants-du-spectacle/commit/7f443817becf392b8954562e78dd9916683024d1))
+
+## [1.82.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.1...v1.82.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* fix close connections prisma ([#553](https://github.com/SocialGouv/enfants-du-spectacle/issues/553)) ([623ba84](https://github.com/SocialGouv/enfants-du-spectacle/commit/623ba8424726bb5355b5d8fb909ae175d704c079))
+
+## [1.82.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.82.0...v1.82.1) (2023-05-24)
+
+
+### Bug Fixes
+
+* lower number replicas prod ([#552](https://github.com/SocialGouv/enfants-du-spectacle/issues/552)) ([3e18a45](https://github.com/SocialGouv/enfants-du-spectacle/commit/3e18a4565f200ccd449bb1ee7f8a352fb5b656a8))
+
+# [1.82.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.2...v1.82.0) (2023-05-24)
+
+
+### Features
+
+* get commissionDate from Instructeur side ([#550](https://github.com/SocialGouv/enfants-du-spectacle/issues/550)) ([5b0a1ac](https://github.com/SocialGouv/enfants-du-spectacle/commit/5b0a1ac98cd9870f4e1b82b09a138f1a5c927bea))
+* make date of birth required ([#551](https://github.com/SocialGouv/enfants-du-spectacle/issues/551)) ([693f6e3](https://github.com/SocialGouv/enfants-du-spectacle/commit/693f6e30afb50868c9b623328e6580019b5dd9fe))
+
 ## [1.81.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.81.1...v1.81.2) (2023-05-23)
 
 

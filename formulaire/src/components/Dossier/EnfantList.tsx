@@ -232,7 +232,12 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
         return 0;
       })
     );
-  }, [order, termOrdered]);
+  }, [order, termOrdered])
+
+  React.useEffect(() => {
+    console.log('selectedEnfant : ', selectedEnfant)
+  }, [selectedEnfant])
+
 
   return (
     <div className={styles.enfantList}>
@@ -488,6 +493,9 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                   ? birthDateToFrenchAge(moment(enfant.dateNaissance).toDate())
                   : ""
               }) - Personnage : ${enfant.nomPersonnage}`}
+              enfant={enfant}
+              selectedEnfant={selectedEnfant}
+              action={clickEnfant}
             >
               <EnfantForm
                 enfant={enfant}

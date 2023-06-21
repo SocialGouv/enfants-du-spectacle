@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "DELETE") {
@@ -16,14 +18,13 @@ function getId(req: NextApiRequest): number {
 }
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const parsed = JSON.parse(req.body as string);
   const enfantId = getId(req);
   if (parsed.api_key !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
     try {
-      await prisma.enfant.delete({
+      await client.enfant.delete({
         where: { externalId: enfantId.toString() },
       });
     } catch (e: unknown) {

@@ -1,8 +1,10 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -22,7 +24,7 @@ const handler: NextApiHandler = async (req, res) => {
 const get: NextApiHandler = async (req, res) => {
   const departement = req.query.departement;
   if (typeof departement === "string") {
-    const allUsers = await prisma.user.findMany({
+    const allUsers = await client.user.findMany({
       orderBy: { name: "asc" },
       where: {
         departements: {

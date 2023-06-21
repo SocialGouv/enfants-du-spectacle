@@ -53,6 +53,7 @@ const EnfantComponent: React.FC<Props> = ({
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
+  
   const nombreDeLignes = remunerations.find(
     (remuneration) => remuneration.nombreLignes
   )?.nombreLignes;
@@ -415,9 +416,7 @@ const EnfantComponent: React.FC<Props> = ({
                       onChange={(e) => {
                         handleForm(e);
                       }}
-                      disabled={
-                        (session.data?.dbUser as User).role === "MEDECIN"
-                      }
+                      disabled={true}
                       type="text"
                       id={row.value}
                       name={row.value}
@@ -489,11 +488,13 @@ const EnfantComponent: React.FC<Props> = ({
                 {formData.typeConsultationMedecin !== "PHYSIQUE" && (
                   <>
                     <InputFile
-                      id={`${TYPE_CONSULTATION_MEDECIN.find(
-                        (type) =>
-                          type.value === formData.typeConsultationMedecin
-                      )?.typeJustif!}`}
-                      docs={formData.piecesDossier || []}
+                      id={`${
+                        TYPE_CONSULTATION_MEDECIN.find(
+                          (type) =>
+                            type.value === formData.typeConsultationMedecin
+                        )?.typeJustif as JustificatifEnfant
+                      }`}
+                      docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
                       allowChanges={false}
                       label={`${
                         TYPE_CONSULTATION_MEDECIN.find(
@@ -515,8 +516,8 @@ const EnfantComponent: React.FC<Props> = ({
                 <Info title="AVIS MÉDICAL">
                   <InputFile
                     id={"AVIS_MEDICAL"}
-                    docs={formData.piecesDossier || []}
-                    allowChanges={false}
+                    docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
+                    allowChanges={true}
                     label={`Avis médical`}
                     handleFile={handleFile}
                     handleDelete={handleDelete}

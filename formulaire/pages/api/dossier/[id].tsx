@@ -49,9 +49,11 @@ const remove: NextApiHandler = async (req, res) => {
       }
       return r.json();
     });
+    await prisma?.$disconnect()
 
     res.status(200).json({ dossierDeleted });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Dossier non trouvé" });
   }
@@ -87,6 +89,7 @@ const get: NextApiHandler = async (req, res) => {
       dossier?.userId === session?.dbUser.id ||
       dossier?.collaboratorIds.includes(session?.dbUser.id)
     ) {
+      await prisma?.$disconnect()
       res.status(200).json({
         dossier: dossier,
         docs: {
@@ -119,9 +122,11 @@ const get: NextApiHandler = async (req, res) => {
         },
       });
     } else {
+      await prisma?.$disconnect()
       res.status(401).json({ message: "Unauthorized" });
     }
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Dossier non trouvé" });
   }

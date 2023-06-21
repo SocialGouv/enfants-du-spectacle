@@ -59,9 +59,11 @@ const remove: NextApiHandler = async (req, res) => {
       }
       return r.json();
     });
+    await prisma?.$disconnect()
 
     res.status(200).json({ message: "Demandeur supprimé" });
   } catch (e: unknown) {
+    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Demandeur non trouvé" });
   }

@@ -1,8 +1,10 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import prisma from "src/lib/prismaClient";
 import superjson from "superjson";
+
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -33,7 +35,7 @@ const update: NextApiHandler = async (req, res) => {
 
   const dossierId = parsed.dossierId;
 
-  const updatedEnfant = await prisma.enfant.updateMany({
+  const updatedEnfant = await client.enfant.updateMany({
     data: {
       cdc: parsed.cdc,
     },
