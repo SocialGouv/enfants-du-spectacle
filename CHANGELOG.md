@@ -1,3 +1,10 @@
+## [1.84.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.3...v1.84.4) (2023-06-21)
+
+
+### Bug Fixes
+
+* fix: trigger deploy ([#568](https://github.com/SocialGouv/enfants-du-spectacle/issues/568)) ([037df8a](https://github.com/SocialGouv/enfants-du-spectacle/commit/037df8a3eaf111cd90f8c5246605ac5f1b2074ab))
+
 ## [1.84.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.2...v1.84.3) (2023-06-13)
 
 
