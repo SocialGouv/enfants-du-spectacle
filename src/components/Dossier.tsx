@@ -68,7 +68,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         enfantIds as string[]
       );
       setRemunerations(resRemuneration);
-      console.log("Remunerations: ", remunerations);
     }
   };
 
@@ -463,6 +462,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         enfant.dateNaissance
                       )}) - Personnage:
                       ${enfant.nomPersonnage}`;
+                    const remunerationsEnfant = remunerations.filter(
+                      (rem) => rem.enfantId?.toString() === enfant.externalId
+                    );
                     return (
                       <div
                         id={enfant.id.toString()}
@@ -477,7 +479,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
-                            remunerations={remunerations}
+                            remunerations={remunerationsEnfant}
                           />
                         </Accordion>
                       </div>
