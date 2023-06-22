@@ -81,9 +81,6 @@ const CHECKS = [
         {label : 'Nombre de jours de travail', code: 'nombreJours'},
         {label : 'Période de travail', code: 'periodeTravail'},
         {label : 'Temps et lieu de travail', code: 'contexteTravail'},
-        {label : 'Montant du cachet', code: 'montantCachet'},
-        {label : 'Nombre de cachets', code: 'nombreCachets'},
-        {label : 'Rémunération totale', code: 'remunerationTotale'},
       ],
       mandatory_files: [
         {label : 'Livret de famille', code : 'LIVRET_FAMILLE'},
