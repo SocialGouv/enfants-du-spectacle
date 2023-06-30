@@ -309,9 +309,9 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           <div className={styles.saveBar}>
             <div className={styles.textSaveBar}>
               <p>
-                Votre dossier est automatiquement enregistré. <br />
-                En cliquant sur le bouton Déposer, vous transmettrez le dossier
-                aux services d'instruction.
+                Votre dossier est automatiquement enregistré sur votre interface. <br />
+                Le bouton “Déposer” vous permet de transmettre votre dossier aux services d’instruction de la DRIEETS avant la date limite de dépôt et de transmettre toutes les mises à jour que vous seriez amené à faire par la suite. <br />
+                Merci de cliquer sur “Déposer” dès lors que vous souhaitez transmettre des mises à jour de votre dossier aux services d’instruction.
               </p>
             </div>
             <div className={styles.buttonSaveBar}>
