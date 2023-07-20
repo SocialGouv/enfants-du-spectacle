@@ -21,6 +21,13 @@ app:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
 
 form:
   ~chart: app
@@ -46,13 +53,19 @@ form:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
 
 metabase:
   enabled: false
 
 oauth2-proxy:
   enabled: false
-
 
 jobs:
   ~chart: jobs
@@ -91,4 +104,3 @@ deactivate:
         with:
           database: "form_{{.Values.global.branchSlug32}}"
           databaseUser: "form_{{ .Values.global.branchSlug32 }}"
-        
