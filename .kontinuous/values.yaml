@@ -21,6 +21,9 @@ app:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  startupProbe:
+    failureThreshold: 48
+    periodSeconds: 5
 
 form:
   ~chart: app
