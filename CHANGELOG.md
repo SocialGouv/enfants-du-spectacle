@@ -1,3 +1,17 @@
+## [1.84.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.5...v1.84.6) (2023-06-30)
+
+
+### Bug Fixes
+
+* change label depot button ([#570](https://github.com/SocialGouv/enfants-du-spectacle/issues/570)) ([97b3f29](https://github.com/SocialGouv/enfants-du-spectacle/commit/97b3f29800def2928383c9e9b58323fddfa64b75))
+
+## [1.84.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.4...v1.84.5) (2023-06-22)
+
+
+### Bug Fixes
+
+* remove checks for old remunerations ([#569](https://github.com/SocialGouv/enfants-du-spectacle/issues/569)) ([5b257d0](https://github.com/SocialGouv/enfants-du-spectacle/commit/5b257d06b6b66bb402bd6a9e6a6937cf274d2742))
+
 ## [1.84.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.3...v1.84.4) (2023-06-21)
 
 

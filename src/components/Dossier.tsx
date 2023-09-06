@@ -68,7 +68,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         enfantIds as string[]
       );
       setRemunerations(resRemuneration);
-      console.log("Remunerations: ", remunerations);
     }
   };
 
