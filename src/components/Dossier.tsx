@@ -72,6 +72,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     }
   };
 
+
+
   const [comments, setComments] = React.useState<Comments[]>([]);
   const fetchComments = async () => {
     if (dossier?.source === "FORM_EDS") {
@@ -123,6 +125,10 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   React.useEffect(() => {
     console.log("comments : ", comments);
   }, comments);
+
+  React.useEffect(() => {
+    console.log("remunerations : ", remunerations);
+  }, remunerations);
 
   React.useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -477,7 +483,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
-                            remunerations={remunerations}
+                            remunerations={remunerations.filter(rem => rem.enfantId === parseInt(enfant.externalId ?? ''))}
                           />
                         </Accordion>
                       </div>

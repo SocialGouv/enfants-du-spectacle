@@ -33,8 +33,6 @@ const post: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
-  console.log("data : ", data);
-
   //console.log('data reveived : ', data)
 
   try {
@@ -190,6 +188,8 @@ const update: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
+  console.log('UPDATING DOSSIER : ', data.dossier.nom, ', ', data.dossier.id)
+
   try {
     const commissions = await client.commission.findMany({
       orderBy: { date: "asc" },
@@ -232,7 +232,6 @@ const update: NextApiHandler = async (req, res) => {
         dossierId: updateDossier.id,
       },
     });
-    console.log("list enfants : ", listEnfant);
     const EnfantsData = EnfantModel.omit({
       adresseEnfant: true,
       cdc: true,
@@ -265,7 +264,7 @@ const update: NextApiHandler = async (req, res) => {
           (enfantL) => enfantL.externalId === enfant.id.toString()
         )
       ) {
-        console.log("has to update enfant :", enfant);
+        console.log("has to update enfant :", enfant.nom, ' ', enfant.prenom, ', ', enfant.id);
         const updateEnfant = await client.enfant.update({
           data: {
             ...EnfantsData.parse(enfant),
@@ -277,18 +276,24 @@ const update: NextApiHandler = async (req, res) => {
             externalId: enfant.id.toString(),
           },
         });
+        console.log("enfant updated :", updateEnfant.nom, ' ', updateEnfant.prenom, ', ', updateEnfant.externalId);
       } else {
-        console.log("has to create enfant :", enfant);
-        const CreateEnfants = await client.enfant.create({
-          data: {
-            ...EnfantsData.parse(enfant),
-            dossierId: updateDossier.id,
-            externalId: enfant.id.toString(),
-            justificatifs: enfant.piecesDossier
-              .map((piece) => piece.type)
-              .filter((item, i, ar) => ar.indexOf(item) === i),
-          },
-        });
+        try {
+          console.log("has to create enfant :", enfant.nom, ' ', enfant.prenom, ', ', enfant.id);
+          const CreateEnfants = await client.enfant.create({
+            data: {
+              ...EnfantsData.parse(enfant),
+              dossierId: updateDossier.id,
+              externalId: enfant.id.toString(),
+              justificatifs: enfant.piecesDossier
+                .map((piece) => piece.type)
+                .filter((item, i, ar) => ar.indexOf(item) === i),
+            },
+          });
+          console.log("enfant updated :", CreateEnfants.nom, ' ', CreateEnfants.prenom, ', ', CreateEnfants.externalId);
+        } catch (e) {
+          console.log('PROBLEM with : ', enfant.nom, ' ', enfant.prenom, ', ', enfant.id)
+        }
       }
     });
     res.status(200).json({
