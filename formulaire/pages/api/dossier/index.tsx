@@ -85,7 +85,12 @@ const get: NextApiHandler = async (req, res) => {
     const countCurrent = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in:
@@ -95,16 +100,41 @@ const get: NextApiHandler = async (req, res) => {
             },
           },
         ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
+          },
+        ],
       },
     });
     const countEnCours = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in: STATUS_EN_COURS as StatutDossier[],
             },
+          },
+        ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
           },
         ],
       },
@@ -112,11 +142,26 @@ const get: NextApiHandler = async (req, res) => {
     const countTermines = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in: STATUS_TERMINES as StatutDossier[],
             },
+          },
+        ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
           },
         ],
       },
