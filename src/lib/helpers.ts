@@ -136,6 +136,7 @@ const getRemunerations = async (commission: CommissionData): Promise<Remuneratio
   let rems : Remuneration[] = []
   return Promise.all(
     commission.dossiers.filter(dossier => STATUS_ODJ.includes(dossier.statut)).map(async (dossier) => {
+      if(dossier.source === 'FORM_EDS')
       rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
     })
   ).then(() => {
@@ -145,6 +146,7 @@ const getRemunerations = async (commission: CommissionData): Promise<Remuneratio
 
 const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> => {
   let rems : Remuneration[] = []
+  if(dossier.source === 'FORM_EDS')
   rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
   return rems
 }
