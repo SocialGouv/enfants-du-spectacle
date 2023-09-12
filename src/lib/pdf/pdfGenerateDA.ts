@@ -144,7 +144,7 @@ Considérant qu’après analyse, le projet présenté respecte les conditions d
         {
           content: `${enfant.prenom} ${enfant.nom}, né le ${frenchDateText(
             enfant.dateNaissance
-          )}, pour une rémunération totale de ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} €, ${
+          )}, pour une rémunération totale de ${dossier.source === 'FORM_EDS' ? remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0) : enfant.remunerationTotale} €, ${
             enfant.cdc ? enfant.cdc : 0
           }% de cette somme devant être versés à la Caisse des dépôts et consignations;`,
           styles: {

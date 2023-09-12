@@ -63,7 +63,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   const fetchRemunerations = async () => {
     const enfantIds = dossier?.enfants.map((enfant) => enfant.externalId);
-    if (enfantIds && enfantIds.length > 0) {
+    if (enfantIds && enfantIds.length > 0 && dossier?.source === 'FORM_EDS') {
       const resRemuneration = await getRemunerationsByEnfantsIds(
         enfantIds as string[]
       );
@@ -183,7 +183,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES">
-              <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+              {dossier.source === 'FORM_EDS' &&
+                <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+              }
             </Info>
             <Info title="VALIDATION">
               <ValidationJustificatifsDossier

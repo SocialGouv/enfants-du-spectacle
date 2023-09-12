@@ -121,7 +121,8 @@ const generateFE = async (dossiers: DossierData[]) => {
                     }
   ${enfant.nombreJours} jours travaillés
   ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
-  Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
+  ${dossier.source === 'FORM_EDS' ? 
+  `Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
     return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ` : ''
   }).join(' ')}
@@ -129,7 +130,14 @@ const generateFE = async (dossiers: DossierData[]) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
     return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
   }).join(' ')}
-  TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} Euros
+  TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} Euros` 
+  : 
+  `${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
+    enfant.remunerationsAdditionnelles
+      ? `\n  Rémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+      : ""
+  }
+  TOTAL : ${enfant.remunerationTotale} Euros` }
   Part CDC : ${enfant.cdc ? enfant.cdc : "0"}% 
   |_| Favorable        |_| Favorable sous réserve          |_| Ajourné          |_| Défavorable 
   Motifs : \n \n`,

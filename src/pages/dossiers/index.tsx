@@ -70,6 +70,7 @@ const Page: React.FC = () => {
   const [showTable, setShowTable] = React.useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = React.useState<statusGroup>("futur");
+  const [loadingPdf, setLoadingPdf] = React.useState<string>('')
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleStatus = (status: statusGroup) => {
@@ -469,25 +470,37 @@ const Page: React.FC = () => {
                                   >
                                     <ButtonLink
                                       light={true}
-                                      onClick={() => {
-                                        generateOdj(commission);
+                                      onClick={async () => {
+                                        setLoadingPdf('ODJ_' + commission.id);
+                                        await generateOdj(commission);
+                                        setLoadingPdf('');
                                       }}
                                     >
                                       <RiDownloadLine
                                         style={{ marginRight: "10px" }}
                                       />
-                                      Ordre du jour
+                                      {loadingPdf === 'ODJ_' + commission.id ? 
+                                        (<IconLoader></IconLoader>)
+                                        :
+                                        (<span>Ordre du jour</span>)
+                                      }
                                     </ButtonLink>
                                     <ButtonLink
                                       light={true}
-                                      onClick={() => {
-                                        generatePV(commission);
+                                      onClick={async () => {
+                                        setLoadingPdf('PV_' + commission.id);
+                                        await generatePV(commission);
+                                        setLoadingPdf('');
                                       }}
                                     >
                                       <RiDownloadLine
                                         style={{ marginRight: "10px" }}
                                       />
-                                      Procès Verbal
+                                      {loadingPdf === 'PV_' + commission.id ? 
+                                        (<IconLoader></IconLoader>)
+                                        :
+                                        (<span>Procès Verbal</span>)
+                                      }
                                     </ButtonLink>
                                   </div>
                                 )}

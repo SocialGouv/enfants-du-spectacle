@@ -119,15 +119,24 @@ const generateOdj = async (commission: CommissionData) => {
                     }
   ${enfant.nombreJours} jours travaillés
   ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
-  Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
-    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ` : ''
-  }).join(' ')}
+  ${dossier.source === 'FORM_EDS' ? 
+    `Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
+      let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
+      return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ` : ''
+    }).join(' ')}
   Rémunérations additionnelles : ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
-    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
-  }).join(' ')}
-  TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} Euros
+      let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
+      return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
+    }).join(' ')}
+  TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} Euros`
+    :
+    `${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
+      enfant.remunerationsAdditionnelles
+        ? `\n  Rémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+        : ""
+    }
+    TOTAL : ${enfant.remunerationTotale} Euros`
+  }
   Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
                     styles: {
                       fontSize: 11,

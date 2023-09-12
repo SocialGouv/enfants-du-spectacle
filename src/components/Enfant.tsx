@@ -353,20 +353,25 @@ const EnfantComponent: React.FC<Props> = ({
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>
+          {dossier.source === 'FORM_EDS' &&
             <JustificatifsEnfants
               enfant={enfant}
               dataLinks={dataLinks}
               dossier={dossier}
             />
+          }
           </Info>
           {(session.data?.dbUser.role === "INSTRUCTEUR" ||
             session.data?.dbUser.role === "ADMIN") && (
             <Info title="Validation" className={styles.info}>
+
+            {dossier.source === 'FORM_EDS' &&
               <ValidationJustificatifsEnfant
                 enfant={enfant}
                 dossier={dossier}
                 dataLinks={dataLinks}
               />
+            }
             </Info>
           )}
         </div>
