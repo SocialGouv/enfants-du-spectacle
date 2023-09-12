@@ -10,9 +10,12 @@ import type {
 import { grandeCategorieToCategorieValues } from "src/lib/categories";
 import type {
   CommissionData,
+  DossierData,
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
+import { Remuneration } from "./types";
+import { getRemunerationsByEnfantsIds } from "./fetching/remunerations";
 
 function capitalizeWord(str: string): string {
   return str.replace(/^\w/, (c) => c.toUpperCase());
@@ -127,6 +130,23 @@ function getFilterableSocietesProductions(
       commissions.flatMap((c) => c.dossiers.map((p) => p.societeProduction))
     );
   }
+}
+
+const getRemunerations = async (commission: CommissionData): Promise<Remuneration[]> => {
+  let rems : Remuneration[] = []
+  return Promise.all(
+    commission.dossiers.filter(dossier => STATUS_ODJ.includes(dossier.statut)).map(async (dossier) => {
+      rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
+    })
+  ).then(() => {
+    return rems
+  })
+}
+
+const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> => {
+  let rems : Remuneration[] = []
+  rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
+  return rems
 }
 
 function getFormatedTypeDossier(type: string): string {
@@ -440,6 +460,8 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  getRemunerations,
+  getRemsByDossier,
   INFOS_REPRESENTANTS,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,

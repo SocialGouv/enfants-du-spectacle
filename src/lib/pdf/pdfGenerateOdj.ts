@@ -12,13 +12,16 @@ import {
   birthDateToFrenchAge,
   frenchDateText,
   frenchDepartementName,
+  getRemunerations,
+  REMUNERATIONS,
   STATUS_ODJ,
   typeEmploiLabel,
   TYPES_EMPLOI,
 } from "src/lib/helpers";
 import type { CommissionData, DossierData } from "src/lib/types";
 
-const generateOdj = (commission: CommissionData) => {
+const generateOdj = async (commission: CommissionData) => {
+  let rems = await getRemunerations(commission)
   const doc = new jsPDF();
   const categories = _.uniq(
     _.filter(commission.dossiers, (dossier: DossierData) => {
@@ -104,6 +107,7 @@ const generateOdj = (commission: CommissionData) => {
                 return 0;
               })
               .map((enfant: Enfant) => {
+                let remEnfant = rems.filter(rem => rem.enfantId?.toString() === enfant.externalId)
                 blocs.push([
                   {
                     content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
@@ -115,12 +119,15 @@ const generateOdj = (commission: CommissionData) => {
                     }
   ${enfant.nombreJours} jours travaillés
   ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
-  ${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
-                      enfant.remunerationsAdditionnelles
-                        ? `\n  Rémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
-                        : ""
-                    }
-  TOTAL : ${enfant.remunerationTotale} Euros
+  Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
+    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
+    return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ` : ''
+  }).join(' ')}
+  Rémunérations additionnelles : ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
+    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
+    return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
+  }).join(' ')}
+  TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} Euros
   Part CDC : ${enfant.cdc ? enfant.cdc : "0"}%`,
                     styles: {
                       fontSize: 11,

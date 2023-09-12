@@ -15,7 +15,6 @@ interface Props {
 
 const AssignedAgent: React.FC<Props> = ({ dossier }) => {
   const session = useSession();
-  console.log('dossier in agent select : ', dossier)
   return (
     <>
       {!dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'] && session.data.dbUser.role !== "MEMBRE" && (

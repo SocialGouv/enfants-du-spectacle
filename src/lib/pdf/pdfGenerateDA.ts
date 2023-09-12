@@ -2,11 +2,12 @@ import { jsPDF } from "jspdf";
 import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import logoPrefet from "src/images/logo_prefet.png";
-import { frenchDateText } from "src/lib/helpers";
+import { frenchDateText, getRemsByDossier } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 import commissions from "src/pages/api/commissions";
 
-const generateDA = (dossiers: DossierData[], binary = false) => {
+const generateDA = async (dossiers: DossierData[], binary = false) => {
+  let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
   const blocs: RowInput[] = [];
 
@@ -138,11 +139,12 @@ Considérant qu’après analyse, le projet présenté respecte les conditions d
       },
     ]);
     dossier.enfants.map((enfant) => {
+      let remEnfant = rems.filter(rem => rem.enfantId?.toString() === enfant.externalId)
       blocs.push([
         {
           content: `${enfant.prenom} ${enfant.nom}, né le ${frenchDateText(
             enfant.dateNaissance
-          )}, pour une rémunération totale de ${enfant.remunerationTotale} €, ${
+          )}, pour une rémunération totale de ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) : acc, 0)} €, ${
             enfant.cdc ? enfant.cdc : 0
           }% de cette somme devant être versés à la Caisse des dépôts et consignations;`,
           styles: {

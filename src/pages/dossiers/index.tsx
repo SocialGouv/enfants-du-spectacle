@@ -424,7 +424,6 @@ const Page: React.FC = () => {
                         <td>
                           {commission.dossiers
                             .map((p) => {
-                              console.log(p);
                               return p._count
                                 ? p._count.enfants
                                 : p.enfants
