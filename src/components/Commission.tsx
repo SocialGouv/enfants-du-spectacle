@@ -18,6 +18,7 @@ import type { CommissionData, DossierDataLight } from "src/lib/queries";
 import type { CommentaireNotifications, DossierData } from "src/lib/types";
 
 import styles from "./Commission.module.scss";
+import IconLoader from "./IconLoader";
 
 interface DossierProps {
   dossier: DossierData;
@@ -58,6 +59,7 @@ interface Props {
 }
 
 const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
+  const [loadingPdf, setLoadingPdf] = React.useState<string>('')
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
@@ -122,12 +124,18 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
             }) && (
               <button
                 className="postButton"
-                onClick={() => {
-                  generateOdj(commission);
+                onClick={async () => {
+                  setLoadingPdf('ODJ_' + commission.id);
+                  await generateOdj(commission);
+                  setLoadingPdf('');
                 }}
               >
                 <RiDownloadLine style={{ marginRight: "10px" }} />
-                Télécharger ordre du jour
+                {loadingPdf === 'ODJ_' + commission.id ? 
+                  (<IconLoader></IconLoader>)
+                  :
+                  (<span>Télécharger Ordre du jour</span>)
+                }
               </button>
             )}
           </div>
@@ -139,12 +147,18 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
             }) && (
               <button
                 className="postButton"
-                onClick={() => {
-                  generatePV(commission);
+                onClick={async () => {
+                  setLoadingPdf('PV_' + commission.id);
+                  await generatePV(commission);
+                  setLoadingPdf('');
                 }}
               >
                 <RiDownloadLine style={{ marginRight: "10px" }} />
-                Télécharger Procès Verbal
+                {loadingPdf === 'PV_' + commission.id ? 
+                  (<IconLoader></IconLoader>)
+                  :
+                  (<span>Télécharger Procès Verbal</span>)
+                }
               </button>
             )}
           </div>
