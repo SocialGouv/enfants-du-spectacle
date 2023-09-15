@@ -53,7 +53,7 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
           <button
             key={transition.name}
             className={styles.row}
-            onClick={() => {
+            onClick={async () => {
               setDropdownVisible(false);
               const transitionEvent = transition.name;
               mutate(
@@ -69,7 +69,7 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                 });
               });
               if (transition.name === "passerAccepte") {
-                const attachment = generateDA([dossier as DossierData], true);
+                const attachment = await generateDA([dossier as DossierData], true);
                 sendEmail(
                   "auth_access",
                   attachment as string,
