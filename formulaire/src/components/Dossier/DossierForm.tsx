@@ -16,6 +16,7 @@ import IconLoader from "../IconLoader";
 import useStateContext from "src/context/StateContext";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { sendEmail } from "src/fetching/email";
+import EnfantListBis from "./EnfantListBis";
 
 interface Props {
   dossier: DossierData;
@@ -27,7 +28,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const router = useRouter();
 
   const [toDisplay, setTodisplay] = React.useState<
-    "Demandeur" | "Projet" | "Enfants"
+    "Demandeur" | "Projet" | "Enfants" | "EnfantsBis"
   >("Demandeur");
   const [messageError, setMessageError] = React.useState<string>("");
   const [messageSuccess, setMessageSuccess] = React.useState<string>("");
@@ -241,6 +242,12 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         >
           Enfants
         </ButtonLink>
+        <ButtonLink
+          light={toDisplay !== "EnfantsBis"}
+          onClick={() => setTodisplay("EnfantsBis")}
+        >
+          EnfantsBis
+        </ButtonLink>
       </div>
 
       <div className={styles.infosRow}>
@@ -301,6 +308,17 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                 dossier.statut === "CONSTRUCTION"
               }
             ></EnfantList>
+          </>
+        )}
+
+        {toDisplay === "EnfantsBis" && (
+          <>
+            <EnfantListBis
+              allowChanges={
+                dossier.statut === "BROUILLON" ||
+                dossier.statut === "CONSTRUCTION"
+              }
+            ></EnfantListBis>
           </>
         )}
 
