@@ -150,7 +150,7 @@ const Politic: React.FC = () => {
             Le responsable de traitement s'engage à ce que les données à caractère personnel soient traitées par les seules personnes autorisées, c’est-à-dire :
           </p>
           <ul>
-            <li>les agents habilités de la DRIEEST ;</li>
+            <li>les agents habilités de la DRIEETS ;</li>
             <li>les membres de la commission ;</li>
             <li>les médecins et assistantes médicales habilités de la société Thalie.</li>
           </ul>
