@@ -15,6 +15,7 @@ import { CommentaireNotifications } from "src/lib/types";
 import IconLoader from "../IconLoader";
 import Image from "next/image";
 import EnfantForm from "./EnfantForm";
+import EnfantFormBis from "./EnfantFormBis";
 
 interface Props {
   allowChanges: Boolean;
@@ -31,6 +32,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   const [numberEnfants, setNumberEnfants] = React.useState<number>(0);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [selectedEnfant, setSelectedEnfant] = React.useState<EnfantData | null>(null)
+  const [enfantToPass, setEnfantToPass] = React.useState<EnfantData | null>(null)
   const [scrollPosition, setScrollPosition] = React.useState(0);
 
   /*const handleScroll = () => {
@@ -64,6 +66,32 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   const handlePage = (page: number) => {
     setPage(page); 
   };
+
+  const clickEnfant = (enfant: EnfantData) => {
+    if (selectedEnfant && selectedEnfant.id === enfant.id) {
+      setSelectedEnfant(null)
+    } else {
+      setSelectedEnfant(enfant)
+    }
+  }
+
+  const formEnfant = (enfantToPass: EnfantData) => {
+    return (
+      <>
+        {enfantToPass &&
+          <EnfantFormBis
+            enfant={enfantToPass}
+            allowChanges={allowChanges}
+          ></EnfantFormBis>
+        }
+      </>
+    )
+  }
+
+  React.useEffect(() => {
+    setEnfantToPass(null)
+    setEnfantToPass(selectedEnfant)
+  }, [selectedEnfant])
 
   React.useEffect(() => {
     fetchEnfants() 
@@ -123,7 +151,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
               className={(selectedEnfant && selectedEnfant?.id === enfant.id) ? `${styles.tableEnfant} ${styles.selected}` : styles.tableEnfant}
               key={`table-enfant-${enfant.id}`}
               onClick={() => {
-                setSelectedEnfant(enfant);
+                clickEnfant(enfant);
               }}
             >
               <div className={styles.itemDossier}>{enfant.typeEmploi}</div>
@@ -173,17 +201,15 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
         </div>
       </TableCard>
 
-      {selectedEnfant && (
+      {enfantToPass && selectedEnfant &&(
         <>
         <br />
-        <TableCard title={`${selectedEnfant.nom} ${selectedEnfant.prenom}`}>
-          <EnfantForm
-            enfant={selectedEnfant}
-            allowChanges={allowChanges}
-            refresh={() => {
-              console.log('refresh')
-            }}
-          ></EnfantForm>
+        <TableCard title={`${selectedEnfant.typeEmploi} : ${selectedEnfant.nom} ${selectedEnfant.prenom} (${
+                selectedEnfant.dateNaissance
+                  ? birthDateToFrenchAge(moment(selectedEnfant.dateNaissance).toDate())
+                  : ""
+              }) - Personnage : ${selectedEnfant.nomPersonnage ?? "..."}`}>
+          {formEnfant(enfantToPass)}
         </TableCard>
         </>
       )}

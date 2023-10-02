@@ -14,6 +14,7 @@ import {
   ResDossier,
 } from "../../src/fetching/dossiers";
 import { getAgentByDossierId } from "src/fetching/instructeur";
+import IconLoader from "src/components/IconLoader";
 
 const DossierPage: React.FC = () => {
   const router = useRouter();
@@ -64,40 +65,46 @@ const DossierPage: React.FC = () => {
   }
 
   return (
-    <Layout windowTitle="Mes dossiers">
-      {dossier && (
-        <>
-          <HeadingDossier
-            dossier={dossier.dossier}
-            setShowDialogue={setShowDialogue}
-            agent={agent}
-            commissionDate={commissionDate}
-          ></HeadingDossier>
-          <ShareDossierModal
-            dossier={dossier.dossier}
-            showDialogue={showDialogue}
-            setShowDialogue={setShowDialogue}
-            setCollaboratorId={handleCollaboratorIdsChange}
-          />
-        </>
-      )}
-      <Container>
-        <Link href="/">Retour aux dossiers</Link>
-        {dossier && (
-          <>
-            <StateProvider>
-              {!loading && (
-                <DossierForm
-                  dossier={dossier.dossier}
-                  docs={dossier.docs}
-                  comments={comments}
-                ></DossierForm>
-              )}
-            </StateProvider>
-          </>
-        )}
-      </Container>
-    </Layout>
+    <>
+      {dossier ? 
+        <Layout windowTitle="Mes dossiers">
+          {dossier && (
+            <>
+              <HeadingDossier
+                dossier={dossier.dossier}
+                setShowDialogue={setShowDialogue}
+                agent={agent}
+                commissionDate={commissionDate}
+              ></HeadingDossier>
+              <ShareDossierModal
+                dossier={dossier.dossier}
+                showDialogue={showDialogue}
+                setShowDialogue={setShowDialogue}
+                setCollaboratorId={handleCollaboratorIdsChange}
+              />
+            </>
+          )}
+          <Container>
+            <Link href="/">Retour aux dossiers</Link>
+            {dossier && (
+              <>
+                <StateProvider>
+                  {!loading && (
+                    <DossierForm
+                      dossier={dossier.dossier}
+                      docs={dossier.docs}
+                      comments={comments}
+                    ></DossierForm>
+                  )}
+                </StateProvider>
+              </>
+            )}
+          </Container>
+        </Layout>
+        : 
+        <div style={{textAlign: 'center', margin: '2rem'}}><IconLoader></IconLoader></div>
+      }
+    </>
   );
 };
 
