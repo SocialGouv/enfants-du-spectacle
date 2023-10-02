@@ -370,9 +370,9 @@ const Conditions: React.FC = () => {
             d’amende.
           </p>
           <p>
-            Les Demandeurs s'engagent à ne pas mettre en ligne de contenus ou
+            {`            Les Demandeurs s'engagent à ne pas mettre en ligne de contenus ou
             informations contraires aux dispositions légales et réglementaires
-            en vigueur.
+            en vigueur.`}
           </p>
           <h5>Article 5.3. Les Membres d’une commission</h5>
           <p>
@@ -389,9 +389,9 @@ const Conditions: React.FC = () => {
             d’amende.
           </p>
           <p>
-            Les Membres d’une commission s'engagent à ne pas mettre en ligne de
+            {`            Les Membres d’une commission s'engagent à ne pas mettre en ligne de
             contenus ou informations contraires aux dispositions légales et
-            réglementaires en vigueur.
+            réglementaires en vigueur.`}
           </p>
           <h5>Article 5.4. Les Médecins</h5>
           <p>
@@ -408,9 +408,9 @@ const Conditions: React.FC = () => {
             d’amende.
           </p>
           <p>
-            Les Médecins s'engagent à ne pas mettre en ligne de contenus ou
+            {`            Les Médecins s'engagent à ne pas mettre en ligne de contenus ou
             informations contraires aux dispositions légales et réglementaires
-            en vigueur.
+            en vigueur.`}
           </p>
           <h5>Article 6. Mise à jour des conditions d’utilisation</h5>
           <div>
