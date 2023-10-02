@@ -195,8 +195,6 @@ const DemandeurForm: React.FC<Props> = ({ allowChanges }) => {
             </div>
           )}
         </div>
-
-        <SocieteProd></SocieteProd>
       </TableCard>
     </div>
   );
