@@ -38,7 +38,7 @@ const get: NextApiHandler = async (req, res) => {
         dossierConcerned?.collaboratorIds.includes(session?.dbUser.id)
     ) {
       const enfantsByDossier = await prisma.enfant.findMany({
-          take: 25,
+          take: req.query.numberByPage ? Number(req.query.numberByPage) : 25,
           skip: 25 * Number(req.query.page),
           include: {
             piecesDossier: true,

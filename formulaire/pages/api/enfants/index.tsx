@@ -109,6 +109,7 @@ const update: NextApiHandler = async (req, res) => {
 
   delete parsed.piecesDossier;
   delete parsed.remuneration;
+  delete parsed.Comments;
 
   const enfantUpdated = await prisma.enfant.update({
     data: parsed as Enfant,

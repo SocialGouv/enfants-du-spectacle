@@ -72,7 +72,7 @@ const CHECKS = [
       ]
     },
     {
-      entity: 'Enfants',
+      entity: 'EnfantsBis',
       mandatory_fields: [
         {label : 'Prenom(s)', code: 'prenom'},
         {label : 'Nom', code: 'nom'},

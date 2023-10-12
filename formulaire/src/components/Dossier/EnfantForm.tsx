@@ -43,7 +43,6 @@ interface Props {
 }
 
 const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
-  console.log('enfant to check: ', enfant)
   const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant);
   const [dataPassed, setDataPassed] =
     React.useState<Record<"nom" | "prenom", string>>();

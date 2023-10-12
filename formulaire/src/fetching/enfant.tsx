@@ -17,7 +17,7 @@ const createEnfant = async (enfant: Omit<Enfant, "id">) => {
     }
     return r.json();
   });
-  return fetching as Enfant;
+  return fetching as EnfantData;
 };
 
 const deleteEnfant = async (id: number) => {
@@ -61,7 +61,7 @@ const searchEnfants = async (infosEnfant: Record<"nom" | "prenom", string>) => {
   return fetching as EnfantWithDosier[];
 };
 
-const getEnfantsByDossierId = async (dossierId: number, page: number, termToOrder: keyof Enfant, order: 'asc' | 'desc') => {
+const getEnfantsByDossierId = async (dossierId: number, page: number, numberByPage: number, termToOrder: keyof Enfant, order: 'asc' | 'desc') => {
   const fetching = await fetch(
     `/api/enfants/dossier/${dossierId}?page=${page}&termToOrder=${termToOrder}&order=${order}`,
     {
