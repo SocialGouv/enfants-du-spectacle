@@ -26,6 +26,7 @@ import {
 import { createPiece, getPieces } from "../../fetching/pieces";
 import { useSession } from "next-auth/react";
 import ShareDossierModal from "../Dossier/ShareDossierModal";
+import { set } from "date-fns";
 
 interface Props {
   search: string;
@@ -50,6 +51,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchDossiers = async () => {
+    setShowLoader(true);
     let res = await getDossiers(page, status, search, termOrdered, order);
     setDossiers(res.dossiers);
     setCountDossiers(res.countCurrent);
@@ -67,6 +69,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
         })
       );
       setComments(commentsList.flat());
+      setShowLoader(false);
     }
   };
 
@@ -86,6 +89,10 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [status])
 
   React.useEffect(() => {
     fetchComments();
@@ -159,11 +166,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
 
   return (
     <div className={styles.containerDossiers}>
-      {showLoader && (
-        <div className={styles.containerLoader}>
-          <IconLoader />
-        </div>
-      )}
       <TableCard title={"Dossiers en cours"}>
         <div>
           <div className={styles.headRow}>
@@ -198,7 +200,8 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
             <div className={styles.itemHead}>Actions</div>
             <div className={styles.itemHead}>Notifications</div>
           </div>
-          {dossiers.map((dossier, index) => {
+          {showLoader ? <div style={{textAlign: 'center', margin: '2rem'}}><IconLoader></IconLoader></div> : 
+          dossiers.map((dossier, index) => {
             const commentsNotifications: CommentaireNotifications = {
               dossierId: dossier.id,
               notificationsProject: comments?.filter(

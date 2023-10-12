@@ -1,55 +1,37 @@
-import React, { useEffect, useState } from "react";
-import styles from "./DossierForm.module.scss";
-import { Select } from "@dataesr/react-dsfr";
-import {
-  Enfant,
-  JustificatifEnfant,
-  NatureCachet,
-  Remuneration,
-} from "@prisma/client";
-import {
-  REMUNERATIONS,
-  TYPE_EMPLOI,
-  frenchDateText,
-  useDebouncedCallback,
-} from "../../lib/helpers";
-import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
-import { EnfantWithDosier, updateEnfant } from "src/fetching/enfant";
-import _ from "lodash";
-import fr from "date-fns/locale/fr";
-import moment from "moment";
-import InputFile from "../uiComponents/InputFile";
+import React, { useState } from "react";
 import { EnfantData } from "src/fetching/dossiers";
-import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
+import styles from "./DossierForm.module.scss";
 import InputAutocomplete from "../uiComponents/InputAutocomplete";
+import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import { EnfantWithDosier, deleteEnfant, updateEnfant } from "src/fetching/enfant";
+import { REMUNERATIONS, TYPE_EMPLOI, frenchDateText, useDebouncedCallback } from "src/lib/helpers";
+import { Select } from "@dataesr/react-dsfr";
+import { Enfant, JustificatifEnfant, NatureCachet, Remuneration } from "@prisma/client";
+import { createRemuneration, deleteRemunerationById, deleteRemunerationsByEnfantId } from "src/fetching/remuneration";
+import { BiTrash } from "react-icons/bi";
+import { ButtonLink } from "src/uiComponents/button";
+import InputFile from "../uiComponents/InputFile";
+import useStateContext from "src/context/StateContext";
 import { uploadDoc } from "src/fetching/docs";
 import Link from "next/link";
-import useStateContext from "src/context/StateContext";
-import { ButtonLink } from "src/uiComponents/button";
-import { deleteEnfant } from "src/fetching/enfant";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
-import { BiTrash } from "react-icons/bi";
-import {
-  createRemuneration,
-  deleteRemunerationsByEnfantId,
-  deleteRemunerationById,
-} from "src/fetching/remuneration";
 
 interface Props {
   enfant: EnfantData;
   allowChanges: Boolean;
-  refresh: (enfant: Enfant) => void;
+  refresh: (enfant: EnfantData) => void;
+  listDelete: (enfant: EnfantData) => void;
 }
 
-const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
-  const [enfantTmp, setEnfant] = React.useState<EnfantData>(enfant);
+const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDelete }) => {
+  const [enfantTmp, setEnfant] = useState<EnfantData>(enfant);
   const [dataPassed, setDataPassed] =
     React.useState<Record<"nom" | "prenom", string>>();
-  const [initialRender, setInitialRender] = React.useState<Boolean>(true);
   const [initialDataPassed, setInitialDataPassed] =
     React.useState<Boolean>(true);
-  const contextDossier = { ...useStateContext() };
   const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
   const [defaultTypeRemuneration, setDefaultTypeRemuneration] = React.useState<
     string | null
@@ -58,31 +40,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
   const [totalRemuneration, setTotalRemuneration] = useState<
     number | undefined
   >(0);
-
-  const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
-    const target = e.target as HTMLInputElement;
-    setEnfant({
-      ...enfantTmp,
-      [target.id]: target.value,
-    });
-  };
-
-  const handleAutocomplete = (str: string, field: "nom" | "prenom"): void => {
-    setDataPassed({ [field]: str } as Record<"nom" | "prenom", string>);
-  };
-
-  React.useEffect(() => {
-    if (!initialDataPassed) {
-      setEnfant({
-        ...enfantTmp,
-        [dataPassed?.nom ? "nom" : "prenom"]: dataPassed?.nom
-          ? dataPassed?.nom
-          : dataPassed?.prenom,
-      });
-    } else {
-      setInitialDataPassed(false);
-    }
-  }, [dataPassed]);
+  const contextDossier = { ...useStateContext() };
 
   const handleSelect = (enfant: EnfantWithDosier) => {
     setEnfant({
@@ -120,6 +78,23 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     });
   };
 
+  const handleAutocomplete = (str: string, field: "nom" | "prenom"): void => {
+    setDataPassed({ [field]: str } as Record<"nom" | "prenom", string>);
+  };
+
+  React.useEffect(() => {
+    if (!initialDataPassed) {
+      setEnfant({
+        ...enfantTmp,
+        [dataPassed?.nom ? "nom" : "prenom"]: dataPassed?.nom
+          ? dataPassed?.nom
+          : dataPassed?.prenom,
+      });
+    } else {
+      setInitialDataPassed(false);
+    }
+  }, [dataPassed]);
+
   const handleDateEnfant = (wichDate: string, date: Date): void => {
     setEnfant({
       ...enfantTmp,
@@ -131,55 +106,31 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     event.target.select();
   };
 
-  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const data = new FormData();
-      data.append(e.target.name, e.target.files[0]);
-      let upload = await uploadDoc(data, enfantTmp.dossierId);
-      let res = await createPieceEnfant({
-        nom: e.target.files[0].name,
-        enfantId: enfantTmp.id,
-        type: e.target.id as JustificatifEnfant,
-        externalId: "",
-        link: upload.filePath,
-        statut: null,
-        dossierId: contextDossier.dossier.id,
-      });
-      setEnfant({
-        ...enfantTmp,
-        piecesDossier: enfantTmp.piecesDossier
-          ? [...enfantTmp.piecesDossier, res.pieceDossier]
-          : [res.pieceDossier],
-      });
-      contextDossier.processInput("docs", "enfants", [
-        {
-          id: enfantTmp.id,
-          piecesDossier: [
-            ...(contextDossier.docs.enfants.find(
-              (enf) => enf.id === enfantTmp.id
-            )?.piecesDossier ?? []),
-            res.tokenizedLink,
-          ],
-        },
-        ...contextDossier.docs.enfants.filter(
-          (docEnfant) => docEnfant.id !== enfantTmp.id
-        ),
-      ]);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    let res = await deletePieceEnfant(parseInt(id));
+  const handleFormEnfant = (e: React.FormEvent<HTMLInputElement>): void => {
+    const target = e.target as HTMLInputElement;
     setEnfant({
       ...enfantTmp,
-      piecesDossier: enfantTmp.piecesDossier.filter((doc) => {
-        return doc.id !== parseInt(id);
-      }),
+      [target.id]: target.value,
     });
   };
 
+  React.useEffect(() => {
+    saveEnfant();
+  }, [enfantTmp]);
+
+  const saveEnfant = useDebouncedCallback(() => {
+    updateEnfant(enfantTmp);
+    refresh(enfantTmp);
+  }, 1000);
+
+  React.useEffect(() => {
+    setEnfant(enfant);
+  }, [enfant])
+
   const handleDeleteChild = async () => {
     await deleteEnfant(enfant.id);
+    listDelete(enfant);
+    setShowDialogue(false);
   };
 
   React.useEffect(() => {
@@ -314,11 +265,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     handleTotalRemuneration();
   }, [remunerationList]);
 
-  const saveEnfant = useDebouncedCallback(() => {
-    updateEnfant(enfantTmp);
-    refresh(enfantTmp);
-  }, 1000);
-
   interface Option {
     label: string;
     value: string;
@@ -366,28 +312,53 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
     enfantTmp.remunerationsAdditionnelles,
   ]);
 
-  React.useEffect(() => {
-    console.log(
-      "test enfant : ",
-      enfantTmp.typeConsultation !== "THALIE" ||
-        (enfantTmp.typeConsultation === "THALIE" &&
-          (enfantTmp.piecesDossier.filter((doc) => {
-            return doc.type === "AUTORISATION_PRISE_EN_CHARGE";
-          }).length > 0 ||
-            enfantTmp.piecesDossier.filter((doc) => {
-              return doc.type === "BON_PRISE_EN_CHARGE";
-            }).length > 0))
-    );
-    if (initialRender) {
-      setInitialRender(false);
-    } else {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const data = new FormData();
+      data.append(e.target.name, e.target.files[0]);
+      let upload = await uploadDoc(data, enfantTmp.dossierId);
+      let res = await createPieceEnfant({
+        nom: e.target.files[0].name,
+        enfantId: enfantTmp.id,
+        type: e.target.id as JustificatifEnfant,
+        externalId: "",
+        link: upload.filePath,
+        statut: null,
+        dossierId: contextDossier.dossier.id,
+      });
+      setEnfant({
+        ...enfantTmp,
+        piecesDossier: enfantTmp.piecesDossier
+          ? [...enfantTmp.piecesDossier, res.pieceDossier]
+          : [res.pieceDossier],
+      });
+      contextDossier.processInput("docs", "enfants", [
+        {
+          id: enfantTmp.id,
+          piecesDossier: [
+            ...(contextDossier.docs.enfants.find(
+              (enf) => enf.id === enfantTmp.id
+            )?.piecesDossier ?? []),
+            res.tokenizedLink,
+          ],
+        },
+        ...contextDossier.docs.enfants.filter(
+          (docEnfant) => docEnfant.id !== enfantTmp.id
+        ),
+      ]);
     }
-  }, [enfantTmp]);
+  };
 
-  React.useEffect(() => {
-    registerLocale("fr", fr);
-    setDefaultLocale("fr");
-  });
+  const handleDelete = async (id: string) => {
+    let res = await deletePieceEnfant(parseInt(id));
+    setEnfant({
+      ...enfantTmp,
+      piecesDossier: enfantTmp.piecesDossier.filter((doc) => {
+        return doc.id !== parseInt(id);
+      }),
+    });
+  };
+
 
   return (
     <div className={styles.enfantForm}>
@@ -493,6 +464,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           />
         </div>
       </div>
+
       <h5 className={styles.h5Spacer}>Périodes de travail liées à l'enfant</h5>
       <div className={styles.blocForm}>
         <label htmlFor="periodeTravail" className="mb-2 italic">
@@ -570,6 +542,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
           </>
         )}
       </div>
+
       <h5 className={styles.h5Spacer}>Rémunérations</h5>
       <div
         className={styles.blocForm}
@@ -901,6 +874,8 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       ) : (
         ""
       )}
+
+
       <h5 className={styles.h5Spacer}>{"Avis médical d'aptitude"}</h5>
       <div className={styles.blocForm}>
         <label htmlFor="remunerationTotale" className="mb-2 italic">
@@ -1152,7 +1127,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
       </div>
       <br />
       <br />
-      
+
       <h5 className={styles.h5Spacer}>
         {"Pièces justificatives liées à l'enfant"}
       </h5>
@@ -1319,11 +1294,6 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
                   onClick={() => {
                     setShowDialogue(false);
                     handleDeleteChild();
-                    contextDossier.processEntity("enfants", [
-                      ...contextDossier.enfants.filter(
-                        (enf) => enf.id !== enfantTmp.id
-                      ),
-                    ]);
                   }}
                 >
                   Oui
@@ -1341,7 +1311,7 @@ const EnfantForm: React.FC<Props> = ({ enfant, allowChanges, refresh }) => {
         )}
       </div>
     </div>
-  );
+  )
 };
 
-export default EnfantForm;
+export default EnfantFormBis;

@@ -41,6 +41,11 @@
         background-color: var(--light-grey-fr);
     }
 
+    .selected{
+        background-color: var(--blue-fr) !important;
+        color: white
+    }
+
     .pagination {
         margin-top:1rem;
         text-align: center;
