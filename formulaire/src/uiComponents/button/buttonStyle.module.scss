@@ -1,6 +1,6 @@
 
 
-a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight, button.btnRed {
+a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight, button.btnRed, button.btnDisabled {
     display: inline-flex;
     text-decoration: none;
     padding: 0;
@@ -96,6 +96,9 @@ a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight, butt
       background-color:rgb(117, 14, 14) !important;
 
     }
+  }
+  button.btnDisabled {
+    background-color: #D3D3D3; 
   }
 
   a.buttonLinkLight, button.buttonLinkLight {
