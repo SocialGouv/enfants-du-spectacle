@@ -1,17 +1,16 @@
-# from https://nextjs.org/docs/deployment#docker-image
-
 # 1. Install node dependencies only when needed
 FROM node:alpine3.16 AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+RUN yarn fetch --immutable && yarn cache clean
 
 # 2. Rebuild the source code only when needed
 FROM node:alpine3.16 AS builder
 WORKDIR /app
-COPY . .
 COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 # cf https://github.com/webpack/webpack/issues/14532
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NODE_ENV=production
@@ -39,7 +38,7 @@ ENV SENTRY_ORG=incubateur
 ARG SENTRY_AUTH_TOKEN
 ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 RUN npm run build
-RUN npm ci --production --ignore-scripts
+RUN yarn workspaces focus --production && yarn cache clean
 # this should remove dev node module dependencies
 RUN npx prisma generate
 
@@ -82,4 +81,4 @@ USER 1000
 EXPOSE 3000
 ARG START_SCRIPT=start-prod
 ENV START_SCRIPT=$START_SCRIPT
-CMD ["sh", "-c", "npm run $START_SCRIPT"]
+CMD ["sh", "-c", "yarn run $START_SCRIPT"]

@@ -99,5 +99,6 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "npx eslint --cache"
-  }
+  },
+  "packageManager": "yarn@3.6.4"
 }
