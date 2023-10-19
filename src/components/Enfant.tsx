@@ -4,6 +4,7 @@ import type {
   Dossier,
   Enfant,
   JustificatifEnfant,
+  PieceDossierEnfant,
   TypeConsultationMedecin,
   User,
 } from "@prisma/client";
@@ -15,7 +16,7 @@ import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
 import type { Comments } from "src/lib/fetching/comments";
-import { uploadDoc } from "src/lib/fetching/docs";
+import { deleteDoc, uploadDoc } from "src/lib/fetching/docs";
 import { passEnfant } from "src/lib/fetching/enfants";
 import {
   INFOS_REPRESENTANTS,
@@ -53,7 +54,9 @@ const EnfantComponent: React.FC<Props> = ({
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
-  
+  const [localDataLinks, setLocalDataLinks] =
+    React.useState<Record<string, unknown>>(dataLinks);
+
   const nombreDeLignes = remunerations.find(
     (remuneration) => remuneration.nombreLignes
   )?.nombreLignes;
@@ -259,7 +262,21 @@ const EnfantComponent: React.FC<Props> = ({
     });
   };
 
-  const handleDelete = async (id: string) => {};
+  const handleDelete = async (id: string) => {
+    if (id) {
+      await deleteDoc(parseInt(id));
+      setLocalDataLinks((prevData) => {
+        const updatedData = prevData.enfants.map((enfant) => {
+          const piecesFiltered = enfant.piecesDossier.filter(
+            (piece: PieceDossierEnfant) => piece.id !== parseInt(id)
+          );
+          enfant.piecesDossier = piecesFiltered;
+          return enfant;
+        });
+        return { ...prevData, enfants: updatedData };
+      });
+    }
+  };
 
   useEffect(() => {
     if (mountedRef) {
@@ -353,25 +370,24 @@ const EnfantComponent: React.FC<Props> = ({
           </Info>
 
           <Info title="Pièces justificatives" className={styles.info}>
-          {dossier.source === 'FORM_EDS' &&
-            <JustificatifsEnfants
-              enfant={enfant}
-              dataLinks={dataLinks}
-              dossier={dossier}
-            />
-          }
+            {dossier.source === "FORM_EDS" && (
+              <JustificatifsEnfants
+                enfant={enfant}
+                dataLinks={localDataLinks}
+                dossier={dossier}
+              />
+            )}
           </Info>
           {(session.data?.dbUser.role === "INSTRUCTEUR" ||
             session.data?.dbUser.role === "ADMIN") && (
             <Info title="Validation" className={styles.info}>
-
-            {dossier.source === 'FORM_EDS' &&
-              <ValidationJustificatifsEnfant
-                enfant={enfant}
-                dossier={dossier}
-                dataLinks={dataLinks}
-              />
-            }
+              {dossier.source === "FORM_EDS" && (
+                <ValidationJustificatifsEnfant
+                  enfant={enfant}
+                  dossier={dossier}
+                  dataLinks={localDataLinks}
+                />
+              )}
             </Info>
           )}
         </div>
@@ -499,7 +515,21 @@ const EnfantComponent: React.FC<Props> = ({
                             type.value === formData.typeConsultationMedecin
                         )?.typeJustif as JustificatifEnfant
                       }`}
-                      docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
+                      docs={
+                        (localDataLinks &&
+                          localDataLinks.enfants
+                            .find(
+                              (enf) => parseInt(enfant.externalId) === enf.id
+                            )
+                            .piecesDossier.filter((piece) =>
+                              [
+                                "AVIS_MEDICAL",
+                                "BON_PRISE_EN_CHARGE",
+                                "AUTORISATION_PRISE_EN_CHARGE",
+                              ].includes(piece.type)
+                            )) ||
+                        []
+                      }
                       allowChanges={false}
                       label={`${
                         TYPE_CONSULTATION_MEDECIN.find(
@@ -521,7 +551,19 @@ const EnfantComponent: React.FC<Props> = ({
                 <Info title="AVIS MÉDICAL">
                   <InputFile
                     id={"AVIS_MEDICAL"}
-                    docs={dataLinks.enfants.find(enf => parseInt(enfant.externalId) === enf.id).piecesDossier.filter(piece => ['AVIS_MEDICAL', 'BON_PRISE_EN_CHARGE', 'AUTORISATION_PRISE_EN_CHARGE'].includes(piece.type)) || []}
+                    docs={
+                      (localDataLinks &&
+                        localDataLinks.enfants
+                          .find((enf) => parseInt(enfant.externalId) === enf.id)
+                          .piecesDossier.filter((piece) =>
+                            [
+                              "AVIS_MEDICAL",
+                              "BON_PRISE_EN_CHARGE",
+                              "AUTORISATION_PRISE_EN_CHARGE",
+                            ].includes(piece.type)
+                          )) ||
+                      []
+                    }
                     allowChanges={true}
                     label={`Avis médical`}
                     handleFile={handleFile}
