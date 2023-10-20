@@ -1,22 +1,23 @@
-import {
+import type {
   JustificatifDossier,
   JustificatifEnfant,
   PieceDossier,
   STATUT_PIECE,
 } from "@prisma/client";
-import React from "react";
-import styles from "./InputFile.module.scss";
-import { BiTrash } from "react-icons/bi";
 import { useSession } from "next-auth/react";
-import ButtonLink from "./button/buttonLink";
+import React from "react";
+import { BiTrash } from "react-icons/bi";
 
-type Doc = {
+import ButtonLink from "./button/buttonLink";
+import styles from "./InputFile.module.scss";
+
+interface Doc {
   id: string;
   nom: string;
   type: string;
   statut: STATUT_PIECE | null;
   link: string;
-};
+}
 
 interface Props {
   id: JustificatifDossier | JustificatifEnfant;
@@ -27,7 +28,7 @@ interface Props {
     id: number;
     piecesDossier: (PieceDossier & { path: string })[];
   };
-  allowChanges: Boolean;
+  allowChanges: boolean;
   handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete: (id: string) => void;
 }
@@ -41,7 +42,7 @@ const InputFile: React.FC<Props> = ({
   handleDelete,
 }) => {
   const { data: session } = useSession();
-  const [showDialogue, setShowDialogue] = React.useState<Boolean>(false);
+  const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
 
   return (
     <div className={styles.InputFile}>
@@ -70,8 +71,9 @@ const InputFile: React.FC<Props> = ({
                         ? styles.accepted
                         : ""
                     }`}
+                    rel="noreferrer"
                   >
-                    {doc.type}
+                    {doc.nom}
                   </a>
                   {session && session.dbUser.role === "MEDECIN" && (
                     <div className={styles.medecinBloc}>
@@ -125,7 +127,7 @@ const InputFile: React.FC<Props> = ({
             placeholder="Parcourir..."
             accept="image/jpeg,image/gif,image/png,application/pdf,text/plain"
             onChange={handleFile}
-          ></input>
+          />
           <p className={styles.smallText}>
             Documents acceptés : jpeg, png, pdf
           </p>

@@ -73,6 +73,7 @@ const get: NextApiHandler = async (req, res) => {
           });
           return {
             id: piece.id,
+            nom: piece.nom,
             type: piece.type,
             statut: piece.statut,
             link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`,
@@ -96,6 +97,7 @@ const get: NextApiHandler = async (req, res) => {
             );
             return {
               id: piece.id,
+              nom: piece.nom,
               type: piece.type,
               statut: piece.statut,
               link: `${process.env.NEXTAUTH_URL}/docs?token=${tokenSDP}`,

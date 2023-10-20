@@ -5,13 +5,12 @@ import type {
   Enfant,
   JustificatifEnfant,
   PieceDossierEnfant,
-  TypeConsultationMedecin,
   User,
 } from "@prisma/client";
 import _ from "lodash";
 import { useSession } from "next-auth/react";
-import React, { useCallback, useEffect, useState } from "react";
-import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
+import React, { useCallback, useEffect } from "react";
+import DatePicker from "react-datepicker";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
 import { JustificatifsEnfants } from "src/components/Justificatifs";
@@ -24,7 +23,7 @@ import {
   TYPE_CONSULTATION_MEDECIN,
 } from "src/lib/helpers";
 import { updateCommentairesNotifications, updateEnfant } from "src/lib/queries";
-import type { Remuneration } from "src/lib/types";
+import type { DataLinks, Remuneration } from "src/lib/types";
 
 import Accordion from "./Accordion";
 import InputComments from "./inputComments";
@@ -34,7 +33,7 @@ import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
-  dataLinks: Record<string, unknown>;
+  dataLinks: DataLinks;
   dossier: Dossier;
   comments: Comments[];
   actionComments: (comment: Comments) => void;
@@ -55,7 +54,7 @@ const EnfantComponent: React.FC<Props> = ({
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
-    React.useState<Record<string, unknown>>(dataLinks);
+    React.useState<DataLinks>(dataLinks);
 
   const nombreDeLignes = remunerations.find(
     (remuneration) => remuneration.nombreLignes
@@ -251,6 +250,7 @@ const EnfantComponent: React.FC<Props> = ({
         (type) => type.value === formData.typeConsultationMedecin
       )?.typeJustif
     );
+
     setFormData({
       ...formData,
       ["justificatifs"]: [
