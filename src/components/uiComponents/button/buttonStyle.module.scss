@@ -1,98 +1,115 @@
+a.buttonLink,
+button.buttonLink,
+a.buttonLinkLight,
+button.buttonLinkLight,
+button.btnRed {
+  display: inline-flex;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
 
+  &:after {
+    display: none;
+  }
 
-a.buttonLink, button.buttonLink, a.buttonLinkLight, button.buttonLinkLight {
+  .contentWrapper {
     display: inline-flex;
-    text-decoration: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    text-align: center;
-    padding: 10px 20px 10px 20px;
+    white-space: nowrap;
+    align-items: center;
+    img {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  > .content-wrapper {
+    display: inline-flex;
     font-size: 1rem;
     font-weight: 600;
+    padding: 8px 15px;
+    background-color: var(--blue_if);
+    border: 1px solid var(--blue_if);
+    color: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    vertical-align: baseline;
+    user-select: none;
+    transition: transform 100ms ease-in-out, box-shadow 100ms ease-in-out;
+  }
 
-    &:after {
-      display: none;
-    }
+  &.disabled > .content-wrapper {
+    pointer-events: none;
+    cursor: default;
+    background-color: var(--blue_if);
+    border: 1px solid var(--blue_if);
+  }
 
-    .contentWrapper {
-      display: inline-flex;
-      white-space: nowrap; 
-      align-items: center;
-      img {
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-      }
-    }
+  &.alt > .content-wrapper {
+    color: var(--blue_if);
+    background-color: #fff;
+    border: 1px solid var(--blue_if);
+  }
 
-    > .content-wrapper {
-      display:inline-flex;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 8px 15px;
-      background-color: var(--blue_if);
-      border: 1px solid var(--blue_if);
-      color: #fff;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      border-radius: 4px;
-      vertical-align: baseline;
-      user-select: none;
-      transition: transform 100ms ease-in-out, box-shadow 100ms ease-in-out;
-    }
+  &.small > .content-wrapper {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
 
-    &.disabled > .content-wrapper {
-      pointer-events: none;
-      cursor: default;
-      background-color: var(--blue_if);
-      border: 1px solid var(--blue_if);
-    }
-
-    &.alt > .content-wrapper {
-      color: var(--blue_if);
-      background-color: #fff;
-      border: 1px solid var(--blue_if);
-    }
-
-    &.small > .content-wrapper {
-      padding: 6px 12px;
-      font-size: 0.9rem;
-    }
-
-    &.large > .content-wrapper {
-      padding: 12px 20px;
-      font-size: 1.15rem;
-    }
-    &.alt.disabled > .content-wrapper {
-      color: white;
-      border: 1px solid var(--blue_if);
-    }
-  } 
-
-  a.buttonLink, button.buttonLink {
-    background: var(--blue-fr);
+  &.large > .content-wrapper {
+    padding: 12px 20px;
+    font-size: 1.15rem;
+  }
+  &.alt.disabled > .content-wrapper {
     color: white;
-    border: solid transparent 1px;
-    position: relative;
-    top: 0px;
-
-    &:hover {
-      transition: top 0.1s ease 0s;
-      top: 2px;
-      background-color: var(--blue-fr) !important;
-
-    }
+    border: 1px solid var(--blue_if);
   }
+}
 
-  a.buttonLinkLight, button.buttonLinkLight {
-    background: transparent;
-    color: var(--blue-fr);
-    border: solid var(--blue-fr) 1px;
-    position: relative;
-    top: 0px;
+a.buttonLink,
+button.buttonLink {
+  background: var(--blue-fr);
+  color: white;
+  border: solid transparent 1px;
+  position: relative;
+  top: 0px;
 
-    &:hover {
-      transition: top 0.1s ease 0s;
-      top: 2px;
-      background-color: var(--red-datafid);
-    }
+  &:hover {
+    transition: top 0.1s ease 0s;
+    top: 2px;
+    background-color: var(--blue-fr) !important;
   }
+}
+
+button.btnRed {
+  background: rgb(167, 31, 31);
+  color: white;
+  border: solid transparent 1px;
+  position: relative;
+  top: 0px;
+
+  &:hover {
+    transition: top 0.1s ease 0s;
+    top: 2px;
+    background-color: rgb(117, 14, 14) !important;
+  }
+}
+
+a.buttonLinkLight,
+button.buttonLinkLight {
+  background: transparent;
+  color: var(--blue-fr);
+  border: solid var(--blue-fr) 1px;
+  position: relative;
+  top: 0px;
+
+  &:hover {
+    transition: top 0.1s ease 0s;
+    top: 2px;
+    background-color: var(--red-datafid);
+  }
+}
