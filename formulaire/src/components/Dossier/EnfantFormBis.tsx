@@ -125,6 +125,7 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
 
   React.useEffect(() => {
     setEnfant(enfant);
+    setRemunerationList(enfant.remuneration ?? []);
   }, [enfant])
 
   const handleDeleteChild = async () => {

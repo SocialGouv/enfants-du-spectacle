@@ -146,6 +146,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   const fetchEnfants = async () => {
     setLoading(true);
     const enfantsFetched = await getEnfantsByDossierId(contextDossier.dossier.id, page, 25, termOrdered, order)
+    console.log('enfants fetched', enfantsFetched)
     setEnfants(enfantsFetched.enfants);
     setNumberEnfants(enfantsFetched.count);
     setLoading(false);
@@ -449,6 +450,21 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
           )}
         </div>
       </TableCard>
+      {(contextDossier.dossier.statut === "BROUILLON" ||
+        contextDossier.dossier.statut === "CONSTRUCTION") && (
+        <div className={styles.listBtn}>
+          <div>
+            <ButtonLink
+              light={true}
+              onClick={() => {
+                addEnfant();
+              }}
+            >
+              Ajouter un enfant
+            </ButtonLink>
+          </div>
+        </div>
+      )}
 
       {enfantToPass && selectedEnfant &&(
         <div id="row-enfant">
