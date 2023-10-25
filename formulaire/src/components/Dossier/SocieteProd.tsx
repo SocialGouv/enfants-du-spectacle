@@ -71,7 +71,7 @@ const SocieteProd: React.FC<Props> = ({ }) => {
             </div>
 
             {resSirene && !resSirene.etablissements &&
-                <span>{resSirene.header.message !== 'ok' ? resSirene.header.message :  resSirene.etablissement.uniteLegale.denominationUniteLegale}</span>
+                <span className={resSirene.header.message !== 'ok' ? styles.wrong : styles.valid}>{resSirene.header.message !== 'ok' ? resSirene.header.message :  resSirene.etablissement.uniteLegale.denominationUniteLegale}</span>
             }
             
         </div>

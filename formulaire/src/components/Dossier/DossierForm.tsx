@@ -29,7 +29,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const router = useRouter();
 
   const [toDisplay, setTodisplay] = React.useState<
-    "Demandeur" | "Projet" | "Enfants" | "EnfantsBis"
+    "Demandeur" | "Projet" | "Enfants" 
   >("Demandeur");
   const [messageError, setMessageError] = React.useState<string>("");
   const [messageSuccess, setMessageSuccess] = React.useState<string>("");
@@ -116,7 +116,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
             }
           });
           break;
-        case "EnfantsBis":
+        case "Enfants":
           console.log('in enfant')
           const enfantsFetched = await getEnfantsByDossierId(contextDossier.dossier.id, 0, 250, 'nom', 'asc')
           console.log('fetch : ', enfantsFetched.enfants)
@@ -129,7 +129,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                 enfant[field.code as keyof Enfant] === ""
               ) {
                 setTodisplay(
-                  entity.entity as "Demandeur" | "Projet" | "EnfantsBis"
+                  entity.entity as "Demandeur" | "Projet" | "Enfants"
                 );
                 setMessageError(
                   `Le champ '${field.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`
@@ -247,8 +247,8 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           Projet
         </ButtonLink>
         <ButtonLink
-          light={toDisplay !== "EnfantsBis"}
-          onClick={() => setTodisplay("EnfantsBis")}
+          light={toDisplay !== "Enfants"}
+          onClick={() => setTodisplay("Enfants")}
         >
           Enfants
         </ButtonLink>
@@ -304,18 +304,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         )}
 
         {toDisplay === "Enfants" && (
-          <>
-            <EnfantList
-              comments={comments}
-              allowChanges={
-                dossier.statut === "BROUILLON" ||
-                dossier.statut === "CONSTRUCTION"
-              }
-            ></EnfantList>
-          </>
-        )}
-
-        {toDisplay === "EnfantsBis" && (
           <>
             <EnfantListBis
               allowChanges={

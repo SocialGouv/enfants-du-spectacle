@@ -22,6 +22,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
     let resDossier = await createDossierEds({
       demandeurId: resDemanndeur.id,
       dateCreation: new Date(),
+      nom: ''
     } as Dossier);
     router.push(`/dossier/${resDossier.id}`);
   };

@@ -69,7 +69,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
         })
       );
       setComments(commentsList.flat());
-      setShowLoader(false);
     }
   };
 
@@ -96,6 +95,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
 
   React.useEffect(() => {
     fetchComments();
+    setShowLoader(false);
   }, [dossiers]);
 
   const [indexItem, setIndexItem] = React.useState<number>();

@@ -352,7 +352,8 @@ const sendEmail = (
   type: string,
   attachment: string,
   dossier?: Dossier,
-  to?: string
+  to?: string,
+  statut: string = ""
 ) => {
   window
     .fetch(`/api/mail/`, {
@@ -361,6 +362,7 @@ const sendEmail = (
         dossier: dossier ? dossier : null,
         to: to ? to : null,
         type: type,
+        statut: statut ? statut : null,
       }),
       method: "POST",
     })

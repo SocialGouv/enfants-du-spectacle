@@ -148,7 +148,8 @@ const EnfantFormBis: React.FC<Props> = ({
 
   React.useEffect(() => {
     setEnfant(enfant);
-  }, [enfant]);
+    setRemunerationList(enfant.remuneration ?? []);
+  }, [enfant])
 
   const handleDeleteChild = async () => {
     await deleteEnfant(enfant.id);
