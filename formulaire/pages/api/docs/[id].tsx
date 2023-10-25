@@ -30,6 +30,15 @@ function getId(req: NextApiRequest): number {
   return Number(req.query.id as string);
 }
 
+const cleanFileName = (originalFilename: string): string => {
+  const cleaned = originalFilename
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const replacedSpaces = cleaned.replace(/\s+/g, "_");
+
+  return replacedSpaces;
+};
+
 export const uploadFile = (
   req: NextApiRequest,
   saveLocally?: boolean
@@ -40,7 +49,8 @@ export const uploadFile = (
   if (saveLocally) {
     options.uploadDir = `/mnt/docs-form/${dossierId}`;
     options.filename = (name, ext, path, form) => {
-      return Date.now().toString() + "_" + path.originalFilename?.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const cleanedFilename = cleanFileName(path.originalFilename || "");
+      return Date.now().toString() + "_" + cleanedFilename;
     };
   }
 
