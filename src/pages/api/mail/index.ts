@@ -43,7 +43,7 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { type, dossier, to, attachment } = parsed;
+  const { type, dossier, to, attachment, statut } = parsed;
   const wording = _.find(WORDING_MAILING, { type: type });
   if (!wording) {
     res.status(400).end();
@@ -51,10 +51,21 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   if (type === "status_changed") {
+    console.log('dossier statut', statut)
     wording.subject = wording.subject.replace(
       "___DOSSIERID___",
       `n° ${dossier.externalId}`
     );
+    wording.subject = wording.subject.replace(
+      "__STATUS__",
+      `${statut.replace("_", " ")}`.toLocaleLowerCase()
+    );
+    wording.text = wording.text.replace(
+      "__STATUS__",
+      `${statut.replace("_", " ")}`.toLocaleLowerCase()
+    ).replace(
+      "__WARNING__",
+      statut === "CONSTRUCTION" ? "Vous pouvez apporter les deniers éléments necessaires à la complétion de votre dossier." : "Il n’est plus modifiable d’ici la commission.");
   }
 
   const templateSignin = fs
