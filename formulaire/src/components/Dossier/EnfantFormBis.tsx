@@ -5,11 +5,29 @@ import InputAutocomplete from "../uiComponents/InputAutocomplete";
 import { createPieceEnfant, deletePieceEnfant } from "src/fetching/pieceEnfant";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { EnfantWithDosier, deleteEnfant, updateEnfant } from "src/fetching/enfant";
-import { REMUNERATIONS, TYPE_EMPLOI, frenchDateText, useDebouncedCallback } from "src/lib/helpers";
+import {
+  EnfantWithDosier,
+  deleteEnfant,
+  updateEnfant,
+} from "src/fetching/enfant";
+import {
+  REMUNERATIONS,
+  TYPE_EMPLOI,
+  frenchDateText,
+  useDebouncedCallback,
+} from "src/lib/helpers";
 import { Select } from "@dataesr/react-dsfr";
-import { Enfant, JustificatifEnfant, NatureCachet, Remuneration } from "@prisma/client";
-import { createRemuneration, deleteRemunerationById, deleteRemunerationsByEnfantId } from "src/fetching/remuneration";
+import {
+  Enfant,
+  JustificatifEnfant,
+  NatureCachet,
+  Remuneration,
+} from "@prisma/client";
+import {
+  createRemuneration,
+  deleteRemunerationById,
+  deleteRemunerationsByEnfantId,
+} from "src/fetching/remuneration";
 import { BiTrash } from "react-icons/bi";
 import { ButtonLink } from "src/uiComponents/button";
 import InputFile from "../uiComponents/InputFile";
@@ -26,7 +44,12 @@ interface Props {
   listDelete: (enfant: EnfantData) => void;
 }
 
-const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDelete }) => {
+const EnfantFormBis: React.FC<Props> = ({
+  enfant,
+  allowChanges,
+  refresh,
+  listDelete,
+}) => {
   const [enfantTmp, setEnfant] = useState<EnfantData>(enfant);
   const [dataPassed, setDataPassed] =
     React.useState<Record<"nom" | "prenom", string>>();
@@ -125,7 +148,7 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
 
   React.useEffect(() => {
     setEnfant(enfant);
-  }, [enfant])
+  }, [enfant]);
 
   const handleDeleteChild = async () => {
     await deleteEnfant(enfant.id);
@@ -358,7 +381,6 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
       }),
     });
   };
-
 
   return (
     <div className={styles.enfantForm}>
@@ -875,7 +897,6 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
         ""
       )}
 
-
       <h5 className={styles.h5Spacer}>{"Avis médical d'aptitude"}</h5>
       <div className={styles.blocForm}>
         <label htmlFor="remunerationTotale" className="mb-2 italic">
@@ -1094,7 +1115,7 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
             className="inputText"
           />
         </div>
-        
+
         <div className={styles.blocForm}>
           <label htmlFor="telRepresentant1" className="mb-2 italic">
             Téléphone du représentant légal 1
@@ -1276,6 +1297,10 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
       >
         <div className={styles.buttonDeleteBar}>
           <ButtonLink
+            disabled={
+              contextDossier.dossier.statut !== "BROUILLON" &&
+              contextDossier.dossier.statut !== "CONSTRUCTION"
+            }
             red
             onClick={() => {
               setShowDialogue(true);
@@ -1311,7 +1336,7 @@ const EnfantFormBis: React.FC<Props> = ({ enfant, allowChanges, refresh, listDel
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export default EnfantFormBis;
