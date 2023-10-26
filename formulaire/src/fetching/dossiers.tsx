@@ -1,4 +1,5 @@
 import {
+  Comments,
   Demandeur,
   Dossier,
   Enfant,
@@ -13,6 +14,7 @@ import { DemandeurData, statusGroup } from "src/lib/types";
 type EnfantData = Enfant & {
   remuneration: Remuneration[];
   piecesDossier: PieceDossierEnfant[];
+  comments?: Comments[]
 };
 
 type DossierData = Dossier & {

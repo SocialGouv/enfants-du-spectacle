@@ -1,5 +1,5 @@
-import React from 'react';
-import IconLoader from 'src/components/IconLoader';
+import React from "react";
+import IconLoader from "src/components/IconLoader";
 import styles from "./buttonStyle.module.scss";
 
 interface IProps {
@@ -8,13 +8,14 @@ interface IProps {
   rel?: string;
   target?: string;
   disabled?: boolean;
-  light?: boolean; 
+  light?: boolean;
+  red?: boolean;
   loading?: boolean;
-  size?: 'small' | null | 'large';
+  size?: "small" | null | "large";
   onClick?: (() => void) | undefined;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   download?: string;
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface ILinkProps {
@@ -24,22 +25,24 @@ interface ILinkProps {
   target?: string;
   disabled?: boolean;
   download?: string;
-  light?: boolean; 
+  light?: boolean;
+  red?: boolean;
   loading?: boolean;
-  size?: 'small' | null | 'large';
+  size?: "small" | null | "large";
   onClick?: (() => void) | undefined;
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface IButtonProps {
   alt?: boolean;
   disabled?: boolean;
-  size?: 'small' | null | 'large';
-  light?: boolean; 
+  size?: "small" | null | "large";
+  light?: boolean;
+  red?: boolean;
   loading?: boolean;
   onClick?: (() => void) | undefined;
-  type: 'button' | 'submit' | 'reset' | undefined;
-  children: React.ReactNode
+  type: "button" | "submit" | "reset" | undefined;
+  children: React.ReactNode;
 }
 
 const LinkAsAButton: React.FC<ILinkProps> = ({
@@ -76,20 +79,23 @@ const ClassicButton: React.FC<IButtonProps> = ({
   children,
   loading,
   light,
+  red,
 }) => (
   <button
     onClick={onClick}
     type={type}
     disabled={loading}
-    className={ light ? styles.buttonLinkLight : styles.buttonLink}
+    className={
+      light ? styles.buttonLinkLight : red ? styles.btnRed : styles.buttonLink
+    }
   >
     <div className={styles.contentWrapper}>
       {(() => {
         switch (loading) {
-          case true: 
-            return <IconLoader size={40} text={`chargement ...`}/>
-          default: 
-            return children
+          case true:
+            return <IconLoader size={40} text={`chargement ...`} />;
+          default:
+            return children;
         }
       })()}
     </div>
@@ -106,9 +112,10 @@ const ButtonLink: React.FC<IProps> = ({
   size,
   type,
   onClick,
-  download, 
+  download,
   loading,
-  light
+  light,
+  red,
 }) => {
   if (href) {
     return (
@@ -120,6 +127,7 @@ const ButtonLink: React.FC<IProps> = ({
         disabled={disabled}
         size={size}
         light={light}
+        red={red}
         onClick={onClick}
         download={download}
       >
@@ -133,6 +141,7 @@ const ButtonLink: React.FC<IProps> = ({
         onClick={onClick}
         type={type}
         light={light}
+        red={red}
         loading={loading}
         alt={alt}
         disabled={disabled}
@@ -142,7 +151,7 @@ const ButtonLink: React.FC<IProps> = ({
       </ClassicButton>
     );
   }
-  throw new Error('Should not happen');
+  throw new Error("Should not happen");
 };
 
 export default ButtonLink;

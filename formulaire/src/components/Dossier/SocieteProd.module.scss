@@ -1,4 +1,11 @@
 .societeProd {
     margin-top: 2rem;
     padding: 0 2rem;
+
+    .valid {
+        color: green;
+    }
+    .wrong {
+        color: red;
+    }
 }

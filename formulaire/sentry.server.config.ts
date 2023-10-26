@@ -8,6 +8,6 @@ if (!sentryDsn) {
   Sentry.init({
     dsn: sentryDsn,
     environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT,
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.2,
   });
 }

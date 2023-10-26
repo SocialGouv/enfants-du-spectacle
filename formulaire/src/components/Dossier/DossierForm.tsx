@@ -1,6 +1,6 @@
 import { Comments, Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
-import { DossierData, ResDocs, updateDossier } from "../../fetching/dossiers";
+import { DossierData, EnfantData, ResDocs, updateDossier } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./DossierForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,6 +16,8 @@ import IconLoader from "../IconLoader";
 import useStateContext from "src/context/StateContext";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { sendEmail } from "src/fetching/email";
+import EnfantListBis from "./EnfantListBis";
+import { getEnfantsByDossierId } from "src/fetching/enfant";
 
 interface Props {
   dossier: DossierData;
@@ -27,7 +29,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const router = useRouter();
 
   const [toDisplay, setTodisplay] = React.useState<
-    "Demandeur" | "Projet" | "Enfants"
+    "Demandeur" | "Projet" | "Enfants" 
   >("Demandeur");
   const [messageError, setMessageError] = React.useState<string>("");
   const [messageSuccess, setMessageSuccess] = React.useState<string>("");
@@ -55,7 +57,8 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     let verif = true;
     setMessageError("");
 
-    CHECKS.map((entity) => {
+    await Promise.all(CHECKS.map(async (entity) => {
+      console.log('entity : ', entity.entity)
       switch (entity.entity) {
         case "Demandeur":
           entity.mandatory_fields.map((field) => {
@@ -114,8 +117,13 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           });
           break;
         case "Enfants":
-          contextDossier.enfants.map((enfant) => {
+          console.log('in enfant')
+          const enfantsFetched = await getEnfantsByDossierId(contextDossier.dossier.id, 0, 250, 'nom', 'asc')
+          console.log('fetch : ', enfantsFetched.enfants)
+          enfantsFetched.enfants.map((enfant) => {
+            console.log('for enfant : ', enfant.nom + ' ' + enfant.prenom)
             entity.mandatory_fields.map((field) => {
+              console.log('checking field : ', field.code)
               if (
                 !enfant[field.code as keyof Enfant] ||
                 enfant[field.code as keyof Enfant] === ""
@@ -134,15 +142,18 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         default:
           return false;
       }
-    });
+    }));
 
     console.log("verif: ", verif);
+    setMessageSuccess("");
     return verif;
   };
 
   const handleDepotDossier = async () => {
     console.log("trying depot : ", contextDossier);
-
+    setMessageSuccess(
+      "Vérification du dossier en cours ..."
+    );
     if (await processChecks()) {
       setMessageSuccess(
         "Votre dossier est en cours d'envoi aux services d'instructions"
@@ -152,7 +163,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         contextDossier.dossier,
         contextDossier.demandeur,
         contextDossier.societeProduction,
-        contextDossier.enfants
+        (await getEnfantsByDossierId(contextDossier.dossier.id, 0, 250, 'nom', 'asc')).enfants
       );
       if (!dossierSent.error) {
         if (contextDossier.dossier.statut === "BROUILLON") {
@@ -294,13 +305,12 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
 
         {toDisplay === "Enfants" && (
           <>
-            <EnfantList
-              comments={comments}
+            <EnfantListBis
               allowChanges={
                 dossier.statut === "BROUILLON" ||
                 dossier.statut === "CONSTRUCTION"
               }
-            ></EnfantList>
+            ></EnfantListBis>
           </>
         )}
 

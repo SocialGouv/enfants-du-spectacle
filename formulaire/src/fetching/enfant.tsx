@@ -1,4 +1,5 @@
 import { Dossier, Enfant, PieceDossierEnfant } from "@prisma/client";
+import { EnfantData } from "./dossiers";
 
 export type EnfantWithDosier = Enfant & {
   dossier: Dossier;
@@ -16,7 +17,7 @@ const createEnfant = async (enfant: Omit<Enfant, "id">) => {
     }
     return r.json();
   });
-  return fetching as Enfant;
+  return fetching as EnfantData;
 };
 
 const deleteEnfant = async (id: number) => {
@@ -60,6 +61,21 @@ const searchEnfants = async (infosEnfant: Record<"nom" | "prenom", string>) => {
   return fetching as EnfantWithDosier[];
 };
 
+const getEnfantsByDossierId = async (dossierId: number, page: number, numberByPage: number, termToOrder: keyof Enfant, order: 'asc' | 'desc') => {
+  const fetching = await fetch(
+    `/api/enfants/dossier/${dossierId}?page=${page}&termToOrder=${termToOrder}&order=${order}`,
+    {
+      method: "GET",
+    }
+  ).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return {enfants: fetching.enfants as EnfantData[], count: fetching.count as number};
+};
+
 const importEnfants = async (
   enfants: Record<string, any>[],
   dossierId: number
@@ -81,6 +97,7 @@ export {
   createEnfant,
   updateEnfant,
   searchEnfants,
+  getEnfantsByDossierId,
   deleteEnfant,
   importEnfants,
 };

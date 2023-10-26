@@ -76,9 +76,9 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                   dossier,
                   demandeur.email
                 );
+              } else {
+                sendEmail("status_changed", "", dossier, demandeur.email, transition.to);
               }
-              if (transition.name === "passerInstruction")
-                sendEmail("status_changed", "", dossier, demandeur.email);
             }}
           >
             <span role="img" className={styles.icon} aria-label="test">

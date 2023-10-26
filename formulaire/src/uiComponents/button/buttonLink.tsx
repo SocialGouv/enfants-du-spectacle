@@ -84,9 +84,15 @@ const ClassicButton: React.FC<IButtonProps> = ({
   <button
     onClick={onClick}
     type={type}
-    disabled={loading}
+    disabled={disabled}
     className={
-      light ? styles.buttonLinkLight : red ? styles.btnRed : styles.buttonLink
+      disabled
+        ? styles.btnDisabled
+        : light
+        ? styles.buttonLinkLight
+        : red
+        ? styles.btnRed
+        : styles.buttonLink
     }
   >
     <div className={styles.contentWrapper}>
