@@ -4,6 +4,8 @@ import type { Comments } from "src/lib/fetching/comments";
 import { frenchDateHour } from "src/lib/helpers";
 
 import styles from "./ListComments.module.scss";
+import { User } from "@prisma/client";
+import { getUsersById } from "src/lib/fetching/users";
 
 interface Props {
   comments: Comments[];
@@ -36,7 +38,6 @@ interface CommentsProps {
 }
 
 const CardComment: React.FC<CommentsProps> = ({ comment }) => {
-  const { data: session } = useSession();
   return (
     <div
       className={`${styles.cardComment} ${
@@ -44,7 +45,7 @@ const CardComment: React.FC<CommentsProps> = ({ comment }) => {
       }`}
     >
       <div className={styles.headerComment}>
-        <b>{session.dbUser.email}</b> -{" "}
+        {comment.sender && <b>{comment.sender}</b>} -{" "}
         {frenchDateHour(comment.date ?? new Date())}
       </div>
       <p

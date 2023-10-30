@@ -1,7 +1,6 @@
 import { Comments } from "@prisma/client";
 import React from "react";
 import styles from "./ListComments.module.scss";
-import { useSession } from "next-auth/react";
 import { frenchDateHour } from "src/lib/helpers";
 
 interface Props {
@@ -39,7 +38,6 @@ interface CommentsProps {
 }
 
 const CardComment: React.FC<CommentsProps> = ({ comment }) => {
-  const { data: session } = useSession();
   return (
     <div
       className={`${styles.cardComment} ${
@@ -47,7 +45,7 @@ const CardComment: React.FC<CommentsProps> = ({ comment }) => {
       }`}
     >
       <div className={styles.headerComment}>
-        <b>{session.dbUser.email}</b> -{" "}
+        {comment.sender && <b>{comment.sender}</b>} -{" "}
         {frenchDateHour(comment.date ?? new Date())}
       </div>
       <p

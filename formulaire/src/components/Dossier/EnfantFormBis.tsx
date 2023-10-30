@@ -36,6 +36,8 @@ import { uploadDoc } from "src/fetching/docs";
 import Link from "next/link";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
+import { useSession } from "next-auth/react";
+import { getUsersById } from "src/fetching/users";
 
 interface Props {
   enfant: EnfantData;
@@ -51,6 +53,7 @@ const EnfantFormBis: React.FC<Props> = ({
   listDelete,
 }) => {
   const [enfantTmp, setEnfant] = useState<EnfantData>(enfant);
+  const { data: session } = useSession();
   const [dataPassed, setDataPassed] =
     React.useState<Record<"nom" | "prenom", string>>();
   const [initialDataPassed, setInitialDataPassed] =
@@ -64,6 +67,18 @@ const EnfantFormBis: React.FC<Props> = ({
     number | undefined
   >(0);
   const contextDossier = { ...useStateContext() };
+
+  const [senderComment, setSenderComment] = React.useState<string>("");
+
+  const fetchUser = async () => {
+    if (session) {
+      const users = await getUsersById([session.dbUser.id]);
+      const responseUser = users[0] || {};
+      if (responseUser && responseUser.nom && responseUser.prenom) {
+        setSenderComment(responseUser.nom + " " + responseUser.prenom);
+      }
+    }
+  };
 
   const handleSelect = (enfant: EnfantWithDosier) => {
     setEnfant({
@@ -141,6 +156,10 @@ const EnfantFormBis: React.FC<Props> = ({
     saveEnfant();
   }, [enfantTmp]);
 
+  React.useEffect(() => {
+    fetchUser();
+  }, []);
+
   const saveEnfant = useDebouncedCallback(() => {
     updateEnfant(enfantTmp);
     refresh(enfantTmp);
@@ -149,7 +168,7 @@ const EnfantFormBis: React.FC<Props> = ({
   React.useEffect(() => {
     setEnfant(enfant);
     setRemunerationList(enfant.remuneration ?? []);
-  }, [enfant])
+  }, [enfant]);
 
   const handleDeleteChild = async () => {
     await deleteEnfant(enfant.id);
@@ -1280,6 +1299,7 @@ const EnfantFormBis: React.FC<Props> = ({
       <InputComments
         title={"Commentaires liés à l'enfant"}
         dossierId={contextDossier.dossier.id}
+        sender={senderComment}
         enfantId={enfantTmp.id}
         parentId={null}
       ></InputComments>

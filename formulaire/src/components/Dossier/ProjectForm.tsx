@@ -12,10 +12,11 @@ import { uploadDoc } from "src/fetching/docs";
 import useStateContext from "src/context/StateContext";
 import { useState } from "react";
 import { MultiSelect } from "react-multi-select-component";
-import dossier from "pages/api/dossier";
 import TableCard from "../TableCard";
 import InputComments from "../uiComponents/inputComments";
 import ListComments from "../ListComments";
+import { useSession } from "next-auth/react";
+import { getUsersById } from "src/fetching/users";
 
 interface Props {
   allowChanges: Boolean;
@@ -23,6 +24,7 @@ interface Props {
 
 const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
   const contextDossier = { ...useStateContext() };
+  const { data: session } = useSession();
   const [scenesSensibles, setScenesSensibles] = useState<
     { label: string; value: string }[]
   >(
@@ -33,6 +35,18 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
       };
     })
   );
+
+  const [senderComment, setSenderComment] = React.useState<string>("");
+
+  const fetchUser = async () => {
+    if (session) {
+      const users = await getUsersById([session.dbUser.id]);
+      const responseUser = users[0] || {};
+      if (responseUser && responseUser.nom && responseUser.prenom) {
+        setSenderComment(responseUser.nom + " " + responseUser.prenom);
+      }
+    }
+  };
 
   const multiSelectText = {
     allItemsAreSelected: "Tous les élements sont sélectionnés",
@@ -82,6 +96,10 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
     registerLocale("fr", fr);
     setDefaultLocale("fr");
   });
+
+  React.useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <div className={styles.projectForm}>
@@ -316,6 +334,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
         <InputComments
           title={"Commentaires liés au projet"}
           dossierId={contextDossier.dossier.id}
+          sender={senderComment}
           enfantId={null}
           parentId={null}
         ></InputComments>

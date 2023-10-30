@@ -7,6 +7,7 @@ export interface Comments {
   dossierId: number;
   enfantId: number | null;
   date: Date;
+  sender: string | null;
   seen?: boolean;
 }
 

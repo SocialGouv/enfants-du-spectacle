@@ -4,13 +4,13 @@ import { createComment } from "src/fetching/commentaires";
 import { ButtonLink } from "src/uiComponents/button";
 import styles from "./InputComments.module.scss";
 import useStateContext from "src/context/StateContext";
-import { DossierData } from "src/fetching/dossiers";
 
 interface Props {
   dossierId: number;
-  title: string,
+  title: string;
   enfantId: number | null;
   parentId: number | null;
+  sender: string | null;
 }
 
 const InputComments: React.FC<Props> = ({
@@ -18,6 +18,7 @@ const InputComments: React.FC<Props> = ({
   dossierId,
   enfantId,
   parentId,
+  sender,
 }) => {
   const [comment, setComment] = React.useState<string>("");
   const contextDossier = { ...useStateContext() };
@@ -46,6 +47,7 @@ const InputComments: React.FC<Props> = ({
               dossierId: dossierId,
               enfantId: enfantId,
               commentsId: parentId,
+              sender: sender,
               date: new Date(),
             };
             console.log("length : ", comment.length);
