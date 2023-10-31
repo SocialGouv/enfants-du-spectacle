@@ -42,8 +42,8 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
     if (session) {
       const users = await getUsersById([session.dbUser.id]);
       const responseUser = users[0] || {};
-      if (responseUser && responseUser.nom && responseUser.prenom) {
-        setSenderComment(responseUser.nom + " " + responseUser.prenom);
+      if (responseUser && responseUser.email) {
+        setSenderComment(responseUser.email);
       }
     }
   };
