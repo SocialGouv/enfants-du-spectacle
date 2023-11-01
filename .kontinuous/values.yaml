@@ -75,7 +75,6 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
-
     build-form:
       use: build
       with:
@@ -87,8 +86,3 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
-
-deactivate:
-  jobs-deactivate:
-    runs:
-      deactivate:
