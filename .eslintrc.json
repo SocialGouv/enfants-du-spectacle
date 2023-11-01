@@ -1,17 +1,9 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "prettier",
-    "@socialgouv/eslint-config-react",
-    "@socialgouv/eslint-config-typescript"
-  ],
+  "extends": ["next/core-web-vitals", "prettier", "eslint-config-next"],
   "settings": {
     "import/resolver": {
       "node": {
-        "moduleDirectory": [
-          "node_modules",
-          "."
-        ]
+        "moduleDirectory": ["node_modules", "."]
       }
     }
   },
