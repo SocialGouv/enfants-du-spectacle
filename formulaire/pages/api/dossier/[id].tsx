@@ -1,10 +1,12 @@
 import type { NextApiHandler, NextApiRequest } from "next";
 import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
 import { generateToken } from "src/lib/utils";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
+  console.log('session id', session)
   if (!session) {
     res.status(401).end();
     return;
@@ -60,7 +62,7 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const prisma = new PrismaClient();
 
   var jwt = require("jsonwebtoken");

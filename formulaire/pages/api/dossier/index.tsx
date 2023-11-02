@@ -1,14 +1,15 @@
 import { Dossier, Prisma, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import { DossierData } from "src/fetching/dossiers";
 import { STATUS_EN_COURS, STATUS_TERMINES, CATEGORIES } from "src/lib/helpers";
 import { statusGroup } from "src/lib/types";
 import prisma from "../../../src/lib/prismaClient";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -26,7 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const numberByPage = 10;
   const page = req.query.page
     ? (parseInt(req.query.page as string) - 1) * numberByPage
@@ -180,7 +181,7 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const parsed: Dossier = JSON.parse(req.body);
   const data = {
     userId: session?.dbUser.id,
