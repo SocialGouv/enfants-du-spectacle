@@ -1,12 +1,11 @@
-import { Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
-import { EnfantData } from "src/fetching/dossiers";
 import prisma from "../../../../src/lib/prismaClient";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
