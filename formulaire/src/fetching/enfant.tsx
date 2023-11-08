@@ -63,7 +63,7 @@ const searchEnfants = async (infosEnfant: Record<"nom" | "prenom", string>) => {
 
 const getEnfantsByDossierId = async (dossierId: number, page: number, numberByPage: number, termToOrder: keyof Enfant, order: 'asc' | 'desc') => {
   const fetching = await fetch(
-    `/api/enfants/dossier/${dossierId}?page=${page}&termToOrder=${termToOrder}&order=${order}`,
+    `/api/enfants/dossier/${dossierId}?page=${page}&numberByPage=${numberByPage}&termToOrder=${termToOrder}&order=${order}`,
     {
       method: "GET",
     }
