@@ -1,9 +1,10 @@
 import type { NextApiHandler, NextApiRequest } from "next";
 import { Enfant, PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -22,7 +23,7 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const prisma = new PrismaClient();
   console.log('order : ', req.query.order)
   try {

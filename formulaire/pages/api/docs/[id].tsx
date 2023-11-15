@@ -1,10 +1,11 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
-import { getSession } from "next-auth/react";
 import formidable from "formidable";
 import fs from "fs";
 import fsp from "fs/promises";
 import * as crypto from "crypto";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 export const config = {
   api: {
@@ -13,7 +14,7 @@ export const config = {
 };
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -33,10 +34,25 @@ function getId(req: NextApiRequest): number {
 const cleanFileName = (originalFilename: string): string => {
   const cleaned = originalFilename
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-  const replacedSpaces = cleaned.replace(/\s+/g, "_");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s]/g, (match) => {
+      const specialChars: Record<string, string> = {
+        è: "e",
+        ç: "c",
+        à: "a",
+        "¨": "",
+        "~": "",
+        ê: "e",
+        î: "i",
+        ĩ: "i",
+      };
 
-  return replacedSpaces;
+      return specialChars[match] || match;
+    })
+    .replace(/@/g, "")
+    .replace(/\s/g, "_");
+
+  return cleaned;
 };
 
 export const uploadFile = (

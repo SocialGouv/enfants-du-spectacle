@@ -21,10 +21,16 @@ app:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
   startupProbe:
     failureThreshold: 48
     periodSeconds: 5
-
 form:
   ~chart: app
   ~needs: [build-form, pg-form]
@@ -49,6 +55,13 @@ form:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
 
 metabase:
   enabled: false
@@ -86,3 +99,16 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
+
+deactivate:
+  jobs-deactivate:
+    runs:
+      deactivate:
+        with:
+          db: true
+      drop-db2:
+        use: drop-db
+        with:
+          database: "form_{{.Values.global.branchSlug32}}"
+          databaseUser: "form_{{ .Values.global.branchSlug32 }}"
+

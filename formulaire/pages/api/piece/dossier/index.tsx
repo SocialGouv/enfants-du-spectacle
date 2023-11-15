@@ -1,13 +1,14 @@
 import { PieceDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import prisma from "../../../../src/lib/prismaClient";
 import fs from "fs";
 import { generateToken } from "src/lib/utils";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
