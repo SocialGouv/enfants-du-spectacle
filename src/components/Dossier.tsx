@@ -41,6 +41,7 @@ import InputComments from "./inputComments";
 import ListComments from "./ListComments";
 import Table from "./Table";
 import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
+import { getUsersById } from "src/lib/fetching/users";
 
 interface Props {
   dossierId: number;
@@ -59,19 +60,28 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
+  const [senderComment, setSenderComment] = React.useState<string>("");
   const [remunerations, setRemunerations] = React.useState<Remuneration[]>([]);
+
+  const fetchUser = async () => {
+    if (session) {
+      const users = await getUsersById([session.dbUser.id]);
+      const responseUser = users[0] || {};
+      if (responseUser && responseUser.nom && responseUser.prenom) {
+        setSenderComment(responseUser.nom + " " + responseUser.prenom);
+      }
+    }
+  };
 
   const fetchRemunerations = async () => {
     const enfantIds = dossier?.enfants.map((enfant) => enfant.externalId);
-    if (enfantIds && enfantIds.length > 0 && dossier?.source === 'FORM_EDS') {
+    if (enfantIds && enfantIds.length > 0 && dossier?.source === "FORM_EDS") {
       const resRemuneration = await getRemunerationsByEnfantsIds(
         enfantIds as string[]
       );
       setRemunerations(resRemuneration);
     }
   };
-
-
 
   const [comments, setComments] = React.useState<Comments[]>([]);
   const fetchComments = async () => {
@@ -119,6 +129,10 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   React.useEffect(() => {
     fetchComments();
     fetchRemunerations();
+  }, []);
+
+  React.useEffect(() => {
+    fetchUser();
   }, []);
 
   React.useEffect(() => {
@@ -183,9 +197,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES">
-              {dossier.source === 'FORM_EDS' &&
+              {dossier.source === "FORM_EDS" && (
                 <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
-              }
+              )}
             </Info>
             <Info title="VALIDATION">
               <ValidationJustificatifsDossier
@@ -228,6 +242,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                 <>
                   <InputComments
                     dossierId={parseInt(dossier.externalId!)}
+                    sender={senderComment}
                     enfantId={null}
                     parentId={null}
                     action={processComment}
@@ -480,11 +495,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         <Accordion title={childInfo} type={"commentChildren"}>
                           <Enfant
                             enfant={enfant}
+                            sender={senderComment}
                             dataLinks={dataLinks}
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
-                            remunerations={remunerations.filter(rem => rem.enfantId === parseInt(enfant.externalId ?? ''))}
+                            remunerations={remunerations.filter(
+                              (rem) =>
+                                rem.enfantId ===
+                                parseInt(enfant.externalId ?? "")
+                            )}
                           />
                         </Accordion>
                       </div>

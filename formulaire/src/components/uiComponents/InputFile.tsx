@@ -64,12 +64,26 @@ const InputFile: React.FC<Props> = ({
               const cleanFileName = (originalFilename: string): string => {
                 const cleaned = originalFilename
                   .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "");
-                const replacedSpaces = cleaned.replace(/\s+/g, "_");
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/[^\w\s]/g, (match) => {
+                    const specialChars: Record<string, string> = {
+                      è: "e",
+                      ç: "c",
+                      à: "a",
+                      "¨": "",
+                      "~": "",
+                      ê: "e",
+                      î: "i",
+                      ĩ: "i",
+                    };
 
-                return replacedSpaces;
+                    return specialChars[match] || match;
+                  })
+                  .replace(/@/g, "")
+                  .replace(/\s/g, "_");
+
+                return cleaned;
               };
-
               return (
                 <div key={`${doc.nom}_${index}`}>
                   <div className={styles.rowDoc}>
