@@ -63,13 +63,15 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   const fetchRemunerations = async () => {
     const enfantIds = dossier?.enfants.map((enfant) => enfant.externalId);
-    if (enfantIds && enfantIds.length > 0) {
+    if (enfantIds && enfantIds.length > 0 && dossier?.source === 'FORM_EDS') {
       const resRemuneration = await getRemunerationsByEnfantsIds(
         enfantIds as string[]
       );
       setRemunerations(resRemuneration);
     }
   };
+
+
 
   const [comments, setComments] = React.useState<Comments[]>([]);
   const fetchComments = async () => {
@@ -122,6 +124,10 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   React.useEffect(() => {
     console.log("comments : ", comments);
   }, comments);
+
+  React.useEffect(() => {
+    console.log("remunerations : ", remunerations);
+  }, remunerations);
 
   React.useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -177,7 +183,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES">
-              <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+              {dossier.source === 'FORM_EDS' &&
+                <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+              }
             </Info>
             <Info title="VALIDATION">
               <ValidationJustificatifsDossier
@@ -462,9 +470,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         enfant.dateNaissance
                       )}) - Personnage:
                       ${enfant.nomPersonnage}`;
-                    const remunerationsEnfant = remunerations.filter(
-                      (rem) => rem.enfantId?.toString() === enfant.externalId
-                    );
                     return (
                       <div
                         id={enfant.id.toString()}
@@ -479,7 +484,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
-                            remunerations={remunerationsEnfant}
+                            remunerations={remunerations.filter(rem => rem.enfantId === parseInt(enfant.externalId ?? ''))}
                           />
                         </Accordion>
                       </div>

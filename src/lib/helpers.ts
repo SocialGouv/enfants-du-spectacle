@@ -10,9 +10,12 @@ import type {
 import { grandeCategorieToCategorieValues } from "src/lib/categories";
 import type {
   CommissionData,
+  DossierData,
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
+import { Remuneration } from "./types";
+import { getRemunerationsByEnfantsIds } from "./fetching/remunerations";
 
 function capitalizeWord(str: string): string {
   return str.replace(/^\w/, (c) => c.toUpperCase());
@@ -127,6 +130,25 @@ function getFilterableSocietesProductions(
       commissions.flatMap((c) => c.dossiers.map((p) => p.societeProduction))
     );
   }
+}
+
+const getRemunerations = async (commission: CommissionData): Promise<Remuneration[]> => {
+  let rems : Remuneration[] = []
+  return Promise.all(
+    commission.dossiers.filter(dossier => STATUS_ODJ.includes(dossier.statut)).map(async (dossier) => {
+      if(dossier.source === 'FORM_EDS')
+      rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
+    })
+  ).then(() => {
+    return rems
+  })
+}
+
+const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> => {
+  let rems : Remuneration[] = []
+  if(dossier.source === 'FORM_EDS')
+  rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
+  return rems
 }
 
 function getFormatedTypeDossier(type: string): string {
@@ -307,7 +329,7 @@ const WORDING_MAILING = [
   {
     button: "Connexion",
     bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
-    subject: "Connexion au formulaire enfants du spectacle",
+    subject: "Connexion à l'interface enfants du spectacle",
     text: "Connectez-vous en suivant ce lien : ",
     title: "Bonjour,",
     type: "auth",
@@ -315,8 +337,8 @@ const WORDING_MAILING = [
   {
     button: "Accéder à la plate-forme",
     bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
-    subject: "Votre dossier ___DOSSIERID___ est passé “En instruction“",
-    text: "Les services d’instruction de la DRIEETS ont passé votre dossier au statut “En instruction”. Il n’est plus modifiable d’ici la commission.",
+    subject: "Votre dossier ___DOSSIERID___ est passé en __STATUS__",
+    text: "Les services d’instruction de la DRIEETS ont passé votre dossier au statut __STATUS__. __WARNING__",
     title: "Bonjour,",
     type: "status_changed",
   },
@@ -440,6 +462,8 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  getRemunerations,
+  getRemsByDossier,
   INFOS_REPRESENTANTS,
   JUSTIFS_DOSSIER,
   JUSTIFS_ENFANT,

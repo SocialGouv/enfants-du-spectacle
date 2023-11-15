@@ -28,7 +28,9 @@ app:
         more_set_headers "X-Frame-Options: deny";
         more_set_headers "X-XSS-Protection: 1; mode=block";
         more_set_headers "X-Content-Type-Options: nosniff";
-
+  startupProbe:
+    failureThreshold: 48
+    periodSeconds: 5
 form:
   ~chart: app
   ~needs: [build-form]

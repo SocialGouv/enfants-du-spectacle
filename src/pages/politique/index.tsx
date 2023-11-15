@@ -145,6 +145,15 @@ const Politic: React.FC = () => {
               "Le responsable de traitement s'engage à ce que les données à caractères personnels soient traitées par les seules personnes autorisées."
             }
           </p>
+          <h5>Destinataire des données</h5>
+          <p>
+            Le responsable de traitement s'engage à ce que les données à caractère personnel soient traitées par les seules personnes autorisées, c’est-à-dire :
+          </p>
+          <ul>
+            <li>les agents habilités de la DRIEETS ;</li>
+            <li>les membres de la commission ;</li>
+            <li>les médecins et assistantes médicales habilités de la société Thalie.</li>
+          </ul>
           <h5>Quelles mesures de sécurité mettons-nous en place ?</h5>
           <p>
             Nous mettons en place plusieurs mesures pour sécuriser les données :

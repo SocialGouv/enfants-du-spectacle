@@ -1,10 +1,11 @@
 import type { NextApiHandler, NextApiRequest } from "next";
 import { PrismaClient, User } from "@prisma/client";
-import { getSession } from "next-auth/react";
 import { number } from "zod";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;

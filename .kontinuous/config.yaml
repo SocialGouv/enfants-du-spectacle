@@ -1,0 +1,5 @@
+projectName: enfants-du-spectacle
+dependencies:
+  fabrique:
+    extends:
+    - name: buildkit-service

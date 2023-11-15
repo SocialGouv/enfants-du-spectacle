@@ -24,28 +24,28 @@
   flex-direction: column;
   align-items: start;
   padding-bottom: 20px;
-  font-size: 16px !important; 
+  font-size: 16px !important;
 }
 
 .remunerationBloc ul {
-  margin: 0; 
-  list-style: none; 
+  margin: 0;
+  list-style: none;
 }
 .remunerationBloc ul li {
-  margin: 0; 
+  margin: 0;
   position: relative;
 }
 
 .remunerationBloc ul li::before {
-  content: ""; 
+  content: "";
   display: inline-block;
-  width: 0.2em; 
-  height: 0.2em; 
-  background-color: black; 
-  border-radius: 50%; 
+  width: 0.2em;
+  height: 0.2em;
+  background-color: black;
+  border-radius: 50%;
   position: absolute;
-  top: 0.7em; 
-  left: -0.5em; 
+  top: 0.7em;
+  left: -0.5em;
 }
 
 .remunerationTitle {
@@ -53,14 +53,14 @@
   padding-bottom: 10px;
 }
 
-.adressesGrid form{
+.adressesGrid form {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   .inputAdresse {
-    padding-right:1rem;
-    margin-top:1rem;
+    padding-right: 1rem;
+    margin-top: 1rem;
     input {
-      background-color:rgb(240, 240, 240) !important;
+      background-color: rgb(240, 240, 240) !important;
     }
   }
 }
@@ -68,17 +68,17 @@
 .avisMedicalGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  position: relative;
 
   .radioMedecine {
     display: block;
     cursor: pointer;
     margin-bottom: 1rem;
-      input {
-          margin-right: 1rem;
-          appearance: auto;
-      }
+    input {
+      margin-right: 1rem;
+      appearance: auto;
+    }
   }
-
 
   .datePickerWrapper {
     padding: 0 !important;
@@ -87,4 +87,3 @@
     }
   }
 }
-

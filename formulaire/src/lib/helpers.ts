@@ -80,7 +80,7 @@ const CHECKS = [
         {label : 'Type d\'emploi', code: 'typeEmploi'},
         {label : 'Nombre de jours de travail', code: 'nombreJours'},
         {label : 'Période de travail', code: 'periodeTravail'},
-        {label : 'Temps et lieu de travail', code: 'contexteTravail'},
+        {label : 'Temps et lieu de travail', code: 'contexteTravail'}
       ],
       mandatory_files: [
         {label : 'Livret de famille', code : 'LIVRET_FAMILLE'},

@@ -1,14 +1,15 @@
 import { Dossier, Prisma, StatutDossier } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import { DossierData } from "src/fetching/dossiers";
 import { STATUS_EN_COURS, STATUS_TERMINES, CATEGORIES } from "src/lib/helpers";
 import { statusGroup } from "src/lib/types";
 import prisma from "../../../src/lib/prismaClient";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -26,7 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const numberByPage = 10;
   const page = req.query.page
     ? (parseInt(req.query.page as string) - 1) * numberByPage
@@ -85,7 +86,12 @@ const get: NextApiHandler = async (req, res) => {
     const countCurrent = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in:
@@ -95,16 +101,41 @@ const get: NextApiHandler = async (req, res) => {
             },
           },
         ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
+          },
+        ],
       },
     });
     const countEnCours = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in: STATUS_EN_COURS as StatutDossier[],
             },
+          },
+        ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
           },
         ],
       },
@@ -112,11 +143,26 @@ const get: NextApiHandler = async (req, res) => {
     const countTermines = await prisma.dossier.count({
       where: {
         AND: [
-          { userId: session?.dbUser.id },
+          {
+            nom: {
+              contains: req.query.search as string,
+              mode: "insensitive",
+            },
+          },
           {
             statut: {
               in: STATUS_TERMINES as StatutDossier[],
             },
+          },
+        ],
+        OR: [
+          {
+            collaboratorIds: {
+              has: session?.dbUser.id,
+            },
+          },
+          {
+            userId: session?.dbUser.id,
           },
         ],
       },
@@ -135,13 +181,14 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   const parsed: Dossier = JSON.parse(req.body);
   const data = {
     userId: session?.dbUser.id,
     dateDerniereModification: new Date(),
     dateCreation: parsed.dateCreation,
     demandeurId: parsed.demandeurId,
+    nom: parsed.nom,
   };
   try {
     const dossier = await prisma.dossier.create({ data });

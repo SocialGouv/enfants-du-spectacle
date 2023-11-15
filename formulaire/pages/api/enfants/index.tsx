@@ -1,12 +1,13 @@
 import { Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import { EnfantData } from "src/fetching/dossiers";
 import prisma from "../../../src/lib/prismaClient";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -24,7 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   let nom = req.query.nom as string;
   let prenom = req.query.prenom as string;
   let userId = session?.dbUser.id;
@@ -62,7 +63,7 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   let data = JSON.parse(req.body) as Enfant;
   data.userId = session?.dbUser.id;
   try {
@@ -109,6 +110,7 @@ const update: NextApiHandler = async (req, res) => {
 
   delete parsed.piecesDossier;
   delete parsed.remuneration;
+  delete parsed.Comments;
 
   const enfantUpdated = await prisma.enfant.update({
     data: parsed as Enfant,
