@@ -1,19 +1,38 @@
 app:
   addVolumes:
     - docs
+  envFrom:
+    - secretRef:
+        name: pg-user
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+
 form:
   addVolumes:
     - docs-form
+  envFrom:
+    - secretRef:
+        name: pg-user-form # todo: remove after CNPG migration
+    - secretRef:
+        name: app-sealed-secret
+    - configMapRef:
+        name: app-configmap
+
+pg-metabase:
+  ~chart: pg
 
 metabase:
   enabled: true
+  ~needs: [pg-metabase]
   ingress:
     enabled: false
   envFrom:
     - configMapRef:
         name: metabase-configmap
     - secretRef:
-        name: metabase-db-user
+        name: pg-metabase-app
 
 oauth2-proxy:
   host: "metabase-eds.fabrique.social.gouv.fr"

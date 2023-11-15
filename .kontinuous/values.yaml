@@ -1,6 +1,6 @@
 app:
   ~chart: app
-  ~needs: [build-app]
+  ~needs: [build-app, pg]
   imagePackage: app
   resources:
     requests:
@@ -14,7 +14,7 @@ app:
       value: "https://{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-user
+        name: pg-app
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
@@ -33,7 +33,7 @@ app:
     periodSeconds: 5
 form:
   ~chart: app
-  ~needs: [build-form]
+  ~needs: [build-form, pg-form]
   imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
   resources:
@@ -48,7 +48,7 @@ form:
       value: "https://formulaire-{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-user-form
+        name: pg-form-app
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
@@ -69,6 +69,12 @@ metabase:
 oauth2-proxy:
   enabled: false
 
+pg:
+  ~chart: pg
+
+pg-form:
+  ~chart: pg
+
 jobs:
   ~chart: jobs
   runs:
@@ -82,7 +88,6 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
-
     build-form:
       use: build
       with:
@@ -106,3 +111,4 @@ deactivate:
         with:
           database: "form_{{.Values.global.branchSlug32}}"
           databaseUser: "form_{{ .Values.global.branchSlug32 }}"
+
