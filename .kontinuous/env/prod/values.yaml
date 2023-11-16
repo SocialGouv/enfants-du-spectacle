@@ -32,7 +32,7 @@ metabase:
     - configMapRef:
         name: metabase-configmap
     - secretRef:
-        name: pg-metabase-app
+        name: metabase-db-user
 
 oauth2-proxy:
   host: "metabase-eds.fabrique.social.gouv.fr"
