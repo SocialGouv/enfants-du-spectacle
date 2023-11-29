@@ -1,6 +1,6 @@
 app:
   ~chart: app
-  ~needs: [build-app]
+  ~needs: [build-app, pg]
   imagePackage: app
   resources:
     requests:
@@ -14,20 +14,26 @@ app:
       value: "https://{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-user
+        name: pg-app
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
   startupProbe:
     failureThreshold: 48
     periodSeconds: 5
-
 form:
   ~chart: app
-  ~needs: [build-form]
+  ~needs: [build-form, pg-form]
   imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
   resources:
@@ -42,13 +48,20 @@ form:
       value: "https://formulaire-{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-user-form
+        name: pg-form-app
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
   replicas: 1
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'";
+        more_set_headers "X-Frame-Options: deny";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "X-Content-Type-Options: nosniff";
 
 metabase:
   enabled: false
@@ -56,6 +69,11 @@ metabase:
 oauth2-proxy:
   enabled: false
 
+pg:
+  ~chart: pg
+
+pg-form:
+  ~chart: pg
 
 jobs:
   ~chart: jobs
@@ -70,7 +88,6 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
-
     build-form:
       use: build
       with:
@@ -94,4 +111,4 @@ deactivate:
         with:
           database: "form_{{.Values.global.branchSlug32}}"
           databaseUser: "form_{{ .Values.global.branchSlug32 }}"
-        
+

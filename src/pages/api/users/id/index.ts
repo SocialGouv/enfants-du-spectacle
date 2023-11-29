@@ -1,11 +1,9 @@
-import type { NextApiHandler, NextApiRequest } from "next";
+import type { NextApiHandler } from "next";
 import { PrismaClient, User } from "@prisma/client";
-import { number } from "zod";
-import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { getSession } from "next-auth/react";
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getSession({ req });
   if (!session) {
     res.status(401).end();
     return;
@@ -20,29 +18,29 @@ const handler: NextApiHandler = async (req, res) => {
 
 const getUserById: NextApiHandler = async (req, res) => {
   const prisma = new PrismaClient();
-  let collaboratorIds: number[] | number = [];
+  let userIds: number[] | number = [];
 
   if (req.query.id) {
     if (Array.isArray(req.query.id)) {
-      collaboratorIds = req.query.id.map((id) => {
+      userIds = req.query.id.map((id) => {
         return parseInt(id);
       });
     } else {
-      collaboratorIds = parseInt(req.query.id);
+      userIds = parseInt(req.query.id);
     }
   }
   try {
     const users = await prisma.user.findMany({
       where: {
         id: {
-          in: collaboratorIds,
+          in: userIds,
         },
       },
     });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(users);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };

@@ -1,11 +1,12 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import prisma from "../../../src/lib/prismaClient";
 import { Remuneration } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
@@ -23,7 +24,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   let data = JSON.parse(req.body) as Remuneration;
   try {
     const remuneration = await prisma.remuneration.create({ data });

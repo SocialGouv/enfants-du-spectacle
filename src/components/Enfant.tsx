@@ -36,6 +36,7 @@ interface Props {
   dataLinks: DataLinks;
   dossier: Dossier;
   comments: Comments[];
+  sender: string | null;
   actionComments: (comment: Comments) => void;
   remunerations: Remuneration[];
 }
@@ -47,6 +48,7 @@ const EnfantComponent: React.FC<Props> = ({
   comments,
   actionComments,
   remunerations,
+  sender,
 }) => {
   const [formData, setFormData] = React.useState<Enfant>({
     ...enfant,
@@ -403,6 +405,7 @@ const EnfantComponent: React.FC<Props> = ({
             <InputComments
               dossierId={parseInt(dossier.externalId!)}
               enfantId={parseInt(enfant.externalId!)}
+              sender={sender}
               parentId={null}
               action={actionComments}
             />

@@ -5,10 +5,11 @@ import * as Sentry from "@sentry/nextjs";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
 import { sendVerificationRequest } from "../../../src/lib/emailAuth";
+import type { NextAuthOptions } from 'next-auth'
 
 const prisma = new PrismaClient();
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   callbacks: {
     session({ session, user }) {
@@ -45,4 +46,6 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+export default NextAuth(authOptions)

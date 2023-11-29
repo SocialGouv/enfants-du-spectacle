@@ -2,11 +2,12 @@ import { withSentry } from "@sentry/nextjs";
 import fs from "fs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
 import type { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { WORDING_MAILING } from "src/lib/helpers";
+import { getServerSession } from "next-auth";
+import { authOptions }  from '../auth/[...nextauth]'
 
 export const config = {
   api: {
@@ -17,7 +18,7 @@ export const config = {
 };
 
 const handler: NextApiHandler = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).end();
     return;
