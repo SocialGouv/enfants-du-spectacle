@@ -1,5 +1,5 @@
 # 1. Install node dependencies only when needed
-FROM node:alpine3.16 AS deps
+FROM node:alpine3.18 AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY yarn.lock .yarnrc.yml ./
@@ -7,7 +7,7 @@ COPY .yarn .yarn
 RUN yarn fetch --immutable && yarn cache clean
 
 # 2. Rebuild the source code only when needed
-FROM node:alpine3.16 AS builder
+FROM node:alpine3.18 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -42,7 +42,7 @@ RUN yarn workspaces focus --production && yarn cache clean
 RUN npx prisma generate
 
 # Production image, copy all the files and run next
-FROM node:alpine3.16 AS runner
+FROM node:alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
 WORKDIR /app
 ENV NODE_ENV production
