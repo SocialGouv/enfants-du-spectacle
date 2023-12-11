@@ -31,6 +31,7 @@ app:
   startupProbe:
     failureThreshold: 48
     periodSeconds: 5
+
 form:
   ~chart: app
   ~needs: [build-form, pg-form]
@@ -111,4 +112,3 @@ deactivate:
         with:
           database: "form_{{.Values.global.branchSlug32}}"
           databaseUser: "form_{{ .Values.global.branchSlug32 }}"
-
