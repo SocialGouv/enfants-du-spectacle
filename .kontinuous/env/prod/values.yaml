@@ -22,6 +22,8 @@ metabase:
         name: metabase-configmap
     - secretRef:
         name: pg-metabase-app
+    - secretRef:
+        name: metabase
 
 oauth2-proxy:
   host: "metabase-eds.fabrique.social.gouv.fr"
