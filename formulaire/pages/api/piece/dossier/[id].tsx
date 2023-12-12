@@ -1,7 +1,7 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../../auth/[...nextauth]'
+import { authOptions } from "../../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -32,34 +32,28 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const dossierId = getId(req);
   try {
-    const pieces = await prisma.pieceDossier.findMany({
+    const pieces = await client.pieceDossier.findMany({
       where: {
         dossierId: dossierId,
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json(pieces);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   try {
     const pieceId = getId(req);
-    const dossierDeleted = await prisma.pieceDossier.delete({
+    const dossierDeleted = await client.pieceDossier.delete({
       where: { id: pieceId },
     });
-    await prisma?.$disconnect()
     res.status(200).json({ dossierDeleted });
   } catch (e: unknown) {
     console.log(e);
-    await prisma?.$disconnect()
     res.status(200).json({ message: "Piece non trouvée" });
   }
 };

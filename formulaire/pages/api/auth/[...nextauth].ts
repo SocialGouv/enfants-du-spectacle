@@ -1,16 +1,14 @@
 // @ts-nocheck
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client"
 import * as Sentry from "@sentry/nextjs";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
 import { sendVerificationRequest } from "../../../src/lib/emailAuth";
-import type { NextAuthOptions } from 'next-auth'
-
-const prisma = new PrismaClient();
+import type { NextAuthOptions } from "next-auth";
+import client from "src/lib/prismaClient";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(client),
   callbacks: {
     session({ session, user }) {
       session.dbUser = user;
@@ -18,7 +16,7 @@ export const authOptions: NextAuthOptions = {
     },
     async signIn({ user }) {
       if (typeof user.email !== "string") return false;
-      return true
+      return true;
     },
   },
   logger: {
@@ -48,4 +46,4 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);

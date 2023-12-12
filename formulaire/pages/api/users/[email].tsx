@@ -1,5 +1,5 @@
 import type { NextApiHandler } from "next";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { WORDING_MAILING } from "src/lib/helpers";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type { Transporter } from "nodemailer";
@@ -7,7 +7,8 @@ import nodemailer from "nodemailer";
 import fs from "fs";
 import _ from "lodash";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -24,11 +25,10 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const getUserByEmail: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const userEmail = req.query.email as string;
   try {
     let user: User | null = null;
-    user = await prisma.user.findFirst({
+    user = await client.user.findFirst({
       where: {
         email: userEmail,
       },
@@ -38,9 +38,8 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       const data = {
         email: userEmail as string,
       };
-      user = await prisma.user.create({ data });
+      user = await client.user.create({ data });
     }
-    await prisma?.$disconnect()
 
     //SEND EMAIL
     if (typeof req.body !== "string") {

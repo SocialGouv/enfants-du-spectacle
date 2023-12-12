@@ -1,7 +1,7 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -27,10 +27,9 @@ function getId(req: NextApiRequest): number {
 }
 
 const get: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const demandeurId = getId(req);
   try {
-    const demandeur = await prisma.demandeur.findFirst({
+    const demandeur = await client.demandeur.findFirst({
       where: {
         id: demandeurId,
       },
@@ -42,10 +41,9 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   try {
     const demandeurId = getId(req);
-    await prisma.demandeur.delete({
+    await client.demandeur.delete({
       where: { id: demandeurId },
     });
 
@@ -60,11 +58,9 @@ const remove: NextApiHandler = async (req, res) => {
       }
       return r.json();
     });
-    await prisma?.$disconnect()
 
     res.status(200).json({ message: "Demandeur supprimé" });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Demandeur non trouvé" });
   }

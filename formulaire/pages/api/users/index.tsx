@@ -1,8 +1,8 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient, User } from "@prisma/client";
 import { number } from "zod";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -19,7 +19,6 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const getUserById: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   let collaboratorIds: number[] | number = [];
 
   if (req.query.id) {
@@ -32,17 +31,17 @@ const getUserById: NextApiHandler = async (req, res) => {
     }
   }
   try {
-    const users = await prisma.user.findMany({
+    const users = await client.user.findMany({
       where: {
         id: {
           in: collaboratorIds,
         },
       },
     });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(users);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };

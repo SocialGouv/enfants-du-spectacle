@@ -1,12 +1,12 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient } from "@prisma/client";
 import { generateToken } from "src/lib/utils";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
-  console.log('session id', session)
+  console.log("session id", session);
   if (!session) {
     res.status(401).end();
     return;
@@ -33,10 +33,9 @@ function getId(req: NextApiRequest): number {
 }
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   try {
     const dossierId = getId(req);
-    const dossierDeleted = await prisma.dossier.delete({
+    const dossierDeleted = await client.dossier.delete({
       where: { id: dossierId },
     });
 
@@ -51,11 +50,9 @@ const remove: NextApiHandler = async (req, res) => {
       }
       return r.json();
     });
-    await prisma?.$disconnect()
 
     res.status(200).json({ dossierDeleted });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Dossier non trouvé" });
   }
@@ -63,13 +60,12 @@ const remove: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
-  const prisma = new PrismaClient();
 
   var jwt = require("jsonwebtoken");
 
   try {
     const dossierId = getId(req);
-    const dossier = await prisma.dossier.findUnique({
+    const dossier = await client.dossier.findUnique({
       include: {
         user: true,
         enfants: {
@@ -91,7 +87,6 @@ const get: NextApiHandler = async (req, res) => {
       dossier?.userId === session?.dbUser.id ||
       dossier?.collaboratorIds.includes(session?.dbUser.id)
     ) {
-      await prisma?.$disconnect()
       res.status(200).json({
         dossier: dossier,
         docs: {
@@ -124,11 +119,9 @@ const get: NextApiHandler = async (req, res) => {
         },
       });
     } else {
-      await prisma?.$disconnect()
       res.status(401).json({ message: "Unauthorized" });
     }
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Dossier non trouvé" });
   }
