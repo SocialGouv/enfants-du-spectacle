@@ -12,12 +12,12 @@ export const config = {
 };
 
 const handler: NextApiHandler = async (req, res) => {
-    if (req.method == "POST") {
-      await sendDoc(req, res);
-    } else {
-      res.status(405).end();
-      return;
-    }
+  if (req.method == "POST") {
+    await sendDoc(req, res);
+  } else {
+    res.status(405).end();
+    return;
+  }
 };
 
 function getId(req: NextApiRequest): number {
@@ -25,37 +25,30 @@ function getId(req: NextApiRequest): number {
 }
 
 const sendDoc: NextApiHandler = async (req, res) => {
-
-  console.log('------ INC FROM SDP ------')
-
-  
+  console.log("------ INC FROM SDP ------");
 
   const dossierId = getId(req);
   try {
-      await fsp.readdir(`/mnt/docs-form/${dossierId}`);
+    await fsp.readdir(`/mnt/docs-form/${dossierId}`);
   } catch (error) {
-      await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
+    await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
   }
   const upload = await uploadFile(req, true);
 
   const data = {
-      nom: upload.files.justificatif.originalFilename,
-      enfantId: parseInt(req.query.enfantId as string),
-      type: req.query.typeJustif as JustificatifEnfant,
-      externalId: "",
-      link: upload.files.justificatif.filepath + ".encrypted",
-      statut: null
-  }
+    nom: upload.files.justificatif.originalFilename,
+    enfantId: parseInt(req.query.enfantId as string),
+    type: req.query.typeJustif as JustificatifEnfant,
+    externalId: "",
+    link: upload.files.justificatif.filepath + ".encrypted",
+    statut: null,
+  };
 
-  const pieceEnfant = await prisma.pieceDossierEnfant.create({data})
+  const pieceEnfant = await prisma.pieceDossierEnfant.create({ data });
   //@ts-ignore
-  await prisma?.$disconnect()
   res
-      .status(200)
-      .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
-
-  
-  
+    .status(200)
+    .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
 };
 
 export default withSentry(handler);

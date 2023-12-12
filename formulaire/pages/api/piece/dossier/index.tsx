@@ -5,7 +5,7 @@ import prisma from "../../../../src/lib/prismaClient";
 import fs from "fs";
 import { generateToken } from "src/lib/utils";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../../auth/[...nextauth]'
+import { authOptions } from "../../auth/[...nextauth]";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -32,10 +32,8 @@ const post: NextApiHandler = async (req, res) => {
       piece.link,
       piece.statut
     );
-    await prisma?.$disconnect()
     res.status(200).json({ pieceDossier: piece, tokenizedLink: tokenizedLink });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };

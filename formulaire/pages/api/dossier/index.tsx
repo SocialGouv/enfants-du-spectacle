@@ -6,7 +6,7 @@ import { STATUS_EN_COURS, STATUS_TERMINES, CATEGORIES } from "src/lib/helpers";
 import { statusGroup } from "src/lib/types";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -167,7 +167,6 @@ const get: NextApiHandler = async (req, res) => {
         ],
       },
     });
-    await prisma?.$disconnect()
     res.status(200).json({
       dossiers: dossiers,
       countCurrent: countCurrent,
@@ -175,7 +174,6 @@ const get: NextApiHandler = async (req, res) => {
       countTermines: countTermines,
     });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
   }
 };
@@ -220,7 +218,6 @@ const update: NextApiHandler = async (req, res) => {
     data: parsed,
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
   res.status(200).json(produitupdated);
 };
 

@@ -2,7 +2,7 @@ import { Comments } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { CommentaireNotifications } from "src/lib/types";
-// import prisma from "../../../../../src/lib/prismaClient";
+import prisma from "../../../../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "PUT") {
@@ -48,7 +48,6 @@ const update: NextApiHandler = async (req, res) => {
         },
       },
     });
-    await prisma?.$disconnect();
     res.status(200).json(updateComments);
   }
 };

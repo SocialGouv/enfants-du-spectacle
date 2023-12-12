@@ -4,7 +4,7 @@ import type { NextApiHandler } from "next";
 import { DemandeurModel } from "prisma/zod";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -49,7 +49,6 @@ const update: NextApiHandler = async (req, res) => {
     data: { ...demandeurData.parse(parsed) },
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
 
   res.status(200).json(dempandeurUpdated);
 };

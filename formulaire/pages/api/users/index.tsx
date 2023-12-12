@@ -38,10 +38,8 @@ const getUserById: NextApiHandler = async (req, res) => {
         },
       },
     });
-    await prisma?.$disconnect();
     res.status(200).json(users);
   } catch (e: unknown) {
-    await prisma?.$disconnect();
     console.log(e);
   }
 };

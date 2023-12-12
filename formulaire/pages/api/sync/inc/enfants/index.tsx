@@ -27,10 +27,8 @@ const update: NextApiHandler = async (req, res) => {
       },
     });
     // console.log('update : ', update)
-    await prisma?.$disconnect();
     res.status(200).json(update);
   } catch (e) {
-    await prisma?.$disconnect();
     res.status(500).json({ message: "Something went wrong" });
     console.log(e);
   }
