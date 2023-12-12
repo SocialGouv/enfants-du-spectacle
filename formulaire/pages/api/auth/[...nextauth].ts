@@ -5,9 +5,10 @@ import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
 import { sendVerificationRequest } from "../../../src/lib/emailAuth";
 import type { NextAuthOptions } from "next-auth";
+import client from "src/lib/prismaClient";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(client),
   callbacks: {
     session({ session, user }) {
       session.dbUser = user;
