@@ -1,7 +1,7 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -19,11 +19,10 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const remunerationId = Number(req.body as string);
   try {
     console.log("remunerationId: ", remunerationId);
-    await prisma.remuneration.delete({
+    await client.remuneration.delete({
       where: { id: remunerationId },
     });
 

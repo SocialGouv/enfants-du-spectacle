@@ -1,7 +1,8 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { Dossier, PrismaClient, StatutDossier } from "@prisma/client";
+import { Dossier, StatutDossier } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../../auth/[...nextauth]'
+import { authOptions } from "../../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -23,7 +24,6 @@ function getId(req: NextApiRequest): number {
 }
 
 const create: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   const dossier: Dossier = JSON.parse(req.body);
   const session = await getServerSession(req, res, authOptions);
 
@@ -48,7 +48,7 @@ const create: NextApiHandler = async (req, res) => {
   };
 
   try {
-    const dossier = await prisma.dossier.create({ data });
+    const dossier = await client.dossier.create({ data });
     res.status(200).json(dossier);
   } catch (e: unknown) {
     console.log(e);

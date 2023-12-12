@@ -1,7 +1,7 @@
 import type { NextApiHandler, NextApiRequest } from "next";
-import { Enfant, PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -23,10 +23,9 @@ function getId(req: NextApiRequest): number {
 }
 
 const remove: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   try {
     const enfantId = getId(req);
-    const enfantDeleted = await prisma.enfant.delete({
+    const enfantDeleted = await client.enfant.delete({
       where: { id: enfantId },
     });
 
@@ -41,11 +40,9 @@ const remove: NextApiHandler = async (req, res) => {
       }
       return r.json();
     });
-    await prisma?.$disconnect()
 
     res.status(200).json({ message: fetching });
   } catch (e: unknown) {
-    await prisma?.$disconnect()
     console.log(e);
     res.status(200).json({ message: "Enfant non trouvé" });
   }
