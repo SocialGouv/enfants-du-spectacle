@@ -4,7 +4,7 @@ import type { NextApiHandler } from "next";
 import { EnfantData } from "src/fetching/dossiers";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -54,10 +54,10 @@ const get: NextApiHandler = async (req, res) => {
         ],
       },
     });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(enfants);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };
@@ -68,10 +68,10 @@ const post: NextApiHandler = async (req, res) => {
   data.userId = session?.dbUser.id;
   try {
     const enfant = await prisma.enfant.create({ data });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(enfant);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };
@@ -88,7 +88,7 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  console.log("ENFANT UPDATED: ", parsed);
+  console.log("ENFANT UPDATED: ", parsed.id);
 
   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || "0");
   parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || "0");
@@ -101,10 +101,15 @@ const update: NextApiHandler = async (req, res) => {
 
   if (parsed.remuneration) {
     parsed.remuneration.forEach(async (rem) => {
-      await prisma.remuneration.update({
-        data: rem,
-        where: { id: rem.id },
-      });
+      try {
+        await prisma.remuneration.update({
+          data: rem,
+          where: { id: rem.id },
+        });
+      } catch (e) {
+        console.log("error, cannot update remuneration", rem.id);
+        throw e;
+      }
     });
   }
 
@@ -116,7 +121,7 @@ const update: NextApiHandler = async (req, res) => {
     data: parsed as Enfant,
     where: { id: parsed.id },
   });
-  await prisma?.$disconnect()
+  await prisma?.$disconnect();
 
   res.status(200).json(enfantUpdated);
 };
