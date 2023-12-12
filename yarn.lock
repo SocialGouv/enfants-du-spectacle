@@ -4324,7 +4324,6 @@ __metadata:
     swr: ^1.1.0
     ts-node: ^10.4.0
     typescript: 4.5.2
-    typescript-eslint: ^0.0.1-alpha.0
     use-debounce: ^7.0.1
     zod: ^3.20.2
   languageName: unknown
@@ -11656,13 +11655,6 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 33b39f3d0e8463985eeaeeacc3cb2e28bc3dfaf2a5ed219628c0b629d5d7b810b0eb2165f9f607c34871d5daa92ba1dc69f49051cf7d578b4cbd26c340b9d1b1
-  languageName: node
-  linkType: hard
-
-"typescript-eslint@npm:^0.0.1-alpha.0":
-  version: 0.0.1-alpha.0
-  resolution: "typescript-eslint@npm:0.0.1-alpha.0"
-  checksum: 2896a13f2c77f5193736016abfdb78139c4f781d10c1fa9d4a1b4dbaa6f8696db9e0060bb148d5e9c74eb76e797530b048dcf135b7d4ff303609b2f47a62b206
   languageName: node
   linkType: hard
 

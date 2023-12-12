@@ -4,7 +4,7 @@ import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../auth/[...nextauth]'
+import { authOptions } from "../auth/[...nextauth]";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
@@ -32,10 +32,10 @@ const get: NextApiHandler = async (req, res) => {
         dossierId: parseInt(dossierId),
       },
     });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(comments);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };
@@ -52,13 +52,13 @@ const updateCommentairesNotifications: NextApiHandler = async (req, res) => {
     }
   }
 
-  console.log("data received : ", data.commentIds);
+  //console.log("data received : ", data.commentIds);
 
   const commentIds = data.commentIds.map((id: string) =>
     parseInt(id)
   ) as number[];
 
-  console.log("commentIds : ", commentIds);
+  //console.log("commentIds : ", commentIds);
   const updateComments = await prisma?.comments.updateMany({
     data: {
       seen: true,
@@ -69,7 +69,7 @@ const updateCommentairesNotifications: NextApiHandler = async (req, res) => {
       },
     },
   });
-  await prisma?.$disconnect()
+  await prisma?.$disconnect();
   res.status(200).json(updateComments);
 };
 
@@ -81,10 +81,10 @@ const post: NextApiHandler = async (req, res) => {
   console.log("comment to create : ", data);
   try {
     const comment = await prisma.comments.create({ data });
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     res.status(200).json(comment);
   } catch (e: unknown) {
-    await prisma?.$disconnect()
+    await prisma?.$disconnect();
     console.log(e);
   }
 };
