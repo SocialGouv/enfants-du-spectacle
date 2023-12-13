@@ -41,7 +41,7 @@ const remove: NextApiHandler = async (req, res) => {
 
     const url = `${process.env.API_URL_INSTRUCTEUR}/inc/dossiers/${dossierId}`;
 
-    const fetching = fetch(url, {
+    const fetching = await fetch(url, {
       body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
       method: "DELETE",
     }).then(async (r) => {
