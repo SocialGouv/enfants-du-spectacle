@@ -101,14 +101,3 @@ jobs:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
 
-deactivate:
-  jobs-deactivate:
-    runs:
-      deactivate:
-        with:
-          db: true
-      drop-db2:
-        use: drop-db
-        with:
-          database: "form_{{.Values.global.branchSlug32}}"
-          databaseUser: "form_{{ .Values.global.branchSlug32 }}"
