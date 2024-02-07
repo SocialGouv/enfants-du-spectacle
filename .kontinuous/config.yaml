@@ -2,7 +2,9 @@ projectName: enfants-du-spectacle
 dependencies:
   fabrique:
     extends:
-    - name: buildkit-service
+      - name: buildkit-service
+      - name: ovh
+        ifEnv: [dev, preprod]
     dependencies:
       contrib:
         preDeploy:
@@ -11,3 +13,4 @@ dependencies:
               secrets:
                 enfants-du-spectacle-dev-backups-access-key:
                 enfants-du-spectacle-prod-backups-access-key:
+
