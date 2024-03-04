@@ -6,38 +6,6 @@ form:
   addVolumes:
     - docs-form
 
-pg-metabase:
-  ~chart: pg
-
-metabase:
-  enabled: true
-  ~needs: [pg-metabase]
-  ingress:
-    enabled: false
-  env:
-    - name: MB_DB_CONNECTION_URI
-      value: "postgres://$(PGHOST):5432/$(PGDATABASE)?user=$(PGUSER)&password=$(PGPASSWORD)&ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory"
-  envFrom:
-    - configMapRef:
-        name: metabase-configmap
-    - secretRef:
-        name: pg-metabase-app
-    - secretRef:
-        name: metabase
-
-oauth2-proxy:
-  host: "metabase-eds.fabrique.social.gouv.fr"
-  enabled: true
-  upstream: http://metabase
-  envFrom:
-    - configMapRef:
-        name: oauth2-proxy-configmap
-    - secretRef:
-        name: oauth2-proxy-sealed-secret
-  # additionalArgs:
-  #   - --skip-auth-route
-  #   - ^/public/.*,^/app/dist/.*,^/api/public/.*,^/api/session/.*,^/app/assets/.*
-
 jobs:
   runs:
     build-app:
@@ -60,3 +28,47 @@ jobs:
           NEXT_PUBLIC_FORMULAIRE_HJS: 6
           NEXT_PUBLIC_MATOMO_URL: https://matomo.fabrique.social.gouv.fr/
           NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID: 84
+
+pg:
+  backup:
+    name: "202403051831" # backup on a new folder
+  cnpg-cluster:
+    recovery:
+      enabled: true
+      ~tpl~database: "{{ .Values.global.pgDatabase }}"
+      ~tpl~owner: "{{ .Values.global.pgUser }}"
+      secretName: "pg-db"
+      barmanObjectStore:
+        ~tpl~destinationPath: "s3://recosante-prod-backups/recosante"
+        s3Credentials:
+          accessKeyId:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_access_key
+          secretAccessKey:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_secret_key
+          region:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_region
+
+pg-form:
+  backup:
+    name: "202403051831" # backup on a new folder
+  cnpg-cluster:
+    recovery:
+      enabled: true
+      ~tpl~database: "{{ .Values.global.pgDatabase }}"
+      ~tpl~owner: "{{ .Values.global.pgUser }}"
+      secretName: "pg-db"
+      barmanObjectStore:
+        ~tpl~destinationPath: "s3://recosante-prod-backups/recosante"
+        s3Credentials:
+          accessKeyId:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_access_key
+          secretAccessKey:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_secret_key
+          region:
+            ~tpl~name: "recosante-prod-backups-access-key"
+            key: bucket_region
