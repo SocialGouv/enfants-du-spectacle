@@ -1,8 +1,12 @@
 app:
+  replicas: 1
+  strategyType: Recreate
   addVolumes:
     - docs
 
 form:
+  replicas: 1
+  strategyType: Recreate
   addVolumes:
     - docs-form
 

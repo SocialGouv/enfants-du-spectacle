@@ -1,7 +1,9 @@
 app:
+  strategyType: Recreate
   addVolumes:
     - docs
 form:
+  strategyType: Recreate
   addVolumes:
     - docs-form
 

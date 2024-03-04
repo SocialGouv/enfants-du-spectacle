@@ -20,7 +20,6 @@ app:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
-  replicas: 1
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -55,7 +54,6 @@ form:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
-  replicas: 1
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
