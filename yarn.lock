@@ -6384,16 +6384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.11.0, is-core-module@npm:^2.13.0, is-core-module@npm:^2.8.1":
-  version: 2.13.0
-  resolution: "is-core-module@npm:2.13.0"
-  dependencies:
-    has: ^1.0.3
-  checksum: 053ab101fb390bfeb2333360fd131387bed54e476b26860dc7f5a700bbf34a0ec4454f7c8c4d43e8a0030957e4b3db6e16d35e1890ea6fb654c833095e040355
-  languageName: node
-  linkType: hard
-
-"is-core-module@npm:^2.13.1":
+"is-core-module@npm:^2.11.0, is-core-module@npm:^2.13.0, is-core-module@npm:^2.13.1, is-core-module@npm:^2.8.1":
   version: 2.13.1
   resolution: "is-core-module@npm:2.13.1"
   dependencies:
@@ -8980,9 +8971,9 @@ __metadata:
   linkType: hard
 
 "nodemailer@npm:^6.7.2":
-  version: 6.9.6
-  resolution: "nodemailer@npm:6.9.6"
-  checksum: f5a8b438fb2f077bf04661fe2f4d2f73ea9df278bab7bde62e03a7ab8c28830182223090a73c5de571e8501bbfed06eb3917010a5729fe8572e2f79fe6d9464c
+  version: 6.9.9
+  resolution: "nodemailer@npm:6.9.9"
+  checksum: 9af862b497273796ad6ba7ca9eac23a7d69737554f6dd51cfd3557f60902c56344158192672f1208daf00340a47a9e1805bd809965edc191011b35dd98a74be1
   languageName: node
   linkType: hard
 
@@ -10013,19 +10004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:1.1":
-  version: 1.1.13
-  resolution: "readable-stream@npm:1.1.13"
-  dependencies:
-    core-util-is: ~1.0.0
-    inherits: ~2.0.1
-    isarray: 0.0.1
-    string_decoder: ~0.10.x
-  checksum: 7048f0ffbd01e4221cbddfcb7c0e083b982d575ca97615985234b3e4767aed34104271043b92414d91bc5ab0b69c0545f7e4ea202186c6692465333a59948cad
-  languageName: node
-  linkType: hard
-
-"readable-stream@npm:1.1.x":
+"readable-stream@npm:1.1, readable-stream@npm:1.1.x":
   version: 1.1.14
   resolution: "readable-stream@npm:1.1.14"
   dependencies:
