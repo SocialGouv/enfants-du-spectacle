@@ -12,6 +12,14 @@ form:
   securityContext:
     fsGroup: 1000
 
+pg:
+  backup:
+    name: "202403061907" # backup on a new folder
+
+pg-form:
+  backup:
+    name: "202403061907" # backup on a new folder
+
 jobs:
   runs:
     build-app:
@@ -26,4 +34,3 @@ jobs:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: preproduction
           START_SCRIPT: start
-
