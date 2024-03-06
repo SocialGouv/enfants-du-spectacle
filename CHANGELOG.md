@@ -1,3 +1,10 @@
+## [1.91.18](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.17...v1.91.18) (2024-03-06)
+
+
+### Bug Fixes
+
+* **footer:** metabase update link ([c933907](https://github.com/SocialGouv/enfants-du-spectacle/commit/c9339070f4608c27b56791b6b9fe4751e855609f))
+
 ## [1.91.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.16...v1.91.17) (2024-03-06)
 
 
