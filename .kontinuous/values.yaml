@@ -20,7 +20,6 @@ app:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
-  replicas: 1
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -55,7 +54,6 @@ form:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
-  replicas: 1
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -63,12 +61,6 @@ form:
         more_set_headers "X-Frame-Options: deny";
         more_set_headers "X-XSS-Protection: 1; mode=block";
         more_set_headers "X-Content-Type-Options: nosniff";
-
-metabase:
-  enabled: false
-
-oauth2-proxy:
-  enabled: false
 
 pg:
   ~chart: pg
@@ -100,4 +92,3 @@ jobs:
           sentry_auth_token:
             secretName: app-sealed-secret
             secretKey: SENTRY_AUTH_TOKEN
-

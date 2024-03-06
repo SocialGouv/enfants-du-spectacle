@@ -1,9 +1,16 @@
 app:
+  strategyType: Recreate
   addVolumes:
     - docs
+  securityContext:
+    fsGroup: 1000
+
 form:
+  strategyType: Recreate
   addVolumes:
     - docs-form
+  securityContext:
+    fsGroup: 1000
 
 jobs:
   runs:
@@ -19,3 +26,4 @@ jobs:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: preproduction
           START_SCRIPT: start
+
