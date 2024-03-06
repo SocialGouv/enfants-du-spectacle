@@ -3,12 +3,16 @@ app:
   strategyType: Recreate
   addVolumes:
     - docs
+  securityContext:
+    fsGroup: 1000
 
 form:
   replicas: 1
   strategyType: Recreate
   addVolumes:
     - docs-form
+  securityContext:
+    fsGroup: 1000
 
 jobs:
   runs:
