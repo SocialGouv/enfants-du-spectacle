@@ -1,3 +1,10 @@
+## [1.91.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.15...v1.91.16) (2024-03-06)
+
+
+### Bug Fixes
+
+* release action ([5d6d0d7](https://github.com/SocialGouv/enfants-du-spectacle/commit/5d6d0d70bb1c7a44206c5457ed4e39daa79946ed))
+
 ## [1.84.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.84.5...v1.84.6) (2023-06-30)
 
 
