@@ -39,7 +39,7 @@ jobs:
 
 pg:
   backup:
-    name: "202403051831" # backup on a new folder
+    name: "202403062019" # backup on a new folder
   cnpg-cluster:
     recovery:
       enabled: true
@@ -47,21 +47,21 @@ pg:
       ~tpl~owner: "{{ .Values.global.pgUser }}"
       secretName: "pg-db"
       barmanObjectStore:
-        ~tpl~destinationPath: "s3://recosante-prod-backups/recosante"
+        ~tpl~destinationPath: "s3://enfants-du-spectacle-prod-backups/enfants-du-spectacle"
         s3Credentials:
           accessKeyId:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_access_key
           secretAccessKey:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_secret_key
           region:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_region
 
 pg-form:
   backup:
-    name: "202403051831" # backup on a new folder
+    name: "202403062019" # backup on a new folder
   cnpg-cluster:
     recovery:
       enabled: true
@@ -69,14 +69,14 @@ pg-form:
       ~tpl~owner: "{{ .Values.global.pgUser }}"
       secretName: "pg-db"
       barmanObjectStore:
-        ~tpl~destinationPath: "s3://recosante-prod-backups/recosante"
+        ~tpl~destinationPath: "s3://enfants-du-spectacle-prod-backups/enfants-du-spectacle"
         s3Credentials:
           accessKeyId:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_access_key
           secretAccessKey:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_secret_key
           region:
-            ~tpl~name: "recosante-prod-backups-access-key"
+            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_region
