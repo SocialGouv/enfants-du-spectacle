@@ -1,3 +1,10 @@
+## [1.91.21](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.20...v1.91.21) (2024-03-07)
+
+
+### Bug Fixes
+
+* cast max_connections as string ([efb3e64](https://github.com/SocialGouv/enfants-du-spectacle/commit/efb3e64cbe60db7e07b42ca04891af41c42a5e1f))
+
 ## [1.91.20](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.19...v1.91.20) (2024-03-07)
 
 
