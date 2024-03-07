@@ -1,3 +1,10 @@
+## [1.91.20](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.19...v1.91.20) (2024-03-07)
+
+
+### Bug Fixes
+
+* increase pg maxConnections for prisma pool ([b1f2ea8](https://github.com/SocialGouv/enfants-du-spectacle/commit/b1f2ea886206f6c6c25967ae890309659875d5e9))
+
 ## [1.91.19](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.18...v1.91.19) (2024-03-06)
 
 
