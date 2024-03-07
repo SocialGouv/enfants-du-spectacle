@@ -65,12 +65,12 @@ form:
 pg:
   ~chart: pg
   postgresqlParameters:
-    max_connections: 1000
+    max_connections: "1000"
 
 pg-form:
   ~chart: pg
   postgresqlParameters:
-    max_connections: 1000
+    max_connections: "1000"
 
 jobs:
   ~chart: jobs
