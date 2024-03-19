@@ -1,3 +1,11 @@
+## [1.91.22](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.21...v1.91.22) (2024-03-19)
+
+
+### Bug Fixes
+
+* remove sentry instrumentation on healthz ([1f2d0cb](https://github.com/SocialGouv/enfants-du-spectacle/commit/1f2d0cbaba8272bce662ec0afd081ed2ffac3001))
+* replace sync calls by async ones to try fix kube readiness probe ([38a6724](https://github.com/SocialGouv/enfants-du-spectacle/commit/38a6724f2a54959549d5d8814a2ba2204a608510))
+
 ## [1.91.21](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.20...v1.91.21) (2024-03-07)
 
 
