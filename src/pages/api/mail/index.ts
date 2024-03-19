@@ -68,9 +68,9 @@ const sendMail: NextApiHandler = async (req, res) => {
       statut === "CONSTRUCTION" ? "Vous pouvez apporter les deniers éléments necessaires à la complétion de votre dossier." : "Il n’est plus modifiable d’ici la commission.");
   }
 
-  const templateSignin = fs
-    .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
-    .toString();
+  const templateSignin = (
+    await fs.readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
+  ).toString();
 
   function html({ url }: { url: string }): string {
     return templateSignin

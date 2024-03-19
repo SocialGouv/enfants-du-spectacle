@@ -51,9 +51,9 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const templateSignin = fs
-    .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
-    .toString();
+  const templateSignin = (
+    await fs.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
+  ).toString();
 
   function html({ url }: { url: string }): string {
     if (type === "update_dossier" || type === "depot_dossier") 

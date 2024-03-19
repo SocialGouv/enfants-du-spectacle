@@ -19,9 +19,9 @@ function sendVerificationRequest({
   provider: EmailConfig;
   // token: string;
 }): Awaitable<void> {
-  const templateSignin = fs
-    .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
-    .toString();
+  const templateSignin = (
+    await fs.readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
+  ).toString();
 
   const type = url.includes("dl_commission") ? "dl_commission" : "auth";
 

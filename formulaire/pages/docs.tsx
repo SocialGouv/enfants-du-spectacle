@@ -54,8 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         console.log('extension : ', extension)
         console.log('mime : ', mimes[extension])
 
-        const stat = fs.statSync(pathFull);
-
+        const stat = await fs.stat(pathFull);
         const decipher = crypto.createDecipheriv("aes-256-cfb", key, iv);
 
         res.writeHead(200, {

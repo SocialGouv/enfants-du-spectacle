@@ -63,7 +63,7 @@ const downloadZip: NextApiHandler = async (req, res) => {
   console.log("zipname : ", zipname);
 
   const filePath = `/mnt/docs/${zipname}.zip`;
-  const stat = fs.statSync(filePath);
+  const stat = await fs.stat(filePath);
 
   res.writeHead(200, {
     "Content-Length": stat.size,

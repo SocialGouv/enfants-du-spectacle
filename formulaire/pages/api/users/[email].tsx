@@ -64,9 +64,9 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
       return;
     }
 
-    const templateSignin = fs
-      .readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
-      .toString();
+    const templateSignin = (
+      await fs.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
+    ).toString();
 
     const html = ({ url }: { url: string }): string => {
       return templateSignin

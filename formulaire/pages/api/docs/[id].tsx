@@ -95,9 +95,9 @@ export const uploadFile = (
           .on("error", (error) => {
             throw error;
           })
-          .on("finish", () => {
+          .on("finish", async () => {
             //@ts-ignore
-            fs.unlinkSync(files.justificatif.filepath);
+            await fs.unlinkSync(files.justificatif.filepath);
           });
       } catch (err) {
         console.log(err);
