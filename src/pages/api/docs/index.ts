@@ -10,7 +10,7 @@ import type {
 } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import fs from "fs";
-import fsp from "fsp";
+import fsp from "fs/promises";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
