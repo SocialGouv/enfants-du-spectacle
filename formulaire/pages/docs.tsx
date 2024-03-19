@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
-import fsp from "fsp";
+import fs from "fs"
+import fsp from "fs/promises";
 import * as crypto from "crypto";
 
 const Docs: React.FC = () => {
