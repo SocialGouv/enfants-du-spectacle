@@ -1,3 +1,10 @@
+## [1.91.26](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.25...v1.91.26) (2024-03-19)
+
+
+### Bug Fixes
+
+* remove sentry instrumentation on healthz route ([023015e](https://github.com/SocialGouv/enfants-du-spectacle/commit/023015e71f755c58c90bcee5bdc58a4a97db456e))
+
 ## [1.91.25](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.24...v1.91.25) (2024-03-19)
 
 
