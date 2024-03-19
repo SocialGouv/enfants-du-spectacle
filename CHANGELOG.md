@@ -1,3 +1,10 @@
+## [1.91.25](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.24...v1.91.25) (2024-03-19)
+
+
+### Bug Fixes
+
+* rm sync ([526300f](https://github.com/SocialGouv/enfants-du-spectacle/commit/526300fb6068acb2a415fe0e02a8a3ee4cebe175))
+
 ## [1.91.24](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.23...v1.91.24) (2024-03-19)
 
 
