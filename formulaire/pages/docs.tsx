@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import fs from "fs";
+import fsp from "fsp";
 import * as crypto from "crypto";
 
 const Docs: React.FC = () => {
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         console.log('extension : ', extension)
         console.log('mime : ', mimes[extension])
 
-        const stat = await fs.stat(pathFull);
+        const stat = await fsp.stat(pathFull);
         const decipher = crypto.createDecipheriv("aes-256-cfb", key, iv);
 
         res.writeHead(200, {

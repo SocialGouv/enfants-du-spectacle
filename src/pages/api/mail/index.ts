@@ -1,5 +1,5 @@
 import { withSentry } from "@sentry/nextjs";
-import fs from "fs";
+import fsp from "fs/promises";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
@@ -69,7 +69,7 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   const templateSignin = (
-    await fs.readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
+    await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();
 
   function html({ url }: { url: string }): string {

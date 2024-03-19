@@ -10,6 +10,7 @@ import type {
 } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import fs from "fs";
+import fsp from "fsp";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
@@ -63,7 +64,7 @@ const downloadZip: NextApiHandler = async (req, res) => {
   console.log("zipname : ", zipname);
 
   const filePath = `/mnt/docs/${zipname}.zip`;
-  const stat = await fs.stat(filePath);
+  const stat = await fsp.stat(filePath);
 
   res.writeHead(200, {
     "Content-Length": stat.size,

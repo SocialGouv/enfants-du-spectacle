@@ -1,4 +1,4 @@
-import fs from "fs";
+import fsp from "fs/promises";
 import _ from "lodash";
 import type { Awaitable } from "next-auth";
 import nodemailer from "nodemailer";
@@ -8,7 +8,7 @@ function text({ url }: { url: string }) {
   return `Connectez-vous à Enfants du Spectacle en suivant ce lien\n${url}\n`;
 }
 
-function sendVerificationRequest({
+async function sendVerificationRequest({
   identifier: email,
   provider,
   url,
@@ -20,7 +20,7 @@ function sendVerificationRequest({
   // token: string;
 }): Awaitable<void> {
   const templateSignin = (
-    await fs.readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
+    await fsp.readFileSync(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();
 
   const type = url.includes("dl_commission") ? "dl_commission" : "auth";

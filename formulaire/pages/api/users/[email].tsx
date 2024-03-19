@@ -4,7 +4,7 @@ import { WORDING_MAILING } from "src/lib/helpers";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
-import fs from "fs";
+import fsp from "fs/promises"
 import _ from "lodash";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
@@ -65,7 +65,7 @@ const getUserByEmail: NextApiHandler = async (req, res) => {
     }
 
     const templateSignin = (
-      await fs.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
+      await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
     ).toString();
 
     const html = ({ url }: { url: string }): string => {
