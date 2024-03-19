@@ -97,7 +97,7 @@ export const uploadFile = (
           })
           .on("finish", async () => {
             //@ts-ignore
-            await fsp.unlinkSync(files.justificatif.filepath);
+            await fsp.unlink(files.justificatif.filepath);
           });
       } catch (err) {
         console.log(err);
