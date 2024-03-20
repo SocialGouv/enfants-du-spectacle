@@ -1,3 +1,10 @@
+## [1.91.28](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.27...v1.91.28) (2024-03-20)
+
+
+### Bug Fixes
+
+* **privacy:** remove logs verbosity ([3e3f115](https://github.com/SocialGouv/enfants-du-spectacle/commit/3e3f1157080898e62d65eea314c4061df2b691bf))
+
 ## [1.91.27](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.26...v1.91.27) (2024-03-20)
 
 
