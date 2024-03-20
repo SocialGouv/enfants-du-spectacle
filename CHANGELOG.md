@@ -1,3 +1,10 @@
+## [1.91.27](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.26...v1.91.27) (2024-03-20)
+
+
+### Bug Fixes
+
+* increase readiness probe timeout to avoid app instability especially with only one pod ([015a4ad](https://github.com/SocialGouv/enfants-du-spectacle/commit/015a4ad53942a85085e4ba889227ac316eec4d87))
+
 ## [1.91.26](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.25...v1.91.26) (2024-03-19)
 
 
