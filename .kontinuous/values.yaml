@@ -21,6 +21,9 @@ app:
         name: app-configmap
   probesPath: /api/healthz
   readinessProbe:
+    httpGet:
+      path: /api/healthz
+      port: http
     timeoutSeconds: 3 # otherwise we get instability of the readiness probe
   ingress:
     annotations:
