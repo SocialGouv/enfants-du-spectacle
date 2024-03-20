@@ -20,6 +20,8 @@ app:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
+  readinessProbe:
+    timeoutSeconds: 3 # otherwise we get instability of the readiness probe
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
