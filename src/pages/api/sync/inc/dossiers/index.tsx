@@ -264,7 +264,7 @@ const update: NextApiHandler = async (req, res) => {
           (enfantL) => enfantL.externalId === enfant.id.toString()
         )
       ) {
-        console.log("has to update enfant :", enfant.nom, ' ', enfant.prenom, ', ', enfant.id);
+        // console.log("has to update enfant :", enfant.id);
         const updateEnfant = await client.enfant.update({
           data: {
             ...EnfantsData.parse(enfant),
@@ -276,7 +276,7 @@ const update: NextApiHandler = async (req, res) => {
             externalId: enfant.id.toString(),
           },
         });
-        console.log("enfant updated :", updateEnfant.nom, ' ', updateEnfant.prenom, ', ', updateEnfant.externalId);
+        // console.log("enfant updated :", updateEnfant.externalId);
       } else {
         try {
           console.log("has to create enfant :", enfant.nom, ' ', enfant.prenom, ', ', enfant.id);
@@ -290,9 +290,9 @@ const update: NextApiHandler = async (req, res) => {
                 .filter((item, i, ar) => ar.indexOf(item) === i),
             },
           });
-          console.log("enfant updated :", CreateEnfants.nom, ' ', CreateEnfants.prenom, ', ', CreateEnfants.externalId);
+          // console.log("enfant updated :", CreateEnfants.externalId);
         } catch (e) {
-          console.log('PROBLEM with : ', enfant.nom, ' ', enfant.prenom, ', ', enfant.id)
+          console.log('PROBLEM with : ', enfant.id)
         }
       }
     });
