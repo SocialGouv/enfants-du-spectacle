@@ -1,3 +1,10 @@
+## [1.91.30](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.29...v1.91.30) (2024-03-21)
+
+
+### Bug Fixes
+
+* fix signin instructeurs ([#608](https://github.com/SocialGouv/enfants-du-spectacle/issues/608)) ([b34b518](https://github.com/SocialGouv/enfants-du-spectacle/commit/b34b5184c45c6e8bcb036093a0fd27428e94e41d))
+
 ## [1.91.29](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.28...v1.91.29) (2024-03-20)
 
 
