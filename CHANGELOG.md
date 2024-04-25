@@ -1,3 +1,10 @@
+## [1.91.31](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.30...v1.91.31) (2024-04-25)
+
+
+### Bug Fixes
+
+* tls reject unauthorized preprod ([#610](https://github.com/SocialGouv/enfants-du-spectacle/issues/610)) ([19420f0](https://github.com/SocialGouv/enfants-du-spectacle/commit/19420f09fee7cc686d2512c9128deaa261f8cfbb))
+
 ## [1.91.30](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.29...v1.91.30) (2024-03-21)
 
 
