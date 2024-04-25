@@ -4,7 +4,7 @@ metadata:
   name: app-configmap
 data:
   NODE_ENV: "production"
-  NODE_TLS_REJECT_UNAUTHORIZED: 0
+  NODE_TLS_REJECT_UNAUTHORIZED: "0"
   EMAIL_FROM: "Enfants du Spectacle [PREPROD] <enfantsduspectacle@diffusion.fabrique.social.gouv.fr>"
   DEMARCHE_NUMBER: "55315"
   API_URL_INSTRUCTEUR: "https://enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync"
