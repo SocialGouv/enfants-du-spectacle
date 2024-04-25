@@ -1,3 +1,10 @@
+## [1.91.32](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.31...v1.91.32) (2024-04-25)
+
+
+### Bug Fixes
+
+* tls fix ([#611](https://github.com/SocialGouv/enfants-du-spectacle/issues/611)) ([f79518f](https://github.com/SocialGouv/enfants-du-spectacle/commit/f79518f0a9f2df293a45f116c3fe9285be6895d8))
+
 ## [1.91.31](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.30...v1.91.31) (2024-04-25)
 
 
