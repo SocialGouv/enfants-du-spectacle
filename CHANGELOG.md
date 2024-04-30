@@ -1,3 +1,10 @@
+## [1.91.37](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.36...v1.91.37) (2024-04-30)
+
+
+### Bug Fixes
+
+* fix fetching commissions ([#616](https://github.com/SocialGouv/enfants-du-spectacle/issues/616)) ([abeb8b7](https://github.com/SocialGouv/enfants-du-spectacle/commit/abeb8b7f62fdec5ccbace05dbfce7fd34f8a93c2))
+
 ## [1.91.36](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.35...v1.91.36) (2024-04-30)
 
 
