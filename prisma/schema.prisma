@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "referentialActions"]
-  engineType = "binary"
+  engineType      = "binary"
 }
 
 datasource db {
@@ -17,6 +17,7 @@ model Commission {
   dossiers        Dossier[]
   lastSent        DateTime?
   SendList        SendList[]
+  archived        Boolean?
 }
 
 model SocieteProduction {
