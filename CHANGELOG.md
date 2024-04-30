@@ -1,3 +1,10 @@
+## [1.91.33](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.32...v1.91.33) (2024-04-30)
+
+
+### Bug Fixes
+
+* console log fetch agent ([#612](https://github.com/SocialGouv/enfants-du-spectacle/issues/612)) ([f345298](https://github.com/SocialGouv/enfants-du-spectacle/commit/f34529824f6d6324d34f425d187a2c8d43b130af))
+
 ## [1.91.32](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.31...v1.91.32) (2024-04-25)
 
 
