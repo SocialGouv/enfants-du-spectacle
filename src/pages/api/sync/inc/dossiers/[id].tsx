@@ -1,8 +1,8 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 
-import { PrismaClient, Prisma } from '@prisma/client'
-const client = new PrismaClient()
+import { PrismaClient, Prisma } from "@prisma/client";
+const client = new PrismaClient();
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "GET") {
@@ -48,6 +48,7 @@ const get: NextApiHandler = async (req, res) => {
     res.status(401).json({ error: "Unauthorized" });
   } else {
     try {
+      console.log("try to fetch agent ...");
       if (data.id) {
         const dossier = await client.dossier.findFirst({
           where: { externalId: data.id.toString() },
