@@ -188,7 +188,7 @@ const getPastCommissions = async () => {
       },
     },
     orderBy: { date: "desc" },
-    where: { date: { lt: new Date() }, dossiers: { some: {} } },
+    where: { date: { lt: new Date() }, dossiers: { some: {} }, archived: false },
   });
 };
 

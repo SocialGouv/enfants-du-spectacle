@@ -70,32 +70,38 @@ const Page: React.FC = () => {
   const [showTable, setShowTable] = React.useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = React.useState<statusGroup>("futur");
-  const [loadingPdf, setLoadingPdf] = React.useState<string>('')
+  const [loadingPdf, setLoadingPdf] = React.useState<string>("");
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleStatus = (status: statusGroup) => {
     setStatus(status);
   };
 
-  const { commissions, ...swrCommissions } = useCommissions(
-    "upcoming",
-    //@ts-expect-error
-    session.data.dbUser.role !== "MEMBRE"
-      ? "all"
-      : //@ts-expect-error
-        session.data.dbUser.departements
-  );
+  const { commissions, ...swrCommissions } =
+    status === "futur"
+      ? useCommissions(
+          "upcoming",
+          //@ts-expect-error
+          session.data.dbUser.role !== "MEMBRE"
+            ? "all"
+            : //@ts-expect-error
+              session.data.dbUser.departements
+        )
+      : { commissions: [] };
 
   console.log("commissions : ", commissions);
 
-  const { ...commissionsPast } = useCommissions(
-    "past",
-    //@ts-expect-error
-    session.data.dbUser.role !== "MEMBRE"
-      ? "all"
-      : //@ts-expect-error
-        session.data.dbUser.departements
-  );
+  const { ...commissionsPast } =
+    status === "past"
+      ? useCommissions(
+          "past",
+          //@ts-expect-error
+          session.data.dbUser.role !== "MEMBRE"
+            ? "all"
+            : //@ts-expect-error
+              session.data.dbUser.departements
+        )
+      : { commissions: [] };
 
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
@@ -471,36 +477,36 @@ const Page: React.FC = () => {
                                     <ButtonLink
                                       light={true}
                                       onClick={async () => {
-                                        setLoadingPdf('ODJ_' + commission.id);
+                                        setLoadingPdf("ODJ_" + commission.id);
                                         await generateOdj(commission);
-                                        setLoadingPdf('');
+                                        setLoadingPdf("");
                                       }}
                                     >
                                       <RiDownloadLine
                                         style={{ marginRight: "10px" }}
                                       />
-                                      {loadingPdf === 'ODJ_' + commission.id ? 
-                                        (<IconLoader></IconLoader>)
-                                        :
-                                        (<span>Ordre du jour</span>)
-                                      }
+                                      {loadingPdf === "ODJ_" + commission.id ? (
+                                        <IconLoader></IconLoader>
+                                      ) : (
+                                        <span>Ordre du jour</span>
+                                      )}
                                     </ButtonLink>
                                     <ButtonLink
                                       light={true}
                                       onClick={async () => {
-                                        setLoadingPdf('PV_' + commission.id);
+                                        setLoadingPdf("PV_" + commission.id);
                                         await generatePV(commission);
-                                        setLoadingPdf('');
+                                        setLoadingPdf("");
                                       }}
                                     >
                                       <RiDownloadLine
                                         style={{ marginRight: "10px" }}
                                       />
-                                      {loadingPdf === 'PV_' + commission.id ? 
-                                        (<IconLoader></IconLoader>)
-                                        :
-                                        (<span>Procès Verbal</span>)
-                                      }
+                                      {loadingPdf === "PV_" + commission.id ? (
+                                        <IconLoader></IconLoader>
+                                      ) : (
+                                        <span>Procès Verbal</span>
+                                      )}
                                     </ButtonLink>
                                   </div>
                                 )}
