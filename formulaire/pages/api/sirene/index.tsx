@@ -22,7 +22,7 @@ const get: NextApiHandler = async (req, res) => {
     const siret = req.query.siret || ''
     console.log('token : ', process.env.TOKEN_SIRENE)
 
-    let fetching = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`,{
+    let fetching = await fetch(`https://api.insee.fr/entreprises/sirene/V3.11/siret/${siret}`,{
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${process.env.TOKEN_SIRENE}`,
