@@ -1,3 +1,10 @@
+## [1.91.38](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.37...v1.91.38) (2024-05-03)
+
+
+### Bug Fixes
+
+* fix API sirene ([a9fecd1](https://github.com/SocialGouv/enfants-du-spectacle/commit/a9fecd13cdf30c33685f2015a4460e520c75a212))
+
 ## [1.91.37](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.36...v1.91.37) (2024-04-30)
 
 
