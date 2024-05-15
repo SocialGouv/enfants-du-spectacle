@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         res.writeHead(200, {
             "Content-Length": stat.size,
             "Content-Name": name,
-            "Content-Type": mimes[extension],
+            "Content-Type": mimes[extension.toLowerCase() as keyof typeof mimes],
         });
 
         const input = fs.createReadStream(pathFull);
