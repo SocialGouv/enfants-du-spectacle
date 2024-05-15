@@ -1,3 +1,10 @@
+## [1.91.40](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.39...v1.91.40) (2024-05-15)
+
+
+### Bug Fixes
+
+* fix extension type docs ([#618](https://github.com/SocialGouv/enfants-du-spectacle/issues/618)) ([c4192d3](https://github.com/SocialGouv/enfants-du-spectacle/commit/c4192d3e3c739526accede44a047dee61628a7f6))
+
 ## [1.91.39](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.38...v1.91.39) (2024-05-03)
 
 
