@@ -3,6 +3,7 @@ import {
   FooterBody,
   FooterBottom,
   FooterLink,
+  Link,
   Logo,
 } from "@dataesr/react-dsfr";
 import type { ReactElement } from "react";
@@ -14,6 +15,26 @@ export default function Footer(): ReactElement {
     <FooterDSE className={styles.footer}>
       <FooterBody description="Simplifier la démarche de demande d’autorisation d’emplois d’enfants du spectacle tout en garantissant une plus grande protection des mineurs de moins de 16 ans travaillant dans ce secteur">
         <Logo>Préfet de la région Île-de-France</Logo>
+        <FooterBodyItem>
+            <Link href="https://info.gouv.fr" target="_blank">
+              info.gouv.fr
+            </Link>
+          </FooterBodyItem>
+          <FooterBodyItem>
+            <Link href="https://service-public.fr" target="_blank">
+              service-public.fr
+            </Link>
+          </FooterBodyItem>
+          <FooterBodyItem>
+            <Link href="https://legifrance.gouv.fr" target="_blank">
+              legifrance.gouv.fr
+            </Link>
+          </FooterBodyItem>
+          <FooterBodyItem>
+            <Link href="https://data.gouv.fr" target="_blank">
+              data.gouv.fr
+            </Link>
+          </FooterBodyItem>
       </FooterBody>
       <div className={styles.contactText}>
         En cas de problème avec la plateforme, merci d’envoyer un email à{" "}
