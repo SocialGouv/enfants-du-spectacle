@@ -2,6 +2,7 @@ import {
   Footer as FooterDSE,
   FooterBody,
   FooterBottom,
+  FooterBodyItem,
   FooterLink,
   Link,
   Logo,
