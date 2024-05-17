@@ -1,3 +1,10 @@
+## [1.91.42](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.41...v1.91.42) (2024-05-17)
+
+
+### Bug Fixes
+
+* fix import ([#620](https://github.com/SocialGouv/enfants-du-spectacle/issues/620)) ([f9c9097](https://github.com/SocialGouv/enfants-du-spectacle/commit/f9c909762c629edefed87bc2eae630de3f4aa12b))
+
 ## [1.91.41](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.40...v1.91.41) (2024-05-17)
 
 
