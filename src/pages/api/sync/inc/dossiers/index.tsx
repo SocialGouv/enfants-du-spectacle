@@ -11,8 +11,16 @@ import {
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { z } from "zod";
 
-import { PrismaClient, Prisma } from '@prisma/client'
-const client = new PrismaClient()
+import { PrismaClient, Prisma } from "@prisma/client";
+const client = new PrismaClient();
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "5mb",
+    },
+  },
+};
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "POST") {
@@ -188,7 +196,7 @@ const update: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
-  console.log('UPDATING DOSSIER : ', data.dossier.nom, ', ', data.dossier.id)
+  console.log("UPDATING DOSSIER : ", data.dossier.nom, ", ", data.dossier.id);
 
   try {
     const commissions = await client.commission.findMany({
@@ -236,7 +244,7 @@ const update: NextApiHandler = async (req, res) => {
       adresseEnfant: true,
       cdc: true,
       dossierId: true,
-      id: true
+      id: true,
     });
     data.enfants.map(async (enfant) => {
       enfant.nombreJours =
@@ -279,7 +287,14 @@ const update: NextApiHandler = async (req, res) => {
         // console.log("enfant updated :", updateEnfant.externalId);
       } else {
         try {
-          console.log("has to create enfant :", enfant.nom, ' ', enfant.prenom, ', ', enfant.id);
+          console.log(
+            "has to create enfant :",
+            enfant.nom,
+            " ",
+            enfant.prenom,
+            ", ",
+            enfant.id
+          );
           const CreateEnfants = await client.enfant.create({
             data: {
               ...EnfantsData.parse(enfant),
@@ -292,7 +307,7 @@ const update: NextApiHandler = async (req, res) => {
           });
           // console.log("enfant updated :", CreateEnfants.externalId);
         } catch (e) {
-          console.log('PROBLEM with : ', enfant.id)
+          console.log("PROBLEM with : ", enfant.id);
         }
       }
     });
