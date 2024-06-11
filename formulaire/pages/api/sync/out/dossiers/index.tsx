@@ -4,7 +4,15 @@ import type { NextApiHandler } from "next";
 import { DossierData, EnfantData } from "src/fetching/dossiers";
 import { DemandeurData } from "src/lib/types";
 import { getServerSession } from "next-auth";
-import { authOptions }  from '../../../auth/[...nextauth]'
+import { authOptions } from "../../../auth/[...nextauth]";
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "5mb",
+    },
+  },
+};
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
