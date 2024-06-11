@@ -1,3 +1,10 @@
+## [1.91.43](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.42...v1.91.43) (2024-06-11)
+
+
+### Bug Fixes
+
+* update body size ([#621](https://github.com/SocialGouv/enfants-du-spectacle/issues/621)) ([35e0457](https://github.com/SocialGouv/enfants-du-spectacle/commit/35e0457ccf31a378a48cfbb1ed72166758b00f6c))
+
 ## [1.91.42](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.41...v1.91.42) (2024-05-17)
 
 
