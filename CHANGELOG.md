@@ -1,3 +1,10 @@
+## [1.91.44](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.43...v1.91.44) (2024-06-11)
+
+
+### Bug Fixes
+
+* update body parser ([#622](https://github.com/SocialGouv/enfants-du-spectacle/issues/622)) ([6d8864c](https://github.com/SocialGouv/enfants-du-spectacle/commit/6d8864c6d54546017a061d2c889369312822149b))
+
 ## [1.91.43](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.42...v1.91.43) (2024-06-11)
 
 
