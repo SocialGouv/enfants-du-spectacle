@@ -59,9 +59,6 @@ pg:
       limits:
         cpu: "1"
         memory: 1Gi
-  backup:
-    name: "202403062019" # backup on a new folder
-  cnpg-cluster:
     recovery:
       enabled: true
       ~tpl~database: "{{ .Values.global.pgDatabase }}"
@@ -79,6 +76,8 @@ pg:
           region:
             ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_region
+  backup:
+    name: "202403062019" # backup on a new folder
 
 pg-form:
   cnpg-cluster:
@@ -88,9 +87,6 @@ pg-form:
       limits:
         cpu: "1"
         memory: 1Gi
-  backup:
-    name: "202403062019" # backup on a new folder
-  cnpg-cluster:
     recovery:
       enabled: true
       ~tpl~database: "{{ .Values.global.pgDatabase }}"
@@ -108,3 +104,5 @@ pg-form:
           region:
             ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
             key: bucket_region
+  backup:
+    name: "202403062019" # backup on a new folder
