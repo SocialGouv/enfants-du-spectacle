@@ -1,3 +1,10 @@
+## [1.91.47](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.46...v1.91.47) (2024-07-04)
+
+
+### Bug Fixes
+
+* cnpg ([#626](https://github.com/SocialGouv/enfants-du-spectacle/issues/626)) ([e9012c8](https://github.com/SocialGouv/enfants-du-spectacle/commit/e9012c87f795d016381d03d678561a93693a6af5))
+
 ## [1.91.46](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.45...v1.91.46) (2024-07-04)
 
 
