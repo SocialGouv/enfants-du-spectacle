@@ -1,3 +1,10 @@
+## [1.91.45](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.44...v1.91.45) (2024-07-04)
+
+
+### Bug Fixes
+
+* eds update-resources ([#624](https://github.com/SocialGouv/enfants-du-spectacle/issues/624)) ([6c029c8](https://github.com/SocialGouv/enfants-du-spectacle/commit/6c029c87ad2533c08c8aa71e3d5150483aa05e73))
+
 ## [1.91.44](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.43...v1.91.44) (2024-06-11)
 
 
