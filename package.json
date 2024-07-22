@@ -76,7 +76,7 @@
     "@socialgouv/eslint-config-typescript": "^1.100.0",
     "@types/faker": "^5.5.9",
     "@types/formidable": "^2.0.5",
-    "@types/react": "17.0.37",
+    "@types/react": "17.0.80",
     "@types/react-datepicker": "^4.10.0",
     "csv-parse": "^5.0.3",
     "csv-stringify": "^6.0.3",
