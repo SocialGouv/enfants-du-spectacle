@@ -1,3 +1,10 @@
+## [1.91.49](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.48...v1.91.49) (2024-07-29)
+
+
+### Bug Fixes
+
+* disable pg-form recovery ([6a7e9b1](https://github.com/SocialGouv/enfants-du-spectacle/commit/6a7e9b1956749c89218f423481667f7927530222))
+
 ## [1.91.48](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.47...v1.91.48) (2024-07-29)
 
 
