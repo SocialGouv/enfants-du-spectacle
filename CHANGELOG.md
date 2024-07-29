@@ -1,3 +1,10 @@
+## [1.91.48](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.47...v1.91.48) (2024-07-29)
+
+
+### Bug Fixes
+
+* pg-form cluster ([318676b](https://github.com/SocialGouv/enfants-du-spectacle/commit/318676b00bedcd7c21c6fdf6a4405bdc8e1afc39))
+
 ## [1.91.47](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.46...v1.91.47) (2024-07-04)
 
 
