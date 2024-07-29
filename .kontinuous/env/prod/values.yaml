@@ -88,7 +88,7 @@ pg-form:
         cpu: "1"
         memory: 1Gi
     recovery:
-      enabled: true
+      enabled: false
       ~tpl~database: "{{ .Values.global.pgDatabase }}"
       ~tpl~owner: "{{ .Values.global.pgUser }}"
       secretName: "pg-db"
