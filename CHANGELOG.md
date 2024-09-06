@@ -1,3 +1,10 @@
+## [1.91.50](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.49...v1.91.50) (2024-09-06)
+
+
+### Bug Fixes
+
+* remove faq phrase ([ad96a2b](https://github.com/SocialGouv/enfants-du-spectacle/commit/ad96a2b0453ea392f879314e96d107e5b1baeac7))
+
 ## [1.91.49](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.48...v1.91.49) (2024-07-29)
 
 
