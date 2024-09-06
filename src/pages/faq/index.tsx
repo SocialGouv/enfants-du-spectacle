@@ -127,10 +127,6 @@ const Faq: React.FC = () => {
               des pièces justificatives, ils passeront votre dossier en “Prêt”,
               ce qui signifie que le dossier est prêt pour la commission.{" "}
             </li>
-            <li>
-              A savoir qu’il n’est plus possible de modifier des éléments d’un
-              dossier la dernière semaine précédent la commission.{" "}
-            </li>
           </ul>
           <h5>3) Comment ajouter des enfants ?</h5>
           <div>
