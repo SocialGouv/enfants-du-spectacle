@@ -1,3 +1,10 @@
+## [1.91.51](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.50...v1.91.51) (2024-09-27)
+
+
+### Bug Fixes
+
+* allow longer than 3 chars TLD in email ([#632](https://github.com/SocialGouv/enfants-du-spectacle/issues/632)) ([892c8f7](https://github.com/SocialGouv/enfants-du-spectacle/commit/892c8f7a50ed540c661e07e8e67606e5f01c6390))
+
 ## [1.91.50](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.49...v1.91.50) (2024-09-06)
 
 
