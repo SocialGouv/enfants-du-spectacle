@@ -91,7 +91,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
             verif = false;
           }
           if (
-            !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+            !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(
               contextDossier.demandeur.email ?? ""
             )
           ) {
