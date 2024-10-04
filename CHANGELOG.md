@@ -1,3 +1,10 @@
+## [1.91.52](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.51...v1.91.52) (2024-10-04)
+
+
+### Bug Fixes
+
+* disable cnpg recovery ([81202f6](https://github.com/SocialGouv/enfants-du-spectacle/commit/81202f6bb595dbb74d70d67938517a783ec8fa50))
+
 ## [1.91.51](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.50...v1.91.51) (2024-09-27)
 
 
