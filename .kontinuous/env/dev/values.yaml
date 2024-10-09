@@ -14,6 +14,16 @@ form:
     - mountPath: /mnt/docs
       name: docs-form
 
+pg:
+  cnpg-cluster:
+    monitoring:
+      ~tpl~enablePodMonitor: "true"
+
+pg-form:
+  cnpg-cluster:
+    monitoring:
+      ~tpl~enablePodMonitor: "true"
+
 jobs:
   runs:
     build-app:
@@ -21,6 +31,8 @@ jobs:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
           START_SCRIPT: start-review
+          NEXT_PUBLIC_API_URL_SDP:
+            https://formulaire-{{ .Values.global.host }}/api/sync
     build-form:
       with:
         buildArgs:

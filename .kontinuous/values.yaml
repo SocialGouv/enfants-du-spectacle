@@ -2,13 +2,13 @@ app:
   ~chart: app
   ~needs: [build-app, pg]
   imagePackage: app
+  annotations:
+    "oblik.socialgouv.io/min-request-memory": 1Gi
+    "oblik.socialgouv.io/min-request-cpu": 300m
   resources:
     requests:
-      cpu: 0.2
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 4Gi
+      memory: 1Gi
+      cpu: 300m
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
@@ -40,14 +40,10 @@ form:
   ~chart: app
   ~needs: [build-form, pg-form]
   imagePackage: form
+  annotations:
+    "oblik.socialgouv.io/min-request-memory": 1Gi
+    "oblik.socialgouv.io/min-request-cpu": 300m
   host: "formulaire-{{ $.Values.global.host }}"
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 4Gi
   env:
     - name: APP_BASE_URL
       value: "https://formulaire-{{ $.Values.global.host }}"
