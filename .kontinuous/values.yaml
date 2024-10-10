@@ -3,12 +3,12 @@ app:
   ~needs: [build-app, pg]
   imagePackage: app
   annotations:
-    "oblik.socialgouv.io/min-request-memory": 1Gi
-    "oblik.socialgouv.io/min-request-cpu": 300m
+    "oblik.socialgouv.io/min-request-memory": 2Gi
+    "oblik.socialgouv.io/min-request-cpu": "1"
   resources:
     requests:
-      memory: 1Gi
-      cpu: 300m
+      memory: 2Gi
+      cpu: "1"
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
@@ -41,8 +41,12 @@ form:
   ~needs: [build-form, pg-form]
   imagePackage: form
   annotations:
-    "oblik.socialgouv.io/min-request-memory": 1Gi
-    "oblik.socialgouv.io/min-request-cpu": 300m
+    "oblik.socialgouv.io/min-request-memory": 2Gi
+    "oblik.socialgouv.io/min-request-cpu": "1"
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: "1"
   host: "formulaire-{{ $.Values.global.host }}"
   env:
     - name: APP_BASE_URL
