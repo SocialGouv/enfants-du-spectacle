@@ -7,6 +7,7 @@ declare global {
 export const client =
   globalThis.prismaClient ??
   new PrismaClient({
+    datasourceUrl: process.env.DATABASE_URL + "&connection_limit=5",
     log: ["info", "warn", "error"],
   });
 
