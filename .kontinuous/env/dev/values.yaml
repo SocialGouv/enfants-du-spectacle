@@ -7,8 +7,6 @@ app:
   volumeMounts:
     - mountPath: /mnt/docs
       name: docs
-  vars:
-    DEBUG: "*"
 
 form:
   annotations:
@@ -19,8 +17,6 @@ form:
   volumeMounts:
     - mountPath: /mnt/docs
       name: docs-form
-  vars:
-    DEBUG: "*"
 
 pg:
   cnpg-cluster:
