@@ -9,7 +9,7 @@ export const client =
   new PrismaClient({
     datasources: {
       db: {
-        url: process.env.DATABASE_URL + "&connection_limit=5",
+        url: process.env.DATABASE_URL + "&connection_limit=100",
       },
     },
     log: ["info", "warn", "error"],
