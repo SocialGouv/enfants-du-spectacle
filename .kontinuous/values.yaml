@@ -9,6 +9,9 @@ app:
     requests:
       memory: 2Gi
       cpu: "1"
+    limits:
+      memory: 2Gi
+      cpu: "1"
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
@@ -45,6 +48,9 @@ form:
     "oblik.socialgouv.io/min-request-cpu": "1"
   resources:
     requests:
+      memory: 2Gi
+      cpu: "1"
+    limits:
       memory: 2Gi
       cpu: "1"
   host: "formulaire-{{ $.Values.global.host }}"
