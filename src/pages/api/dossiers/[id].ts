@@ -6,8 +6,8 @@ import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
 import superjson from "superjson";
 
-import { PrismaClient, Prisma } from "@prisma/client";
-const client = new PrismaClient();
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });

@@ -2,7 +2,8 @@ import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import superjson from "superjson";
 
-import { client } from "src/lib/prismaClient";
+import { PrismaClient, Prisma } from '@prisma/client'
+const client = new PrismaClient()
 
 const handler: NextApiHandler = async (req, res) => {
   const { id: commissionIdStr } = req.query;
