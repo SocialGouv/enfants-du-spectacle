@@ -1,26 +1,38 @@
 app:
+  annotations:
+    "oblik.socialgouv.io/enabled": "false"
   volumes:
     - name: docs
       emptyDir: {}
   volumeMounts:
     - mountPath: /mnt/docs
       name: docs
+  vars:
+    DEBUG: "*"
 
 form:
+  annotations:
+    "oblik.socialgouv.io/enabled": "false"
   volumes:
     - name: docs-form
       emptyDir: {}
   volumeMounts:
     - mountPath: /mnt/docs
       name: docs-form
+  vars:
+    DEBUG: "*"
 
 pg:
   cnpg-cluster:
+    annotations:
+      "oblik.socialgouv.io/enabled": "false"
     monitoring:
       ~tpl~enablePodMonitor: "true"
 
 pg-form:
   cnpg-cluster:
+    annotations:
+      "oblik.socialgouv.io/enabled": "false"
     monitoring:
       ~tpl~enablePodMonitor: "true"
 
@@ -30,11 +42,11 @@ jobs:
       with:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
-          START_SCRIPT: start-review
+          START_SCRIPT: start-prod
           NEXT_PUBLIC_API_URL_SDP:
             https://formulaire-{{ .Values.global.host }}/api/sync
     build-form:
       with:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
-          START_SCRIPT: start-review
+          START_SCRIPT: start

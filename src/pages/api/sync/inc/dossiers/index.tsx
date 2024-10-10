@@ -12,7 +12,7 @@ import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { z } from "zod";
 
 import { PrismaClient, Prisma } from "@prisma/client";
-const client = new PrismaClient();
+const client = new PrismaClient({ log: ["query", "info", "warn", "error"] });
 
 export const config = {
   api: {
