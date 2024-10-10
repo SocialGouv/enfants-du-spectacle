@@ -2,8 +2,7 @@ import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import superjson from "superjson";
 
-import { PrismaClient, Prisma } from '@prisma/client'
-const client = new PrismaClient()
+import { client } from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {

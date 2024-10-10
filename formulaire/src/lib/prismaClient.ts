@@ -1,11 +1,20 @@
-// cf https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
-
 import { PrismaClient } from "@prisma/client";
 
-const getClient = () => {
-  return new PrismaClient();
-};
+declare global {
+  var prismaClient: PrismaClient | undefined;
+}
 
-const client = getClient();
+const client =
+  globalThis.prismaClient ??
+  new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL + "&connection_limit=5",
+      },
+    },
+    log: ["info", "warn", "error"],
+  });
+
+globalThis.prismaClient = client;
 
 export default client;
