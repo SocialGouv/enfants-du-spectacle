@@ -35,6 +35,9 @@ app:
   startupProbe:
     failureThreshold: 48
     periodSeconds: 5
+    httpGet:
+      path: /api/healthz
+      port: http
 
 form:
   ~chart: app
