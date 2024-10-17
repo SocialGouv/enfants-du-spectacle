@@ -1,3 +1,10 @@
+## [1.91.54](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.53...v1.91.54) (2024-10-17)
+
+
+### Bug Fixes
+
+* startupProbe ([014fcf8](https://github.com/SocialGouv/enfants-du-spectacle/commit/014fcf812a61e80a4f1b9916aec3cf619a6f4a4f))
+
 ## [1.91.53](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.52...v1.91.53) (2024-10-17)
 
 
