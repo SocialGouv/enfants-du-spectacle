@@ -1,8 +1,5 @@
 projectName: enfants-du-spectacle
 dependencies:
   fabrique:
-    dependencies:
-      contrib:
-        patches:
-          updateManifestsWithPreprodResources:
-            enabled: false
+    extends:
+      - name: ovh
