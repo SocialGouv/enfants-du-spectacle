@@ -1,3 +1,10 @@
+## [1.91.53](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.52...v1.91.53) (2024-10-17)
+
+
+### Bug Fixes
+
+* prisma client ([#633](https://github.com/SocialGouv/enfants-du-spectacle/issues/633)) ([035d466](https://github.com/SocialGouv/enfants-du-spectacle/commit/035d466ad93a909276eadbf1a4a6f2506002221f))
+
 ## [1.91.52](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.51...v1.91.52) (2024-10-04)
 
 
