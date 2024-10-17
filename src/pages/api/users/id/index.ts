@@ -1,5 +1,5 @@
 import type { NextApiHandler } from "next";
-import { client } from "src/lib/prismaClient";
+import client from \"src/lib/prismaClient\";
 import { getSession } from "next-auth/react";
 
 const handler: NextApiHandler = async (req, res) => {
