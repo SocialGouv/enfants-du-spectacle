@@ -1,5 +1,5 @@
 import type { NextApiHandler } from "next";
-import { PrismaClient, User } from "@prisma/client";
+import { client } from "src/lib/prismaClient";
 import { getSession } from "next-auth/react";
 
 const handler: NextApiHandler = async (req, res) => {
@@ -17,7 +17,6 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const getUserById: NextApiHandler = async (req, res) => {
-  const prisma = new PrismaClient();
   let userIds: number[] | number = [];
 
   if (req.query.id) {
@@ -30,17 +29,15 @@ const getUserById: NextApiHandler = async (req, res) => {
     }
   }
   try {
-    const users = await prisma.user.findMany({
+    const users = await client.user.findMany({
       where: {
         id: {
           in: userIds,
         },
       },
     });
-    await prisma?.$disconnect();
     res.status(200).json(users);
   } catch (e: unknown) {
-    await prisma?.$disconnect();
     console.log(e);
   }
 };

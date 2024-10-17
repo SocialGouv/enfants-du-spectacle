@@ -3,8 +3,7 @@ import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
 import superjson from "superjson";
 
-import { PrismaClient, Prisma } from '@prisma/client'
-const client = new PrismaClient()
+import { client } from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -42,7 +41,6 @@ const get: NextApiHandler = async (req, res) => {
         ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
-  await client?.$disconnect()
   res.status(200).json(superjson.stringify(commissions));
 };
 
