@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 
-import client from \"src/lib/prismaClient\";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "GET") {
