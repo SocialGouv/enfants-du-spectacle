@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import { searchDossiers, searchEnfants } from "src/lib/queries";
 import superjson from "superjson";
 
-import { client } from "src/lib/prismaClient";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {

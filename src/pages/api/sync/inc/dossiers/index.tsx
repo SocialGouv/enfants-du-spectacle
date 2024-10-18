@@ -11,7 +11,7 @@ import {
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { z } from "zod";
 
-import { client } from "src/lib/prismaClient";
+import client from "src/lib/prismaClient";
 
 export const config = {
   api: {

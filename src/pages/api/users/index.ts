@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import superjson from "superjson";
 
 import { Role } from "@prisma/client";
-import { client } from "src/lib/prismaClient";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });

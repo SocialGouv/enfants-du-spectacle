@@ -4,7 +4,7 @@ declare global {
   var prismaClient: PrismaClient | undefined;
 }
 
-export const client =
+const client =
   globalThis.prismaClient ??
   new PrismaClient({
     datasources: {
@@ -16,3 +16,5 @@ export const client =
   });
 
 globalThis.prismaClient = client;
+
+export default client;
