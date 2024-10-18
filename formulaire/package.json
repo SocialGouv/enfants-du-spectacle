@@ -55,5 +55,5 @@
     "@types/multer": "^1.4.7",
     "prisma": "^4.7.0"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@3.8.6"
 }
