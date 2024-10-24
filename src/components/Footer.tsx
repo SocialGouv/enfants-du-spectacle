@@ -19,7 +19,7 @@ export default function Footer(): ReactElement {
   return (
     <FooterDSE className={styles.footer}>
       <FooterBody description="Simplifier la démarche de demande d’autorisation d’emplois d’enfants du spectacle tout en garantissant une plus grande protection des mineurs de moins de 16 ans travaillant dans ce secteur.">
-        <Logo>Préfet de la région Île-de-France</Logo>
+        <Logo>MINISTÈRE DU TRAVAIL ET DE L'EMPLOI</Logo>
         <FooterBodyItem>
             <Link href="https://info.gouv.fr" target="_blank">
               info.gouv.fr
@@ -52,16 +52,6 @@ export default function Footer(): ReactElement {
           </a>
         </span>
       </div>
-      <FooterPartners>
-        <FooterPartnersTitle>Partenaires</FooterPartnersTitle>
-        <FooterPartnersLink href="https://www.culture.gouv.fr/Regions/Drac-Ile-de-France" />
-        <FooterPartnersLogo
-          isMain
-          href="#"
-          imageSrc="/logo-beta-gouv.png"
-          imageAlt="beta.gouv.fr"
-        />
-      </FooterPartners>
       <FooterBottom>
         <FooterLink href="/mentions">Mentions légales</FooterLink>
         <FooterLink href="/conditions-generales">
