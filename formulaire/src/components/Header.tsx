@@ -61,7 +61,7 @@ const Header: React.FC<Props> = ({
       <div className={styles.wrapper}>
         <HeaderSDE className={styles.headerSDE}>
           <HeaderBody>
-            <Logo>Préfet de la région Île-de-France</Logo>
+            <Logo>RÉPUBLIQUE FRANÇAISE</Logo>
             <HeaderOperator>
               <Image
                 src={logoEds}
