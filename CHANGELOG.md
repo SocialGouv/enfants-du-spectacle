@@ -1,3 +1,10 @@
+# [1.92.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.55...v1.92.0) (2024-10-29)
+
+
+### Features
+
+* replace header logo ([#635](https://github.com/SocialGouv/enfants-du-spectacle/issues/635)) ([690b657](https://github.com/SocialGouv/enfants-du-spectacle/commit/690b657d4da3953dd9deff8eb4477b73d3a74be3))
+
 ## [1.91.55](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.54...v1.91.55) (2024-10-18)
 
 
