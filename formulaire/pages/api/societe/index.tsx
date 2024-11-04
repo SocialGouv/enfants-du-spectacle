@@ -62,7 +62,7 @@ const post: NextApiHandler = async (req, res) => {
     const societe = await prisma.societeProduction.create({
       data: { ...societeData.parse(data) },
     });
-    console.log("societe created : ", societe);
+    // console.log("societe created : ", societe);
     res.status(200).json(societe);
   } catch (e: unknown) {
     console.log(e);

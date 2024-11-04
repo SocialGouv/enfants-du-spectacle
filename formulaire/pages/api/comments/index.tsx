@@ -75,7 +75,7 @@ const post: NextApiHandler = async (req, res) => {
   let data = JSON.parse(req.body) as Comments;
   //@ts-ignore
   data.userId = session?.dbUser.id;
-  console.log("comment to create : ", data);
+  // console.log("comment to create : ", data);
   try {
     const comment = await prisma.comments.create({ data });
     res.status(200).json(comment);

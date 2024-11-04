@@ -24,7 +24,7 @@ function getId(req: NextApiRequest): number {
 
 const get: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
-  console.log("order : ", req.query.order);
+  // console.log("order : ", req.query.order);
   try {
     const dossierId = getId(req);
     const dossierConcerned = await client.dossier.findUnique({

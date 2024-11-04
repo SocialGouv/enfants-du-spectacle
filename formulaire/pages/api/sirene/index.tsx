@@ -20,7 +20,7 @@ const handler: NextApiHandler = async (req, res) => {
 const get: NextApiHandler = async (req, res) => {
 
     const siret = req.query.siret || ''
-    console.log('token : ', process.env.TOKEN_SIRENE)
+    // console.log('token : ', process.env.TOKEN_SIRENE)
 
     let fetching = await fetch(`https://api.insee.fr/entreprises/sirene/V3.11/siret/${siret}`,{
         method: 'GET',

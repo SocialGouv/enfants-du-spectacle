@@ -35,7 +35,7 @@ const post: NextApiHandler = async (req, res) => {
     societeProduction: SocieteProduction;
     enfants: EnfantData[];
   };
-  console.log("dossier to send : ", data);
+  // console.log("dossier to send : ", data);
 
   if (
     data.dossier.statut === "BROUILLON" ||
@@ -47,7 +47,7 @@ const post: NextApiHandler = async (req, res) => {
       method: data.dossier.statut === "BROUILLON" ? "POST" : "PUT",
     }).then(async (r) => {
       if (!r.ok) {
-        console.log("r : ", r.status);
+        console.log("r : ", r.status); // TODO: to be replaced by an error ?
         res.status(500).json({ error: `Something went wrong : ${r.status}` });
       }
       return r.json();

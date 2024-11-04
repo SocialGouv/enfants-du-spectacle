@@ -6,7 +6,7 @@ import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
-  console.log("session id", session);
+  // console.log("session id", session);
   if (!session) {
     res.status(401).end();
     return;
