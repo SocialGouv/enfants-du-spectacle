@@ -1,3 +1,10 @@
+# [1.93.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.92.0...v1.93.0) (2024-11-13)
+
+
+### Features
+
+* new calandar commissions ([#639](https://github.com/SocialGouv/enfants-du-spectacle/issues/639)) ([f068785](https://github.com/SocialGouv/enfants-du-spectacle/commit/f0687855b36c2b1cb1e2ee0d3f35b424ffc6e0c4))
+
 # [1.92.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.91.55...v1.92.0) (2024-10-29)
 
 
