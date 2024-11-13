@@ -22,7 +22,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
     let resDossier = await createDossierEds({
       demandeurId: resDemanndeur.id,
       dateCreation: new Date(),
-      nom: ''
+      nom: "",
     } as Dossier);
     router.push(`/dossier/${resDossier.id}`);
   };
@@ -84,7 +84,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           Créer un nouveau dossier
         </ButtonLink>
         <a
-          href="./calendar_commission/Calendrier_commission_2023.pdf"
+          href="./calendar_commission/Calendrier_commission_2025 H92-.pdf"
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>
