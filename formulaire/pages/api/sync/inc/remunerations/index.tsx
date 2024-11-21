@@ -21,7 +21,7 @@ const get: NextApiHandler = async (req, res) => {
     }
   }
   const externalIds = ids.map((id: string) => parseInt(id)) as number[];
-  console.log("data externalIds received : ", data);
+  // console.log("data externalIds received : ", data);
 
   if (data.token !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
@@ -33,7 +33,7 @@ const get: NextApiHandler = async (req, res) => {
         },
       },
     });
-    console.log("REMUNERATIONS: ", remunerations);
+    // console.log("REMUNERATIONS: ", remunerations);
     res.status(200).json(remunerations);
   }
 };

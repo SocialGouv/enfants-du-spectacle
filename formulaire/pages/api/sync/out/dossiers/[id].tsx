@@ -31,7 +31,7 @@ const get: NextApiHandler = async (req, res) => {
       method: "GET",
     }).then(async (r) => {
       if (!r.ok) {
-        console.log("r : ", r.status);
+        console.log("r : ", r.status); // TODO: to be replaced by an error ?
       }
       return r.json();
     });
