@@ -1,3 +1,10 @@
+## [1.93.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.0...v1.93.1) (2024-12-03)
+
+
+### Bug Fixes
+
+* commissions 2025 ([#640](https://github.com/SocialGouv/enfants-du-spectacle/issues/640)) ([c11871b](https://github.com/SocialGouv/enfants-du-spectacle/commit/c11871b4d7dd7321aeb537249faf71460557f9c7))
+
 # [1.93.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.92.0...v1.93.0) (2024-11-13)
 
 
