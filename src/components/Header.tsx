@@ -48,11 +48,11 @@ const Header: React.FC<Props> = ({
   const calendar_list: { name: string; value: string }[] = [
     {
       name: "Île-de-France (hors 92)",
-      value: "calendrier_commission_2023",
+      value: "calendrier_commission_2025",
     },
     {
       name: "Hauts-de-Seine",
-      value: "calendrier_commission_92",
+      value: "calendrier_commission_2025_92",
     },
   ];
 
@@ -137,7 +137,7 @@ const Header: React.FC<Props> = ({
             </HeaderBody>
             <div style={{ borderTop: "1px solid #E5E5E5" }} />
             <Container>
-              {!session &&
+              {!session && (
                 <div className={styles.subNav}>
                   <ToolItem link="/">Accueil</ToolItem>
                   <ToolItem link="https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr">
@@ -155,7 +155,7 @@ const Header: React.FC<Props> = ({
                           setShowDropdown(!showDropdown);
                         }}
                       >
-                        <a href={"/"}>Calendrier des commissions 2023</a>
+                        <a href={"/"}>Calendrier des commissions 2025</a>
                         {!showDropdown ? (
                           <TiArrowSortedDown style={{ margin: "4px" }} />
                         ) : (
@@ -186,7 +186,7 @@ const Header: React.FC<Props> = ({
                   </div>
                   <ToolItem link="/faq">FAQ</ToolItem>
                 </div>
-              }
+              )}
             </Container>
           </div>
         </HeaderSDE>

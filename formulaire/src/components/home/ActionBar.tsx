@@ -84,11 +84,19 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           Créer un nouveau dossier
         </ButtonLink>
         <a
-          href="./calendar_commission/Calendrier_commission_2025 H92-.pdf"
+          href="./calendar_commission/calendrier_commission_2025_92.pdf"
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>
-            Calendrier des commissions
+            Calendrier des commissions (hors 92)
+          </ButtonLink>
+        </a>
+        <a
+          href="./calendar_commission/calendrier_commission_2025.pdf"
+          target="blank"
+        >
+          <ButtonLink light={true} onClick={() => {}}>
+            Calendrier des commissions (92)
           </ButtonLink>
         </a>
 
