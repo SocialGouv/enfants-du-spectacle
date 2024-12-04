@@ -88,7 +88,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>
-            Calendrier des commissions (hors 92)
+            Calendrier des commissions (92)
           </ButtonLink>
         </a>
         <a
@@ -96,7 +96,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>
-            Calendrier des commissions (92)
+            Calendrier des commissions (hors 92)
           </ButtonLink>
         </a>
 
