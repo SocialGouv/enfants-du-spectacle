@@ -1,3 +1,10 @@
+## [1.93.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.1...v1.93.2) (2024-12-04)
+
+
+### Bug Fixes
+
+* switch calendars ([#641](https://github.com/SocialGouv/enfants-du-spectacle/issues/641)) ([e0b109c](https://github.com/SocialGouv/enfants-du-spectacle/commit/e0b109ce043d4e26c937fc7ee070ee5f7ced2f92))
+
 ## [1.93.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.0...v1.93.1) (2024-12-03)
 
 
