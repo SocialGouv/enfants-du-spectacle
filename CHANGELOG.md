@@ -1,3 +1,10 @@
+## [1.93.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.2...v1.93.3) (2024-12-05)
+
+
+### Bug Fixes
+
+* renew token API Sirene ([#642](https://github.com/SocialGouv/enfants-du-spectacle/issues/642)) ([44a55a3](https://github.com/SocialGouv/enfants-du-spectacle/commit/44a55a3c36f47375bd32de78b6892f6728e6112b))
+
 ## [1.93.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.1...v1.93.2) (2024-12-04)
 
 
