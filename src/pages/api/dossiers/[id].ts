@@ -70,7 +70,7 @@ const get: NextApiHandler = async (req, res) => {
     where: { id: dossierId },
   });
 
-  res.status(200).json(superjson.stringify(dossier));
+  res.status(200).json(dossier);
 };
 
 const remove: NextApiHandler = async (req, res) => {
@@ -107,6 +107,7 @@ const update: NextApiHandler = async (req, res) => {
     statusNotification?: string | null;
   } = {};
   const dossierId = getId(req);
+  console.log("dossier id to pudate : ", dossierId)
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
@@ -297,7 +298,7 @@ const update: NextApiHandler = async (req, res) => {
     where: { id: dossierId },
   });
 
-  res.status(200).json(superjson.stringify(updatedDossier));
+  res.status(200).json(updatedDossier);
 };
 
 export default withSentry(handler);

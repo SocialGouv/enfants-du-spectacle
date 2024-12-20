@@ -469,20 +469,21 @@ function updateDossier(
     .fetch(`/api/dossiers/${dossier.id}`, {
       body: JSON.stringify(updates),
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json", // ✅ Ajout du header pour indiquer du JSON
+      },
     })
-    .then((r) => {
+    .then(async (r) => {
       if (!r.ok) {
-        throw Error(`got status ${r.status}`);
+        throw new Error(`got status ${r.status}`);
       }
-      return r;
+      return r.json(); // ✅ Remplace `r.text()` + `superJSONParse` par `r.json()`
     })
-    .then(async (r) => r.text())
-    .then((rawJson) => {
-      const updatedDossier = superJSONParse<DossierData>(rawJson);
-      callback(updatedDossier);
+    .then((updatedDossier) => {
+      callback(updatedDossier); // ✅ Directement passer l'objet JSON
     })
     .catch((e) => {
-      throw e;
+      console.error("Erreur dans updateDossier :", e);
     });
 }
 

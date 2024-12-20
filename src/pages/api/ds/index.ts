@@ -82,14 +82,14 @@ const get: NextApiHandler = async (req, res) => {
         const insert = await insertDataFromDs(fetching.data.dossier);
         console.log("inserted : ", insert);
       } catch (e: unknown) {
-        res.status(500).json(superjson.stringify(_.get(e, "errors")));
+        res.status(500).json(_.get(e, "errors"));
       }
     }
-    res.status(200).json(superjson.stringify("Ok success"));
+    res.status(200).json({message : "Ok success"});
   } else {
     res
       .status(200)
-      .json(superjson.stringify({ success: "doesn't need update" }));
+      .json({ success: "doesn't need update" });
   }
 };
 

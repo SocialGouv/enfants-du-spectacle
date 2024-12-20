@@ -25,7 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const enfants = await searchEnfants(client, tsquery);
   const dossiers = await searchDossiers(client, tsquery);
-  res.status(200).json(superjson.stringify({ dossiers, enfants }));
+  res.status(200).json({dossiers: dossiers, enfants: enfants});
 };
 
 export default withSentry(handler);

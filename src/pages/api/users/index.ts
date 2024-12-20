@@ -71,7 +71,7 @@ const update: NextApiHandler = async (req, res) => {
     where: { id: userId },
   });
 
-  res.status(200).json(superjson.stringify(updatedUser));
+  res.status(200).json(updatedUser);
 };
 
 const get: NextApiHandler = async (req, res) => {
@@ -85,7 +85,7 @@ const get: NextApiHandler = async (req, res) => {
           orderBy: { name: "asc" },
           where: { role: role.toUpperCase() as Role },
         });
-  res.status(200).json(superjson.stringify(allUsers));
+  res.status(200).json(allUsers);
 };
 
 export default withSentry(handler);

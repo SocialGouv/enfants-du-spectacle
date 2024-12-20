@@ -52,7 +52,7 @@ const get: NextApiHandler = async (req, res) => {
       dossierId: dossierId,
     },
   });
-  res.status(200).json(superjson.stringify(allComments));
+  res.status(200).json(allComments);
 };
 
 const post: NextApiHandler = async (req, res) => {

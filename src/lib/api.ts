@@ -12,7 +12,7 @@ function useDossier(id: number | null) {
     id ? `/api/dossiers/${id}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<DossierData>(await res.text());
+      return res.json();
     }
   );
 
@@ -28,7 +28,7 @@ function useCommentaires(dossierId: number | null) {
     dossierId ? `/api/commentaires?dossierId=${dossierId}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<CommentaireData[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -44,7 +44,7 @@ function useAllUsers(role: string | undefined = "all") {
     `/api/users?role=${role}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<User[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -60,7 +60,7 @@ function useDataDS() {
     `/api/dsapi`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<CommissionData[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -72,12 +72,14 @@ function useDataDS() {
 }
 
 function RefreshLinks(dossierExternalId: string, source: Source) {
+
+  console.log('refresh from dossier : ', dossierExternalId, source)
   
   const { data, error } = useSWR(
     `${source === 'FORM_EDS' ? `/api/edslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<PieceDossierEnfant[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -101,7 +103,7 @@ function useCommissions(
     `/api/commissions?datePeriod=${datePeriod}&departements=${departements}&withChild=${withChild}`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<CommissionData[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -117,7 +119,7 @@ function useDatesCommissions() {
     `/api/commissions/date`,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<CommissionData[]>(await res.text());
+      return res.json();
     }
   );
 
@@ -133,7 +135,7 @@ function useCommission(id: number | null) {
     id ? `/api/commissions/${id}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       const res = await fetch(input, init);
-      return superJSONParse<CommissionData>(await res.text());
+      return res.json();
     }
   );
 
