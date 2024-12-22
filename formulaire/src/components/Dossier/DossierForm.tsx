@@ -1,6 +1,11 @@
 import { Comments, Demandeur, Enfant, SocieteProduction } from "@prisma/client";
 import React, { useContext } from "react";
-import { DossierData, EnfantData, ResDocs, updateDossier } from "../../fetching/dossiers";
+import {
+  DossierData,
+  EnfantData,
+  ResDocs,
+  updateDossier,
+} from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./DossierForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -29,7 +34,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const router = useRouter();
 
   const [toDisplay, setTodisplay] = React.useState<
-    "Demandeur" | "Projet" | "Enfants" 
+    "Demandeur" | "Projet" | "Enfants"
   >("Demandeur");
   const [messageError, setMessageError] = React.useState<string>("");
   const [messageSuccess, setMessageSuccess] = React.useState<string>("");
@@ -57,92 +62,104 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     let verif = true;
     setMessageError("");
 
-    await Promise.all(CHECKS.map(async (entity) => {
-      console.log('entity : ', entity.entity)
-      switch (entity.entity) {
-        case "Demandeur":
-          entity.mandatory_fields.map((field) => {
-            if (
-              !contextDossier.demandeur[field.code as keyof Demandeur] ||
-              contextDossier.demandeur[field.code as keyof Demandeur] === ""
-            ) {
-              setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
-              setMessageError(
-                `Le champ '${field.label}' est necessaire sur l'onglet Demandeur`
-              );
-              verif = false;
-            }
-          });
-          if (!contextDossier.societeProduction.id) {
-            setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
-            setMessageError(
-              `Le champ 'Société Production (SIRET)' est necessaire sur l'onglet Demandeur`
-            );
-            verif = false;
-          }
-          if (
-            contextDossier.demandeur.conventionCollectiveCode === "0000" &&
-            !contextDossier.demandeur.otherConventionCollective
-          ) {
-            setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
-            setMessageError(
-              `Le champ 'Nom de la convention' est necessaire sur l'onglet Demandeur`
-            );
-            verif = false;
-          }
-          if (
-            !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(
-              contextDossier.demandeur.email ?? ""
-            )
-          ) {
-            setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
-            setMessageError(
-              `Le champ 'Email' est incorrect sur l'onglet Demandeur`
-            );
-            verif = false;
-          }
-          break;
-        case "Projet":
-          entity.mandatory_fields.map((field) => {
-            if (
-              !contextDossier.dossier[field.code as keyof DossierData] ||
-              contextDossier.dossier[field.code as keyof DossierData] === ""
-            ) {
-              setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
-              setMessageError(
-                `Le champ '${field.label}' est necessaire sur l'onglet Projet`
-              );
-              verif = false;
-            }
-          });
-          break;
-        case "Enfants":
-          console.log('in enfant')
-          const enfantsFetched = await getEnfantsByDossierId(contextDossier.dossier.id, 0, 250, 'nom', 'asc')
-          console.log('fetch : ', enfantsFetched.enfants)
-          enfantsFetched.enfants.map((enfant) => {
-            console.log('for enfant : ', enfant.nom + ' ' + enfant.prenom)
+    await Promise.all(
+      CHECKS.map(async (entity) => {
+        console.log("entity : ", entity.entity);
+        switch (entity.entity) {
+          case "Demandeur":
             entity.mandatory_fields.map((field) => {
-              console.log('checking field : ', field.code)
               if (
-                !enfant[field.code as keyof Enfant] ||
-                enfant[field.code as keyof Enfant] === ""
+                !contextDossier.demandeur[field.code as keyof Demandeur] ||
+                contextDossier.demandeur[field.code as keyof Demandeur] === ""
               ) {
                 setTodisplay(
                   entity.entity as "Demandeur" | "Projet" | "Enfants"
                 );
                 setMessageError(
-                  `Le champ '${field.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`
+                  `Le champ '${field.label}' est necessaire sur l'onglet Demandeur`
                 );
                 verif = false;
               }
             });
-          });
-          break;
-        default:
-          return false;
-      }
-    }));
+            if (!contextDossier.societeProduction.id) {
+              setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
+              setMessageError(
+                `Le champ 'Société Production (SIRET)' est necessaire sur l'onglet Demandeur`
+              );
+              verif = false;
+            }
+            if (
+              contextDossier.demandeur.conventionCollectiveCode === "0000" &&
+              !contextDossier.demandeur.otherConventionCollective
+            ) {
+              setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
+              setMessageError(
+                `Le champ 'Nom de la convention' est necessaire sur l'onglet Demandeur`
+              );
+              verif = false;
+            }
+            if (
+              !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(
+                contextDossier.demandeur.email ?? ""
+              )
+            ) {
+              setTodisplay(entity.entity as "Demandeur" | "Projet" | "Enfants");
+              setMessageError(
+                `Le champ 'Email' est incorrect sur l'onglet Demandeur`
+              );
+              verif = false;
+            }
+            break;
+          case "Projet":
+            entity.mandatory_fields.map((field) => {
+              if (
+                !contextDossier.dossier[field.code as keyof DossierData] ||
+                contextDossier.dossier[field.code as keyof DossierData] === ""
+              ) {
+                setTodisplay(
+                  entity.entity as "Demandeur" | "Projet" | "Enfants"
+                );
+                setMessageError(
+                  `Le champ '${field.label}' est necessaire sur l'onglet Projet`
+                );
+                verif = false;
+              }
+            });
+            break;
+          case "Enfants":
+            console.log("in enfant");
+            const enfantsFetched = await getEnfantsByDossierId(
+              contextDossier.dossier.id,
+              0,
+              250,
+              "nom",
+              "asc"
+            );
+            console.log("fetch : ", enfantsFetched.enfants);
+            enfantsFetched.enfants.map((enfant) => {
+              console.log("for enfant : ", enfant.nom + " " + enfant.prenom);
+              entity.mandatory_fields.map((field) => {
+                console.log("checking field : ", field.code);
+                if (
+                  !enfant[field.code as keyof Enfant] ||
+                  enfant[field.code as keyof Enfant] === ""
+                ) {
+                  setTodisplay(
+                    entity.entity as "Demandeur" | "Projet" | "Enfants"
+                  );
+                  setMessageError(
+                    `Le champ '${field.label}' est necessaire pour l'enfant ${enfant.nom} ${enfant.prenom}`
+                  );
+                  verif = false;
+                }
+              });
+            });
+            break;
+          default:
+            return false;
+        }
+      })
+    );
 
     console.log("verif: ", verif);
     setMessageSuccess("");
@@ -151,9 +168,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
 
   const handleDepotDossier = async () => {
     console.log("trying depot : ", contextDossier);
-    setMessageSuccess(
-      "Vérification du dossier en cours ..."
-    );
+    setMessageSuccess("Vérification du dossier en cours ...");
     if (await processChecks()) {
       setMessageSuccess(
         "Votre dossier est en cours d'envoi aux services d'instructions"
@@ -163,7 +178,15 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         contextDossier.dossier,
         contextDossier.demandeur,
         contextDossier.societeProduction,
-        (await getEnfantsByDossierId(contextDossier.dossier.id, 0, 250, 'nom', 'asc')).enfants
+        (
+          await getEnfantsByDossierId(
+            contextDossier.dossier.id,
+            0,
+            250,
+            "nom",
+            "asc"
+          )
+        ).enfants
       );
       if (!dossierSent.error) {
         if (contextDossier.dossier.statut === "BROUILLON") {
@@ -319,9 +342,15 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           <div className={styles.saveBar}>
             <div className={styles.textSaveBar}>
               <p>
-                Votre dossier est automatiquement enregistré sur votre interface. <br />
-                Le bouton “Déposer” vous permet de transmettre votre dossier aux services d’instruction de la DRIEETS avant la date limite de dépôt et de transmettre toutes les mises à jour que vous seriez amené à faire par la suite. <br />
-                Merci de cliquer sur “Déposer” dès lors que vous souhaitez transmettre des mises à jour de votre dossier aux services d’instruction.
+                Votre dossier est automatiquement enregistré sur votre
+                interface. <br />
+                Le bouton “Déposer” vous permet de transmettre votre dossier aux
+                services d’instruction de la DRIEETS avant la date limite de
+                dépôt et de transmettre toutes les mises à jour que vous seriez
+                amené à faire par la suite. <br />
+                Merci de cliquer sur “Déposer” dès lors que vous souhaitez
+                transmettre des mises à jour de votre dossier aux services
+                d’instruction.
               </p>
             </div>
             <div className={styles.buttonSaveBar}>

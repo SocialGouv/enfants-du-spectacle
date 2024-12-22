@@ -46,13 +46,22 @@ function frenchDateHour(date: Date): string {
   });
 }
 
-function birthDateToFrenchAge(birthDate: Date): string {
+function birthDateToFrenchAge(birthDate: Date | string): string {
+  // Convertir la date en objet Date si ce n'est pas déjà le cas
+  const parsedDate = birthDate instanceof Date 
+    ? birthDate 
+    : new Date(birthDate);
+
+  console.log("birthDate : ", parsedDate);
+  
   const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+  let age = today.getFullYear() - parsedDate.getFullYear();
+  const m = today.getMonth() - parsedDate.getMonth();
+  
+  if (m < 0 || (m === 0 && today.getDate() < parsedDate.getDate())) {
     age--;
   }
+  
   return `${age} ans`;
 }
 
