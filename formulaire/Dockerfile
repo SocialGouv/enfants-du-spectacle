@@ -2,9 +2,10 @@
 FROM node:20-alpine3.18 AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
+COPY package.json ./
 COPY yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
-RUN yarn fetch --immutable && yarn cache clean
+RUN yarn install && yarn cache clean
 
 # 2. Rebuild the source code only when needed
 FROM node:20-alpine3.18 AS builder
