@@ -1,3 +1,10 @@
+## [1.93.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.4...v1.93.5) (2025-02-03)
+
+
+### Bug Fixes
+
+* **ci-cd:** use token-bureau ([#644](https://github.com/SocialGouv/enfants-du-spectacle/issues/644)) ([7c46f70](https://github.com/SocialGouv/enfants-du-spectacle/commit/7c46f70df8bc326e58988c6f77be5a285ef24086))
+
 ## [1.93.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.3...v1.93.4) (2024-12-12)
 
 
