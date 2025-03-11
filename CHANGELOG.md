@@ -1,3 +1,10 @@
+## [1.93.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.6...v1.93.7) (2025-03-11)
+
+
+### Bug Fixes
+
+* ingress customHeaders ([ba97dc2](https://github.com/SocialGouv/enfants-du-spectacle/commit/ba97dc24641ee4fb593aa21e3b28c8b3df5525fd))
+
 ## [1.93.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.5...v1.93.6) (2025-03-11)
 
 
