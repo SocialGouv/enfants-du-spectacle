@@ -2,13 +2,9 @@ app:
   ~chart: app
   ~needs: [build-app, pg]
   imagePackage: app
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 4Gi
+  annotations:
+    oblik.socialgouv.io/min-request-cpu: "200m"
+    oblik.socialgouv.io/min-request-memory: "512Mi"
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
@@ -43,13 +39,9 @@ form:
   ~needs: [build-form, pg-form]
   imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 4Gi
+  annotations:
+    oblik.socialgouv.io/min-request-cpu: "200m"
+    oblik.socialgouv.io/min-request-memory: "512Mi"
   env:
     - name: APP_BASE_URL
       value: "https://formulaire-{{ $.Values.global.host }}"
