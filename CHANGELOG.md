@@ -1,3 +1,10 @@
+## [1.93.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.7...v1.93.8) (2025-03-24)
+
+
+### Bug Fixes
+
+* up next (fix CVE) ([42c18ee](https://github.com/SocialGouv/enfants-du-spectacle/commit/42c18ee9a3a5f7916ac058ffda2919f8255ce76c))
+
 ## [1.93.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.6...v1.93.7) (2025-03-11)
 
 
