@@ -1,3 +1,10 @@
+## [1.94.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.0...v1.94.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* update sirene token ([#647](https://github.com/SocialGouv/enfants-du-spectacle/issues/647)) ([b3d769b](https://github.com/SocialGouv/enfants-du-spectacle/commit/b3d769be9553675683ffd4fb27ca6a2926c13976))
+
 # [1.94.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.8...v1.94.0) (2025-03-28)
 
 
