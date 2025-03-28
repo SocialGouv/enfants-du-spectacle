@@ -56,7 +56,7 @@ const CommissionRow: React.FC<RowProps> = ({ commission }) => {
 };
 
 const Page: React.FC = () => {
-  const { commissions, ...swrCommissions } = useCommissions("past");
+  const { commissions, ...swrCommissions } = useCommissions("past", "all");
   const isLoading = swrCommissions.isLoading;
   const isError = !isLoading && (swrCommissions.isError || !commissions);
 

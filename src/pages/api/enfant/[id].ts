@@ -59,6 +59,6 @@ const update: NextApiHandler = async (req, res) => {
     where: { id: enfantId },
   });
 
-  res.status(200).json(superjson.stringify(updatedEnfant));
+  res.status(200).json(updatedEnfant);
 };
 export default withSentry(handler);

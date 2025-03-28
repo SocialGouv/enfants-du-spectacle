@@ -16,6 +16,7 @@ const Page: React.FC = () => {
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
+  console.log("dossier : ", dossier);
   const { ...swrLinks } = RefreshLinks(
     dossier?.number?.toString() ?? dossier?.externalId!,
     dossier?.source!

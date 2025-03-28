@@ -14,7 +14,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 const get: NextApiHandler = async (req, res) => {
   const commissions = await getUpcomingCommissions();
-  res.status(200).json(superjson.stringify(commissions));
+  res.status(200).json(commissions);
 };
 
 const getUpcomingCommissions = async () => {

@@ -43,7 +43,7 @@ const get: NextApiHandler = async (req, res) => {
     where: { id },
   });
 
-  res.status(200).json(superjson.stringify(commission));
+  res.status(200).json(commission);
 };
 
 const update: NextApiHandler = async (req, res) => {
@@ -77,7 +77,7 @@ const update: NextApiHandler = async (req, res) => {
     where: { id: parsed.id },
   });
 
-  res.status(200).json(superjson.stringify(updateCommission));
+  res.status(200).json(updateCommission);
 };
 
 export default withSentry(handler);

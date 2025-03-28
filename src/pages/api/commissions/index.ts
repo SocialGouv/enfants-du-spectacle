@@ -41,7 +41,7 @@ const get: NextApiHandler = async (req, res) => {
         ? await getUpcomingCommissionsNotEmpty(req)
         : await getUpcomingCommissions()
       : await getUpcomingCommissionsByDepartement(departements as string);
-  res.status(200).json(superjson.stringify(commissions));
+  res.status(200).json(commissions);
 };
 
 const post: NextApiHandler = async (req, res) => {

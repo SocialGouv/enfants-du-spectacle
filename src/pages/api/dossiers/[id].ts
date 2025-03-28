@@ -70,7 +70,7 @@ const get: NextApiHandler = async (req, res) => {
     where: { id: dossierId },
   });
 
-  res.status(200).json(superjson.stringify(dossier));
+  res.status(200).json(dossier);
 };
 
 const remove: NextApiHandler = async (req, res) => {
@@ -87,14 +87,25 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const update: NextApiHandler = async (req, res) => {
-  if (typeof req.body !== "string") {
-    res.status(400).end();
-    return;
-  }
+  // Parsez le body de manière sécurisée
+  let parsed;
+  try {
+    // Vérifiez d'abord le type de req.body
+    console.log('Type de req.body:', typeof req.body);
+    console.log('Contenu de req.body:', req.body);
 
-  const parsed = JSON.parse(req.body);
-  if (!parsed) {
-    res.status(400).end();
+    // Essayez de parser selon le type
+    parsed = typeof req.body === 'string' 
+      ? JSON.parse(req.body) 
+      : req.body;
+
+    if (!parsed) {
+      res.status(400).json({ error: 'Invalid request body' });
+      return;
+    }
+  } catch (error) {
+    console.error('Erreur de parsing:', error);
+    res.status(400).json({ error: 'Cannot parse request body' });
     return;
   }
 
@@ -107,6 +118,7 @@ const update: NextApiHandler = async (req, res) => {
     statusNotification?: string | null;
   } = {};
   const dossierId = getId(req);
+  console.log("dossier id to pudate : ", dossierId)
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
@@ -297,7 +309,7 @@ const update: NextApiHandler = async (req, res) => {
     where: { id: dossierId },
   });
 
-  res.status(200).json(superjson.stringify(updatedDossier));
+  res.status(200).json(updatedDossier);
 };
 
 export default withSentry(handler);
