@@ -1,3 +1,10 @@
+# [1.94.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.8...v1.94.0) (2025-03-28)
+
+
+### Features
+
+* begin upgrade node version ([#646](https://github.com/SocialGouv/enfants-du-spectacle/issues/646)) ([747c56c](https://github.com/SocialGouv/enfants-du-spectacle/commit/747c56cd8f83e450f676ffdb70a80770b5eee8b7))
+
 ## [1.93.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.93.7...v1.93.8) (2025-03-24)
 
 
