@@ -21,7 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const remunerationId = Number(req.body as string);
   try {
-    console.log("remunerationId: ", remunerationId);
+    // console.log("remunerationId: ", remunerationId);
     await client.remuneration.delete({
       where: { id: remunerationId },
     });
