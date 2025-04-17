@@ -87,7 +87,7 @@ const InputFile: React.FC<Props> = ({
               return (
                 <div key={`${doc.nom}_${index}`}>
                   <div className={styles.rowDoc}>
-                    {!allowChanges && (
+                    {!allowChanges && doc.statut !== "VALIDE" && (
                       <div
                         className={styles.deleteDoc}
                         onClick={() => handleDelete(doc.id.toString())}
