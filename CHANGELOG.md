@@ -1,3 +1,10 @@
+## [1.94.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.3...v1.94.4) (2025-04-17)
+
+
+### Bug Fixes
+
+* remove .env.development ([#651](https://github.com/SocialGouv/enfants-du-spectacle/issues/651)) ([4b2fa63](https://github.com/SocialGouv/enfants-du-spectacle/commit/4b2fa638e2e100b74de7b83e85b14ed02fc43a61))
+
 ## [1.94.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.2...v1.94.3) (2025-04-17)
 
 
