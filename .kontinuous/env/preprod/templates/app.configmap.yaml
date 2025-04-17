@@ -18,4 +18,4 @@ data:
   NEXT_PUBLIC_MATOMO_URL: "https://matomo.fabrique.social.gouv.fr/"
   NEXT_PUBLIC_MATOMO_SITE_AGENT_ID: "85"
   NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID: "84"
-  NEXT_PUBLIC_API_URL_SDP: "https://formulaire-enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr/api/sync"
+  NEXT_PUBLIC_API_URL_SDP: "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr/api/sync"
