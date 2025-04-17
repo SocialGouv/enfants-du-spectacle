@@ -1,3 +1,10 @@
+## [1.94.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.1...v1.94.2) (2025-04-17)
+
+
+### Bug Fixes
+
+* prevent delete accepted docs ([#649](https://github.com/SocialGouv/enfants-du-spectacle/issues/649)) ([387220f](https://github.com/SocialGouv/enfants-du-spectacle/commit/387220f88765e065e93e5d5dae16483bbca7bd10))
+
 ## [1.94.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.0...v1.94.1) (2025-03-28)
 
 
