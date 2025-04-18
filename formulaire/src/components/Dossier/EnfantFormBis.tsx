@@ -171,8 +171,8 @@ const EnfantFormBis: React.FC<Props> = ({
   }, [enfant]);
 
   const handleDeleteChild = async () => {
-    await deleteEnfant(enfant.id);
     listDelete(enfant);
+    await deleteEnfant(enfant.id);
     setShowDialogue(false);
   };
 

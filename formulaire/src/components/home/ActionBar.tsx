@@ -92,7 +92,7 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           </ButtonLink>
         </a>
         <a
-          href="./calendar_commission/calendrier_commission_2025.pdf"
+          href="./calendar_commission/Calendrier_commission_2025 H92-.pdf"
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>

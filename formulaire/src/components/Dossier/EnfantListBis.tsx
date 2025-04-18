@@ -2,7 +2,11 @@ import React, { useRef } from "react";
 import { Comments, Enfant } from "@prisma/client";
 import { birthDateToFrenchAge, frenchDateText } from "../../lib/helpers";
 import styles from "./EnfantList.module.scss";
-import { createEnfant, getEnfantsByDossierId, importEnfants } from "src/fetching/enfant";
+import {
+  createEnfant,
+  getEnfantsByDossierId,
+  importEnfants,
+} from "src/fetching/enfant";
 import useStateContext from "src/context/StateContext";
 import { set } from "date-fns";
 import TableCard from "../TableCard";
@@ -31,15 +35,17 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   const router = useRouter();
   const contextDossier = { ...useStateContext() };
   const [enfants, setEnfants] = React.useState<EnfantData[]>([]);
-  const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>(
-    "nom"
-  );
+  const [termOrdered, setTermToOrder] = React.useState<keyof Enfant>("nom");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [page, setPage] = React.useState<number>(0);
   const [numberEnfants, setNumberEnfants] = React.useState<number>(0);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [selectedEnfant, setSelectedEnfant] = React.useState<EnfantData | null>(null)
-  const [enfantToPass, setEnfantToPass] = React.useState<EnfantData | null>(null)
+  const [selectedEnfant, setSelectedEnfant] = React.useState<EnfantData | null>(
+    null
+  );
+  const [enfantToPass, setEnfantToPass] = React.useState<EnfantData | null>(
+    null
+  );
   const [scrollPosition, setScrollPosition] = React.useState(0);
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState(0);
@@ -79,7 +85,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
         else setProgress((start / rowParsed.length) * 100);
       }
       setEnfantRefused(new Set(rows.errors.map((obj) => obj.row)).size);
-      fetchEnfants()
+      fetchEnfants();
     });
     setActiveOnce(false);
   }
@@ -145,12 +151,18 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
 
   const fetchEnfants = async () => {
     setLoading(true);
-    const enfantsFetched = await getEnfantsByDossierId(contextDossier.dossier.id, page, 25, termOrdered, order)
-    console.log('enfants fetched', enfantsFetched)
+    const enfantsFetched = await getEnfantsByDossierId(
+      contextDossier.dossier.id,
+      page,
+      25,
+      termOrdered,
+      order
+    );
+    console.log("enfants fetched", enfantsFetched);
     setEnfants(enfantsFetched.enfants);
     setNumberEnfants(enfantsFetched.count);
     setLoading(false);
-  }
+  };
 
   const handleOrder = (termToOrder: string) => {
     setOrder(
@@ -160,50 +172,50 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   };
 
   const handlePage = (page: number) => {
-    setPage(page); 
+    setPage(page);
   };
 
   const clickEnfant = (enfant: EnfantData) => {
     if (selectedEnfant && selectedEnfant.id === enfant.id) {
-      setSelectedEnfant(null)
+      setSelectedEnfant(null);
     } else {
-      setSelectedEnfant(enfant)
+      setSelectedEnfant(enfant);
     }
-  }
+  };
 
   const refreshEnfant = (enfant: EnfantData) => {
-    const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id)
-    const newEnfants = [...enfants]
-    newEnfants[index] = enfant
-    setEnfants(newEnfants)
-    setSelectedEnfant(enfant)
-  }
+    const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id);
+    const newEnfants = [...enfants];
+    newEnfants[index] = enfant;
+    setEnfants(newEnfants);
+    setSelectedEnfant(enfant);
+  };
 
   const deleteEnfant = (enfant: EnfantData) => {
-    const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id)
-    const newEnfants = [...enfants]
-    newEnfants.splice(index, 1)
-    setEnfants(newEnfants)
-    setSelectedEnfant(null)
-  }
+    const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id);
+    const newEnfants = [...enfants];
+    newEnfants.splice(index, 1);
+    setEnfants(newEnfants);
+    setSelectedEnfant(null);
+  };
 
   const formEnfant = (enfantToPass: EnfantData) => {
     return (
       <>
-        {enfantToPass &&
+        {enfantToPass && (
           <EnfantFormBis
             enfant={enfantToPass}
             allowChanges={allowChanges}
             refresh={refreshEnfant}
             listDelete={deleteEnfant}
           ></EnfantFormBis>
-        }
+        )}
       </>
-    )
-  }
+    );
+  };
 
   const addEnfant = async () => {
-    console.log('adding enfant')
+    console.log("adding enfant");
     let res = await createEnfant({
       nom: "Enfant",
       prenom: "Nouvel",
@@ -215,19 +227,19 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
       remunerationTotale: 0,
     } as Enfant);
     setEnfants([res, ...enfants]);
-    res.remuneration = []
-    res.piecesDossier = []
+    res.remuneration = [];
+    res.piecesDossier = [];
     setSelectedEnfant(res);
   };
 
   React.useEffect(() => {
-    setEnfantToPass(null)
-    setEnfantToPass(selectedEnfant)
-  }, [selectedEnfant])
+    setEnfantToPass(null);
+    setEnfantToPass(selectedEnfant);
+  }, [selectedEnfant]);
 
   React.useEffect(() => {
-    fetchEnfants() 
-  }, [order, page])
+    fetchEnfants();
+  }, [order, page]);
 
   return (
     <div className={styles.enfantList}>
@@ -389,65 +401,73 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
           ></OrderableItem>
           <div className={styles.itemHead}>Notifications</div>
         </div>
-        {loading ? <div style={{textAlign: 'center', margin: '2rem'}}><IconLoader></IconLoader></div> : 
-        enfants.map((enfant) => {
-          const commentsNotifications: CommentaireNotifications = {
-            dossierId: contextDossier.dossier.id,
-            notificationsProject: 0,
-            notificationsChildren: enfant.comments?.length || 0,
-          };
-          return (
-            <a href={`#row-enfant`}
-              className={(selectedEnfant && selectedEnfant?.id === enfant.id) ? `${styles.tableEnfant} ${styles.selected}` : styles.tableEnfant}
-              key={`table-enfant-${enfant.id}`}
-              onClick={() => {
-                clickEnfant(enfant);
-              }}
-            >
-              <div className={styles.itemDossier}>{enfant.typeEmploi}</div>
-              <div className={styles.itemDossier}>
-                {`${enfant.nom} ${enfant.prenom}`}
-              </div>
-              <div className={styles.itemDossier}>
-                {enfant.dateNaissance
-                  ? birthDateToFrenchAge(
-                      moment(enfant.dateNaissance).toDate()
-                    )
-                  : ""}
-              </div>
-              <div className={styles.itemDossier}>{enfant.nomPersonnage}</div>
-              <div className={styles.itemDossier}>
-                {enfant.dateDerniereModification
-                  ? frenchDateText(enfant.dateDerniereModification)
-                  : ""}
-              </div>
-              <div className={styles.itemDossier}>
-                {enfant.piecesDossier && (
-                  <CountPieces
-                    commentsNotifications={commentsNotifications}
-                    piecesJustif={enfant.piecesDossier.map(
-                      (piece) => piece.statut
-                    )}
-                  ></CountPieces>
-                )}
-              </div>
-            </a>
-          )
-        })}
-        <div className={styles.pagination}>
-          {[...Array(Math.ceil(numberEnfants / 25))].map(
-            (e, i) => (
-              <ButtonLink
-                light={page !== i}
+        {loading ? (
+          <div style={{ textAlign: "center", margin: "2rem" }}>
+            <IconLoader></IconLoader>
+          </div>
+        ) : (
+          enfants.map((enfant) => {
+            const commentsNotifications: CommentaireNotifications = {
+              dossierId: contextDossier.dossier.id,
+              notificationsProject: 0,
+              notificationsChildren: enfant.comments?.length || 0,
+            };
+            return (
+              <a
+                href={`#row-enfant`}
+                className={
+                  selectedEnfant && selectedEnfant?.id === enfant.id
+                    ? `${styles.tableEnfant} ${styles.selected}`
+                    : styles.tableEnfant
+                }
+                key={`table-enfant-${enfant.id}`}
                 onClick={() => {
-                  handlePage(i);
+                  clickEnfant(enfant);
                 }}
-                key={i}
               >
-                {i + 1}
-              </ButtonLink>
-            )
-          )}
+                <div className={styles.itemDossier}>{enfant.typeEmploi}</div>
+                <div className={styles.itemDossier}>
+                  {`${enfant.nom} ${enfant.prenom}`}
+                </div>
+                <div className={styles.itemDossier}>
+                  {enfant.dateNaissance
+                    ? birthDateToFrenchAge(
+                        moment(enfant.dateNaissance).toDate()
+                      )
+                    : ""}
+                </div>
+                <div className={styles.itemDossier}>{enfant.nomPersonnage}</div>
+                <div className={styles.itemDossier}>
+                  {enfant.dateDerniereModification
+                    ? frenchDateText(enfant.dateDerniereModification)
+                    : ""}
+                </div>
+                <div className={styles.itemDossier}>
+                  {enfant.piecesDossier && (
+                    <CountPieces
+                      commentsNotifications={commentsNotifications}
+                      piecesJustif={enfant.piecesDossier.map(
+                        (piece) => piece.statut
+                      )}
+                    ></CountPieces>
+                  )}
+                </div>
+              </a>
+            );
+          })
+        )}
+        <div className={styles.pagination}>
+          {[...Array(Math.ceil(numberEnfants / 25))].map((e, i) => (
+            <ButtonLink
+              light={page !== i}
+              onClick={() => {
+                handlePage(i);
+              }}
+              key={i}
+            >
+              {i + 1}
+            </ButtonLink>
+          ))}
         </div>
       </TableCard>
       {(contextDossier.dossier.statut === "BROUILLON" ||
@@ -466,16 +486,22 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
         </div>
       )}
 
-      {enfantToPass && selectedEnfant &&(
+      {enfantToPass && selectedEnfant && (
         <div id="row-enfant">
-        <br />
-        <TableCard title={`${selectedEnfant.typeEmploi} : ${selectedEnfant.nom} ${selectedEnfant.prenom} (${
-                selectedEnfant.dateNaissance
-                  ? birthDateToFrenchAge(moment(selectedEnfant.dateNaissance).toDate())
-                  : ""
-              }) - Personnage : ${selectedEnfant.nomPersonnage ?? "..."}`}>
-          {formEnfant(enfantToPass)}
-        </TableCard>
+          <br />
+          <TableCard
+            title={`${selectedEnfant.typeEmploi} : ${selectedEnfant.nom} ${
+              selectedEnfant.prenom
+            } (${
+              selectedEnfant.dateNaissance
+                ? birthDateToFrenchAge(
+                    moment(selectedEnfant.dateNaissance).toDate()
+                  )
+                : ""
+            }) - Personnage : ${selectedEnfant.nomPersonnage ?? "..."}`}
+          >
+            {formEnfant(enfantToPass)}
+          </TableCard>
         </div>
       )}
 
@@ -492,7 +518,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
         </div>
       )}
     </div>
-  )
+  );
 };
 
 export default EnfantListBis;
