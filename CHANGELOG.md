@@ -1,3 +1,10 @@
+## [1.94.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.6...v1.94.7) (2025-04-23)
+
+
+### Bug Fixes
+
+* logs mailer from login ([#654](https://github.com/SocialGouv/enfants-du-spectacle/issues/654)) ([cd0919c](https://github.com/SocialGouv/enfants-du-spectacle/commit/cd0919c4c68776cf1caf4f2f6a0e506bf236235c))
+
 ## [1.94.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.5...v1.94.6) (2025-04-18)
 
 
