@@ -39,21 +39,31 @@ function sendVerificationRequest({
 
   return new Promise((resolve, reject) => {
     const { server, from } = provider;
+    const transport = nodemailer.createTransport(server);
 
-    nodemailer.createTransport(server).sendMail(
+    transport.sendMail(
       {
         from,
-        html: html({ url }),
+        to: email,
         subject: wording.subject,
         text: text({ url }),
-        to: email,
+        html: html({ url }),
       },
-      (error: Error | null) => {
+      (error, info) => {
         if (error) {
-          // logger.error("SEND_VERIFICATION_EMAIL_ERROR", email, error);
-          reject(error);
+          console.error("Erreur lors de l'envoi de l'email :", error);
+          reject(new Error(`Erreur SMTP : ${error.message}`));
           return;
         }
+
+        // Vérifie que le mail n’a pas été rejeté silencieusement
+        if (info.rejected && info.rejected.length > 0) {
+          const reason = `Email rejeté par le serveur SMTP : ${info.rejected.join(", ")}`;
+          console.error(reason);
+          reject(new Error(reason));
+          return;
+        }
+
         resolve();
       }
     );

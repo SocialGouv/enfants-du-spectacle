@@ -14,9 +14,11 @@ export default NextAuth({
     },
     async signIn({ user }) {
       if (typeof user.email !== "string") return false;
+      console.log('user : ', user)
       const test = await prisma.user.findUnique({
         where: { email: user.email },
       });
+      console.log('test : ', test)
       return test != null;
     },
   },
