@@ -1,0 +1,26 @@
+import { z } from 'zod';
+
+export const DossierScalarFieldEnumSchema = z.enum([
+  'id',
+  'nom',
+  'statut',
+  'categorie',
+  'collaboratorIds',
+  'userId',
+  'justificatifs',
+  'scenesSensibles',
+  'presentation',
+  'dateDebut',
+  'dateFin',
+  'number',
+  'dateCreation',
+  'dateDerniereModification',
+  'cdc',
+  'scenario',
+  'securite',
+  'complementaire',
+  'dateDepot',
+  'demandeurId',
+  'commissionDate',
+  'commissionString',
+]);

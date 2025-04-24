@@ -1,0 +1,20 @@
+import { z } from 'zod';
+
+import type { Prisma } from '@prisma/client';
+
+const Schema: z.ZodType<Prisma.DemandeurCountAggregateInputType> = z
+  .object({
+    id: z.literal(true).optional(),
+    email: z.literal(true).optional(),
+    nom: z.literal(true).optional(),
+    prenom: z.literal(true).optional(),
+    phone: z.literal(true).optional(),
+    fonction: z.literal(true).optional(),
+    conventionCollectiveCode: z.literal(true).optional(),
+    otherConventionCollective: z.literal(true).optional(),
+    societeProductionId: z.literal(true).optional(),
+    _all: z.literal(true).optional(),
+  })
+  .strict();
+
+export const DemandeurCountAggregateInputObjectSchema = Schema;

@@ -1,13 +1,13 @@
 import type { Commission, Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import type { RelatedDossierModel, RelatedEnfantModel } from "prisma/zod";
+import type { RelatedDossierModel, RelatedEnfantModel } from "src/lib/schemas";
 import {
   DemandeurModel,
   DossierModel,
   EnfantModel,
   SocieteProductionModel,
-} from "prisma/zod";
+} from "src/lib/schemas";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { z } from "zod";
 
