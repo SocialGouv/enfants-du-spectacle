@@ -1,6 +1,6 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { SocieteProductionModel } from "prisma/zod";
+import { SocieteProductionModel } from "../../../src/lib/schemas";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";

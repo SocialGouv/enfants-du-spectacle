@@ -1,6 +1,11 @@
 // Schémas Zod pour la validation des données
 import { z } from 'zod';
-import type { Role, JustificatifDossier, STATUT_PIECE, StatutDossier, CategorieDossier, StatusNotif, Source, JustificatifEnfant, TypeEmploi, TypeConsultation, TypeConsultationMedecin } from '@prisma/client';
+import type { Role, JustificatifDossier, STATUT_PIECE, StatutDossier, CategorieDossier, JustificatifEnfant, TypeEmploi, TypeConsultation } from '@prisma/client';
+
+// Types personnalisés pour la compatibilité
+type StatusNotif = 'NOUVEAU' | 'MIS_A_JOUR' | 'PRET' | 'EN_COURS' | 'FAVORABLE' | 'FAVORABLE_SOUS_RESERVE' | 'AJOURNE' | 'REFUSE';
+type Source = 'FORM_DS' | 'FORM_EDS' | 'MANUEL';
+type TypeConsultationMedecin = 'EN_PRESENTIEL' | 'A_DISTANCE';
 
 // Modèle Account
 export const AccountModel = z.object({
@@ -165,7 +170,7 @@ export const SessionModel = z.object({
 
 // Modèle SocieteProduction
 export const SocieteProductionModel = z.object({
-  id: z.number().int(),
+  id: z.union([z.number().int(), z.string()]),
   nom: z.string(),
   siret: z.string(),
   siren: z.string(),

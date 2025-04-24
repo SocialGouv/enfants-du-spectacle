@@ -49,11 +49,11 @@ const post: NextApiHandler = async (req, res) => {
       otherConventionCollective: true,
       id: true,
     });
-    const createSociete = await client.societeProduction.create({
+      const createSociete = await client.societeProduction.create({
       data: {
         ...SocieteData.parse(data.societeProduction),
-        ["conventionCollectiveCode"]: data.demandeur.conventionCollectiveCode,
-        ["otherConventionCollective"]: data.demandeur.otherConventionCollective,
+        ["conventionCollectiveCode"]: data.demandeur.conventionCollectiveCode || "",
+        ["otherConventionCollective"]: data.demandeur.otherConventionCollective || null,
       },
     });
     //console.log('societe created')
@@ -67,14 +67,13 @@ const post: NextApiHandler = async (req, res) => {
     //console.log("demandeur found : ", demandeurFound);
 
     //HANDLE CREATING DEMANDEUR IF NOT FOUND
-    let createDemandeur = {
-      id: "",
-    };
+    let createDemandeur;
     if (!demandeurFound) {
       const DemandeurData = DemandeurModel.omit({
         id: true,
         societeProductionId: true,
       });
+        // Conversion explicite du type pour Prisma
       createDemandeur = await client.demandeur.create({
         data: {
           ...DemandeurData.parse(data.demandeur),
@@ -86,6 +85,8 @@ const post: NextApiHandler = async (req, res) => {
           },
         },
       });
+    } else {
+      createDemandeur = demandeurFound;
     }
 
     //SEARCHING FOR COMMISSION
@@ -98,6 +99,7 @@ const post: NextApiHandler = async (req, res) => {
     });
 
     //HANDLE DOSSIER
+    // Valider avec Zod puis préparer les données pour Prisma
     const DossierData = DossierModel.omit({
       commissionId: true,
       demandeurId: true,
@@ -108,26 +110,43 @@ const post: NextApiHandler = async (req, res) => {
       statut: true,
       userId: true,
     });
+    
+    // Valider les données avec Zod
+    const validatedDossierData = DossierData.parse(data.dossier);
+    
+    // Préparer les données du dossier sans piecesDossier
+    const justificatifs = data.dossier.piecesDossier 
+      ? data.dossier.piecesDossier
+          .map((piece) => piece.type)
+          .filter((item, i, ar) => ar.indexOf(item) === i)
+      : [];
+
+    // Créer la structure de données pour Prisma avec les propriétés explicites
     const createDossier = await client.dossier.create({
       data: {
-        ...DossierData.parse(data.dossier),
+        nom: validatedDossierData.nom,
+        presentation: validatedDossierData.presentation,
+        dateDebut: validatedDossierData.dateDebut,
+        dateFin: validatedDossierData.dateFin,
+        scenesSensibles: validatedDossierData.scenesSensibles,
+        justificatifs,
+        categorie: validatedDossierData.categorie,
+        
+        // Ajouter les relations et autres champs spécifiques à cette opération
         commission: {
           connect: {
             id: commissions[0].id,
           },
         },
-        conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
-        otherConventionCollective: data.demandeur.otherConventionCollective,
+        conventionCollectiveCode: data.demandeur.conventionCollectiveCode || null,
+        otherConventionCollective: data.demandeur.otherConventionCollective || null,
         dateDepot: new Date(),
         demandeur: {
           connect: {
-            id: demandeurFound ? demandeurFound.id : createDemandeur.id,
+            id: createDemandeur.id,
           },
         },
         externalId: data.dossier.id.toString(),
-        justificatifs: data.dossier.piecesDossier
-          .map((piece) => piece.type)
-          .filter((item, i, ar) => ar.indexOf(item) === i),
         societeProduction: {
           connect: {
             id: createSociete.id,
@@ -142,37 +161,43 @@ const post: NextApiHandler = async (req, res) => {
     //HANDLE ENFANTS
     if (data.enfants.length > 0) {
       const EnfantsData = EnfantModel.omit({ dossierId: true, id: true });
+      
+      // Préparer les données avec des conversions de type adéquates pour Prisma
+      const enfantDataForPrisma = data.enfants.map((enfant) => {
+        // Validation via le schema Zod
+        const validatedData = EnfantsData.parse(enfant);
+        
+        // Conversion explicite des types pour Prisma
+        return {
+          ...validatedData,
+          dossierId: createDossier.id,
+          externalId: enfant.id.toString(),
+          // Convertir en nombres explicitement pour Prisma
+          nombreJours: typeof enfant.nombreJours === "string" 
+            ? parseInt(enfant.nombreJours) 
+            : Number(enfant.nombreJours),
+          montantCachet: typeof enfant.montantCachet === "string"
+            ? parseFloat(enfant.montantCachet)
+            : Number(enfant.montantCachet),
+          nombreCachets: typeof enfant.nombreCachets === "string"
+            ? parseInt(enfant.nombreCachets)
+            : Number(enfant.nombreCachets),
+          remunerationTotale: typeof enfant.remunerationTotale === "string"
+            ? parseInt(enfant.remunerationTotale)
+            : Number(enfant.remunerationTotale),
+          nombreLignes: typeof enfant.nombreLignes === "string"
+            ? parseInt(enfant.nombreLignes)
+            : Number(enfant.nombreLignes),
+          justificatifs: enfant.piecesDossier
+            ? enfant.piecesDossier
+                .map((piece) => piece.type)
+                .filter((item, i, ar) => ar.indexOf(item) === i)
+            : [],
+        };
+      });
+      
       const CreateEnfants = await client.enfant.createMany({
-        data: data.enfants.map((enfant) => {
-          enfant.nombreJours =
-            typeof enfant.nombreJours === "string"
-              ? parseInt(enfant.nombreJours)
-              : enfant.nombreJours;
-          enfant.montantCachet =
-            typeof enfant.montantCachet === "string"
-              ? parseFloat(enfant.montantCachet)
-              : enfant.montantCachet;
-          enfant.nombreCachets =
-            typeof enfant.nombreCachets === "string"
-              ? parseInt(enfant.nombreCachets)
-              : enfant.nombreCachets;
-          enfant.remunerationTotale =
-            typeof enfant.remunerationTotale === "string"
-              ? parseInt(enfant.remunerationTotale)
-              : enfant.remunerationTotale;
-          enfant.nombreLignes =
-            typeof enfant.nombreLignes === "string"
-              ? parseInt(enfant.nombreLignes)
-              : enfant.nombreLignes;
-          return {
-            ...EnfantsData.parse(enfant),
-            dossierId: createDossier.id,
-            externalId: enfant.id.toString(),
-            justificatifs: enfant.piecesDossier
-              .map((piece) => piece.type)
-              .filter((item, i, ar) => ar.indexOf(item) === i),
-          };
-        }),
+        data: enfantDataForPrisma,
       });
     }
 
@@ -217,17 +242,33 @@ const update: NextApiHandler = async (req, res) => {
       statut: true,
       userId: true,
     });
-    const updateDossier = await client.dossier.update({
-      data: {
-        ...DossierData.parse(data.dossier),
-        conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
-        otherConventionCollective: data.demandeur.otherConventionCollective,
-        justificatifs: data.dossier.piecesDossier
+    
+    // Valider les données avec Zod
+    const validatedDossierData = DossierData.parse(data.dossier);
+    
+    // Extraire piecesDossier qui n'est pas une propriété reconnue par Prisma
+    const { piecesDossier, ...dossierWithoutPiecesDossier } = validatedDossierData;
+    
+    // Convertir les justificatifs à partir de piecesDossier si nécessaire
+    const justificatifs = piecesDossier
+      ? piecesDossier
           .map((piece) => piece.type)
-          .filter((item, i, ar) => ar.indexOf(item) === i),
-        statusNotification: "MIS_A_JOUR",
-        statut: "CONSTRUCTION",
-      },
+          .filter((item, i, ar) => ar.indexOf(item) === i)
+      : [];
+    
+    // Créer l'objet de données pour Prisma
+    const dossierPrismaData = {
+      ...dossierWithoutPiecesDossier,
+      justificatifs,
+      conventionCollectiveCode: data.demandeur.conventionCollectiveCode,
+      otherConventionCollective: data.demandeur.otherConventionCollective,
+      statusNotification: "MIS_A_JOUR" as const,
+      statut: "CONSTRUCTION" as const,
+    };
+    
+    // Effectuer la mise à jour
+    const updateDossier = await client.dossier.update({
+      data: dossierPrismaData,
       where: {
         externalId: data.dossier.id.toString(),
       },
@@ -245,71 +286,68 @@ const update: NextApiHandler = async (req, res) => {
       dossierId: true,
       id: true,
     });
-    data.enfants.map(async (enfant) => {
-      enfant.nombreJours =
-        typeof enfant.nombreJours === "string"
-          ? parseInt(enfant.nombreJours)
-          : enfant.nombreJours;
-      enfant.montantCachet =
-        typeof enfant.montantCachet === "string"
-          ? parseFloat(enfant.montantCachet)
-          : enfant.montantCachet;
-      enfant.nombreCachets =
-        typeof enfant.nombreCachets === "string"
-          ? parseInt(enfant.nombreCachets)
-          : enfant.nombreCachets;
-      enfant.remunerationTotale =
-        typeof enfant.remunerationTotale === "string"
-          ? parseInt(enfant.remunerationTotale)
-          : enfant.remunerationTotale;
-      enfant.nombreLignes =
-        typeof enfant.nombreLignes === "string"
-          ? parseInt(enfant.nombreLignes)
-          : enfant.nombreLignes;
-      if (
-        listEnfant.find(
-          (enfantL) => enfantL.externalId === enfant.id.toString()
-        )
-      ) {
-        // console.log("has to update enfant :", enfant.id);
-        const updateEnfant = await client.enfant.update({
-          data: {
-            ...EnfantsData.parse(enfant),
-            justificatifs: enfant.piecesDossier
-              .map((piece) => piece.type)
-              .filter((item, i, ar) => ar.indexOf(item) === i),
-          },
-          where: {
-            externalId: enfant.id.toString(),
-          },
-        });
-        // console.log("enfant updated :", updateEnfant.externalId);
-      } else {
-        try {
-          console.log(
-            "has to create enfant :",
-            enfant.nom,
-            " ",
-            enfant.prenom,
-            ", ",
-            enfant.id
-          );
-          const CreateEnfants = await client.enfant.create({
-            data: {
-              ...EnfantsData.parse(enfant),
-              dossierId: updateDossier.id,
-              externalId: enfant.id.toString(),
-              justificatifs: enfant.piecesDossier
-                .map((piece) => piece.type)
-                .filter((item, i, ar) => ar.indexOf(item) === i),
-            },
+    // Pour chaque enfant dans les données
+    for (const enfant of data.enfants) {
+      try {
+        // Valider les données de l'enfant avec Zod
+        const validatedData = EnfantsData.parse(enfant);
+        
+        // Extraire l'ID de l'enfant pour la recherche
+        const enfantExternalId = enfant.id.toString();
+        
+        // Vérifier si l'enfant existe déjà
+        const enfantExistant = listEnfant.find(e => e.externalId === enfantExternalId);
+        
+        // Préparer un objet Prisma valide avec les justificatifs extraits de piecesDossier
+        const justificatifs = Array.isArray(enfant.piecesDossier) 
+          ? enfant.piecesDossier.map(piece => piece.type).filter((item, i, ar) => ar.indexOf(item) === i)
+          : [];
+          
+        // Créer un objet avec uniquement les propriétés acceptées par Prisma
+        const prismaValidData = {
+          nom: validatedData.nom,
+          prenom: validatedData.prenom,
+          dateNaissance: validatedData.dateNaissance,
+          typeEmploi: validatedData.typeEmploi,
+          nomPersonnage: validatedData.nomPersonnage,
+          periodeTravail: validatedData.periodeTravail,
+          nombreJours: Number(validatedData.nombreJours),
+          contexteTravail: validatedData.contexteTravail,
+          montantCachet: Number(validatedData.montantCachet),
+          nombreCachets: Number(validatedData.nombreCachets),
+          nombreLignes: Number(validatedData.nombreLignes),
+          remunerationsAdditionnelles: validatedData.remunerationsAdditionnelles,
+          remunerationTotale: Number(validatedData.remunerationTotale),
+          justificatifs,
+          // Autres champs si nécessaire...
+          typeConsultation: validatedData.typeConsultation,
+          typeConsultationMedecin: validatedData.typeConsultationMedecin,
+          dateConsultation: validatedData.dateConsultation,
+          checkTravailNuit: validatedData.checkTravailNuit,
+          textTravailNuit: validatedData.textTravailNuit
+        };
+        
+        if (enfantExistant) {
+          // Mise à jour d'un enfant existant
+          await client.enfant.update({
+            where: { externalId: enfantExternalId },
+            data: prismaValidData
           });
-          // console.log("enfant updated :", CreateEnfants.externalId);
-        } catch (e) {
-          console.log("PROBLEM with : ", enfant.id);
+        } else {
+          // Création d'un nouvel enfant
+          console.log(`Création d'un nouvel enfant: ${validatedData.nom} ${validatedData.prenom}, ID: ${enfant.id}`);
+          await client.enfant.create({
+            data: {
+              ...prismaValidData,
+              dossierId: updateDossier.id,
+              externalId: enfantExternalId
+            }
+          });
         }
+      } catch (e) {
+        console.log("PROBLÈME avec enfant:", enfant.id, e);
       }
-    });
+    }
     res.status(200).json({
       message: `${frenchDepartementName(
         commissions[0].departement
