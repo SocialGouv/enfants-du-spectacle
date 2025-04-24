@@ -1,3 +1,10 @@
+## [1.94.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.7...v1.94.8) (2025-04-24)
+
+
+### Bug Fixes
+
+* try fixing deploy ([#655](https://github.com/SocialGouv/enfants-du-spectacle/issues/655)) ([88e69c7](https://github.com/SocialGouv/enfants-du-spectacle/commit/88e69c751917362e5cca2337142762772aebede6))
+
 ## [1.94.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.6...v1.94.7) (2025-04-23)
 
 
