@@ -13,6 +13,14 @@ export default NextAuth({
       return session;
     },
     async signIn({ user }) {
+      try {
+        await prisma.$connect()
+        console.log('✅ Connexion à la base de données réussie')
+      } catch (error) {
+        console.error('❌ Erreur de connexion à la base de données :', error)
+      } finally {
+        await prisma.$disconnect()
+      }
       if (typeof user.email !== "string") return false;
       console.log('user : ', user)
       const test = await prisma.user.findUnique({
