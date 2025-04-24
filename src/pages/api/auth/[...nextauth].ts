@@ -16,6 +16,8 @@ export default NextAuth({
       try {
         await prisma.$connect()
         console.log('✅ Connexion à la base de données réussie')
+        const users = await prisma.user.findMany()
+        console.log('users:', users)
       } catch (error) {
         console.error('❌ Erreur de connexion à la base de données :', error)
       } finally {
