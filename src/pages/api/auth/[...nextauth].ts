@@ -14,16 +14,12 @@ export default NextAuth({
     },
     async signIn({ user }) {
       try {
-        await prisma.$connect()
-        console.log('✅ Connexion à la base de données réussie')
         console.log('typeof prisma.user:', typeof prisma.user)
         console.log(Object.keys(prisma))
         const users = await prisma.user.findMany()
         console.log('users:', users)
       } catch (error) {
         console.error('❌ Erreur de connexion à la base de données :', error)
-      } finally {
-        await prisma.$disconnect()
       }
       if (typeof user.email !== "string") return false;
       console.log('user : ', user)
