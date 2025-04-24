@@ -1,3 +1,10 @@
+## [1.94.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.9...v1.94.10) (2025-04-24)
+
+
+### Bug Fixes
+
+* try update dockerfile, log type prisma, add query display ([#658](https://github.com/SocialGouv/enfants-du-spectacle/issues/658)) ([4c5356a](https://github.com/SocialGouv/enfants-du-spectacle/commit/4c5356a35fdcc9ce4d3925ffd2ea3baa5e4ceead))
+
 ## [1.94.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.8...v1.94.9) (2025-04-24)
 
 
