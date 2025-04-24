@@ -1,3 +1,10 @@
+## [1.94.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.8...v1.94.9) (2025-04-24)
+
+
+### Bug Fixes
+
+* try to get all users, more console logs... ([#656](https://github.com/SocialGouv/enfants-du-spectacle/issues/656)) ([387b48c](https://github.com/SocialGouv/enfants-du-spectacle/commit/387b48c895841f678cc222a3bdf50700a52172ae))
+
 ## [1.94.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.7...v1.94.8) (2025-04-24)
 
 
