@@ -1,3 +1,10 @@
+## [1.94.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.10...v1.94.11) (2025-04-24)
+
+
+### Bug Fixes
+
+* remove disconnect prisma ([#659](https://github.com/SocialGouv/enfants-du-spectacle/issues/659)) ([c1dab29](https://github.com/SocialGouv/enfants-du-spectacle/commit/c1dab29ad842c4fcc0892bc828ef9763bf490310))
+
 ## [1.94.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.9...v1.94.10) (2025-04-24)
 
 
