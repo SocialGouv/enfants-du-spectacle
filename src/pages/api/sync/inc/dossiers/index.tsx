@@ -1,13 +1,12 @@
 import type { Commission, Enfant } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import type { RelatedDossierModel, RelatedEnfantModel } from "src/lib/schemas";
-import {
-  DemandeurModel,
-  DossierModel,
-  EnfantModel,
-  SocieteProductionModel,
-} from "src/lib/schemas";
+import type { RelatedDossierModel } from "../../../../../../prisma/zod/dossier";
+import type { RelatedEnfantModel } from "../../../../../../prisma/zod/enfant";
+import { DemandeurModel } from "../../../../../../prisma/zod/demandeur";
+import { DossierModel } from "../../../../../../prisma/zod/dossier";
+import { EnfantModel } from "../../../../../../prisma/zod/enfant";
+import { SocieteProductionModel } from "../../../../../../prisma/zod/societeproduction";
 import { frenchDateText, frenchDepartementName } from "src/lib/helpers";
 import type { z } from "zod";
 
