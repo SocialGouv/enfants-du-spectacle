@@ -91,7 +91,6 @@
     "mjml": "^4.11.0",
     "prettier": "^2.5.1",
     "prisma": "^6.6.0",
-    "prisma-zod-generator": "^0.8.13",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
     "typescript": "latest"
