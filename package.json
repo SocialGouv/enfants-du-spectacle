@@ -31,7 +31,7 @@
   "dependencies": {
     "@dataesr/react-dsfr": "^0.9.2",
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@prisma/client": "^4.7.0",
+    "@prisma/client": "^6.6.0",
     "@sentry/nextjs": "^6.15.0",
     "@socialgouv/matomo-next": "^1.6.1",
     "b64-to-blob": "^1.2.19",
@@ -90,7 +90,7 @@
     "maildev": "^2.2.1",
     "mjml": "^4.11.0",
     "prettier": "^2.5.1",
-    "prisma": "^4.7.0",
+    "prisma": "^6.6.0",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
     "typescript": "latest"

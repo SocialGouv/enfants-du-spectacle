@@ -4,6 +4,8 @@ declare global {
   var prismaClient: PrismaClient | undefined;
 }
 
+console.log("DATABASE_URL", process.env.DATABASE_URL)
+
 const client =
   globalThis.prismaClient ??
   new PrismaClient({
