@@ -42,7 +42,7 @@
     "emailjs": "^4.0.0",
     "file-saver": "^2.0.5",
     "form-data": "^4.0.0",
-    "formidable": "^2.1.1",
+    "formidable": "^3.0.0",
     "hoist-non-react-statics": "^3.3.2",
     "javascript-state-machine": "^3.1.0",
     "js-base64": "^3.7.2",
