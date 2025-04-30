@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteSocieteProduction, RelatedSocieteProductionModel, CompleteDossier, RelatedDossierModel } from "./index"
 
 export const DemandeurModel = z.object({
@@ -10,6 +9,8 @@ export const DemandeurModel = z.object({
   phone: z.string().nullish(),
   fonction: z.string(),
   societeProductionId: z.number().int(),
+  conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish(),
 })
 
 export interface CompleteDemandeur extends z.infer<typeof DemandeurModel> {

@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteCommission, RelatedCommissionModel, CompleteUser, RelatedUserModel } from "./index"
 
 export const SendListModel = z.object({

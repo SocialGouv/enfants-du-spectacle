@@ -1,9 +1,8 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteUser, RelatedUserModel } from "./index"
 
 export const AccountModel = z.object({
-  id: z.string(),
+  id: z.number().int(),
   userId: z.number().int(),
   type: z.string(),
   provider: z.string(),

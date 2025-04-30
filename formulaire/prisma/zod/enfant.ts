@@ -1,6 +1,5 @@
 import * as z from "zod"
-import * as imports from "../null"
-import { TypeEmploi, JustificatifEnfant } from "@prisma/client"
+import { TypeEmploi, JustificatifEnfant, TypeConsultation, STATUT_PIECE } from "@prisma/client"
 import { CompletePieceDossierEnfant, RelatedPieceDossierEnfantModel, CompleteDossier, RelatedDossierModel, CompleteUser, RelatedUserModel } from "./index"
 
 export const EnfantModel = z.object({
@@ -25,9 +24,13 @@ export const EnfantModel = z.object({
   nomRepresentant1: z.string().nullish(),
   prenomRepresentant1: z.string().nullish(),
   adresseRepresentant1: z.string().nullish(),
+  telRepresentant1: z.string().nullish(),
+  mailRepresentant1: z.string().nullish(),
   adresseRepresentant2: z.string().nullish(),
   nomRepresentant2: z.string().nullish(),
   prenomRepresentant2: z.string().nullish(),
+  telRepresentant2: z.string().nullish(),
+  mailRepresentant2: z.string().nullish(),
   livret: z.string().nullish(),
   autorisation: z.string().nullish(),
   situation: z.string().nullish(),
@@ -36,6 +39,10 @@ export const EnfantModel = z.object({
   avis: z.string().nullish(),
   dateDerniereModification: z.date().nullish(),
   userId: z.number().int().nullish(),
+  typeConsultation: z.nativeEnum(TypeConsultation).nullish(),
+  dateConsultation: z.date().nullish(),
+  checkTravailNuit: z.boolean().nullish(),
+  textTravailNuit: z.string().nullish(),
 })
 
 export interface CompleteEnfant extends z.infer<typeof EnfantModel> {

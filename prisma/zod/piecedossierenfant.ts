@@ -1,6 +1,5 @@
 import * as z from "zod"
-import * as imports from "../null"
-import { JustificatifEnfant } from "@prisma/client"
+import { JustificatifEnfant, STATUT_PIECE } from "@prisma/client"
 import { CompleteEnfant, RelatedEnfantModel } from "./index"
 
 export const PieceDossierEnfantModel = z.object({
@@ -10,6 +9,7 @@ export const PieceDossierEnfantModel = z.object({
   externalId: z.string().nullish(),
   type: z.nativeEnum(JustificatifEnfant),
   link: z.string(),
+  statut: z.nativeEnum(STATUT_PIECE).nullish(),
 })
 
 export interface CompletePieceDossierEnfant extends z.infer<typeof PieceDossierEnfantModel> {

@@ -1,7 +1,6 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { Role } from "@prisma/client"
-import { CompleteAccount, RelatedAccountModel, CompleteSession, RelatedSessionModel, CompleteDossier, RelatedDossierModel, CompleteEnfant, RelatedEnfantModel } from "./index"
+import { CompleteAccount, RelatedAccountModel, CompleteSession, RelatedSessionModel, CompleteDossier, RelatedDossierModel } from "./index"
 
 export const UserModel = z.object({
   id: z.number().int(),
@@ -9,21 +8,18 @@ export const UserModel = z.object({
   nom: z.string().nullish(),
   prenom: z.string().nullish(),
   email: z.string().nullish(),
-  telephone: z.string().nullish(),
-  fonction: z.string().nullish(),
   emailVerified: z.date().nullish(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  image: z.string().nullish(),
   role: z.nativeEnum(Role).nullish(),
   departement: z.string().nullish(),
   departements: z.string().array(),
 })
 
 export interface CompleteUser extends z.infer<typeof UserModel> {
-  Account: CompleteAccount[]
-  Session: CompleteSession[]
+  accounts: CompleteAccount[]
+  sessions: CompleteSession[]
   dossiers: CompleteDossier[]
-  Enfant: CompleteEnfant[]
+  dossiersMedecin: CompleteDossier[]
 }
 
 /**
@@ -32,8 +28,8 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserModel.extend({
-  Account: RelatedAccountModel.array(),
-  Session: RelatedSessionModel.array(),
+  accounts: RelatedAccountModel.array(),
+  sessions: RelatedSessionModel.array(),
   dossiers: RelatedDossierModel.array(),
-  Enfant: RelatedEnfantModel.array(),
+  dossiersMedecin: RelatedDossierModel.array(),
 }))

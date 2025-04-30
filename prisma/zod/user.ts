@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { Role } from "@prisma/client"
 import { CompleteAccount, RelatedAccountModel, CompleteSession, RelatedSessionModel, CompleteDossier, RelatedDossierModel, CompleteCommentaire, RelatedCommentaireModel, CompleteSendList, RelatedSendListModel } from "./index"
 
@@ -20,6 +19,7 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
   accounts: CompleteAccount[]
   sessions: CompleteSession[]
   dossiers: CompleteDossier[]
+  dossiersMedecin: CompleteDossier[]
   commentaires: CompleteCommentaire[]
   SendList: CompleteSendList[]
 }
@@ -33,6 +33,7 @@ export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserMode
   accounts: RelatedAccountModel.array(),
   sessions: RelatedSessionModel.array(),
   dossiers: RelatedDossierModel.array(),
+  dossiersMedecin: RelatedDossierModel.array(),
   commentaires: RelatedCommentaireModel.array(),
   SendList: RelatedSendListModel.array(),
 }))

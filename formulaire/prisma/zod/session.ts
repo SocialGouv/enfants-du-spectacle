@@ -1,9 +1,8 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteUser, RelatedUserModel } from "./index"
 
 export const SessionModel = z.object({
-  id: z.string(),
+  id: z.number().int(),
   sessionToken: z.string(),
   userId: z.number().int(),
   expires: z.date(),

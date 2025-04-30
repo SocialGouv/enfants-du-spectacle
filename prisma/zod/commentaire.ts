@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteUser, RelatedUserModel, CompleteDossier, RelatedDossierModel } from "./index"
 
 export const CommentaireModel = z.object({
@@ -8,6 +7,7 @@ export const CommentaireModel = z.object({
   date: z.date(),
   userId: z.number().int(),
   dossierId: z.number().int(),
+  seen: z.boolean().nullish(),
 })
 
 export interface CompleteCommentaire extends z.infer<typeof CommentaireModel> {

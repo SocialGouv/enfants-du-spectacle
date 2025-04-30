@@ -1,21 +1,18 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteSocieteProduction, RelatedSocieteProductionModel, CompleteDossier, RelatedDossierModel } from "./index"
 
 export const DemandeurModel = z.object({
   id: z.number().int(),
-  email: z.string().nullish(),
-  nom: z.string().nullish(),
-  prenom: z.string().nullish(),
+  email: z.string(),
+  nom: z.string(),
+  prenom: z.string(),
   phone: z.string().nullish(),
-  fonction: z.string().nullish(),
-  conventionCollectiveCode: z.string().nullish(),
-  otherConventionCollective: z.string().nullish(),
-  societeProductionId: z.number().int().nullish(),
+  fonction: z.string(),
+  societeProductionId: z.number().int(),
 })
 
 export interface CompleteDemandeur extends z.infer<typeof DemandeurModel> {
-  societeProduction?: CompleteSocieteProduction | null
+  societeProduction: CompleteSocieteProduction
   dossiers: CompleteDossier[]
 }
 
@@ -25,6 +22,6 @@ export interface CompleteDemandeur extends z.infer<typeof DemandeurModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedDemandeurModel: z.ZodSchema<CompleteDemandeur> = z.lazy(() => DemandeurModel.extend({
-  societeProduction: RelatedSocieteProductionModel.nullish(),
+  societeProduction: RelatedSocieteProductionModel,
   dossiers: RelatedDossierModel.array(),
 }))

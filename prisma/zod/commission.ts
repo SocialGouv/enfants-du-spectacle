@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { CompleteDossier, RelatedDossierModel, CompleteSendList, RelatedSendListModel } from "./index"
 
 export const CommissionModel = z.object({
@@ -8,6 +7,7 @@ export const CommissionModel = z.object({
   date: z.date(),
   dateLimiteDepot: z.date(),
   lastSent: z.date().nullish(),
+  archived: z.boolean().nullish(),
 })
 
 export interface CompleteCommission extends z.infer<typeof CommissionModel> {

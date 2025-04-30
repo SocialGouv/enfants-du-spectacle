@@ -1,5 +1,4 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { StatutDossier, CategorieDossier, JustificatifDossier, StatusNotif, Source } from "@prisma/client"
 import { CompleteCommission, RelatedCommissionModel, CompleteSocieteProduction, RelatedSocieteProductionModel, CompleteEnfant, RelatedEnfantModel, CompletePieceDossier, RelatedPieceDossierModel, CompleteCommentaire, RelatedCommentaireModel, CompleteUser, RelatedUserModel, CompleteDemandeur, RelatedDemandeurModel } from "./index"
 
@@ -12,21 +11,25 @@ export const DossierModel = z.object({
   societeProductionId: z.number().int(),
   numeroDS: z.number().int().nullish(),
   userId: z.number().int().nullish(),
+  medecinId: z.number().int().nullish(),
   demandeurId: z.number().int(),
   justificatifs: z.nativeEnum(JustificatifDossier).array(),
   scenesSensibles: z.string().array(),
   presentation: z.string(),
   conventionCollectiveCode: z.string().nullish(),
   otherConventionCollective: z.string().nullish(),
-  dateDebut: z.string(),
-  dateFin: z.string(),
+  dateDebut: z.date(),
+  dateFin: z.date(),
   externalId: z.string().nullish(),
   number: z.number().int().nullish(),
-  dateDerniereModification: z.string().nullish(),
+  dateDerniereModification: z.date().nullish(),
   cdc: z.number().int().nullish(),
   dateDepot: z.date().nullish(),
   statusNotification: z.nativeEnum(StatusNotif).nullish(),
   source: z.nativeEnum(Source).nullish(),
+  piecesDossier: z.array(z.object({
+    type: z.nativeEnum(JustificatifDossier)
+  })).optional(),
 })
 
 export interface CompleteDossier extends z.infer<typeof DossierModel> {
@@ -36,6 +39,7 @@ export interface CompleteDossier extends z.infer<typeof DossierModel> {
   piecesDossier: CompletePieceDossier[]
   commentaires: CompleteCommentaire[]
   user?: CompleteUser | null
+  medecin?: CompleteUser | null
   demandeur: CompleteDemandeur
 }
 
@@ -51,5 +55,6 @@ export const RelatedDossierModel: z.ZodSchema<CompleteDossier> = z.lazy(() => Do
   piecesDossier: RelatedPieceDossierModel.array(),
   commentaires: RelatedCommentaireModel.array(),
   user: RelatedUserModel.nullish(),
+  medecin: RelatedUserModel.nullish(),
   demandeur: RelatedDemandeurModel,
 }))

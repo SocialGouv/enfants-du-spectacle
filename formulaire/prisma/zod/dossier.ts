@@ -1,34 +1,41 @@
 import * as z from "zod"
-import * as imports from "../null"
 import { StatutDossier, CategorieDossier, JustificatifDossier } from "@prisma/client"
-import { CompleteEnfant, RelatedEnfantModel, CompletePieceDossier, RelatedPieceDossierModel, CompleteUser, RelatedUserModel, CompleteDemandeur, RelatedDemandeurModel } from "./index"
+import { CompleteEnfant, RelatedEnfantModel, CompletePieceDossier, RelatedPieceDossierModel, CompleteUser, RelatedUserModel, CompleteDemandeur, RelatedDemandeurModel, CompleteSocieteProduction, RelatedSocieteProductionModel } from "./index"
 
 export const DossierModel = z.object({
   id: z.number().int(),
-  nom: z.string().nullish(),
+  nom: z.string(),
   statut: z.nativeEnum(StatutDossier),
-  categorie: z.nativeEnum(CategorieDossier).nullish(),
-  userId: z.number().int(),
+  categorie: z.nativeEnum(CategorieDossier),
+  commissionId: z.number().int(),
+  societeProductionId: z.number().int(),
+  userId: z.number().int().nullish(),
+  medecinId: z.number().int().nullish(),
+  demandeurId: z.number().int(),
   justificatifs: z.nativeEnum(JustificatifDossier).array(),
   scenesSensibles: z.string().array(),
-  presentation: z.string().nullish(),
-  dateDebut: z.date().nullish(),
-  dateFin: z.date().nullish(),
+  presentation: z.string(),
+  conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish(),
+  dateDebut: z.date(),
+  dateFin: z.date(),
+  externalId: z.string().nullish(),
   number: z.number().int().nullish(),
   dateDerniereModification: z.date().nullish(),
   cdc: z.number().int().nullish(),
-  scenario: z.string().nullish(),
-  securite: z.string().nullish(),
-  complementaire: z.string().nullish(),
   dateDepot: z.date().nullish(),
-  demandeurId: z.number().int().nullish(),
+  statusNotification: z.string().nullish(),
+  source: z.string().nullish(),
+  numeroDS: z.number().int().nullish()
 })
 
 export interface CompleteDossier extends z.infer<typeof DossierModel> {
   enfants: CompleteEnfant[]
   piecesDossier: CompletePieceDossier[]
-  user: CompleteUser
-  Demandeur?: CompleteDemandeur | null
+  user?: CompleteUser | null
+  medecin?: CompleteUser | null
+  demandeur: CompleteDemandeur
+  societeProduction: CompleteSocieteProduction
 }
 
 /**
@@ -39,6 +46,8 @@ export interface CompleteDossier extends z.infer<typeof DossierModel> {
 export const RelatedDossierModel: z.ZodSchema<CompleteDossier> = z.lazy(() => DossierModel.extend({
   enfants: RelatedEnfantModel.array(),
   piecesDossier: RelatedPieceDossierModel.array(),
-  user: RelatedUserModel,
-  Demandeur: RelatedDemandeurModel.nullish(),
+  user: RelatedUserModel.nullish(),
+  medecin: RelatedUserModel.nullish(),
+  demandeur: RelatedDemandeurModel,
+  societeProduction: RelatedSocieteProductionModel
 }))

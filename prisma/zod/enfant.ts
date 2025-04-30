@@ -1,22 +1,27 @@
 import * as z from "zod"
-import { TypeEmploi, JustificatifEnfant, TypeConsultation } from "@prisma/client"
+import { TypeEmploi, JustificatifEnfant, TypeConsultation, TypeConsultationMedecin } from "@prisma/client"
 import { CompletePieceDossierEnfant, RelatedPieceDossierEnfantModel, CompleteDossier, RelatedDossierModel } from "./index"
+
+// Type pour la compatibilité avec les données existantes
+const numberOrString = z.union([z.number(), z.string()]).transform(val => 
+  typeof val === 'string' ? Number(val) : val
+);
 
 export const EnfantModel = z.object({
   id: z.number().int(),
   prenom: z.string(),
   nom: z.string(),
-  dateNaissance: z.string(),
+  dateNaissance: z.date(),
   typeEmploi: z.nativeEnum(TypeEmploi),
   nomPersonnage: z.string().nullish(),
   periodeTravail: z.string().nullish(),
-  nombreJours: z.number().int(),
+  nombreJours: numberOrString,
   contexteTravail: z.string().nullish(),
-  montantCachet: z.number(),
-  nombreCachets: z.number().int(),
-  nombreLignes: z.number().int(),
+  montantCachet: numberOrString,
+  nombreCachets: numberOrString.default(0),
+  nombreLignes: numberOrString.default(0),
   remunerationsAdditionnelles: z.string().nullish(),
-  remunerationTotale: z.number(),
+  remunerationTotale: numberOrString,
   justificatifs: z.nativeEnum(JustificatifEnfant).array(),
   dossierId: z.number().int(),
   cdc: z.number().int().nullish(),
@@ -24,17 +29,22 @@ export const EnfantModel = z.object({
   nomRepresentant1: z.string().nullish(),
   prenomRepresentant1: z.string().nullish(),
   adresseRepresentant1: z.string().nullish(),
-  mailRepresentant1: z.string().nullish(),
   telRepresentant1: z.string().nullish(),
-  adresseRepresentant2: z.string().nullish(),
+  mailRepresentant1: z.string().nullish(),
   nomRepresentant2: z.string().nullish(),
   prenomRepresentant2: z.string().nullish(),
-  mailRepresentant2: z.string().nullish(),
+  adresseRepresentant2: z.string().nullish(),
   telRepresentant2: z.string().nullish(),
+  mailRepresentant2: z.string().nullish(),
   externalId: z.string().nullish(),
-  typeConsultation: z.nativeEnum(TypeConsultation || null),
+  typeConsultation: z.nativeEnum(TypeConsultation).nullish(),
+  typeConsultationMedecin: z.nativeEnum(TypeConsultationMedecin).nullish(),
+  dateConsultation: z.date().nullish(),
   checkTravailNuit: z.boolean().nullish(),
   textTravailNuit: z.string().nullish(),
+  piecesDossier: z.array(z.object({
+    type: z.nativeEnum(JustificatifEnfant)
+  })).optional(),
 })
 
 export interface CompleteEnfant extends z.infer<typeof EnfantModel> {

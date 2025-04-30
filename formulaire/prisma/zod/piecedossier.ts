@@ -1,15 +1,14 @@
 import * as z from "zod"
-import * as imports from "../null"
-import { JustificatifDossier } from "@prisma/client"
+import { JustificatifDossier, STATUT_PIECE } from "@prisma/client"
 import { CompleteDossier, RelatedDossierModel } from "./index"
 
 export const PieceDossierModel = z.object({
   id: z.number().int(),
-  nom: z.string(),
   dossierId: z.number().int(),
   externalId: z.string().nullish(),
   type: z.nativeEnum(JustificatifDossier),
-  link: z.string().nullish(),
+  link: z.string(),
+  statut: z.nativeEnum(STATUT_PIECE).nullish(),
 })
 
 export interface CompletePieceDossier extends z.infer<typeof PieceDossierModel> {

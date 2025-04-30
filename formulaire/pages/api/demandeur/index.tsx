@@ -1,7 +1,7 @@
 import { Demandeur } from "@prisma/client";
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { DemandeurModel } from "prisma/zod";
+import { DemandeurModel } from "../../../prisma/zod/demandeur";
 import prisma from "../../../src/lib/prismaClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
