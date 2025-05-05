@@ -188,21 +188,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codegouvfr/react-dsfr@npm:^0.0.60":
-  version: 0.0.60
-  resolution: "@codegouvfr/react-dsfr@npm:0.0.60"
+"@codegouvfr/react-dsfr@npm:^0.78.0":
+  version: 0.78.2
+  resolution: "@codegouvfr/react-dsfr@npm:0.78.2"
   dependencies:
-    tsafe: ^1.4.0
-  peerDependencies:
-    "@types/react": ^16.0.0 || ^17.0.0 || ^18.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
+    tsafe: ^1.6.3
   bin:
     copy-dsfr-to-public: bin/copy-dsfr-to-public.js
     only-include-used-icons: bin/only-include-used-icons.js
-  checksum: 040e52881f6c142c4650544fd3f8495da19048461e6e6c2e211bd39a1a52d94629c2504050f8a9c56a46c3fa81e8b7d8172393b920737b63278727e18898f6f1
+  checksum: a3972e2a0f09f7f01276b4ae5d1f8db27d73fcd63fbf34d8f8fa4d2a7f1edcebff64582cf9fc9e99c71750486fcf8ca9d51ced056eaf519bb6b7888ee0422d38
   languageName: node
   linkType: hard
 
@@ -2154,7 +2148,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "enfants-du-spectacle-formulaire@workspace:."
   dependencies:
-    "@codegouvfr/react-dsfr": ^0.0.60
+    "@codegouvfr/react-dsfr": ^0.78.0
     "@dataesr/react-dsfr": ^3.4.8
     "@next-auth/prisma-adapter": ^1.0.5
     "@prisma/client": ^6.6.0
@@ -5597,7 +5591,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsafe@npm:^1.4.0":
+"tsafe@npm:^1.6.3":
   version: 1.6.5
   resolution: "tsafe@npm:1.6.5"
   checksum: 189600dd1278d0b29ae8af70a774f07581d9795974fadc901b58b961ff2d99d120fc79fbdf9055a7af083d5d633e52536f188245bc8caf9de7be33c69e9bcd2f
