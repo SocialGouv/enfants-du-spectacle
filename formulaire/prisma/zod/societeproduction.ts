@@ -3,18 +3,18 @@ import { CompleteDemandeur, RelatedDemandeurModel, CompleteDossier, RelatedDossi
 
 export const SocieteProductionModel = z.object({
   id: z.number().int(),
-  nom: z.string(),
-  siret: z.string(),
-  siren: z.string(),
-  departement: z.string(),
-  naf: z.string(),
-  raisonSociale: z.string(),
-  adresse: z.string(),
-  adresseCodePostal: z.string(),
-  adresseCodeCommune: z.string(),
-  formeJuridique: z.string(),
-  conventionCollectiveCode: z.string(),
-  otherConventionCollective: z.string().nullish(),
+  nom: z.string().nullish(),
+  siret: z.string().nullish(),
+  siren: z.string().nullish(),
+  departement: z.string().nullish(),
+  naf: z.string().nullish(),
+  raisonSociale: z.string().nullish(),
+  adresse: z.string().nullish(),
+  adresseCodePostal: z.string().nullish(),
+  adresseCodeCommune: z.string().nullish(),
+  formeJuridique: z.string().nullish(),
+  conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish().nullish(),
 })
 
 export interface CompleteSocieteProduction extends z.infer<typeof SocieteProductionModel> {

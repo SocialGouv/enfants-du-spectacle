@@ -64,7 +64,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
 
     await Promise.all(
       CHECKS.map(async (entity) => {
-        console.log("entity : ", entity.entity);
         switch (entity.entity) {
           case "Demandeur":
             entity.mandatory_fields.map((field) => {
