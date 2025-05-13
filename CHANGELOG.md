@@ -1,3 +1,10 @@
+## [1.94.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.12...v1.94.13) (2025-05-13)
+
+
+### Bug Fixes
+
+* try fix db ([#664](https://github.com/SocialGouv/enfants-du-spectacle/issues/664)) ([cfad327](https://github.com/SocialGouv/enfants-du-spectacle/commit/cfad327a1d2d54f070e7e56df7aa7b4064f5f515))
+
 ## [1.94.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.11...v1.94.12) (2025-05-13)
 
 
