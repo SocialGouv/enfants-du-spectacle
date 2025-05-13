@@ -1,3 +1,10 @@
+## [1.94.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.11...v1.94.12) (2025-05-13)
+
+
+### Bug Fixes
+
+* fix problem societe prod siret ([#663](https://github.com/SocialGouv/enfants-du-spectacle/issues/663)) ([b1a4ec7](https://github.com/SocialGouv/enfants-du-spectacle/commit/b1a4ec765545f26a13d8b4eb60ad7e98ab241252))
+
 ## [1.94.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.10...v1.94.11) (2025-04-24)
 
 
