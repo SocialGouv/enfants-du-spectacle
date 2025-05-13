@@ -43,6 +43,7 @@ const update: NextApiHandler = async (req, res) => {
     res.status(400).end();
     return;
   }
+  console.log('parsed : ', parsed)
   const demandeurData = DemandeurModel.omit({ id: true });
 
   let dempandeurUpdated = await prisma.demandeur.update({

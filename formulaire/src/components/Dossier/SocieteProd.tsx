@@ -32,24 +32,33 @@ const SocieteProd: React.FC<Props> = ({ }) => {
     }, [resSirene])
 
     const processSociete = async () => {
+        console.log('processing societe ...')
         if(resSirene){
-            const societeFound = await getSocieteProd(contextDossier.societeProduction.siret ?? '')
-            let societeTmp: SocieteProduction = {
-                id: societeFound ? societeFound.id : 0,
-                nom: resSirene.etablissement.uniteLegale.denominationUniteLegale,
-                siret: resSirene.etablissement.siret,
-                siren: resSirene.etablissement.siren,
-                departement: resSirene.etablissement.adresseEtablissement.codePostalEtablissement.slice(0, 2),
-                naf: resSirene.etablissement.uniteLegale.activitePrincipaleUniteLegale.replace('.', ''),
-                raisonSociale: resSirene.etablissement.uniteLegale.denominationUniteLegale,
-                adresse: resSirene.etablissement.adresseEtablissement.numeroVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.typeVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.libelleVoieEtablissement,
-                adresseCodePostal: resSirene.etablissement.adresseEtablissement.codePostalEtablissement,
-                adresseCodeCommune: resSirene.etablissement.adresseEtablissement.libelleCommuneEtablissement,
-                formeJuridique: resSirene.etablissement.uniteLegale.categorieJuridiqueUniteLegale
+            try {
+                console.log('got res sirene ...')
+                const societeFound = await getSocieteProd(contextDossier.societeProduction.siret ?? '')
+                console.log('societe found : ', societeFound)
+                let societeTmp: SocieteProduction = {
+                    id: societeFound ? societeFound.id : 0,
+                    nom: resSirene.etablissement.uniteLegale.denominationUniteLegale,
+                    siret: resSirene.etablissement.siret,
+                    siren: resSirene.etablissement.siren,
+                    departement: resSirene.etablissement.adresseEtablissement.codePostalEtablissement.slice(0, 2),
+                    naf: resSirene.etablissement.uniteLegale.activitePrincipaleUniteLegale.replace('.', ''),
+                    raisonSociale: resSirene.etablissement.uniteLegale.denominationUniteLegale,
+                    adresse: resSirene.etablissement.adresseEtablissement.numeroVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.typeVoieEtablissement + ' ' + resSirene.etablissement.adresseEtablissement.libelleVoieEtablissement,
+                    adresseCodePostal: resSirene.etablissement.adresseEtablissement.codePostalEtablissement,
+                    adresseCodeCommune: resSirene.etablissement.adresseEtablissement.libelleCommuneEtablissement,
+                    formeJuridique: resSirene.etablissement.uniteLegale.categorieJuridiqueUniteLegale
+                }
+                console.log('societe tmp : ', societeTmp)
+                const societeProcessed = societeFound ? await updateSociete(societeTmp) : await createSociete(societeTmp)
+                console.log('societe processed : ', societeProcessed)
+                contextDossier.processEntity('societeProduction', societeProcessed)
+                contextDossier.processInput('demandeur', 'societeProductionId', societeProcessed.id)
+            } catch(e) {
+                console.log('error proceesing societe : ', e)
             }
-            const societeProcessed = societeFound ? await updateSociete(societeTmp) : await createSociete(societeTmp)
-            contextDossier.processEntity('societeProduction', societeProcessed)
-            contextDossier.processInput('demandeur', 'societeProductionId', societeProcessed.id)
         }
     }
 

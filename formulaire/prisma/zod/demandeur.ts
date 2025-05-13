@@ -3,12 +3,14 @@ import { CompleteSocieteProduction, RelatedSocieteProductionModel, CompleteDossi
 
 export const DemandeurModel = z.object({
   id: z.number().int(),
-  email: z.string(),
-  nom: z.string(),
-  prenom: z.string(),
+  email: z.string().nullish(),
+  nom: z.string().nullish(),
+  prenom: z.string().nullish(),
   phone: z.string().nullish(),
-  fonction: z.string(),
-  societeProductionId: z.number().int(),
+  fonction: z.string().nullish(),
+  conventionCollectiveCode: z.string().nullish(),
+  otherConventionCollective: z.string().nullish(),
+  societeProductionId: z.number().int().nullish(),
 })
 
 export interface CompleteDemandeur extends z.infer<typeof DemandeurModel> {

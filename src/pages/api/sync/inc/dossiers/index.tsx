@@ -73,6 +73,8 @@ const post: NextApiHandler = async (req, res) => {
         societeProductionId: true,
       });
         // Conversion explicite du type pour Prisma
+        delete data.demandeur.conventionCollectiveCode
+        delete data.demandeur.otherConventionCollective
       createDemandeur = await client.demandeur.create({
         data: {
           ...DemandeurData.parse(data.demandeur),
