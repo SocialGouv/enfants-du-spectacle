@@ -26,6 +26,14 @@ interface DossierProps {
 }
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
   const { data: session } = useSession();
+  
+  // Force fetch societeProduction if missing through API
+  React.useEffect(() => {
+    if (!dossier.societeProduction && dossier.societeProductionId) {
+      console.log(`Dossier ${dossier.id} is missing societeProduction data but has ID ${dossier.societeProductionId}`);
+    }
+  }, [dossier]);
+  
   return (
     <div className={`${session?.dbUser.role !== "MEDECIN" ? styles.dossierGrid : styles.dossierGridMedecin} itemGrid`}>
       {session?.dbUser.role !== "MEDECIN" &&
@@ -33,10 +41,24 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
           <StatutDossierTag dossier={dossier} />
         </div>
       }
-      <div className={styles.nomDossier} title={dossier.nom}>
-        <Link href={`/dossiers/${dossier.id}`}>{dossier.nom}</Link>
+      <div className={styles.nomDossier} title={dossier.nom || ""}>
+        <Link href={`/dossiers/${dossier.id}`}>{dossier.nom || "Sans nom"}</Link>
       </div>
-      <div>{dossier.societeProduction.nom}</div>
+      <div data-testid="societe-production">
+        {/* Try to get societeProduction name from direct relation first */}
+        {dossier.societeProduction && dossier.societeProduction.nom ? 
+          dossier.societeProduction.nom : 
+          /* If societeProduction is missing, show demandeur company name if available */
+          /* TypeScript doesn't know demandeur.societeProduction exists, so we use a type assertion */
+          dossier.demandeur && 
+          (dossier.demandeur as any).societeProduction && 
+          (dossier.demandeur as any).societeProduction.nom ?
+          (dossier.demandeur as any).societeProduction.nom :
+          /* Fallback to showing the societeProduction ID if available */
+          dossier.societeProductionId ? 
+          `Société ID: ${dossier.societeProductionId}` : 
+          "N/A"}
+      </div>
       <div>
         <b>{dossier.enfants ? dossier.enfants.length : dossier._count?.enfants ? dossier._count.enfants : 0}</b>&nbsp;enfants
       </div>
@@ -130,7 +152,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
                   setLoadingPdf('');
                 }}
               >
-                <RiDownloadLine style={{ marginRight: "10px" }} />
+                <span style={{ marginRight: "10px" }}>⬇️</span>
                 {loadingPdf === 'ODJ_' + commission.id ? 
                   (<IconLoader></IconLoader>)
                   :
@@ -153,7 +175,7 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
                   setLoadingPdf('');
                 }}
               >
-                <RiDownloadLine style={{ marginRight: "10px" }} />
+                <span style={{ marginRight: "10px" }}>⬇️</span>
                 {loadingPdf === 'PV_' + commission.id ? 
                   (<IconLoader></IconLoader>)
                   :

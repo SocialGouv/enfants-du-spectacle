@@ -34,8 +34,8 @@ const get: NextApiHandler = async (req, res) => {
     });
 
     if (
-      dossierConcerned?.userId === session?.dbUser.id ||
-      dossierConcerned?.collaboratorIds.includes(session?.dbUser.id)
+      dossierConcerned?.creatorId === session?.dbUser?.id ||
+      (session?.dbUser?.id && dossierConcerned?.collaboratorIds.includes(session.dbUser.id))
     ) {
       const enfantsByDossier = await client.enfant.findMany({
         take: req.query.numberByPage ? Number(req.query.numberByPage) : 25,
@@ -43,7 +43,7 @@ const get: NextApiHandler = async (req, res) => {
         include: {
           piecesDossier: true,
           remuneration: true,
-          Comments: true,
+          comments: true,
         },
         where: {
           dossierId: dossierId,

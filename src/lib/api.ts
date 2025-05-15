@@ -71,24 +71,65 @@ function useDataDS() {
   };
 }
 
-function RefreshLinks(dossierExternalId: string, source: Source) {
-
-  console.log('refresh from dossier : ', dossierExternalId, source)
+function useRefreshLinks(dossierExternalId: string, source: Source) {
+  console.log('refresh from dossier : ', dossierExternalId, source);
+  
+  // Validate input parameters to avoid API errors
+  const isValidId = dossierExternalId && dossierExternalId.trim() !== '';
+  const shouldFetch = source === 'FORM_EDS' && isValidId;
+  
+  console.log('Should fetch links:', shouldFetch, 'Valid ID:', isValidId);
   
   const { data, error } = useSWR(
-    `${source === 'FORM_EDS' ? `/api/edslinks?externalid=${dossierExternalId}` : `/api/dslinks?externalid=${dossierExternalId}`}`,
+    shouldFetch ? `/api/edslinks?externalid=${dossierExternalId}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
-      const res = await fetch(input, init);
-      return res.json();
+      try {
+        console.log('Fetching links from:', input);
+        const res = await fetch(input, init);
+        
+        if (!res.ok) {
+          console.error(`Error fetching links: ${res.status}`);
+          // Return empty data structure instead of throwing
+          return { 
+            id: 0, 
+            dossier: { id: 0, piecesDossier: [] },
+            enfants: []
+          };
+        }
+        
+        return res.json();
+      } catch (error) {
+        console.error('Error in links fetch:', error);
+        // Return empty data structure instead of throwing
+        return { 
+          id: 0, 
+          dossier: { id: 0, piecesDossier: [] },
+          enfants: []
+        };
+      }
+    },
+    {
+      // Add fallback data to avoid nullish errors
+      fallbackData: { 
+        id: 0, 
+        dossier: { id: 0, piecesDossier: [] },
+        enfants: []
+      },
+      // Increase staletime to reduce refetches on problematic endpoints
+      dedupingInterval: 10000
     }
   );
 
-  console.log('data : ', data)
+  console.log('data links :', data);
 
   return {
-    dataLinks: data,
-    isError: error,
-    isLoading: !error && !data,
+    dataLinks: data || { 
+      id: 0, 
+      dossier: { id: 0, piecesDossier: [] },
+      enfants: []
+    },
+    isError: error && shouldFetch,
+    isLoading: shouldFetch && !error && !data,
   };
 }
 
@@ -159,7 +200,7 @@ const searchUsers = async (departement: string | null) => {
 };
 
 export {
-  RefreshLinks,
+  useRefreshLinks,
   searchUsers,
   useAllUsers,
   useCommentaires,

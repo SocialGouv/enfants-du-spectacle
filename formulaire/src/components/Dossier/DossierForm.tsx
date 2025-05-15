@@ -45,9 +45,24 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     updateDossier(contextDossier.dossier);
   }, 1000);
 
-  const saveDemandeur = useDebouncedCallback(() => {
-    console.log("saving demandeur ... : ", contextDossier.demandeur);
-    updateDemandeur(contextDossier.demandeur);
+  const saveDemandeur = useDebouncedCallback(async () => {
+    try {
+      console.log("saving demandeur ... : ", contextDossier.demandeur);
+      // Validate demandeur has required fields for update
+      if (!contextDossier.demandeur || !contextDossier.demandeur.id) {
+        console.error("Cannot update demandeur: missing ID");
+        return;
+      }
+      
+      await updateDemandeur(contextDossier.demandeur);
+      // Clear any previous error
+      if (messageError && messageError.includes("demandeur")) {
+        setMessageError("");
+      }
+    } catch (error) {
+      console.error("Error saving demandeur:", error);
+      setMessageError(`Erreur lors de la sauvegarde du demandeur: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }, 1000);
 
   React.useEffect(() => {
@@ -226,10 +241,10 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
 
   React.useEffect(() => {
     contextDossier.processEntity("dossier", dossier);
-    contextDossier.processEntity("demandeur", dossier.Demandeur);
+    contextDossier.processEntity("demandeur", dossier.demandeur ?? {});
     contextDossier.processEntity(
       "societeProduction",
-      dossier.Demandeur.societeProduction ?? {}
+      dossier.demandeur?.societeProduction ?? {}
     );
     contextDossier.processEntity("enfants", dossier.enfants);
     contextDossier.processEntity("docs", docs);
@@ -287,7 +302,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         </div>
         <div className={styles.infoText}>
           <p>
-            Les champs suivis d’un astérisque ( * ) sont obligatoires. Votre
+            Les champs suivis d'un astérisque ( * ) sont obligatoires. Votre
             dossier est enregistré automatiquement après chaque modification.
             Vous pouvez à tout moment fermer la fenêtre et reprendre plus tard
             là où vous en étiez.
@@ -340,28 +355,38 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
           dossier.statut === "CONSTRUCTION") && (
           <div className={styles.saveBar}>
             <div className={styles.textSaveBar}>
-              <p>
-                Votre dossier est automatiquement enregistré sur votre
-                interface. <br />
-                Le bouton “Déposer” vous permet de transmettre votre dossier aux
-                services d’instruction de la DRIEETS avant la date limite de
-                dépôt et de transmettre toutes les mises à jour que vous seriez
-                amené à faire par la suite. <br />
-                Merci de cliquer sur “Déposer” dès lors que vous souhaitez
-                transmettre des mises à jour de votre dossier aux services
-                d’instruction.
-              </p>
+              {dossier.statut === "BROUILLON" ? (
+                <p>
+                  Votre dossier est automatiquement enregistré sur votre
+                  interface. <br />
+                  Le bouton "Déposer" vous permet de transmettre votre dossier aux
+                  services d'instruction de la DRIEETS avant la date limite de
+                  dépôt et de transmettre toutes les mises à jour que vous seriez
+                  amené à faire par la suite.
+                </p>
+              ) : (
+                <p>
+                  Votre dossier a été transmis aux services d'instruction. <br />
+                  Vos modifications sont automatiquement enregistrées et 
+                  transmises aux services d'instruction. <br />
+                  {dossier.commissionString && (
+                    <span>Votre dossier est associé à la {dossier.commissionString}.</span>
+                  )}
+                </p>
+              )}
             </div>
-            <div className={styles.buttonSaveBar}>
-              <ButtonLink
-                href={`#menu-dossier`}
-                onClick={async () => {
-                  handleDepotDossier();
-                }}
-              >
-                Déposer
-              </ButtonLink>
-            </div>
+            {dossier.statut === "BROUILLON" && (
+              <div className={styles.buttonSaveBar}>
+                <ButtonLink
+                  href={`#menu-dossier`}
+                  onClick={async () => {
+                    handleDepotDossier();
+                  }}
+                >
+                  Déposer
+                </ButtonLink>
+              </div>
+            )}
           </div>
         )}
       </div>

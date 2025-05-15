@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import styles from "./Foldable.module.scss";
 
 interface Props {
-  onlyOnce: boolean;
-  hidden: boolean;
-  text: string;
+  onlyOnce?: boolean;
+  hidden?: boolean;
+  text?: string;
+  children: React.ReactNode;
 }
 
 const Foldable: React.FC<Props> = ({ children, onlyOnce, hidden, text }) => {

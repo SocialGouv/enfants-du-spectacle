@@ -1,6 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import prisma from "../../../../../lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -19,40 +20,66 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const postComment: NextApiHandler = async (req, res) => {
-  const url = `${process.env.API_URL_SDP}/inc/commentaires`;
-  const fetching = await fetch(url, {
-    body: JSON.stringify({
-      comment: JSON.parse(req.body),
-      api_key: process.env.API_KEY_SDP,
-    }),
-    method: "POST",
-  }).then(async (r) => {
-    if (!r.ok) {
-      console.log("r : ", r.status);
-      res.status(500).json({ error: `Something went wrong : ${r.status}` });
+  try {
+    const commentData = JSON.parse(req.body);
+    
+    // If dossierId is actually an externalId, find the internal dossier ID
+    if (commentData.dossierId && typeof commentData.dossierId === 'string') {
+      const dossier = await prisma.dossier.findUnique({
+        where: {
+          externalId: commentData.dossierId.toString()
+        }
+      });
+      
+      if (!dossier) {
+        return res.status(404).json({ error: "Dossier not found" });
+      }
+      
+      // Use the internal dossier ID for the comment
+      commentData.dossierId = dossier.id;
     }
-    return r.json();
-  });
-  res.status(200).json(fetching);
+    
+    // Create the comment
+    const comment = await prisma.comments.create({
+      data: commentData
+    });
+    
+    res.status(200).json(comment);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ error: "Failed to create comment" });
+  }
 };
 
 const getComments: NextApiHandler = async (req, res) => {
-  const dossierId = req.query.externalId as string;
+  try {
+    const externalId = req.query.externalId as string;
+    console.log("Fetching comments for dossier with externalId:", externalId);
+    
+    // First find the dossier by its externalId
+    const dossier = await prisma.dossier.findUnique({
+      where: {
+        externalId: externalId,
+      }
+    });
 
-  console.log("id to get from : ", dossierId);
-
-  const url = `${process.env.API_URL_SDP}/inc/commentaires`;
-  const fetching = await fetch(url, {
-    body: JSON.stringify({ id: dossierId, api_key: process.env.API_KEY_SDP }),
-    method: "PUT",
-  }).then(async (r) => {
-    if (!r.ok) {
-      console.log("r : ", r.status);
-      res.status(500).json({ error: `Something went wrong : ${r.status}` });
+    if (!dossier) {
+      console.log("Dossier not found with externalId:", externalId);
+      return res.status(404).json({ error: "Dossier not found" });
     }
-    return r.json();
-  });
-  res.status(200).json(fetching);
+
+    // Then find comments by the dossier's actual ID
+    const comments = await prisma.comments.findMany({
+      where: {
+        dossierId: dossier.id,
+      }
+    });
+    
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
 };
 
 export default withSentry(handler);

@@ -28,7 +28,7 @@ const get: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
   let nom = req.query.nom as string;
   let prenom = req.query.prenom as string;
-  let userId = session?.dbUser.id;
+  let populatedByUserId = session?.dbUser?.id;
   try {
     const enfants = await prisma.enfant.findMany({
       take: 5,
@@ -50,7 +50,7 @@ const get: NextApiHandler = async (req, res) => {
               mode: "insensitive",
             },
           },
-          { userId: userId },
+          { populatedByUserId: populatedByUserId },
         ],
       },
     });
@@ -63,7 +63,7 @@ const get: NextApiHandler = async (req, res) => {
 const post: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
   let data = JSON.parse(req.body) as Enfant;
-  data.userId = session?.dbUser.id;
+  data.populatedByUserId = session?.dbUser?.id || null;
   try {
     const enfant = await prisma.enfant.create({ data });
     res.status(200).json(enfant);
@@ -109,12 +109,53 @@ const update: NextApiHandler = async (req, res) => {
     });
   }
 
-  delete parsed.piecesDossier;
-  delete parsed.remuneration;
-  delete parsed.Comments;
+  // Create a clean data object without relation fields
+  const enfantData = {
+    id: parsed.id,
+    nom: parsed.nom,
+    prenom: parsed.prenom,
+    dateNaissance: parsed.dateNaissance,
+    typeEmploi: parsed.typeEmploi,
+    nomPersonnage: parsed.nomPersonnage,
+    periodeTravail: parsed.periodeTravail,
+    nombreJours: parsed.nombreJours,
+    contexteTravail: parsed.contexteTravail,
+    montantCachet: parsed.montantCachet,
+    nombreCachets: parsed.nombreCachets,
+    nombreLignes: parsed.nombreLignes,
+    remunerationsAdditionnelles: parsed.remunerationsAdditionnelles,
+    remunerationTotale: parsed.remunerationTotale,
+    dossierId: parsed.dossierId,
+    cdc: parsed.cdc,
+    adresseEnfant: parsed.adresseEnfant,
+    nomRepresentant1: parsed.nomRepresentant1,
+    prenomRepresentant1: parsed.prenomRepresentant1,
+    adresseRepresentant1: parsed.adresseRepresentant1,
+    telRepresentant1: parsed.telRepresentant1,
+    mailRepresentant1: parsed.mailRepresentant1,
+    adresseRepresentant2: parsed.adresseRepresentant2,
+    nomRepresentant2: parsed.nomRepresentant2,
+    prenomRepresentant2: parsed.prenomRepresentant2,
+    telRepresentant2: parsed.telRepresentant2,
+    mailRepresentant2: parsed.mailRepresentant2,
+    externalId: parsed.externalId,
+    typeConsultation: parsed.typeConsultation,
+    typeConsultationMedecin: parsed.typeConsultationMedecin,
+    dateConsultation: parsed.dateConsultation,
+    dateDerniereModification: parsed.dateDerniereModification,
+    populatedByUserId: parsed.populatedByUserId,
+    checkTravailNuit: parsed.checkTravailNuit,
+    textTravailNuit: parsed.textTravailNuit,
+    livret: parsed.livret,
+    autorisation: parsed.autorisation,
+    situation: parsed.situation,
+    contrat: parsed.contrat,
+    certificat: parsed.certificat,
+    avis: parsed.avis,
+  };
 
   const enfantUpdated = await prisma.enfant.update({
-    data: parsed as Enfant,
+    data: enfantData,
     where: { id: parsed.id },
   });
 

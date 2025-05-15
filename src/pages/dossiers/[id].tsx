@@ -5,7 +5,7 @@ import { FaHome } from "react-icons/fa";
 import Dossier from "src/components/Dossier";
 import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
-import { RefreshLinks, useDossier } from "src/lib/api";
+import { useRefreshLinks, useDossier } from "src/lib/api";
 import { updateDossier } from "src/lib/queries";
 import { useSWRConfig } from "swr";
 
@@ -16,16 +16,25 @@ const Page: React.FC = () => {
   const dossierId =
     typeof router.query.id == "string" ? Number(router.query.id) : null;
   const { dossier, ...swrDossier } = useDossier(dossierId);
-  console.log("dossier : ", dossier);
-  const { ...swrLinks } = RefreshLinks(
-    dossier?.number?.toString() ?? dossier?.externalId!,
-    dossier?.source!
-  );
 
-  const isLoading = swrDossier.isLoading || swrLinks.isLoading;
+  // Safe extraction of identifier for links
+  const dossierId1 = dossier?.number ? dossier.number.toString() : undefined;
+  const dossierId2 = dossier?.externalId ?? undefined;
+  const dossierIdentifier = dossierId1 || dossierId2 || "";
+  const source = dossier?.source || "FORM_DS";
+  
+  const { ...swrLinks } = useRefreshLinks(dossierIdentifier, source);
+
+  // Check loading states and prevent rendering with incomplete data
+  const isLoading = swrDossier.isLoading || (dossier?.source === "FORM_EDS" && swrLinks.isLoading);
+  
+  // Prevent displaying an error for DS dossiers due to missing links
   const isError =
     !isLoading &&
-    (swrDossier.isError || !dossierId || !dossier || swrLinks.isError);
+    (swrDossier.isError || 
+     !dossierId || 
+     !dossier || 
+     (dossier.source === "FORM_EDS" && swrLinks.isError));
 
   if (dossier && dossier.statusNotification !== null) {
     const statusNotification = null;

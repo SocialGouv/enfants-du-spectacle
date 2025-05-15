@@ -74,6 +74,12 @@ const getUpcomingCommissions = async () => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
+          societeProduction: true,
+          demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
         },
         orderBy: { id: "desc" },
       },
@@ -110,9 +116,13 @@ const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
             } 
           },
           societeProduction: true,
-          user: true,
+          instructeur: true,
           medecin: true,
-          demandeur: true,
+          demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
           enfants: {
             where: session?.dbUser.role !== "MEDECIN" ?
             {}
@@ -157,9 +167,13 @@ const getUpcomingCommissionsByDepartement = async (departements: string) => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
-          demandeur: true,
+          demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
           societeProduction: true,
-          user: true,
+          instructeur: true,
         },
         orderBy: { id: "desc" },
       },
@@ -182,6 +196,12 @@ const getPastCommissions = async () => {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
+          societeProduction: true,
+          demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
         },
       },
     },

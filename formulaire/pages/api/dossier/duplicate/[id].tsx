@@ -27,8 +27,13 @@ const create: NextApiHandler = async (req, res) => {
   const dossier: Dossier = JSON.parse(req.body);
   const session = await getServerSession(req, res, authOptions);
 
+  if (!session?.user?.id) {
+    res.status(401).json({ error: "User ID is required" });
+    return;
+  }
+
   const data = {
-    userId: session?.dbUser.id,
+    creatorId: session.user.id,
     dateDerniereModification: new Date(),
     demandeurId: dossier.demandeurId,
     nom: dossier.nom ? "Copie de " + dossier.nom : "",

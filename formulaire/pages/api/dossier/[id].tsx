@@ -67,14 +67,14 @@ const get: NextApiHandler = async (req, res) => {
     const dossierId = getId(req);
     const dossier = await client.dossier.findUnique({
       include: {
-        user: true,
+        creator: true,
         enfants: {
           include: {
             piecesDossier: true,
             remuneration: true,
           },
         },
-        Demandeur: {
+        demandeur: {
           include: {
             societeProduction: true,
           },
@@ -83,9 +83,14 @@ const get: NextApiHandler = async (req, res) => {
       },
       where: { id: dossierId },
     });
+    if (!session?.user?.id) {
+      res.status(401).json({ error: "User ID is required" });
+      return;
+    }
+
     if (
-      dossier?.userId === session?.dbUser.id ||
-      dossier?.collaboratorIds.includes(session?.dbUser.id)
+      dossier?.creatorId === session.user.id ||
+      (dossier?.collaboratorIds && dossier.collaboratorIds.includes(session.user.id))
     ) {
       res.status(200).json({
         dossier: dossier,

@@ -62,6 +62,24 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
   const [senderComment, setSenderComment] = React.useState<string>("");
   const [remunerations, setRemunerations] = React.useState<Remuneration[]>([]);
+  const [comments, setComments] = React.useState<Comments[]>([]);
+  const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
+
+  // Function to fetch societeProduction directly
+  const fetchSocieteProduction = async (id: number) => {
+    try {
+      const response = await fetch(`/api/societe-production/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFetchedSocieteProduction(data);
+        console.log("Successfully fetched societeProduction:", data);
+      } else {
+        console.error("Failed to fetch societeProduction", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching societeProduction:", error);
+    }
+  };
 
   const fetchUser = async () => {
     if (session) {
@@ -74,20 +92,49 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
 
   const fetchRemunerations = async () => {
-    const enfantIds = dossier?.enfants.map((enfant) => enfant.externalId);
-    if (enfantIds && enfantIds.length > 0 && dossier?.source === "FORM_EDS") {
-      const resRemuneration = await getRemunerationsByEnfantsIds(
-        enfantIds as string[]
-      );
+    try {
+      if (!dossier) {
+        return;
+      }
+      
+      if (!dossier.enfants || dossier.enfants.length === 0) {
+        return;
+      }
+      
+      if (dossier.source !== "FORM_EDS") {
+        return;
+      }
+      
+      const enfantIds = dossier.enfants.map((enfant) => enfant.externalId);
+      
+      if (!enfantIds || enfantIds.length === 0) {
+        return;
+      }
+      
+      const resRemuneration = await getRemunerationsByEnfantsIds(enfantIds);
       setRemunerations(resRemuneration);
+    } catch (error) {
+      console.error("Error fetching remunerations:", error);
+      // Set empty remunerations to avoid UI errors
+      setRemunerations([]);
     }
   };
 
-  const [comments, setComments] = React.useState<Comments[]>([]);
   const fetchComments = async () => {
-    if (dossier?.source === "FORM_EDS") {
-      const res = await getCommentsByDossier(dossier.externalId!);
-      setComments(res);
+    try {
+      // For any dossier source, get comments directly from database
+      if (dossier?.id) {
+        // Only fetch dossier-level comments (where enfantId is null)
+        const response = await fetch(`/api/dossier-comments/${dossier.id}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching comments: ${response.status}`);
+        }
+        const commentsData = await response.json();
+        setComments(commentsData);
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      setComments([]); // Set empty comments to avoid UI errors
     }
   };
 
@@ -127,21 +174,32 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   };
 
   React.useEffect(() => {
-    fetchComments();
-    fetchRemunerations();
-  }, []);
+    try {
+      fetchComments();
+      fetchRemunerations();
+    } catch (error) {
+      console.error("Error in initial data fetch:", error);
+    }
+  }, [dossier?.id]);
 
   React.useEffect(() => {
     fetchUser();
   }, []);
 
-  React.useEffect(() => {
-    console.log("comments : ", comments);
-  }, comments);
 
+  // Call fetchSocieteProduction when showCompanySection changes to true
   React.useEffect(() => {
-    console.log("remunerations : ", remunerations);
-  }, remunerations);
+    if (showCompanySection) {
+      // Try to fetch using dossier.societeProductionId first
+      if (dossier?.societeProductionId) {
+        fetchSocieteProduction(dossier.societeProductionId);
+      } 
+      // If that doesn't exist, try using demandeur.societeProductionId as a fallback
+      else if (dossier?.demandeur?.societeProductionId) {
+        fetchSocieteProduction(dossier.demandeur.societeProductionId);
+      }
+    }
+  }, [showCompanySection, dossier?.societeProductionId, dossier?.demandeur?.societeProductionId]);
 
   React.useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -190,11 +248,11 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 </Foldable>
               </Info>
-              <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
-                {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
-                {dossier.scenesSensibles.length > 0 &&
-                  dossier.scenesSensibles.join(", ")}
-              </Info>
+            <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
+              {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
+              {dossier.scenesSensibles.length > 0 &&
+                dossier.scenesSensibles.filter(scene => scene !== null).join(", ")}
+            </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES">
               {dossier.source === "FORM_EDS" && (
@@ -238,10 +296,10 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 )}
               </div>
-              {dossier.source === "FORM_EDS" && showCommentSection && (
+              {showCommentSection && (
                 <>
                   <InputComments
-                    dossierId={parseInt(dossier.externalId!)}
+                    dossierId={dossier.id}
                     sender={senderComment}
                     enfantId={null}
                     parentId={null}
@@ -254,12 +312,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 </>
               )}
-              {dossier.source !== "FORM_EDS" && showCommentSection && (
-                <span>
-                  Les commentaires ne sont pas disponibles pour les dossiers
-                  déposés sur Démarches Simplifiées.
-                </span>
-              )}
+              {/* Allow comments for all dossier sources */}
             </div>
             <div className={`${styles.bottomItemFoldable}`}>
               <div className={styles.flexRow}>
@@ -284,9 +337,30 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               </div>
               {showCompanySection && (
                 <div className={styles.societeSummaryBloc}>
+                  {/* Create a mock societeProduction if it doesn't exist */}
                   <Info title="SOCIETE">
                     <InfoSociete
-                      societeProduction={dossier.societeProduction}
+                      societeProduction={
+                        // Try to use fetchedSocieteProduction first, then fall back to other options
+                        fetchedSocieteProduction || 
+                        dossier.societeProduction || 
+                        dossier.demandeur?.societeProduction || 
+                        {
+                          id: 0,
+                          nom: "Société de production",
+                          siret: "N/A",
+                          siren: "N/A",
+                          departement: "N/A",
+                          naf: "N/A",
+                          raisonSociale: "Information non disponible",
+                          adresse: "Adresse non disponible",
+                          adresseCodePostal: "N/A",
+                          adresseCodeCommune: "N/A",
+                          formeJuridique: "Information non disponible",
+                          conventionCollectiveCode: "N/A",
+                          otherConventionCollective: null
+                        }
+                      }
                       conventionCollectiveCode={
                         dossier.conventionCollectiveCode
                       }
@@ -425,12 +499,12 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               countCommentsNotification={
                                 countCommentsNotification
                               }
-                              piecesJustif={dataLinks.enfants
-                                .find(
-                                  (data) =>
-                                    data.id === parseInt(enf.externalId ?? "")
-                                )
-                                ?.piecesDossier.map((tmp) => tmp.statut)}
+                  piecesJustif={dataLinks?.enfants
+                    ?.find(
+                      (data) =>
+                        data.id === parseInt(enf.externalId ?? "")
+                    )
+                    ?.piecesDossier.map((tmp) => tmp.statut)?.filter(Boolean) as string[] | undefined}
                             />
                           )}
                         </td>
