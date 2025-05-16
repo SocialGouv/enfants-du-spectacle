@@ -4,6 +4,7 @@ import { getSession } from "next-auth/react";
 import formidable from "formidable";
 import FormData from "form-data";
 import fs from "fs";
+import prisma from "../../../../../lib/prismaClient";
 
 export const config = {
   api: {
@@ -29,57 +30,135 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const deleteDoc: NextApiHandler = async (req, res) => {
-  const docId = req.query.id;
-  const url = `${process.env.API_URL_SDP}/inc/docs?id=${docId}&token=${process.env.API_KEY_SDP}`;
-  const fetching = await fetch(url, {
-    method: "DELETE",
-  }).then(async (r) => {
-    if (!r.ok) {
-      throw Error(`got status ${r.status}`);
+  try {
+    const docId = req.query.id as string;
+    console.log("Deleting document with ID:", docId);
+    
+    // First check if this is a PieceDossier or PieceDossierEnfant
+    // Try to delete from PieceDossier first
+    let deleted = await prisma.pieceDossier.deleteMany({
+      where: {
+        id: parseInt(docId),
+      },
+    });
+    
+    // If nothing was deleted, try PieceDossierEnfant
+    if (deleted.count === 0) {
+      deleted = await prisma.pieceDossierEnfant.deleteMany({
+        where: {
+          id: parseInt(docId),
+        },
+      });
     }
-    return r.json();
-  });
-  res.status(200).json(fetching);
+    
+    console.log(`Deleted ${deleted.count} document(s)`);
+    
+    // The physical file might still exist, but we've at least removed the database record
+    res.status(200).json({ success: true, deleted: deleted.count });
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    res.status(500).json({ error: "Failed to delete document" });
+  }
 };
 
 const sendDoc: NextApiHandler = async (req, res) => {
   const options: formidable.Options = {};
 
-  const data = await new Promise((resolve, reject) => {
-    const form = formidable(options);
-
-    form.parse(req, (err, fields, files) => {
-      if (err) reject({ err });
-      resolve({ err, fields, files });
-    });
-  });
-
-  console.log("data : ", data);
-
   try {
-    const fileData = new FormData();
-    fileData.append(
-      "justificatif",
-      fs.createReadStream(data.files.justificatif.filepath),
-      data.files.justificatif.originalFilename
-    );
-
-    console.log("fileData : ", fileData);
-
-    const url = `${process.env.API_URL_SDP}/inc/upload?id=${req.query.dossierId}&api_key=${process.env.API_KEY_SDP}&typeJustif=${req.query.typeJustif}&enfantId=${req.query.enfantId}`;
-    const fetching = await fetch(url, {
-      body: fileData,
-      method: "POST",
-    }).then(async (r) => {
-      if (!r.ok) {
-        res.status(500).json({ error: `Something went wrong : ${r.status}` });
-      }
-      return r.json();
+    // Define the return type for formidable
+    interface FormidableResult {
+      err: Error | null;
+      fields: formidable.Fields;
+      files: formidable.Files;
+    }
+    
+    const data = await new Promise<FormidableResult>((resolve, reject) => {
+      const form = formidable(options);
+  
+      form.parse(req, (err, fields, files) => {
+        if (err) reject({ err });
+        resolve({ err, fields, files } as FormidableResult);
+      });
     });
-    console.log("fetching : ", fetching);
-    res.status(200).json({ message: "ok" });
-  } catch (e) {
-    console.log(e);
+  
+    console.log("Received document upload data:", data);
+    
+    const dossierId = req.query.dossierId as string;
+    const typeJustif = req.query.typeJustif as string;
+    const enfantId = req.query.enfantId as string;
+    
+    // Find the dossier first to ensure it exists
+    const dossier = await prisma.dossier.findUnique({
+      where: {
+        externalId: dossierId,
+      },
+    });
+    
+    if (!dossier) {
+      return res.status(404).json({ error: "Dossier not found" });
+    }
+    
+    // Process file - in a real implementation, you would upload to a storage service
+    // and get back a URL. For now, we'll simulate this by creating a placeholder URL
+    // Safely access file properties with type assertions
+    const justificatifFile = data.files.justificatif as formidable.File;
+    const fileName = justificatifFile.originalFilename || 'unnamed-file';
+    const filePath = justificatifFile.filepath;
+    
+    // TODO: Implement file storage logic - for now, we'll use a placeholder
+    const fileUrl = `/uploads/${dossierId}/${enfantId || 'dossier'}/${fileName}`;
+    
+    // Create the appropriate record in the database
+    if (enfantId && enfantId !== 'null') {
+      // This is a document for an enfant
+      const enfant = await prisma.enfant.findFirst({
+        where: {
+          externalId: enfantId,
+        },
+      });
+      
+      if (!enfant) {
+        return res.status(404).json({ error: "Enfant not found" });
+      }
+      
+      // Create the piece for the enfant
+      const piece = await prisma.pieceDossierEnfant.create({
+        data: {
+          type: typeJustif as any, // Cast to the enum type
+          link: fileUrl,
+          enfantId: enfant.id,
+          dossierId: dossier.id,
+          nom: fileName,
+        },
+      });
+      
+      console.log("Created PieceDossierEnfant:", piece);
+      
+      res.status(200).json({ 
+        message: "ok",
+        piece: piece
+      });
+    } else {
+      // This is a document for the dossier
+      const piece = await prisma.pieceDossier.create({
+        data: {
+          type: typeJustif as any, // Cast to the enum type
+          link: fileUrl,
+          dossierId: dossier.id,
+          nom: fileName,
+        },
+      });
+      
+      console.log("Created PieceDossier:", piece);
+      
+      res.status(200).json({ 
+        message: "ok",
+        piece: piece
+      });
+    }
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    res.status(500).json({ error: "Failed to upload document" });
   }
 };
 

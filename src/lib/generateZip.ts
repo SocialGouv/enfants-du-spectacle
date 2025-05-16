@@ -55,11 +55,11 @@ export default (commission: CommissionData) => {
         `Statut: ${dossier.statut} \r\n
 Nom: ${dossier.nom} \r\n
 Catégorie: ${categorieToLabel(dossier.categorie)} \r\n
-Société de production: ${dossier.societeProduction.nom} \r\n
-Adresse société de production: ${dossier.societeProduction.adresse}, ${
-          dossier.societeProduction.adresseCodeCommune
+Société de production: ${dossier.societeProduction?.nom || "N/A"} \r\n
+Adresse société de production: ${dossier.societeProduction?.adresse || ""}, ${
+          dossier.societeProduction?.adresseCodeCommune || ""
         } \r\n
-Siret Société production : ${dossier.societeProduction.siret} \r\n
+Siret Société production : ${dossier.societeProduction?.siret || "N/A"} \r\n
 Convention collective: ${
           dossier.conventionCollectiveCode
         } (${getConventionLabel(

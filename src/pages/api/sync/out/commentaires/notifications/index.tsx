@@ -1,6 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
+import prisma from "../../../../../../lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -17,29 +18,40 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const updateComments: NextApiHandler = async (req, res) => {
-  const commentIds = Array.isArray(req.query.commentIds)
-    ? req.query.commentIds
-    : [req.query.commentIds];
-  console.log("comment Ids to get from : ", commentIds);
-
-  const url = `${process.env.API_URL_SDP}/inc/commentaires/notifications${
-    commentIds.length > 0 ? "?" : ""
-  }${commentIds.map((id, index) => {
-    return `${index !== 0 ? "&" : ""}commentIds=${id}`;
-  })}&token=${process.env.API_KEY_SDP}`
-    .split(",")
-    .join("");
-
-  const fetching = await fetch(url, {
-    method: "PUT",
-  }).then(async (r) => {
-    if (!r.ok) {
-      console.log("r : ", r.status);
-      res.status(500).json({ error: `Something went wrong : ${r.status}` });
+  try {
+    const commentIds = Array.isArray(req.query.commentIds)
+      ? req.query.commentIds
+      : [req.query.commentIds];
+    
+    if (!commentIds || commentIds.length === 0 || !commentIds[0]) {
+      return res.status(400).json({ error: "No comment IDs provided" });
     }
-    return r.json();
-  });
-  res.status(200).json(fetching);
+    
+    console.log("Updating comments with IDs:", commentIds);
+    
+    // Convert string IDs to numbers
+    const parsedCommentIds = commentIds.map(id => parseInt(id as string));
+    
+    // Update the comments to set seen = true
+    const updateResult = await prisma.comments.updateMany({
+      where: {
+        id: {
+          in: parsedCommentIds
+        }
+      },
+      data: {
+        seen: true
+      }
+    });
+    
+    res.status(200).json({ 
+      updated: updateResult.count, 
+      message: `${updateResult.count} comments marked as seen`
+    });
+  } catch (error) {
+    console.error("Error updating comments:", error);
+    res.status(500).json({ error: "Failed to update comments" });
+  }
 };
 
 export default withSentry(handler);

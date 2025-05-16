@@ -1,8 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { getDatasFromDS } from "src/lib/queries";
-import superjson from "superjson";
+import prisma from "../../../lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -20,21 +19,68 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const get: NextApiHandler = async (req, res) => {
-  const dossierExternalId = req.query.externalid;
+  try {
+    const externalId = req.query.externalid as string;
+    
+    console.log("Fetching document links for dossier with externalId:", externalId);
+    
+    // Find the dossier by its externalId
+    const dossier = await prisma.dossier.findUnique({
+      where: {
+        externalId: externalId,
+      },
+      include: {
+        piecesDossier: true, // Include the dossier's pieces
+        enfants: {
+          include: {
+            piecesDossier: true, // Include each enfant's pieces
+          }
+        }
+      }
+    });
 
-  console.log("fetching for : ", dossierExternalId);
-
-  const url = `${process.env.API_URL_SDP}/inc/docs?externalId=${dossierExternalId}&token=${process.env.API_KEY_SDP}`;
-  console.log("url : ", url);
-  const fetching = await fetch(url.split(",").join(""), {
-    method: "GET",
-  }).then(async (r) => {
-    if (!r.ok) {
-      res.status(500).json({ error: `Something went wrong : ${r.status}` });
+    if (!dossier) {
+      console.log("Dossier not found with externalId:", externalId);
+      return res.status(404).json({ error: "Dossier not found" });
     }
-    return r.json();
-  });
-  res.status(fetching.errors ? 500 : 200).json(fetching);
+
+    // Format response to match the expected DataLinks interface structure
+    const formattedResponse = {
+      id: parseInt(externalId),
+      dossier: {
+        id: dossier.id,
+        piecesDossier: dossier.piecesDossier.map(piece => ({
+          id: piece.id,
+          type: piece.type,
+          link: piece.link,
+          statut: piece.statut,
+          externalId: piece.externalId,
+          nom: piece.nom,
+          dossierId: piece.dossierId
+        }))
+      },
+      enfants: dossier.enfants.map(enfant => ({
+        id: enfant.id,
+        piecesDossier: enfant.piecesDossier.map(piece => ({
+          id: piece.id,
+          type: piece.type,
+          link: piece.link,
+          statut: piece.statut,
+          externalId: piece.externalId,
+          nom: piece.nom,
+          dossierId: piece.dossierId,
+          enfantId: piece.enfantId
+        }))
+      }))
+    };
+    
+    console.log("Successfully formatted response with document links");
+    
+    res.status(200).json(formattedResponse);
+  } catch (error) {
+    console.error("Error fetching document links:", error);
+    res.status(500).json({ error: "Failed to fetch document links" });
+  }
 };
 
 export default withSentry(handler);

@@ -61,8 +61,12 @@ type statusGroup = "futur" | "past";
 interface linkPiece {
   id: number;
   type: string;
-  statut: string;
-  link: string;
+  statut: string | null;
+  link: string | null;
+  externalId?: string | null;
+  nom?: string | null;
+  dossierId?: number | null;
+  enfantId?: number;
 }
 
 interface dossierlinks {
@@ -73,7 +77,11 @@ interface dossierlinks {
 interface DataLinks {
   id: number;
   dossier: dossierlinks;
-  enfants: dossierlinks[];
+  enfants: Array<{
+    id: number;
+    piecesDossier: linkPiece[];
+  }>;
+  [key: string]: unknown;
 }
 
 interface Remuneration {

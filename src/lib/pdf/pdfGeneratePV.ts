@@ -53,15 +53,15 @@ const generatePV = async (commission: CommissionData) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${dossier.societeProduction.nom} - ${
-              dossier.societeProduction.adresse
-            } ${dossier.societeProduction.adresseCodePostal} ${
-              dossier.societeProduction.adresseCodeCommune
-            } \nPROJET : ${dossier.nom} - du ${frenchDateText(
-              dossier.dateDebut
+            content: `\n\nSOCIETE : ${dossier.societeProduction?.nom || "N/A"} - ${
+              dossier.societeProduction?.adresse || ""
+            } ${dossier.societeProduction?.adresseCodePostal || ""} ${
+              dossier.societeProduction?.adresseCodeCommune || ""
+            } \nPROJET : ${dossier.nom || "Sans nom"} - du ${frenchDateText(
+              dossier.dateDebut || new Date()
             )} au ${frenchDateText(
-              dossier.dateFin
-            )} \nTYPE DE PROJET : ${categorieToLabel(dossier.categorie)} 
+              dossier.dateFin || new Date()
+            )} \nTYPE DE PROJET : ${categorieToLabel(dossier.categorie || "AUTRE")} 
               `,
             styles: {
               fontSize: 13,

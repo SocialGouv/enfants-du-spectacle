@@ -13,12 +13,23 @@ import styles from "src/components/Justificatifs.module.scss";
 import { JUSTIFS_DOSSIER } from "src/lib/helpers";
 import type { DataLinks } from "src/lib/types";
 
-interface JustificatifProps {
-  subject: Dossier | Enfant;
-  value: JustificatifDossier | JustificatifEnfant;
+// Create separate interfaces for dossier and enfant justificatifs
+interface BaseJustificatifProps {
   label: string;
-  link?: string[] | string;
+  link?: Array<string | null> | string | undefined;
 }
+
+interface JustificatifDossierProps extends BaseJustificatifProps {
+  subject: Dossier;
+  value: JustificatifDossier;
+}
+
+interface JustificatifEnfantProps extends BaseJustificatifProps {
+  subject: Enfant;
+  value: JustificatifEnfant;
+}
+
+type JustificatifProps = JustificatifDossierProps | JustificatifEnfantProps;
 
 const Justificatif: React.FC<JustificatifProps> = ({
   subject,
@@ -26,17 +37,28 @@ const Justificatif: React.FC<JustificatifProps> = ({
   label,
   link,
 }) => {
-  const isPresent = subject.justificatifs.includes(value);
+  // Use string comparison to avoid type issues
+  const isPresent = subject.justificatifs.some(item => String(item) === String(value));
 
   const url = isPresent && link;
-  const icon = isPresent ? (
-    <AiOutlineCheck color="green" style={{ marginRight: "11px" }} size={20} />
-  ) : (
-    <RxCross2 color="red" style={{ marginRight: "11px" }} size={20} />
+  
+  // Use simple emoji characters instead of React icons to avoid type issues
+  const iconElement = (
+    <span 
+      style={{ 
+        marginRight: "11px", 
+        color: isPresent ? "green" : "red",
+        fontSize: "18px",
+        fontWeight: "bold" 
+      }}
+    >
+      {isPresent ? "✓" : "✗"}
+    </span>
   );
+  
   return (
     <div style={{ marginBottom: "35px" }}>
-      {!Array.isArray(url) && icon}
+      {!Array.isArray(url) && iconElement}
       {!Array.isArray(url) && !isPresent && label}
       {isPresent && !Array.isArray(url) && (
         <a href={url ? url : "/"} target="_blank" rel="noreferrer">
@@ -47,7 +69,7 @@ const Justificatif: React.FC<JustificatifProps> = ({
         Array.isArray(url) &&
         url.map((urlLink, key) => (
           <div key={key} className={styles.blocLink}>
-            {icon}
+            {iconElement}
             {!urlLink && label}
             {urlLink && (
               <a href={urlLink} target="_blank" rel="noreferrer">
@@ -77,8 +99,8 @@ const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
 const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
   const justificatifs = [...JUSTIFICATIFS_DOSSIERS].sort(
     (a, b) =>
-      dossier.justificatifs.includes(b.value) -
-      dossier.justificatifs.includes(a.value)
+      (dossier.justificatifs.includes(b.value) ? 1 : 0) -
+      (dossier.justificatifs.includes(a.value) ? 1 : 0)
   );
   return (
     <ul className={styles.justificatifs}>
@@ -89,15 +111,13 @@ const JustificatifsDossier: React.FC<Props> = ({ dossier, dataLinks }) => {
               subject={dossier}
               value={value}
               label={label}
-              link={
-                dossier.source === "FORM_EDS"
-                  ? dataLinks.dossier.piecesDossier
-                      .filter((piece) => piece.type === value)
-                      .map((link) => link.link)
-                  : _.find(dataLinks.data.dossier.champs, {
-                      label: _.find(JUSTIFS_DOSSIER, { value: value }).label,
-                    })?.file?.url
-              }
+  link={
+    dossier.source === "FORM_EDS" && dataLinks?.dossier
+      ? dataLinks.dossier.piecesDossier
+          .filter((piece) => piece.type === value)
+          .map((link) => link.link)
+      : undefined
+  }
             />
           </li>
         );
@@ -121,18 +141,15 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
 
 const JustificatifsEnfants: React.FC<{
   enfant: Enfant & { piecesDossier: PieceDossierEnfant[] };
-  dataLinks: DataLinks;
+  dataLinks: DataLinks | null;
   dossier: Dossier;
 }> = ({ enfant, dataLinks, dossier }) => {
   const justificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
     (a, b) =>
-      enfant.justificatifs.includes(b.value) -
-      enfant.justificatifs.includes(a.value)
+      (enfant.justificatifs.includes(b.value) ? 1 : 0) -
+      (enfant.justificatifs.includes(a.value) ? 1 : 0)
   );
-  const champEnfant = _.get(
-    _.find(dataLinks.data?.dossier.champs, { label: "Enfant" }),
-    "champs"
-  );
+  
   return (
     <ul className={styles.justificatifs}>
       {justificatifs.map(({ label, value }) => {
@@ -143,25 +160,14 @@ const JustificatifsEnfants: React.FC<{
               value={value}
               label={label}
               link={
-                dossier.source === "FORM_EDS"
+                dossier.source === "FORM_EDS" && dataLinks
                   ? dataLinks.enfants
                       .find((enfantTmp) => {
                         return enfantTmp.id.toString() === enfant.externalId;
                       })
                       ?.piecesDossier.filter((piece) => piece.type === value)
                       .map((link) => link.link)
-                  : _.find(
-                      champEnfant,
-                      (
-                        champ: Record<string, Record<string, unknown> | null>
-                      ) => {
-                        return (
-                          champ.file?.checksum ===
-                          _.find(enfant.piecesDossier, { type: value })
-                            ?.externalId
-                        );
-                      }
-                    )?.file?.url
+                  : undefined
               }
             />
           </li>

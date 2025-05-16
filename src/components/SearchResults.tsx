@@ -38,14 +38,14 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
         <div className={styles.nom}>
           {enfant.nom} {enfant.prenom}
         </div>
-        {birthDateToFrenchAge(enfant.dateNaissance)}
+        {enfant.dateNaissance ? birthDateToFrenchAge(enfant.dateNaissance) : ""}
       </div>
       <div>
         <Link href={`/dossiers/${enfant.dossier.id}`}>
           {enfant.dossier.nom}
         </Link>
         <div className={styles.discret}>
-          {enfant.dossier.societeProduction.nom}
+          {enfant.dossier.societeProduction?.nom || "N/A"}
         </div>
       </div>
       <div>
@@ -78,7 +78,7 @@ const DossierRow: React.FC<DossierProps> = ({ dossier }) => {
       <div className={styles.nom}>
         <Link href={`/dossiers/${dossier.id}`}>{dossier.nom}</Link>
       </div>
-      <div>{dossier.societeProduction.nom}</div>
+      <div>{dossier.societeProduction?.nom || "N/A"}</div>
       <div>
         <b>{dossier._count?.enfants}</b>&nbsp;enfants
       </div>
@@ -105,16 +105,21 @@ const SearchResults: React.FC<Props> = ({
           <div className="enfantsContainer">
             {enfants
               .sort(function (a, b) {
-                if (a.nom < b.nom) {
+                const aNom = a.nom || "";
+                const bNom = b.nom || "";
+                const aPrenom = a.prenom || "";
+                const bPrenom = b.prenom || "";
+                
+                if (aNom < bNom) {
                   return -1;
                 }
-                if (a.nom > b.nom) {
+                if (aNom > bNom) {
                   return 1;
                 }
-                if (a.prenom < b.prenom) {
+                if (aPrenom < bPrenom) {
                   return -1;
                 }
-                if (a.prenom > b.prenom) {
+                if (aPrenom > bPrenom) {
                   return 1;
                 }
                 if (a.dossier.commission.date > b.dossier.commission.date) {

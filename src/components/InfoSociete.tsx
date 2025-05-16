@@ -7,25 +7,46 @@ import {
 } from "src/lib/conventionsCollectives";
 
 interface Props {
-  societeProduction: SocieteProduction;
+  societeProduction: SocieteProduction | null;
   conventionCollectiveCode: string | null;
   otherConventionCollective?: string | null;
 }
 
 const InfoSociete: React.FC<Props> = ({
-  societeProduction: {
-    nom,
-    raisonSociale,
-    formeJuridique,
-    adresse,
-    adresseCodeCommune,
-    siret,
-    naf,
-    siren,
-  },
+  societeProduction,
   conventionCollectiveCode,
   otherConventionCollective,
 }) => {
+  // Check for null societeProduction (should not happen anymore with the mock object)
+  if (!societeProduction) {
+    return <div>Aucune information sur la société de production</div>;
+  }
+
+  // Extract properties with safe defaults - double check for properties
+  const nom = societeProduction.nom !== undefined && societeProduction.nom !== null 
+    ? societeProduction.nom 
+    : 'Non spécifié';
+  const raisonSociale = societeProduction.raisonSociale !== undefined && societeProduction.raisonSociale !== null
+    ? societeProduction.raisonSociale
+    : 'Non spécifié';
+  const formeJuridique = societeProduction.formeJuridique !== undefined && societeProduction.formeJuridique !== null
+    ? societeProduction.formeJuridique
+    : 'Non spécifié';
+  const adresse = societeProduction.adresse !== undefined && societeProduction.adresse !== null
+    ? societeProduction.adresse
+    : 'Non spécifié';
+  const adresseCodeCommune = societeProduction.adresseCodeCommune !== undefined && societeProduction.adresseCodeCommune !== null
+    ? societeProduction.adresseCodeCommune
+    : 'Non spécifié';
+  const siret = societeProduction.siret !== undefined && societeProduction.siret !== null
+    ? societeProduction.siret
+    : 'Non spécifié';
+  const naf = societeProduction.naf !== undefined && societeProduction.naf !== null
+    ? societeProduction.naf
+    : 'Non spécifié';
+  const siren = societeProduction.siren !== undefined && societeProduction.siren !== null
+    ? societeProduction.siren
+    : 'Non spécifié';
   const conventionStr = `CCN ${conventionCollectiveCode} 
   (${
     conventionCollectiveCode !== "0000"

@@ -42,13 +42,13 @@ const get: NextApiHandler = async (req, res) => {
   try {
     const dossiers = await prisma.dossier.findMany({
       include: {
-        user: true,
+        creator: true,
         enfants: {
           include: {
             piecesDossier: true,
           },
         },
-        Demandeur: true,
+        demandeur: true,
         piecesDossier: true,
       },
       skip: page,
@@ -73,11 +73,11 @@ const get: NextApiHandler = async (req, res) => {
         OR: [
           {
             collaboratorIds: {
-              has: session?.dbUser.id,
+              has: session?.user?.id,
             },
           },
           {
-            userId: session?.dbUser.id,
+            creatorId: session?.user?.id,
           },
         ],
       },
@@ -104,11 +104,11 @@ const get: NextApiHandler = async (req, res) => {
         OR: [
           {
             collaboratorIds: {
-              has: session?.dbUser.id,
+              has: session?.user?.id,
             },
           },
           {
-            userId: session?.dbUser.id,
+            creatorId: session?.user?.id,
           },
         ],
       },
@@ -131,11 +131,11 @@ const get: NextApiHandler = async (req, res) => {
         OR: [
           {
             collaboratorIds: {
-              has: session?.dbUser.id,
+              has: session?.user?.id,
             },
           },
           {
-            userId: session?.dbUser.id,
+            creatorId: session?.user?.id,
           },
         ],
       },
@@ -158,11 +158,11 @@ const get: NextApiHandler = async (req, res) => {
         OR: [
           {
             collaboratorIds: {
-              has: session?.dbUser.id,
+              has: session?.user?.id,
             },
           },
           {
-            userId: session?.dbUser.id,
+            creatorId: session?.user?.id,
           },
         ],
       },
@@ -181,8 +181,13 @@ const get: NextApiHandler = async (req, res) => {
 const post: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
   const parsed: Dossier = JSON.parse(req.body);
+  if (!session?.user?.id) {
+    res.status(401).json({ error: "User ID is required" });
+    return;
+  }
+
   const data = {
-    userId: session?.dbUser.id,
+    creatorId: session.user.id,
     dateDerniereModification: new Date(),
     dateCreation: parsed.dateCreation,
     demandeurId: parsed.demandeurId,
@@ -208,14 +213,32 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  delete parsed.user;
-  delete parsed.enfants;
-  delete parsed.Demandeur;
-  delete parsed.piecesDossier;
-  parsed.dateDerniereModification = new Date();
+  // Create a clean data object without relations
+  const updateData = {
+    nom: parsed.nom,
+    statut: parsed.statut,
+    categorie: parsed.categorie,
+    collaboratorIds: parsed.collaboratorIds,
+    justificatifs: parsed.justificatifs,
+    scenesSensibles: parsed.scenesSensibles,
+    presentation: parsed.presentation,
+    dateDebut: parsed.dateDebut,
+    dateFin: parsed.dateFin,
+    number: parsed.number,
+    dateCreation: parsed.dateCreation,
+    cdc: parsed.cdc,
+    scenario: parsed.scenario,
+    securite: parsed.securite,
+    complementaire: parsed.complementaire,
+    dateDepot: parsed.dateDepot,
+    demandeurId: parsed.demandeurId,
+    commissionDate: parsed.commissionDate,
+    commissionString: parsed.commissionString,
+    dateDerniereModification: new Date()
+  };
 
   const produitupdated = await prisma.dossier.update({
-    data: parsed,
+    data: updateData,
     where: { id: parsed.id },
   });
   res.status(200).json(produitupdated);

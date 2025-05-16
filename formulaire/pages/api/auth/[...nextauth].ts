@@ -11,7 +11,10 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(client),
   callbacks: {
     session({ session, user }) {
-      session.dbUser = user;
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      session.dbUser = user; // Keep this for backward compatibility
       return session;
     },
     async signIn({ user }) {

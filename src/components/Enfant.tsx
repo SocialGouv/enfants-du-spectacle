@@ -296,17 +296,49 @@ const EnfantComponent: React.FC<Props> = ({
     setMountedRef(true);
   });
 
+  // State to store enfant-specific comments
+  const [enfantComments, setEnfantComments] = React.useState<Comments[]>([]);
+
+  // Fetch comments specific to this enfant
+  const fetchEnfantComments = async () => {
+    try {
+      if (dossier?.id) {
+        const response = await fetch(`/api/dossier-comments/${dossier.id}?enfantId=${enfant.id}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching enfant comments: ${response.status}`);
+        }
+        const commentsData = await response.json();
+        console.log("Fetched enfant comments:", commentsData);
+        setEnfantComments(commentsData);
+      }
+    } catch (error) {
+      console.error("Error fetching enfant comments:", error);
+      setEnfantComments([]);
+    }
+  };
+
+  // Process new comments from the input component
+  const processEnfantComment = (comment: Comments) => {
+    setEnfantComments([comment, ...enfantComments]);
+  };
+
+  // Mark comments as seen
   const updateComments = () => {
-    const commentsChildrenIds: string[] = comments
+    const commentsChildrenIds: string[] = enfantComments
       .filter(
         (comment) =>
-          comment.enfantId === parseInt(enfant.externalId!) &&
+          comment.enfantId === enfant.id &&
           comment.source === "SOCIETE_PROD"
       )
       .map((com) => JSON.stringify(com.id));
     if (commentsChildrenIds.length)
       updateCommentairesNotifications(commentsChildrenIds);
   };
+
+  // Fetch enfant comments when component mounts
+  React.useEffect(() => {
+    fetchEnfantComments();
+  }, [dossier?.id, enfant?.id]);
 
   const lauchUpdate = useCallback(
     _.debounce((enfantToUpdate: Enfant) => {
@@ -403,16 +435,14 @@ const EnfantComponent: React.FC<Props> = ({
         {dossier.source === "FORM_EDS" && (
           <>
             <InputComments
-              dossierId={parseInt(dossier.externalId!)}
-              enfantId={parseInt(enfant.externalId!)}
+              dossierId={dossier.id}
+              enfantId={enfant.id}
               sender={sender}
               parentId={null}
-              action={actionComments}
+              action={processEnfantComment}
             />
             <ListComments
-              comments={comments.filter((comment) => {
-                return comment.enfantId === parseInt(enfant.externalId!);
-              })}
+              comments={enfantComments}
             />
           </>
         )}
@@ -519,12 +549,11 @@ const EnfantComponent: React.FC<Props> = ({
                         )?.typeJustif as JustificatifEnfant
                       }`}
                       docs={
-                        (localDataLinks &&
-                          localDataLinks.enfants
-                            .find(
+                        (localDataLinks?.enfants
+                            ?.find(
                               (enf) => parseInt(enfant.externalId) === enf.id
                             )
-                            .piecesDossier.filter((piece) =>
+                            ?.piecesDossier.filter((piece) =>
                               [
                                 "AVIS_MEDICAL",
                                 "BON_PRISE_EN_CHARGE",
@@ -555,10 +584,9 @@ const EnfantComponent: React.FC<Props> = ({
                   <InputFile
                     id={"AVIS_MEDICAL"}
                     docs={
-                      (localDataLinks &&
-                        localDataLinks.enfants
-                          .find((enf) => parseInt(enfant.externalId) === enf.id)
-                          .piecesDossier.filter((piece) =>
+                      (localDataLinks?.enfants
+                          ?.find((enf) => parseInt(enfant.externalId) === enf.id)
+                          ?.piecesDossier.filter((piece) =>
                             [
                               "AVIS_MEDICAL",
                               "BON_PRISE_EN_CHARGE",

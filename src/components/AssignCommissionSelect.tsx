@@ -22,7 +22,7 @@ const AssignCommissionSelect: React.FC<Props> = ({ dossierId, commission }) => {
 
   const fetchCommissions = async () => {
     const res = await getUpcomingCommissionsByDepartement(
-      dossier?.societeProduction.departement ?? "75"
+      dossier?.societeProduction?.departement ?? "75"
     );
     setCommissions(res);
   };

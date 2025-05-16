@@ -51,8 +51,6 @@ function birthDateToFrenchAge(birthDate: Date | string): string {
   const parsedDate = birthDate instanceof Date 
     ? birthDate 
     : new Date(birthDate);
-
-  console.log("birthDate : ", parsedDate);
   
   const today = new Date();
   let age = today.getFullYear() - parsedDate.getFullYear();
@@ -68,7 +66,9 @@ function birthDateToFrenchAge(birthDate: Date | string): string {
 function uniqueById<Type extends { id: number }>(array: Type[]): Type[] {
   const map: Map<number, Type> = new Map();
   for (const item of array) {
-    map.set(item.id, item);
+    if (item && item.id !== undefined && item.id !== null) {
+      map.set(item.id, item);
+    }
   }
   return Array.from(map.values());
 }
@@ -87,14 +87,20 @@ type FilterDossierFn = (dossier: Dossier) => boolean;
 
 function filterDossierFn(filters: DossiersFilters): FilterDossierFn {
   return function (dossier: Dossier) {
+    // Handle the case where grandeCategorie is needed
+    let categorieMatch = true;
+    if (filters.grandeCategorie && dossier.categorie) {
+      categorieMatch = grandeCategorieToCategorieValues(filters.grandeCategorie).includes(dossier.categorie);
+    } else if (filters.grandeCategorie) {
+      // If filters.grandeCategorie exists but dossier.categorie is null
+      categorieMatch = false;
+    }
+    
     return (
-      (!filters.userId || dossier.userId == filters.userId) &&
+      (!filters.userId || dossier.creatorId == filters.userId) &&
       (!filters.societeProductionId ||
         dossier.societeProductionId == filters.societeProductionId) &&
-      (!filters.grandeCategorie ||
-        grandeCategorieToCategorieValues(filters.grandeCategorie).includes(
-          dossier.categorie
-        ))
+      categorieMatch
     );
   };
 }

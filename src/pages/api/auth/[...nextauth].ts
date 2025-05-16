@@ -1,4 +1,5 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { customPrismaAdapter } from "src/lib/customPrismaAdapter";
 import * as Sentry from "@sentry/nextjs";
 import NextAuth from "next-auth";
 import EmailAuthProvider from "next-auth/providers/email";
@@ -6,9 +7,10 @@ import { sendVerificationRequest } from "src/lib/emailAuth";
 import prisma from "src/lib/prismaClient";
 
 export default NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: customPrismaAdapter(prisma),
   callbacks: {
-    session({ session, user }) {
+    // Use type assertion to work around the type mismatch
+    session({ session, user }: { session: any; user: any }) {
       session.dbUser = user;
       return session;
     },

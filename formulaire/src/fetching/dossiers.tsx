@@ -20,7 +20,7 @@ type EnfantData = Enfant & {
 type DossierData = Dossier & {
   user: User;
   enfants: EnfantData[];
-  Demandeur: DemandeurData;
+  demandeur: DemandeurData;
   piecesDossier: PieceDossier[];
   societeProduction?: SocieteProduction;
 };

@@ -8,22 +8,28 @@ import styles from "./AssignedAgent.module.scss";
 
 interface Props {
   dossier: Dossier & { 
-    user?: User | null
+    instructeur?: User | null
     medecin?: User | null
    };
 }
 
 const AssignedAgent: React.FC<Props> = ({ dossier }) => {
   const session = useSession();
+  const role = session.data?.dbUser?.role;
+  const agentType = role !== "MEDECIN" ? 'instructeur' : 'medecin';
+  const agent = dossier[agentType];
+  
   return (
     <>
-      {!dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'] && session.data.dbUser.role !== "MEMBRE" && (
+      {!agent && role !== "MEMBRE" && (
         <span className={styles.na}>
           <AssignedAgentSelect dossierId={dossier.id} />
         </span>
       )}
-      {dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'] && (
-        <span className={styles.nomUser}>{shortUserName(dossier[session.data?.dbUser.role !== "MEDECIN" ? 'user' : 'medecin'])}</span>
+      {agent && (
+        <span className={styles.nomUser}>
+          {shortUserName(agent as User)}
+        </span>
       )}
     </>
   );

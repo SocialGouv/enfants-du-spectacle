@@ -27,21 +27,48 @@ function getId(req: NextApiRequest): number {
 
 const get: NextApiHandler = async (req, res) => {
   const id = getId(req);
-  const commission = await client.commission.findUnique({
+  // Query commission data with included relations
+  // TypeScript doesn't recognize all the fields, so we need to cast
+  const commission = await (client.commission.findUnique as any)({
     include: {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
-          demandeur: true,
+          demandeur: {
+            include: {
+              societeProduction: true
+            }
+          },
           enfants: true,
           societeProduction: true,
-          user: true,
+          instructeur: true, // Use instructeur instead of user
+          medecin: true,     // Include medecin as well
         },
         orderBy: { id: "desc" },
       },
     },
     where: { id },
   });
+
+  // Log the fetched commission data to help debug
+  if (commission) {
+    // Safely access the commission data using optional chaining
+    const dossierCount = commission?.dossiers?.length || 0;
+    console.log(`Commission ${id} fetched with ${dossierCount} dossiers`);
+    
+    // Count dossiers with societeProduction
+    let dossiersWithSocieteCount = 0;
+    if (commission.dossiers) {
+      for (const dossier of commission.dossiers) {
+        if (dossier.societeProduction) {
+          dossiersWithSocieteCount++;
+        }
+      }
+      console.log(`Found ${dossiersWithSocieteCount} dossiers with societeProduction data out of ${dossierCount} total`);
+    }
+  } else {
+    console.log(`Commission ${id} fetched but is null`);
+  }
 
   res.status(200).json(commission);
 };

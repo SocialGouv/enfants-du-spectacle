@@ -1,5 +1,5 @@
 import React from "react";
-import { Comments, createComment } from "src/lib/fetching/comments";
+import { Comments } from "src/lib/fetching/comments";
 import styles from "./InputComments.module.scss";
 import { ButtonLink } from "./uiComponents/button";
 
@@ -19,6 +19,51 @@ const InputComments: React.FC<Props> = ({
   sender,
 }) => {
   const [comment, setComment] = React.useState<string>("");
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+
+  const submitComment = async (commentText: string) => {
+    if (commentText.length <= 2 || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Create the comment data with all required fields
+      const commentData = {
+        text: commentText,
+        source: "INSTRUCTEUR",
+        enfantId: enfantId,
+        sender: sender || "Utilisateur",
+        date: new Date()
+      };
+      
+      console.log("Sending comment data:", commentData);
+      
+      const response = await fetch(`/api/dossier-comments/${dossierId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentData),
+      });
+      
+      // Get the response body for error details
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        console.error("Server response:", responseData);
+        throw new Error(`Error submitting comment: ${response.status} - ${responseData.details || responseData.error || 'Unknown error'}`);
+      }
+      
+      // If successful, update the UI
+      action(responseData);
+      setComment("");
+    } catch (error) {
+      console.error("Failed to submit comment:", error);
+      alert("Échec de l'envoi du commentaire. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className={styles.InputComments}>
@@ -29,28 +74,14 @@ const InputComments: React.FC<Props> = ({
         id="presentation"
         value={comment}
         className={styles.areaText}
+        disabled={isSubmitting}
       />
 
       <ButtonLink
-        onClick={() => {
-          let commentSent: Omit<Comments, "id"> = {
-            text: comment,
-            source: "INSTRUCTEUR",
-            dossierId: dossierId,
-            sender: sender,
-            enfantId: enfantId,
-
-            date: new Date(),
-          };
-          console.log("length : ", comment.length);
-          if (comment.length > 2) {
-            createComment(commentSent);
-            action(commentSent);
-            setComment("");
-          }
-        }}
+        onClick={() => submitComment(comment)}
+        disabled={isSubmitting || comment.length <= 2}
       >
-        Ajouter un nouveau commentaire
+        {isSubmitting ? "Envoi en cours..." : "Ajouter un nouveau commentaire"}
       </ButtonLink>
     </div>
   );
