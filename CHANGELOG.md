@@ -1,3 +1,10 @@
+## [1.96.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.5...v1.96.6) (2025-05-16)
+
+
+### Bug Fixes
+
+* add brouillon enum to statutdossier ([#672](https://github.com/SocialGouv/enfants-du-spectacle/issues/672)) ([b810710](https://github.com/SocialGouv/enfants-du-spectacle/commit/b8107103f6ce9257b7af6b3c0cc73697ff954097))
+
 ## [1.96.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.4...v1.96.5) (2025-05-16)
 
 
