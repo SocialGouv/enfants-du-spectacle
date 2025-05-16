@@ -36,7 +36,7 @@ app:
 
 form:
   ~chart: app
-  ~needs: [build-form, pg-form]
+  ~needs: [build-form, pg]
   imagePackage: form
   host: "formulaire-{{ $.Values.global.host }}"
   annotations:
@@ -47,7 +47,7 @@ form:
       value: "https://formulaire-{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
-        name: pg-form-app
+        name: pg-app
     - secretRef:
         name: app-sealed-secret
     - configMapRef:
@@ -61,11 +61,6 @@ form:
       "X-Content-Type-Options": "nosniff"
 
 pg:
-  ~chart: pg
-  postgresqlParameters:
-    max_connections: "1000"
-
-pg-form:
   ~chart: pg
   postgresqlParameters:
     max_connections: "1000"
