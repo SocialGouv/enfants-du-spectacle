@@ -1,3 +1,10 @@
+# [1.95.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.13...v1.95.0) (2025-05-16)
+
+
+### Features
+
+* fusion db ([#665](https://github.com/SocialGouv/enfants-du-spectacle/issues/665)) ([fec39b9](https://github.com/SocialGouv/enfants-du-spectacle/commit/fec39b94cfc2436d12e334ae2437b4776c9d33b3))
+
 ## [1.94.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.12...v1.94.13) (2025-05-13)
 
 
