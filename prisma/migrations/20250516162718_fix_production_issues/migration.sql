@@ -101,18 +101,33 @@ BEGIN
 END $$;
 
 -- Add BROUILLON to StatutDossier enum if it doesn't exist
-DO $$
+-- First create a function to check if the enum value exists
+CREATE OR REPLACE FUNCTION add_enum_value_if_not_exists() RETURNS void AS $$
+DECLARE
+  enum_exists boolean;
+  value_exists boolean;
 BEGIN
-    -- Check if StatutDossier enum exists (note: pg_type stores type names in lowercase)
-    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'statutdossier') THEN
-        -- Check if BROUILLON value exists in the enum
-        IF NOT EXISTS (
-            SELECT 1 FROM pg_enum 
-            WHERE enumlabel = 'BROUILLON' 
-            AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'statutdossier')
-        ) THEN
-            -- Add BROUILLON value to the enum (using proper case for the SQL statement)
-            ALTER TYPE "StatutDossier" ADD VALUE 'BROUILLON';
-        END IF;
+  -- Check if the enum exists
+  SELECT EXISTS(SELECT 1 FROM pg_type WHERE typname = 'statutdossier') INTO enum_exists;
+  
+  IF enum_exists THEN
+    -- Check if the value exists
+    SELECT EXISTS(
+      SELECT 1 FROM pg_enum 
+      WHERE enumlabel = 'BROUILLON' 
+      AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'statutdossier')
+    ) INTO value_exists;
+    
+    IF NOT value_exists THEN
+      -- Add the value directly if it doesn't exist
+      EXECUTE 'ALTER TYPE "StatutDossier" ADD VALUE ''BROUILLON''';
     END IF;
-END $$;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Execute the function
+SELECT add_enum_value_if_not_exists();
+
+-- Clean up the function
+DROP FUNCTION add_enum_value_if_not_exists();
