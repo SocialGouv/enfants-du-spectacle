@@ -39,7 +39,8 @@ ENV SENTRY_ORG=incubateur
 RUN --mount=type=secret,id=sentry_auth_token export SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token); \
   npm run build
 RUN yarn workspaces focus --production && yarn cache clean
-# this should remove dev node module dependencies
+# Generate Prisma client with the local schema for now
+# In the CI environment, the main schema will be used through the DATABASE_URL
 RUN npx prisma generate
 
 # Production image, copy all the files and run next
