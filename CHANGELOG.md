@@ -1,3 +1,10 @@
+# [1.96.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.95.0...v1.96.0) (2025-05-16)
+
+
+### Features
+
+* modify pipeline ([#666](https://github.com/SocialGouv/enfants-du-spectacle/issues/666)) ([502c7ff](https://github.com/SocialGouv/enfants-du-spectacle/commit/502c7ff0fa0afa085b9b73427cdc0f226bd9b40a))
+
 # [1.95.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.94.13...v1.95.0) (2025-05-16)
 
 
