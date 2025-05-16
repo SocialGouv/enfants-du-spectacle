@@ -55,6 +55,17 @@ form:
     - configMapRef:
         name: app-configmap
   probesPath: /api/healthz
+  readinessProbe:
+    httpGet:
+      path: /api/healthz
+      port: http
+    timeoutSeconds: 3 # prevent instability of the readiness probe
+  startupProbe:
+    failureThreshold: 48
+    periodSeconds: 5
+    httpGet:
+      path: /api/healthz
+      port: http
   ingress:
     customHeaders:
       "Content-Security-Policy": "default-src 'none'; manifest-src 'self' https://*.gouv.fr; connect-src 'self' https://*.gouv.fr; media-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' https://*.gouv.fr 'unsafe-inline'; frame-src 'self' https://*.gouv.fr; style-src 'self' 'unsafe-inline'"
