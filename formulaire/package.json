@@ -6,8 +6,9 @@
     "dev": "next dev -p 3001",
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build",
-    "start": "export NEXTAUTH_URL=$APP_BASE_URL && npx prisma migrate deploy && next start",
-    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && npx prisma migrate deploy && next start",
+    "start": "export NEXTAUTH_URL=$APP_BASE_URL && next start",
+    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && next start",
+    "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && next start",
     "lint": "next lint"
   },
   "dependencies": {

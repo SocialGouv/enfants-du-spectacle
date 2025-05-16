@@ -45,6 +45,8 @@ form:
   env:
     - name: APP_BASE_URL
       value: "https://formulaire-{{ $.Values.global.host }}"
+    - name: START_SCRIPT
+      value: "start-prod"
   envFrom:
     - secretRef:
         name: pg-app
