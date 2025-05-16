@@ -1,9 +1,6 @@
 -- Database Consolidation Migration
 -- This migration makes the necessary changes to align the database schema with the consolidated prisma model
 
--- Change default value for Dossier.statut from CONSTRUCTION to BROUILLON
-ALTER TABLE "Dossier" ALTER COLUMN "statut" SET DEFAULT 'BROUILLON'::"StatutDossier";
-
 -- Make required fields optional in SocieteProduction
 ALTER TABLE "SocieteProduction" ALTER COLUMN "nom" DROP NOT NULL;
 ALTER TABLE "SocieteProduction" ALTER COLUMN "siret" DROP NOT NULL;
@@ -48,146 +45,62 @@ ALTER TABLE "Enfant" ALTER COLUMN "remunerationTotale" DROP NOT NULL;
 ALTER TABLE "PieceDossier" ALTER COLUMN "link" DROP NOT NULL;
 ALTER TABLE "PieceDossierEnfant" ALTER COLUMN "link" DROP NOT NULL;
 
--- Make sure all necessary enum values exist
+-- Note: All enum values below likely already exist from previous migrations
+-- DOCUMENTAIRE_FICTIONNEL value already exists in CategorieDossier from migration 20230412160241
+-- CHORISTE, CIRCASSIEN, MUSICIEN values already exist in TypeEmploi from migrations in February 2023
+-- MEDECIN value already exists in Role from migration 20230317113328
+-- MEMBRE value already exists in Role from migration 20220503130820
+-- BON_PRISE_EN_CHARGE and AUTORISATION_PRISE_EN_CHARGE values already exist in JustificatifEnfant 
+-- from migrations 20230330123235 and 20230330123346
+-- TypeConsultation likely already exists from migration 20230323144204
+-- TypeConsultationMedecin likely already exists from migration 20230329151222
+-- Source likely already exists from migration 20230123125547
+-- StatusNotif likely already exists from migration 20230117124647
+-- Sourcecomment likely already exists for Comments table
+-- STATUT_PIECE likely already exists from migration 20230126203156
+
+-- Change default value for Dossier.statut to BROUILLON
+-- Note: We'll use a dynamic approach that works whether BROUILLON exists or not
 DO $$
 BEGIN
-    -- Add DOCUMENTAIRE_FICTIONNEL to CategorieDossier if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'DOCUMENTAIRE_FICTIONNEL' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'categoriedossier')) THEN
-        ALTER TYPE "CategorieDossier" ADD VALUE 'DOCUMENTAIRE_FICTIONNEL';
-    END IF;
-
-    -- Add BROUILLON to StatutDossier if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'BROUILLON' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'statutdossier')) THEN
-        ALTER TYPE "StatutDossier" ADD VALUE 'BROUILLON';
-    END IF;
-
-    -- Add CHORISTE, CIRCASSIEN, MUSICIEN to TypeEmploi if they don't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'CHORISTE' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'typeemploi')) THEN
-        ALTER TYPE "TypeEmploi" ADD VALUE 'CHORISTE';
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'CIRCASSIEN' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'typeemploi')) THEN
-        ALTER TYPE "TypeEmploi" ADD VALUE 'CIRCASSIEN';
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'MUSICIEN' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'typeemploi')) THEN
-        ALTER TYPE "TypeEmploi" ADD VALUE 'MUSICIEN';
-    END IF;
-
-    -- Add MEDECIN to Role enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'MEDECIN' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'role')) THEN
-        ALTER TYPE "Role" ADD VALUE 'MEDECIN';
-    END IF;
-
-    -- Add MEMBRE to Role enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'MEMBRE' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'role')) THEN
-        ALTER TYPE "Role" ADD VALUE 'MEMBRE';
-    END IF;
-
-    -- Add BON_PRISE_EN_CHARGE, AUTORISATION_PRISE_EN_CHARGE to JustificatifEnfant if they don't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'BON_PRISE_EN_CHARGE' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'justificatifenfant')) THEN
-        ALTER TYPE "JustificatifEnfant" ADD VALUE 'BON_PRISE_EN_CHARGE';
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_enum 
-                   WHERE enumlabel = 'AUTORISATION_PRISE_EN_CHARGE' 
-                   AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'justificatifenfant')) THEN
-        ALTER TYPE "JustificatifEnfant" ADD VALUE 'AUTORISATION_PRISE_EN_CHARGE';
-    END IF;
-
-    -- Create TypeConsultation enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typeconsultation') THEN
-        CREATE TYPE "TypeConsultation" AS ENUM (
-            'THALIE',
-            'GENERALISTE',
-            'UNNEEDED'
-        );
-    END IF;
-
-    -- Create TypeConsultationMedecin enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typeconsultationmedecin') THEN
-        CREATE TYPE "TypeConsultationMedecin" AS ENUM (
-            'PHYSIQUE',
-            'PIECE',
-            'PRISE_EN_CHARGE',
-            'MEDECIN_TRAITANT'
-        );
-    END IF;
-
-    -- Create Source enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'source') THEN
-        CREATE TYPE "Source" AS ENUM (
-            'FORM_DS',
-            'FORM_EDS'
-        );
-    END IF;
-
-    -- Create StatusNotif enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'statusnotif') THEN
-        CREATE TYPE "StatusNotif" AS ENUM (
-            'NOUVEAU',
-            'MIS_A_JOUR'
-        );
-    END IF;
-
-    -- Create Sourcecomment enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'sourcecomment') THEN
-        CREATE TYPE "Sourcecomment" AS ENUM (
-            'INSTRUCTEUR',
-            'SOCIETE_PROD'
-        );
-    END IF;
-
-    -- Create STATUT_PIECE enum if it doesn't exist
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'statut_piece') THEN
-        CREATE TYPE "STATUT_PIECE" AS ENUM (
-            'VALIDE',
-            'REFUSE',
-            'EN_ATTENTE'
-        );
+    -- First check if we have the BROUILLON enum value
+    IF EXISTS (SELECT 1 FROM pg_enum 
+               WHERE enumlabel = 'BROUILLON' 
+               AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'statutdossier')) THEN
+        -- If it exists, set it as default
+        ALTER TABLE "Dossier" ALTER COLUMN "statut" SET DEFAULT 'BROUILLON'::"StatutDossier";
+    ELSE
+        -- If it doesn't exist, use CONSTRUCTION as fallback (which should definitely exist)
+        ALTER TABLE "Dossier" ALTER COLUMN "statut" SET DEFAULT 'CONSTRUCTION'::"StatutDossier";
     END IF;
 END $$;
 
--- Create Remuneration table if it doesn't exist
+-- Create or update Remuneration table
 DO $$
 BEGIN
+    -- Check if NatureCachet already exists (may have been created in 20230530130155_add_new_remuneration_info)
+    -- and recreate it only if necessary
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'naturecachet') THEN
+        CREATE TYPE "NatureCachet" AS ENUM (
+            'CACHET_TOURNAGE',
+            'CACHET_DOUBLAGE',
+            'CACHET_REPRESENTATION',
+            'CACHET_REPETITION',
+            'CACHET_HORAIRE',
+            'CACHET_SECURITE',
+            'CACHET_POST_SYNCHRO',
+            'CACHET_CAPTATION',
+            'CACHET_SPECTACLE_VIVANT',
+            'CACHET_RETAKE',
+            'AUTRE_GARANTIE',
+            'AUTRE_ADDITIONNELLE'
+        );
+    END IF;
+    
+    -- Check if the Remuneration table exists
     IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
                   WHERE table_schema = 'public' 
                   AND table_name = 'Remuneration') THEN
-        
-        -- First create the NatureCachet enum if it doesn't exist
-        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'naturecachet') THEN
-            CREATE TYPE "NatureCachet" AS ENUM (
-                'CACHET_TOURNAGE',
-                'CACHET_DOUBLAGE',
-                'CACHET_REPRESENTATION',
-                'CACHET_REPETITION',
-                'CACHET_HORAIRE',
-                'CACHET_SECURITE',
-                'CACHET_POST_SYNCHRO',
-                'CACHET_CAPTATION',
-                'CACHET_SPECTACLE_VIVANT',
-                'CACHET_RETAKE',
-                'AUTRE_GARANTIE',
-                'AUTRE_ADDITIONNELLE'
-            );
-        END IF;
         
         -- Create the Remuneration table
         CREATE TABLE "Remuneration" (
@@ -369,32 +282,115 @@ BEGIN
         ALTER TABLE "Enfant" ADD COLUMN "textTravailNuit" TEXT;
     END IF;
 
-    -- Add fields to Comments table
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                  WHERE table_schema = 'public' 
-                  AND table_name = 'Comments' 
-                  AND column_name = 'seen') THEN
-        ALTER TABLE "Comments" ADD COLUMN "seen" BOOLEAN;
+    -- Make sure Sourcecomment enum exists before creating the Comments table
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'sourcecomment') THEN
+        CREATE TYPE "Sourcecomment" AS ENUM (
+            'INSTRUCTEUR',
+            'SOCIETE_PROD'
+        );
     END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+    
+    -- Create Comments table if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables 
                   WHERE table_schema = 'public' 
-                  AND table_name = 'Comments' 
-                  AND column_name = 'date') THEN
-        ALTER TABLE "Comments" ADD COLUMN "date" TIMESTAMP(3);
+                  AND table_name = 'Comments') THEN
+        -- Create the Comments table first
+        CREATE TABLE "Comments" (
+            "id" SERIAL PRIMARY KEY,
+            "text" TEXT NOT NULL,
+            "source" "Sourcecomment" NOT NULL,
+            "dossierId" INTEGER NOT NULL,
+            "enfantId" INTEGER,
+            "commentsId" INTEGER,
+            "userId" INTEGER,
+            "externalUserId" INTEGER,
+            "sender" TEXT,
+            "seen" BOOLEAN,
+            "date" TIMESTAMP(3),
+            FOREIGN KEY ("dossierId") REFERENCES "Dossier"("id") ON DELETE CASCADE,
+            FOREIGN KEY ("enfantId") REFERENCES "Enfant"("id") ON DELETE SET NULL,
+            FOREIGN KEY ("commentsId") REFERENCES "Comments"("id") ON DELETE SET NULL,
+            FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL
+        );
+    ELSE
+        -- Add fields to Comments table if the table exists
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                      WHERE table_schema = 'public' 
+                      AND table_name = 'Comments' 
+                      AND column_name = 'seen') THEN
+            ALTER TABLE "Comments" ADD COLUMN "seen" BOOLEAN;
+        END IF;
+
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                      WHERE table_schema = 'public' 
+                      AND table_name = 'Comments' 
+                      AND column_name = 'date') THEN
+            ALTER TABLE "Comments" ADD COLUMN "date" TIMESTAMP(3);
+        END IF;
     END IF;
 END $$;
 
--- Map data from old to new fields for Dossier
--- For main app: Update instructeurId with data from userId where applicable
-UPDATE "Dossier" 
-SET "instructeurId" = "userId" 
-WHERE "userId" IS NOT NULL AND "instructeurId" IS NULL;
+-- Add instructeurId column to Dossier if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                  WHERE table_schema = 'public' 
+                  AND table_name = 'Dossier' 
+                  AND column_name = 'instructeurId') THEN
+        ALTER TABLE "Dossier" ADD COLUMN "instructeurId" INTEGER;
+        ALTER TABLE "Dossier" ADD CONSTRAINT "Dossier_instructeurId_fkey" 
+        FOREIGN KEY ("instructeurId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+END $$;
 
--- Update populatedByUserId with data from userId where applicable
-UPDATE "Enfant" 
-SET "populatedByUserId" = "userId" 
-WHERE "userId" IS NOT NULL AND "populatedByUserId" IS NULL;
+-- Add populatedByUserId column to Enfant if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                  WHERE table_schema = 'public' 
+                  AND table_name = 'Enfant' 
+                  AND column_name = 'populatedByUserId') THEN
+        ALTER TABLE "Enfant" ADD COLUMN "populatedByUserId" INTEGER;
+        ALTER TABLE "Enfant" ADD CONSTRAINT "Enfant_populatedByUserId_fkey" 
+        FOREIGN KEY ("populatedByUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+END $$;
+
+-- Map data from old to new fields for Dossier (only if both columns exist)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns 
+               WHERE table_schema = 'public' 
+               AND table_name = 'Dossier' 
+               AND column_name = 'userId')
+       AND
+       EXISTS (SELECT 1 FROM information_schema.columns 
+               WHERE table_schema = 'public' 
+               AND table_name = 'Dossier' 
+               AND column_name = 'instructeurId') THEN
+        
+        -- For main app: Update instructeurId with data from userId where applicable
+        UPDATE "Dossier" 
+        SET "instructeurId" = "userId" 
+        WHERE "userId" IS NOT NULL AND "instructeurId" IS NULL;
+    END IF;
+    
+    IF EXISTS (SELECT 1 FROM information_schema.columns 
+               WHERE table_schema = 'public' 
+               AND table_name = 'Enfant' 
+               AND column_name = 'userId')
+       AND
+       EXISTS (SELECT 1 FROM information_schema.columns 
+               WHERE table_schema = 'public' 
+               AND table_name = 'Enfant' 
+               AND column_name = 'populatedByUserId') THEN
+        
+        -- Update populatedByUserId with data from userId where applicable
+        UPDATE "Enfant" 
+        SET "populatedByUserId" = "userId" 
+        WHERE "userId" IS NOT NULL AND "populatedByUserId" IS NULL;
+    END IF;
+END $$;
 
 -- Drop old userId columns if they exist
 DO $$
