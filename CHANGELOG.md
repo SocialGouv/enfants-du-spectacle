@@ -1,3 +1,10 @@
+## [1.96.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.0...v1.96.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* fix link to right DB ([#667](https://github.com/SocialGouv/enfants-du-spectacle/issues/667)) ([d5a7e04](https://github.com/SocialGouv/enfants-du-spectacle/commit/d5a7e049c6c0c8eddb9186a00022ed376167bab9))
+
 # [1.96.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.95.0...v1.96.0) (2025-05-16)
 
 
