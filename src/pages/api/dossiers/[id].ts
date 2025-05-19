@@ -7,6 +7,7 @@ import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossi
 import superjson from "superjson";
 
 import client from "src/lib/prismaClient"
+import { generateToken } from "src/lib/utils";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -71,7 +72,38 @@ const get: NextApiHandler = async (req, res) => {
     where: { id: dossierId },
   });
 
-  res.status(200).json(dossier);
+  
+      res.status(200).json({
+        ...dossier,
+        docs: {
+          dossier: {
+            id: dossier?.id,
+            piecesDossier: dossier?.piecesDossier.map((piece) => {
+              return generateToken(
+                piece.id,
+                dossier.id,
+                piece.type,
+                piece.link,
+                piece.statut
+              );
+            }),
+          },
+          enfants: dossier?.enfants.map((enfant) => {
+            return {
+              id: enfant.id,
+              piecesDossier: enfant.piecesDossier.map((piece) => {
+                return generateToken(
+                  piece.id,
+                  dossier.id,
+                  piece.type,
+                  piece.link,
+                  piece.statut
+                );
+              }),
+            };
+          }),
+        },
+      });
 };
 
 const remove: NextApiHandler = async (req, res) => {

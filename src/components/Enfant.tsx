@@ -13,7 +13,7 @@ import React, { useCallback, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import styles from "src/components/Enfant.module.scss";
 import Info from "src/components/Info";
-import { JustificatifsEnfants } from "src/components/Justificatifs";
+import { EnfantJustificatifs } from "src/components/DossierJustificatifs";
 import type { Comments } from "src/lib/fetching/comments";
 import { deleteDoc, uploadDoc } from "src/lib/fetching/docs";
 import { passEnfant } from "src/lib/fetching/enfants";
@@ -29,7 +29,6 @@ import Accordion from "./Accordion";
 import InputComments from "./inputComments";
 import ListComments from "./ListComments";
 import InputFile from "./uiComponents/InputFile";
-import { ValidationJustificatifsEnfant } from "./ValidationJustificatifs";
 
 interface Props {
   enfant: Enfant;
@@ -403,27 +402,16 @@ const EnfantComponent: React.FC<Props> = ({
             </div>
           </Info>
 
-          <Info title="Pièces justificatives" className={styles.info}>
+          <Info title="Pièces justificatives & Validation" className={styles.info}>
             {dossier.source === "FORM_EDS" && (
-              <JustificatifsEnfants
+              <EnfantJustificatifs
                 enfant={enfant}
-                dataLinks={localDataLinks}
                 dossier={dossier}
+                showValidation={(session.data?.dbUser.role === "INSTRUCTEUR" ||
+                  session.data?.dbUser.role === "ADMIN")}
               />
             )}
           </Info>
-          {(session.data?.dbUser.role === "INSTRUCTEUR" ||
-            session.data?.dbUser.role === "ADMIN") && (
-            <Info title="Validation" className={styles.info}>
-              {dossier.source === "FORM_EDS" && (
-                <ValidationJustificatifsEnfant
-                  enfant={enfant}
-                  dossier={dossier}
-                  dataLinks={localDataLinks}
-                />
-              )}
-            </Info>
-          )}
         </div>
       </Accordion>
       <Accordion

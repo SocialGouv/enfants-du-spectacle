@@ -13,7 +13,7 @@ import Foldable from "src/components/Foldable";
 import IconLoader from "src/components/IconLoader";
 import Info from "src/components/Info";
 import InfoSociete from "src/components/InfoSociete";
-import { JustificatifsDossier } from "src/components/Justificatifs";
+import { DossierJustificatifs } from "src/components/DossierJustificatifs";
 import logoArrowUp from "src/images/arrow-up.svg";
 import { useDossier } from "src/lib/api";
 import type { Comments } from "src/lib/fetching/comments";
@@ -40,7 +40,6 @@ import CountPieces from "./CountPieces";
 import InputComments from "./inputComments";
 import ListComments from "./ListComments";
 import Table from "./Table";
-import { ValidationJustificatifsDossier } from "./ValidationJustificatifs";
 import { getUsersById } from "src/lib/fetching/users";
 
 interface Props {
@@ -254,16 +253,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                 dossier.scenesSensibles.filter(scene => scene !== null).join(", ")}
             </Info>
             </div>
-            <Info title="PIECES JUSTIFICATIVES">
+            <Info title="PIECES JUSTIFICATIVES & VALIDATION">
               {dossier.source === "FORM_EDS" && (
-                <JustificatifsDossier dossier={dossier} dataLinks={dataLinks} />
+                <DossierJustificatifs 
+                  dossier={dossier} 
+                  showValidation={true}
+                />
               )}
-            </Info>
-            <Info title="VALIDATION">
-              <ValidationJustificatifsDossier
-                dossier={dossier}
-                dataLinks={dataLinks}
-              />
             </Info>
           </div>
           <div style={{ marginTop: "36px" }}>
