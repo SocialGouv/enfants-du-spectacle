@@ -1,0 +1,50 @@
+.justificatifRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.documentInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.validationControls {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.compactSelect {
+  :global {
+    .fr-select {
+      height: 2rem;
+      min-height: auto;
+      font-size: 0.875rem;
+    }
+    
+    .fr-select-group {
+      margin-bottom: 0;
+    }
+    
+    .fr-label {
+      display: none; // Hide the label to save space
+    }
+  }
+}
+
+.statusIcon {
+  margin-right: 11px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.documentLink {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
