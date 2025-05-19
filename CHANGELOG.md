@@ -1,3 +1,10 @@
+## [1.96.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.6...v1.96.7) (2025-05-19)
+
+
+### Bug Fixes
+
+* fix display pieces justifivatives on intructeur ([#673](https://github.com/SocialGouv/enfants-du-spectacle/issues/673)) ([23dc95c](https://github.com/SocialGouv/enfants-du-spectacle/commit/23dc95c79f4f44fd8c121b4ea6192b5ebbdd12af))
+
 ## [1.96.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.5...v1.96.6) (2025-05-16)
 
 
