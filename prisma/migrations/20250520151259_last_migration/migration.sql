@@ -79,10 +79,26 @@ END $$;
 ALTER TABLE "Enfant" ALTER COLUMN "nombreLignes" DROP NOT NULL;
 
 -- AlterTable
-ALTER TABLE "PieceDossier" ADD COLUMN     "nom" TEXT;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'PieceDossier' AND column_name = 'nom'
+    ) THEN
+        ALTER TABLE "PieceDossier" ADD COLUMN "nom" TEXT;
+    END IF;
+END $$;
 
 -- AlterTable
-ALTER TABLE "PieceDossierEnfant" ADD COLUMN     "nom" TEXT;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'PieceDossierEnfant' AND column_name = 'nom'
+    ) THEN
+        ALTER TABLE "PieceDossierEnfant" ADD COLUMN "nom" TEXT;
+    END IF;
+END $$;
 
 -- AlterTable
 ALTER TABLE "Session" ALTER COLUMN "id" DROP DEFAULT;
