@@ -1,3 +1,10 @@
+## [1.96.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.10...v1.96.11) (2025-05-20)
+
+
+### Bug Fixes
+
+* change url sdp for depot doc medecin ([#698](https://github.com/SocialGouv/enfants-du-spectacle/issues/698)) ([1d15d1a](https://github.com/SocialGouv/enfants-du-spectacle/commit/1d15d1a71c4afa4ebabb3651a307c483469eba3d))
+
 ## [1.96.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.9...v1.96.10) (2025-05-20)
 
 
