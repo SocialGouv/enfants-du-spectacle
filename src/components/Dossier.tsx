@@ -18,7 +18,6 @@ import logoArrowUp from "src/images/arrow-up.svg";
 import { useDossier } from "src/lib/api";
 import type { Comments } from "src/lib/fetching/comments";
 import { getCommentsByDossier } from "src/lib/fetching/comments";
-import { getRemunerationsByEnfantsIds } from "src/lib/fetching/remunerations";
 import {
   birthDateToFrenchAge,
   EMPLOIS_CATEGORIES,
@@ -60,7 +59,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     setScrollPosition(position);
   };
   const [senderComment, setSenderComment] = React.useState<string>("");
-  const [remunerations, setRemunerations] = React.useState<Remuneration[]>([]);
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
 
@@ -90,34 +88,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     }
   };
 
-  const fetchRemunerations = async () => {
-    try {
-      if (!dossier) {
-        return;
-      }
-      
-      if (!dossier.enfants || dossier.enfants.length === 0) {
-        return;
-      }
-      
-      if (dossier.source !== "FORM_EDS") {
-        return;
-      }
-      
-      const enfantIds = dossier.enfants.map((enfant) => enfant.externalId);
-      
-      if (!enfantIds || enfantIds.length === 0) {
-        return;
-      }
-      
-      const resRemuneration = await getRemunerationsByEnfantsIds(enfantIds);
-      setRemunerations(resRemuneration);
-    } catch (error) {
-      console.error("Error fetching remunerations:", error);
-      // Set empty remunerations to avoid UI errors
-      setRemunerations([]);
-    }
-  };
 
   const fetchComments = async () => {
     try {
@@ -175,7 +145,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   React.useEffect(() => {
     try {
       fetchComments();
-      fetchRemunerations();
     } catch (error) {
       console.error("Error in initial data fetch:", error);
     }
@@ -571,11 +540,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             dossier={dossier}
                             comments={comments}
                             actionComments={processComment}
-                            remunerations={remunerations.filter(
-                              (rem) =>
-                                rem.enfantId ===
-                                parseInt(enfant.externalId ?? "")
-                            )}
+                            remunerations={enfant.remuneration || []}
                           />
                         </Accordion>
                       </div>
