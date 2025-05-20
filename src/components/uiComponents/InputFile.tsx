@@ -43,28 +43,37 @@ const InputFile: React.FC<Props> = ({
 }) => {
   const { data: session } = useSession();
   const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
-  const cleanFileName = (originalFilename: string): string => {
-    const cleaned = originalFilename
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^\w\s]/g, (match) => {
-        const specialChars: Record<string, string> = {
-          è: "e",
-          ç: "c",
-          à: "a",
-          "¨": "",
-          "~": "",
-          ê: "e",
-          î: "i",
-          ĩ: "i",
-        };
+  const cleanFileName = (originalFilename: string | null | undefined): string => {
+    if (!originalFilename) {
+      return "Fichier sans nom";
+    }
+    
+    try {
+      const cleaned = originalFilename
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s]/g, (match) => {
+          const specialChars: Record<string, string> = {
+            è: "e",
+            ç: "c",
+            à: "a",
+            "¨": "",
+            "~": "",
+            ê: "e",
+            î: "i",
+            ĩ: "i",
+          };
 
-        return specialChars[match] || match;
-      })
-      .replace(/@/g, "")
-      .replace(/\s/g, "_");
+          return specialChars[match] || match;
+        })
+        .replace(/@/g, "")
+        .replace(/\s/g, "_");
 
-    return cleaned;
+      return cleaned;
+    } catch (error) {
+      console.error("Error cleaning filename:", error, "Original filename:", originalFilename);
+      return String(originalFilename);
+    }
   };
 
   return (

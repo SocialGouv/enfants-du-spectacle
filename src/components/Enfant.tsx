@@ -33,7 +33,18 @@ import InputFile from "./uiComponents/InputFile";
 interface Props {
   enfant: Enfant;
   dataLinks: DataLinks;
-  dossier: Dossier;
+  dossier: Dossier & { 
+    docs?: {
+      dossier: {
+        id: number;
+        piecesDossier: any[];
+      };
+      enfants: Array<{
+        id: number;
+        piecesDossier: any[];
+      }>;
+    } 
+  };
   comments: Comments[];
   sender: string | null;
   actionComments: (comment: Comments) => void;
@@ -56,6 +67,27 @@ const EnfantComponent: React.FC<Props> = ({
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
+  
+  // Debug logs to help diagnose file visibility issues
+  useEffect(() => {
+    console.log("Current enfant:", enfant);
+    console.log("Current enfant externalId:", enfant.externalId);
+    console.log("localDataLinks:", localDataLinks);
+    
+    const matchingEnfant = localDataLinks?.enfants?.find(
+      (enf) => enf.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
+    );
+    console.log("Matching enfant found:", matchingEnfant);
+    
+    if (matchingEnfant) {
+      console.log("Matching enfant piecesDossier:", matchingEnfant.piecesDossier);
+      
+      const filteredPieces = matchingEnfant.piecesDossier.filter((piece) =>
+        ["AVIS_MEDICAL", "BON_PRISE_EN_CHARGE", "AUTORISATION_PRISE_EN_CHARGE"].includes(piece.type)
+      );
+      console.log("Filtered pieces:", filteredPieces);
+    }
+  }, [enfant, localDataLinks]);
 
   const nombreDeLignes = remunerations.find(
     (remuneration) => remuneration.nombreLignes
@@ -245,8 +277,8 @@ const EnfantComponent: React.FC<Props> = ({
     data.append(e.target.name, e.target.files[0]);
     const upload = await uploadDoc(
       data,
-      dossier.externalId ?? "",
-      formData.externalId ?? "",
+      dossier.id,
+      enfant.id,
       TYPE_CONSULTATION_MEDECIN.find(
         (type) => type.value === formData.typeConsultationMedecin
       )?.typeJustif
@@ -263,10 +295,12 @@ const EnfantComponent: React.FC<Props> = ({
     });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
+    console.log('id : ', id)
     if (id) {
-      await deleteDoc(parseInt(id));
-      setLocalDataLinks((prevData) => {
+      await deleteDoc(id);
+      window.location.reload()
+      /*setLocalDataLinks((prevData) => {
         const updatedData = prevData.enfants.map((enfant) => {
           const piecesFiltered = enfant.piecesDossier.filter(
             (piece: PieceDossierEnfant) => piece.id !== parseInt(id)
@@ -275,7 +309,7 @@ const EnfantComponent: React.FC<Props> = ({
           return enfant;
         });
         return { ...prevData, enfants: updatedData };
-      });
+      });*/
     }
   };
 
@@ -536,20 +570,31 @@ const EnfantComponent: React.FC<Props> = ({
                             type.value === formData.typeConsultationMedecin
                         )?.typeJustif as JustificatifEnfant
                       }`}
-                      docs={
-                        (localDataLinks?.enfants
-                            ?.find(
-                              (enf) => parseInt(enfant.externalId) === enf.id
-                            )
-                            ?.piecesDossier.filter((piece) =>
-                              [
-                                "AVIS_MEDICAL",
-                                "BON_PRISE_EN_CHARGE",
-                                "AUTORISATION_PRISE_EN_CHARGE",
-                              ].includes(piece.type)
-                            )) ||
-                        []
-                      }
+                      docs={(() => {
+                        const matchingEnfant = dossier.docs?.enfants
+                          .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
+                        
+                        console.log("Matching enfant for docs (1):", matchingEnfant);
+                        
+                        if (!matchingEnfant) return [];
+                        
+                        const filteredDocs = matchingEnfant.piecesDossier
+                          .filter(piece => [
+                            "AVIS_MEDICAL", 
+                            "BON_PRISE_EN_CHARGE", 
+                            "AUTORISATION_PRISE_EN_CHARGE"
+                          ].includes(piece.type))
+                          .map(piece => ({
+                            id: String(piece.id),
+                            nom: piece.nom || piece.type.replace(/_/g, ' ').toLowerCase(),
+                            type: piece.type,
+                            statut: piece.statut,
+                            link: piece.link
+                          }));
+                          
+                        console.log("Filtered docs (1):", filteredDocs);
+                        return filteredDocs;
+                      })()}
                       allowChanges={false}
                       label={`${
                         TYPE_CONSULTATION_MEDECIN.find(
@@ -571,18 +616,31 @@ const EnfantComponent: React.FC<Props> = ({
                 <Info title="AVIS MÉDICAL">
                   <InputFile
                     id={"AVIS_MEDICAL"}
-                    docs={
-                      (localDataLinks?.enfants
-                          ?.find((enf) => parseInt(enfant.externalId) === enf.id)
-                          ?.piecesDossier.filter((piece) =>
-                            [
-                              "AVIS_MEDICAL",
-                              "BON_PRISE_EN_CHARGE",
-                              "AUTORISATION_PRISE_EN_CHARGE",
-                            ].includes(piece.type)
-                          )) ||
-                      []
-                    }
+                    docs={(() => {
+                        const matchingEnfant = dossier.docs?.enfants
+                          .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
+                        
+                        console.log("Matching enfant for docs (2):", matchingEnfant);
+                        
+                        if (!matchingEnfant) return [];
+                        
+                        const filteredDocs = matchingEnfant.piecesDossier
+                          .filter(piece => [
+                            "AVIS_MEDICAL", 
+                            "BON_PRISE_EN_CHARGE", 
+                            "AUTORISATION_PRISE_EN_CHARGE"
+                          ].includes(piece.type))
+                          .map(piece => ({
+                            id: String(piece.id),
+                            nom: piece.nom || piece.type.replace(/_/g, ' ').toLowerCase(),
+                            type: piece.type,
+                            statut: piece.statut,
+                            link: piece.link
+                          }));
+                          
+                        console.log("Filtered docs (2):", filteredDocs);
+                        return filteredDocs;
+                      })()}
                     allowChanges={true}
                     label={`Avis médical`}
                     handleFile={handleFile}

@@ -6,6 +6,24 @@
   width: 100%;
 }
 
+.labelStatus {
+  cursor: pointer;
+  width: 6.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
+.labelStatus.accepted {
+  background-color: #b8fec9;
+}
+
+.labelStatus.refused {
+  background-color: #ffe9e9;
+}
+
 .documentInfo {
   flex: 1;
   display: flex;
@@ -24,6 +42,7 @@
       height: 2rem;
       min-height: auto;
       font-size: 0.875rem;
+      line-height: 1rem;
     }
     
     .fr-select-group {

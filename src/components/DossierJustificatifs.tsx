@@ -168,8 +168,8 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
               {piece.statut && piece.statut !== "EN_ATTENTE" ? (
                 // Show status indicator with ability to clear
                 <div
-                  className={`${styles.labelStatus} ${
-                    piece.statut === "REFUSE" ? styles.refused : styles.accepted
+                  className={`${justifStyles.labelStatus} ${
+                    piece.statut === "REFUSE" ? justifStyles.refused : justifStyles.accepted
                   }`}
                   onClick={() => handleValidationChange(piece.id, null)}
                 >

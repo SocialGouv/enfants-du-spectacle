@@ -2,8 +2,8 @@ import { JustificatifEnfant } from "@prisma/client";
 
 const uploadDoc = async (
   data: FormData,
-  dossierId: string,
-  enfantId: string,
+  dossierId: number,
+  enfantId: number,
   typeJustif?: JustificatifEnfant
 ): Promise<{ filePath: string }> => {
   //const url = `/api/sync/out/docs?dossierId=${dossierId}&typeJustif=${typeJustif}&enfantId=${enfantId}`;
