@@ -23,7 +23,7 @@ model Commission {
 model SocieteProduction {
   id                        Int         @id @default(autoincrement())
   nom                       String?     // Made optional to match formulaire schema
-  siret                     String?     @unique // Made optional to match formulaire schema
+  siret                     String?     // Made optional to match formulaire schema
   siren                     String?     // Made optional to match formulaire schema
   departement               String?     // Made optional to match formulaire schema
   naf                       String?     // Made optional to match formulaire schema
@@ -40,7 +40,7 @@ model SocieteProduction {
 
 model Demandeur {
   id                        Int                @id @default(autoincrement())
-  email                     String?            @unique // Made optional to match formulaire schema
+  email                     String?            // Made optional to match formulaire schema
   nom                       String?            // Made optional to match formulaire schema
   prenom                    String?            // Made optional to match formulaire schema
   phone                     String?

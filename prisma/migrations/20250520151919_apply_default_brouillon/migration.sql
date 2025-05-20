@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Dossier" ALTER COLUMN "statut" SET DEFAULT 'BROUILLON',
+ALTER COLUMN "collaboratorIds" DROP DEFAULT;

@@ -40,7 +40,7 @@ const create: NextApiHandler = async (req, res) => {
     statut: "BROUILLON" as StatutDossier,
     categorie: dossier.categorie ? dossier.categorie : null,
     justificatifs: dossier.justificatifs ? dossier.justificatifs : [],
-    scenesSensibles: dossier.scenesSensibles ? dossier.scenesSensibles : "",
+    scenesSensibles: dossier.scenesSensibles ? dossier.scenesSensibles : [],
     presentation: dossier.presentation ? dossier.presentation : "",
     dateDebut: dossier.dateDebut ? dossier.dateDebut : null,
     dateFin: dossier.dateFin ? dossier.dateFin : null,

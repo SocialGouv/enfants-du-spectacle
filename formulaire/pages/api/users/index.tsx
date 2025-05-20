@@ -27,7 +27,7 @@ const getUserById: NextApiHandler = async (req, res) => {
         return parseInt(id);
       });
     } else {
-      collaboratorIds = parseInt(req.query.id);
+      collaboratorIds = [parseInt(req.query.id)];
     }
   }
   try {

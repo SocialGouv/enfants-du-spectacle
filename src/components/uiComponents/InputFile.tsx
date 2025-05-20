@@ -6,10 +6,11 @@ import type {
 } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { BiTrash } from "react-icons/bi";
+import { BiLoader, BiTrash } from "react-icons/bi";
 
 import ButtonLink from "./button/buttonLink";
 import styles from "./InputFile.module.scss";
+import IconLoader from "../IconLoader";
 
 interface Doc {
   id: string;
@@ -31,6 +32,7 @@ interface Props {
   allowChanges: boolean;
   handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete: (id: string) => void;
+  isLoading?: boolean;
 }
 
 const InputFile: React.FC<Props> = ({
@@ -40,6 +42,7 @@ const InputFile: React.FC<Props> = ({
   docs,
   handleFile,
   handleDelete,
+  isLoading = false,
 }) => {
   const { data: session } = useSession();
   const [showDialogue, setShowDialogue] = React.useState<boolean>(false);
@@ -78,6 +81,12 @@ const InputFile: React.FC<Props> = ({
 
   return (
     <div className={styles.InputFile}>
+      {isLoading && (
+        <div className={styles.loaderContainer}>
+          <IconLoader />
+          <span className={styles.loadingText}>Chargement en cours...</span>
+        </div>
+      )}
       <label htmlFor={id} className="mb-2 italic">
         {label}
       </label>
@@ -152,17 +161,26 @@ const InputFile: React.FC<Props> = ({
       )}
       {docs.length === 0 && (
         <div className="Form--field">
-          <input
-            type="file"
-            id={id}
-            name="justificatif"
-            placeholder="Parcourir..."
-            accept="image/jpeg,image/gif,image/png,application/pdf,text/plain"
-            onChange={handleFile}
-          />
-          <p className={styles.smallText}>
-            Documents acceptés : jpeg, png, pdf
-          </p>
+          {!isLoading ? (
+            <>
+              <input
+                type="file"
+                id={id}
+                name="justificatif"
+                placeholder="Parcourir..."
+                accept="image/jpeg,image/gif,image/png,application/pdf,text/plain"
+                onChange={handleFile}
+                disabled={isLoading}
+              />
+              <p className={styles.smallText}>
+                Documents acceptés : jpeg, png, pdf
+              </p>
+            </>
+          ) : (
+            <p className={styles.smallText}>
+              Téléchargement en cours, veuillez patienter...
+            </p>
+          )}
         </div>
       )}
     </div>

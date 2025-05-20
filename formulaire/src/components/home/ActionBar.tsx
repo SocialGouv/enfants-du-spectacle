@@ -79,6 +79,15 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           </div>
         </div>
       )}
+      <div className={styles.infoMessageWrapper}>
+        <div className={styles.iconInfoWrapper}>
+          <FiAlertCircle className={styles.alertIcon} size={24} />
+        </div>
+        <div>
+          Des changements ont été apportés à la plateforme. Désormais, vous n'avez besoin d'appuyer qu'une seule fois sur le bouton "Déposer". <br />
+          Une fois le dossier transmis aux services d'instruction, toutes les modifications apportées seront automatiquement enregistrées.
+        </div>
+      </div>
       <div className={styles.button}>
         <ButtonLink onClick={() => createDossier()}>
           Créer un nouveau dossier
