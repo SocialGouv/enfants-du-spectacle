@@ -617,8 +617,6 @@ const EnfantComponent: React.FC<Props> = ({
                         const matchingEnfant = dossier.docs?.enfants
                           .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
                         
-                        console.log("Matching enfant for docs (2):", matchingEnfant);
-                        
                         if (!matchingEnfant) return [];
                         
                         const filteredDocs = matchingEnfant.piecesDossier
@@ -634,8 +632,6 @@ const EnfantComponent: React.FC<Props> = ({
                             statut: piece.statut,
                             link: piece.link
                           }));
-                          
-                        console.log("Filtered docs (2):", filteredDocs);
                         return filteredDocs;
                       })()}
                     allowChanges={true}
