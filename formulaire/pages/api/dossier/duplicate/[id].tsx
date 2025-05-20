@@ -50,6 +50,7 @@ const create: NextApiHandler = async (req, res) => {
     complementaire: dossier.complementaire ? dossier.complementaire : "",
     scenario: dossier.scenario ? dossier.scenario : "",
     securite: dossier.securite ? dossier.securite : "",
+    source: "FORM_EDS"
   };
 
   try {

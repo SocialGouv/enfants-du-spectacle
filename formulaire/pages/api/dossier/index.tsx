@@ -192,6 +192,7 @@ const post: NextApiHandler = async (req, res) => {
     dateCreation: parsed.dateCreation,
     demandeurId: parsed.demandeurId,
     nom: parsed.nom,
+    source: "FORM_EDS"
   };
   try {
     const dossier = await prisma.dossier.create({ data });
