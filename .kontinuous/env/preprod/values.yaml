@@ -27,7 +27,7 @@ jobs:
         buildArgs:
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: preproduction
           START_SCRIPT: start-prod
-          NEXT_PUBLIC_API_URL_SDP: https://formulaire-enfants-du-spectacle-preprod.dev.fabrique.social.gouv.fr/api/sync
+          NEXT_PUBLIC_API_URL_SDP: https://formulaire-enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr/api/sync
 
     build-form:
       with:
