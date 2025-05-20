@@ -77,15 +77,12 @@ const EnfantComponent: React.FC<Props> = ({
     const matchingEnfant = localDataLinks?.enfants?.find(
       (enf) => enf.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
     );
-    console.log("Matching enfant found:", matchingEnfant);
     
     if (matchingEnfant) {
-      console.log("Matching enfant piecesDossier:", matchingEnfant.piecesDossier);
       
       const filteredPieces = matchingEnfant.piecesDossier.filter((piece) =>
         ["AVIS_MEDICAL", "BON_PRISE_EN_CHARGE", "AUTORISATION_PRISE_EN_CHARGE"].includes(piece.type)
       );
-      console.log("Filtered pieces:", filteredPieces);
     }
   }, [enfant, localDataLinks]);
 

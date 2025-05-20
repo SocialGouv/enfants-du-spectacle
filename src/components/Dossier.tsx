@@ -257,7 +257,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               {dossier.source === "FORM_EDS" && (
                 <DossierJustificatifs 
                   dossier={dossier} 
-                  showValidation={true}
+                  showValidation={(session?.dbUser.role === "INSTRUCTEUR" ||
+                  session?.dbUser.role === "ADMIN")}
                 />
               )}
             </Info>
