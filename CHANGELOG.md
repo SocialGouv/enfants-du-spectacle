@@ -1,3 +1,10 @@
+## [1.96.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.8...v1.96.9) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix create source ([#678](https://github.com/SocialGouv/enfants-du-spectacle/issues/678)) ([4bbd9b4](https://github.com/SocialGouv/enfants-du-spectacle/commit/4bbd9b4e2ad08ecc18c3e41d8334ea5864bb353f))
+
 ## [1.96.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.7...v1.96.8) (2025-05-20)
 
 
