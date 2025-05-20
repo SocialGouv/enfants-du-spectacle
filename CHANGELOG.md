@@ -1,3 +1,10 @@
+## [1.96.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.11...v1.96.12) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix remunerations ([#701](https://github.com/SocialGouv/enfants-du-spectacle/issues/701)) ([fc6f33f](https://github.com/SocialGouv/enfants-du-spectacle/commit/fc6f33f3134ef0c9b302581fef0cb84067720d3e))
+
 ## [1.96.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.10...v1.96.11) (2025-05-20)
 
 
