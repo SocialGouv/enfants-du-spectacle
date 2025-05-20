@@ -1,3 +1,10 @@
+## [1.96.14](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.13...v1.96.14) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix mirations ([#705](https://github.com/SocialGouv/enfants-du-spectacle/issues/705)) ([d243156](https://github.com/SocialGouv/enfants-du-spectacle/commit/d243156df5020867eafee888da0b279854775e33))
+
 ## [1.96.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.12...v1.96.13) (2025-05-20)
 
 
