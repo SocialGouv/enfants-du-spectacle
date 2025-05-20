@@ -6,6 +6,7 @@ import type {
   JustificatifEnfant,
   PieceDossierEnfant,
   User,
+  Remuneration as DbRemuneration,
 } from "@prisma/client";
 import _ from "lodash";
 import { useSession } from "next-auth/react";
@@ -43,7 +44,18 @@ interface Props {
         id: number;
         piecesDossier: any[];
       }>;
-    } 
+    };
+    remunerations?: Array<DbRemuneration & { 
+      nombreLignes?: number;
+      enfantId: number;
+      montant?: number;
+      nombre?: number;
+      totalDadr?: number | string;
+      typeRemuneration?: string;
+      natureCachet?: string;
+      autreNatureCachet?: string;
+      comment?: string;
+    }>;
   };
   comments: Comments[];
   sender: string | null;
