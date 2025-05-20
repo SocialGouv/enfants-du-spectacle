@@ -1,4 +1,19 @@
 .InputFile {
+  .loaderContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+  }
+  
+  .loadingText {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    color: var(--blue-france);
+  }
+
   .smallText {
     color: var(--light-dark-fr);
     font-size: 0.8rem;

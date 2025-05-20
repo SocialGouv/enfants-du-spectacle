@@ -302,7 +302,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           />
                           Éditer
                         </li>
-                        {session?.dbUser.id === dossier.userId && (
+                        {session?.dbUser.id === dossier.creatorId && (
                           <>
                             <li
                               onClick={async () => {

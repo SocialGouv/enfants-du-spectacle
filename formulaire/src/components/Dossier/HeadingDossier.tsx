@@ -34,7 +34,7 @@ const HeadingDossier: React.FC<Props> = ({
                 status={dossier.statut}
                 wihteBackground={true}
               ></LabelStatus>
-              {dossier.userId === session?.dbUser.id && (
+              {dossier.creatorId === session?.dbUser.id && (
                 <CollaboratorsList
                   dossier={dossier}
                   setShowDialogue={

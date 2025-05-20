@@ -76,6 +76,7 @@ const EnfantComponent: React.FC<Props> = ({
     ...enfant,
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
+  const [isFileUploading, setIsFileUploading] = React.useState<boolean>(false);
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
@@ -282,26 +283,36 @@ const EnfantComponent: React.FC<Props> = ({
   };
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const data = new FormData();
-    data.append(e.target.name, e.target.files[0]);
-    const upload = await uploadDoc(
-      data,
-      dossier.id,
-      enfant.id,
-      TYPE_CONSULTATION_MEDECIN.find(
-        (type) => type.value === formData.typeConsultationMedecin
-      )?.typeJustif
-    );
-
-    setFormData({
-      ...formData,
-      ["justificatifs"]: [
-        ...formData.justificatifs,
+    if (!e.target.files || !e.target.files[0]) return;
+    
+    setIsFileUploading(true);
+    
+    try {
+      const data = new FormData();
+      data.append(e.target.name, e.target.files[0]);
+      const upload = await uploadDoc(
+        data,
+        dossier.id,
+        enfant.id,
         TYPE_CONSULTATION_MEDECIN.find(
           (type) => type.value === formData.typeConsultationMedecin
-        )?.typeJustif!,
-      ],
-    });
+        )?.typeJustif
+      );
+
+      setFormData({
+        ...formData,
+        ["justificatifs"]: [
+          ...formData.justificatifs,
+          TYPE_CONSULTATION_MEDECIN.find(
+            (type) => type.value === formData.typeConsultationMedecin
+          )?.typeJustif!,
+        ],
+      });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } finally {
+      setIsFileUploading(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -614,6 +625,7 @@ const EnfantComponent: React.FC<Props> = ({
                       handleFile={handleFile}
                       handleDelete={handleDelete}
                       text={``}
+                      isLoading={isFileUploading}
                     />
                   </>
                 )}
@@ -651,6 +663,7 @@ const EnfantComponent: React.FC<Props> = ({
                     handleFile={handleFile}
                     handleDelete={handleDelete}
                     text={``}
+                    isLoading={isFileUploading}
                   />
                 </Info>
               )}

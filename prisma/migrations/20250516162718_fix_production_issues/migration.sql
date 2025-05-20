@@ -51,7 +51,7 @@ BEGIN
         
         -- Add id column with correct default value
         ALTER TABLE "VerificationToken" 
-        ADD COLUMN "id" SERIAL PRIMARY KEY DEFAULT nextval('"VerificationToken_id_seq"'::regclass);
+        ADD COLUMN "id" SERIAL PRIMARY KEY;
     END IF;
 END $$;
 

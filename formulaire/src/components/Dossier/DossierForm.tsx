@@ -369,9 +369,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                   Votre dossier a été transmis aux services d'instruction. <br />
                   Vos modifications sont automatiquement enregistrées et 
                   transmises aux services d'instruction. <br />
-                  {dossier.commissionString && (
-                    <span>Votre dossier est associé à la {dossier.commissionString}.</span>
-                  )}
                 </p>
               )}
             </div>

@@ -39,18 +39,6 @@ const remove: NextApiHandler = async (req, res) => {
       where: { id: dossierId },
     });
 
-    const url = `${process.env.API_URL_INSTRUCTEUR}/inc/dossiers/${dossierId}`;
-
-    const fetching = await fetch(url, {
-      body: JSON.stringify({ api_key: process.env.API_KEY_SDP }),
-      method: "DELETE",
-    }).then(async (r) => {
-      if (!r.ok) {
-        throw Error(`got status ${r.status}`);
-      }
-      return r.json();
-    });
-
     res.status(200).json({ dossierDeleted });
   } catch (e: unknown) {
     console.log(e);
