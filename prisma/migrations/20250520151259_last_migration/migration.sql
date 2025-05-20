@@ -104,8 +104,22 @@ END $$;
 ALTER TABLE "Session" ALTER COLUMN "id" DROP DEFAULT;
 
 -- AlterTable
-ALTER TABLE "User" DROP COLUMN "createdAt",
-DROP COLUMN "updatedAt";
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'User' AND column_name = 'createdAt'
+    ) THEN
+        ALTER TABLE "User" DROP COLUMN "createdAt";
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'User' AND column_name = 'updatedAt'
+    ) THEN
+        ALTER TABLE "User" DROP COLUMN "updatedAt";
+    END IF;
+END $$;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_provider_account_id_key" ON "Account"("provider", "provider_account_id");
