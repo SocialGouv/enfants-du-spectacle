@@ -12,7 +12,7 @@ const client =
         url: process.env.DATABASE_URL,
       },
     },
-    log: ["query", "info", "warn", "error"],
+    log: ["info", "warn", "error"],
   });
 
 globalThis.prismaClient = client;

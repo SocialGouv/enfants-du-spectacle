@@ -72,13 +72,10 @@ function useDataDS() {
 }
 
 function useRefreshLinks(dossierExternalId: string, source: Source) {
-  console.log('refresh from dossier : ', dossierExternalId, source);
   
   // Validate input parameters to avoid API errors
   const isValidId = dossierExternalId && dossierExternalId.trim() !== '';
   const shouldFetch = source === 'FORM_EDS' && isValidId;
-  
-  console.log('Should fetch links:', shouldFetch, 'Valid ID:', isValidId);
   
   const { data, error } = useSWR(
     shouldFetch ? `/api/edslinks?externalid=${dossierExternalId}` : null,
@@ -119,8 +116,6 @@ function useRefreshLinks(dossierExternalId: string, source: Source) {
       dedupingInterval: 10000
     }
   );
-
-  console.log('data links :', data);
 
   return {
     dataLinks: data || { 
