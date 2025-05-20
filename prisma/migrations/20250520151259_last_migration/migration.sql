@@ -56,9 +56,24 @@ ALTER COLUMN "id" SET DATA TYPE TEXT,
 ADD CONSTRAINT "Account_pkey" PRIMARY KEY ("id");
 DROP SEQUENCE "Account_id_seq";
 
--- AlterTable
-ALTER TABLE "Demandeur" ADD COLUMN     "conventionCollectiveCode" TEXT,
-ADD COLUMN     "otherConventionCollective" TEXT;
+DO $$
+BEGIN
+    -- Ajouter conventionCollectiveCode seulement si elle n'existe pas
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'Demandeur' AND column_name = 'conventionCollectiveCode'
+    ) THEN
+        ALTER TABLE "Demandeur" ADD COLUMN "conventionCollectiveCode" TEXT;
+    END IF;
+
+    -- Ajouter otherConventionCollective seulement si elle n'existe pas
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'Demandeur' AND column_name = 'otherConventionCollective'
+    ) THEN
+        ALTER TABLE "Demandeur" ADD COLUMN "otherConventionCollective" TEXT;
+    END IF;
+END $$;
 
 -- AlterTable
 ALTER TABLE "Enfant" ALTER COLUMN "nombreLignes" DROP NOT NULL;
