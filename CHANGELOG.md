@@ -1,3 +1,10 @@
+## [1.96.19](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.18...v1.96.19) (2025-05-22)
+
+
+### Bug Fixes
+
+* add full calendar ([#710](https://github.com/SocialGouv/enfants-du-spectacle/issues/710)) ([a118385](https://github.com/SocialGouv/enfants-du-spectacle/commit/a1183850be62ed9cbd01ab718ba9a7717bcbc356))
+
 ## [1.96.18](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.17...v1.96.18) (2025-05-21)
 
 
