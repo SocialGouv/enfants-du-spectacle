@@ -1,3 +1,10 @@
+## [1.96.21](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.20...v1.96.21) (2025-05-26)
+
+
+### Bug Fixes
+
+* fix searchbar and societe prod hors IDF ([#713](https://github.com/SocialGouv/enfants-du-spectacle/issues/713)) ([267c6f2](https://github.com/SocialGouv/enfants-du-spectacle/commit/267c6f23666c2d5f1f4774e41ae6c55d92f2a71d))
+
 ## [1.96.20](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.19...v1.96.20) (2025-05-26)
 
 
