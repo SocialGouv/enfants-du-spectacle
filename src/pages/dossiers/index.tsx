@@ -16,6 +16,7 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
+import SearchDebug from "src/components/SearchDebug";
 import { ButtonLink } from "src/components/uiComponents/button";
 import { useCommissions } from "src/lib/api";
 import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
@@ -155,26 +156,56 @@ const Page: React.FC = () => {
   // Trigger search for word (server-side)
   useEffect(() => {
     if (!routerIsReady || searchValueEffective === undefined) return;
-    setLoading(true);
+    
+    // Update URL query string
     updateQuerystring({ search: searchValueEffective });
+    
+    // Handle empty search
     if (!searchValueEffective) {
       setSearchResults(null);
       setLoading(false);
       return;
     }
+    
+    // Start loading
+    setLoading(true);
+    console.log(`Searching for: "${searchValueEffective}"`);
+    
+    // Fetch search results
     window
       .fetch(
         `/api/search.json?${new URLSearchParams({
           search: searchValueEffective,
-        })}`
+        })}`,
+        {
+          credentials: 'include', // Include credentials for authentication
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
       )
-      .then(async (res) => res.text())
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Search API returned status ${res.status}`);
+        }
+        return res.text(); // Get as text for SuperJSON parsing
+      })
       .then((rawJSON: string) => {
-        setSearchResults(superJSONParse<SearchResultsType>(rawJSON));
-        setLoading(false);
+        try {
+          const parsed = superJSONParse<SearchResultsType>(rawJSON);
+          console.log(`Search results received: ${parsed.dossiers.length} dossiers, ${parsed.enfants.length} enfants`);
+          setSearchResults(parsed);
+        } catch (parseError) {
+          console.error("Error parsing search results:", parseError);
+          throw new Error("Failed to parse search results");
+        }
       })
       .catch((e) => {
-        throw e;
+        console.error("Search error:", e);
+        // Don't throw, just log - we want to show a friendly error to the user
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [searchValueEffective, routerIsReady]);
 
@@ -431,8 +462,8 @@ const Page: React.FC = () => {
                         <td>
                           {commission.dossiers
                             .map((p) => {
-                              return p._count
-                                ? p._count.enfants
+                              return p._count !== undefined
+                                ? p._count?.enfants || 0
                                 : p.enfants
                                 ? p.enfants.length
                                 : 0;
@@ -555,12 +586,9 @@ const Page: React.FC = () => {
             ))}
         </>
       )}
-      {!isLoading &&
-        !isError &&
-        searchValueEffective &&
-        filteredSearchResults && (
-          <SearchResults searchResults={filteredSearchResults} />
-        )}
+      {!isLoading && !isError && searchValueEffective && filteredSearchResults && (
+        <SearchResults searchResults={filteredSearchResults} />
+      )}
     </Layout>
   );
 };
