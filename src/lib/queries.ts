@@ -24,7 +24,7 @@ const searchEnfants = async (
   search: string
 ): Promise<
   (Enfant & {
-    dossier: Dossier & { user: User | null };
+    dossier: Dossier & { instructeur: User | null };
     piecesDossier: PieceDossierEnfant[];
   })[]
 > => {
@@ -32,7 +32,7 @@ const searchEnfants = async (
     return await prismaClient.enfant.findMany({
       include: {
         dossier: {
-          include: { commission: true, societeProduction: true, user: true },
+          include: { commission: true, societeProduction: true, instructeur: true },
         },
         piecesDossier: true,
       },
@@ -59,7 +59,7 @@ const searchDossierByExternalId = async (
           },
         },
         societeProduction: true,
-        user: true,
+        instructeur: true,
       },
       where: { externalId: dossierId },
     });
@@ -156,7 +156,7 @@ const searchDossiers = async (
 ): Promise<
   (Dossier & {
     societeProduction: SocieteProduction;
-    user: User | null;
+    instructeur: User | null;
     commission: Commission;
     _count: {
       enfants: number;
@@ -169,7 +169,7 @@ const searchDossiers = async (
         _count: { select: { enfants: true } },
         commission: true,
         societeProduction: true,
-        user: true,
+        instructeur: true,
       },
       where: {
         OR: [
@@ -807,14 +807,14 @@ const getDatasFromDS = async (dossierId: number) => {
 interface SearchResultsType {
   enfants: (Enfant & {
     dossier: Dossier & {
-      user?: User | null;
+      instructeur?: User | null;
       societeProduction: SocieteProduction;
       commission: Commission;
     };
   })[];
   dossiers: (Dossier & {
     societeProduction: SocieteProduction;
-    user: User | null;
+    instructeur: User | null;
     _count: {
       enfants: number;
     } | null;
@@ -822,7 +822,7 @@ interface SearchResultsType {
 }
 
 interface DossiersFilters {
-  userId?: number;
+  instructeurId?: number;
   societeProductionId?: number;
   departement?: string;
   grandeCategorie?: GrandeCategorieValue;

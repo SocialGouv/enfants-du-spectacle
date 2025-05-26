@@ -97,7 +97,7 @@ function filterDossierFn(filters: DossiersFilters): FilterDossierFn {
     }
     
     return (
-      (!filters.userId || dossier.creatorId == filters.userId) &&
+      (!filters.instructeurId || dossier.instructeurId == filters.instructeurId) &&
       (!filters.societeProductionId ||
         dossier.societeProductionId == filters.societeProductionId) &&
       categorieMatch

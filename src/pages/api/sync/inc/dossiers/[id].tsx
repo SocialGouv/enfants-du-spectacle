@@ -55,9 +55,9 @@ const get: NextApiHandler = async (req, res) => {
         const commission = await client.commission.findFirst({
           where: { id: dossier?.commissionId },
         });
-        if (dossier?.userId) {
+        if (dossier?.instructeurId) {
           const instructeur = await client.user.findFirst({
-            where: { id: dossier.userId },
+            where: { id: dossier.instructeurId },
           });
 
           res.status(200).json({

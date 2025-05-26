@@ -11,7 +11,7 @@ import type {
 } from "@prisma/client";
 
 type DossierDataLight = Dossier & {
-  user: User | null;
+  instructeur: User | null;
   societeProduction: SocieteProduction;
   _count: {
     enfants: number;
@@ -19,7 +19,7 @@ type DossierDataLight = Dossier & {
 };
 
 type DossierData = Dossier & {
-  user: User | null;
+  instructeur: User | null;
   medecin: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;

@@ -21,7 +21,7 @@ import type { SearchResultsType } from "src/lib/queries";
 interface EnfantProps {
   enfant: Enfant & {
     dossier: Dossier & {
-      user?: User | null;
+      instructeur?: User | null;
       societeProduction: SocieteProduction;
       commission: Commission;
     };
@@ -62,7 +62,7 @@ const EnfantRow: React.FC<EnfantProps> = ({ enfant }) => {
 interface DossierProps {
   dossier: Dossier & {
     societeProduction: SocieteProduction;
-    user: User | null;
+    instructeur: User | null;
     _count: {
       enfants: number;
     } | null;
