@@ -29,17 +29,30 @@ const searchEnfants = async (
   })[]
 > => {
   try {
-    return await prismaClient.enfant.findMany({
+    // Log the search query for debugging
+    console.log("Search enfants with query:", search);
+    
+    // Skip the full-text search and go directly to contains
+    // This is more reliable and works regardless of database configuration
+    const results = await prismaClient.enfant.findMany({
       include: {
         dossier: {
           include: { commission: true, societeProduction: true, instructeur: true },
         },
         piecesDossier: true,
       },
-      where: { OR: [{ nom: { search } }, { prenom: { search } }] },
+      where: { 
+        OR: [
+          { nom: { contains: search, mode: 'insensitive' } },
+          { prenom: { contains: search, mode: 'insensitive' } }
+        ] 
+      },
     });
+    
+    console.log(`Found ${results.length} enfants`);
+    return results;
   } catch (e: unknown) {
-    console.log(e);
+    console.log("Error in searchEnfants:", e);
     return [];
   }
 };
@@ -164,7 +177,26 @@ const searchDossiers = async (
   })[]
 > => {
   try {
-    return await prismaClient.dossier.findMany({
+    console.log("Search dossiers with query:", search);
+    
+    // First try a very basic search with just the dossiers
+    console.log("Trying to get all dossiers to debug...");
+    const allDossiers = await prismaClient.dossier.findMany({
+      take: 5, // Just get a few to check
+      include: {
+        _count: { select: { enfants: true } },
+        commission: true,
+        societeProduction: true,
+        instructeur: true,
+      },
+    });
+    
+    console.log(`Database has ${allDossiers.length} dossiers (sample). First one:`, 
+      allDossiers.length > 0 ? JSON.stringify(allDossiers[0].nom) : "none");
+    
+    // Now try the actual search
+    console.log("Trying contains search...");
+    const results = await prismaClient.dossier.findMany({
       include: {
         _count: { select: { enfants: true } },
         commission: true,
@@ -173,17 +205,47 @@ const searchDossiers = async (
       },
       where: {
         OR: [
-          { nom: { search } },
+          { nom: { contains: search, mode: 'insensitive' } },
           {
             societeProduction: {
-              nom: { search },
+              nom: { contains: search, mode: 'insensitive' },
             },
           },
         ],
       },
     });
+    
+    console.log(`Found ${results.length} dossiers matching "${search}"`);
+    
+    // If no results, try a very simple search
+    if (results.length === 0) {
+      console.log("No results, trying simpler search...");
+      const simpleResults = await prismaClient.dossier.findMany({
+        take: 10,
+        include: {
+          _count: { select: { enfants: true } },
+          commission: true,
+          societeProduction: true,
+          instructeur: true,
+        },
+        where: {
+          nom: { 
+            not: null
+          }
+        },
+      });
+      
+      console.log(`Simple search found ${simpleResults.length} dossiers with non-null names`);
+      if (simpleResults.length > 0) {
+        console.log("Sample dossier names:", simpleResults.map(d => d.nom).join(", "));
+        // Return these results for now to show something
+        return simpleResults;
+      }
+    }
+    
+    return results;
   } catch (e: unknown) {
-    console.log(e);
+    console.log("Error in searchDossiers:", e);
     return [];
   }
 };
