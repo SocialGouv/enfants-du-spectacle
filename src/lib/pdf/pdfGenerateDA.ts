@@ -8,6 +8,18 @@ import type { DossierData } from "src/lib/types";
 import commissions from "src/pages/api/commissions";
 
 const generateDA = async (dossiers: DossierData[], binary = false) => {
+  // Debug data availability
+  console.log("DEBUG DA: First dossier:", dossiers[0].id);
+  console.log("DEBUG DA: Demandeur exists:", !!dossiers[0].demandeur);
+  console.log("DEBUG DA: Demandeur societeProduction exists:", !!dossiers[0].demandeur?.societeProduction);
+  console.log("DEBUG DA: Direct societeProduction exists:", !!dossiers[0].societeProduction);
+  
+  if (dossiers[0].demandeur?.societeProduction) {
+    console.log("DEBUG DA: Demandeur societeProduction nom:", dossiers[0].demandeur.societeProduction.nom);
+  } else {
+    console.log("DEBUG DA: Demandeur societeProduction is not populated");
+  }
+  
   let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
   const blocs: RowInput[] = [];
@@ -36,7 +48,7 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
         return {
           date: "20 juillet 2022",
           nom: "Monsieur Bertrand GAUME",
-          prefet: "Préfet de l'Essonne",
+          prefet: "Préfet de l’Essonne",
         };
       case "92":
         return {
@@ -68,10 +80,9 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
   };
 
   dossiers.map((dossier: DossierData) => {
-    // Utiliser la société de production liée au dossier
-    // Note: Dans le nouveau modèle, la société de production est directement liée au dossier
-    // mais nous voulons nous assurer d'afficher toujours le bon nom et la bonne adresse
-    const societeProduction = dossier.societeProduction;
+    // Utiliser la société de production liée au demandeur en priorité, puis celle liée au dossier
+    // Après la migration, la société de production doit être récupérée via le demandeur
+    const societeProduction = dossier.demandeur?.societeProduction || dossier.societeProduction;
     
     // Valeurs par défaut qui seront utilisées si les données sont absentes
     const nomSociete = societeProduction?.nom || societeProduction?.raisonSociale || 'la société de production';

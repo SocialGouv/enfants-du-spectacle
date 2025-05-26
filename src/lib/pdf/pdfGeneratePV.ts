@@ -69,10 +69,10 @@ const generatePV = async (commission: CommissionData) => {
         
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${dossier.societeProduction?.nom || "N/A"} - ${
-              dossier.societeProduction?.adresse || ""
-            } ${dossier.societeProduction?.adresseCodePostal || ""} ${
-              dossier.societeProduction?.adresseCodeCommune || ""
+            content: `\n\nSOCIETE : ${dossier.demandeur?.societeProduction?.nom || dossier.societeProduction?.nom || "N/A"} - ${
+              dossier.demandeur?.societeProduction?.adresse || dossier.societeProduction?.adresse || ""
+            } ${dossier.demandeur?.societeProduction?.adresseCodePostal || dossier.societeProduction?.adresseCodePostal || ""} ${
+              dossier.demandeur?.societeProduction?.adresseCodeCommune || dossier.societeProduction?.adresseCodeCommune || ""
             } \nPROJET : ${dossier.nom || "Sans nom"} - du ${frenchDateText(
               dossier.dateDebut || new Date()
             )} au ${frenchDateText(

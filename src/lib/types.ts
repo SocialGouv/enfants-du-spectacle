@@ -1,7 +1,7 @@
 import type {
   Commentaire,
   Commission,
-  Demandeur,
+  Demandeur as PrismaDemandeur,
   Dossier,
   Enfant,
   PieceDossier,
@@ -9,6 +9,11 @@ import type {
   SocieteProduction,
   User,
 } from "@prisma/client";
+
+// Extend the Demandeur type to include the societeProduction relation
+type Demandeur = PrismaDemandeur & {
+  societeProduction?: SocieteProduction | null;
+};
 
 type DossierDataLight = Dossier & {
   instructeur: User | null;

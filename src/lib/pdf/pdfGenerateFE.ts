@@ -20,6 +20,18 @@ import {
 import type { DossierData } from "src/lib/types";
 
 const generateFE = async (dossiers: DossierData[]) => {
+  // Debug data availability
+  console.log("DEBUG FE: First dossier:", dossiers[0].id);
+  console.log("DEBUG FE: Demandeur exists:", !!dossiers[0].demandeur);
+  console.log("DEBUG FE: Demandeur societeProduction exists:", !!dossiers[0].demandeur?.societeProduction);
+  console.log("DEBUG FE: Direct societeProduction exists:", !!dossiers[0].societeProduction);
+  
+  if (dossiers[0].demandeur?.societeProduction) {
+    console.log("DEBUG FE: Demandeur societeProduction nom:", dossiers[0].demandeur.societeProduction.nom);
+  } else {
+    console.log("DEBUG FE: Demandeur societeProduction is not populated");
+  }
+  
   let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
   const categories = _.uniq(
@@ -41,10 +53,10 @@ const generateFE = async (dossiers: DossierData[]) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${dossier.societeProduction?.nom || "N/A"} - ${
-              dossier.societeProduction?.adresse || ""
-            } ${dossier.societeProduction?.adresseCodePostal || ""} ${
-              dossier.societeProduction?.adresseCodeCommune || ""
+            content: `\n\nSOCIETE : ${dossier.demandeur?.societeProduction?.nom || dossier.societeProduction?.nom || "N/A"} - ${
+              dossier.demandeur?.societeProduction?.adresse || dossier.societeProduction?.adresse || ""
+            } ${dossier.demandeur?.societeProduction?.adresseCodePostal || dossier.societeProduction?.adresseCodePostal || ""} ${
+              dossier.demandeur?.societeProduction?.adresseCodeCommune || dossier.societeProduction?.adresseCodeCommune || ""
             } \nPROJET : ${dossier.nom || "Sans nom"} - du ${frenchDateText(
               dossier.dateDebut || new Date()
             )} au ${frenchDateText(

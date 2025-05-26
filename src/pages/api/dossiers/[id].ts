@@ -8,6 +8,7 @@ import superjson from "superjson";
 
 import client from "src/lib/prismaClient"
 import { generateToken } from "src/lib/utils";
+import societeProduction from "../diagnostic/societe-production";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
@@ -49,7 +50,11 @@ const get: NextApiHandler = async (req, res) => {
         },
       },
       commission: true,
-      demandeur: true,
+      demandeur: {
+        include : {
+          societeProduction: true
+        }
+      },
       enfants: {
         where: session?.dbUser.role !== "MEDECIN" ?
         {}
