@@ -37,17 +37,17 @@ const FilterBar: React.FC<Props> = ({
   React.useEffect(() => {
     if (session.data?.dbUser.role === "INSTRUCTEUR")
       onChangeFilters({
-        userId: stringToNumberOrNull(session.data?.dbUser.id),
+        instructeurId: stringToNumberOrNull(session.data?.dbUser.id),
       });
   }, []);
 
   if (isLoading) return <IconLoader />;
   if (isError || !allUsers) return <Icon name="ri-error" />;
 
-  const onChangeUserId: React.ChangeEventHandler<HTMLOptionElement> = (
+  const onChangeInstructeurId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilters({ userId: stringToNumberOrNull(event.target.value) });
+    onChangeFilters({ instructeurId: stringToNumberOrNull(event.target.value) });
   };
 
   const onChangeSocieteProductionId: React.ChangeEventHandler<
@@ -104,15 +104,15 @@ const FilterBar: React.FC<Props> = ({
         {session.data?.dbUser.role !== "MEDECIN" &&
           <span className={styles.filterContainer || ""}>
             <Select
-              id="userId"
-              selected={String(filters.userId)}
+              id="instructeurId"
+              selected={String(filters.instructeurId)}
               options={[defaultUserOption].concat(
                 allUsers.map((u) => ({
                   label: shortUserName(u),
                   value: String(u.id),
                 }))
               )}
-              onChange={onChangeUserId}
+              onChange={onChangeInstructeurId}
             />
           </span>
         }
@@ -147,7 +147,7 @@ const FilterBar: React.FC<Props> = ({
                   departement: "",
                   grandeCategorie: "",
                   societeProductionId: "",
-                  userId: "",
+                  instructeurId: "",
                 });
               }}
             >

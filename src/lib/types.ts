@@ -1,7 +1,7 @@
 import type {
   Commentaire,
   Commission,
-  Demandeur,
+  Demandeur as PrismaDemandeur,
   Dossier,
   Enfant,
   PieceDossier,
@@ -10,8 +10,13 @@ import type {
   User,
 } from "@prisma/client";
 
+// Extend the Demandeur type to include the societeProduction relation
+type Demandeur = PrismaDemandeur & {
+  societeProduction?: SocieteProduction | null;
+};
+
 type DossierDataLight = Dossier & {
-  user: User | null;
+  instructeur: User | null;
   societeProduction: SocieteProduction;
   _count: {
     enfants: number;
@@ -19,7 +24,7 @@ type DossierDataLight = Dossier & {
 };
 
 type DossierData = Dossier & {
-  user: User | null;
+  instructeur: User | null;
   medecin: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;
@@ -95,6 +100,11 @@ interface Remuneration {
   totalDadr: number | null;
   comment: string | null;
   enfantId: number | null;
+}
+
+// Augmenter l'interface Enfant importée depuis Prisma pour inclure remuneration
+interface EnfantWithRemunerations extends Enfant {
+  remuneration?: Remuneration[];
 }
 
 export type {

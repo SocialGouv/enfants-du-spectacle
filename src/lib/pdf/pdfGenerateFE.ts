@@ -20,6 +20,18 @@ import {
 import type { DossierData } from "src/lib/types";
 
 const generateFE = async (dossiers: DossierData[]) => {
+  // Debug data availability
+  console.log("DEBUG FE: First dossier:", dossiers[0].id);
+  console.log("DEBUG FE: Demandeur exists:", !!dossiers[0].demandeur);
+  console.log("DEBUG FE: Demandeur societeProduction exists:", !!dossiers[0].demandeur?.societeProduction);
+  console.log("DEBUG FE: Direct societeProduction exists:", !!dossiers[0].societeProduction);
+  
+  if (dossiers[0].demandeur?.societeProduction) {
+    console.log("DEBUG FE: Demandeur societeProduction nom:", dossiers[0].demandeur.societeProduction.nom);
+  } else {
+    console.log("DEBUG FE: Demandeur societeProduction is not populated");
+  }
+  
   let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
   const categories = _.uniq(
@@ -41,10 +53,10 @@ const generateFE = async (dossiers: DossierData[]) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${dossier.societeProduction?.nom || "N/A"} - ${
-              dossier.societeProduction?.adresse || ""
-            } ${dossier.societeProduction?.adresseCodePostal || ""} ${
-              dossier.societeProduction?.adresseCodeCommune || ""
+            content: `\n\nSOCIETE : ${dossier.demandeur?.societeProduction?.nom || dossier.societeProduction?.nom || "N/A"} - ${
+              dossier.demandeur?.societeProduction?.adresse || dossier.societeProduction?.adresse || ""
+            } ${dossier.demandeur?.societeProduction?.adresseCodePostal || dossier.societeProduction?.adresseCodePostal || ""} ${
+              dossier.demandeur?.societeProduction?.adresseCodeCommune || dossier.societeProduction?.adresseCodeCommune || ""
             } \nPROJET : ${dossier.nom || "Sans nom"} - du ${frenchDateText(
               dossier.dateDebut || new Date()
             )} au ${frenchDateText(
@@ -78,49 +90,51 @@ const generateFE = async (dossiers: DossierData[]) => {
               },
             ]);
             _.filter(dossier.enfants, { typeEmploi: role.value })
-              .sort(function (
-                a: Record<string, string>,
-                b: Record<string, string>
-              ) {
-                if (a.nom < b.nom) {
+              .sort(function (a, b) {
+                if ((a as Enfant).nom < (b as Enfant).nom) {
                   return -1;
                 }
-                if (a.nom > b.nom) {
+                if ((a as Enfant).nom > (b as Enfant).nom) {
                   return 1;
                 }
-                if (a.prenom < b.prenom) {
+                if ((a as Enfant).prenom < (b as Enfant).prenom) {
                   return -1;
                 }
-                if (a.prenom > b.prenom) {
+                if ((a as Enfant).prenom > (b as Enfant).prenom) {
                   return 1;
                 }
                 return 0;
               })
-              .map((enfant: Enfant) => {
-                let remEnfant = rems.filter(rem => rem.enfantId?.toString() === enfant.externalId)
+              .map((enfant) => {
+                // Ensure enfant is treated as Enfant type
+                const typedEnfant = enfant as Enfant;
+                // Accès aux rémunérations de l'enfant de manière sécurisée
+                // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
+                const remEnfant = typedEnfant.remuneration || [];
+                console.log(`Rémunérations pour l'enfant ${typedEnfant.id} dans FE:`, remEnfant);
                 blocs.push([
                   {
-                    content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(
-                      enfant.dateNaissance
+                    content: `${typedEnfant.nom?.toUpperCase()} ${typedEnfant.prenom?.toUpperCase()}, ${birthDateToFrenchAge(
+                      typedEnfant.dateNaissance || new Date()
                     )} ${
-                      enfant.nomPersonnage
-                        ? ", incarne " + enfant.nomPersonnage
+                      typedEnfant.nomPersonnage
+                        ? ", incarne " + typedEnfant.nomPersonnage
                         : ""
                     }${
-                      enfant.adresseEnfant
-                        ? "\n  Domicile : " + enfant.adresseEnfant
+                      typedEnfant.adresseEnfant
+                        ? "\n  Domicile : " + typedEnfant.adresseEnfant
                         : ""
                     }${
-                      enfant.nomRepresentant1
-                        ? `\n  Représentant légal 1 : ${enfant.nomRepresentant1} ${enfant.prenomRepresentant1} - ${enfant.adresseRepresentant1}`
+                      typedEnfant.nomRepresentant1
+                        ? `\n  Représentant légal 1 : ${typedEnfant.nomRepresentant1} ${typedEnfant.prenomRepresentant1} - ${typedEnfant.adresseRepresentant1}`
                         : ""
                     }${
-                      enfant.nomRepresentant2
-                        ? `\n  Représentant légal 2 : ${enfant.nomRepresentant2} ${enfant.prenomRepresentant2} - ${enfant.adresseRepresentant2}`
+                      typedEnfant.nomRepresentant2
+                        ? `\n  Représentant légal 2 : ${typedEnfant.nomRepresentant2} ${typedEnfant.prenomRepresentant2} - ${typedEnfant.adresseRepresentant2}`
                         : ""
                     }
-  ${enfant.nombreJours} jours travaillés
-  ${enfant.periodeTravail ? `Période: ${enfant.periodeTravail}` : ""}
+  ${typedEnfant.nombreJours} jours travaillés
+  ${typedEnfant.periodeTravail ? `Période: ${typedEnfant.periodeTravail}` : ""}
   ${dossier.source === 'FORM_EDS' ? 
   `Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
@@ -132,13 +146,13 @@ const generateFE = async (dossiers: DossierData[]) => {
   }).join(' ')}
   TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0)} Euros` 
   : 
-  `${enfant.nombreCachets} cachets de ${enfant.montantCachet} Euros ${
-    enfant.remunerationsAdditionnelles
-      ? `\n  Rémunérations additionnelles : ${enfant.remunerationsAdditionnelles}`
+  `${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet} Euros ${
+    typedEnfant.remunerationsAdditionnelles
+      ? `\n  Rémunérations additionnelles : ${typedEnfant.remunerationsAdditionnelles}`
       : ""
   }
-  TOTAL : ${enfant.remunerationTotale} Euros` }
-  Part CDC : ${enfant.cdc ? enfant.cdc : "0"}% 
+  TOTAL : ${typedEnfant.remunerationTotale} Euros` }
+  Part CDC : ${typedEnfant.cdc ? typedEnfant.cdc : "0"}% 
   |_| Favorable        |_| Favorable sous réserve          |_| Ajourné          |_| Défavorable 
   Motifs : \n \n`,
                     styles: {

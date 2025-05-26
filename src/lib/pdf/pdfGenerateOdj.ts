@@ -53,10 +53,10 @@ const generateOdj = async (commission: CommissionData) => {
       }).map((dossier: DossierData) => {
         blocs.push([
           {
-            content: `\n\nSOCIETE : ${dossier.societeProduction?.nom || "N/A"}  - ${
-              dossier.societeProduction?.adresse || ""
-            } ${dossier.societeProduction?.adresseCodePostal || ""} ${
-              dossier.societeProduction?.adresseCodeCommune || ""
+            content: `\n\nSOCIETE : ${dossier.demandeur?.societeProduction?.nom || dossier.societeProduction?.nom || "N/A"}  - ${
+              dossier.demandeur?.societeProduction?.adresse || dossier.societeProduction?.adresse || ""
+            } ${dossier.demandeur?.societeProduction?.adresseCodePostal || dossier.societeProduction?.adresseCodePostal || ""} ${
+              dossier.demandeur?.societeProduction?.adresseCodeCommune || dossier.societeProduction?.adresseCodeCommune || ""
             } \nPROJET : ${dossier.nom || "Sans nom"} - du ${frenchDateText(
               dossier.dateDebut || new Date()
             )} au ${frenchDateText(
@@ -87,27 +87,28 @@ const generateOdj = async (commission: CommissionData) => {
                 },
               },
             ]);
-            _.filter(dossier.enfants, { typeEmploi: role.value })
-              .sort(function (
-                a: Record<string, string>,
-                b: Record<string, string>
-              ) {
-                if (a.nom < b.nom) {
-                  return -1;
-                }
-                if (a.nom > b.nom) {
-                  return 1;
-                }
-                if (a.prenom < b.prenom) {
-                  return -1;
-                }
-                if (a.prenom > b.prenom) {
-                  return 1;
-                }
+            const enfantsWithRole = dossier.enfants.filter(
+              (e) => e.typeEmploi === role.value
+            );
+            
+            enfantsWithRole
+              .sort((a, b) => {
+                const aNom = (a.nom || '');
+                const bNom = (b.nom || '');
+                const aPrenom = (a.prenom || '');
+                const bPrenom = (b.prenom || '');
+                
+                if (aNom < bNom) return -1;
+                if (aNom > bNom) return 1;
+                if (aPrenom < bPrenom) return -1;
+                if (aPrenom > bPrenom) return 1;
                 return 0;
               })
-              .map((enfant: Enfant) => {
-                let remEnfant = rems.filter(rem => rem.enfantId?.toString() === enfant.externalId)
+              .forEach((enfant) => {
+                // Accès aux rémunérations de l'enfant de manière sécurisée
+                // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
+                const remEnfant = enfant.remuneration || [];
+                console.log(`Rémunérations pour l'enfant ${enfant.id} dans ODJ:`, remEnfant);
                 blocs.push([
                   {
                     content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(

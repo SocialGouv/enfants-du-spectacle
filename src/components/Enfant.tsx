@@ -72,8 +72,16 @@ const EnfantComponent: React.FC<Props> = ({
   remunerations,
   sender,
 }) => {
-  const [formData, setFormData] = React.useState<Enfant>({
-    ...enfant,
+  const [formData, setFormData] = React.useState<Enfant>(() => {
+    // Make a copy of the enfant object
+    const formDataCopy = { ...enfant };
+    
+    // Convert dateConsultation string to Date object if it exists
+    if (enfant.dateConsultation) {
+      formDataCopy.dateConsultation = new Date(enfant.dateConsultation);
+    }
+    
+    return formDataCopy;
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
   const [isFileUploading, setIsFileUploading] = React.useState<boolean>(false);

@@ -147,7 +147,7 @@ const Page: React.FC = () => {
       societeProductionId: stringToNumberOrNull(
         query.societeProductionId as string
       ),
-      userId: stringToNumberOrNull(query.userId as string),
+      instructeurId: stringToNumberOrNull(query.instructeurId as string),
     });
     setFilters(newFilters);
   }, [routerIsReady, query]);
