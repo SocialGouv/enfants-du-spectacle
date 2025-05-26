@@ -97,6 +97,11 @@ interface Remuneration {
   enfantId: number | null;
 }
 
+// Augmenter l'interface Enfant importée depuis Prisma pour inclure remuneration
+interface EnfantWithRemunerations extends Enfant {
+  remuneration?: Remuneration[];
+}
+
 export type {
   CommentaireData,
   CommentaireDataLight,

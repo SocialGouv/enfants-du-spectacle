@@ -15,7 +15,7 @@ import type {
   SearchResultsType,
 } from "src/lib/queries";
 import { Remuneration } from "./types";
-import { getRemunerationsByEnfantsIds } from "./fetching/remunerations";
+import prismaClient from "./prismaClient";
 
 function capitalizeWord(str: string): string {
   return str.replace(/^\w/, (c) => c.toUpperCase());
@@ -148,22 +148,79 @@ function getFilterableSocietesProductions(
 }
 
 const getRemunerations = async (commission: CommissionData): Promise<Remuneration[]> => {
-  let rems : Remuneration[] = []
-  return Promise.all(
-    commission.dossiers.filter(dossier => STATUS_ODJ.includes(dossier.statut)).map(async (dossier) => {
-      if(dossier.source === 'FORM_EDS')
-      rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
-    })
-  ).then(() => {
-    return rems
-  })
+  try {
+    // Get all enfant IDs from the commission dossiers
+    const enfantIds = commission.dossiers
+      .filter(dossier => STATUS_ODJ.includes(dossier.statut))
+      .flatMap(dossier => dossier.enfants.map(enfant => enfant.id));
+    
+    if (enfantIds.length === 0) {
+      return [];
+    }
+    
+    // Fetch remunerations using our API endpoint
+    const queryParams = enfantIds.map(id => `enfantIds=${id}`).join('&');
+    const response = await fetch(`/api/remunerations?${queryParams}`);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    
+    const data = await response.json() as Remuneration[];
+    console.log("Remuneration data from API:", data);
+    
+    // Important: Attach remuneration data to each enfant object in all dossiers
+    for (const dossier of commission.dossiers) {
+      for (const enfant of dossier.enfants) {
+        // Filter remunerations for this specific enfant
+        const enfantRemunerations = data.filter(rem => rem.enfantId === enfant.id);
+        // Attach the remuneration array to the enfant object
+        // @ts-ignore - La propriété remuneration n'est pas dans le type Enfant mais est utilisée dans le code
+        enfant.remuneration = enfantRemunerations;
+      }
+    }
+    
+    return data;
+  } catch (error) {
+    console.error("Error fetching remunerations:", error);
+    return [];
+  }
 }
 
 const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> => {
-  let rems : Remuneration[] = []
-  if(dossier.source === 'FORM_EDS')
-  rems.push(...await getRemunerationsByEnfantsIds(dossier.enfants.map(enfant => enfant.externalId || '')))
-  return rems
+  try {
+    // Get all enfant IDs from the dossier
+    const enfantIds = dossier.enfants.map(enfant => enfant.id);
+    
+    if (enfantIds.length === 0) {
+      return [];
+    }
+    
+    // Fetch remunerations using our API endpoint
+    const queryParams = enfantIds.map(id => `enfantIds=${id}`).join('&');
+    const response = await fetch(`/api/remunerations?${queryParams}`);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    
+    const data = await response.json() as Remuneration[];
+    console.log("Remuneration data from API for dossier:", data);
+    
+    // Important: Attach remuneration data to each enfant object
+    for (const enfant of dossier.enfants) {
+      // Filter remunerations for this specific enfant
+      const enfantRemunerations = data.filter(rem => rem.enfantId === enfant.id);
+      // Attach the remuneration array to the enfant object
+      // @ts-ignore - La propriété remuneration n'est pas dans le type Enfant mais est utilisée dans le code
+      enfant.remuneration = enfantRemunerations;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error("Error fetching remunerations by dossier:", error);
+    return [];
+  }
 }
 
 function getFormatedTypeDossier(type: string): string {
