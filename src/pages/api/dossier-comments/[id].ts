@@ -24,28 +24,36 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
   if (req.method === "GET") {
     try {
-      // Parse enfantId from query params if it exists
-      const { enfantId } = req.query;
+      // Parse query params
+      const { enfantId, includeChildren } = req.query;
       let enfantIdFilter = undefined;
       
-      if (enfantId) {
+      // Check if we should include children comments
+      if (includeChildren === 'true') {
+        // Don't filter by enfantId - return all comments for this dossier
+        console.log("Fetching all comments (project + children) for dossier:", dossierId);
+      } else if (enfantId) {
+        // Filter by specific enfantId
         if (typeof enfantId === 'string') {
           const parsedEnfantId = parseInt(enfantId, 10);
           if (!isNaN(parsedEnfantId)) {
             enfantIdFilter = parsedEnfantId;
           }
         }
+      } else {
+        // Default behavior: only project comments (enfantId = null)
+        enfantIdFilter = null;
       }
       
-      // Build the where clause based on whether enfantId is provided
+      // Build the where clause based on the params
       const whereClause: any = { dossierId: dossierId };
-      if (enfantIdFilter !== undefined) {
+      if (includeChildren !== 'true' && enfantIdFilter !== undefined) {
         whereClause.enfantId = enfantIdFilter;
       }
       
       console.log("Fetching comments with filter:", whereClause);
       
-      // Fetch comments for the dossier with optional enfantId filter
+      // Fetch comments for the dossier with the appropriate filter
       const comments = await prisma.comments.findMany({
         where: whereClause,
         orderBy: { date: "desc" }
