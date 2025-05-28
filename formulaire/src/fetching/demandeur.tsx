@@ -41,7 +41,6 @@ const deleteDemandeur = async (id: number) => {
 };
 
 const updateDemandeur = async (demandeur: Demandeur) => {
-  console.log("Updating demandeur, data being sent:", demandeur);
   
   // Ensure we have a valid demandeur object with at least an ID
   if (!demandeur || !demandeur.id) {
@@ -74,7 +73,6 @@ const updateDemandeur = async (demandeur: Demandeur) => {
     }
     
     const result = await response.json();
-    console.log("Demandeur update successful:", result);
     return result as Demandeur;
   } catch (error) {
     console.error("Exception during demandeur update:", error);

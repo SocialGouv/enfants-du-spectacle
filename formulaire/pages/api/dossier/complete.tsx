@@ -39,8 +39,6 @@ const post: NextApiHandler = async (req, res) => {
       enfants: EnfantData[];
     };
     
-    console.log("Processing complete dossier submission:", data.dossier.id);
-    
     // Validate the dossier status
     if (
       data.dossier.statut !== "BROUILLON" &&
@@ -74,13 +72,11 @@ const post: NextApiHandler = async (req, res) => {
           dateLimiteDepot: 'asc' // Get the earliest deadline
         }
       });
-      console.log('commission found : ', commission)
       
       if (commission) {
         commissionId = commission.id;
         commissionString = `Commission du ${commission.date.toLocaleDateString('fr-FR')} - Département ${commission.departement}`;
         commissionDate = commission.date;
-        console.log(`Assigning dossier to commission ID: ${commissionId}`);
       } else {
         console.log(`No suitable commission found for department: ${department}`);
       }

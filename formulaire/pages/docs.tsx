@@ -20,11 +20,9 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
       var jwt = require('jsonwebtoken');
       let encrypted = false;
       const token = query.token;
-      console.log('token : ', token)
 
       try {
         var decoded = jwt.verify(token, process.env.SECRET_KEY_DOCS);
-        console.log('decoded : ', decoded)
 
         const mimes = {
             'bmp': 'image/bmp',
@@ -50,10 +48,6 @@ export const getServerSideProps: GetServerSideProps = async ({query, res}) => {
         if(nameFull !== name) encrypted = true
 
         let extension: keyof typeof mimes = name.substring(name.lastIndexOf('.') + 1)
-
-        console.log('name : ', name)
-        console.log('extension : ', extension)
-        console.log('mime : ', mimes[extension])
 
         const stat = await fsp.stat(pathFull);
         const decipher = crypto.createDecipheriv("aes-256-cfb", key, iv);

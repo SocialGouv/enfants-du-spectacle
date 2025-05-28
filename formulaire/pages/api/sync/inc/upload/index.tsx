@@ -25,7 +25,6 @@ function getId(req: NextApiRequest): number {
 }
 
 const sendDoc: NextApiHandler = async (req, res) => {
-  console.log("------ INC FROM SDP ------");
 
   const dossierId = getId(req);
   try {

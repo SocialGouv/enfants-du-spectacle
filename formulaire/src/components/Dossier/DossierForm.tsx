@@ -41,13 +41,11 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const contextDossier = { ...useStateContext() };
 
   const saveDossier = useDebouncedCallback(() => {
-    console.log("saving dossier ... : ", contextDossier.dossier);
     updateDossier(contextDossier.dossier);
   }, 1000);
 
   const saveDemandeur = useDebouncedCallback(async () => {
     try {
-      console.log("saving demandeur ... : ", contextDossier.demandeur);
       // Validate demandeur has required fields for update
       if (!contextDossier.demandeur || !contextDossier.demandeur.id) {
         console.error("Cannot update demandeur: missing ID");
@@ -141,7 +139,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
             });
             break;
           case "Enfants":
-            console.log("in enfant");
             const enfantsFetched = await getEnfantsByDossierId(
               contextDossier.dossier.id,
               0,
@@ -149,11 +146,8 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
               "nom",
               "asc"
             );
-            console.log("fetch : ", enfantsFetched.enfants);
             enfantsFetched.enfants.map((enfant) => {
-              console.log("for enfant : ", enfant.nom + " " + enfant.prenom);
               entity.mandatory_fields.map((field) => {
-                console.log("checking field : ", field.code);
                 if (
                   !enfant[field.code as keyof Enfant] ||
                   enfant[field.code as keyof Enfant] === ""
@@ -175,13 +169,11 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
       })
     );
 
-    console.log("verif: ", verif);
     setMessageSuccess("");
     return verif;
   };
 
   const handleDepotDossier = async () => {
-    console.log("trying depot : ", contextDossier);
     setMessageSuccess("Vérification du dossier en cours ...");
     if (await processChecks()) {
       setMessageSuccess(
@@ -250,10 +242,6 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
     contextDossier.processEntity("docs", docs);
     contextDossier.processEntity("comments", comments);
   }, []);
-
-  React.useEffect(() => {
-    console.log("comments : ", contextDossier.comments);
-  }, [contextDossier.comments]);
 
   return (
     <div className={styles.dossierForm}>

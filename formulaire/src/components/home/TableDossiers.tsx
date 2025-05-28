@@ -56,21 +56,10 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     setDossiers(res.dossiers);
     setCountDossiers(res.countCurrent);
     action(res.countEnCours, res.countTermines);
+    setShowLoader(false);
   };
 
   const [comments, setComments] = React.useState<Comments[]>([]);
-
-  const fetchComments = async () => {
-    if (dossiers && dossiers.length > 0) {
-      const commentsList = await Promise.all(
-        dossiers.map(async (dossier: DossierData) => {
-          const resComments = await getComments(dossier.id as number);
-          return resComments;
-        })
-      );
-      setComments(commentsList.flat());
-    }
-  };
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -92,11 +81,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
   React.useEffect(() => {
     setPage(1);
   }, [status])
-
-  React.useEffect(() => {
-    fetchComments();
-    setShowLoader(false);
-  }, [dossiers]);
 
   const [indexItem, setIndexItem] = React.useState<number>();
 
@@ -143,7 +127,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
     try {
       let res = await deleteDossier(dossier.id);
       setDossiers(dossiers.filter((d) => d.id !== dossier.id));
-      console.log("res delete : ", res);
     } catch (e) {
       console.log(e);
     }
@@ -204,14 +187,14 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
           dossiers.map((dossier, index) => {
             const commentsNotifications: CommentaireNotifications = {
               dossierId: dossier.id,
-              notificationsProject: comments?.filter(
+              notificationsProject: dossier.comments?.filter(
                 (comment) =>
                   comment.dossierId === dossier.id &&
                   comment.seen !== true &&
                   comment.source === "INSTRUCTEUR" &&
                   comment.enfantId === null
               ).length,
-              notificationsChildren: comments?.filter(
+              notificationsChildren: dossier.comments?.filter(
                 (comment) =>
                   comment.dossierId === dossier.id &&
                   comment.seen !== true &&

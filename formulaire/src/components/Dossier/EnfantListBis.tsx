@@ -26,6 +26,7 @@ import ProgressBar from "../ProgressBar";
 import readXlsxFile from "read-excel-file";
 import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
 import { FaFileDownload, FaUserPlus } from "react-icons/fa";
+import { updateCommentairesNotifications } from "src/fetching/commentaires";
 
 interface Props {
   allowChanges: Boolean;
@@ -158,7 +159,6 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
       termOrdered,
       order
     );
-    console.log("enfants fetched", enfantsFetched);
     setEnfants(enfantsFetched.enfants);
     setNumberEnfants(enfantsFetched.count);
     setLoading(false);
@@ -182,6 +182,16 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
       setSelectedEnfant(enfant);
     }
   };
+
+  React.useEffect(() => {
+    if(selectedEnfant) {
+      console.log("selectedEnfant : ", selectedEnfant)
+      const selectedComs = selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)
+      if(selectedComs && selectedComs?.length > 0) {
+        updateCommentairesNotifications(selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true).map(com => JSON.stringify(com.id)) || [])
+      }
+    }
+  }, [selectedEnfant])
 
   const refreshEnfant = (enfant: EnfantData) => {
     const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id);
@@ -215,7 +225,6 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   };
 
   const addEnfant = async () => {
-    console.log("adding enfant");
     let res = await createEnfant({
       nom: "Enfant",
       prenom: "Nouvel",
@@ -410,7 +419,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
             const commentsNotifications: CommentaireNotifications = {
               dossierId: contextDossier.dossier.id,
               notificationsProject: 0,
-              notificationsChildren: enfant.comments?.length || 0,
+              notificationsChildren: enfant.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)?.length || 0,
             };
             return (
               <a

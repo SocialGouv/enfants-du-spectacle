@@ -50,6 +50,7 @@ const get: NextApiHandler = async (req, res) => {
         },
         demandeur: true,
         piecesDossier: true,
+        comments: true
       },
       skip: page,
       take: numberByPage,

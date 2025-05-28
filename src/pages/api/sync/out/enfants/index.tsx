@@ -20,8 +20,6 @@ const handler: NextApiHandler = async (req, res) => {
 const passEnfant: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as Enfant;
 
-  //console.log('data received : ', data)
-
   const url = `${process.env.API_URL_SDP}/inc/enfants`;
   const fetching = await fetch(url, {
     method: "PUT",

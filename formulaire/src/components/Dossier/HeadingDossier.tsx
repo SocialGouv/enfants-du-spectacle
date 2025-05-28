@@ -11,15 +11,11 @@ import { User } from "@prisma/client";
 interface Props {
   dossier: DossierData;
   setShowDialogue?: (showDialogue: boolean) => void;
-  agent?: User;
-  commissionDate?: Date;
 }
 
 const HeadingDossier: React.FC<Props> = ({
   dossier,
   setShowDialogue,
-  agent,
-  commissionDate,
 }) => {
   const { data: session } = useSession();
 
@@ -47,8 +43,8 @@ const HeadingDossier: React.FC<Props> = ({
           <h2>
             Dossier n° {dossier.id}
             {`${
-              commissionDate
-                ? ` pour la commission: ${frenchDateText(commissionDate)}`
+              dossier.commission
+                ? ` pour la commission: ${frenchDateText(dossier.commission.date)}`
                 : ""
             }`}
           </h2>
@@ -63,10 +59,10 @@ const HeadingDossier: React.FC<Props> = ({
               {frenchDateText(dossier.dateDerniereModification)}
             </div>
           )}
-          {agent?.id && (
+          {dossier.instructeur?.id && (
             <div style={{ marginTop: "10px" }}>
               <span className={styles.commissionTitle}>Suivi par </span>
-              {agent.nom + " " + agent.prenom + " - " + agent.email}
+              {dossier.instructeur.nom + " " + dossier.instructeur.prenom + " - " + dossier.instructeur.email}
             </div>
           )}
         </Container>

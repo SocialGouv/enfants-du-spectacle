@@ -20,8 +20,6 @@ const update: NextApiHandler = async (req, res) => {
     api_key: string;
   };
 
-  //console.log("data received : ", data);
-
   if (data.api_key !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
@@ -43,7 +41,6 @@ const update: NextApiHandler = async (req, res) => {
               id: parseInt(data.id),
             },
           });
-    // console.log("piece trouvee : ", piece);
   }
 
   res.status(200).json({ message: "OK" });

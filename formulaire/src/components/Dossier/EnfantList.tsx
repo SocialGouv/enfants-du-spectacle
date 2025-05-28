@@ -235,7 +235,6 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
   }, [order, termOrdered])
 
   React.useEffect(() => {
-    console.log('selectedEnfant : ', selectedEnfant)
   }, [selectedEnfant])
 
 
@@ -410,8 +409,8 @@ const EnfantList: React.FC<Props> = ({ allowChanges, comments }) => {
                 key={`table-enfant-${enfant.id}`}
                 onClick={() => {
                   clickEnfant(enfant);
-                  if (commentsChildren?.length) {
-                    const commentsChildrenIds: string[] = commentsChildren.map(
+                  if (comments?.length) {
+                    const commentsChildrenIds: string[] = comments?.map(
                       (comment: Comments) => JSON.stringify(comment.id)
                     );
                     if (commentsChildrenIds)

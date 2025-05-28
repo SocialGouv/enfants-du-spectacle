@@ -28,13 +28,6 @@ interface DossierProps {
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
   const { data: session } = useSession();
   
-  // Force fetch societeProduction if missing through API
-  React.useEffect(() => {
-    if (!dossier.societeProduction && dossier.societeProductionId) {
-      console.log(`Dossier ${dossier.id} is missing societeProduction data but has ID ${dossier.societeProductionId}`);
-    }
-  }, [dossier]);
-  
   return (
     <div className={`${session?.dbUser.role !== "MEDECIN" ? styles.dossierGrid : styles.dossierGridMedecin} itemGrid`}>
       {session?.dbUser.role !== "MEDECIN" &&
@@ -92,7 +85,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
         const response = await fetch(`/api/notifications/commission/${commission.id}`);
         if (response.ok) {
           const data = await response.json();
-          console.log('NOTIFICATIONS DEBUG:', data);
           setNotificationsData(data.notifications || data);
         } else {
           console.error('Erreur lors du chargement des notifications:', response.statusText);

@@ -73,8 +73,6 @@ const DossierPage: React.FC = () => {
               <HeadingDossier
                 dossier={dossier.dossier}
                 setShowDialogue={setShowDialogue}
-                agent={agent}
-                commissionDate={commissionDate}
               ></HeadingDossier>
               <ShareDossierModal
                 dossier={dossier.dossier}

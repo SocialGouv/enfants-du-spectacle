@@ -50,7 +50,6 @@ const InputComments: React.FC<Props> = ({
               sender: sender,
               date: new Date(),
             };
-            console.log("length : ", comment.length);
             if (comment.length > 2) {
               createComment(commentSent);
               contextDossier.processEntity("comments", [

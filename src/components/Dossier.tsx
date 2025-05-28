@@ -69,7 +69,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       if (response.ok) {
         const data = await response.json();
         setFetchedSocieteProduction(data);
-        console.log("Successfully fetched societeProduction:", data);
       } else {
         console.error("Failed to fetch societeProduction", response.status);
       }
@@ -98,7 +97,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
           throw new Error(`Error fetching comments: ${response.status}`);
         }
         const commentsData = await response.json();
-        console.log('DEBUG DOSSIER COMMENTS:', commentsData);
         setComments(commentsData);
       }
     } catch (error) {
@@ -441,23 +439,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                 <Table headers={tableChildHeaders}>
                   {filterTypeEmploi(typeEmploi).map((enf: any, idx: number) => {
                     let countCommentsNotification = 0;
-                    if (enf.externalId !== null) {
+                    if (enf.id !== null) {
                       const filteredComments = comments.filter(
                         (comment) =>
-                          comment.enfantId === parseInt(enf.externalId) &&
+                          comment.enfantId === enf.id &&
                           comment.source === "SOCIETE_PROD" &&
                           (comment.seen === false || comment.seen === null)
                       );
                       countCommentsNotification = filteredComments.length;
-                      
-                      // Debug log
-                      console.log(`DEBUG ENFANT ${enf.externalId}:`, {
-                        enfantId: enf.externalId,
-                        allComments: comments.length,
-                        commentsForChild: comments.filter(c => c.enfantId === parseInt(enf.externalId)).length,
-                        unreadComments: countCommentsNotification,
-                        filteredComments
-                      });
                     }
                     return (
                       <tr key={idx}>
@@ -479,12 +468,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               countCommentsNotification={
                                 countCommentsNotification
                               }
-                  piecesJustif={dataLinks?.enfants
-                    ?.find(
-                      (data: any) =>
-                        data.id === parseInt(enf.externalId ?? "")
-                    )
-                    ?.piecesDossier.map((tmp: any) => tmp.statut)?.filter(Boolean) as string[] | undefined}
+                              piecesJustif={enf.piecesDossier?.map((piece: any) => piece.statut) as string[] | undefined}
                             />
                           )}
                         </td>
@@ -570,7 +554,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       {scrollPosition > 400 && (
         <div className={styles.buttonUp}>
           <Link href={`#summaryBloc`}>
-            <img src={logoArrowUp} alt="Supprimer" width={30} height={30} />
+            <Image src={logoArrowUp} alt="Remonter" width={30} height={30} />
           </Link>
         </div>
       )}

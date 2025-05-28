@@ -35,7 +35,6 @@ const post: NextApiHandler = async (req, res) => {
     societeProduction: SocieteProduction;
     enfants: EnfantData[];
   };
-  console.log("dossier to send : ", data);
 
   if (
     data.dossier.statut === "BROUILLON" ||

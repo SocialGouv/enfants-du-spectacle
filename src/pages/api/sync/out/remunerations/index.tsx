@@ -18,7 +18,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 const getRemunerationsByEnfantsIds: NextApiHandler = async (req, res) => {
   const enfantIds = req.query.externalId as string[];
-  console.log("external Ids to get from : ", enfantIds);
 
   // Check if we have valid environment variables
   if (!process.env.API_URL_SDP || !process.env.API_KEY_SDP) {
@@ -48,8 +47,6 @@ const getRemunerationsByEnfantsIds: NextApiHandler = async (req, res) => {
   const url = `${process.env.API_URL_SDP}/inc/remunerations${
     queryParams ? "?" : ""
   }${queryParams}&token=${process.env.API_KEY_SDP}`;
-
-  console.log("Fetching remunerations from external API:", url.replace(process.env.API_KEY_SDP || "", "[REDACTED]"));
 
   try {
     const response = await fetch(url, {
