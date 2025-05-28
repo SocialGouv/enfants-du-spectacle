@@ -77,29 +77,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
   const [loadingPdf, setLoadingPdf] = React.useState<string>('')
   const [notificationsData, setNotificationsData] = React.useState<CommissionNotifications[]>([])
   const [loadingNotifications, setLoadingNotifications] = React.useState<boolean>(true)
-  
-  // Charger les notifications au montage du composant
-  React.useEffect(() => {
-    const loadNotifications = async () => {
-      try {
-        const response = await fetch(`/api/notifications/commission/${commission.id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setNotificationsData(data.notifications || data);
-        } else {
-          console.error('Erreur lors du chargement des notifications:', response.statusText);
-          setNotificationsData([]);
-        }
-      } catch (error) {
-        console.error('Erreur lors du chargement des notifications:', error);
-        setNotificationsData([]);
-      } finally {
-        setLoadingNotifications(false);
-      }
-    };
-
-    loadNotifications();
-  }, [commission.id]);
 
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
@@ -140,10 +117,6 @@ const Commission: React.FC<Props> = ({ commission }) => {
       </div>
       <div>
         {commission.dossiers.map((dossier) => {
-          const commentsInfo = notificationsData?.find(
-            (notification: CommissionNotifications) =>
-              notification.dossierId === dossier.id
-          );
           return (
             <div
               style={{ borderBottom: "1px solid #DDDDDD", padding: "23px 0" }}
@@ -151,12 +124,12 @@ const Commission: React.FC<Props> = ({ commission }) => {
             >
               <Dossier
                 dossier={dossier}
-                commentsInfo={commentsInfo || {
+                commentsInfo={{
                   dossierId: dossier.id,
-                  notificationsProject: 0,
-                  notificationsChildren: 0,
-                  newPiecesEnfant: 0,
-                  newPiecesDossier: 0
+                  notificationsProject: dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true && com.enfantId === null)).length,
+                  notificationsChildren: dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true) && com.enfantId !== null).length,
+                  newPiecesEnfant: dossier.enfants.flatMap((enf) => enf.piecesDossier.filter((piece) => piece.statut === null)).length,
+                  newPiecesDossier: dossier.piecesDossier.filter((p) => (p.statut === null)).length
                 }}
               />
             </div>

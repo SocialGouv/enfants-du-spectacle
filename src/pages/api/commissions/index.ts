@@ -131,9 +131,13 @@ const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
               typeConsultation: {
                 equals: "THALIE"
               }
+            },
+            include: {
+              piecesDossier: true
             }
           },
           piecesDossier: true,
+          comments: true
         },
         orderBy: { id: "desc" },
       },
