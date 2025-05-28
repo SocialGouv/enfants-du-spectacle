@@ -1,3 +1,10 @@
+## [1.96.23](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.22...v1.96.23) (2025-05-28)
+
+
+### Bug Fixes
+
+* fix getter notifications ([#716](https://github.com/SocialGouv/enfants-du-spectacle/issues/716)) ([216987d](https://github.com/SocialGouv/enfants-du-spectacle/commit/216987dc091cac5af8b727ba180115b2199e9473))
+
 ## [1.96.22](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.21...v1.96.22) (2025-05-28)
 
 
