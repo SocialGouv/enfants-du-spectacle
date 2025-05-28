@@ -8,6 +8,7 @@ import type { ReactElement } from "react";
 import React from "react";
 import CookieConsent from "react-cookie-consent";
 import IconLoader from "src/components/IconLoader";
+import { trpc } from "src/lib/trpc";
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
@@ -110,4 +111,4 @@ const Auth: React.FC = ({ children }) => {
   );
 };
 
-export default App;
+export default trpc.withTRPC(App);
