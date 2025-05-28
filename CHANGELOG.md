@@ -1,3 +1,10 @@
+# [1.97.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.24...v1.97.0) (2025-05-28)
+
+
+### Features
+
+* allow delete users (on cascade), begin trpc integration ([#718](https://github.com/SocialGouv/enfants-du-spectacle/issues/718)) ([1469c29](https://github.com/SocialGouv/enfants-du-spectacle/commit/1469c29cd84153df853b2501dc2b505c0955ba7f))
+
 ## [1.96.24](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.23...v1.96.24) (2025-05-28)
 
 
