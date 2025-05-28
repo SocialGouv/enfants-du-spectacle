@@ -8,6 +8,8 @@ import type {
   SendList,
   SocieteProduction,
   User,
+  Comments,
+  PieceDossierEnfant,
 } from "@prisma/client";
 
 // Extend the Demandeur type to include the societeProduction relation
@@ -28,9 +30,10 @@ type DossierData = Dossier & {
   medecin: User | null;
   commission: Commission;
   societeProduction: SocieteProduction;
-  enfants: Enfant[];
+  enfants: Enfant[] & {piecesDossier: PieceDossierEnfant[]};
   piecesDossier: PieceDossier[];
   commentaires: Commentaire[];
+  comments: Comments[];
   demandeur: Demandeur;
   _count?: {
     enfants: number;
