@@ -14,7 +14,6 @@ const handler: NextApiHandler = async (req, res) => {
 const update: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as { id: string; api_key: string };
 
-  //console.log('data received : ', data)
   if (data.api_key !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
@@ -23,7 +22,6 @@ const update: NextApiHandler = async (req, res) => {
         dossierId: parseInt(data.id as string),
       },
     });
-    console.log("comments found : ", comments);
     res.status(200).json(comments);
   }
 };

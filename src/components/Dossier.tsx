@@ -58,7 +58,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
-  const [senderComment, setSenderComment] = React.useState<string>("");
+  const [senderComment, setSenderComment] = React.useState<string>(session?.dbUser.prenom + ' ' + session?.dbUser.nom || 'Instructeur');
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
 
@@ -69,7 +69,6 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       if (response.ok) {
         const data = await response.json();
         setFetchedSocieteProduction(data);
-        console.log("Successfully fetched societeProduction:", data);
       } else {
         console.error("Failed to fetch societeProduction", response.status);
       }
@@ -91,10 +90,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   const fetchComments = async () => {
     try {
-      // For any dossier source, get comments directly from database
+      // Récupérer TOUS les commentaires du dossier (projet ET enfants)
       if (dossier?.id) {
-        // Only fetch dossier-level comments (where enfantId is null)
-        const response = await fetch(`/api/dossier-comments/${dossier.id}`);
+        const response = await fetch(`/api/dossier-comments/${dossier.id}?includeChildren=true`);
         if (!response.ok) {
           throw new Error(`Error fetching comments: ${response.status}`);
         }
@@ -134,7 +132,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   ) => {
     if (dossier) {
       return dossier.enfants.filter(
-        (e) =>
+        (e: any) =>
           typeEmploiLabel(e.typeEmploi) === typeEmploi.label ||
           typeEmploi.value.includes(e.typeEmploi)
       );
@@ -190,8 +188,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return (
     <>
-      {session.dbUser.role !== "MEMBRE" &&
-        session.dbUser.role !== "MEDECIN" && (
+      {session?.dbUser.role !== "MEMBRE" &&
+        session?.dbUser.role !== "MEDECIN" && (
           <div id="summaryBloc">
             <DossierActionBar dossierId={dossierId} />
           </div>
@@ -219,7 +217,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
               {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
               {dossier.scenesSensibles.length > 0 &&
-                dossier.scenesSensibles.filter(scene => scene !== null).join(", ")}
+                dossier.scenesSensibles.filter((scene: any) => scene !== null).join(", ")}
             </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES & VALIDATION">
@@ -251,6 +249,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       );
                       if (commentsProject.length) updateComments();
                     }}
+                    style={{ cursor: "pointer" }}
                   />
                 ) : (
                   <AiOutlineMinus
@@ -259,6 +258,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     onClick={() => {
                       setShowCommentSection(false);
                     }}
+                    style={{ cursor: "pointer" }}
                   />
                 )}
               </div>
@@ -290,6 +290,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     onClick={() => {
                       setShowCompanySection(true);
                     }}
+                    style={{ cursor: "pointer" }}
                   />
                 ) : (
                   <AiOutlineMinus
@@ -298,6 +299,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     onClick={() => {
                       setShowCompanySection(false);
                     }}
+                    style={{ cursor: "pointer" }}
                   />
                 )}
               </div>
@@ -353,7 +355,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       </a>
                     </div>
                     {dossier.statut == "ACCEPTE" &&
-                      session.dbUser.role !== "MEMBRE" && (
+                      session?.dbUser.role !== "MEMBRE" && (
                         <div>
                           <button
                             className="postButton"
@@ -377,7 +379,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             </div>
             {dossier.statut !== "INSTRUCTION" &&
               dossier.statut !== "CONSTRUCTION" &&
-              session.dbUser.role !== "MEMBRE" && (
+              session?.dbUser.role !== "MEMBRE" && (
                 <button
                   style={{ marginRight: "10px" }}
                   className="postButton"
@@ -389,7 +391,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                 </button>
               )}
             {dossier.statut == "ACCEPTE" &&
-              session.dbUser.role !== "MEMBRE" && (
+              session?.dbUser.role !== "MEMBRE" && (
                 <button
                   className="postButton"
                   style={{ marginRight: "10px" }}
@@ -400,7 +402,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   Télécharger Décision autorisation
                 </button>
               )}
-            {session.dbUser.role === "ADMIN" && (
+            {session?.dbUser.role === "ADMIN" && (
               <button
                 className="deleteButton"
                 onClick={() => {
@@ -435,15 +437,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                 className="accordionBorder"
               >
                 <Table headers={tableChildHeaders}>
-                  {filterTypeEmploi(typeEmploi).map((enf, idx) => {
+                  {filterTypeEmploi(typeEmploi).map((enf: any, idx: number) => {
                     let countCommentsNotification = 0;
-                    if (enf.externalId !== null) {
-                      countCommentsNotification = comments.filter(
+                    if (enf.id !== null) {
+                      const filteredComments = comments.filter(
                         (comment) =>
-                          comment.enfantId === parseInt(enf.externalId) &&
+                          comment.enfantId === enf.id &&
                           comment.source === "SOCIETE_PROD" &&
-                          comment.seen !== true
-                      ).length;
+                          (comment.seen === false || comment.seen === null)
+                      );
+                      countCommentsNotification = filteredComments.length;
                     }
                     return (
                       <tr key={idx}>
@@ -465,12 +468,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               countCommentsNotification={
                                 countCommentsNotification
                               }
-                  piecesJustif={dataLinks?.enfants
-                    ?.find(
-                      (data) =>
-                        data.id === parseInt(enf.externalId ?? "")
-                    )
-                    ?.piecesDossier.map((tmp) => tmp.statut)?.filter(Boolean) as string[] | undefined}
+                              piecesJustif={enf.piecesDossier?.map((piece: any) => piece.statut) as string[] | undefined}
                             />
                           )}
                         </td>
@@ -490,17 +488,17 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
         {TYPES_EMPLOI.map((typeEmploi, index) => (
           <span key={index}>
-            {dossier.enfants.filter(function (element) {
+            {dossier.enfants.filter(function (element: any) {
               return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
             }).length > 0 ? (
               <div style={{ marginBottom: "36px" }}>
                 {dossier.enfants
-                  .filter(function (element) {
+                  .filter(function (element: any) {
                     return (
                       typeEmploiLabel(element.typeEmploi) === typeEmploi.label
                     );
                   })
-                  .sort(function (a, b) {
+                  .sort(function (a: any, b: any) {
                     if (a.nom < b.nom) {
                       return -1;
                     }
@@ -515,7 +513,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     }
                     return 0;
                   })
-                  .map((enfant) => {
+                  .map((enfant: any) => {
                     const childInfo = `
                       ${typeEmploiLabel(enfant.typeEmploi)}
                       :
@@ -556,7 +554,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
       {scrollPosition > 400 && (
         <div className={styles.buttonUp}>
           <Link href={`#summaryBloc`}>
-            <Image src={logoArrowUp} alt="Supprimer" width={30} height={30} />
+            <Image src={logoArrowUp} alt="Remonter" width={30} height={30} />
           </Link>
         </div>
       )}

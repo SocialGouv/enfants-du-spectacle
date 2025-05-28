@@ -90,7 +90,6 @@ const Page: React.FC = () => {
         )
       : { commissions: [] };
 
-  console.log("commissions : ", commissions);
 
   const { ...commissionsPast } =
     status === "past"
@@ -169,7 +168,6 @@ const Page: React.FC = () => {
     
     // Start loading
     setLoading(true);
-    console.log(`Searching for: "${searchValueEffective}"`);
     
     // Fetch search results
     window
@@ -193,7 +191,6 @@ const Page: React.FC = () => {
       .then((rawJSON: string) => {
         try {
           const parsed = superJSONParse<SearchResultsType>(rawJSON);
-          console.log(`Search results received: ${parsed.dossiers.length} dossiers, ${parsed.enfants.length} enfants`);
           setSearchResults(parsed);
         } catch (parseError) {
           console.error("Error parsing search results:", parseError);

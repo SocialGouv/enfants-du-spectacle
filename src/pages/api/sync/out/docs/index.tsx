@@ -50,9 +50,7 @@ const deleteDoc: NextApiHandler = async (req, res) => {
         },
       });
     }
-    
-    console.log(`Deleted ${deleted.count} document(s)`);
-    
+        
     // The physical file might still exist, but we've at least removed the database record
     res.status(200).json({ success: true, deleted: deleted.count });
   } catch (error) {
@@ -80,9 +78,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
         resolve({ err, fields, files } as FormidableResult);
       });
     });
-  
-    console.log("Received document upload data:", data);
-    
+      
     const dossierId = req.query.dossierId as string;
     const typeJustif = req.query.typeJustif as string;
     const enfantId = req.query.enfantId as string;
@@ -131,9 +127,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
           nom: fileName,
         },
       });
-      
-      console.log("Created PieceDossierEnfant:", piece);
-      
+            
       res.status(200).json({ 
         message: "ok",
         piece: piece
@@ -149,7 +143,6 @@ const sendDoc: NextApiHandler = async (req, res) => {
         },
       });
       
-      console.log("Created PieceDossier:", piece);
       
       res.status(200).json({ 
         message: "ok",

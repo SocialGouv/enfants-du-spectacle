@@ -26,7 +26,6 @@ const SocieteProd: React.FC<Props> = ({ }) => {
 
     const processSiret = useDebouncedCallback(async () => {
         let res = await getSocieteInfos(contextDossier.societeProduction.siret ?? '')
-        console.log('res sirene : ', res)
         setResSirene(res)
     }, 1000);
 
@@ -37,12 +36,9 @@ const SocieteProd: React.FC<Props> = ({ }) => {
     }, [resSirene])
 
     const processSociete = async () => {
-        console.log('processing societe ...')
         if(resSirene){
             try {
-                console.log('got res sirene ...')
                 const societeFound = await getSocieteProd(contextDossier.societeProduction.siret ?? '')
-                console.log('societe found : ', societeFound)
                 let societeTmp: SocieteProduction = {
                     id: societeFound ? societeFound.id : 0,
                     nom: resSirene.etablissement.uniteLegale.denominationUniteLegale,
@@ -59,7 +55,6 @@ const SocieteProd: React.FC<Props> = ({ }) => {
                     conventionCollectiveCode: null,
                     otherConventionCollective: null
                 }
-                console.log('societe tmp : ', societeTmp)
                 
                 // Vérifier si la société est basée en Île-de-France
                 const departement = societeTmp.departement || "";
@@ -71,11 +66,9 @@ const SocieteProd: React.FC<Props> = ({ }) => {
                 }
                 
                 const societeProcessed = societeFound ? await updateSociete(societeTmp) : await createSociete(societeTmp)
-                console.log('societe processed : ', societeProcessed)
                 contextDossier.processEntity('societeProduction', societeProcessed)
                 contextDossier.processInput('demandeur', 'societeProductionId', societeProcessed.id)
             } catch(e) {
-                console.log('error proceesing societe : ', e)
             }
         }
     }

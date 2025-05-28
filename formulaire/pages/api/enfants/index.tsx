@@ -84,8 +84,6 @@ const update: NextApiHandler = async (req, res) => {
     return;
   }
 
-  console.log("ENFANT UPDATED: ", parsed.id);
-
   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || "0");
   parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || "0");
   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || "0");

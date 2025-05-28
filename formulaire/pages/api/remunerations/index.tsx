@@ -37,7 +37,6 @@ const post: NextApiHandler = async (req, res) => {
 const remove: NextApiHandler = async (req, res) => {
   const enfantId = Number(req.body as string);
   try {
-    console.log("ENFANT ID: ", enfantId);
     await prisma.remuneration.deleteMany({
       where: { enfantId: enfantId },
     });

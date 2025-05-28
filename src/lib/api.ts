@@ -81,7 +81,6 @@ function useRefreshLinks(dossierExternalId: string, source: Source) {
     shouldFetch ? `/api/edslinks?externalid=${dossierExternalId}` : null,
     async function (input: RequestInfo, init?: RequestInit) {
       try {
-        console.log('Fetching links from:', input);
         const res = await fetch(input, init);
         
         if (!res.ok) {
@@ -134,7 +133,6 @@ function useCommissions(
   departements: string[] | "all",
   withChild = true
 ) {
-  console.log("departements in swr : ", departements);
   const { data, error } = useSWR(
     `/api/commissions?datePeriod=${datePeriod}&departements=${departements}&withChild=${withChild}`,
     async function (input: RequestInfo, init?: RequestInit) {

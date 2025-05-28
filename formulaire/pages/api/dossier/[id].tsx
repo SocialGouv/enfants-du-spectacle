@@ -56,6 +56,7 @@ const get: NextApiHandler = async (req, res) => {
     const dossier = await client.dossier.findUnique({
       include: {
         creator: true,
+        instructeur: true,
         enfants: {
           include: {
             piecesDossier: true,
@@ -68,6 +69,7 @@ const get: NextApiHandler = async (req, res) => {
           },
         },
         piecesDossier: true,
+        commission: true
       },
       where: { id: dossierId },
     });

@@ -47,7 +47,6 @@ const post: NextApiHandler = async (req, res) => {
 };
 
 const update: NextApiHandler = async (req, res) => {
-  console.log("Update demandeur - Request body type:", typeof req.body);
   
   let parsed: Demandeur;
   
@@ -62,7 +61,6 @@ const update: NextApiHandler = async (req, res) => {
       res.status(400).json({ error: "Request body must be a JSON string or object" });
       return;
     }
-    console.log('Parsed demandeur data:', parsed);
     
     if (!parsed) {
       console.error("Update demandeur - Empty parsed data");
@@ -82,7 +80,6 @@ const update: NextApiHandler = async (req, res) => {
     let dataToUpdate;
     try {
       dataToUpdate = demandeurData.parse(parsed);
-      console.log("Valid demandeur data for update:", dataToUpdate);
     } catch (zodError) {
       console.error("Update demandeur - Zod validation error:", zodError);
       res.status(400).json({ error: "Invalid demandeur data format", details: zodError });
@@ -103,7 +100,6 @@ const update: NextApiHandler = async (req, res) => {
         where: { id: parsed.id },
       });
       
-      console.log("Demandeur updated successfully:", demandeurUpdated);
       res.status(200).json(demandeurUpdated);
     } catch (error) {
       console.error("Error updating demandeur in database:", error);

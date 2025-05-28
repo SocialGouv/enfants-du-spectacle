@@ -38,7 +38,6 @@ const get: NextApiHandler = async (req, res) => {
 };
 
 const update: NextApiHandler = async (req, res) => {
-  console.log("in societe update");
   const data = JSON.parse(req.body);
   const societeData = SocieteProductionModel.omit({ id: true });
   try {
@@ -55,14 +54,12 @@ const update: NextApiHandler = async (req, res) => {
 };
 
 const post: NextApiHandler = async (req, res) => {
-  console.log("in societe create");
   const data = JSON.parse(req.body);
   const societeData = SocieteProductionModel.omit({ id: true });
   try {
     const societe = await prisma.societeProduction.create({
       data: { ...societeData.parse(data) },
     });
-    console.log("societe created : ", societe);
     res.status(200).json(societe);
   } catch (e: unknown) {
     console.log(e);

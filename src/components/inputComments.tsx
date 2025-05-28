@@ -33,11 +33,10 @@ const InputComments: React.FC<Props> = ({
         source: "INSTRUCTEUR",
         enfantId: enfantId,
         sender: sender || "Utilisateur",
-        date: new Date()
+        date: new Date(),
+        seen: true
       };
-      
-      console.log("Sending comment data:", commentData);
-      
+            
       const response = await fetch(`/api/dossier-comments/${dossierId}`, {
         method: 'POST',
         headers: {

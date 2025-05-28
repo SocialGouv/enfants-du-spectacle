@@ -167,7 +167,6 @@ const getRemunerations = async (commission: CommissionData): Promise<Remuneratio
     }
     
     const data = await response.json() as Remuneration[];
-    console.log("Remuneration data from API:", data);
     
     // Important: Attach remuneration data to each enfant object in all dossiers
     for (const dossier of commission.dossiers) {
@@ -205,7 +204,6 @@ const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> =
     }
     
     const data = await response.json() as Remuneration[];
-    console.log("Remuneration data from API for dossier:", data);
     
     // Important: Attach remuneration data to each enfant object
     for (const enfant of dossier.enfants) {
@@ -223,7 +221,6 @@ const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> =
         if (dossier.societeProduction && dossier.demandeur.societeProductionId === dossier.societeProductionId) {
           // @ts-ignore - This property will be added dynamically
           dossier.demandeur.societeProduction = dossier.societeProduction;
-          console.log("Linked demandeur.societeProduction from dossier.societeProduction");
         } else {
           console.log("Cannot link demandeur.societeProduction - IDs don't match or societeProduction missing");
         }

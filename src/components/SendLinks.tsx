@@ -90,7 +90,6 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
 
   React.useEffect(() => {
     if (mountedRef) {
-      console.log("sendlist = ", SendList);
     }
   }, [SendList]);
 
@@ -140,7 +139,6 @@ const SendLinks: React.FC<Props> = ({ commission }) => {
                   checked={user.send}
                   onChange={async () => {
                     user.send = !user.send;
-                    console.log("sendlist a update :", user);
                     await updateSendList(user);
                   }}
                   label={user.user.email}

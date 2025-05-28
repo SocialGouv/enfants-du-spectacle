@@ -15,8 +15,6 @@ const handler: NextApiHandler = async (req, res) => {
 const update: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as Enfant & { externalId: string };
 
-  //console.log("data received : ", data);
-
   try {
     const update = await prisma.enfant.update({
       data: {
@@ -26,7 +24,6 @@ const update: NextApiHandler = async (req, res) => {
         id: parseInt(data.externalId),
       },
     });
-    // console.log('update : ', update)
     res.status(200).json(update);
   } catch (e) {
     res.status(500).json({ message: "Something went wrong" });

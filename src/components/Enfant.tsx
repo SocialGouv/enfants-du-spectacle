@@ -89,12 +89,7 @@ const EnfantComponent: React.FC<Props> = ({
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
   
-  // Debug logs to help diagnose file visibility issues
   useEffect(() => {
-    console.log("Current enfant:", enfant);
-    console.log("Current enfant externalId:", enfant.externalId);
-    console.log("localDataLinks:", localDataLinks);
-    
     const matchingEnfant = localDataLinks?.enfants?.find(
       (enf) => enf.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
     );
@@ -324,7 +319,6 @@ const EnfantComponent: React.FC<Props> = ({
   };
 
   const handleDelete = async (id: number) => {
-    console.log('id : ', id)
     if (id) {
       await deleteDoc(id);
       window.location.reload()
@@ -369,7 +363,6 @@ const EnfantComponent: React.FC<Props> = ({
           throw new Error(`Error fetching enfant comments: ${response.status}`);
         }
         const commentsData = await response.json();
-        console.log("Fetched enfant comments:", commentsData);
         setEnfantComments(commentsData);
       }
     } catch (error) {
@@ -602,7 +595,6 @@ const EnfantComponent: React.FC<Props> = ({
                         const matchingEnfant = dossier.docs?.enfants
                           .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
                         
-                        console.log("Matching enfant for docs (1):", matchingEnfant);
                         
                         if (!matchingEnfant) return [];
                         
@@ -620,7 +612,6 @@ const EnfantComponent: React.FC<Props> = ({
                             link: piece.link
                           }));
                           
-                        console.log("Filtered docs (1):", filteredDocs);
                         return filteredDocs;
                       })()}
                       allowChanges={false}

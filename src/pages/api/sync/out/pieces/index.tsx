@@ -24,8 +24,6 @@ const updatePiece: NextApiHandler = async (req, res) => {
     statut: STATUT_PIECE;
   };
 
-  //console.log('data received : ', data)
-
   const url = `${process.env.API_URL_SDP}/inc/pieces`;
   const fetching = await fetch(url, {
     body: JSON.stringify({ ...data, api_key: process.env.API_KEY_SDP }),

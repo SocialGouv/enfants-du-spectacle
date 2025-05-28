@@ -46,7 +46,6 @@ const AssignCommissionSelect: React.FC<Props> = ({ dossierId, commission }) => {
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         const rawCommissionId = event.target.value;
         const commissionId = rawCommissionId ? Number(rawCommissionId) : null;
-        console.log("comission to put : ", rawCommissionId);
         mutate(
           `/api/dossiers/${dossier.id}`,
           { ...dossier, commissionId },

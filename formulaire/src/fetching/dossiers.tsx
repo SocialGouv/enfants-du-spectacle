@@ -1,5 +1,6 @@
 import {
   Comments,
+  Commission,
   Demandeur,
   Dossier,
   Enfant,
@@ -18,11 +19,14 @@ type EnfantData = Enfant & {
 };
 
 type DossierData = Dossier & {
-  user: User;
+  creator: User;
+  instructeur: User;
   enfants: EnfantData[];
   demandeur: DemandeurData;
   piecesDossier: PieceDossier[];
   societeProduction?: SocieteProduction;
+  comments: Comments[];
+  commission: Commission
 };
 
 type ResDocs = {

@@ -21,7 +21,6 @@ const handler: NextApiHandler = async (req, res) => {
 const update: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as { id: string; api_key: string };
 
-  //console.log("data received : ", data);
   if (data.api_key !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
@@ -30,7 +29,6 @@ const update: NextApiHandler = async (req, res) => {
         dossierId: parseInt(data.id as string),
       },
     });
-    // console.log("comments found : ", comments);
     res.status(200).json(comments);
   }
 };
@@ -38,14 +36,12 @@ const update: NextApiHandler = async (req, res) => {
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as { comment: Comments; api_key: string };
 
-  //console.log("data received : ", data);
   if (data.api_key !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });
   } else {
     const comment = await prisma.comments.create({
       data: data.comment,
     });
-    //console.log("comments created : ", comment);
     res.status(200).json(comment);
   }
 };
@@ -54,7 +50,6 @@ const get: NextApiHandler = async (req, res) => {
   const data = req.query;
   let ids = data.externalId as string[];
   const externalIds = ids.map((id: string) => parseInt(id)) as number[];
-  console.log("data externalIds received : ", data);
 
   if (data.token !== process.env.API_KEY_SDP) {
     res.status(401).json({ error: `Unauthorized` });

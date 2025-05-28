@@ -15,24 +15,18 @@ import {
 import { generateOdj } from "src/lib/pdf/pdfGenerateOdj";
 import { generatePV } from "src/lib/pdf/pdfGeneratePV";
 import type { CommissionData, DossierDataLight } from "src/lib/queries";
-import type { CommentaireNotifications, DossierData } from "src/lib/types";
+import type { DossierData } from "src/lib/types";
+import type { CommissionNotifications } from "src/lib/notifications";
 
 import styles from "./Commission.module.scss";
 import IconLoader from "./IconLoader";
 
 interface DossierProps {
   dossier: DossierData;
-  commentsInfo: CommentaireNotifications;
+  commentsInfo: CommissionNotifications;
 }
 const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
   const { data: session } = useSession();
-  
-  // Force fetch societeProduction if missing through API
-  React.useEffect(() => {
-    if (!dossier.societeProduction && dossier.societeProductionId) {
-      console.log(`Dossier ${dossier.id} is missing societeProduction data but has ID ${dossier.societeProductionId}`);
-    }
-  }, [dossier]);
   
   return (
     <div className={`${session?.dbUser.role !== "MEDECIN" ? styles.dossierGrid : styles.dossierGridMedecin} itemGrid`}>
@@ -77,11 +71,36 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
 
 interface Props {
   commission: CommissionData;
-  commentsCountInfo?: CommentaireNotifications[];
 }
 
-const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
+const Commission: React.FC<Props> = ({ commission }) => {
   const [loadingPdf, setLoadingPdf] = React.useState<string>('')
+  const [notificationsData, setNotificationsData] = React.useState<CommissionNotifications[]>([])
+  const [loadingNotifications, setLoadingNotifications] = React.useState<boolean>(true)
+  
+  // Charger les notifications au montage du composant
+  React.useEffect(() => {
+    const loadNotifications = async () => {
+      try {
+        const response = await fetch(`/api/notifications/commission/${commission.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setNotificationsData(data.notifications || data);
+        } else {
+          console.error('Erreur lors du chargement des notifications:', response.statusText);
+          setNotificationsData([]);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des notifications:', error);
+        setNotificationsData([]);
+      } finally {
+        setLoadingNotifications(false);
+      }
+    };
+
+    loadNotifications();
+  }, [commission.id]);
+
   const dossiersCount = commission.dossiers.length;
   const enfantsCount = commission.dossiers
     .map((p) => {
@@ -121,9 +140,9 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
       </div>
       <div>
         {commission.dossiers.map((dossier) => {
-          const commentsInfo = commentsCountInfo?.find(
-            (comment) =>
-              JSON.stringify(comment.dossierId) === dossier.externalId
+          const commentsInfo = notificationsData?.find(
+            (notification: CommissionNotifications) =>
+              notification.dossierId === dossier.id
           );
           return (
             <div
@@ -132,7 +151,13 @@ const Commission: React.FC<Props> = ({ commission, commentsCountInfo }) => {
             >
               <Dossier
                 dossier={dossier}
-                commentsInfo={commentsInfo as CommentaireNotifications}
+                commentsInfo={commentsInfo || {
+                  dossierId: dossier.id,
+                  notificationsProject: 0,
+                  notificationsChildren: 0,
+                  newPiecesEnfant: 0,
+                  newPiecesDossier: 0
+                }}
               />
             </div>
           );

@@ -17,6 +17,7 @@ const createComment = async (
 };
 
 const updateCommentairesNotifications = (commentaireIds: string[]) => {
+  console.log(commentaireIds)
   const url = `/api/comments${
     commentaireIds.length > 0 ? "?" : ""
   }${commentaireIds.map((id, index) => {
@@ -24,6 +25,7 @@ const updateCommentairesNotifications = (commentaireIds: string[]) => {
   })}`
     .split(",")
     .join("");
+    console.log('url : ', url)
   window
     .fetch(url, {
       method: "PUT",

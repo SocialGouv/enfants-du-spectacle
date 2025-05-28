@@ -359,14 +359,12 @@ const ValidationJustificatifsEnfant: React.FC<{
           );
           
           if (foundEnfant && foundEnfant.piecesDossier && Array.isArray(foundEnfant.piecesDossier)) {
-            console.log(`Found enfant in dataLinks.enfants, checking for pieces of type ${String(value)}`);
             
             // Use String comparison to avoid type issues
             const filteredPieces = foundEnfant.piecesDossier.filter(
               (piece: any) => String(piece.type) === String(value)
             );
             
-            console.log(`Found ${filteredPieces.length} pieces for type ${String(value)}`);
             
             pieces = filteredPieces.map((piece: any) => ({
               id: String(piece.id),

@@ -32,6 +32,7 @@ const get: NextApiHandler = async (req, res) => {
         dossierId: parseInt(dossierId),
       },
     });
+    console.log('comments fetched : ', comments)
     res.status(200).json(comments);
   } catch (e: unknown) {
     console.log(e);
@@ -50,13 +51,10 @@ const updateCommentairesNotifications: NextApiHandler = async (req, res) => {
     }
   }
 
-  //console.log("data received : ", data.commentIds);
-
   const commentIds = data.commentIds.map((id: string) =>
     parseInt(id)
   ) as number[];
 
-  //console.log("commentIds : ", commentIds);
   const updateComments = await prisma?.comments.updateMany({
     data: {
       seen: true,
@@ -75,7 +73,6 @@ const post: NextApiHandler = async (req, res) => {
   let data = JSON.parse(req.body) as Comments;
   //@ts-ignore
   data.userId = session?.dbUser.id;
-  console.log("comment to create : ", data);
   try {
     const comment = await prisma.comments.create({ data });
     res.status(200).json(comment);
