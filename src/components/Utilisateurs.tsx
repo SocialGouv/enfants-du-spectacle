@@ -5,19 +5,25 @@ import React from "react";
 import { MultiSelect } from "react-multi-select-component";
 import AddUser from "src/components/AddUtilisateur";
 import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
-import { createUser, removeUser, updateUser } from "src/lib/queries";
+import { trpc } from "src/lib/trpc";
 import styles from "src/styles/commissions.module.scss";
 
 interface Props {
   allUsers: User[];
+  onUserUpdate?: () => void;
+  onPageChange?: (page: number) => void;
+  page: number;
+  total: number;
+  totalPages: number;
 }
 
 interface RowProps {
   user: User;
   deleteUser: (id: number) => void;
+  updateUserMutation: any;
 }
 
-const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
+const UserRow: React.FC<RowProps> = ({ user, deleteUser, updateUserMutation }) => {
   const [changeDep, setDepartementChange] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState(
     user.departements.map((departement) => {
@@ -44,7 +50,17 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
 
   React.useEffect(() => {
     if (mountedRef && newUser.id) {
-      updateUser(newUser);
+      updateUserMutation.mutate({
+        id: newUser.id,
+        nom: newUser.nom,
+        prenom: newUser.prenom,
+        email: newUser.email,
+        role: newUser.role,
+        departement: newUser.departement,
+        departements: newUser.departements,
+        telephone: newUser.telephone,
+        fonction: newUser.fonction,
+      });
     }
   }, [newUser]);
 
@@ -74,12 +90,8 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
             }))}
             value={selected}
             hasSelectAll={false}
-            onChange={(value) => {
-              setSelected(
-                value as React.SetStateAction<
-                  { key: string; label: string; value: string }[]
-                >
-              );
+            onChange={(value: { key: string; label: string; value: string }[]) => {
+              setSelected(value);
               setDepartementChange(!changeDep);
             }}
             labelledBy="Département(s)"
@@ -121,36 +133,62 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser }) => {
   );
 };
 
-const Utilisateurs: React.FC<Props> = ({ allUsers }) => {
+const Utilisateurs: React.FC<Props> = ({ allUsers, onUserUpdate, onPageChange, page, total, totalPages }) => {
   const [userList, setUserList] = React.useState<User[]>(allUsers);
+  
+  // Mutations tRPC
+  const createUserMutation = trpc.users.createUser.useMutation({
+    onSuccess: async () => {
+      // Rediriger vers la première page pour voir le nouvel utilisateur
+      onPageChange?.(1);
+      // Petit délai pour laisser le temps à la DB de se mettre à jour
+      await new Promise(resolve => setTimeout(resolve, 100));
+      // Refetch la liste après création
+      await onUserUpdate?.();
+    },
+  });
+  
+  const deleteUserMutation = trpc.users.deleteUser.useMutation({
+    onSuccess: async () => {
+      // Refetch la liste après suppression
+      await onUserUpdate?.();
+    },
+  });
+  
+  const updateUserMutation = trpc.users.updateUser.useMutation();
 
   const deleteUser = (id: number) => {
+    // Optimistic update
     const userListTmp: User[] = userList.filter((user: User) => user.id !== id);
     setUserList(userListTmp);
-    removeUser(id);
+    
+    // API call
+    deleteUserMutation.mutate({ id });
   };
 
-  const addUser = (e: React.FormEvent, formData: User) => {
+  const addUser = (e: React.FormEvent, formData: Partial<User>) => {
     e.preventDefault();
-    const user: User = {
-      departement: formData.departement,
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      departements: formData.departements || [""],
-      email: formData.email,
-      emailVerified: new Date(),
-      nom: formData.nom,
-      prenom: formData.prenom,
-      role: formData.role,
+    
+    const userData = {
+      nom: formData.nom || null,
+      prenom: formData.prenom || null,
+      email: formData.email || null,
+      role: formData.role || null,
+      departement: formData.departement || null,
+      departements: formData.departements || [],
+      telephone: formData.telephone || null,
+      fonction: formData.fonction || null,
     };
-    createUser(user);
-    setUserList([user, ...userList]);
+    
+    createUserMutation.mutate(userData);
   };
 
   return (
     <>
       <AddUser saveUser={addUser} />
+      <p>Page {page} sur {totalPages} - {total} utilisateur(s) au total</p>
       {userList.map((user) => (
-        <UserRow key={user.id} user={user} deleteUser={deleteUser} />
+        <UserRow key={user.id} user={user} deleteUser={deleteUser} updateUserMutation={updateUserMutation} />
       ))}
     </>
   );
