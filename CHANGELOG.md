@@ -1,3 +1,10 @@
+## [1.96.24](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.23...v1.96.24) (2025-05-28)
+
+
+### Bug Fixes
+
+* fix past commissionsunreachable, fix validation pieces (mutate) ([#717](https://github.com/SocialGouv/enfants-du-spectacle/issues/717)) ([ea9f0bb](https://github.com/SocialGouv/enfants-du-spectacle/commit/ea9f0bb6a140a64af0276bff41143cf096bf5e9d))
+
 ## [1.96.23](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.22...v1.96.23) (2025-05-28)
 
 
