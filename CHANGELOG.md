@@ -1,3 +1,10 @@
+## [1.96.22](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.21...v1.96.22) (2025-05-28)
+
+
+### Bug Fixes
+
+* retours migration ([#715](https://github.com/SocialGouv/enfants-du-spectacle/issues/715)) ([7f47170](https://github.com/SocialGouv/enfants-du-spectacle/commit/7f471701d7f42c875ef5cc388785c26fca774a00))
+
 ## [1.96.21](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.20...v1.96.21) (2025-05-26)
 
 
