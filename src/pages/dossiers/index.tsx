@@ -567,7 +567,6 @@ const Page: React.FC = () => {
                 >
                   <CommissionBloc
                     commission={commission}
-                    commentsCountInfo={commentsCountInfo}
                   />
                 </div>
               );

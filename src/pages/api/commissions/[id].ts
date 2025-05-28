@@ -39,10 +39,16 @@ const get: NextApiHandler = async (req, res) => {
               societeProduction: true
             }
           },
-          enfants: true,
+          piecesDossier: true,
+          enfants: {
+            include: {
+              piecesDossier: true
+            }
+          },
           societeProduction: true,
           instructeur: true, // Use instructeur instead of user
           medecin: true,     // Include medecin as well
+          comments: true
         },
         orderBy: { id: "desc" },
       },

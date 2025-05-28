@@ -9,6 +9,7 @@ import type {
 } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
+import { mutate } from "swr";
 import styles from "src/components/Justificatifs.module.scss";
 import justifStyles from "./DossierJustificatifs.module.scss";
 import logoAccepted from "src/images/accepted.svg";
@@ -70,6 +71,7 @@ interface JustificatifItemProps {
   docPieces: PieceDoc[];
   showValidation: boolean;
   documentType: string;
+  dossierId: number;
 }
 
 const JustificatifItem: React.FC<JustificatifItemProps> = ({
@@ -77,6 +79,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
   docPieces,
   showValidation,
   documentType,
+  dossierId,
 }) => {
   const [pieces, setPieces] = React.useState<PieceDoc[]>(docPieces);
 
@@ -108,6 +111,9 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
         }),
         method: "PUT",
       });
+      
+      // Invalidate SWR cache to sync with database
+      mutate(`/api/dossiers/${dossierId}`);
     } catch (error) {
       console.error("Failed to update document status:", error);
       // Revert the state if the API call fails
@@ -242,6 +248,7 @@ const DossierJustificatifs: React.FC<DossierJustificatifsProps> = ({
               docPieces={docPieces}
               showValidation={showValidation}
               documentType="dossier"
+              dossierId={dossier.id}
             />
           </li>
         );
@@ -296,6 +303,7 @@ const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
               docPieces={docPieces}
               showValidation={showValidation}
               documentType="enfant"
+              dossierId={dossier.id}
             />
           </li>
         );
