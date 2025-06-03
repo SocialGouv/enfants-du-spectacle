@@ -1,3 +1,10 @@
+# [1.98.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.97.0...v1.98.0) (2025-06-03)
+
+
+### Features
+
+* fiche emploi individuelle ([#720](https://github.com/SocialGouv/enfants-du-spectacle/issues/720)) ([9d053b0](https://github.com/SocialGouv/enfants-du-spectacle/commit/9d053b0520d27bb1d3c676dda58022d6ee8fcf3c))
+
 # [1.97.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.96.24...v1.97.0) (2025-05-28)
 
 
