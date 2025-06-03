@@ -19,7 +19,15 @@ import {
 } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
 
-const generateFE = async (dossiers: DossierData[]) => {
+const generateFE = async (dossiers: DossierData[], enfantId?: number) => {
+  // Si enfantId est fourni, filtrer les enfants pour ne garder que celui-ci
+  if (enfantId) {
+    dossiers = dossiers.map(dossier => ({
+      ...dossier,
+      enfants: dossier.enfants.filter(enfant => enfant.id === enfantId)
+    }));
+  }
+  
   // Debug data availability
   console.log("DEBUG FE: First dossier:", dossiers[0].id);
   console.log("DEBUG FE: Demandeur exists:", !!dossiers[0].demandeur);
@@ -111,7 +119,6 @@ const generateFE = async (dossiers: DossierData[]) => {
                 // Accès aux rémunérations de l'enfant de manière sécurisée
                 // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
                 const remEnfant = typedEnfant.remuneration || [];
-                console.log(`Rémunérations pour l'enfant ${typedEnfant.id} dans FE:`, remEnfant);
                 blocs.push([
                   {
                     content: `${typedEnfant.nom?.toUpperCase()} ${typedEnfant.prenom?.toUpperCase()}, ${birthDateToFrenchAge(
@@ -133,14 +140,22 @@ const generateFE = async (dossiers: DossierData[]) => {
                         ? `\n  Représentant légal 2 : ${typedEnfant.nomRepresentant2} ${typedEnfant.prenomRepresentant2} - ${typedEnfant.adresseRepresentant2}`
                         : ""
                     }
-  ${typedEnfant.nombreJours} jours travaillés
-  ${typedEnfant.periodeTravail ? `Période: ${typedEnfant.periodeTravail}` : ""}
+
+  NOMBRE DE JOURS TRAVAILLÉS : ${typedEnfant.nombreJours}
+
+  ${typedEnfant.periodeTravail ? `PÉRIODE DE TRAVAIL: ${typedEnfant.periodeTravail}` : ""}
+
+  ${typedEnfant.contexteTravail ? `TEMPS ET LIEU DE TRAVAIL: ${typedEnfant.contexteTravail}` : ""}
+
   ${dossier.source === 'FORM_EDS' ? 
-  `Rémunérations garanties : ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
+  `RÉMUNÉRATIONS GARANTIES : 
+  ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
     return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ${remFound.totalDadr ? `Montant total DADR : ${remFound.totalDadr} Euros, ` : ''}` : ''
   }).join(' ')}
-  Rémunérations additionnelles : ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
+
+  RÉMUNÉRATIONS ADDITIONNfffELLES : 
+  ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
     return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
   }).join(' ')}
@@ -151,9 +166,13 @@ const generateFE = async (dossiers: DossierData[]) => {
       ? `\n  Rémunérations additionnelles : ${typedEnfant.remunerationsAdditionnelles}`
       : ""
   }
-  TOTAL : ${typedEnfant.remunerationTotale} Euros` }
+  
+  TOTAL RÉMUNÉRATIONS: ${typedEnfant.remunerationTotale} Euros` }
   Part CDC : ${typedEnfant.cdc ? typedEnfant.cdc : "0"}% 
+
+
   |_| Favorable        |_| Favorable sous réserve          |_| Ajourné          |_| Défavorable 
+  
   Motifs : \n \n`,
                     styles: {
                       fontSize: 11,
@@ -228,7 +247,12 @@ const generateFE = async (dossiers: DossierData[]) => {
     }
   }
 
-  return doc.save("FICHE_EMPLOI_" + dossiers[0].nom.replaceAll(".", "_"));
+  // Générer un nom de fichier adapté selon qu'il s'agit d'une fiche individuelle ou complète
+  const fileName = enfantId && dossiers[0].enfants.length > 0
+    ? `FICHE_EMPLOI_${dossiers[0].enfants[0]?.nom}_${dossiers[0].enfants[0]?.prenom}_${dossiers[0].nom.replaceAll(".", "_")}`
+    : `FICHE_EMPLOI_${dossiers[0].nom.replaceAll(".", "_")}`;
+  
+  return doc.save(fileName);
 };
 
 export { generateFE };

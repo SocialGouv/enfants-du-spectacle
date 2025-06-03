@@ -540,6 +540,20 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             actionComments={processComment}
                             remunerations={enfant.remuneration || []}
                           />
+                          {dossier.statut !== "INSTRUCTION" &&
+                            dossier.statut !== "CONSTRUCTION" &&
+                            session?.dbUser.role !== "MEMBRE" && (
+                              <div style={{ marginTop: "15px", textAlign: "center" }}>
+                                <button
+                                  className="postButton"
+                                  onClick={() => {
+                                    generateFE([dossier], enfant.id);
+                                  }}
+                                >
+                                  Télécharger Fiche Emploi individuelle
+                                </button>
+                              </div>
+                            )}
                         </Accordion>
                       </div>
                     );
