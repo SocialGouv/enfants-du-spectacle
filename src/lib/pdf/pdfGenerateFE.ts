@@ -154,7 +154,7 @@ const generateFE = async (dossiers: DossierData[], enfantId?: number) => {
     return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ${remFound.totalDadr ? `Montant total DADR : ${remFound.totalDadr} Euros, ` : ''}` : ''
   }).join(' ')}
 
-  RÉMUNÉRATIONS ADDITIONNfffELLES : 
+  RÉMUNÉRATIONS ADDITIONNELLES : 
   ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
     let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
     return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
