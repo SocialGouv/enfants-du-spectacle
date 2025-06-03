@@ -5,9 +5,28 @@ import autoTable from "jspdf-autotable";
 import logoPrefet from "src/images/logo_prefet.png";
 import { frenchDateText, getRemsByDossier } from "src/lib/helpers";
 import type { DossierData } from "src/lib/types";
+import { getAllContenusPdf, replaceVariables } from "src/lib/contenuPdf";
 import commissions from "src/pages/api/commissions";
 
 const generateDA = async (dossiers: DossierData[], binary = false) => {
+  // Récupérer les contenus personnalisés pour le département
+  const departement = dossiers[0].commission.departement || '75';
+  console.log('🔍 DEBUG PDF - Département:', departement);
+  const contenus = await getAllContenusPdf(departement);
+  console.log('🔍 DEBUG PDF - Contenus récupérés:', {
+    TEXTES_LEGAUX: contenus.TEXTES_LEGAUX.titre,
+    CONSIDERANTS: contenus.CONSIDERANTS.titre,
+    ARTICLE_2: contenus.ARTICLE_2.titre,
+    ARTICLE_3: contenus.ARTICLE_3.titre,
+    ARTICLE_4: contenus.ARTICLE_4.titre,
+    SIGNATURE: contenus.SIGNATURE.titre,
+    RECOURS: contenus.RECOURS.titre
+  });
+  
+  // Variables pour remplacer dans les contenus
+  const variables = {
+    DATE_COMMISSION: frenchDateText(dossiers[0].commission.date)
+  };
   // Debug data availability
   console.log("DEBUG DA: First dossier:", dossiers[0].id);
   console.log("DEBUG DA: Demandeur exists:", !!dossiers[0].demandeur);
@@ -123,10 +142,7 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     ]);
     blocs.push([
       {
-        content: `Considérant que la commission des enfants du spectacle, pour autoriser un mineur de moins de 16 ans à travailler dans une entreprise de spectacle, vérifie:
-- L'absence de risque pour la santé, la sécurité et la moralité du mineur;
-- Les conditions d'emploi et de rémunération du mineur; \n
-Considérant qu'après analyse, le projet présenté respecte les conditions de travail et de rémunération;`,
+        content: replaceVariables(contenus.CONSIDERANTS.contenu, variables),
         styles: {
           fontSize: 11,
           halign: "left",
@@ -260,27 +276,15 @@ Considérant qu'après analyse, le projet présenté respecte les conditions de 
     body: [
       [
         {
-          content: `\nVu les articles L7124-1 à L7124-35 et R7124-1 à R7124-35 du code du travail ;\n
-Vu la loi n° 82-213 du 2 mars 1982 relative aux droits et libertés des communes, des départements et des régions, modifiée ; \n
-Vu la loi d'orientation n° 92-125 du 6 février 1992 modifiée relative à l'administration territoriale de la République, notamment ses articles 4 et 6 ; \n
-Vu le décret n° 97-34 du 15 janvier 1997 relatif à la déconcentration des décisions administratives individuelles ; \n
-Vu  le décret n° 2004-374 du 29 avril 2004 modifié relatif aux pouvoirs des préfets, à l'organisation et à l'action des services de l'État dans les régions et départements ; \n
-Vu le décret n° 2009-360 du 31 mars 2009 relatif aux emplois de direction de l'administration territoriale de l'État ; \n
-Vu le décret n°2010-146 du 16 février 2010 modifiant le décret n° 2004-374 du 29 avril 2004 relatif aux pouvoirs des préfets, à l'organisation et à l'action des services de l'État dans les régions et départements ; \n
-Vu le décret n° 2020-1545 du 9 décembre 2020 relatif à l'organisation et aux missions des directions régionales de l'économie, de l'emploi, du travail et des solidarités, des directions départementales de l'emploi, du travail et des solidarités et des directions départementales de l'emploi, du travail, des solidarités et de la protection des populations ; \n
-Vu le décret du ${
-            getObjectDecret(dossiers[0].commission.departement || '')?.date || ''
-          } portant nomination de ${
-            getObjectDecret(dossiers[0].commission.departement || '')?.nom || ''
-          } en qualité de ${
-            getObjectDecret(dossiers[0].commission.departement || '')?.prefet || ''
-          } ; \n
-Vu l'arrêté interministériel du 25 mars 2021 nommant Monsieur Gaëtan RUDANT, directeur régional et interdépartemental de l'économie, de l'emploi, du travail et des solidarités d'Ile-de-France à compter du 1er avril 2021 ; \n
-${
-  dossiers[0].commission.departement === "75"
-    ? "Vu l'arrêté interministériel du 13 décembre 2022 nommant Monsieur Jean-François DALVAI, directeur régional et interdépartemental adjoint de l'économie, de l'emploi, du travail et des solidarités d'Île-de-France, chargé des fonctions de directeur de l'unité départementale de Paris à compter du 16 janvier 2023;"
-    : ""
-}`,
+          content: `\n${replaceVariables(contenus.TEXTES_LEGAUX.contenu, {
+            ...variables,
+            DECRET_DATE: getObjectDecret(dossiers[0].commission.departement || '')?.date || '',
+            DECRET_NOM: getObjectDecret(dossiers[0].commission.departement || '')?.nom || '',
+            DECRET_PREFET: getObjectDecret(dossiers[0].commission.departement || '')?.prefet || '',
+            ARRETE_DALVAI: dossiers[0].commission.departement === "75" 
+              ? "Vu l'arrêté interministériel du 13 décembre 2022 nommant Monsieur Jean-François DALVAI, directeur régional et interdépartemental adjoint de l'économie, de l'emploi, du travail et des solidarités d'Île-de-France, chargé des fonctions de directeur de l'unité départementale de Paris à compter du 16 janvier 2023;" 
+              : ""
+          })}`,
           styles: {
             fontSize: 11,
             halign: "left",
@@ -300,7 +304,7 @@ ${
     body: [
       [
         {
-          content: "ARTICLE 2",
+          content: contenus.ARTICLE_2.titre,
           styles: {
             fontSize: 13,
             fontStyle: "bold",
@@ -310,8 +314,7 @@ ${
       ],
       [
         {
-          content:
-            "La rémunération totale comprend un ou plusieurs cachets de base et des rémunérations additionnelles éventuelles. Ces dernières seront déduites du montant total dans le cas où les prestations correspondantes n'auront pas été réalisées.",
+          content: replaceVariables(contenus.ARTICLE_2.contenu, variables),
           styles: {
             fontSize: 11,
             halign: "left",
@@ -320,7 +323,7 @@ ${
       ],
       [
         {
-          content: "\nARTICLE 3",
+          content: `\n${contenus.ARTICLE_3.titre}`,
           styles: {
             fontSize: 13,
             fontStyle: "bold",
@@ -330,8 +333,7 @@ ${
       ],
       [
         {
-          content:
-            "Le versement à la Caisse des dépôts et consignations est accompagné d'une déclaration de l'employeur rappelant l'état civil de l'enfant, son domicile et le nom de ses représentants légaux.",
+          content: replaceVariables(contenus.ARTICLE_3.contenu, variables),
           styles: {
             fontSize: 11,
             halign: "left",
@@ -340,7 +342,7 @@ ${
       ],
       [
         {
-          content: "\nARTICLE 4",
+          content: `\n${contenus.ARTICLE_4.titre}`,
           styles: {
             fontSize: 13,
             fontStyle: "bold",
@@ -350,19 +352,7 @@ ${
       ],
       [
         {
-          content: `La durée quotidienne de travail ne peut excéder :
-
-Pour les enfants de moins de 3 ans: 1h/jour avec pause obligatoire après 30 minutes de temps de travail.
-
-Pour les enfants de 3 à 5 ans: 2h/jour avec pause obligatoire après 1h00 de temps de travail.
-
-Pour les enfants de 6 à 11 ans :
-En période scolaire : 3h/jour avec pause obligatoire après 1h30 de temps de travail ;
-En période de vacances scolaires : 4h/jour avec pause obligatoire après 2h00 de temps de travail;
-
-Pour les enfants de 12 à 16 ans:
-En période scolaire: 4h/jour avec pause obligatoire après 2h00 de temps de travail
-En période de vacances scolaires: 6h/jour avec pause obligatoire après 3h00 de temps de travail.`,
+          content: replaceVariables(contenus.ARTICLE_4.contenu, variables),
           styles: {
             fontSize: 11,
             halign: "left",
@@ -377,14 +367,7 @@ En période de vacances scolaires: 6h/jour avec pause obligatoire après 3h00 de
     body: [
       [
         {
-          content: `Fait à Aubervilliers, le : ${frenchDateText(
-            dossiers[0].commission.date
-          )}
-
-Pour le préfet et par délégation
-Sophie Bidon
-
-Responsable du département protection et insertion des jeunes`,
+          content: replaceVariables(contenus.SIGNATURE.contenu, variables),
           styles: {
             fontSize: 11,
             halign: "left",
@@ -400,23 +383,18 @@ Responsable du département protection et insertion des jeunes`,
     body: [
       [
         {
-          content: `Voies et délais de recours :
-          Cette décision peut faire l'objet  dans un délai de deux mois à compter de sa notification:
-          -  d'un recours ${
-            dossiers[0].commission.departement === "92"
+          content: replaceVariables(contenus.RECOURS.contenu, {
+            ...variables,
+            RECOURS_TYPE: dossiers[0].commission.departement === "92"
               ? "gracieux auprès du préfet des Hauts-de-Seine"
-              : "hiérarchique auprès du ministre du travail, de l'emploi et de l'insertion, Direction générale du travail, 39-43 quai André-Citroën 75902 Paris cedex 15"
-          };
-          -  d'un recours contentieux auprès du tribunal administratif ${
-            dossiers[0].commission.departement === "92"
+              : "hiérarchique auprès du ministre du travail, de l'emploi et de l'insertion, Direction générale du travail, 39-43 quai André-Citroën 75902 Paris cedex 15",
+            TRIBUNAL_ADMINISTRATIF: dossiers[0].commission.departement === "92"
               ? "Cergy 2-4, boulevard de l'Hautil"
-              : "de Paris, 7 rue de Jouy -75181 Paris Cedex 04."
-          }
-          ${
-            dossiers[0].commission.departement === "92"
+              : "de Paris, 7 rue de Jouy -75181 Paris Cedex 04.",
+            TELERECOURS_INFO: dossiers[0].commission.departement === "92"
               ? "Le tribunal administratif peut-être saisi par l'application informatique « Telerecours citoyens » accessible par le site internet www.telerecours.fr"
               : ""
-          }`,
+          }),
           styles: {
             fontSize: 9,
             halign: "left",

@@ -109,6 +109,10 @@ const Header: React.FC<Props> = ({
                             title="Utilisateurs"
                             link="/utilisateurs"
                           />
+                          <NavSubItem
+                            title="Gestion contenus PDF"
+                            link="/admin/contenus-pdf"
+                          />
                         </NavItem>
                       </div>
                     )}
