@@ -12,13 +12,10 @@ interface Props {
 
 const StatutDossierTag: React.FC<Props> = ({ dossier }) => {
   const stateMachine = statutDossierStateMachineFactory(dossier.statut);
+  const stateClassName = stateMachine.stateClassName();
   return (
     <div
-      className={`${styles.tag} ${
-        stateMachine.stateLabel() === "Prêt"
-          ? `${styles.tagGreen}`
-          : `${styles.tagYellow}`
-      }`}
+      className={`${styles.tag} ${stateClassName}`}
     >
       {stateMachine.stateLabel().toUpperCase()}
     </div>
