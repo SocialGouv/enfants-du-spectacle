@@ -100,13 +100,156 @@ html {
 
 }
 
-.state-accepte, .state-favorable, .state-pret,
-.state-accepte select, .state-favorable select, .state-pret select{
-  background-color: #3C8058 !important;
-  border-color: #3C8058;
+/* Statut ACCEPTE - Vert foncé (statut final positif) */
+.state-accepte,
+.state-accepte select {
+  background-color: #28a745 !important;
+  border-color: #28a745;
   color: white !important;
   border-color: white !important;
 }
+button.state-accepte {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #28a745 !important;
+  }
+}
+
+/* Statut AVIS_FAVORABLE - Bleu (avis positif en attente) */
+.state-favorable,
+.state-favorable select {
+  background-color: #007bff !important;
+  border-color: #007bff;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-favorable {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #007bff !important;
+  }
+}
+
+/* Statut AVIS_FAVORABLE_SOUS_RESERVE - Orange clair (avis positif conditionnel) */
+.state-favorableSousReserve,
+.state-favorableSousReserve select {
+  background-color: #ffc107 !important;
+  border-color: #ffc107;
+  color: black !important;
+  border-color: black !important;
+}
+button.state-favorableSousReserve {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #ffc107 !important;
+  }
+}
+
+/* Statut PRET - Violet (prêt pour commission) */
+.state-pret,
+.state-pret select {
+  background-color: #6f42c1 !important;
+  border-color: #6f42c1;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-pret {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #6f42c1 !important;
+  }
+}
+
+/* Statut INSTRUCTION - Gris moyen (en cours de traitement) */
+.state-instruction,
+.state-instruction select {
+  background-color: #6c757d !important;
+  border-color: #6c757d;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-instruction {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #6c757d !important;
+  }
+}
+
+/* Statut CONSTRUCTION - Marron clair (en construction) */
+.state-construction,
+.state-construction select {
+  background-color: #795548 !important;
+  border-color: #795548;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-construction {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #795548 !important;
+  }
+}
+
+/* Statut AVIS_AJOURNE - Orange (en attente) */
+.state-avisAjourne,
+.state-avisAjourne select {
+  background-color: #fd7e14 !important;
+  border-color: #fd7e14;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-avisAjourne {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #fd7e14 !important;
+  }
+}
+
+/* Statut AVIS_DEFAVORABLE - Rouge clair (avis négatif) */
+.state-avisDefavorable,
+.state-avisDefavorable select {
+  background-color: #dc3545 !important;
+  border-color: #dc3545;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-avisDefavorable {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #dc3545 !important;
+  }
+}
+
+/* Statut REFUSE - Rouge foncé (statut final négatif) */
+.state-refuse,
+.state-refuse select {
+  background-color: #721c24 !important;
+  border-color: #721c24;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-refuse {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #721c24 !important;
+  }
+}
+
+/* Statut BROUILLON - Bleu clair (brouillon) */
+.state-brouillon,
+.state-brouillon select {
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8;
+  color: white !important;
+  border-color: white !important;
+}
+button.state-brouillon {
+  &:hover, &:active, &:focus {
+    background-color: white !important;
+    color: #17a2b8 !important;
+  }
+}
+
 .accordionSpacing {
   margin: 28px 0;
 }
@@ -116,36 +259,6 @@ html {
 
 .noBorder {
   border: none !important;
-}
-button.state-accepte, button.state-favorable, button.state-pret{
-  &:hover, &:active, &:focus {
-    background-color: white !important;
-    color: #3C8058 !important;
-  }
-}
-
-.state-avisAjourne,
-.state-avisAjourne,
-.state-avisDefavorable,
-.state-favorableSousReserve,
-.state-construction,
-.state-instruction,
-.state-refuse {
-  background-color: #FDEDD1 !important;
-  border-color: #FDEDD1;
-  color: black !important;
-}
-
-button.state-avisAjourne,
-button.state-avisAjourne,
-button.state-avisDefavorable,
-button.state-favorableSousReserve,
-button.state-construction,
-button.state-instruction,
-button.state-refuse {
-  &:hover, &:active, &:focus {
-    background-color: white !important;
-  }
 }
 
 .hoverableTitle {
