@@ -1,3 +1,10 @@
+# [1.99.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.98.0...v1.99.0) (2025-06-03)
+
+
+### Features
+
+* colors status ([#721](https://github.com/SocialGouv/enfants-du-spectacle/issues/721)) ([1bd2862](https://github.com/SocialGouv/enfants-du-spectacle/commit/1bd286223e2db590ec3b1ea03473930be0066ec8))
+
 # [1.98.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.97.0...v1.98.0) (2025-06-03)
 
 
