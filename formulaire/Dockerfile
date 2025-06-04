@@ -41,7 +41,7 @@ ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
 # Handle Sentry CLI issue
-RUN --mount=type=secret,id=sentry_auth_token \
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token || echo "dummy-token") \
     npm run build || (echo "Build failed, continuing anyway" && mkdir -p .next)
 # Make the cleanup resilient to failures

@@ -40,7 +40,7 @@ ENV NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=$NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID
 ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
-RUN --mount=type=secret,id=sentry_auth_token export SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token); \
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
   npm run build
 RUN yarn workspaces focus --production && yarn cache clean
 # this should remove dev node module dependencies
