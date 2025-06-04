@@ -51,7 +51,7 @@ FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
 WORKDIR /app
 ENV NODE_ENV production
-ENV NODE_OPTIONS=--openssl-legacy-provider,--max-old-space-size=8192
+ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED 1
 ARG NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
