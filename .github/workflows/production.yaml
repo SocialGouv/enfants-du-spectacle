@@ -52,7 +52,7 @@ jobs:
             NEXT_PUBLIC_MATOMO_SITE_AGENT_ID=85
             NEXT_PUBLIC_API_URL_SDP=https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/api/sync
           secrets: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
   build-form:
     environment: build-production
@@ -97,7 +97,7 @@ jobs:
             NEXT_PUBLIC_MATOMO_URL=https://matomo.fabrique.social.gouv.fr/
             NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=84
           secrets: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
   socialgouv:
     needs: [build-app, build-form]

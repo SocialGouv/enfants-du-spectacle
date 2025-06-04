@@ -55,7 +55,7 @@ jobs:
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=review
             START_SCRIPT=start-review
           secrets: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
   build-form:
     environment: build-review-auto
@@ -102,7 +102,7 @@ jobs:
             NEXT_PUBLIC_SENTRY_ENVIRONMENT=review
             START_SCRIPT=start-review
           secrets: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
   socialgouv:
     needs: [build-app, build-form]
