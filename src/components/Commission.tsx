@@ -126,10 +126,10 @@ const Commission: React.FC<Props> = ({ commission }) => {
                 dossier={dossier}
                 commentsInfo={{
                   dossierId: dossier.id,
-                  notificationsProject: dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true && com.enfantId === null)).length,
-                  notificationsChildren: dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true) && com.enfantId !== null).length,
-                  newPiecesEnfant: dossier.enfants.flatMap((enf) => enf.piecesDossier.filter((piece) => piece.statut === null)).length,
-                  newPiecesDossier: dossier.piecesDossier.filter((p) => (p.statut === null)).length
+                  notificationsProject: dossier.comments ? dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true && com.enfantId === null)).length : 0,
+                  notificationsChildren: dossier.comments ? dossier.comments.filter((com) => (com.source === "SOCIETE_PROD" && com.seen !== true) && com.enfantId !== null).length : 0,
+                  newPiecesEnfant: dossier.enfants ? dossier.enfants.flatMap((enf) => enf.piecesDossier.filter((piece) => piece.statut === null)).length : 0,
+                  newPiecesDossier: dossier.piecesDossier ? dossier.piecesDossier.filter((p) => (p.statut === null)).length : 0
                 }}
               />
             </div>
