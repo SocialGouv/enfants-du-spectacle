@@ -1,3 +1,10 @@
+## [1.100.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.100.1...v1.100.2) (2025-06-06)
+
+
+### Bug Fixes
+
+* fix access members ([#726](https://github.com/SocialGouv/enfants-du-spectacle/issues/726)) ([ab91be3](https://github.com/SocialGouv/enfants-du-spectacle/commit/ab91be33e2d3956ae57a2423553e3bca39ebe743))
+
 ## [1.100.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.100.0...v1.100.1) (2025-06-03)
 
 
