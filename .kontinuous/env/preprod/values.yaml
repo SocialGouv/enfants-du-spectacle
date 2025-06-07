@@ -19,18 +19,3 @@ pg:
 pg-form:
   backup:
     name: "202403061907" # backup on a new folder
-
-jobs:
-  runs:
-    build-app:
-      with:
-        buildArgs:
-          NEXT_PUBLIC_SENTRY_ENVIRONMENT: preproduction
-          START_SCRIPT: start-prod
-          NEXT_PUBLIC_API_URL_SDP: https://formulaire-enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr/api/sync
-
-    build-form:
-      with:
-        buildArgs:
-          NEXT_PUBLIC_SENTRY_ENVIRONMENT: preproduction
-          START_SCRIPT: start

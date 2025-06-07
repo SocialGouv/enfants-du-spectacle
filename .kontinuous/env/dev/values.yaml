@@ -13,16 +13,3 @@ form:
   volumeMounts:
     - mountPath: /mnt/docs
       name: docs-form
-
-jobs:
-  runs:
-    build-app:
-      with:
-        buildArgs:
-          NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
-          START_SCRIPT: start-review
-    build-form:
-      with:
-        buildArgs:
-          NEXT_PUBLIC_SENTRY_ENVIRONMENT: review
-          START_SCRIPT: start-review

@@ -1,5 +1,1 @@
 projectName: enfants-du-spectacle
-dependencies:
-  fabrique:
-    extends:
-      - name: ovh
