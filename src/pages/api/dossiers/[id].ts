@@ -172,7 +172,7 @@ const update: NextApiHandler = async (req, res) => {
       return;
     }
 
-    eval(`stateMachine.${transition}()`);
+    (stateMachine as any)[transition]();
     updates.statut = stateMachine.state;
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
     if (dossier.source === "FORM_EDS") {
