@@ -185,7 +185,6 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
 
   React.useEffect(() => {
     if(selectedEnfant) {
-      console.log("selectedEnfant : ", selectedEnfant)
       const selectedComs = selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)
       if(selectedComs && selectedComs?.length > 0) {
         updateCommentairesNotifications(selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true).map(com => JSON.stringify(com.id)) || [])

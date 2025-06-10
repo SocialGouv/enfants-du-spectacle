@@ -39,8 +39,6 @@ const post: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
-  //console.log('data reveived : ', data)
-
   try {
     //HANDLE SOCIETE PROD
     const SocieteData = SocieteProductionModel.omit({
@@ -55,7 +53,6 @@ const post: NextApiHandler = async (req, res) => {
         ["otherConventionCollective"]: data.demandeur.otherConventionCollective || null,
       },
     });
-    //console.log('societe created')
 
     //HANDLE FINDING DEMANDEUR
     const demandeurFound = await client.demandeur.findUnique({
@@ -63,7 +60,6 @@ const post: NextApiHandler = async (req, res) => {
         email: data.demandeur.email,
       },
     });
-    //console.log("demandeur found : ", demandeurFound);
 
     //HANDLE CREATING DEMANDEUR IF NOT FOUND
     let createDemandeur;
@@ -221,8 +217,6 @@ const update: NextApiHandler = async (req, res) => {
     enfants: z.infer<typeof RelatedEnfantModel>[];
   };
 
-  console.log("UPDATING DOSSIER : ", data.dossier.nom, ", ", data.dossier.id);
-
   try {
     const commissions = await client.commission.findMany({
       orderBy: { date: "asc" },
@@ -335,8 +329,6 @@ const update: NextApiHandler = async (req, res) => {
             data: prismaValidData
           });
         } else {
-          // Création d'un nouvel enfant
-          console.log(`Création d'un nouvel enfant: ${validatedData.nom} ${validatedData.prenom}, ID: ${enfant.id}`);
           await client.enfant.create({
             data: {
               ...prismaValidData,

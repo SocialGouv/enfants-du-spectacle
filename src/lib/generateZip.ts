@@ -188,7 +188,6 @@ Rémunération totale: ${enfant.remunerationTotale}
     .on("finish", function () {
       // JSZip generates a readable stream with a "end" event,
       // but is piped here in a writable stream which emits a "finish" event.
-      console.log(fileName, " written.");
     });
 
   /*const zipAsBase64 = await zip.generateAsync({ type: "base64" });*/

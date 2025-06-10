@@ -221,8 +221,6 @@ const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> =
         if (dossier.societeProduction && dossier.demandeur.societeProductionId === dossier.societeProductionId) {
           // @ts-ignore - This property will be added dynamically
           dossier.demandeur.societeProduction = dossier.societeProduction;
-        } else {
-          console.log("Cannot link demandeur.societeProduction - IDs don't match or societeProduction missing");
         }
       } catch (error) {
         console.error("Error trying to link demandeur.societeProduction:", error);

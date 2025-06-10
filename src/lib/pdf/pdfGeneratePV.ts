@@ -22,13 +22,8 @@ import type { CommissionData, DossierData } from "src/lib/types";
 
 const generatePV = async (commission: CommissionData) => {
   const doc = new jsPDF();
-  
-  console.log("DÉBOGAGE: Début génération PV avec commission:", commission.id);
 
-  // AJOUT IMPORTANT: Chargement explicite des rémunérations pour chaque dossier
-  // Cette ligne est présente dans pdfGenerateFE.ts mais pas dans pdfGeneratePV.ts
   for (const dossier of commission.dossiers) {
-    console.log("DÉBOGAGE: Chargement des rémunérations pour dossier:", dossier.id);
     await getRemsByDossier(dossier);
   }
 
@@ -65,7 +60,6 @@ const generatePV = async (commission: CommissionData) => {
       });
       
       for (const dossier of categorizedDossiers) {
-        console.log(`Traitement du dossier ${dossier.id}: ${dossier.nom}`);
         
         blocs.push([
           {
@@ -128,12 +122,10 @@ const generatePV = async (commission: CommissionData) => {
             // Pour chaque enfant avec ce rôle
             for (const enfant of sortedEnfants) {
               const typedEnfant = enfant as any;
-              console.log(`Enfant ${typedEnfant.id}: ${typedEnfant.prenom} ${typedEnfant.nom}`);
               
               // === CODE COPIÉ DE pdfGenerateFE.ts QUI FONCTIONNE ===
               // Accès aux rémunérations de l'enfant de manière sécurisée
               const remEnfant = typedEnfant.remuneration || [];
-              console.log(`Rémunérations pour l'enfant ${typedEnfant.id}:`, remEnfant);
               
               let remunerationsContent = '';
               

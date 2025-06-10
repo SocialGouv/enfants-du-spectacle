@@ -63,8 +63,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       };
     }));
 
-    console.log('DEBUG NOTIFICATIONS:', JSON.stringify(debugData, null, 2));
-
     // Calculer les notifications
     const notifications = await getBulkDossierNotifications(dossierIds);
     

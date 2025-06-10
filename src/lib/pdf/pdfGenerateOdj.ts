@@ -108,7 +108,6 @@ const generateOdj = async (commission: CommissionData) => {
                 // Accès aux rémunérations de l'enfant de manière sécurisée
                 // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
                 const remEnfant = enfant.remuneration || [];
-                console.log(`Rémunérations pour l'enfant ${enfant.id} dans ODJ:`, remEnfant);
                 blocs.push([
                   {
                     content: `${enfant.nom.toUpperCase()} ${enfant.prenom.toUpperCase()}, ${birthDateToFrenchAge(

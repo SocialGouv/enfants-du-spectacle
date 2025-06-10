@@ -11,33 +11,12 @@ import commissions from "src/pages/api/commissions";
 const generateDA = async (dossiers: DossierData[], binary = false) => {
   // Récupérer les contenus personnalisés pour le département
   const departement = dossiers[0].commission.departement || '75';
-  console.log('🔍 DEBUG PDF - Département:', departement);
   const contenus = await getAllContenusPdf(departement);
-  console.log('🔍 DEBUG PDF - Contenus récupérés:', {
-    TEXTES_LEGAUX: contenus.TEXTES_LEGAUX.titre,
-    CONSIDERANTS: contenus.CONSIDERANTS.titre,
-    ARTICLE_2: contenus.ARTICLE_2.titre,
-    ARTICLE_3: contenus.ARTICLE_3.titre,
-    ARTICLE_4: contenus.ARTICLE_4.titre,
-    SIGNATURE: contenus.SIGNATURE.titre,
-    RECOURS: contenus.RECOURS.titre
-  });
   
   // Variables pour remplacer dans les contenus
   const variables = {
     DATE_COMMISSION: frenchDateText(dossiers[0].commission.date)
   };
-  // Debug data availability
-  console.log("DEBUG DA: First dossier:", dossiers[0].id);
-  console.log("DEBUG DA: Demandeur exists:", !!dossiers[0].demandeur);
-  console.log("DEBUG DA: Demandeur societeProduction exists:", !!dossiers[0].demandeur?.societeProduction);
-  console.log("DEBUG DA: Direct societeProduction exists:", !!dossiers[0].societeProduction);
-  
-  if (dossiers[0].demandeur?.societeProduction) {
-    console.log("DEBUG DA: Demandeur societeProduction nom:", dossiers[0].demandeur.societeProduction.nom);
-  } else {
-    console.log("DEBUG DA: Demandeur societeProduction is not populated");
-  }
   
   let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
@@ -112,8 +91,6 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
       adresseSociete = `sise ${societeProduction.adresse} ${societeProduction.adresseCodePostal || ''} ${societeProduction.adresseCodeCommune || ''}`;
     }
     
-    console.log(`Dossier ${dossier.id}: societeProduction:`, societeProduction);
-    
     blocs.push([
       {
         content: `Vu la demande présentée le ${frenchDateText(
@@ -184,7 +161,6 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
       // Accès aux rémunérations de l'enfant de manière sécurisée
       // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
       const remEnfant = typedEnfant.remuneration || [];
-      console.log(`Rémunérations pour l'enfant ${typedEnfant.id} dans DA:`, remEnfant);
       blocs.push([
         {
           content: `${typedEnfant.prenom || ''} ${typedEnfant.nom || ''}, né le ${frenchDateText(

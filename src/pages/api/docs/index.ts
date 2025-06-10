@@ -61,7 +61,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 const downloadZip: NextApiHandler = async (req, res) => {
   const zipname = req.query.zipname;
-  console.log("zipname : ", zipname);
 
   const filePath = `/mnt/docs/${zipname}.zip`;
   const stat = await fsp.stat(filePath);
@@ -109,10 +108,8 @@ const uploadDoc: NextApiHandler = async (req, res) => {
     res.status(400).end();
     return;
   }
-  console.log("Create Zip for commission ", parsed.id);
 
   for (const [index, dossier] of parsed.dossiers.entries()) {
-    console.log("dossier : ", dossier.nom);
     const tmpLinks = await getDatasFromDS((dossier.number as number) || 0);
 
     parsed.dossiers[index].files = await getDocsDossier(

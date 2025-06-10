@@ -22,8 +22,6 @@ const get: NextApiHandler = async (req, res) => {
   try {
     const externalId = req.query.externalid as string;
     
-    console.log("Fetching document links for dossier with externalId:", externalId);
-    
     // Find the dossier by its externalId
     const dossier = await prisma.dossier.findUnique({
       where: {
@@ -40,7 +38,6 @@ const get: NextApiHandler = async (req, res) => {
     });
 
     if (!dossier) {
-      console.log("Dossier not found with externalId:", externalId);
       return res.status(404).json({ error: "Dossier not found" });
     }
 
@@ -73,8 +70,6 @@ const get: NextApiHandler = async (req, res) => {
         }))
       }))
     };
-    
-    console.log("Successfully formatted response with document links");
     
     res.status(200).json(formattedResponse);
   } catch (error) {

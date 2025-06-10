@@ -32,7 +32,6 @@ const get: NextApiHandler = async (req, res) => {
         dossierId: parseInt(dossierId),
       },
     });
-    console.log('comments fetched : ', comments)
     res.status(200).json(comments);
   } catch (e: unknown) {
     console.log(e);

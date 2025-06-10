@@ -34,7 +34,6 @@ const getRemunerationsByEnfantsIds: NextApiHandler = async (req, res) => {
     : enfantIds;
 
   if (!validEnfantIds || (Array.isArray(validEnfantIds) && validEnfantIds.length === 0)) {
-    console.log("No valid enfant IDs provided");
     return res.status(200).json([]); // Return empty array instead of error
   }
 

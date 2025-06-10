@@ -27,8 +27,6 @@ const updateComments: NextApiHandler = async (req, res) => {
       return res.status(400).json({ error: "No comment IDs provided" });
     }
     
-    console.log("Updating comments with IDs:", commentIds);
-    
     // Convert string IDs to numbers
     const parsedCommentIds = commentIds.map(id => parseInt(id as string));
     
