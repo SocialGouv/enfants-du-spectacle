@@ -1,3 +1,10 @@
+# [1.101.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.100.2...v1.101.0) (2025-06-10)
+
+
+### Features
+
+* add high priority indexes DB ([#728](https://github.com/SocialGouv/enfants-du-spectacle/issues/728)) ([b3ca14a](https://github.com/SocialGouv/enfants-du-spectacle/commit/b3ca14a07568a303e1c0d60a857e0c1f16e5e011))
+
 ## [1.100.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.100.1...v1.100.2) (2025-06-06)
 
 
