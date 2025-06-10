@@ -307,13 +307,13 @@ const TYPE_CONSULTATION_MEDECIN: {
   {
     label: "En physique ou en téléconsultation",
     labelCol2: "Date du rdv ",
-    typeJustif: "AVIS_MEDICAL",
+    typeJustif: "AVIS_MEDICAL_THALIE",
     value: "PHYSIQUE",
   },
   {
     label: "Sur pièce",
     labelCol2: "Avis médical",
-    typeJustif: "AVIS_MEDICAL",
+    typeJustif: "AVIS_MEDICAL_THALIE",
     value: "PIECE",
   },
   {

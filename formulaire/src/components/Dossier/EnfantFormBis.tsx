@@ -1236,7 +1236,7 @@ const EnfantFormBis: React.FC<Props> = ({
             (enfant) => enfant.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
-          label={`Certificat de scolarité ou avis pédagogique`}
+          label={`Certificat de scolarité`}
           handleFile={handleFile}
           handleDelete={handleDelete}
           text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
@@ -1250,6 +1250,66 @@ const EnfantFormBis: React.FC<Props> = ({
             {`l'Académie de Paris`}
           </Link>
         </div>
+      </div>
+      <div className={styles.blocForm}>
+        <InputFile
+          id={"AVIS_PEDAGOGIQUE_1ER_DEGRE"}
+          docs={enfantTmp.piecesDossier || []}
+          docsTokenized={contextDossier.docs.enfants.find(
+            (enfant) => enfant.id === enfantTmp.id
+          )}
+          allowChanges={!allowChanges}
+          label={`Avis pédagogique 1er degré`}
+          handleFile={handleFile}
+          handleDelete={handleDelete}
+          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
+        />
+        <div className={styles.smallText}>
+          Informations disponibles sur le site de{" "}
+          <Link
+            href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
+            target={"_blank"}
+          >
+            {`l'Académie de Paris`}
+          </Link>
+        </div>
+      </div>
+      <div className={styles.blocForm}>
+        <InputFile
+          id={"AVIS_PEDAGOGIQUE_2ND_DEGRE"}
+          docs={enfantTmp.piecesDossier || []}
+          docsTokenized={contextDossier.docs.enfants.find(
+            (enfant) => enfant.id === enfantTmp.id
+          )}
+          allowChanges={!allowChanges}
+          label={`Avis pédagogie 2nd degré`}
+          handleFile={handleFile}
+          handleDelete={handleDelete}
+          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
+        />
+        <div className={styles.smallText}>
+          Informations disponibles sur le site de{" "}
+          <Link
+            href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
+            target={"_blank"}
+          >
+            {`l'Académie de Paris`}
+          </Link>
+        </div>
+      </div>
+      <div className={styles.blocForm}>
+        <InputFile
+          id={"AVIS_DASEN"}
+          docs={enfantTmp.piecesDossier || []}
+          docsTokenized={contextDossier.docs.enfants.find(
+            (enfant) => enfant.id === enfantTmp.id
+          )}
+          allowChanges={!allowChanges}
+          label={`Avis DASEN`}
+          handleFile={handleFile}
+          handleDelete={handleDelete}
+          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
+        />
         <div className={styles.smallText}>
           Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
           <Link href="https://mon-administration.com/dsden/" target={"_blank"}>
