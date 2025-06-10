@@ -62,7 +62,7 @@ model PieceDossier {
   nom        String?
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 
-  @@index([dossierId])
+  @@index([dossierId], name: "idx_pieceDossier_dossierId")
 }
 
 model Dossier {
@@ -109,13 +109,13 @@ model Dossier {
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
 
-  @@index([commissionId])
-  @@index([societeProductionId]) 
-  @@index([demandeurId])
-  @@index([creatorId])
-  @@index([instructeurId])
-  @@index([medecinId])
-  @@index([nom])
+  @@index([commissionId], name: "idx_dossier_commissionId")
+  @@index([societeProductionId], name: "idx_dossier_societeProductionId") 
+  @@index([demandeurId], name: "idx_dossier_demandeurId")
+  @@index([creatorId], name: "idx_dossier_creatorId")
+  @@index([instructeurId], name: "idx_dossier_instructeurId")
+  @@index([medecinId], name: "idx_dossier_medecinId")
+  @@index([nom], name: "idx_dossier_nom")
 }
 
 model Commentaire {
@@ -147,9 +147,9 @@ model Comments {
   enfant         Enfant?       @relation(fields: [enfantId], references: [id])
   User           User?         @relation(fields: [userId], references: [id])
 
-  @@index([dossierId])
-  @@index([userId])
-  @@index([enfantId])
+  @@index([dossierId], name: "idx_comments_dossierId")
+  @@index([userId], name: "idx_comments_userId")
+  @@index([enfantId], name: "idx_comments_enfantId")
 }
 
 model PieceDossierEnfant {
@@ -163,8 +163,8 @@ model PieceDossierEnfant {
   nom        String?
   enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
 
-  @@index([dossierId])
-  @@index([enfantId])
+  @@index([dossierId], name: "idx_pieceDossierEnfant_dossierId")
+  @@index([enfantId], name: "idx_pieceDossierEnfant_enfantId")
 }
 
 model Remuneration {
@@ -230,10 +230,10 @@ model Enfant {
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
 
-  @@index([dossierId])
-  @@index([populatedByUserId])
-  @@index([nom])
-  @@index([prenom])
+  @@index([dossierId], name: "idx_enfant_dossierId")
+  @@index([populatedByUserId], name: "idx_enfant_populatedById")
+  @@index([nom], name: "idx_enfant_nom")
+  @@index([prenom], name: "idx_enfant_prenom")
 }
 
 model ContenuPdf {
