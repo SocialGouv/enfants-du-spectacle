@@ -115,6 +115,7 @@ model Dossier {
   @@index([creatorId])
   @@index([instructeurId])
   @@index([medecinId])
+  @@index([nom])
 }
 
 model Commentaire {
@@ -231,6 +232,8 @@ model Enfant {
 
   @@index([dossierId])
   @@index([populatedByUserId])
+  @@index([nom])
+  @@index([prenom])
 }
 
 model ContenuPdf {
