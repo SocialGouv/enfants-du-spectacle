@@ -61,6 +61,8 @@ model PieceDossier {
   statut     STATUT_PIECE?
   nom        String?
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId])
 }
 
 model Dossier {
@@ -106,6 +108,13 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+
+  @@index([commissionId])
+  @@index([societeProductionId]) 
+  @@index([demandeurId])
+  @@index([creatorId])
+  @@index([instructeurId])
+  @@index([medecinId])
 }
 
 model Commentaire {
@@ -136,6 +145,10 @@ model Comments {
   dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   enfant         Enfant?       @relation(fields: [enfantId], references: [id])
   User           User?         @relation(fields: [userId], references: [id])
+
+  @@index([dossierId])
+  @@index([userId])
+  @@index([enfantId])
 }
 
 model PieceDossierEnfant {
@@ -148,6 +161,9 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
   nom        String?
   enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId])
+  @@index([enfantId])
 }
 
 model Remuneration {
@@ -212,6 +228,9 @@ model Enfant {
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
+
+  @@index([dossierId])
+  @@index([populatedByUserId])
 }
 
 model ContenuPdf {
