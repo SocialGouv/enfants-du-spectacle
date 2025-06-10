@@ -30,9 +30,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(400).json({ error: "Commission ID is required for PV generation" });
         }
         
-        // SOLUTION FINALE: Chargement complet de la commission avec appel explicite à l'API de rémunérations
-        console.log("FINAL: Chargement de la commission", commissionId);
-        
         // 1. Charger la commission sans les rémunérations
         const commission = await prismaClient.commission.findUnique({
           where: { id: parseInt(commissionId) },
@@ -56,16 +53,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(404).json({ error: "Commission not found" });
         }
         
-        // 2. Pour chaque dossier, charger explicitement les rémunérations de chaque enfant via l'API
-        console.log("FINAL: Récupération des rémunérations pour", commission.dossiers.length, "dossiers");
-        
         for (const dossier of commission.dossiers) {
           // Extraire les IDs de tous les enfants du dossier
           const enfantIds = dossier.enfants.map(enfant => enfant.id);
           
           if (enfantIds.length > 0) {
-            // Appeler directement l'API de rémunérations
-            console.log(`FINAL: Récupération des rémunérations pour ${enfantIds.length} enfants du dossier ${dossier.id}`);
             
             const remunerations = await prismaClient.remuneration.findMany({
               where: {
@@ -73,15 +65,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
               }
             });
             
-            console.log(`FINAL: ${remunerations.length} rémunérations trouvées pour le dossier ${dossier.id}`);
-            
             // Attacher chaque rémunération à l'enfant correspondant
             for (const enfant of dossier.enfants) {
               const enfantRems = remunerations.filter(rem => rem.enfantId === enfant.id);
               // Ajouter les rémunérations à l'enfant sous la propriété 'remuneration'
               // @ts-ignore - On ajoute cette propriété dynamiquement
               enfant.remuneration = enfantRems;
-              console.log(`FINAL: Enfant ${enfant.id} a ${enfantRems.length} rémunérations`);
             }
           }
         }

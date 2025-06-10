@@ -51,7 +51,6 @@ const sendMail: NextApiHandler = async (req, res) => {
   }
 
   if (type === "status_changed") {
-    console.log('dossier statut', statut)
     wording.subject = wording.subject.replace(
       "___DOSSIERID___",
       `n° ${dossier.externalId}`

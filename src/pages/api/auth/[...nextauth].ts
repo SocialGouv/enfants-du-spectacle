@@ -16,19 +16,14 @@ export default NextAuth({
     },
     async signIn({ user }) {
       try {
-        console.log('typeof prisma.user:', typeof prisma.user)
-        console.log(Object.keys(prisma))
         const users = await prisma.user.findMany()
-        console.log('users:', users)
       } catch (error) {
         console.error('❌ Erreur de connexion à la base de données :', error)
       }
       if (typeof user.email !== "string") return false;
-      console.log('user : ', user)
       const test = await prisma.user.findUnique({
         where: { email: user.email },
       });
-      console.log('test : ', test)
       return test != null;
     },
   },

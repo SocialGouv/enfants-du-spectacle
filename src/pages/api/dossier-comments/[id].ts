@@ -31,7 +31,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
       // Check if we should include children comments
       if (includeChildren === 'true') {
         // Don't filter by enfantId - return all comments for this dossier
-        console.log("Fetching all comments (project + children) for dossier:", dossierId);
       } else if (enfantId) {
         // Filter by specific enfantId
         if (typeof enfantId === 'string') {
@@ -51,8 +50,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         whereClause.enfantId = enfantIdFilter;
       }
       
-      console.log("Fetching comments with filter:", whereClause);
-      
       // Fetch comments for the dossier with the appropriate filter
       const comments = await prisma.comments.findMany({
         where: whereClause,
@@ -68,10 +65,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     try {
       // Parse the request body
       const commentData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      
-      // Log the input data to diagnose issues
-      console.log("Comment data received:", commentData);
-      console.log("Enfant ID type:", typeof commentData.enfantId);
       
       // Ensure all required fields are present
       if (!commentData.text) {
@@ -92,8 +85,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         }
       }
       
-      console.log("Processed enfantId:", enfantId);
-      
       // Create a new comment with proper type casting
       const comment = await prisma.comments.create({
         data: {
@@ -110,8 +101,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
           commentsId: null // For parent-child comment relationship
         }
       });
-      
-      console.log("Comment created successfully:", comment);
       
       return res.status(201).json(comment);
     } catch (error) {

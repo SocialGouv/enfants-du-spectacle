@@ -77,8 +77,6 @@ const post: NextApiHandler = async (req, res) => {
         commissionId = commission.id;
         commissionString = `Commission du ${commission.date.toLocaleDateString('fr-FR')} - Département ${commission.departement}`;
         commissionDate = commission.date;
-      } else {
-        console.log(`No suitable commission found for department: ${department}`);
       }
     }
 
