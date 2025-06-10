@@ -1,3 +1,10 @@
+## [1.101.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.0...v1.101.1) (2025-06-10)
+
+
+### Bug Fixes
+
+* erreur http non offusquée ([#730](https://github.com/SocialGouv/enfants-du-spectacle/issues/730)) ([106ca48](https://github.com/SocialGouv/enfants-du-spectacle/commit/106ca483281692b7c4627e838ff59a820d565adf))
+
 # [1.101.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.100.2...v1.101.0) (2025-06-10)
 
 
