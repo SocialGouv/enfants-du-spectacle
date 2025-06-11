@@ -87,39 +87,17 @@ const DOCUMENT_CONFIGS: DocumentConfig[] = [
   {
     id: "AVIS_PEDAGOGIQUE_1ER_DEGRE",
     label: "Avis pédagogique 1er degré",
-    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
-    additionalInfo: (
-      <div className={styles.smallText}>
-        Informations disponibles sur le site de{" "}
-        <Link
-          href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
-          target={"_blank"}
-        >
-          l'Académie de Paris
-        </Link>
-      </div>
-    ),
+    text: "",
   },
   {
     id: "AVIS_PEDAGOGIQUE_2ND_DEGRE",
     label: "Avis pédagogie 2nd degré",
-    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
-    additionalInfo: (
-      <div className={styles.smallText}>
-        Informations disponibles sur le site de{" "}
-        <Link
-          href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
-          target={"_blank"}
-        >
-          l'Académie de Paris
-        </Link>
-      </div>
-    ),
+    text: "",
   },
   {
     id: "AVIS_DASEN",
     label: "Avis DASEN",
-    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
+    text: "",
     additionalInfo: (
       <div className={styles.smallText}>
         Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
