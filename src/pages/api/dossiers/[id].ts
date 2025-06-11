@@ -129,9 +129,6 @@ const update: NextApiHandler = async (req, res) => {
   // Parsez le body de manière sécurisée
   let parsed;
   try {
-    // Vérifiez d'abord le type de req.body
-    console.log('Type de req.body:', typeof req.body);
-    console.log('Contenu de req.body:', req.body);
 
     // Essayez de parser selon le type
     parsed = typeof req.body === 'string' 
@@ -157,7 +154,6 @@ const update: NextApiHandler = async (req, res) => {
     statusNotification?: string | null;
   } = {};
   const dossierId = getId(req);
-  console.log("dossier id to pudate : ", dossierId)
 
   if (typeof parsed.transitionEvent === "string") {
     const transition = parsed.transitionEvent;
@@ -176,7 +172,7 @@ const update: NextApiHandler = async (req, res) => {
       return;
     }
 
-    eval(`stateMachine.${transition}()`);
+    (stateMachine as any)[transition]();
     updates.statut = stateMachine.state;
     const DS_SECRET = process.env.DEMARCHES_SIMPLIFIEES_API_KEY;
     if (dossier.source === "FORM_EDS") {
@@ -190,7 +186,6 @@ const update: NextApiHandler = async (req, res) => {
         }
         return r.json();
       });
-      console.log(fetching);
     }
   }
 

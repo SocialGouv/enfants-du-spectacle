@@ -63,24 +63,17 @@ const get: NextApiHandler = async (req, res) => {
   const status = req.query.status || "en_construction";
   const forceRefresh = req.query.force === "true" ? true : false;
   const forceUpdateIds = req.query.forceIds || [];
-  console.log("forceUpdateIds = ", forceUpdateIds);
   const infos = await getInfosFromDS(status as string);
-  console.log("fetching data DS");
   const { needUpdate, dossiersToUpdate } = await checkNeedUpdate(
     infos,
     forceRefresh,
     forceUpdateIds
   );
-  console.log("need update : ", needUpdate);
-  console.log("dossiers to update : ", dossiersToUpdate);
   if (needUpdate || forceRefresh) {
     for (const dosNumber of dossiersToUpdate) {
       try {
-        console.log("getting file : ", parseInt(dosNumber));
         const fetching = await getDatasFromDS(parseInt(dosNumber));
-        console.log('got from DS : ', fetching)
         const insert = await insertDataFromDs(fetching.data.dossier);
-        console.log("inserted : ", insert);
       } catch (e: unknown) {
         res.status(500).json(_.get(e, "errors"));
       }
@@ -171,7 +164,6 @@ const insertDataFromDs = async (dossier: unknown) => {
       })
       .then(async (societe) => {
         // Search demandeur
-        console.log('societe edited or created : ', societe)
         let demandeur = await searchDemandeur(
           prisma,
           _.get(
@@ -212,8 +204,6 @@ const insertDataFromDs = async (dossier: unknown) => {
       })
       .then(async (datas) => {
         const { societe, demandeur } = datas;
-        console.log('societe edited or created : ', societe)
-        console.log('demandeur edited or created : ', demandeur)
 
         // search commission
         const commissions = await getUpcomingCommissionsByLimitDate(

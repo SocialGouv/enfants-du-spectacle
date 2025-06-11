@@ -47,7 +47,6 @@ const get: NextApiHandler = async (req, res) => {
     res.status(401).json({ error: "Unauthorized" });
   } else {
     try {
-      console.log("try to fetch agent ...");
       if (data.id) {
         const dossier = await client.dossier.findFirst({
           where: { externalId: data.id.toString() },

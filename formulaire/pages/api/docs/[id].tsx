@@ -75,7 +75,6 @@ export const uploadFile = (
   return new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) reject(err);
-      console.log("files : ", files);
       try {
         const key = process.env.CIPHER_KEY as string;
         const iv = process.env.CIPHER_IV as string;

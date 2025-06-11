@@ -5,7 +5,6 @@ const getRemunerationsByEnfantsIds = async (externalIds: (string | null)[]) => {
   const validExternalIds = externalIds.filter(id => id !== null && id !== undefined) as string[];
   
   if (validExternalIds.length === 0) {
-    console.log("No valid external IDs to fetch remunerations for");
     return [];
   }
   
@@ -15,8 +14,6 @@ const getRemunerationsByEnfantsIds = async (externalIds: (string | null)[]) => {
     ).join("");
     
     const url = `/api/sync/out/remunerations${validExternalIds.length > 0 ? "?" : ""}${queryParams}`;
-    
-    console.log("Fetching remunerations from:", url);
     
     const response = await fetch(url, {
       method: "GET",

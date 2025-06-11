@@ -29,8 +29,6 @@ const getCommentsNotificationsByDossierIds: NextApiHandler = async (
     } else if (req.query.externalId) {
       dossierIds = [req.query.externalId as string];
     }
-
-    console.log("Fetching notifications for dossier externalIds:", dossierIds);
     
     // First find the dossiers by their externalIds
     const dossiers = await prisma.dossier.findMany({

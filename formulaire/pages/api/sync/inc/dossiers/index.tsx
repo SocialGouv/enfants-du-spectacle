@@ -30,7 +30,7 @@ const update: NextApiHandler = async (req, res) => {
     res.status(200).json({ message: "Dossier created successfully" });
   } catch (e) {
     console.log("error : ", e);
-    res.status(500).json({ error: e });
+    res.status(500).json({ error: "Could not update Dossier" });
   }
 };
 

@@ -61,6 +61,8 @@ model PieceDossier {
   statut     STATUT_PIECE?
   nom        String?
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId], name: "idx_pieceDossier_dossierId")
 }
 
 model Dossier {
@@ -106,6 +108,14 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+
+  @@index([commissionId], name: "idx_dossier_commissionId")
+  @@index([societeProductionId], name: "idx_dossier_societeProductionId") 
+  @@index([demandeurId], name: "idx_dossier_demandeurId")
+  @@index([creatorId], name: "idx_dossier_creatorId")
+  @@index([instructeurId], name: "idx_dossier_instructeurId")
+  @@index([medecinId], name: "idx_dossier_medecinId")
+  @@index([nom], name: "idx_dossier_nom")
 }
 
 model Commentaire {
@@ -136,6 +146,10 @@ model Comments {
   dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   enfant         Enfant?       @relation(fields: [enfantId], references: [id])
   User           User?         @relation(fields: [userId], references: [id])
+
+  @@index([dossierId], name: "idx_comments_dossierId")
+  @@index([userId], name: "idx_comments_userId")
+  @@index([enfantId], name: "idx_comments_enfantId")
 }
 
 model PieceDossierEnfant {
@@ -148,6 +162,9 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
   nom        String?
   enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId], name: "idx_pieceDossierEnfant_dossierId")
+  @@index([enfantId], name: "idx_pieceDossierEnfant_enfantId")
 }
 
 model Remuneration {
@@ -212,6 +229,11 @@ model Enfant {
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
+
+  @@index([dossierId], name: "idx_enfant_dossierId")
+  @@index([populatedByUserId], name: "idx_enfant_populatedById")
+  @@index([nom], name: "idx_enfant_nom")
+  @@index([prenom], name: "idx_enfant_prenom")
 }
 
 model ContenuPdf {

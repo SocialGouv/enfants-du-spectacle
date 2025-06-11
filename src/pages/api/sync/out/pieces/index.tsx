@@ -30,7 +30,6 @@ const updatePiece: NextApiHandler = async (req, res) => {
     method: "PUT",
   }).then(async (r) => {
     if (!r.ok) {
-      console.log("r : ", r.status);
       res.status(500).json({ error: `Something went wrong : ${r.status}` });
     }
     return r.json();
