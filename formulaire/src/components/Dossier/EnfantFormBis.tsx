@@ -1177,7 +1177,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"LIVRET_FAMILLE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Livret de Famille`}
@@ -1191,7 +1191,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"AUTORISATION_PARENTALE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Autorisation parentale`}
@@ -1205,7 +1205,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"SITUATION_PARTICULIERE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Situation particulière relative à l'autorité parentale`}
@@ -1219,7 +1219,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"CONTRAT"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Projet de contrat de travail`}
@@ -1233,7 +1233,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"CERTIFICAT_SCOLARITE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Certificat de scolarité`}
@@ -1256,7 +1256,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"AVIS_PEDAGOGIQUE_1ER_DEGRE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Avis pédagogique 1er degré`}
@@ -1279,7 +1279,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"AVIS_PEDAGOGIQUE_2ND_DEGRE"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Avis pédagogie 2nd degré`}
@@ -1302,7 +1302,7 @@ const EnfantFormBis: React.FC<Props> = ({
           id={"AVIS_DASEN"}
           docs={enfantTmp.piecesDossier || []}
           docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
+            (enf) => enf.id === enfantTmp.id
           )}
           allowChanges={!allowChanges}
           label={`Avis DASEN`}
