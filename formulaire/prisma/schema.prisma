@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearchPostgres"]
   engineType      = "binary"
 }
 
@@ -14,25 +14,25 @@ model Commission {
   departement     String
   date            DateTime
   dateLimiteDepot DateTime
-  dossiers        Dossier[]
   lastSent        DateTime?
-  SendList        SendList[]
   archived        Boolean?
+  dossiers        Dossier[]
+  SendList        SendList[]
 }
 
 model SocieteProduction {
   id                        Int         @id @default(autoincrement())
-  nom                       String?     // Made optional to match formulaire schema
-  siret                     String?     @unique // Made optional to match formulaire schema
-  siren                     String?     // Made optional to match formulaire schema
-  departement               String?     // Made optional to match formulaire schema
-  naf                       String?     // Made optional to match formulaire schema
-  raisonSociale             String?     // Made optional to match formulaire schema
-  adresse                   String?     // Made optional to match formulaire schema
-  adresseCodePostal         String?     // Made optional to match formulaire schema
-  adresseCodeCommune        String?     // Made optional to match formulaire schema
-  formeJuridique            String?     // Made optional to match formulaire schema
-  conventionCollectiveCode  String?     // Made optional to match formulaire schema
+  nom                       String?
+  siret                     String?
+  departement               String?
+  siren                     String?
+  adresse                   String?
+  adresseCodeCommune        String?
+  adresseCodePostal         String?
+  formeJuridique            String?
+  naf                       String?
+  raisonSociale             String?
+  conventionCollectiveCode  String?
   otherConventionCollective String?
   demandeurs                Demandeur[]
   dossiers                  Dossier[]
@@ -40,20 +40,269 @@ model SocieteProduction {
 
 model Demandeur {
   id                        Int                @id @default(autoincrement())
-  email                     String?            @unique // Made optional to match formulaire schema
-  nom                       String?            // Made optional to match formulaire schema
-  prenom                    String?            // Made optional to match formulaire schema
+  email                     String?
+  nom                       String?
+  prenom                    String?
   phone                     String?
-  fonction                  String?            // Made optional to match formulaire schema
+  societeProductionId       Int?
+  fonction                  String?
   conventionCollectiveCode  String?
   otherConventionCollective String?
   societeProduction         SocieteProduction? @relation(fields: [societeProductionId], references: [id])
-  societeProductionId       Int?               // Made optional to match formulaire schema
   dossiers                  Dossier[]
 }
 
+model PieceDossier {
+  id         Int                 @id @default(autoincrement())
+  dossierId  Int
+  type       JustificatifDossier
+  link       String?
+  externalId String?
+  statut     STATUT_PIECE?
+  nom        String?
+  dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+}
+
+model Dossier {
+  id                        Int                   @id @default(autoincrement())
+  nom                       String?
+  statut                    StatutDossier         @default(BROUILLON)
+  categorie                 CategorieDossier?
+  commissionId              Int?
+  societeProductionId       Int?
+  demandeurId               Int?
+  justificatifs             JustificatifDossier[]
+  dateDebut                 DateTime?
+  dateFin                   DateTime?
+  presentation              String?
+  scenesSensibles           String[]
+  externalId                String?               @unique
+  numeroDS                  Int?                  @default(0)
+  conventionCollectiveCode  String?
+  dateDerniereModification  DateTime?
+  number                    Int?
+  cdc                       Int?
+  dateDepot                 DateTime?
+  statusNotification        StatusNotif?
+  source                    Source?
+  medecinId                 Int?
+  otherConventionCollective String?
+  creatorId                 Int?
+  commissionString          String?
+  commissionDate            DateTime?
+  collaboratorIds           Int[]
+  dateCreation              DateTime?
+  scenario                  String?
+  securite                  String?
+  complementaire            String?
+  instructeurId             Int?
+  commentaires              Commentaire[]
+  comments                  Comments[]
+  commission                Commission?           @relation(fields: [commissionId], references: [id], onDelete: Cascade)
+  creator                   User?                 @relation("creator", fields: [creatorId], references: [id])
+  demandeur                 Demandeur?            @relation(fields: [demandeurId], references: [id])
+  instructeur               User?                 @relation("instructeur", fields: [instructeurId], references: [id])
+  medecin                   User?                 @relation("medecin", fields: [medecinId], references: [id])
+  societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
+  enfants                   Enfant[]
+  piecesDossier             PieceDossier[]
+}
+
+model Commentaire {
+  id        Int      @id @default(autoincrement())
+  text      String
+  date      DateTime
+  userId    Int
+  dossierId Int
+  seen      Boolean?
+  dossier   Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Comments {
+  id             Int           @id @default(autoincrement())
+  text           String
+  source         Sourcecomment
+  dossierId      Int
+  enfantId       Int?
+  commentsId     Int?
+  userId         Int?
+  externalUserId Int?
+  sender         String?
+  seen           Boolean?
+  date           DateTime?
+  parentComment  Comments?     @relation("ParentComments", fields: [commentsId], references: [id])
+  Comments       Comments[]    @relation("ParentComments")
+  dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  enfant         Enfant?       @relation(fields: [enfantId], references: [id])
+  User           User?         @relation(fields: [userId], references: [id])
+}
+
+model PieceDossierEnfant {
+  id         Int                @id @default(autoincrement())
+  enfantId   Int
+  type       JustificatifEnfant
+  link       String?
+  dossierId  Int?
+  externalId String?
+  statut     STATUT_PIECE?
+  nom        String?
+  enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+}
+
+model Remuneration {
+  id                Int           @id @default(autoincrement())
+  typeRemuneration  String?
+  natureCachet      NatureCachet?
+  autreNatureCachet String?
+  montant           Float?
+  nombre            Int?          @default(0)
+  nombreLignes      Int?          @default(0)
+  totalDadr         Float?
+  comment           String?
+  enfantId          Int?
+  Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
+}
+
+model Enfant {
+  id                          Int                      @id @default(autoincrement())
+  prenom                      String?
+  nom                         String?
+  dateNaissance               DateTime?
+  typeEmploi                  TypeEmploi?
+  nomPersonnage               String?
+  periodeTravail              String?
+  nombreJours                 Int?
+  contexteTravail             String?
+  montantCachet               Float?
+  nombreCachets               Int?                     @default(0)
+  remunerationsAdditionnelles String?
+  remunerationTotale          Float?
+  justificatifs               JustificatifEnfant[]
+  dossierId                   Int
+  nombreLignes                Int?                     @default(0)
+  cdc                         Int?
+  adresseEnfant               String?
+  adresseRepresentant1        String?
+  adresseRepresentant2        String?
+  nomRepresentant1            String?
+  nomRepresentant2            String?
+  prenomRepresentant1         String?
+  prenomRepresentant2         String?
+  externalId                  String?                  @unique
+  typeConsultation            TypeConsultation?
+  mailRepresentant1           String?
+  mailRepresentant2           String?
+  telRepresentant1            String?
+  telRepresentant2            String?
+  typeConsultationMedecin     TypeConsultationMedecin?
+  dateConsultation            DateTime?
+  checkTravailNuit            Boolean?
+  textTravailNuit             String?
+  dateDerniereModification    DateTime?
+  livret                      String?
+  autorisation                String?
+  situation                   String?
+  contrat                     String?
+  certificat                  String?
+  avis                        String?
+  populatedByUserId           Int?
+  comments                    Comments[]
+  dossier                     Dossier                  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
+  piecesDossier               PieceDossierEnfant[]
+  remuneration                Remuneration[]
+}
+
+model ContenuPdf {
+  id                    String     @id @default(cuid())
+  departement           String
+  section               SectionPdf
+  titre                 String
+  contenu               String
+  dateCreation          DateTime   @default(now())
+  dateModification      DateTime   @updatedAt
+  utilisateurModifierId Int?
+  utilisateurModifier   User?      @relation(fields: [utilisateurModifierId], references: [id])
+
+  @@unique([departement, section])
+}
+
+model SendList {
+  id           Int        @id @default(autoincrement())
+  send         Boolean
+  lastSent     DateTime?
+  commissionId Int
+  userId       Int
+  commission   Commission @relation(fields: [commissionId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    Int           @id @default(autoincrement())
+  name                  String?
+  nom                   String?
+  prenom                String?
+  email                 String?       @unique
+  emailVerified         DateTime?
+  image                 String?
+  role                  Role?
+  departement           String?
+  departements          String[]
+  telephone             String?
+  fonction              String?
+  createdAt             DateTime?     @default(now()) @map("created_at")
+  updatedAt             DateTime?     @updatedAt @map("updated_at")
+  accounts              Account[]
+  commentaires          Commentaire[]
+  comments              Comments[]
+  contenusPdf           ContenuPdf[]
+  dossiersCreated       Dossier[]     @relation("creator")
+  dossiersAsInstructeur Dossier[]     @relation("instructeur")
+  dossiersMedecin       Dossier[]     @relation("medecin")
+  enfantsPopulated      Enfant[]      @relation("populatedBy")
+  SendList              SendList[]
+  sessions              Session[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       Int      @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  id         Int      @id @default(autoincrement())
+
+  @@unique([identifier, token])
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  type               String
+  provider           String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+  providerAccountId  String  @map("provider_account_id")
+  userId             Int     @map("user_id")
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
 enum StatutDossier {
-  BROUILLON
   CONSTRUCTION
   INSTRUCTION
   PRET
@@ -63,6 +312,7 @@ enum StatutDossier {
   AVIS_DEFAVORABLE
   ACCEPTE
   REFUSE
+  BROUILLON
 }
 
 enum CategorieDossier {
@@ -71,7 +321,6 @@ enum CategorieDossier {
   TELEFILM
   SERIE
   EMISSION_TV
-  DOCUMENTAIRE_FICTIONNEL
   CLIP
   THEATRE
   DOUBLAGE
@@ -88,23 +337,13 @@ enum CategorieDossier {
   JEU_VIDEO
   VIDEO_EN_LIGNE
   AUTRE
+  DOCUMENTAIRE_FICTIONNEL
 }
 
 enum STATUT_PIECE {
   VALIDE
   REFUSE
   EN_ATTENTE
-}
-
-model PieceDossier {
-  id         Int                 @id @default(autoincrement())
-  nom        String?             // Optional to match both schemas
-  dossierId  Int
-  dossier    Dossier?            @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-  externalId String?
-  type       JustificatifDossier
-  link       String?             // Made optional to match formulaire schema
-  statut     STATUT_PIECE?
 }
 
 enum JustificatifDossier {
@@ -130,105 +369,6 @@ enum Sourcecomment {
   SOCIETE_PROD
 }
 
-model Dossier {
-  id                        Int                   @id @default(autoincrement())
-  nom                       String?               // Made optional to match formulaire schema
-  statut                    StatutDossier         @default(BROUILLON) // Changed default to match formulaire
-  categorie                 CategorieDossier?     // Made optional to match formulaire schema
-  
-  // Commission relationship (main app)
-  commissionId              Int?                  // Made optional for formulaire compatibility
-  commission                Commission?           @relation(fields: [commissionId], references: [id], onDelete: Cascade)
-  commissionString          String?               // From formulaire app
-  commissionDate            DateTime?             // From formulaire app
-  
-  // SocieteProduction relationship
-  societeProductionId       Int?                  // Made optional to match formulaire schema
-  societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
-  
-  // Child relationships
-  enfants                   Enfant[]
-  piecesDossier             PieceDossier[]
-  commentaires              Commentaire[]
-  comments                  Comments[]
-  
-  // Identifiers
-  numeroDS                  Int?                  @default(0)
-  externalId                String?               @unique
-  number                    Int?
-  
-  // User relationships
-  instructeurId             Int?                  // From main app
-  instructeur               User?                 @relation(fields: [instructeurId], references: [id], name: "instructeur")
-  creatorId                 Int?                  // Made optional to match both schemas
-  creator                   User?                 @relation(fields: [creatorId], references: [id], name: "creator")
-  
-  // Medical relationships
-  medecinId                 Int?
-  medecin                   User?                 @relation(fields: [medecinId], references: [id], name: "medecin")
-  
-  // Collaborator relationships
-  collaboratorIds           Int[]                 // From formulaire app
-  
-  // Demandeur relationship
-  demandeurId               Int?                  // Made optional to match formulaire schema
-  demandeur                 Demandeur?            @relation(fields: [demandeurId], references: [id])
-  
-  // Content fields
-  justificatifs             JustificatifDossier[]
-  scenesSensibles           String[]
-  presentation              String?               // Made optional to match formulaire schema
-  scenario                  String?
-  securite                  String?
-  complementaire            String?
-  conventionCollectiveCode  String?
-  otherConventionCollective String?
-  
-  // Date fields
-  dateDebut                 DateTime?             // Made optional to match formulaire schema
-  dateFin                   DateTime?             // Made optional to match formulaire schema
-  dateCreation              DateTime?
-  dateDerniereModification  DateTime?
-  dateDepot                 DateTime?
-  
-  // Additional fields
-  cdc                       Int?
-  statusNotification        StatusNotif?
-  source                    Source?
-}
-
-// Combined model for both app's comment systems
-model Commentaire {
-  id        Int      @id @default(autoincrement())
-  text      String
-  date      DateTime
-  userId    Int
-  user      User?    @relation(fields: [userId], references: [id])
-  dossierId Int
-  dossier   Dossier? @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-  seen      Boolean?
-}
-
-// Comments model from formulaire app
-model Comments {
-  id             Int           @id @default(autoincrement())
-  text           String
-  source         Sourcecomment
-  dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-  dossierId      Int
-  enfant         Enfant?       @relation(fields: [enfantId], references: [id])
-  enfantId       Int?
-  parentComment  Comments?     @relation("ParentComments", fields: [commentsId], references: [id])
-  commentsId     Int?
-  Comments       Comments[]    @relation("ParentComments")
-  User           User?         @relation(fields: [userId], references: [id])
-  userId         Int?
-  externalUserId Int?
-  sender         String?
-  seen           Boolean?
-  date           DateTime?
-}
-
 enum TypeEmploi {
   ROLE_1
   ROLE_2
@@ -238,12 +378,12 @@ enum TypeEmploi {
   DOUBLURE
   DOUBLAGE
   CHANT
-  CHORISTE
-  CIRCASSIEN
-  MUSICIEN
   DANSE
   JEU_VIDEO
   AUTRE
+  CHORISTE
+  CIRCASSIEN
+  MUSICIEN
 }
 
 enum JustificatifEnfant {
@@ -252,22 +392,14 @@ enum JustificatifEnfant {
   SITUATION_PARTICULIERE
   CONTRAT
   CERTIFICAT_SCOLARITE
+  AVIS_PEDAGOGIQUE_1ER_DEGRE
+  AVIS_PEDAGOGIQUE_2ND_DEGRE
+  AVIS_DASEN
   AVIS_MEDICAL
   DECLARATION_HONNEUR
+  AVIS_MEDICAL_THALIE
   BON_PRISE_EN_CHARGE
   AUTORISATION_PRISE_EN_CHARGE
-}
-
-model PieceDossierEnfant {
-  id         Int                @id @default(autoincrement())
-  nom        String?            // Optional for compatibility with both apps
-  enfantId   Int
-  enfant     Enfant?            @relation(fields: [enfantId], references: [id], onDelete: Cascade)
-  dossierId  Int?
-  externalId String?
-  type       JustificatifEnfant
-  link       String?            // Made optional to match formulaire schema
-  statut     STATUT_PIECE?
 }
 
 enum TypeConsultation {
@@ -298,71 +430,6 @@ enum NatureCachet {
   AUTRE_ADDITIONNELLE
 }
 
-model Remuneration {
-  id                Int           @id @default(autoincrement())
-  typeRemuneration  String?
-  natureCachet      NatureCachet?
-  autreNatureCachet String?
-  montant           Float?
-  nombre            Int?          @default(0)
-  nombreLignes      Int?          @default(0)
-  totalDadr         Float?
-  comment           String?
-  Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
-  enfantId          Int?
-}
-
-model Enfant {
-  id                          Int                      @id @default(autoincrement())
-  prenom                      String?                  // Made optional to match formulaire schema
-  nom                         String?                  // Made optional to match formulaire schema
-  dateNaissance               DateTime?                // Made optional to match formulaire schema
-  typeEmploi                  TypeEmploi?              // Made optional to match formulaire schema
-  nomPersonnage               String?
-  periodeTravail              String?
-  nombreJours                 Int?                     // Made optional to match formulaire schema
-  contexteTravail             String?
-  montantCachet               Float?                   // Made optional to match formulaire schema
-  nombreCachets               Int?                     @default(0) // Made optional to match formulaire schema
-  nombreLignes                Int?                     @default(0) // Made optional to match formulaire schema
-  remunerationsAdditionnelles String?
-  remunerationTotale          Float?                   // Made optional to match formulaire schema
-  remuneration                Remuneration[]
-  justificatifs               JustificatifEnfant[]
-  piecesDossier               PieceDossierEnfant[]
-  dossierId                   Int
-  dossier                     Dossier                  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-  cdc                         Int?
-  adresseEnfant               String?
-  nomRepresentant1            String?
-  prenomRepresentant1         String?
-  adresseRepresentant1        String?
-  telRepresentant1            String?
-  mailRepresentant1           String?
-  adresseRepresentant2        String?
-  nomRepresentant2            String?
-  prenomRepresentant2         String?
-  telRepresentant2            String?
-  mailRepresentant2           String?
-  externalId                  String?                  @unique
-  typeConsultation            TypeConsultation?
-  typeConsultationMedecin     TypeConsultationMedecin?
-  dateConsultation            DateTime?
-  dateDerniereModification    DateTime?
-  populatedByUserId           Int?
-  populatedBy                 User?                    @relation(fields: [populatedByUserId], references: [id], name: "populatedBy")
-  comments                    Comments[]
-  checkTravailNuit            Boolean?
-  textTravailNuit             String?
-  // Fields from formulaire app for document links
-  livret                      String?
-  autorisation                String?
-  situation                   String?
-  contrat                     String?
-  certificat                  String?
-  avis                        String?
-}
-
 enum Role {
   ADMIN
   INSTRUCTEUR
@@ -370,76 +437,12 @@ enum Role {
   MEDECIN
 }
 
-model SendList {
-  id           Int        @id @default(autoincrement())
-  send         Boolean
-  lastSent     DateTime?
-  commissionId Int
-  commission   Commission @relation(fields: [commissionId], references: [id])
-  userId       Int
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id                    Int           @id @default(autoincrement())
-  name                  String?
-  nom                   String?
-  prenom                String?
-  email                 String?       @unique
-  telephone             String?
-  fonction              String?
-  emailVerified         DateTime?
-  createdAt             DateTime?     @default(now()) @map(name: "created_at")
-  updatedAt             DateTime?     @updatedAt @map(name: "updated_at")
-  image                 String?
-  accounts              Account[]
-  sessions              Session[]
-  dossiersAsInstructeur Dossier[]     @relation(name: "instructeur")
-  dossiersCreated       Dossier[]     @relation(name: "creator")
-  dossiersMedecin       Dossier[]     @relation(name: "medecin")
-  enfantsPopulated      Enfant[]      @relation(name: "populatedBy")
-  commentaires          Commentaire[]
-  comments              Comments[]
-  role                  Role?
-  departement           String?
-  departements          String[]
-  SendList              SendList[]
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique @map("session_token")
-  userId       Int      @map("user_id")
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  id         Int      @id @default(autoincrement())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-model Account {
-  id                 String  @id @default(cuid())
-  userId             Int     @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
-  oauth_token_secret String?
-  oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+enum SectionPdf {
+  TEXTES_LEGAUX
+  CONSIDERANTS
+  ARTICLE_2
+  ARTICLE_3
+  ARTICLE_4
+  SIGNATURE
+  RECOURS
 }
