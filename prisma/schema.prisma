@@ -36,6 +36,8 @@ model SocieteProduction {
   otherConventionCollective String?
   demandeurs                Demandeur[]
   dossiers                  Dossier[]
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 }
 
 model Demandeur {
@@ -50,6 +52,8 @@ model Demandeur {
   otherConventionCollective String?
   societeProduction         SocieteProduction? @relation(fields: [societeProductionId], references: [id])
   dossiers                  Dossier[]
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 }
 
 model PieceDossier {
@@ -61,6 +65,13 @@ model PieceDossier {
   statut     STATUT_PIECE?
   nom        String?
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+<<<<<<< Updated upstream
+=======
+
+  @@index([dossierId], name: "idx_pieceDossier_dossierId")
+  createdAt  DateTime?
+  updatedAt  DateTime?
+>>>>>>> Stashed changes
 }
 
 model Dossier {
@@ -106,6 +117,19 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+<<<<<<< Updated upstream
+=======
+
+  @@index([commissionId], name: "idx_dossier_commissionId")
+  @@index([societeProductionId], name: "idx_dossier_societeProductionId") 
+  @@index([demandeurId], name: "idx_dossier_demandeurId")
+  @@index([creatorId], name: "idx_dossier_creatorId")
+  @@index([instructeurId], name: "idx_dossier_instructeurId")
+  @@index([medecinId], name: "idx_dossier_medecinId")
+  @@index([nom], name: "idx_dossier_nom")
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
+>>>>>>> Stashed changes
 }
 
 model Commentaire {
@@ -148,6 +172,14 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
   nom        String?
   enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+<<<<<<< Updated upstream
+=======
+
+  @@index([dossierId], name: "idx_pieceDossierEnfant_dossierId")
+  @@index([enfantId], name: "idx_pieceDossierEnfant_enfantId")
+  createdAt  DateTime?
+  updatedAt  DateTime?
+>>>>>>> Stashed changes
 }
 
 model Remuneration {
@@ -162,6 +194,8 @@ model Remuneration {
   comment           String?
   enfantId          Int?
   Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
+  createdAt         DateTime?
+  updatedAt         DateTime?
 }
 
 model Enfant {
@@ -212,6 +246,16 @@ model Enfant {
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
+<<<<<<< Updated upstream
+=======
+
+  @@index([dossierId], name: "idx_enfant_dossierId")
+  @@index([populatedByUserId], name: "idx_enfant_populatedById")
+  @@index([nom], name: "idx_enfant_nom")
+  @@index([prenom], name: "idx_enfant_prenom")
+  createdAt                   DateTime?
+  updatedAt                   DateTime?
+>>>>>>> Stashed changes
 }
 
 model ContenuPdf {

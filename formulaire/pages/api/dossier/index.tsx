@@ -241,7 +241,10 @@ const update: NextApiHandler = async (req, res) => {
   };
 
   const produitupdated = await prisma.dossier.update({
-    data: updateData,
+    data: {
+      ...updateData,
+      updatedAt: new Date()
+    },
     where: { id: parsed.id },
   });
   res.status(200).json(produitupdated);
