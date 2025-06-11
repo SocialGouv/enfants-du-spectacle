@@ -1,3 +1,10 @@
+## [1.101.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.1...v1.101.2) (2025-06-11)
+
+
+### Bug Fixes
+
+* add transactions when needed, delete procedures not needed anymore ([#729](https://github.com/SocialGouv/enfants-du-spectacle/issues/729)) ([3691536](https://github.com/SocialGouv/enfants-du-spectacle/commit/369153606b7fb82570380b8a976b20e2cb65f1d4))
+
 ## [1.101.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.0...v1.101.1) (2025-06-10)
 
 
