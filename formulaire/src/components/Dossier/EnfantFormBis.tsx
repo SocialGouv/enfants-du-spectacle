@@ -39,6 +39,138 @@ import ListComments from "../ListComments";
 import { useSession } from "next-auth/react";
 import { getUsersById } from "src/fetching/users";
 
+// Configuration des documents justificatifs
+interface DocumentConfig {
+  id: JustificatifEnfant;
+  label: string;
+  text: string;
+  additionalInfo?: React.ReactNode;
+}
+
+const DOCUMENT_CONFIGS: DocumentConfig[] = [
+  {
+    id: "LIVRET_FAMILLE",
+    label: "Livret de Famille",
+    text: "Ce document doit être à jour.",
+  },
+  {
+    id: "AUTORISATION_PARENTALE",
+    label: "Autorisation parentale",
+    text: "En cas d'absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l'enfant.",
+  },
+  {
+    id: "SITUATION_PARTICULIERE",
+    label: "Situation particulière relative à l'autorité parentale",
+    text: "Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc).",
+  },
+  {
+    id: "CONTRAT",
+    label: "Projet de contrat de travail",
+    text: "Veuillez fournir un document présentant de manière précise et détaillée, le projet de contrat de travail.",
+  },
+  {
+    id: "CERTIFICAT_SCOLARITE",
+    label: "Certificat de scolarité",
+    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
+    additionalInfo: (
+      <div className={styles.smallText}>
+        Informations disponibles sur le site de{" "}
+        <Link
+          href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
+          target={"_blank"}
+        >
+          l'Académie de Paris
+        </Link>
+      </div>
+    ),
+  },
+  {
+    id: "AVIS_PEDAGOGIQUE_1ER_DEGRE",
+    label: "Avis pédagogique 1er degré",
+    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
+    additionalInfo: (
+      <div className={styles.smallText}>
+        Informations disponibles sur le site de{" "}
+        <Link
+          href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
+          target={"_blank"}
+        >
+          l'Académie de Paris
+        </Link>
+      </div>
+    ),
+  },
+  {
+    id: "AVIS_PEDAGOGIQUE_2ND_DEGRE",
+    label: "Avis pédagogie 2nd degré",
+    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
+    additionalInfo: (
+      <div className={styles.smallText}>
+        Informations disponibles sur le site de{" "}
+        <Link
+          href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
+          target={"_blank"}
+        >
+          l'Académie de Paris
+        </Link>
+      </div>
+    ),
+  },
+  {
+    id: "AVIS_DASEN",
+    label: "Avis DASEN",
+    text: "L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.",
+    additionalInfo: (
+      <div className={styles.smallText}>
+        Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
+        <Link href="https://mon-administration.com/dsden/" target={"_blank"}>
+          https://mon-administration.com/dsden/
+        </Link>
+      </div>
+    ),
+  },
+  {
+    id: "DECLARATION_HONNEUR",
+    label: "Déclaration sur l'honneur de l'enfant âgé de plus de 13 ans",
+    text: "Veuillez fournir un document présentant de manière précise et détaillée, la déclaration sur l'honneur de l'enfant âgé de plus de 13 ans.",
+  },
+];
+
+// Composant pour rendre un document
+interface DocumentInputProps {
+  config: DocumentConfig;
+  enfantTmp: EnfantData;
+  contextDossier: any;
+  allowChanges: boolean;
+  handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDelete: (id: string) => void;
+}
+
+const DocumentInput: React.FC<DocumentInputProps> = ({
+  config,
+  enfantTmp,
+  contextDossier,
+  allowChanges,
+  handleFile,
+  handleDelete,
+}) => (
+  <div className={styles.blocForm}>
+    <InputFile
+      id={config.id}
+      docs={enfantTmp.piecesDossier || []}
+      docsTokenized={contextDossier.docs.enfants.find(
+        (enf: any) => enf.id === enfantTmp.id
+      )}
+      allowChanges={!allowChanges}
+      label={config.label}
+      handleFile={handleFile}
+      handleDelete={handleDelete}
+      text={config.text}
+    />
+    {config.additionalInfo}
+  </div>
+);
+
 interface Props {
   enfant: EnfantData;
   allowChanges: Boolean;
@@ -368,6 +500,8 @@ const EnfantFormBis: React.FC<Props> = ({
         link: upload.filePath,
         statut: null,
         dossierId: contextDossier.dossier.id,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       setEnfant({
         ...enfantTmp,
@@ -1172,151 +1306,17 @@ const EnfantFormBis: React.FC<Props> = ({
       <h5 className={styles.h5Spacer}>
         {"Pièces justificatives liées à l'enfant"}
       </h5>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"LIVRET_FAMILLE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Livret de Famille`}
+      {DOCUMENT_CONFIGS.map((config) => (
+        <DocumentInput
+          key={config.id}
+          config={config}
+          enfantTmp={enfantTmp}
+          contextDossier={contextDossier}
+          allowChanges={allowChanges}
           handleFile={handleFile}
           handleDelete={handleDelete}
-          text={`Ce document doit être à jour.`}
         />
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"AUTORISATION_PARENTALE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Autorisation parentale`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`En cas d'absence parentale pendant le temps de travail, les temps de repos et de trajet, le demandeur devra vérifier la moralité de la personne employée pour assurer la surveillance de l'enfant.`}
-        />
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"SITUATION_PARTICULIERE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Situation particulière relative à l'autorité parentale`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`Veuillez fournir, le cas échéant, tout document justifiant d'une situation particulière relative à l'exercice de l'autorité parentale (retrait d'autorité parentale, tutelle, etc).`}
-        />
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"CONTRAT"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Projet de contrat de travail`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`Veuillez fournir un document présentant de manière précise et détaillée, le projet de contrat de travail.`}
-        />
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"CERTIFICAT_SCOLARITE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Certificat de scolarité`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
-        />
-        <div className={styles.smallText}>
-          Informations disponibles sur le site de{" "}
-          <Link
-            href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
-            target={"_blank"}
-          >
-            {`l'Académie de Paris`}
-          </Link>
-        </div>
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"AVIS_PEDAGOGIQUE_1ER_DEGRE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Avis pédagogique 1er degré`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
-        />
-        <div className={styles.smallText}>
-          Informations disponibles sur le site de{" "}
-          <Link
-            href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
-            target={"_blank"}
-          >
-            {`l'Académie de Paris`}
-          </Link>
-        </div>
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"AVIS_PEDAGOGIQUE_2ND_DEGRE"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Avis pédagogie 2nd degré`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
-        />
-        <div className={styles.smallText}>
-          Informations disponibles sur le site de{" "}
-          <Link
-            href="https://www.ac-paris.fr/scolarite-des-enfants-du-spectacle-123037 "
-            target={"_blank"}
-          >
-            {`l'Académie de Paris`}
-          </Link>
-        </div>
-      </div>
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"AVIS_DASEN"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enf) => enf.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Avis DASEN`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`L'avis pédagogique est requis à partir de 4 jours d'absence scolaire.`}
-        />
-        <div className={styles.smallText}>
-          Pour les avis DASEN, vous pouvez vous référer à cet annuaire :
-          <Link href="https://mon-administration.com/dsden/" target={"_blank"}>
-            https://mon-administration.com/dsden/
-          </Link>
-        </div>
-      </div>
+      ))}
       {enfantTmp.typeConsultation !== "THALIE" ||
       (enfantTmp.typeConsultation === "THALIE" &&
         (enfantTmp.piecesDossier.filter((doc) => {
