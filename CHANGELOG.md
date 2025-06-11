@@ -1,3 +1,10 @@
+## [1.101.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.2...v1.101.3) (2025-06-11)
+
+
+### Bug Fixes
+
+* add missing pieces justificatives ([#732](https://github.com/SocialGouv/enfants-du-spectacle/issues/732)) ([0bf1371](https://github.com/SocialGouv/enfants-du-spectacle/commit/0bf1371474499ef99cedbfe2f5597446cefd4beb))
+
 ## [1.101.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.1...v1.101.2) (2025-06-11)
 
 
