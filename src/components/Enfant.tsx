@@ -62,6 +62,29 @@ interface Props {
   sender: string | null;
   actionComments: (comment: Comments) => void;
   remunerations: Remuneration[];
+  otherFilms?: OtherFilm[];
+}
+
+interface OtherFilm {
+  id: number;
+  nameId: string;
+  nom: string;
+  prenom: string;
+  nomPersonnage: string;
+  typeEmploi: string;
+  dateNaissance: Date;
+  dossier: {
+    id: number;
+    nom: string;
+    categorie: string;
+    dateDebut: Date;
+    dateFin: Date;
+    statut: string;
+    societeProduction: {
+      nom: string;
+      raisonSociale: string;
+    } | null;
+  };
 }
 
 const EnfantComponent: React.FC<Props> = ({
@@ -72,6 +95,7 @@ const EnfantComponent: React.FC<Props> = ({
   actionComments,
   remunerations,
   sender,
+  otherFilms = [],
 }) => {
   const [formData, setFormData] = React.useState<Enfant>(() => {
     // Make a copy of the enfant object
@@ -546,6 +570,47 @@ const EnfantComponent: React.FC<Props> = ({
           </form>
         </div>
       </Accordion>
+
+      {otherFilms && otherFilms.length > 0 && (
+        <Accordion
+          title={`Autres films (${otherFilms.length})`}
+          className="accordionSmallText"
+        >
+          <div>
+            <p style={{ marginBottom: "15px", fontStyle: "italic" }}>
+              Cet enfant a déjà joué dans d'autres projets :
+            </p>
+            {otherFilms.map((film, index) => (
+              <div 
+                key={film.id} 
+                style={{ 
+                  marginBottom: "15px", 
+                  padding: "10px", 
+                  border: "1px solid #ddd", 
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9"
+                }}
+              >
+                <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
+                  {film.dossier.nom}
+                </div>
+                <div style={{ fontSize: "0.9em", color: "#666" }}>
+                  <div>Catégorie: {film.dossier.categorie}</div>
+                  <div>Personnage: {film.nomPersonnage}</div>
+                  <div>Type d'emploi: {film.typeEmploi}</div>
+                  <div>Statut: {film.dossier.statut}</div>
+                  {film.dossier.societeProduction && (
+                    <div>Société: {film.dossier.societeProduction.nom}</div>
+                  )}
+                  <div>
+                    Période: {new Date(film.dossier.dateDebut).toLocaleDateString()} - {new Date(film.dossier.dateFin).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Accordion>
+      )}
 
       {(session.data?.dbUser as User).role === "MEDECIN" && (
         <Accordion

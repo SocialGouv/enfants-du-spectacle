@@ -62,6 +62,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const [senderComment, setSenderComment] = React.useState<string>(session?.dbUser.prenom + ' ' + session?.dbUser.nom || 'Instructeur');
   const [comments, setComments] = React.useState<Comments[]>([]);
   const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
+  const [otherFilms, setOtherFilms] = React.useState<any>({});
+  const [loadingOtherFilms, setLoadingOtherFilms] = React.useState<boolean>(false);
 
   // Function to fetch societeProduction directly
   const fetchSocieteProduction = async (id: number) => {
@@ -88,6 +90,46 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     }
   };
 
+  const fetchOtherFilms = async () => {
+    if (!dossier?.enfants?.length) return;
+    
+    setLoadingOtherFilms(true);
+    try {
+      // Récupérer tous les nameId des enfants du dossier
+      const nameIds = dossier.enfants
+        .filter((enfant: any) => enfant.nameId)
+        .map((enfant: any) => enfant.nameId);
+      
+      if (nameIds.length === 0) {
+        setOtherFilms({});
+        return;
+      }
+
+      const response = await fetch('/api/enfants/other-films', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nameIds,
+          currentDossierId: dossier.id
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error fetching other films: ${response.status} - ${errorText}`);
+      }
+
+      const otherFilmsData = await response.json();
+      setOtherFilms(otherFilmsData);
+    } catch (error) {
+      console.error("Error fetching other films:", error);
+      setOtherFilms({});
+    } finally {
+      setLoadingOtherFilms(false);
+    }
+  };
 
   const fetchComments = async () => {
     try {
@@ -144,6 +186,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   React.useEffect(() => {
     try {
       fetchComments();
+      fetchOtherFilms();
     } catch (error) {
       console.error("Error in initial data fetch:", error);
     }
@@ -541,6 +584,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             comments={comments}
                             actionComments={processComment}
                             remunerations={enfant.remuneration || []}
+                            otherFilms={enfant.nameId ? otherFilms[enfant.nameId] || [] : []}
                           />
                           {dossier.statut !== "INSTRUCTION" &&
                             dossier.statut !== "CONSTRUCTION" &&
