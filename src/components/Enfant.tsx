@@ -273,10 +273,12 @@ const EnfantComponent: React.FC<Props> = ({
   };
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
+    const value = e.currentTarget.value !== "" ? e.currentTarget.value : null;
+    const finalValue = e.target.id === "cdc" && value !== null ? parseInt(value, 10) : value;
+    
     setFormData({
       ...formData,
-      [e.target.id]:
-        e.currentTarget.value !== "" ? e.currentTarget.value : null,
+      [e.target.id]: finalValue,
     });
   };
 
@@ -419,6 +421,20 @@ const EnfantComponent: React.FC<Props> = ({
             ) : (
               <div>Pas de rémunérations</div>
             )}
+            <div className={styles.inputAdresse} style={{ marginTop: "20px" }}>
+              <label htmlFor="cdc" className="mb-2 italic">
+                Part CDC
+              </label>
+              <input
+                onChange={handleForm}
+                type="number"
+                id="cdc"
+                name="cdc"
+                className="inputText"
+                value={formData.cdc || ""}
+                placeholder="Entrez la part CDC"
+              />
+            </div>
           </Info>
           <Info title="Conditions de travail" className={styles.info}>
             <div>
