@@ -96,7 +96,10 @@ const update: NextApiHandler = async (req, res) => {
     // Only proceed with update if we have data to update
     try {
       let demandeurUpdated = await prisma.demandeur.update({
-        data: dataToUpdate,
+        data: {
+          ...dataToUpdate,
+          updatedAt: new Date()
+        },
         where: { id: parsed.id },
       });
       

@@ -36,6 +36,8 @@ model SocieteProduction {
   otherConventionCollective String?
   demandeurs                Demandeur[]
   dossiers                  Dossier[]
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 }
 
 model Demandeur {
@@ -50,6 +52,8 @@ model Demandeur {
   otherConventionCollective String?
   societeProduction         SocieteProduction? @relation(fields: [societeProductionId], references: [id])
   dossiers                  Dossier[]
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 }
 
 model PieceDossier {
@@ -63,6 +67,8 @@ model PieceDossier {
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
 
   @@index([dossierId], name: "idx_pieceDossier_dossierId")
+  createdAt  DateTime?
+  updatedAt  DateTime?
 }
 
 model Dossier {
@@ -116,6 +122,8 @@ model Dossier {
   @@index([instructeurId], name: "idx_dossier_instructeurId")
   @@index([medecinId], name: "idx_dossier_medecinId")
   @@index([nom], name: "idx_dossier_nom")
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 }
 
 model Commentaire {
@@ -165,6 +173,8 @@ model PieceDossierEnfant {
 
   @@index([dossierId], name: "idx_pieceDossierEnfant_dossierId")
   @@index([enfantId], name: "idx_pieceDossierEnfant_enfantId")
+  createdAt  DateTime?
+  updatedAt  DateTime?
 }
 
 model Remuneration {
@@ -179,6 +189,8 @@ model Remuneration {
   comment           String?
   enfantId          Int?
   Enfant            Enfant?       @relation(fields: [enfantId], references: [id])
+  createdAt         DateTime?
+  updatedAt         DateTime?
 }
 
 model Enfant {
@@ -234,6 +246,8 @@ model Enfant {
   @@index([populatedByUserId], name: "idx_enfant_populatedById")
   @@index([nom], name: "idx_enfant_nom")
   @@index([prenom], name: "idx_enfant_prenom")
+  createdAt                   DateTime?
+  updatedAt                   DateTime?
 }
 
 model ContenuPdf {

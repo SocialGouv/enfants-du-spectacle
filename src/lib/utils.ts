@@ -1,4 +1,4 @@
-const generateToken = (pieceId: number, dossierId: number, pieceType: string, pieceLink: string | null, pieceStatus: string | null) => {
+const generateToken = (pieceId: number, dossierId: number, pieceType: string, pieceLink: string | null, pieceStatus: string | null, createdAt: Date) => {
 
     var jwt = require('jsonwebtoken');
 
@@ -15,7 +15,8 @@ const generateToken = (pieceId: number, dossierId: number, pieceType: string, pi
         id: pieceId,
         type: pieceType,
         statut: pieceStatus,
-        link: `${process.env.URL_SDP}/docs?token=${tokenSDP}`
+        link: `${process.env.URL_SDP}/docs?token=${tokenSDP}`,
+        createdAt: createdAt
     }
 
 }

@@ -27,7 +27,10 @@ const post: NextApiHandler = async (req, res) => {
   const dossierId = data.dossierId;
   delete data.dossierId;
   try {
-    const piece = await prisma.pieceDossierEnfant.create({ data });
+    const piece = await prisma.pieceDossierEnfant.create({ data: {
+      ...data,
+      createdAt: new Date()
+    } });
     const tokenizedLink = generateToken(
       piece.id,
       dossierId,

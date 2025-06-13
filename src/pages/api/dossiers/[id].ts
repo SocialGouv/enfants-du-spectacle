@@ -90,7 +90,8 @@ const get: NextApiHandler = async (req, res) => {
                 dossier.id,
                 piece.type,
                 piece.link,
-                piece.statut
+                piece.statut,
+                piece.createdAt
               );
             }),
           },
@@ -103,7 +104,8 @@ const get: NextApiHandler = async (req, res) => {
                   dossier.id,
                   piece.type,
                   piece.link,
-                  piece.statut
+                  piece.statut,
+                  piece.createdAt
                 );
               }),
             };
