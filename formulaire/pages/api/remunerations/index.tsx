@@ -27,7 +27,10 @@ const post: NextApiHandler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
   let data = JSON.parse(req.body) as Remuneration;
   try {
-    const remuneration = await prisma.remuneration.create({ data });
+    const remuneration = await prisma.remuneration.create({ data: {
+      ...data,
+      createdAt: new Date()
+    } });
     res.status(200).json(remuneration);
   } catch (e: unknown) {
     console.log(e);

@@ -21,6 +21,7 @@ import { getCommentsByDossier } from "src/lib/fetching/comments";
 import {
   birthDateToFrenchAge,
   EMPLOIS_CATEGORIES,
+  frenchDateHour,
   frenchDateText,
   typeEmploiLabel,
   TYPES_EMPLOI,
@@ -218,6 +219,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
               {dossier.scenesSensibles.length > 0 &&
                 dossier.scenesSensibles.filter((scene: any) => scene !== null).join(", ")}
+                <p className={styles.infoDate}>Mis à jour le {frenchDateHour(dossier.dateDerniereModification ?? new Date())}</p>
             </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES & VALIDATION">

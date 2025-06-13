@@ -14,6 +14,7 @@ import styles from "src/components/Justificatifs.module.scss";
 import justifStyles from "./DossierJustificatifs.module.scss";
 import logoAccepted from "src/images/accepted.svg";
 import logoRefused from "src/images/refused.svg";
+import { frenchDateHour } from "src/lib/helpers";
 
 // Define piece structure
 interface PieceDoc {
@@ -21,6 +22,7 @@ interface PieceDoc {
   type: string;
   link: string;
   statut: STATUT_PIECE | null;
+  createdAt: Date;
 }
 
 interface DocsData {
@@ -135,7 +137,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
           >
             ✗
           </span>
-          <span>{label}</span>
+          <span className={justifStyles.documentName}>{label}</span>
         </div>
         {showValidation && (
           <div className={justifStyles.validationControls}>
@@ -166,6 +168,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
             >
               {label.length > 50 ? label.slice(0, 50) + "..." : label}
             </a>
+            <p>Déposé le {frenchDateHour(piece.createdAt ?? new Date())}</p>
           </div>
 
           {/* Validation controls if showValidation is true */}

@@ -27,7 +27,19 @@
 .documentInfo {
   flex: 1;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+
+  p {
+    width: 100%;
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    font-style: italic;
+  }
+
+  .documentName {
+    max-width: 85%
+  }
 }
 
 .validationControls {
@@ -63,6 +75,7 @@
 
 .documentLink {
   text-decoration: none;
+  max-width: 85%;
   &:hover {
     text-decoration: underline;
   }

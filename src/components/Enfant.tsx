@@ -19,6 +19,7 @@ import type { Comments } from "src/lib/fetching/comments";
 import { deleteDoc, uploadDoc } from "src/lib/fetching/docs";
 import { passEnfant } from "src/lib/fetching/enfants";
 import {
+  frenchDateHour,
   INFOS_REPRESENTANTS,
   REMUNERATIONS,
   TYPE_CONSULTATION_MEDECIN,
@@ -204,6 +205,7 @@ const EnfantComponent: React.FC<Props> = ({
                                   : matchingLabelGuarantee
                               }
                             />
+                            <div className={styles.dateMaj}>Ajoutée le {frenchDateHour(remuneration.createdAt ?? new Date())}</div>
                           </li>
                         )}
                       </ul>
@@ -455,6 +457,7 @@ const EnfantComponent: React.FC<Props> = ({
                 </>
               )}
             </div>
+            <p className={styles.dateMaj}>Mis à jour le {frenchDateHour(enfant.dateDerniereModification ?? new Date())}</p>
           </Info>
 
           <Info title="Pièces justificatives & Validation" className={styles.info}>

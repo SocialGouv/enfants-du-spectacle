@@ -24,7 +24,10 @@ const handler: NextApiHandler = async (req, res) => {
 const post: NextApiHandler = async (req, res) => {
   const data = JSON.parse(req.body) as PieceDossier;
   try {
-    const piece = await prisma.pieceDossier.create({ data });
+    const piece = await prisma.pieceDossier.create({ data: {
+      ...data,
+      createdAt: new Date()
+    } });
     const tokenizedLink = generateToken(
       piece.id,
       piece.dossierId,

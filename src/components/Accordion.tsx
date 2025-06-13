@@ -5,6 +5,7 @@ import styles from "src/components/Accordion.module.scss";
 
 interface Props {
   title: string;
+  updatedAt?: Date;
   subtitle?: string;
   children: React.ReactNode;
   className?: string;
@@ -15,6 +16,7 @@ interface Props {
 
 const Accordion: React.FC<Props> = ({
   title,
+  updatedAt,
   subtitle,
   children,
   className,
