@@ -1,3 +1,10 @@
+## [1.102.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.102.0...v1.102.1) (2025-06-13)
+
+
+### Bug Fixes
+
+* schema prisma ([#740](https://github.com/SocialGouv/enfants-du-spectacle/issues/740)) ([5a9aec3](https://github.com/SocialGouv/enfants-du-spectacle/commit/5a9aec33526a3d38c6911a06afa13e0242d7a384))
+
 # [1.102.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.101.3...v1.102.0) (2025-06-13)
 
 
