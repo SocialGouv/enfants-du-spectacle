@@ -1,3 +1,10 @@
+# [1.103.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.102.1...v1.103.0) (2025-06-13)
+
+
+### Features
+
+* cdc and history ([#741](https://github.com/SocialGouv/enfants-du-spectacle/issues/741)) ([4e17518](https://github.com/SocialGouv/enfants-du-spectacle/commit/4e175188777ebce1f1036f79c514d4cf8c13df97))
+
 ## [1.102.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.102.0...v1.102.1) (2025-06-13)
 
 
