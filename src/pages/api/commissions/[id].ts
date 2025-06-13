@@ -60,7 +60,6 @@ const get: NextApiHandler = async (req, res) => {
   if (commission) {
     // Safely access the commission data using optional chaining
     const dossierCount = commission?.dossiers?.length || 0;
-    console.log(`Commission ${id} fetched with ${dossierCount} dossiers`);
     
     // Count dossiers with societeProduction
     let dossiersWithSocieteCount = 0;
@@ -70,10 +69,7 @@ const get: NextApiHandler = async (req, res) => {
           dossiersWithSocieteCount++;
         }
       }
-      console.log(`Found ${dossiersWithSocieteCount} dossiers with societeProduction data out of ${dossierCount} total`);
     }
-  } else {
-    console.log(`Commission ${id} fetched but is null`);
   }
 
   res.status(200).json(commission);

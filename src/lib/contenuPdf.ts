@@ -75,15 +75,12 @@ Cette décision peut faire l'objet  dans un délai de deux mois à compter de sa
  * Récupère tous les contenus PDF pour un département donné via API
  */
 export async function getAllContenusPdf(departement: string): Promise<Record<SectionPdf, ContenuPdfData>> {
-  console.log('DEBUG getAllContenusPdf - Département:', departement);
   
   try {
-    console.log('DEBUG - Appel API pour récupérer les contenus...');
     const response = await fetch(`/api/contenus-pdf/${departement}`);
     
     if (response.ok) {
       const contenus = await response.json();
-      console.log('DEBUG - Contenus récupérés depuis l\'API:', Object.keys(contenus));
       return contenus;
     } else {
       console.error('DEBUG - Erreur API:', response.status, response.statusText);
@@ -91,9 +88,6 @@ export async function getAllContenusPdf(departement: string): Promise<Record<Sec
   } catch (error) {
     console.error('DEBUG - Erreur lors de l\'appel API:', error);
   }
-  
-  // Fallback vers les contenus par défaut
-  console.log('DEBUG - Utilisation des contenus par défaut');
   return CONTENUS_DEFAUT;
 }
 

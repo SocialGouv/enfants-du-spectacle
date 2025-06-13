@@ -221,8 +221,6 @@ const getRemsByDossier = async (dossier: DossierData): Promise<Remuneration[]> =
         if (dossier.societeProduction && dossier.demandeur.societeProductionId === dossier.societeProductionId) {
           // @ts-ignore - This property will be added dynamically
           dossier.demandeur.societeProduction = dossier.societeProduction;
-        } else {
-          console.log("Cannot link demandeur.societeProduction - IDs don't match or societeProduction missing");
         }
       } catch (error) {
         console.error("Error trying to link demandeur.societeProduction:", error);
@@ -307,13 +305,13 @@ const TYPE_CONSULTATION_MEDECIN: {
   {
     label: "En physique ou en téléconsultation",
     labelCol2: "Date du rdv ",
-    typeJustif: "AVIS_MEDICAL",
+    typeJustif: "AVIS_MEDICAL_THALIE",
     value: "PHYSIQUE",
   },
   {
     label: "Sur pièce",
     labelCol2: "Avis médical",
-    typeJustif: "AVIS_MEDICAL",
+    typeJustif: "AVIS_MEDICAL_THALIE",
     value: "PIECE",
   },
   {

@@ -20,8 +20,11 @@ const handler: NextApiHandler = async (req, res) => {
 
 const post: NextApiHandler = async (req, res) => {
   let dataList = JSON.parse(req.body);
+  
   try {
-    dataList.enfants.forEach(async (data: any) => {
+    // Préparer toutes les données avant la transaction
+    const preparedEnfants = dataList.enfants.map((data: any) => {
+      // Transformer typeConsultation
       if (data.typeConsultation === "Un médecin Thalie Santé") {
         data.typeConsultation = "THALIE";
       }
@@ -29,96 +32,118 @@ const post: NextApiHandler = async (req, res) => {
         data.typeConsultation = "GENERALISTE";
       }
 
+      // Construire contexteTravail
       data.contexteTravail = data.tempsTravail
         ? data.tempsTravail + " - " + data.lieuTravail
         : data.lieuTravail;
 
-      data.adresseRepresentant1 =
-        data.roadNumber +
-        " " +
-        data.streetName +
-        " " +
-        data.postalCode +
-        " " +
-        data.city;
+      // Construire adresses
+      data.adresseRepresentant1 = [
+        data.roadNumber,
+        data.streetName, 
+        data.postalCode,
+        data.city
+      ].filter(Boolean).join(" ");
 
-      data.adresseRepresentant2 =
-        data.roadNumberTwo +
-        " " +
-        data.streetNameTwo +
-        " " +
-        data.postalCodeTwo +
-        " " +
-        data.cityTwo;
+      data.adresseRepresentant2 = [
+        data.roadNumberTwo,
+        data.streetNameTwo,
+        data.postalCodeTwo,
+        data.cityTwo
+      ].filter(Boolean).join(" ");
 
-      if (
-        data.remunerationsAdditionnelles ||
-        data.remunerationsAdditionnelles === 0
-      ) {
-        data.remunerationsAdditionnelles = JSON.stringify(
-          data.remunerationsAdditionnelles
-        );
+      // Gérer remunerationsAdditionnelles
+      if (data.remunerationsAdditionnelles || data.remunerationsAdditionnelles === 0) {
+        data.remunerationsAdditionnelles = JSON.stringify(data.remunerationsAdditionnelles);
       }
 
-      if (
-        data.montantCachet &&
-        data.nombreCachets &&
-        data.remunerationsAdditionnelles
-      ) {
-        data.remunerationTotale =
-          data.montantCachet * data.nombreCachets +
-          JSON.parse(data.remunerationsAdditionnelles);
-      } else if (data.montantCachet && data.nombreCachets) {
-        data.remunerationTotale = data.montantCachet * data.nombreCachets;
-      } else if (data.remunerationsAdditionnelles) {
-        data.remunerationTotale = JSON.parse(data.remunerationsAdditionnelles);
-      }
+      // Calculer remunerationTotale
+      const montant = data.montantCachet || 0;
+      const cachets = data.nombreCachets || 0;
+      const additionnelles = data.remunerationsAdditionnelles 
+        ? JSON.parse(data.remunerationsAdditionnelles) : 0;
+      
+      data.remunerationTotale = (montant * cachets) + additionnelles;
 
+      // Stringifier les téléphones
       data.telRepresentant1 = JSON.stringify(data.telRepresentant1);
       data.telRepresentant2 = JSON.stringify(data.telRepresentant2);
       data.dossierId = dataList.dossierId;
 
-      delete data.date;
-      delete data.repQuality;
-      delete data.roadNumber;
-      delete data.streetName;
-      delete data.postalCode;
-      delete data.city;
-      delete data.repQualityTwo;
-      delete data.roadNumberTwo;
-      delete data.streetNameTwo;
-      delete data.postalCodeTwo;
-      delete data.cityTwo;
-      delete data.school;
-      delete data.tempsTravail;
-      delete data.lieuTravail;
+      // Nettoyer les champs temporaires
+      const cleanedData = { ...data };
+      delete cleanedData.date;
+      delete cleanedData.repQuality;
+      delete cleanedData.roadNumber;
+      delete cleanedData.streetName;
+      delete cleanedData.postalCode;
+      delete cleanedData.city;
+      delete cleanedData.repQualityTwo;
+      delete cleanedData.roadNumberTwo;
+      delete cleanedData.streetNameTwo;
+      delete cleanedData.postalCodeTwo;
+      delete cleanedData.cityTwo;
+      delete cleanedData.school;
+      delete cleanedData.tempsTravail;
+      delete cleanedData.lieuTravail;
 
-      // find existing enfants first
-      const existingEnfants = await prisma.enfant.findMany({
-        where: {
-          dossierId: dataList.dossierId,
-          nom: data.nom,
-          prenom: data.prenom,
-          dateNaissance: data.dateNaissance,
-        },
-      });
-      if (existingEnfants.length === 0) {
-        const enfant = await prisma.enfant.create({ data });
-      } else {
-        await prisma.enfant.updateMany({
+      return cleanedData;
+    });
+
+    // ✨ TRANSACTION ATOMIQUE
+    const result = await prisma.$transaction(async (tx) => {
+      const operations = [];
+      
+      for (const data of preparedEnfants) {
+        // Vérifier si l'enfant existe déjà
+        const existingEnfants = await tx.enfant.findMany({
           where: {
+            dossierId: dataList.dossierId,
             nom: data.nom,
             prenom: data.prenom,
             dateNaissance: data.dateNaissance,
-            dossierId: data.dossierId,
           },
-          data: data,
         });
+
+        if (existingEnfants.length === 0) {
+          // Créer nouvel enfant
+          const enfant = await tx.enfant.create({ data });
+          operations.push({ action: 'created', enfant: enfant.id });
+        } else {
+          // Mettre à jour enfant(s) existant(s)
+          await tx.enfant.updateMany({
+            where: {
+              nom: data.nom,
+              prenom: data.prenom,
+              dateNaissance: data.dateNaissance,
+              dossierId: data.dossierId,
+            },
+            data: data,
+          });
+          operations.push({ 
+            action: 'updated', 
+            count: existingEnfants.length,
+            enfant: existingEnfants[0].id 
+          });
+        }
       }
+      
+      return operations;
     });
-    res.status(200).json(dataList.enfants);
-  } catch (e: unknown) {
-    console.log(e);
+
+    res.status(200).json({
+      success: true,
+      message: `${preparedEnfants.length} enfants traités avec succès`,
+      operations: result
+    });
+
+  } catch (error: unknown) {
+    console.error("Erreur lors de l'import des enfants:", error);
+    res.status(500).json({
+      success: false,
+      error: "Échec de l'import des enfants",
+      details: error instanceof Error ? error.message : "Erreur inconnue"
+    });
   }
 };
 

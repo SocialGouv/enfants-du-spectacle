@@ -27,7 +27,6 @@ const handler: NextApiHandler = async (req, res) => {
     
     // Get and clean the search term
     const searchTerm = req.query.search.trim();
-    console.log(`SEARCH API: User searching for "${searchTerm}"`);
     
     // DIRECT IMPLEMENTATION - Skip using helper functions which might have issues
     
@@ -71,11 +70,8 @@ const handler: NextApiHandler = async (req, res) => {
       }
     });
     
-    console.log(`SEARCH API: Found ${dossiers.length} dossiers and ${enfants.length} enfants matching "${searchTerm}"`);
-    
     // Ensure we have data to return, even if no matches
     if (dossiers.length === 0 && enfants.length === 0 && searchTerm) {
-      console.log("SEARCH API: No results found, fetching fallback results");
       
       // Get some sample dossiers as fallback (just to verify data exists)
       const sampleDossiers = await client.dossier.findMany({
@@ -88,12 +84,6 @@ const handler: NextApiHandler = async (req, res) => {
           instructeur: true
         }
       });
-      
-      console.log(`SEARCH API: Fallback found ${sampleDossiers.length} sample dossiers`);
-      
-      if (sampleDossiers.length > 0) {
-        console.log("SEARCH API: Sample dossier names:", sampleDossiers.map(d => d.nom).join(", "));
-      }
     }
     
     // Format the response as superjson

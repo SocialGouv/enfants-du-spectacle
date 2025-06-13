@@ -28,18 +28,6 @@ const generateFE = async (dossiers: DossierData[], enfantId?: number) => {
     }));
   }
   
-  // Debug data availability
-  console.log("DEBUG FE: First dossier:", dossiers[0].id);
-  console.log("DEBUG FE: Demandeur exists:", !!dossiers[0].demandeur);
-  console.log("DEBUG FE: Demandeur societeProduction exists:", !!dossiers[0].demandeur?.societeProduction);
-  console.log("DEBUG FE: Direct societeProduction exists:", !!dossiers[0].societeProduction);
-  
-  if (dossiers[0].demandeur?.societeProduction) {
-    console.log("DEBUG FE: Demandeur societeProduction nom:", dossiers[0].demandeur.societeProduction.nom);
-  } else {
-    console.log("DEBUG FE: Demandeur societeProduction is not populated");
-  }
-  
   let rems = await getRemsByDossier(dossiers[0])
   const doc = new jsPDF();
   const categories = _.uniq(

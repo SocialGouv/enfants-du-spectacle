@@ -54,7 +54,6 @@ const postComment: NextApiHandler = async (req, res) => {
 const getComments: NextApiHandler = async (req, res) => {
   try {
     const externalId = req.query.externalId as string;
-    console.log("Fetching comments for dossier with externalId:", externalId);
     
     // First find the dossier by its externalId
     const dossier = await prisma.dossier.findUnique({
@@ -64,7 +63,6 @@ const getComments: NextApiHandler = async (req, res) => {
     });
 
     if (!dossier) {
-      console.log("Dossier not found with externalId:", externalId);
       return res.status(404).json({ error: "Dossier not found" });
     }
 

@@ -154,6 +154,10 @@ model Comments {
   dossier        Dossier       @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   enfant         Enfant?       @relation(fields: [enfantId], references: [id])
   User           User?         @relation(fields: [userId], references: [id])
+
+  @@index([dossierId], name: "idx_comments_dossierId")
+  @@index([userId], name: "idx_comments_userId")
+  @@index([enfantId], name: "idx_comments_enfantId")
 }
 
 model PieceDossierEnfant {
@@ -424,8 +428,12 @@ enum JustificatifEnfant {
   SITUATION_PARTICULIERE
   CONTRAT
   CERTIFICAT_SCOLARITE
+  AVIS_PEDAGOGIQUE_1ER_DEGRE
+  AVIS_PEDAGOGIQUE_2ND_DEGRE
+  AVIS_DASEN
   AVIS_MEDICAL
   DECLARATION_HONNEUR
+  AVIS_MEDICAL_THALIE
   BON_PRISE_EN_CHARGE
   AUTORISATION_PRISE_EN_CHARGE
 }

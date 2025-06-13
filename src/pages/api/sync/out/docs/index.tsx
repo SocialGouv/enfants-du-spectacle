@@ -32,7 +32,6 @@ const handler: NextApiHandler = async (req, res) => {
 const deleteDoc: NextApiHandler = async (req, res) => {
   try {
     const docId = req.query.id as string;
-    console.log("Deleting document with ID:", docId);
     
     // First check if this is a PieceDossier or PieceDossierEnfant
     // Try to delete from PieceDossier first

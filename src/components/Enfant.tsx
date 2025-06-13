@@ -603,7 +603,7 @@ const EnfantComponent: React.FC<Props> = ({
                         
                         const filteredDocs = matchingEnfant.piecesDossier
                           .filter(piece => [
-                            "AVIS_MEDICAL", 
+                            "AVIS_MEDICAL_THALIE", 
                             "BON_PRISE_EN_CHARGE", 
                             "AUTORISATION_PRISE_EN_CHARGE"
                           ].includes(piece.type))
@@ -638,7 +638,7 @@ const EnfantComponent: React.FC<Props> = ({
               formData.dateConsultation && (
                 <Info title="AVIS MÉDICAL">
                   <InputFile
-                    id={"AVIS_MEDICAL"}
+                    id={"AVIS_MEDICAL_THALIE"}
                     docs={(() => {
                         const matchingEnfant = dossier.docs?.enfants
                           .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));

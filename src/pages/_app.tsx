@@ -47,10 +47,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   };
 
   React.useEffect(() => {
-    console.log("INITIALIZING");
     if (MATOMO_SITE_AGENT_ID && MATOMO_URL) {
-      console.log("INITIALIZING MATOMO");
-      console.log("MATOMO INFO", MATOMO_SITE_AGENT_ID, MATOMO_URL);
       init({
         siteId: MATOMO_SITE_AGENT_ID,
         url: MATOMO_URL,

@@ -68,7 +68,6 @@ const remove: NextApiHandler = async (req, res) => {
 };
 
 const getUpcomingCommissions = async () => {
-  console.log('upcoming')
   return client?.commission.findMany({
     include: {
       dossiers: {
@@ -93,7 +92,6 @@ const getUpcomingCommissions = async () => {
 
 const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
   const session = await getSession({ req });
-  console.log('upcoming not empty !!!')
   return await client?.commission.findMany({
     include: {
       dossiers: {
@@ -164,8 +162,6 @@ const getUpcomingCommissionsNotEmpty = async (req: NextApiRequest) => {
 };
 
 const getUpcomingCommissionsByDepartement = async (departements: string) => {
-  console.log('upcoming by departement')
-  console.log("departements : ", departements.split(","));
   return client.commission.findMany({
     include: {
       dossiers: {
@@ -194,7 +190,6 @@ const getUpcomingCommissionsByDepartement = async (departements: string) => {
 };
 
 const getPastCommissions = async () => {
-  console.log('past commissions')
   return client.commission.findMany({
     include: {
       dossiers: {
