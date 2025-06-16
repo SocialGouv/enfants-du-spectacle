@@ -92,20 +92,13 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
         <ButtonLink onClick={() => createDossier()}>
           Créer un nouveau dossier
         </ButtonLink>
+        
         <a
-          href="./calendar_commission/calendrier_commission_2025_92.pdf"
+          href="./documents-publics"
           target="blank"
         >
           <ButtonLink light={true} onClick={() => {}}>
-            Calendrier des commissions (92)
-          </ButtonLink>
-        </a>
-        <a
-          href="./calendar_commission/Calendrier_commission_2025 H92-.pdf"
-          target="blank"
-        >
-          <ButtonLink light={true} onClick={() => {}}>
-            Calendrier des commissions (hors 92)
+            Documents importants
           </ButtonLink>
         </a>
 
