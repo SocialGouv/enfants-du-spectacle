@@ -25,6 +25,11 @@ const ALLOWED_TYPES = [
 ];
 
 const handler: NextApiHandler = async (req, res) => {
+  // Gérer les requêtes preflight CORS (OPTIONS)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   const session = await getServerSession(req, res, authOptions);
   
   if (!session?.dbUser) {
@@ -49,7 +54,7 @@ const handler: NextApiHandler = async (req, res) => {
   } else if (req.method === "DELETE") {
     return await deleteDocument(req, res);
   } else {
-    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE", "OPTIONS"]);
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 };

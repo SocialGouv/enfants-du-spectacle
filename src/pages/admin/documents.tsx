@@ -66,9 +66,12 @@ const DocumentsAdmin: React.FC<Props> = ({ documents: initialDocuments }) => {
     uploadFormData.append("categorie", categorie);
 
     try {
-      const response = await fetch("/api/admin/documents", {
+      // Appel direct à l'API du formulaire
+      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+      const response = await fetch(`${formulaireUrl}/api/admin/documents`, {
         method: "POST",
         body: uploadFormData,
+        credentials: 'include', // Pour inclure les cookies de session
       });
 
       if (response.ok) {
@@ -119,8 +122,11 @@ const DocumentsAdmin: React.FC<Props> = ({ documents: initialDocuments }) => {
     }
 
     try {
-      const response = await fetch(`/api/admin/documents?id=${id}`, {
+      // Appel direct à l'API du formulaire
+      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+      const response = await fetch(`${formulaireUrl}/api/admin/documents?id=${id}`, {
         method: "DELETE",
+        credentials: 'include', // Pour inclure les cookies de session
       });
 
       if (response.ok) {
@@ -301,8 +307,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 
   try {
+    // Appel direct à l'API du formulaire
+    const formulaireUrl = process.env.FORMULAIRE_URL || process.env.NEXT_PUBLIC_FORMULAIRE_URL || "http://localhost:3001";
     const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/admin/documents`,
+      `${formulaireUrl}/api/admin/documents`,
       {
         headers: {
           cookie: req.headers.cookie || "",
