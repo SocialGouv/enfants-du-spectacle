@@ -1,7 +1,7 @@
 import { Container, Row, Col, Button, Table } from "@dataesr/react-dsfr";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import Layout from "src/components/Layout";
 import type { BreadcrumbData } from "src/components/Header";
@@ -23,9 +23,7 @@ interface DocumentPublic {
   };
 }
 
-interface Props {
-  documents: DocumentPublic[];
-}
+interface Props {}
 
 const CATEGORIES = {
   CALENDRIER_COMMISSION_92: "Calendrier des commissions 92",
@@ -36,16 +34,47 @@ const CATEGORIES = {
   CIRCULAIRE: "Circulaire",
 };
 
-const DocumentsAdmin: React.FC<Props> = ({ documents: initialDocuments }) => {
-  const [documents, setDocuments] = useState<DocumentPublic[]>(initialDocuments);
+const DocumentsAdmin: React.FC<Props> = () => {
+  const [documents, setDocuments] = useState<DocumentPublic[]>([]);
   const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
   const [formData, setFormData] = useState<{[key: string]: {nom: string, description: string}}>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const breadcrumbs: BreadcrumbData[] = [
     { label: "Accueil", href: "/dossiers" },
     { label: "Administration", href: "/admin" },
     { label: "Documents importants" },
   ];
+
+  // Charger les documents côté client
+  useEffect(() => {
+    const loadDocuments = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+        const response = await fetch(`${formulaireUrl}/api/admin/documents`, {
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const docs = await response.json();
+          setDocuments(docs);
+        } else {
+          setError('Erreur lors du chargement des documents');
+        }
+      } catch (error) {
+        console.error('Erreur chargement documents:', error);
+        setError('Erreur lors du chargement des documents');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDocuments();
+  }, []);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, categorie: string) => {
     const file = event.target.files?.[0];
@@ -153,6 +182,49 @@ const DocumentsAdmin: React.FC<Props> = ({ documents: initialDocuments }) => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
+
+  if (loading) {
+    return (
+      <Layout breadcrumbs={breadcrumbs} windowTitle="Gestion des documents importants">
+        <Container>
+          <Row>
+            <Col n="12">
+              <h1>Gestion des documents importants</h1>
+              <p>Chargement des documents...</p>
+            </Col>
+          </Row>
+        </Container>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout breadcrumbs={breadcrumbs} windowTitle="Gestion des documents importants">
+        <Container>
+          <Row>
+            <Col n="12">
+              <h1>Gestion des documents importants</h1>
+              <div style={{ 
+                backgroundColor: "#ffeaa7", 
+                border: "1px solid #fdcb6e", 
+                borderRadius: "4px", 
+                padding: "1rem", 
+                marginBottom: "1rem" 
+              }}>
+                <p style={{ margin: 0, color: "#e17055" }}>
+                  {error}. Vérifiez que l'application formulaire est démarrée et accessible.
+                </p>
+              </div>
+              <Button onClick={() => window.location.reload()}>
+                Réessayer
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      </Layout>
+    );
+  }
 
   return (
     <Layout breadcrumbs={breadcrumbs} windowTitle="Gestion des documents importants">
@@ -306,33 +378,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
   }
 
-  try {
-    // Appel direct à l'API du formulaire
-    const formulaireUrl = process.env.FORMULAIRE_URL || process.env.NEXT_PUBLIC_FORMULAIRE_URL || "http://localhost:3001";
-    const response = await fetch(
-      `${formulaireUrl}/api/admin/documents`,
-      {
-        headers: {
-          cookie: req.headers.cookie || "",
-        },
-      }
-    );
-
-    const documents = response.ok ? await response.json() : [];
-
-    return {
-      props: {
-        documents,
-      },
-    };
-  } catch (error) {
-    console.error("Erreur lors du chargement des documents:", error);
-    return {
-      props: {
-        documents: [],
-      },
-    };
-  }
+  // Plus d'appel côté serveur - le chargement se fait côté client
+  return {
+    props: {},
+  };
 };
 
 export default DocumentsAdmin;
