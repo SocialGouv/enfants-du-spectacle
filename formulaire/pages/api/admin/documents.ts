@@ -88,8 +88,15 @@ const uploadDocument = async (req: any, res: any, userId: number) => {
 
     const form = formidable({
       maxFileSize: MAX_FILE_SIZE,
-      uploadDir: "/tmp",
+      uploadDir: UPLOAD_DIR, // Upload directement dans le répertoire final
       keepExtensions: true,
+      filename: (name, ext, part) => {
+        // Générer un nom unique directement
+        const timestamp = Date.now();
+        const uuid = uuidv4().substring(0, 8);
+        const sanitizedName = sanitizeFilename(part.originalFilename || "file");
+        return `${timestamp}-${uuid}-${sanitizedName}`;
+      },
     });
 
     const result = await new Promise<[formidable.Fields, formidable.Files]>((resolve, reject) => {
@@ -138,16 +145,8 @@ const uploadDocument = async (req: any, res: any, userId: number) => {
       });
     }
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const uuid = uuidv4().substring(0, 8);
-    const extension = path.extname(file.originalFilename || "");
-    const fileName = `${timestamp}-${uuid}-${sanitizeFilename(file.originalFilename || "")}`;
-    
-    const absolutePath = path.join(UPLOAD_DIR, fileName);
-
-    // Move file to destination
-    await fs.rename(file.filepath, absolutePath);
+    // Le fichier est déjà dans le bon répertoire, on récupère juste son nom
+    const fileName = path.basename(file.filepath);
 
     // Save to database
     const document = await prisma.documentPublic.create({
