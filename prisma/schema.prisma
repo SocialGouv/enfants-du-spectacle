@@ -276,11 +276,11 @@ model SendList {
 }
 
 model User {
-  id                    Int           @id @default(autoincrement())
+  id                    Int             @id @default(autoincrement())
   name                  String?
   nom                   String?
   prenom                String?
-  email                 String?       @unique
+  email                 String?         @unique
   emailVerified         DateTime?
   image                 String?
   role                  Role?
@@ -288,16 +288,17 @@ model User {
   departements          String[]
   telephone             String?
   fonction              String?
-  createdAt             DateTime?     @default(now()) @map("created_at")
-  updatedAt             DateTime?     @updatedAt @map("updated_at")
+  createdAt             DateTime?       @default(now()) @map("created_at")
+  updatedAt             DateTime?       @updatedAt @map("updated_at")
   accounts              Account[]
   commentaires          Commentaire[]
   comments              Comments[]
   contenusPdf           ContenuPdf[]
-  dossiersCreated       Dossier[]     @relation("creator")
-  dossiersAsInstructeur Dossier[]     @relation("instructeur")
-  dossiersMedecin       Dossier[]     @relation("medecin")
-  enfantsPopulated      Enfant[]      @relation("populatedBy")
+  documentsPublics      DocumentPublic[]
+  dossiersCreated       Dossier[]       @relation("creator")
+  dossiersAsInstructeur Dossier[]       @relation("instructeur")
+  dossiersMedecin       Dossier[]       @relation("medecin")
+  enfantsPopulated      Enfant[]        @relation("populatedBy")
   SendList              SendList[]
   sessions              Session[]
 }
@@ -482,4 +483,32 @@ enum SectionPdf {
   ARTICLE_4
   SIGNATURE
   RECOURS
+}
+
+model DocumentPublic {
+  id           Int               @id @default(autoincrement())
+  nom          String
+  description  String?
+  fileName     String
+  originalName String
+  mimeType     String
+  size         Int
+  path         String
+  categorie    CategorieDocument
+  uploadedBy   Int
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  user         User              @relation(fields: [uploadedBy], references: [id])
+
+  @@index([categorie], name: "idx_documentPublic_categorie")
+  @@index([uploadedBy], name: "idx_documentPublic_uploadedBy")
+}
+
+enum CategorieDocument {
+  CALENDRIER_COMMISSION_92
+  CALENDRIER_COMMISSION_HORS_92
+  MODELE_AUTORISATION
+  MODELE_DASEN
+  GUIDE_ENFANT_SPECTACLE
+  CIRCULAIRE
 }
