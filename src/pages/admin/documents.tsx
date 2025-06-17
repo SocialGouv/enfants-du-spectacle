@@ -54,7 +54,10 @@ const DocumentsAdmin: React.FC<Props> = () => {
         setLoading(true);
         setError(null);
         
-        const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+        // Utiliser la même logique que le projet : NEXT_PUBLIC_API_URL_SDP sans le /api/sync
+        const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || 
+          (process.env.NEXT_PUBLIC_API_URL_SDP ? process.env.NEXT_PUBLIC_API_URL_SDP.replace('/api/sync', '') : null) ||
+          window.location.origin.replace(':3000', ':3001');
         const response = await fetch(`${formulaireUrl}/api/admin/documents`, {
           credentials: 'include',
         });
@@ -96,7 +99,9 @@ const DocumentsAdmin: React.FC<Props> = () => {
 
     try {
       // Appel direct à l'API du formulaire
-      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || 
+        (process.env.NEXT_PUBLIC_API_URL_SDP ? process.env.NEXT_PUBLIC_API_URL_SDP.replace('/api/sync', '') : null) ||
+        window.location.origin.replace(':3000', ':3001');
       const response = await fetch(`${formulaireUrl}/api/admin/documents`, {
         method: "POST",
         body: uploadFormData,
@@ -152,7 +157,9 @@ const DocumentsAdmin: React.FC<Props> = () => {
 
     try {
       // Appel direct à l'API du formulaire
-      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || window.location.origin.replace(':3000', ':3001');
+      const formulaireUrl = process.env.NEXT_PUBLIC_FORMULAIRE_URL || 
+        (process.env.NEXT_PUBLIC_API_URL_SDP ? process.env.NEXT_PUBLIC_API_URL_SDP.replace('/api/sync', '') : null) ||
+        window.location.origin.replace(':3000', ':3001');
       const response = await fetch(`${formulaireUrl}/api/admin/documents?id=${id}`, {
         method: "DELETE",
         credentials: 'include', // Pour inclure les cookies de session
