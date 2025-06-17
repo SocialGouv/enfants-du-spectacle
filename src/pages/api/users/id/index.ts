@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const getUserById: NextApiHandler = async (req, res) => {
-  let userIds: number[] | number = [];
+  let userIds: number[] = [];
 
   if (req.query.id) {
     if (Array.isArray(req.query.id)) {
@@ -25,7 +25,7 @@ const getUserById: NextApiHandler = async (req, res) => {
         return parseInt(id);
       });
     } else {
-      userIds = parseInt(req.query.id);
+      userIds = [parseInt(req.query.id)]; // Wrap single ID in array
     }
   }
   try {
