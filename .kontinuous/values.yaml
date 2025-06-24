@@ -4,7 +4,7 @@ app:
   imagePackage: app
   annotations:
     oblik.socialgouv.io/min-request-cpu: "200m"
-    oblik.socialgouv.io/min-request-memory: "512Mi"
+    oblik.socialgouv.io/min-request-memory: "768Mi"
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
