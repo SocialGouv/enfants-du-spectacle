@@ -1,3 +1,10 @@
+## [1.104.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.104.6...v1.104.7) (2025-06-24)
+
+
+### Bug Fixes
+
+* buildkit in gh ([#724](https://github.com/SocialGouv/enfants-du-spectacle/issues/724)) ([b389b4a](https://github.com/SocialGouv/enfants-du-spectacle/commit/b389b4adf18b1b24b019455a92253a94bb2ddc5b))
+
 ## [1.104.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.104.5...v1.104.6) (2025-06-17)
 
 
