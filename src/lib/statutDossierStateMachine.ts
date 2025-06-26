@@ -7,6 +7,7 @@ interface StateDetail {
 }
 const statesDetails: Record<string, StateDetail> = {
   ACCEPTE: { key: "accepte", label: "Accepté" },
+  ANNULE: { key: "annule", label: "Annulé" },
   AVIS_AJOURNE: { key: "avisAjourne", label: "Avis ajourné" },
   AVIS_DEFAVORABLE: { key: "avisDefavorable", label: "Avis défavorable" },
   AVIS_FAVORABLE: { key: "favorable", label: "Avis favorable" },
@@ -14,6 +15,7 @@ const statesDetails: Record<string, StateDetail> = {
     key: "favorableSousReserve",
     label: "Avis favorable sous réserve",
   },
+  BROUILLON: { key: "brouillon", label: "Brouillon" },
   CONSTRUCTION: { key: "construction", label: "En construction" },
   INSTRUCTION: { key: "instruction", label: "En instruction" },
   PRET: { key: "pret", label: "Prêt" },
@@ -26,6 +28,11 @@ const events = {
       "Une notification et les documents seronts envoyés au demandeur",
     icon: "ri-checkbox-circle-line",
     label: "Accepter",
+  },
+  passerAnnule: {
+    description: "Le dossier est annulé et ne peut plus être traité",
+    icon: "ri-close-line",
+    label: "Annuler",
   },
   passerAjourne: {
     description: "La décision sera prise à une commission ultérieure",
@@ -80,10 +87,12 @@ type TransitionEvent = keyof typeof events;
 
 type StatutDossierStr =
   | "ACCEPTE"
+  | "ANNULE"
   | "AVIS_AJOURNE"
   | "AVIS_DEFAVORABLE"
   | "AVIS_FAVORABLE_SOUS_RESERVE"
   | "AVIS_FAVORABLE"
+  | "BROUILLON"
   | "CONSTRUCTION"
   | "INSTRUCTION"
   | "PRET"
@@ -154,6 +163,16 @@ const transitions: TransitionObject[] = [
     from: ["ACCEPTE", "REFUSE"],
     name: "passerDefavorable",
     to: "AVIS_DEFAVORABLE",
+  },
+  {
+    from: ["BROUILLON", "CONSTRUCTION", "INSTRUCTION", "PRET", "AVIS_AJOURNE", "AVIS_FAVORABLE", "AVIS_FAVORABLE_SOUS_RESERVE", "AVIS_DEFAVORABLE", "ACCEPTE", "REFUSE"],
+    name: "passerAnnule",
+    to: "ANNULE",
+  },
+  {
+    from: ["ANNULE"],
+    name: "repasserConstruction",
+    to: "CONSTRUCTION",
   },
 ];
 

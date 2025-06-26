@@ -19,6 +19,7 @@ const statesDetails: Record<string, StateDetail> = {
   PRET: { key: "pret", label: "Prêt" },
   REFUSE: { key: "refuse", label: "Refusé" },
   BROUILLON: { key: "brouillon", label: "Brouillon" },
+  ANNULE: {key: "annule", label: "Annulé"}
 };
 
 interface StatutDossierStateMachine {

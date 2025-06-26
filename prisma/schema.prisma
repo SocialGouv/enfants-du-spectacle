@@ -351,6 +351,7 @@ enum StatutDossier {
   ACCEPTE
   REFUSE
   BROUILLON
+  ANNULE
 }
 
 enum CategorieDossier {

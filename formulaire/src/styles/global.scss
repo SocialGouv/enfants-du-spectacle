@@ -248,6 +248,21 @@
       color: #17a2b8 !important;
     }
   }
+
+  /* Statut ANNULE - Orange (annulé) */
+  .state-annule,
+  .state-annule select {
+    background-color: #ff6600 !important;
+    border-color: #ff6600;
+    color: white !important;
+    border-color: white !important;
+  }
+  button.state-annule {
+    &:hover, &:active, &:focus {
+      background-color: white !important;
+      color: #ff6600 !important;
+    }
+  }
   
   .hoverableTitle {
     text-decoration: underline dotted;
