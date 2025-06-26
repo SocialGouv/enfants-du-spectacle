@@ -63,6 +63,8 @@ interface Props {
   actionComments: (comment: Comments) => void;
   remunerations: Remuneration[];
   otherFilms?: OtherFilm[];
+  openEnfantAccordionIds?: string[];
+  onToggleEnfantAccordion?: (accordionId: string) => void;
 }
 
 interface OtherFilm {
@@ -96,6 +98,8 @@ const EnfantComponent: React.FC<Props> = ({
   remunerations,
   sender,
   otherFilms = [],
+  openEnfantAccordionIds = [],
+  onToggleEnfantAccordion,
 }) => {
   const [formData, setFormData] = React.useState<Enfant>(() => {
     // Make a copy of the enfant object
@@ -429,11 +433,23 @@ const EnfantComponent: React.FC<Props> = ({
     []
   );
 
+  const isAccordionOpen = (accordionId: string) => {
+    return openEnfantAccordionIds.includes(`${enfant.id}-${accordionId}`);
+  };
+
+  const toggleAccordion = (accordionId: string) => {
+    if (onToggleEnfantAccordion) {
+      onToggleEnfantAccordion(`${enfant.id}-${accordionId}`);
+    }
+  };
+
   return (
     <div>
       <Accordion
         title="Afficher plus d'informations"
         className="accordionSmallText"
+        isOpen={isAccordionOpen('infos')}
+        onToggle={() => toggleAccordion('infos')}
       >
         <div className={styles.wrapperFoldable}>
           <Info title="Rémunération" className={styles.info}>
@@ -516,6 +532,8 @@ const EnfantComponent: React.FC<Props> = ({
         title={"Commentaires"}
         className="accordionSmallText"
         type="commentChildren"
+        isOpen={isAccordionOpen('comments')}
+        onToggle={() => toggleAccordion('comments')}
         updateComments={updateComments}
       >
         {dossier.source === "FORM_EDS" && (
@@ -537,6 +555,8 @@ const EnfantComponent: React.FC<Props> = ({
       <Accordion
         title="Afficher les informations des représentants légaux"
         className="accordionSmallText"
+        isOpen={isAccordionOpen('representants')}
+        onToggle={() => toggleAccordion('representants')}
       >
         <div className={styles.adressesGrid}>
           <form
@@ -575,6 +595,8 @@ const EnfantComponent: React.FC<Props> = ({
         <Accordion
           title={`Autres films (${otherFilms.length})`}
           className="accordionSmallText"
+          isOpen={isAccordionOpen('otherFilms')}
+          onToggle={() => toggleAccordion('otherFilms')}
         >
           <div>
             <p style={{ marginBottom: "15px", fontStyle: "italic" }}>
@@ -617,6 +639,8 @@ const EnfantComponent: React.FC<Props> = ({
           title={"Avis médical "}
           className="accordionSmallText"
           type="commentChildren"
+          isOpen={isAccordionOpen('avisMedical')}
+          onToggle={() => toggleAccordion('avisMedical')}
         >
           <div className={styles.avisMedicalGrid}>
             <Info title="Type de consultation">

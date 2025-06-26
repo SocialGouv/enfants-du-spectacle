@@ -64,6 +64,61 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
   const [otherFilms, setOtherFilms] = React.useState<any>({});
   const [loadingOtherFilms, setLoadingOtherFilms] = React.useState<boolean>(false);
+  const [openAccordionIds, setOpenAccordionIds] = React.useState<number[]>([]);
+  const [openEnfantAccordionIds, setOpenEnfantAccordionIds] = React.useState<string[]>([]);
+
+  // Functions to manage accordion states for children
+  const toggleAccordion = (enfantId: number) => {
+    setOpenAccordionIds(prev => 
+      prev.includes(enfantId) 
+        ? prev.filter(id => id !== enfantId)
+        : [...prev, enfantId]
+    );
+  };
+
+  const expandAllAccordions = () => {
+    if (dossier?.enfants) {
+      const allEnfantIds = dossier.enfants.map((enfant: any) => enfant.id);
+      setOpenAccordionIds(allEnfantIds);
+    }
+  };
+
+  const collapseAllAccordions = () => {
+    setOpenAccordionIds([]);
+  };
+
+  const isAccordionOpen = (enfantId: number) => {
+    return openAccordionIds.includes(enfantId);
+  };
+
+  // Functions to manage accordion states for enfant accordions
+  const toggleEnfantAccordion = (accordionId: string) => {
+    setOpenEnfantAccordionIds(prev => 
+      prev.includes(accordionId) 
+        ? prev.filter(id => id !== accordionId)
+        : [...prev, accordionId]
+    );
+  };
+
+  const expandAllEnfantAccordions = () => {
+    if (dossier?.enfants) {
+      const allAccordionIds: string[] = [];
+      dossier.enfants.forEach((enfant: any) => {
+        allAccordionIds.push(
+          `${enfant.id}-infos`,
+          `${enfant.id}-comments`,
+          `${enfant.id}-representants`,
+          `${enfant.id}-otherFilms`,
+          `${enfant.id}-avisMedical`
+        );
+      });
+      setOpenEnfantAccordionIds(allAccordionIds);
+    }
+  };
+
+  const collapseAllEnfantAccordions = () => {
+    setOpenEnfantAccordionIds([]);
+  };
 
   // Function to fetch societeProduction directly
   const fetchSocieteProduction = async (id: number) => {
@@ -275,7 +330,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               )}
             </Info>
           </div>
-          <div style={{ marginTop: "36px" }}>
+          <div className={styles.actionButtonsContainer}>
             <div
               className={`${styles.bottomItemFoldable} ${styles.commentItem}`}
             >
@@ -426,8 +481,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
               dossier.statut !== "CONSTRUCTION" &&
               session?.dbUser.role !== "MEMBRE" && (
                 <button
-                  style={{ marginRight: "10px" }}
-                  className="postButton"
+                  className={`postButton ${styles.actionButton}`}
                   onClick={() => {
                     generateFE([dossier]);
                   }}
@@ -438,8 +492,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
             {dossier.statut == "ACCEPTE" &&
               session?.dbUser.role !== "MEMBRE" && (
                 <button
-                  className="postButton"
-                  style={{ marginRight: "10px" }}
+                  className={`postButton ${styles.actionButton}`}
                   onClick={() => {
                     generateDA([dossier]);
                   }}
@@ -529,14 +582,36 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
         ))}
       </div>
 
-      <div style={{ padding: "44px 0 10px 0" }}>
+      <div className={styles.childrenSection}>
         {dossier.enfants.length == 0 && <span>Aucun enfant</span>}
+        {dossier.enfants.length > 0 && (
+          <div className={styles.accordionControlButtons}>
+            <button
+              className={`postButton ${styles.controlButton}`}
+              onClick={() => {
+                expandAllAccordions();
+                expandAllEnfantAccordions();
+              }}
+            >
+              Déplier tous les accordéons
+            </button>
+            <button
+              className="postButton"
+              onClick={() => {
+                collapseAllAccordions();
+                collapseAllEnfantAccordions();
+              }}
+            >
+              Replier tous les accordéons
+            </button>
+          </div>
+        )}
         {TYPES_EMPLOI.map((typeEmploi, index) => (
           <span key={index}>
             {dossier.enfants.filter(function (element: any) {
               return typeEmploiLabel(element.typeEmploi) === typeEmploi.label;
             }).length > 0 ? (
-              <div style={{ marginBottom: "36px" }}>
+              <div className={styles.childSection}>
                 {dossier.enfants
                   .filter(function (element: any) {
                     return (
@@ -572,10 +647,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       <div
                         id={enfant.id.toString()}
                         key={enfant.id}
-                        className={styles.bloc}
-                        style={{ marginBottom: "44px", padding: "15px" }}
+                        className={`${styles.bloc} ${styles.childBlock}`}
                       >
-                        <Accordion title={childInfo} type={"commentChildren"}>
+                        <Accordion 
+                          title={childInfo} 
+                          type={"commentChildren"}
+                          isOpen={isAccordionOpen(enfant.id)}
+                          onToggle={() => toggleAccordion(enfant.id)}
+                        >
                           <Enfant
                             enfant={enfant}
                             sender={senderComment}
@@ -585,11 +664,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             actionComments={processComment}
                             remunerations={enfant.remuneration || []}
                             otherFilms={enfant.nameId ? otherFilms[enfant.nameId] || [] : []}
+                            openEnfantAccordionIds={openEnfantAccordionIds}
+                            onToggleEnfantAccordion={toggleEnfantAccordion}
                           />
                           {dossier.statut !== "INSTRUCTION" &&
                             dossier.statut !== "CONSTRUCTION" &&
                             session?.dbUser.role !== "MEMBRE" && (
-                              <div style={{ marginTop: "15px", textAlign: "center" }}>
+                              <div className={styles.downloadButtonContainer}>
                                 <button
                                   className="postButton"
                                   onClick={() => {
