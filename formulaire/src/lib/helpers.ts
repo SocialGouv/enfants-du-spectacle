@@ -119,7 +119,8 @@ const STATUS_EN_COURS = [
 
 const STATUS_TERMINES = [
   'ACCEPTE',
-  'REFUSE'
+  'REFUSE',
+  'ANNULE'
 ]
 
 const CATEGORIES = [
