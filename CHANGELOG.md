@@ -1,3 +1,10 @@
+# [1.105.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.104.7...v1.105.0) (2025-06-26)
+
+
+### Features
+
+* add status canceled ([#758](https://github.com/SocialGouv/enfants-du-spectacle/issues/758)) ([51cc563](https://github.com/SocialGouv/enfants-du-spectacle/commit/51cc563b94dda0c64086f4d409d9bba5d2836afd))
+
 ## [1.104.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.104.6...v1.104.7) (2025-06-24)
 
 
