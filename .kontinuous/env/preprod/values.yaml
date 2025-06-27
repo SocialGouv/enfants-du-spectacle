@@ -2,27 +2,27 @@ bucketValues: &bucketValues
   - name: BUCKET_ENDPOINT
     valueFrom:
       secretKeyRef:
-        name: domifa-dev-app-access-key
+        name: enfants-du-spectacle-dev-app
         key: bucket_endpoint
   - name: BUCKET_NAME
     valueFrom:
       secretKeyRef:
-        name: domifa-dev-app-access-key
+        name: enfants-du-spectacle-dev-app
         key: bucket_name
   - name: BUCKET_REGION
     valueFrom:
       secretKeyRef:
-        name: domifa-dev-app-access-key
+        name: enfants-du-spectacle-dev-app
         key: bucket_region
   - name: BUCKET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
-        name: domifa-dev-app-access-key
+        name: enfants-du-spectacle-dev-app
         key: bucket_access_key
   - name: BUCKET_SECRET_KEY
     valueFrom:
       secretKeyRef:
-        name: domifa-dev-app-access-key
+        name: enfants-du-spectacle-dev-app
         key: bucket_secret_key
 
 app:
