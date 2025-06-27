@@ -11,8 +11,8 @@ const Conditions: React.FC = () => {
           <p>Établie le 22 septembre 2023.</p>
 
           <p>
-            Fabrique Numérique des Ministères Sociaux s'engage à rendre son
-            service accessible, conformément à l'article 47 de la loi n°
+            Fabrique Numérique des Ministères Sociaux s&apos;engage à rendre son
+            service accessible, conformément à l&apos;article 47 de la loi n°
             2005-102 du 11 février 2005.
           </p>
 
@@ -22,7 +22,7 @@ const Conditions: React.FC = () => {
           </p>
 
           <p>
-            Cette déclaration d'accessibilité s'applique à{" "}
+            Cette déclaration d&apos;accessibilité s&apos;applique à{" "}
             <a href="https://enfants-du-spectacle.fabrique.social.gouv.fr/">
               Enfants du spectacle
             </a>
@@ -32,7 +32,7 @@ const Conditions: React.FC = () => {
           <h2>État de conformité</h2>
           <p>
             <strong>Enfants du spectacle</strong> est{" "}
-            <strong>non conforme</strong> avec le RGAA. Le site n'a encore pas
+            <strong>non conforme</strong> avec le RGAA. Le site n&apos;a encore pas
             été audité.
           </p>
 
@@ -40,7 +40,7 @@ const Conditions: React.FC = () => {
 
           <h2>Amélioration et contact</h2>
           <p>
-            Si vous n'arrivez pas à accéder à un contenu ou à un service, vous
+            Si vous n&apos;arrivez pas à accéder à un contenu ou à un service, vous
             pouvez contacter le responsable de Enfants du spectacle pour être
             orienté vers une alternative accessible ou obtenir le contenu sous
             une autre forme.
@@ -67,8 +67,8 @@ const Conditions: React.FC = () => {
           <p>
             Cette procédure est à utiliser dans le cas suivant : vous avez
             signalé au responsable du site internet un défaut d'accessibilité
-            qui vous empêche d'accéder à un contenu ou à un des services du
-            portail et vous n'avez pas obtenu de réponse satisfaisante.
+            qui vous empêche d&apos;accéder à un contenu ou à un des services du
+            portail et vous n&apos;avez pas obtenu de réponse satisfaisante.
           </p>
 
           <p>Vous pouvez :</p>

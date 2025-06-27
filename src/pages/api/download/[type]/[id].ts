@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { s3Client, getSignedUrlForFile } from "../../../../formulaire/src/lib/s3Client";
+import { s3Client, getSignedUrlForFile } from "../../../../lib/s3Client";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
 import prisma from "../../../../lib/prismaClient";
@@ -81,6 +81,7 @@ async function handleDocumentPublic(req: any, res: any, id: string) {
 async function handlePieceCryptee(req: any, res: any, id: string) {
   const { view } = req.query;
   const isInlineView = view === "inline";
+  
   // Vérifier l'authentification pour les pièces cryptées
   const session = await getSession({ req });
   if (!session) {
@@ -102,6 +103,9 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   }
 
   const documentPiece = piece || pieceEnfant;
+  if (!documentPiece) {
+    return res.status(404).json({ error: "Document non trouvé" });
+  }
 
   // Vérifier que l'utilisateur a accès au dossier
   const dossier = piece ? piece.dossier : pieceEnfant?.enfant?.dossier;
@@ -109,9 +113,7 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     return res.status(404).json({ error: "Dossier non trouvé" });
   }
 
-  // TODO: Ajouter ici la vérification des permissions utilisateur selon votre logique métier
-
-  if (!documentPiece.link) {
+  if (!documentPiece?.link) {
     return res.status(404).json({ error: "Fichier non trouvé" });
   }
 
@@ -145,8 +147,6 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     encryptedBuffer = Buffer.concat(chunks as any);
     
   } catch (s3Error: any) {
-    console.log("Erreur SDK S3, tentative avec curl:", s3Error?.message || s3Error);
-    
     // Fallback : utiliser curl
     const { spawn } = require('child_process');
     const signedUrl = await getSignedUrlForFile(documentPiece.link, 300);
@@ -156,7 +156,6 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
       const chunks: any[] = [];
       
       curl.stdout.on('data', (chunk: any) => chunks.push(chunk));
-      curl.stderr.on('data', (data: any) => console.log('curl stderr:', data.toString()));
       curl.on('close', (code: any) => {
         if (code === 0) {
           resolve(Buffer.concat(chunks as any));
