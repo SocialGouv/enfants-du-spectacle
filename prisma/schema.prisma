@@ -241,6 +241,7 @@ model Enfant {
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
+  numeroSequence              Int?
   nameId                      String?
 
   @@index([dossierId], name: "idx_enfant_dossierId")

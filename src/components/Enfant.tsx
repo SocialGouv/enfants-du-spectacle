@@ -500,6 +500,16 @@ const EnfantComponent: React.FC<Props> = ({
               />
             </div>
             <div>
+              Numéro de la séquence :{" "}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: enfant.numeroSequence
+                    ? enfant.numeroSequence.toString()
+                    : "n/a",
+                }}
+              />
+            </div>
+            <div>
               {enfant.checkTravailNuit && (
                 <>
                   Travail de nuit :{" "}
