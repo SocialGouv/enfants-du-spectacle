@@ -105,6 +105,7 @@ const InputFile: React.FC<Props> = ({
                       <a
                         href={`/api/download/pieces/${doc.id}?view=inline`}
                         target="_blank"
+                        rel="noreferrer"
                         key={`piece_justificative_${id}_${index}`}
                         className={`${
                           doc.statut === "REFUSE"
