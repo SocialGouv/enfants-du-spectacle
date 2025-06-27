@@ -1,3 +1,10 @@
+## [1.106.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.4...v1.106.5) (2025-06-27)
+
+
+### Bug Fixes
+
+* **buckets:** secret name ([194570c](https://github.com/SocialGouv/enfants-du-spectacle/commit/194570c28fa0a4a4a9a6c2ba1012b76dbcffdefc))
+
 ## [1.106.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.3...v1.106.4) (2025-06-27)
 
 
