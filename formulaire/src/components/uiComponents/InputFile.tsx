@@ -11,7 +11,7 @@ import styles from "./InputFile.module.scss";
 
 type Doc = {
   id: number;
-  nom: string;
+  nom: string | null;
   type: string;
   statut: STATUT_PIECE | null;
 };
@@ -103,11 +103,7 @@ const InputFile: React.FC<Props> = ({
 
                     {docsTokenized && (
                       <a
-                        href={`${
-                          docsTokenized.piecesDossier.find(
-                            (docTmp) => docTmp.id === doc.id
-                          )?.link
-                        }`}
+                        href={`/api/download/pieces/${doc.id}?view=inline`}
                         target="_blank"
                         key={`piece_justificative_${id}_${index}`}
                         className={`${
@@ -118,7 +114,7 @@ const InputFile: React.FC<Props> = ({
                             : ""
                         }`}
                       >
-                        {cleanFileName(doc.nom)}
+                        {cleanFileName(doc.nom || "document")}
                       </a>
                     )}
                     {!docsTokenized && (
@@ -132,7 +128,7 @@ const InputFile: React.FC<Props> = ({
                             : ""
                         }`}
                       >
-                        {cleanFileName(doc.nom)}
+                        {cleanFileName(doc.nom || "document")}
                       </span>
                     )}
                   </div>

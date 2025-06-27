@@ -44,7 +44,7 @@ const DocumentsPublics: React.FC<Props> = ({ documents }) => {
     setDownloading(prev => ({ ...prev, [documentId]: true }));
     
     // Créer un lien temporaire et déclencher le téléchargement
-    const downloadUrl = `/api/documents-publics/${documentId}/download`;
+    const downloadUrl = `/api/download/documents-publics/${documentId}?view=inline`;
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.target = '_blank'; // Ouvrir dans un nouvel onglet pour éviter les problèmes CORS

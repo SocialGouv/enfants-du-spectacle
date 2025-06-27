@@ -84,7 +84,7 @@ const get: NextApiHandler = async (req, res) => {
         docs: {
           dossier: {
             id: dossier?.id,
-            piecesDossier: dossier?.piecesDossier.map((piece) => {
+            piecesDossier: dossier?.piecesDossier?.map((piece: any) => {
               return generateToken(
                 piece.id,
                 dossier.id,
@@ -93,12 +93,12 @@ const get: NextApiHandler = async (req, res) => {
                 piece.statut,
                 piece.createdAt
               );
-            }),
+            }) || [],
           },
-          enfants: dossier?.enfants.map((enfant) => {
+          enfants: dossier?.enfants.map((enfant: any) => {
             return {
               id: enfant.id,
-              piecesDossier: enfant.piecesDossier.map((piece) => {
+              piecesDossier: enfant.piecesDossier?.map((piece: any) => {
                 return generateToken(
                   piece.id,
                   dossier.id,
@@ -107,9 +107,9 @@ const get: NextApiHandler = async (req, res) => {
                   piece.statut,
                   piece.createdAt
                 );
-              }),
+              }) || [],
             };
-          }),
+          }) || [],
         },
       });
 };
