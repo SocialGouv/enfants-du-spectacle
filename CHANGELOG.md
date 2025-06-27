@@ -1,3 +1,10 @@
+## [1.106.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.0...v1.106.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* fix eslint ([#762](https://github.com/SocialGouv/enfants-du-spectacle/issues/762)) ([7b6a7c1](https://github.com/SocialGouv/enfants-du-spectacle/commit/7b6a7c1ad6c80585da2b78d13d35592c0a6da28b))
+
 # [1.106.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.105.1...v1.106.0) (2025-06-27)
 
 
