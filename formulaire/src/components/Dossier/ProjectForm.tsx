@@ -128,7 +128,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
 
           <div className={styles.blocForm}>
             <label htmlFor="categorie" className="mb-2 italic">
-              Catégorie *
+              Type de projet *
             </label>
             <div className="selectDpt">
               <Select
@@ -163,7 +163,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
 
         <div className={styles.blocForm}>
           <label htmlFor="project" className="mb-2 italic">
-            Projet contenant certains types de scènes
+            Scènes sensibles
           </label>
           <div className={styles.smallText}>
             {` Veuillez cocher, le cas échéant, parmi cette liste, les types
@@ -190,7 +190,7 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
 
         <div className={styles.blocForm}>
           <label htmlFor="presentation" className="mb-2 italic">
-            Présentation globale du projet *
+            Présentation générale *
           </label>
           <div className={styles.smallText}>
             Veuillez fournir une brève description du projet (ex: synopsis pour
