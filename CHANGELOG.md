@@ -1,3 +1,10 @@
+## [1.105.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.105.0...v1.105.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* same wording DRIEETS / SDP ([#761](https://github.com/SocialGouv/enfants-du-spectacle/issues/761)) ([c21c68e](https://github.com/SocialGouv/enfants-du-spectacle/commit/c21c68e2620e0ec7985826303107a1b614dd1be2))
+
 # [1.105.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.104.7...v1.105.0) (2025-06-26)
 
 
