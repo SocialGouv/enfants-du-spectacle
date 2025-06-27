@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { s3Client, getSignedUrlForFile } from "../../../../lib/s3Client";
+import { s3Client, getSignedUrlForFile } from "../../../../formulaire/src/lib/s3Client";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
 import prisma from "../../../../lib/prismaClient";
@@ -40,9 +40,6 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     const isInlineView = view === "inline";
-    console.log(`=== ${isInlineView ? 'View' : 'Download'} ${type} ===`);
-    console.log("ID:", id);
-    console.log("Mode:", isInlineView ? "inline" : "download");
 
     if (type === "documents-publics") {
       return await handleDocumentPublic(req, res, id as string);
@@ -70,9 +67,6 @@ async function handleDocumentPublic(req: any, res: any, id: string) {
   if (!document) {
     return res.status(404).json({ error: "Document non trouvé" });
   }
-
-  console.log("Document public trouvé:", document.nom);
-  console.log("Chemin S3:", document.path);
 
   // Générer une URL signée pour accéder au fichier S3
   const signedUrl = await getSignedUrlForFile(document.path, 3600); // 1 heure
@@ -108,13 +102,6 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   }
 
   const documentPiece = piece || pieceEnfant;
-  if (!documentPiece) {
-    console.log("Pièce non trouvée pour l'ID:", id);
-    return res.status(404).json({ error: "Document non trouvé" });
-  }
-
-  console.log("Pièce cryptée trouvée:", documentPiece.nom);
-  console.log("Chemin S3:", documentPiece.link);
 
   // Vérifier que l'utilisateur a accès au dossier
   const dossier = piece ? piece.dossier : pieceEnfant?.enfant?.dossier;
@@ -156,7 +143,6 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     }
     
     encryptedBuffer = Buffer.concat(chunks as any);
-    console.log("Fichier lu depuis S3, taille:", encryptedBuffer.length);
     
   } catch (s3Error: any) {
     console.log("Erreur SDK S3, tentative avec curl:", s3Error?.message || s3Error);
@@ -179,8 +165,6 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
         }
       });
     });
-    
-    console.log("Fichier lu avec curl, taille:", encryptedBuffer.length);
   }
 
   // Déchiffrer le fichier
