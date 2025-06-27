@@ -1,3 +1,10 @@
+## [1.106.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.3...v1.106.4) (2025-06-27)
+
+
+### Bug Fixes
+
+* **buckets:** env variables ([fab7bc2](https://github.com/SocialGouv/enfants-du-spectacle/commit/fab7bc22a86a71e5373ad322a0474d526c712e16))
+
 ## [1.106.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.2...v1.106.3) (2025-06-27)
 
 
