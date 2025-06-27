@@ -32,11 +32,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   try {
     const { id } = req.query;
-    console.log("=== Download document ===");
-    console.log("Document ID:", id);
     
     if (!id) {
-      console.log("Erreur: ID manquant");
       return res.status(400).json({ error: "ID requis" });
     }
 
@@ -45,24 +42,14 @@ const handler: NextApiHandler = async (req, res) => {
       where: { id: parseInt(id as string) },
     });
 
-    console.log("Document trouvé:", document ? "OUI" : "NON");
-    if (document) {
-      console.log("Document path:", document.path);
-      console.log("Document name:", document.originalName);
-    }
-
     if (!document) {
-      console.log("Document non trouvé pour l'ID:", id);
       return res.status(404).json({ error: "Document non trouvé" });
     }
 
     // Générer une URL signée pour accéder au fichier S3
-    console.log("Génération URL signée pour:", document.path);
     const signedUrl = await getSignedUrlForFile(document.path, 3600); // 1 heure d'expiration
-    console.log("URL signée générée:", signedUrl);
 
     // Rediriger vers l'URL signée
-    console.log("Redirection vers l'URL signée");
     res.redirect(302, signedUrl);
     return;
   } catch (error) {

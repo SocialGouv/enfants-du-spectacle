@@ -152,21 +152,17 @@ const uploadDocument = async (req: any, res: any, userId: number) => {
 
     // Read file content
     const fileBuffer = await fs.readFile(file.filepath);
-    console.log("Fichier lu, taille:", fileBuffer.length, "bytes");
     
     // Generate S3 key
     const s3Key = generateS3Key(file.originalFilename || "file", categorie as string);
-    console.log("Clé S3 générée:", s3Key);
     
     // Upload to S3
-    console.log("Début upload S3...");
     const uploadResult = await uploadFileToS3(
       fileBuffer,
       s3Key,
       file.mimetype || "application/octet-stream",
       file.originalFilename || ""
     );
-    console.log("Upload S3 réussi:", uploadResult);
 
     // Clean up temporary file
     await fs.unlink(file.filepath);

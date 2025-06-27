@@ -1,15 +1,6 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-// Debug des variables d'environnement
-console.log("=== Configuration S3 ===");
-console.log("BUCKET_ENDPOINT:", process.env.BUCKET_ENDPOINT);
-console.log("BUCKET_NAME:", process.env.BUCKET_NAME);
-console.log("BUCKET_REGION:", process.env.BUCKET_REGION);
-console.log("BUCKET_ACCESS_KEY:", process.env.BUCKET_ACCESS_KEY ? "***défini***" : "MANQUANT");
-console.log("BUCKET_SECRET_KEY:", process.env.BUCKET_SECRET_KEY ? "***défini***" : "MANQUANT");
-console.log("========================");
-
 // Configuration du client S3 pour OVH
 const s3Client = new S3Client({
   region: process.env.BUCKET_REGION || "gra",
@@ -37,12 +28,6 @@ export async function uploadFileToS3(
   contentType: string,
   originalName: string
 ): Promise<UploadResult> {
-  console.log("uploadFileToS3 - Début");
-  console.log("- Bucket:", BUCKET_NAME);
-  console.log("- Key:", key);
-  console.log("- ContentType:", contentType);
-  console.log("- File size:", file.length);
-  console.log("- Endpoint:", process.env.BUCKET_ENDPOINT);
   
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
@@ -55,9 +40,7 @@ export async function uploadFileToS3(
   });
 
   try {
-    console.log("Envoi de la commande S3...");
     const result = await s3Client.send(command);
-    console.log("Résultat S3:", result);
     
     return {
       key,
