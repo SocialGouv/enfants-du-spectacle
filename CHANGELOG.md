@@ -1,3 +1,10 @@
+# [1.106.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.105.1...v1.106.0) (2025-06-27)
+
+
+### Features
+
+* upload public docs on S3 ([#760](https://github.com/SocialGouv/enfants-du-spectacle/issues/760)) ([7336300](https://github.com/SocialGouv/enfants-du-spectacle/commit/73363006b48807bcce96b1fec27f760e2470e403))
+
 ## [1.105.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.105.0...v1.105.1) (2025-06-27)
 
 
