@@ -29,6 +29,8 @@
     "send-test-mail": "node scripts/sendTestMail.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.837.0",
+    "@aws-sdk/s3-request-presigner": "^3.837.0",
     "@dataesr/react-dsfr": "^0.9.2",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^6.6.0",
