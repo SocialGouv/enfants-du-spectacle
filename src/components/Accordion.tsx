@@ -9,7 +9,15 @@ interface Props {
   subtitle?: string;
   children: React.ReactNode;
   className?: string;
+  
+  // Props pour le mode autonome (existant)
   state?: boolean;
+  
+  // Props pour le mode contrôlé (nouveau)
+  isOpen?: boolean;
+  onToggle?: () => void;
+  
+  // Props spécifiques
   type?: string;
   updateComments?: (type: string) => void;
 }
@@ -21,15 +29,31 @@ const Accordion: React.FC<Props> = ({
   children,
   className,
   state,
+  isOpen,
+  onToggle,
   type,
   updateComments,
 }) => {
   const [showContent, setShowContent] = React.useState<boolean>(false);
 
+  // Détermine si on est en mode contrôlé ou autonome
+  const isControlled = isOpen !== undefined && onToggle !== undefined;
+  const isContentVisible = isControlled ? isOpen : showContent;
+
   useEffect(() => {
-    if (state) setShowContent(true);
-    else setShowContent(false);
-  }, []);
+    if (!isControlled) {
+      if (state) setShowContent(true);
+      else setShowContent(false);
+    }
+  }, [state, isControlled]);
+
+  const handleToggle = () => {
+    if (isControlled) {
+      onToggle();
+    } else {
+      setShowContent(!showContent);
+    }
+  };
 
   return (
     <div
@@ -48,12 +72,12 @@ const Accordion: React.FC<Props> = ({
           </div>
           <div className={styles.subtitle}>{subtitle ? subtitle : ""}</div>
         </div>
-        {!showContent ? (
+        {!isContentVisible ? (
           <AiOutlinePlus
             cursor="pointer"
             color="black"
             onClick={() => {
-              setShowContent(true);
+              handleToggle();
               if (type === "commentChildren" && updateComments) {
                 updateComments("children");
               }
@@ -63,13 +87,11 @@ const Accordion: React.FC<Props> = ({
           <AiOutlineMinus
             cursor="pointer"
             color="black"
-            onClick={() => {
-              setShowContent(false);
-            }}
+            onClick={handleToggle}
           />
         )}
       </div>
-      {showContent && <div className={styles.content}>{children}</div>}
+      {isContentVisible && <div className={styles.content}>{children}</div>}
     </div>
   );
 };

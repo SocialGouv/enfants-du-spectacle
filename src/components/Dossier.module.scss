@@ -152,3 +152,35 @@ button.transitionButton {
 .infoSuccessive {
   margin-top: 1.5rem;
 }
+
+.accordionControlButtons {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  
+  .controlButton {
+    margin-right: 10px;
+  }
+}
+
+.childSection {
+  margin-bottom: 36px;
+}
+
+.childBlock {
+  margin-bottom: 44px;
+  padding: 15px;
+}
+
+.downloadButtonContainer {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.actionButtonsContainer {
+  margin-top: 36px;
+  
+  .actionButton {
+    margin-right: 10px;
+  }
+}

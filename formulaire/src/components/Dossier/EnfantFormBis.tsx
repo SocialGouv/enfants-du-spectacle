@@ -617,6 +617,25 @@ const EnfantFormBis: React.FC<Props> = ({
             }
           />
         </div>
+
+        <div className={styles.blocForm}>
+          <label htmlFor="numeroSequence" className="mb-2 italic">
+            Numéro de la séquence
+          </label>
+          <input
+            onChange={handleFormEnfant}
+            value={enfantTmp?.numeroSequence || 0}
+            disabled={!allowChanges}
+            type="number"
+            min="0"
+            id="numeroSequence"
+            name="numeroSequence"
+            className="inputText"
+            onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
+              handleFocus(e)
+            }
+          />
+        </div>
       </div>
 
       <h5 className={styles.h5Spacer}>Périodes de travail liées à l'enfant</h5>
