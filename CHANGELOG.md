@@ -1,3 +1,10 @@
+## [1.106.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.2...v1.106.3) (2025-06-27)
+
+
+### Bug Fixes
+
+* **buckets:** add env variables to containers ([bbe3c6a](https://github.com/SocialGouv/enfants-du-spectacle/commit/bbe3c6a91c6303a1191c1b1e21c5dc3b512f2292))
+
 ## [1.106.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.1...v1.106.2) (2025-06-27)
 
 
