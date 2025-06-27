@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
-import { getSignedUrlForFile } from "../../../../src/lib/s3Client";
-import prisma from "../../../../src/lib/prismaClient";
+import { getSignedUrlForFile } from "../../../src/lib/s3Client";
+import prisma from "../../../src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   // Gérer les CORS dynamiquement
@@ -31,28 +31,31 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const { id } = req.query;
-    console.log("=== Download document ===");
-    console.log("Document ID:", id);
+    const { path } = req.query;
+    console.log("=== Route documents ===");
+    console.log("Path reçu:", path);
     
-    if (!id) {
-      console.log("Erreur: ID manquant");
-      return res.status(400).json({ error: "ID requis" });
+    if (!path || !Array.isArray(path)) {
+      console.log("Erreur: chemin manquant ou invalide");
+      return res.status(400).json({ error: "Chemin requis" });
     }
 
-    // Récupérer le document depuis la base de données
-    const document = await prisma.documentPublic.findUnique({
-      where: { id: parseInt(id as string) },
+    // Reconstituer le chemin complet
+    const fullPath = path.join('/');
+    console.log("Chemin complet reconstitué:", fullPath);
+    
+    // Vérifier que le document existe en base
+    const document = await prisma.documentPublic.findFirst({
+      where: { path: fullPath },
     });
 
-    console.log("Document trouvé:", document ? "OUI" : "NON");
+    console.log("Document trouvé en base:", document ? "OUI" : "NON");
     if (document) {
-      console.log("Document path:", document.path);
-      console.log("Document name:", document.originalName);
+      console.log("Document path en base:", document.path);
     }
 
     if (!document) {
-      console.log("Document non trouvé pour l'ID:", id);
+      console.log("Document non trouvé pour le path:", fullPath);
       return res.status(404).json({ error: "Document non trouvé" });
     }
 
@@ -63,10 +66,9 @@ const handler: NextApiHandler = async (req, res) => {
 
     // Rediriger vers l'URL signée
     console.log("Redirection vers l'URL signée");
-    res.redirect(302, signedUrl);
-    return;
+    return res.redirect(302, signedUrl);
   } catch (error) {
-    console.error("Erreur lors du téléchargement:", error);
+    console.error("Erreur lors de la génération de l'URL signée:", error);
     return res.status(500).json({ error: "Erreur serveur" });
   }
 };

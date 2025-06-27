@@ -40,31 +40,22 @@ const DocumentsPublics: React.FC<Props> = ({ documents }) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const handleDownload = async (documentId: number, fileName: string) => {
+  const handleDownload = (documentId: number, fileName: string) => {
     setDownloading(prev => ({ ...prev, [documentId]: true }));
     
-    try {
-      const response = await fetch(`/api/documents-publics/${documentId}/download`);
-      
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      } else {
-        alert("Erreur lors du téléchargement du document");
-      }
-    } catch (error) {
-      console.error("Erreur téléchargement:", error);
-      alert("Erreur lors du téléchargement");
-    } finally {
+    // Créer un lien temporaire et déclencher le téléchargement
+    const downloadUrl = `/api/documents-publics/${documentId}/download`;
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank'; // Ouvrir dans un nouvel onglet pour éviter les problèmes CORS
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Réinitialiser l'état après un délai
+    setTimeout(() => {
       setDownloading(prev => ({ ...prev, [documentId]: false }));
-    }
+    }, 1000);
   };
 
   const getDocumentsByCategory = () => {
