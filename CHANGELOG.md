@@ -1,3 +1,10 @@
+## [1.106.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.8...v1.106.9) (2025-07-02)
+
+
+### Bug Fixes
+
+* fix build ([#766](https://github.com/SocialGouv/enfants-du-spectacle/issues/766)) ([0daf890](https://github.com/SocialGouv/enfants-du-spectacle/commit/0daf890dd57475bf273492b0ea450a3ab69dcd64))
+
 ## [1.106.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.7...v1.106.8) (2025-07-02)
 
 
