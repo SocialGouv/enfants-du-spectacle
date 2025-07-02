@@ -1,3 +1,10 @@
+## [1.106.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.7...v1.106.8) (2025-07-02)
+
+
+### Bug Fixes
+
+* adapt_S3_path ([#765](https://github.com/SocialGouv/enfants-du-spectacle/issues/765)) ([9d4bda3](https://github.com/SocialGouv/enfants-du-spectacle/commit/9d4bda312180b767ab16c6bd38280b39342e703d))
+
 ## [1.106.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.6...v1.106.7) (2025-07-02)
 
 
