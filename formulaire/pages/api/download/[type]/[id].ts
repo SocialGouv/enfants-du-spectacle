@@ -211,8 +211,8 @@ const encodeRFC5987ValueChars = (str: string) =>
     .replace(/;/g, '%3B')
     .replace(/\\/g, '%5C');
   // Fallback ASCII sans accents
-  const fallbackFilename = originalName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x20-\x7E]+/g, '');
-  const encodedFilename = encodeRFC5987ValueChars(originalName);
+// Fallback ASCII sans accents
+const fallbackFilename = originalName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x20-\x7E]+/g, '') || 'document';
 
   res.writeHead(200, {
     "Content-Length": decryptedBuffer.length,
