@@ -1,3 +1,10 @@
+## [1.106.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.9...v1.106.10) (2025-07-02)
+
+
+### Bug Fixes
+
+* S3 prod secrets ([3acde04](https://github.com/SocialGouv/enfants-du-spectacle/commit/3acde0407466c3907c07752b1021ee17174c37f8))
+
 ## [1.106.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.8...v1.106.9) (2025-07-02)
 
 
