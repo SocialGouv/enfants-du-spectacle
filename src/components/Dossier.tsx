@@ -59,19 +59,25 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
-  const [senderComment, setSenderComment] = React.useState<string>(session?.dbUser.prenom + ' ' + session?.dbUser.nom || 'Instructeur');
+  const [senderComment, setSenderComment] = React.useState<string>(
+    session?.dbUser.prenom + " " + session?.dbUser.nom || "Instructeur"
+  );
   const [comments, setComments] = React.useState<Comments[]>([]);
-  const [fetchedSocieteProduction, setFetchedSocieteProduction] = React.useState(null);
+  const [fetchedSocieteProduction, setFetchedSocieteProduction] =
+    React.useState(null);
   const [otherFilms, setOtherFilms] = React.useState<any>({});
-  const [loadingOtherFilms, setLoadingOtherFilms] = React.useState<boolean>(false);
+  const [loadingOtherFilms, setLoadingOtherFilms] =
+    React.useState<boolean>(false);
   const [openAccordionIds, setOpenAccordionIds] = React.useState<number[]>([]);
-  const [openEnfantAccordionIds, setOpenEnfantAccordionIds] = React.useState<string[]>([]);
+  const [openEnfantAccordionIds, setOpenEnfantAccordionIds] = React.useState<
+    string[]
+  >([]);
 
   // Functions to manage accordion states for children
   const toggleAccordion = (enfantId: number) => {
-    setOpenAccordionIds(prev => 
-      prev.includes(enfantId) 
-        ? prev.filter(id => id !== enfantId)
+    setOpenAccordionIds((prev) =>
+      prev.includes(enfantId)
+        ? prev.filter((id) => id !== enfantId)
         : [...prev, enfantId]
     );
   };
@@ -93,9 +99,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   // Functions to manage accordion states for enfant accordions
   const toggleEnfantAccordion = (accordionId: string) => {
-    setOpenEnfantAccordionIds(prev => 
-      prev.includes(accordionId) 
-        ? prev.filter(id => id !== accordionId)
+    setOpenEnfantAccordionIds((prev) =>
+      prev.includes(accordionId)
+        ? prev.filter((id) => id !== accordionId)
         : [...prev, accordionId]
     );
   };
@@ -147,33 +153,35 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   const fetchOtherFilms = async () => {
     if (!dossier?.enfants?.length) return;
-    
+
     setLoadingOtherFilms(true);
     try {
       // Récupérer tous les nameId des enfants du dossier
       const nameIds = dossier.enfants
         .filter((enfant: any) => enfant.nameId)
         .map((enfant: any) => enfant.nameId);
-      
+
       if (nameIds.length === 0) {
         setOtherFilms({});
         return;
       }
 
-      const response = await fetch('/api/enfants/other-films', {
-        method: 'POST',
+      const response = await fetch("/api/enfants/other-films", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           nameIds,
-          currentDossierId: dossier.id
-        })
+          currentDossierId: dossier.id,
+        }),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Error fetching other films: ${response.status} - ${errorText}`);
+        throw new Error(
+          `Error fetching other films: ${response.status} - ${errorText}`
+        );
       }
 
       const otherFilmsData = await response.json();
@@ -190,7 +198,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     try {
       // Récupérer TOUS les commentaires du dossier (projet ET enfants)
       if (dossier?.id) {
-        const response = await fetch(`/api/dossier-comments/${dossier.id}?includeChildren=true`);
+        const response = await fetch(
+          `/api/dossier-comments/${dossier.id}?includeChildren=true`
+        );
         if (!response.ok) {
           throw new Error(`Error fetching comments: ${response.status}`);
         }
@@ -251,20 +261,23 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
     fetchUser();
   }, []);
 
-
   // Call fetchSocieteProduction when showCompanySection changes to true
   React.useEffect(() => {
     if (showCompanySection) {
       // Try to fetch using dossier.societeProductionId first
       if (dossier?.societeProductionId) {
         fetchSocieteProduction(dossier.societeProductionId);
-      } 
+      }
       // If that doesn't exist, try using demandeur.societeProductionId as a fallback
       else if (dossier?.demandeur?.societeProductionId) {
         fetchSocieteProduction(dossier.demandeur.societeProductionId);
       }
     }
-  }, [showCompanySection, dossier?.societeProductionId, dossier?.demandeur?.societeProductionId]);
+  }, [
+    showCompanySection,
+    dossier?.societeProductionId,
+    dossier?.demandeur?.societeProductionId,
+  ]);
 
   React.useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -313,19 +326,30 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                   />
                 </Foldable>
               </Info>
-            <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
-              {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
-              {dossier.scenesSensibles.length > 0 &&
-                dossier.scenesSensibles.filter((scene: any) => scene !== null).join(", ")}
-                <p className={styles.infoDate}>Mis à jour le {frenchDateHour(dossier.dateDerniereModification ?? new Date())}</p>
-            </Info>
+              <Info title="SCENES SENSIBLES" className={styles.infoSuccessive}>
+                {dossier.scenesSensibles.length == 0 && <span>aucune</span>}
+                {dossier.scenesSensibles.length > 0 &&
+                  dossier.scenesSensibles
+                    .filter((scene: any) => scene !== null)
+                    .join(", ")}
+                {dossier.dateDerniereModification && (
+                  <p className={styles.infoDate}>
+                    Mis à jour le{" "}
+                    {frenchDateHour(
+                      dossier.dateDerniereModification ?? new Date()
+                    )}
+                  </p>
+                )}
+              </Info>
             </div>
             <Info title="PIECES JUSTIFICATIVES & VALIDATION">
               {dossier.source === "FORM_EDS" && (
-                <DossierJustificatifs 
-                  dossier={dossier} 
-                  showValidation={(session?.dbUser.role === "INSTRUCTEUR" ||
-                  session?.dbUser.role === "ADMIN")}
+                <DossierJustificatifs
+                  dossier={dossier}
+                  showValidation={
+                    session?.dbUser.role === "INSTRUCTEUR" ||
+                    session?.dbUser.role === "ADMIN"
+                  }
                 />
               )}
             </Info>
@@ -410,10 +434,9 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                     <InfoSociete
                       societeProduction={
                         // Try to use fetchedSocieteProduction first, then fall back to other options
-                        fetchedSocieteProduction || 
-                        dossier.societeProduction || 
-                        dossier.demandeur?.societeProduction || 
-                        {
+                        fetchedSocieteProduction ||
+                        dossier.societeProduction ||
+                        dossier.demandeur?.societeProduction || {
                           id: 0,
                           nom: "Société de production",
                           siret: "N/A",
@@ -426,14 +449,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                           adresseCodeCommune: "N/A",
                           formeJuridique: "Information non disponible",
                           conventionCollectiveCode: "N/A",
-                          otherConventionCollective: null
+                          otherConventionCollective: null,
                         }
                       }
                       conventionCollectiveCode={
-                        dossier.conventionCollectiveCode
+                        dossier.demandeur.conventionCollectiveCode
                       }
                       otherConventionCollective={
-                        dossier.otherConventionCollective
+                        dossier.demandeur.otherConventionCollective
                       }
                     />
                   </Info>
@@ -566,7 +589,11 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                               countCommentsNotification={
                                 countCommentsNotification
                               }
-                              piecesJustif={enf.piecesDossier?.map((piece: any) => piece.statut) as string[] | undefined}
+                              piecesJustif={
+                                enf.piecesDossier?.map(
+                                  (piece: any) => piece.statut
+                                ) as string[] | undefined
+                              }
                             />
                           )}
                         </td>
@@ -649,8 +676,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         key={enfant.id}
                         className={`${styles.bloc} ${styles.childBlock}`}
                       >
-                        <Accordion 
-                          title={childInfo} 
+                        <Accordion
+                          title={childInfo}
                           type={"commentChildren"}
                           isOpen={isAccordionOpen(enfant.id)}
                           onToggle={() => toggleAccordion(enfant.id)}
@@ -663,7 +690,11 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                             comments={comments}
                             actionComments={processComment}
                             remunerations={enfant.remuneration || []}
-                            otherFilms={enfant.nameId ? otherFilms[enfant.nameId] || [] : []}
+                            otherFilms={
+                              enfant.nameId
+                                ? otherFilms[enfant.nameId] || []
+                                : []
+                            }
                             openEnfantAccordionIds={openEnfantAccordionIds}
                             onToggleEnfantAccordion={toggleEnfantAccordion}
                           />

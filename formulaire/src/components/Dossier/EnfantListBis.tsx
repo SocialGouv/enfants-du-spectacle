@@ -184,13 +184,19 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
   };
 
   React.useEffect(() => {
-    if(selectedEnfant) {
-      const selectedComs = selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)
-      if(selectedComs && selectedComs?.length > 0) {
-        updateCommentairesNotifications(selectedEnfant?.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true).map(com => JSON.stringify(com.id)) || [])
+    if (selectedEnfant) {
+      const selectedComs = selectedEnfant?.comments?.filter(
+        (com) => com.source === "INSTRUCTEUR" && com.seen !== true
+      );
+      if (selectedComs && selectedComs?.length > 0) {
+        updateCommentairesNotifications(
+          selectedEnfant?.comments
+            ?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)
+            .map((com) => JSON.stringify(com.id)) || []
+        );
       }
     }
-  }, [selectedEnfant])
+  }, [selectedEnfant]);
 
   const refreshEnfant = (enfant: EnfantData) => {
     const index = enfants.findIndex((enfantTmp) => enfantTmp.id === enfant.id);
@@ -264,7 +270,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
               Ajouter un enfant
             </ButtonLink>
           </div>
-          <div>
+          {/* <div>
             <ButtonLink onClick={handleFileSelectClick}>
               <FaUserPlus style={{ marginRight: "8px" }} />
               {`Importer le fichier d'enfants`}
@@ -283,7 +289,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
               <FaFileDownload style={{ marginRight: "8px" }} /> Télécharger le
               modèle (csv excel)
             </ButtonLink>
-          </div>
+          </div> */}
         </div>
       )}
       {showModal && <div className={styles.overlay} />}
@@ -418,7 +424,10 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
             const commentsNotifications: CommentaireNotifications = {
               dossierId: contextDossier.dossier.id,
               notificationsProject: 0,
-              notificationsChildren: enfant.comments?.filter((com) => com.source === "INSTRUCTEUR" && com.seen !== true)?.length || 0,
+              notificationsChildren:
+                enfant.comments?.filter(
+                  (com) => com.source === "INSTRUCTEUR" && com.seen !== true
+                )?.length || 0,
             };
             return (
               <a

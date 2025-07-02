@@ -216,29 +216,9 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
-          content: "\nDécision de la commission des enfants du spectacle",
+          content: "\nDécision administrative \n\nEmploi des enfants du spectacle",
           styles: {
             fontSize: 18,
-            halign: "center",
-          },
-        },
-      ],
-    ],
-    margin: { top: 70 },
-    theme: "plain",
-  });
-
-  autoTable(doc, {
-    body: [
-      [
-        {
-          content: `\nLe Préfet ${
-            dossiers[0].commission.departement === "92"
-              ? "des Hauts-de-Seine"
-              : "de Paris"
-          }, Préfet de la région d'Ile-de-France`,
-          styles: {
-            fontSize: 13,
             halign: "center",
           },
         },

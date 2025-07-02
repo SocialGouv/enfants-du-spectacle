@@ -35,7 +35,7 @@ import InputFile from "./uiComponents/InputFile";
 interface Props {
   enfant: Enfant;
   dataLinks: DataLinks;
-  dossier: Dossier & { 
+  dossier: Dossier & {
     docs?: {
       dossier: {
         id: number;
@@ -46,17 +46,19 @@ interface Props {
         piecesDossier: any[];
       }>;
     };
-    remunerations?: Array<DbRemuneration & { 
-      nombreLignes?: number;
-      enfantId: number;
-      montant?: number;
-      nombre?: number;
-      totalDadr?: number | string;
-      typeRemuneration?: string;
-      natureCachet?: string;
-      autreNatureCachet?: string;
-      comment?: string;
-    }>;
+    remunerations?: Array<
+      DbRemuneration & {
+        nombreLignes?: number;
+        enfantId: number;
+        montant?: number;
+        nombre?: number;
+        totalDadr?: number | string;
+        typeRemuneration?: string;
+        natureCachet?: string;
+        autreNatureCachet?: string;
+        comment?: string;
+      }
+    >;
   };
   comments: Comments[];
   sender: string | null;
@@ -104,12 +106,12 @@ const EnfantComponent: React.FC<Props> = ({
   const [formData, setFormData] = React.useState<Enfant>(() => {
     // Make a copy of the enfant object
     const formDataCopy = { ...enfant };
-    
+
     // Convert dateConsultation string to Date object if it exists
     if (enfant.dateConsultation) {
       formDataCopy.dateConsultation = new Date(enfant.dateConsultation);
     }
-    
+
     return formDataCopy;
   });
   const [mountedRef, setMountedRef] = React.useState<boolean>(false);
@@ -117,16 +119,20 @@ const EnfantComponent: React.FC<Props> = ({
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
-  
+
   useEffect(() => {
     const matchingEnfant = localDataLinks?.enfants?.find(
-      (enf) => enf.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
+      (enf) =>
+        enf.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
     );
-    
+
     if (matchingEnfant) {
-      
       const filteredPieces = matchingEnfant.piecesDossier.filter((piece) =>
-        ["AVIS_MEDICAL", "BON_PRISE_EN_CHARGE", "AUTORISATION_PRISE_EN_CHARGE"].includes(piece.type)
+        [
+          "AVIS_MEDICAL",
+          "BON_PRISE_EN_CHARGE",
+          "AUTORISATION_PRISE_EN_CHARGE",
+        ].includes(piece.type)
       );
     }
   }, [enfant, localDataLinks]);
@@ -233,7 +239,14 @@ const EnfantComponent: React.FC<Props> = ({
                                   : matchingLabelGuarantee
                               }
                             />
-                            <div className={styles.dateMaj}>Ajoutée le {frenchDateHour(remuneration.createdAt ?? new Date())}</div>
+                            {remuneration.createdAt && (
+                              <div className={styles.dateMaj}>
+                                Ajoutée le{" "}
+                                {frenchDateHour(
+                                  remuneration.createdAt ?? new Date()
+                                )}
+                              </div>
+                            )}
                           </li>
                         )}
                       </ul>
@@ -302,8 +315,9 @@ const EnfantComponent: React.FC<Props> = ({
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
     const value = e.currentTarget.value !== "" ? e.currentTarget.value : null;
-    const finalValue = e.target.id === "cdc" && value !== null ? parseInt(value, 10) : value;
-    
+    const finalValue =
+      e.target.id === "cdc" && value !== null ? parseInt(value, 10) : value;
+
     setFormData({
       ...formData,
       [e.target.id]: finalValue,
@@ -319,9 +333,9 @@ const EnfantComponent: React.FC<Props> = ({
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
-    
+
     setIsFileUploading(true);
-    
+
     try {
       const data = new FormData();
       data.append(e.target.name, e.target.files[0]);
@@ -353,7 +367,7 @@ const EnfantComponent: React.FC<Props> = ({
   const handleDelete = async (id: number) => {
     if (id) {
       await deleteDoc(id);
-      window.location.reload()
+      window.location.reload();
       /*setLocalDataLinks((prevData) => {
         const updatedData = prevData.enfants.map((enfant) => {
           const piecesFiltered = enfant.piecesDossier.filter(
@@ -390,7 +404,9 @@ const EnfantComponent: React.FC<Props> = ({
   const fetchEnfantComments = async () => {
     try {
       if (dossier?.id) {
-        const response = await fetch(`/api/dossier-comments/${dossier.id}?enfantId=${enfant.id}`);
+        const response = await fetch(
+          `/api/dossier-comments/${dossier.id}?enfantId=${enfant.id}`
+        );
         if (!response.ok) {
           throw new Error(`Error fetching enfant comments: ${response.status}`);
         }
@@ -413,8 +429,7 @@ const EnfantComponent: React.FC<Props> = ({
     const commentsChildrenIds: string[] = enfantComments
       .filter(
         (comment) =>
-          comment.enfantId === enfant.id &&
-          comment.source === "SOCIETE_PROD"
+          comment.enfantId === enfant.id && comment.source === "SOCIETE_PROD"
       )
       .map((com) => JSON.stringify(com.id));
     if (commentsChildrenIds.length)
@@ -448,8 +463,8 @@ const EnfantComponent: React.FC<Props> = ({
       <Accordion
         title="Afficher plus d'informations"
         className="accordionSmallText"
-        isOpen={isAccordionOpen('infos')}
-        onToggle={() => toggleAccordion('infos')}
+        isOpen={isAccordionOpen("infos")}
+        onToggle={() => toggleAccordion("infos")}
       >
         <div className={styles.wrapperFoldable}>
           <Info title="Rémunération" className={styles.info}>
@@ -523,16 +538,26 @@ const EnfantComponent: React.FC<Props> = ({
                 </>
               )}
             </div>
-            <p className={styles.dateMaj}>Mis à jour le {frenchDateHour(enfant.dateDerniereModification ?? new Date())}</p>
+            {enfant.dateDerniereModification && (
+              <p className={styles.dateMaj}>
+                Mis à jour le{" "}
+                {frenchDateHour(enfant.dateDerniereModification ?? new Date())}
+              </p>
+            )}
           </Info>
 
-          <Info title="Pièces justificatives & Validation" className={styles.info}>
+          <Info
+            title="Pièces justificatives & Validation"
+            className={styles.info}
+          >
             {dossier.source === "FORM_EDS" && (
               <EnfantJustificatifs
                 enfant={enfant}
                 dossier={dossier}
-                showValidation={(session.data?.dbUser.role === "INSTRUCTEUR" ||
-                  session.data?.dbUser.role === "ADMIN")}
+                showValidation={
+                  session.data?.dbUser.role === "INSTRUCTEUR" ||
+                  session.data?.dbUser.role === "ADMIN"
+                }
               />
             )}
           </Info>
@@ -542,8 +567,8 @@ const EnfantComponent: React.FC<Props> = ({
         title={"Commentaires"}
         className="accordionSmallText"
         type="commentChildren"
-        isOpen={isAccordionOpen('comments')}
-        onToggle={() => toggleAccordion('comments')}
+        isOpen={isAccordionOpen("comments")}
+        onToggle={() => toggleAccordion("comments")}
         updateComments={updateComments}
       >
         {dossier.source === "FORM_EDS" && (
@@ -555,9 +580,7 @@ const EnfantComponent: React.FC<Props> = ({
               parentId={null}
               action={processEnfantComment}
             />
-            <ListComments
-              comments={enfantComments}
-            />
+            <ListComments comments={enfantComments} />
           </>
         )}
       </Accordion>
@@ -565,8 +588,8 @@ const EnfantComponent: React.FC<Props> = ({
       <Accordion
         title="Afficher les informations des représentants légaux"
         className="accordionSmallText"
-        isOpen={isAccordionOpen('representants')}
-        onToggle={() => toggleAccordion('representants')}
+        isOpen={isAccordionOpen("representants")}
+        onToggle={() => toggleAccordion("representants")}
       >
         <div className={styles.adressesGrid}>
           <form
@@ -605,22 +628,22 @@ const EnfantComponent: React.FC<Props> = ({
         <Accordion
           title={`Autres films (${otherFilms.length})`}
           className="accordionSmallText"
-          isOpen={isAccordionOpen('otherFilms')}
-          onToggle={() => toggleAccordion('otherFilms')}
+          isOpen={isAccordionOpen("otherFilms")}
+          onToggle={() => toggleAccordion("otherFilms")}
         >
           <div>
             <p style={{ marginBottom: "15px", fontStyle: "italic" }}>
               Cet enfant a déjà joué dans d'autres projets :
             </p>
             {otherFilms.map((film, index) => (
-              <div 
-                key={film.id} 
-                style={{ 
-                  marginBottom: "15px", 
-                  padding: "10px", 
-                  border: "1px solid #ddd", 
+              <div
+                key={film.id}
+                style={{
+                  marginBottom: "15px",
+                  padding: "10px",
+                  border: "1px solid #ddd",
                   borderRadius: "5px",
-                  backgroundColor: "#f9f9f9"
+                  backgroundColor: "#f9f9f9",
                 }}
               >
                 <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
@@ -635,7 +658,9 @@ const EnfantComponent: React.FC<Props> = ({
                     <div>Société: {film.dossier.societeProduction.nom}</div>
                   )}
                   <div>
-                    Période: {new Date(film.dossier.dateDebut).toLocaleDateString()} - {new Date(film.dossier.dateFin).toLocaleDateString()}
+                    Période:{" "}
+                    {new Date(film.dossier.dateDebut).toLocaleDateString()} -{" "}
+                    {new Date(film.dossier.dateFin).toLocaleDateString()}
                   </div>
                 </div>
               </div>
@@ -649,8 +674,8 @@ const EnfantComponent: React.FC<Props> = ({
           title={"Avis médical "}
           className="accordionSmallText"
           type="commentChildren"
-          isOpen={isAccordionOpen('avisMedical')}
-          onToggle={() => toggleAccordion('avisMedical')}
+          isOpen={isAccordionOpen("avisMedical")}
+          onToggle={() => toggleAccordion("avisMedical")}
         >
           <div className={styles.avisMedicalGrid}>
             <Info title="Type de consultation">
@@ -710,26 +735,34 @@ const EnfantComponent: React.FC<Props> = ({
                         )?.typeJustif as JustificatifEnfant
                       }`}
                       docs={(() => {
-                        const matchingEnfant = dossier.docs?.enfants
-                          .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
-                        
-                        
+                        const matchingEnfant = dossier.docs?.enfants.find(
+                          (e) =>
+                            e.id ===
+                            (enfant.externalId
+                              ? parseInt(enfant.externalId)
+                              : enfant.id)
+                        );
+
                         if (!matchingEnfant) return [];
-                        
+
                         const filteredDocs = matchingEnfant.piecesDossier
-                          .filter(piece => [
-                            "AVIS_MEDICAL_THALIE", 
-                            "BON_PRISE_EN_CHARGE", 
-                            "AUTORISATION_PRISE_EN_CHARGE"
-                          ].includes(piece.type))
-                          .map(piece => ({
+                          .filter((piece) =>
+                            [
+                              "AVIS_MEDICAL_THALIE",
+                              "BON_PRISE_EN_CHARGE",
+                              "AUTORISATION_PRISE_EN_CHARGE",
+                            ].includes(piece.type)
+                          )
+                          .map((piece) => ({
                             id: String(piece.id),
-                            nom: piece.nom || piece.type.replace(/_/g, ' ').toLowerCase(),
+                            nom:
+                              piece.nom ||
+                              piece.type.replace(/_/g, " ").toLowerCase(),
                             type: piece.type,
                             statut: piece.statut,
-                            link: piece.link
+                            link: piece.link,
                           }));
-                          
+
                         return filteredDocs;
                       })()}
                       allowChanges={false}
@@ -755,26 +788,35 @@ const EnfantComponent: React.FC<Props> = ({
                   <InputFile
                     id={"AVIS_MEDICAL_THALIE"}
                     docs={(() => {
-                        const matchingEnfant = dossier.docs?.enfants
-                          .find(e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id));
-                        
-                        if (!matchingEnfant) return [];
-                        
-                        const filteredDocs = matchingEnfant.piecesDossier
-                          .filter(piece => [
-                            "AVIS_MEDICAL", 
-                            "BON_PRISE_EN_CHARGE", 
-                            "AUTORISATION_PRISE_EN_CHARGE"
-                          ].includes(piece.type))
-                          .map(piece => ({
-                            id: String(piece.id),
-                            nom: piece.nom || piece.type.replace(/_/g, ' ').toLowerCase(),
-                            type: piece.type,
-                            statut: piece.statut,
-                            link: piece.link
-                          }));
-                        return filteredDocs;
-                      })()}
+                      const matchingEnfant = dossier.docs?.enfants.find(
+                        (e) =>
+                          e.id ===
+                          (enfant.externalId
+                            ? parseInt(enfant.externalId)
+                            : enfant.id)
+                      );
+
+                      if (!matchingEnfant) return [];
+
+                      const filteredDocs = matchingEnfant.piecesDossier
+                        .filter((piece) =>
+                          [
+                            "AVIS_MEDICAL",
+                            "BON_PRISE_EN_CHARGE",
+                            "AUTORISATION_PRISE_EN_CHARGE",
+                          ].includes(piece.type)
+                        )
+                        .map((piece) => ({
+                          id: String(piece.id),
+                          nom:
+                            piece.nom ||
+                            piece.type.replace(/_/g, " ").toLowerCase(),
+                          type: piece.type,
+                          statut: piece.statut,
+                          link: piece.link,
+                        }));
+                      return filteredDocs;
+                    })()}
                     allowChanges={true}
                     label={`Avis médical`}
                     handleFile={handleFile}
