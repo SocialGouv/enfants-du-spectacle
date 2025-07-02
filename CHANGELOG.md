@@ -1,3 +1,10 @@
+## [1.106.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.6...v1.106.7) (2025-07-02)
+
+
+### Bug Fixes
+
+* fix invalid chars S3 ([#764](https://github.com/SocialGouv/enfants-du-spectacle/issues/764)) ([d1e0026](https://github.com/SocialGouv/enfants-du-spectacle/commit/d1e00262fdbca4d48278dafd96f93c382ab5b3ca))
+
 ## [1.106.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.5...v1.106.6) (2025-07-02)
 
 
