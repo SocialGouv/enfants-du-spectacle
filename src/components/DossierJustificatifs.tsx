@@ -38,7 +38,7 @@ interface DocsData {
 
 // Main component for showing and validating justificatifs
 interface DossierJustificatifsProps {
-  dossier: Dossier & { 
+  dossier: Dossier & {
     piecesDossier: PieceDossierEnfant[];
     docs?: DocsData;
   };
@@ -46,13 +46,14 @@ interface DossierJustificatifsProps {
 }
 
 // Constants for justificatif types
-const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] = [
-  { label: "Synopsis", value: "SYNOPSIS" },
-  { label: "Scénario", value: "SCENARIO" },
-  { label: "Mesures de sécurité", value: "MESURES_SECURITE" },
-  { label: "Plan de travail", value: "PLAN_TRAVAIL" },
-  { label: "Infos complémentaires", value: "INFOS_COMPLEMENTAIRES" },
-];
+const JUSTIFICATIFS_DOSSIERS: { value: JustificatifDossier; label: string }[] =
+  [
+    { label: "Synopsis", value: "SYNOPSIS" },
+    { label: "Scénario", value: "SCENARIO" },
+    { label: "Mesures de sécurité", value: "MESURES_SECURITE" },
+    { label: "Plan de travail", value: "PLAN_TRAVAIL" },
+    { label: "Infos complémentaires", value: "INFOS_COMPLEMENTAIRES" },
+  ];
 
 const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
   { label: "Livret de famille", value: "LIVRET_FAMILLE" },
@@ -63,8 +64,14 @@ const JUSTIFICATIFS_ENFANTS: { value: JustificatifEnfant; label: string }[] = [
   { label: "Avis pédagogique 1er dégré", value: "AVIS_PEDAGOGIQUE_1ER_DEGRE" },
   { label: "Avis pédagogique 2nd degré", value: "AVIS_PEDAGOGIQUE_2ND_DEGRE" },
   { label: "Avis DASEN", value: "AVIS_DASEN" },
-  { label: "Avis médical (médecin généraliste ou pédiatre)", value: "AVIS_MEDICAL" },
-  { label: "Avis médical (Thalie santé ou partenaire)", value: "AVIS_MEDICAL_THALIE" },
+  {
+    label: "Avis médical (médecin généraliste ou pédiatre)",
+    value: "AVIS_MEDICAL",
+  },
+  {
+    label: "Avis médical (Thalie santé ou partenaire)",
+    value: "AVIS_MEDICAL_THALIE",
+  },
   { label: "Dispense Thalie santé", value: "AUTORISATION_PRISE_EN_CHARGE" },
   { label: "bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
   {
@@ -97,7 +104,10 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
   }, [docPieces]);
 
   // Handle validation status change
-  const handleValidationChange = async (pieceId: string, newStatus: STATUT_PIECE | null) => {
+  const handleValidationChange = async (
+    pieceId: string,
+    newStatus: STATUT_PIECE | null
+  ) => {
     // Update local state optimistically
     setPieces(
       pieces.map((piece) => {
@@ -119,7 +129,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
         }),
         method: "PUT",
       });
-      
+
       // Invalidate SWR cache to sync with database
       mutate(`/api/dossiers/${dossierId}`);
     } catch (error) {
@@ -137,10 +147,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
     return (
       <div className={justifStyles.justificatifRow}>
         <div className={justifStyles.documentInfo}>
-          <span 
-            className={justifStyles.statusIcon}
-            style={{ color: "red" }}
-          >
+          <span className={justifStyles.statusIcon} style={{ color: "red" }}>
             ✗
           </span>
           <span className={justifStyles.documentName}>{label}</span>
@@ -160,21 +167,23 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
       {pieces.map((piece, index) => (
         <div key={index} className={justifStyles.justificatifRow}>
           <div className={justifStyles.documentInfo}>
-            <span 
+            <span
               className={justifStyles.statusIcon}
               style={{ color: "green" }}
             >
               ✓
             </span>
-            <a 
-              href={piece.link} 
-              target="_blank" 
+            <a
+              href={piece.link}
+              target="_blank"
               rel="noreferrer"
               className={justifStyles.documentLink}
             >
               {label.length > 50 ? label.slice(0, 50) + "..." : label}
             </a>
-            <p>Déposé le {frenchDateHour(piece.createdAt ?? new Date())}</p>
+            {piece.createdAt && (
+              <p>Déposé le {frenchDateHour(piece.createdAt ?? new Date())}</p>
+            )}
           </div>
 
           {/* Validation controls if showValidation is true */}
@@ -184,16 +193,22 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
                 // Show status indicator with ability to clear
                 <div
                   className={`${justifStyles.labelStatus} ${
-                    piece.statut === "REFUSE" ? justifStyles.refused : justifStyles.accepted
+                    piece.statut === "REFUSE"
+                      ? justifStyles.refused
+                      : justifStyles.accepted
                   }`}
                   onClick={() => handleValidationChange(piece.id, null)}
                 >
-                  <img 
-                    src={piece.statut === "REFUSE" ? logoRefused.src : logoAccepted.src}
+                  <img
+                    src={
+                      piece.statut === "REFUSE"
+                        ? logoRefused.src
+                        : logoAccepted.src
+                    }
                     alt="Status"
                     width={15}
                     height={15}
-                    style={{ display: 'inline-block' }}
+                    style={{ display: "inline-block" }}
                   />
                   <span>{piece.statut}</span>
                 </div>
@@ -226,9 +241,9 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
 };
 
 // Component for dossier justificatifs
-const DossierJustificatifs: React.FC<DossierJustificatifsProps> = ({ 
-  dossier, 
-  showValidation = false 
+const DossierJustificatifs: React.FC<DossierJustificatifsProps> = ({
+  dossier,
+  showValidation = false,
 }) => {
   if (!dossier) return null;
 
@@ -244,12 +259,13 @@ const DossierJustificatifs: React.FC<DossierJustificatifsProps> = ({
       {sortedJustificatifs.map(({ label, value }) => {
         // Check if this justificatif is present in the dossier
         const isPresent = dossier.justificatifs.includes(value);
-        
+
         // Get matching pieces from docs if available
-        const docPieces = dossier.docs?.dossier.piecesDossier.filter(
-          piece => piece.type === value
-        ) || [];
-        
+        const docPieces =
+          dossier.docs?.dossier.piecesDossier.filter(
+            (piece) => piece.type === value
+          ) || [];
+
         return (
           <li key={value} style={{ marginBottom: "16px" }}>
             <JustificatifItem
@@ -269,16 +285,16 @@ const DossierJustificatifs: React.FC<DossierJustificatifsProps> = ({
 // Component for enfant justificatifs
 interface EnfantJustificatifsProps {
   enfant: Enfant;
-  dossier: Dossier & { 
+  dossier: Dossier & {
     docs?: DocsData;
   };
   showValidation?: boolean;
 }
 
-const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({ 
-  enfant, 
-  dossier, 
-  showValidation = false 
+const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
+  enfant,
+  dossier,
+  showValidation = false,
 }) => {
   if (!enfant || !dossier) return null;
 
@@ -294,17 +310,19 @@ const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
       {sortedJustificatifs.map(({ label, value }) => {
         // Check if this justificatif is present for the enfant
         const isPresent = enfant.justificatifs.includes(value);
-        
+
         // Find this enfant in the docs and get its pieces
         const enfantDocs = dossier.docs?.enfants.find(
-          e => e.id === (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
+          (e) =>
+            e.id ===
+            (enfant.externalId ? parseInt(enfant.externalId) : enfant.id)
         );
-        
+
         // Get matching pieces for this justificatif type
-        const docPieces = enfantDocs?.piecesDossier.filter(
-          piece => piece.type === value
-        ) || [];
-        
+        const docPieces =
+          enfantDocs?.piecesDossier.filter((piece) => piece.type === value) ||
+          [];
+
         return (
           <li key={value} style={{ marginBottom: "16px" }}>
             <JustificatifItem
