@@ -1,3 +1,10 @@
+## [1.106.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.10...v1.106.11) (2025-07-02)
+
+
+### Bug Fixes
+
+* encoded filename ([#767](https://github.com/SocialGouv/enfants-du-spectacle/issues/767)) ([9c3cfc8](https://github.com/SocialGouv/enfants-du-spectacle/commit/9c3cfc89dfcde66a2bf01baa8db315d68b3f29d6))
+
 ## [1.106.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.9...v1.106.10) (2025-07-02)
 
 
