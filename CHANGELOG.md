@@ -1,3 +1,10 @@
+## [1.106.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.11...v1.106.12) (2025-07-02)
+
+
+### Bug Fixes
+
+* prod env vars ([7c99af9](https://github.com/SocialGouv/enfants-du-spectacle/commit/7c99af9fd762b8d6bca4a58ac5f6d491f8f30cab))
+
 ## [1.106.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.10...v1.106.11) (2025-07-02)
 
 
