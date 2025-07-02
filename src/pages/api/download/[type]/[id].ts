@@ -197,12 +197,24 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   const extension = originalName.substring(originalName.lastIndexOf('.') + 1).toLowerCase();
   const contentType = mimes[extension] || "application/octet-stream";
 
-  // Envoyer le fichier déchiffré
   const disposition = isInlineView ? "inline" : "attachment";
+
+  // ✅ Nouvelle logique sécurisée pour Content-Disposition
+  const encodeRFC5987ValueChars = (str: string) =>
+    encodeURIComponent(str)
+      .replace(/'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/\*/g, '%2A');
+
+  // Fallback ASCII sans accents
+  const fallbackFilename = originalName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x20-\x7E]+/g, '');
+  const encodedFilename = encodeRFC5987ValueChars(originalName);
+
   res.writeHead(200, {
     "Content-Length": decryptedBuffer.length,
     "Content-Type": contentType,
-    "Content-Disposition": `${disposition}; filename="${originalName}"`,
+    "Content-Disposition": `${disposition}; filename="${fallbackFilename}"; filename*=UTF-8''${encodedFilename}`,
   });
 
   res.end(decryptedBuffer);
