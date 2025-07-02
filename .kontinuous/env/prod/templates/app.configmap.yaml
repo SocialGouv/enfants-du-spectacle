@@ -18,3 +18,4 @@ data:
   NEXT_PUBLIC_MATOMO_SITE_AGENT_ID: "85"
   NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID: "84"
   NEXT_PUBLIC_API_URL_SDP: "https://formulaire-enfants-du-spectacle.fabrique.social.gouv.fr/api/sync"
+  NEXT_PUBLIC_PATH_S3: "docs/"
