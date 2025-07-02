@@ -86,7 +86,9 @@ export function generateS3Key(originalName: string, categorie: string): string {
   const year = new Date().getFullYear();
   const month = String(new Date().getMonth() + 1).padStart(2, '0');
   
-  return `documents/${year}/${month}/${categorie}/${timestamp}-${uuid}-${sanitizedName}`;
+  const basePath = process.env.NEXT_PUBLIC_PATH_S3 || 'documents';
+  
+  return `${basePath}/${year}/${month}/${categorie}/${timestamp}-${uuid}-${sanitizedName}`;
 }
 
 /**
