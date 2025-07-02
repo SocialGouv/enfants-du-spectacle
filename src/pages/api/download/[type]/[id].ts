@@ -213,11 +213,13 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   // Fallback ASCII sans accents
   const fallbackFilename = originalName
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // enlève les diacritiques
-    .replace(/[^\x20-\x7E]+/g, '')   // enlève tout caractère non ASCII
+    .replace(/[\u0300-\u036f]/g, "") // enlève les accents
+    .replace(/[^\x20-\x7E]+/g, '')   // enlève tout caractère non-ASCII
     || 'document';
 
-  // Réponse avec headers sécurisés
+  // Encodage du nom de fichier selon RFC5987
+  const encodedFilename = encodeRFC5987ValueChars(originalName);
+
   res.writeHead(200, {
     "Content-Length": decryptedBuffer.length,
     "Content-Type": contentType,
