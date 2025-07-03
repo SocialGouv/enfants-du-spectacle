@@ -93,7 +93,8 @@ export const uploadFile = async (
         const encryptedBuffer = Buffer.concat(encryptedParts as any);
 
         // Générer la clé S3 pour les documents cryptés
-        const s3Key = `${dossierId}/${Date.now()}_${cleanedFilename}.encrypted`;
+        const basePath = process.env.NEXT_PUBLIC_PATH_S3 || 'documents';
+        const s3Key = `${basePath}/${dossierId}/${Date.now()}_${cleanedFilename}.encrypted`;
         
         // Upload vers S3
         await uploadFileToS3(
