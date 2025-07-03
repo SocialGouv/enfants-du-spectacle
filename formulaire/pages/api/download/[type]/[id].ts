@@ -84,10 +84,10 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   const isInlineView = view === "inline";
   
   // Vérifier l'authentification pour les pièces cryptées
-  const session = await getServerSession(req, res, authOptions);
-  if (!session) {
-    return res.status(401).json({ error: "Non authentifié" });
-  }
+  // const session = await getServerSession(req, res, authOptions);
+  // if (!session) {
+  //   return res.status(401).json({ error: "Non authentifié" });
+  // }
 
   // Récupérer la pièce depuis la base de données (dossier ou enfant)
   let piece = await prisma.pieceDossier.findUnique({
