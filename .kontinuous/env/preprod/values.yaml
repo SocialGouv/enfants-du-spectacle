@@ -45,7 +45,3 @@ form:
 pg:
   backup:
     name: "202403061907" # backup on a new folder
-
-pg-form:
-  backup:
-    name: "202403061907" # backup on a new folder

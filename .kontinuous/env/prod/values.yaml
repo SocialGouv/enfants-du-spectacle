@@ -114,30 +114,3 @@ pg:
   backup:
     name: "202403062019" # backup on a new folder
 
-pg-form:
-  cnpg-cluster:
-    resources:
-      requests:
-        memory: 1Gi
-      limits:
-        cpu: "1"
-        memory: 1Gi
-    recovery:
-      enabled: false
-      ~tpl~database: "{{ .Values.global.pgDatabase }}"
-      ~tpl~owner: "{{ .Values.global.pgUser }}"
-      secretName: "pg-db"
-      barmanObjectStore:
-        ~tpl~destinationPath: "s3://enfants-du-spectacle-prod-backups/enfants-du-spectacle"
-        s3Credentials:
-          accessKeyId:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_access_key
-          secretAccessKey:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_secret_key
-          region:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_region
-  backup:
-    name: "202407291146" # backup on a new folder
