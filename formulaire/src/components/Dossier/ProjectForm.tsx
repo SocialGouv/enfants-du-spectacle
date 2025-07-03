@@ -66,6 +66,8 @@ const ProjectForm: React.FC<Props> = ({ allowChanges }) => {
         externalId: "",
         link: upload.filePath,
         statut: null,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       contextDossier.processInput("dossier", "piecesDossier", [
         ...contextDossier.dossier.piecesDossier,
