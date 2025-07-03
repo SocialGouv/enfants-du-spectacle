@@ -26,19 +26,7 @@ bucketValues: &bucketValues
         key: bucket_secret_key
 
 app:
-  volumes:
-    - name: docs
-      emptyDir: {}
-  volumeMounts:
-    - mountPath: /mnt/docs
-      name: docs
   env: *bucketValues
 
 form:
-  volumes:
-    - name: docs-form
-      emptyDir: {}
-  volumeMounts:
-    - mountPath: /mnt/docs
-      name: docs-form
   env: *bucketValues
