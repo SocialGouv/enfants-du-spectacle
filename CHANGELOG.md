@@ -1,3 +1,10 @@
+## [1.106.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.15...v1.106.16) (2025-07-03)
+
+
+### Bug Fixes
+
+* fix non authentifie ([#770](https://github.com/SocialGouv/enfants-du-spectacle/issues/770)) ([b638a5a](https://github.com/SocialGouv/enfants-du-spectacle/commit/b638a5a856a39b88fb479e504360e360116a68e4))
+
 ## [1.106.15](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.14...v1.106.15) (2025-07-03)
 
 
