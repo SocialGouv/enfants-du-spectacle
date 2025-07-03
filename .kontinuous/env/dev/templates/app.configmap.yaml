@@ -7,3 +7,4 @@ data:
   EMAIL_FROM: "Enfants du Spectacle [DEV] <enfantsduspectacle@diffusion.fabrique.social.gouv.fr>"
   DEMARCHE_NUMBER: "55315"
   NEXT_PUBLIC_PATH_S3: ""
+  PATH_S3: ""
