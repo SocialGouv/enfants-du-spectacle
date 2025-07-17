@@ -181,7 +181,7 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     body: [
       [
         {
-          content: `Aubervilliers, le ${frenchDateText(
+          content: `Paris, le ${frenchDateText(
             dossiers[0].commission.date
           )}`,
           styles: {
@@ -200,7 +200,7 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
       [
         {
           content:
-            "Service des enfants du spectacle \nDépartement protection et insertion des jeunes \nDirection de l'emploi, des entreprises et des solidarités \nUnité départementale de Paris de la DRIEETS",
+            "Service enfants du spectacle et agences de mannequins (ESAM) \nDépartement protection et insertion des jeunes (DPIJ) \nDRIEETS Ile de France \n21-23 rue Miollis - 75015 Paris",
           styles: {
             fontSize: 11,
             halign: "left",
@@ -398,8 +398,8 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     );
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
-      "19-21, rue Madeleine Vionnet  - 93300  Aubervilliers ",
-      100 - 20,
+      "Service enfants du spectacle et agences de mannequins (ESAM) ",
+      90 - 20,
       320 - 30,
       null,
       null,
@@ -407,9 +407,18 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     );
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
-      "www.travail-emploi.gouv.fr – www.economie.gouv.fr - www.idf.direccte.gouv.fr",
-      90 - 20,
+      "21-23 rue Miollis - 75015 Paris ",
+      110 - 20,
       323 - 30,
+      null,
+      null,
+      "left"
+    );
+    // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
+    doc.text(
+      "https://idf.drieets.gouv.fr",
+      115 - 20,
+      326 - 30,
       null,
       null,
       "left"
