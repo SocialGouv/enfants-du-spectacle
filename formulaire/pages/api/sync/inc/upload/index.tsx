@@ -32,14 +32,18 @@ const sendDoc: NextApiHandler = async (req, res) => {
   } catch (error) {
     await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
   }
-  const upload = await uploadFile(req, true);
+  const upload = await uploadFile(req);
+
+  // Extraire le nom du fichier original
+  const file = Array.isArray(upload.files.justificatif) ? upload.files.justificatif[0] : upload.files.justificatif;
+  const originalFilename = file?.originalFilename || "document";
 
   const data = {
-    nom: upload.files.justificatif.originalFilename,
+    nom: originalFilename,
     enfantId: parseInt(req.query.enfantId as string),
     type: req.query.typeJustif as JustificatifEnfant,
     externalId: "",
-    link: upload.files.justificatif.filepath + ".encrypted",
+    link: upload.s3Key,
     statut: null,
   };
 
@@ -47,7 +51,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
   //@ts-ignore
   res
     .status(200)
-    .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
+    .json({ filePath: upload.s3Key });
 };
 
 export default withSentry(handler);
