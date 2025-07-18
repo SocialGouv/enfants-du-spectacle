@@ -710,6 +710,17 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                                 >
                                   Télécharger Fiche Emploi individuelle
                                 </button>
+                                {dossier.statut == "ACCEPTE" && (
+                                  <button
+                                    className="postButton"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={() => {
+                                      generateDA([dossier], false, enfant.id);
+                                    }}
+                                  >
+                                    Télécharger Décision autorisation individuelle
+                                  </button>
+                                )}
                               </div>
                             )}
                         </Accordion>

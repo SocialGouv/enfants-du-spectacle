@@ -1,14 +1,31 @@
-import type { Enfant } from "@prisma/client";
+import type { Enfant, TypeEmploi } from "@prisma/client";
 import { jsPDF } from "jspdf";
 import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import logoPrefet from "src/images/logo_prefet.png";
-import { frenchDateText, getRemsByDossier } from "src/lib/helpers";
+import { 
+  frenchDateText, 
+  getRemsByDossier, 
+  birthDateToFrenchAge,
+  REMUNERATIONS,
+  typeEmploiLabel,
+  TYPES_EMPLOI,
+  frenchDepartementName
+} from "src/lib/helpers";
+import _ from "lodash";
 import type { DossierData } from "src/lib/types";
 import { getAllContenusPdf, replaceVariables } from "src/lib/contenuPdf";
 import commissions from "src/pages/api/commissions";
 
-const generateDA = async (dossiers: DossierData[], binary = false) => {
+const generateDA = async (dossiers: DossierData[], binary = false, enfantId?: number) => {
+  // Si enfantId est fourni, filtrer les enfants pour ne garder que celui-ci
+  if (enfantId) {
+    dossiers = dossiers.map(dossier => ({
+      ...dossier,
+      enfants: dossier.enfants.filter(enfant => enfant.id === enfantId)
+    } as DossierData));
+  }
+  
   // Récupérer les contenus personnalisés pour le département
   const departement = dossiers[0].commission.departement || '75';
   const contenus = await getAllContenusPdf(departement);
@@ -93,13 +110,7 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     
     blocs.push([
       {
-        content: `Vu la demande présentée le ${frenchDateText(
-          dossier.dateDepot ??
-            dossier.dateDerniereModification ??
-            dossier.commission.date
-        )} par ${nomSociete}, ${adresseSociete} pour l'emploi d'enfants dans le cadre du projet intitulé "${
-          dossier.nom
-        }" `,
+        content: `Vu la demande n° ${dossier.id} présentée sur la plateforme pour la commission du ${frenchDateText(dossier.commission.date)} - ${frenchDepartementName(dossier.commission.departement)} par la société ${nomSociete}, immatriculée ${societeProduction?.siret || 'non renseigné'}, pour l'emploi d'enfants dans le cadre du projet intitulé "${dossier.nom}" `,
         styles: {
           fontSize: 11,
           halign: "left",
@@ -148,32 +159,121 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     ]);
     blocs.push([
       {
-        content: `${nomSociete} est autorisée à engager dans le cadre du projet "${dossier.nom}", et selon les conditions définies dans la demande, l'enfant : `,
+        content: `${nomSociete} est autorisée à engager dans le cadre du projet "${dossier.nom}", et selon les conditions définies dans la demande, les enfants suivants : `,
         styles: {
           fontSize: 11,
           halign: "left",
         },
       },
     ]);
-    dossier.enfants.map((enfant) => {
-      // Ensure enfant is treated as Enfant type
-      const typedEnfant = enfant as Enfant;
-      // Accès aux rémunérations de l'enfant de manière sécurisée
-      // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
-      const remEnfant = typedEnfant.remuneration || [];
-      blocs.push([
-        {
-          content: `${typedEnfant.prenom || ''} ${typedEnfant.nom || ''}, né le ${frenchDateText(
-            typedEnfant.dateNaissance || new Date()
-          )}, pour une rémunération totale de ${dossier.source === 'FORM_EDS' ? remEnfant.reduce((acc: number, cur: any) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0) : typedEnfant.remunerationTotale || 0} €, ${
-            typedEnfant.cdc ? typedEnfant.cdc : 0
-          }% de cette somme devant être versés à la Caisse des dépôts et consignations;`,
-          styles: {
-            fontSize: 11,
-            halign: "left",
+    
+    // Organiser les enfants par type de rôle comme dans generateFE
+    const roles = _.uniq(
+      dossier.enfants.map((e: Enfant) => {
+        return e.typeEmploi;
+      })
+    );
+    
+    TYPES_EMPLOI.map((role) => {
+      if (roles.indexOf(role.value) !== -1) {
+        blocs.push([
+          {
+            content: typeEmploiLabel(role.value as TypeEmploi),
+            styles: {
+              fontSize: 13,
+              fontStyle: "bold",
+              halign: "left",
+            },
           },
-        },
-      ]);
+        ]);
+        _.filter(dossier.enfants, { typeEmploi: role.value })
+          .sort(function (a, b) {
+            if ((a as Enfant).nom && (b as Enfant).nom && (a as Enfant).nom! < (b as Enfant).nom!) {
+              return -1;
+            }
+            if ((a as Enfant).nom && (b as Enfant).nom && (a as Enfant).nom! > (b as Enfant).nom!) {
+              return 1;
+            }
+            if ((a as Enfant).prenom && (b as Enfant).prenom && (a as Enfant).prenom! < (b as Enfant).prenom!) {
+              return -1;
+            }
+            if ((a as Enfant).prenom && (b as Enfant).prenom && (a as Enfant).prenom! > (b as Enfant).prenom!) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((enfant) => {
+            // Ensure enfant is treated as Enfant type
+            const typedEnfant = enfant as Enfant;
+            // Accès aux rémunérations de l'enfant de manière sécurisée
+            // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
+            const remEnfant = typedEnfant.remuneration || [];
+            
+            // Calculer le total des rémunérations
+            const totalRemuneration = dossier.source === 'FORM_EDS' 
+              ? remEnfant.reduce((acc: any, cur: any) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0)
+              : typedEnfant.remunerationTotale || 0;
+
+            // Bloc séparé pour le nom de l'enfant en gras
+            blocs.push([
+              {
+                content: `\n${typedEnfant.nom?.toUpperCase()} ${typedEnfant.prenom?.toUpperCase()}, ${birthDateToFrenchAge(
+                  typedEnfant.dateNaissance || new Date()
+                )}${
+                  typedEnfant.nomPersonnage ? `, incarne ${typedEnfant.nomPersonnage}` : ""
+                }`,
+                styles: {
+                  fontSize: 11,
+                  halign: "left",
+                  fontStyle: "bold",
+                },
+              },
+            ]);
+            
+            // Bloc séparé pour les informations détaillées
+            blocs.push([
+              {
+                content: `
+• INFORMATIONS PERSONNELLES
+${typedEnfant.adresseEnfant ? `  Domicile : ${typedEnfant.adresseEnfant}` : ""}
+${typedEnfant.nomRepresentant1 ? `  Représentant légal 1 : ${typedEnfant.nomRepresentant1} ${typedEnfant.prenomRepresentant1}` : ""}
+${typedEnfant.adresseRepresentant1 ? `    ${typedEnfant.adresseRepresentant1}` : ""}
+${typedEnfant.nomRepresentant2 ? `  Représentant légal 2 : ${typedEnfant.nomRepresentant2} ${typedEnfant.prenomRepresentant2}` : ""}
+${typedEnfant.adresseRepresentant2 ? `    ${typedEnfant.adresseRepresentant2}` : ""}
+
+• CONDITIONS DE TRAVAIL
+  Nombre de jours : ${typedEnfant.nombreJours || 'Non spécifié'}
+${typedEnfant.periodeTravail ? `  Période : ${typedEnfant.periodeTravail}` : ""}
+${typedEnfant.contexteTravail ? `  Contexte : ${typedEnfant.contexteTravail}` : ""}
+
+• RÉMUNÉRATIONS
+${dossier.source === 'FORM_EDS' ? 
+  `  Rémunérations garanties :
+${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat: any) => {
+  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
+  return remFound ? `    ${remFound.nombre} ${cat.label} : ${remFound.montant}€` : null
+}).filter(Boolean).join('\n') || '    Aucune'}
+  
+  Rémunérations additionnelles :
+${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat: any) => {
+  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
+  return remFound ? `    ${remFound.nombre} ${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label} : ${remFound.montant}€` : null
+}).filter(Boolean).join('\n') || '    Aucune'}`
+:
+`  ${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet}€
+${typedEnfant.remunerationsAdditionnelles ? `  Additionnelles : ${typedEnfant.remunerationsAdditionnelles}` : ""}`
+}
+
+  TOTAL : ${totalRemuneration}€
+  Part CDC : ${typedEnfant.cdc || 0}%`,
+                styles: {
+                  fontSize: 10,
+                  halign: "left",
+                },
+              },
+            ]);
+          });
+      }
     });
   });
 
@@ -425,9 +525,14 @@ const generateDA = async (dossiers: DossierData[], binary = false) => {
     );
   }
 
+  // Générer un nom de fichier adapté selon qu'il s'agit d'une décision individuelle ou complète
+  const fileName = enfantId && dossiers[0].enfants.length > 0
+    ? `DECISION_AUTORISATION_${dossiers[0].enfants[0]?.nom || 'ENFANT'}_${dossiers[0].enfants[0]?.prenom || 'PRENOM'}_${dossiers[0].nom.replaceAll(".", "_")}`
+    : `DECISION_AUTORISATION_${dossiers[0].nom.replaceAll(".", "_")}`;
+  
   return binary
     ? "data:application/pdf;base64," + btoa(doc.output())
-    : doc.save("Décision_autorisation_" + dossiers[0].nom.replaceAll(".", "_"));
+    : doc.save(fileName);
 };
 
 export { generateDA };
