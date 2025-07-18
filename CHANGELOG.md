@@ -1,3 +1,10 @@
+## [1.106.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.16...v1.106.17) (2025-07-18)
+
+
+### Bug Fixes
+
+* thalie pieces ([#775](https://github.com/SocialGouv/enfants-du-spectacle/issues/775)) ([47a4d5f](https://github.com/SocialGouv/enfants-du-spectacle/commit/47a4d5fbc0e3a9ff9faa5728b44a9aaf03b5741c))
+
 ## [1.106.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.15...v1.106.16) (2025-07-03)
 
 
