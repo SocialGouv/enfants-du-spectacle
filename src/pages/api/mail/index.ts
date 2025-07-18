@@ -43,17 +43,24 @@ const sendMail: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { type, dossier, to, attachment, statut } = parsed;
-  const wording = _.find(WORDING_MAILING, { type: type });
+  const { type, dossier, to, attachment, statut, extraData } = parsed;
+  let wording = _.find(WORDING_MAILING, { type: type });
   if (!wording) {
     res.status(400).end();
     return;
   }
 
+  // Create a copy of wording to avoid mutating the original
+  wording = { ...wording };
+
   if (type === "status_changed") {
     wording.subject = wording.subject.replace(
       "___DOSSIERID___",
-      `n° ${dossier.externalId}`
+      `n° ${dossier.id}`
+    );
+    wording.subject = wording.subject.replace(
+      "___DOSSIER_NAME___",
+      `n° ${dossier.nom}`
     );
     wording.subject = wording.subject.replace(
       "__STATUS__",
@@ -64,7 +71,41 @@ const sendMail: NextApiHandler = async (req, res) => {
       `${statut.replace("_", " ")}`.toLocaleLowerCase()
     ).replace(
       "__WARNING__",
-      statut === "CONSTRUCTION" ? "Vous pouvez apporter les deniers éléments necessaires à la complétion de votre dossier." : "Il n’est plus modifiable d’ici la commission.");
+      statut === "CONSTRUCTION" ? "Vous pouvez apporter les deniers éléments necessaires à la complétion de votre dossier." : "Il n'est plus modifiable d'ici la commission.");
+  }
+
+  if (type === "piece_refused") {
+    const { pieceName, enfantName, documentType } = extraData || {};
+    
+    // Replace basic placeholders
+    wording.subject = wording.subject
+      .replace("___DOSSIERID___", `n° ${dossier.id}`)
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+      
+    wording.text = wording.text
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___PIECE_NAME___", pieceName || "");
+      
+    // Replace enfant info conditionally
+    if (documentType === "enfant" && enfantName) {
+      wording.text = wording.text.replace("___ENFANT_INFO___", ` pour l'enfant ${enfantName}`);
+    } else {
+      wording.text = wording.text.replace("___ENFANT_INFO___", "");
+    }
+  }
+
+  if (type === "medical_document_uploaded") {
+    const { enfantName, documentType } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___DOSSIERID___", `n° ${dossier.id}`)
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___DOCUMENT_TYPE___", documentType || "avis médical");
+      
+    wording.text = wording.text
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___DOCUMENT_TYPE___", documentType || "avis médical");
   }
 
   const templateSignin = (
@@ -73,11 +114,11 @@ const sendMail: NextApiHandler = async (req, res) => {
 
   function html({ url }: { url: string }): string {
     return templateSignin
-      .replace("__TEXT__", wording.text as string)
+      .replace("__TEXT__", wording!.text as string)
       .replace("__URL__", url)
-      .replace("__BUTTON__", wording.button as string)
-      .replace("__TITLE__", wording.title as string)
-      .replace("__BYE__", wording.bye as string);
+      .replace("__BUTTON__", wording!.button as string)
+      .replace("__TITLE__", wording!.title as string)
+      .replace("__BYE__", wording!.bye as string);
   }
 
   function text({ url }: { url: string }) {

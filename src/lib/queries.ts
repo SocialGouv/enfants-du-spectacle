@@ -395,7 +395,12 @@ const sendEmail = (
   attachment: string,
   dossier?: Dossier,
   to?: string,
-  statut: string = ""
+  statut: string = "",
+  extraData?: { 
+    pieceName?: string; 
+    enfantName?: string; 
+    documentType?: string; 
+  }
 ) => {
   window
     .fetch(`/api/mail/`, {
@@ -405,6 +410,7 @@ const sendEmail = (
         to: to ? to : null,
         type: type,
         statut: statut ? statut : null,
+        extraData: extraData ? extraData : null,
       }),
       method: "POST",
     })
@@ -417,6 +423,19 @@ const sendEmail = (
     .catch((e) => {
       throw e;
     });
+};
+
+const getDossierUserEmails = async (dossierId: number): Promise<string[]> => {
+  try {
+    const response = await fetch(`/api/dossiers/${dossierId}/users-emails`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user emails: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching dossier user emails:', error);
+    return [];
+  }
 };
 
 const uploadZip = async (commission: Commission) => {
@@ -894,6 +913,7 @@ export {
   findEnfant,
   findEnfants,
   getDatasFromDS,
+  getDossierUserEmails,
   getDocDS,
   getUpcomingCommissionsByLimitDate,
   removeCommission,

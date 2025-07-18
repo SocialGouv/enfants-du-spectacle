@@ -394,7 +394,7 @@ const EMPLOIS_CATEGORIES = [
 const WORDING_MAILING = [
   {
     button: "Télécharger",
-    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.",
+    bye: "Ce lien sera valide pendant cinq jours après réception de cet email.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
     subject: "Téléchargement commission Enfants du spectacle",
     text: "Cliquez sur le bouton ci-dessous pour télécharger les dossiers de la commission via un lien sécurisé.",
     title: "Bonjour,",
@@ -402,16 +402,15 @@ const WORDING_MAILING = [
   },
   {
     button: "Accéder à la plate-forme",
-    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
     subject: "Décision d'autorisation Enfants du spectacle",
     text: "Votre dossier a été accepté. Vous trouverez la décision d'autorisation en pièce jointe. Vous pouvez également accéder à la plate-forme afin d'y télécharger la décision d'autorisation.",
     title: "Bonjour,",
     type: "auth_access",
   },
-
   {
     button: "Connexion",
-    bye: "Si vous n'êtes pas à l'origine de cette demande de connexion, vous pouvez ignorer ce mail.",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
     subject: "Connexion à l'interface enfants du spectacle",
     text: "Connectez-vous en suivant ce lien : ",
     title: "Bonjour,",
@@ -419,11 +418,27 @@ const WORDING_MAILING = [
   },
   {
     button: "Accéder à la plate-forme",
-    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.",
-    subject: "Votre dossier ___DOSSIERID___ est passé en __STATUS__",
-    text: "Les services d’instruction de la DRIEETS ont passé votre dossier au statut __STATUS__. __WARNING__",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Votre dossier ___DOSSIERID___ (___DOSSIER_NAME___) est passé en __STATUS__",
+    text: "Les services d'instruction de la DRIEETS ont passé votre dossier au statut __STATUS__. __WARNING__",
     title: "Bonjour,",
     type: "status_changed",
+  },
+  {
+    button: "Accéder à la plate-forme",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Pièce justificative refusée - Dossier ___DOSSIERID___ (___DOSSIER_NAME___)",
+    text: "La pièce justificative \"___PIECE_NAME___\"___ENFANT_INFO___ de votre dossier \"___DOSSIER_NAME___\" a été refusée par l'instructeur. Veuillez consulter votre dossier pour plus de détails et procéder aux corrections nécessaires.",
+    title: "Bonjour,",
+    type: "piece_refused",
+  },
+  {
+    button: "Accéder à la plate-forme",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Nouveau ___DOCUMENT_TYPE___ disponible - Dossier ___DOSSIERID___ (___DOSSIER_NAME___)",
+    text: "Un médecin a déposé un nouvel ___DOCUMENT_TYPE___ pour l'enfant ___ENFANT_NAME___ de votre dossier \"___DOSSIER_NAME___\". Le document est maintenant disponible dans votre interface.",
+    title: "Bonjour,",
+    type: "medical_document_uploaded",
   },
 ];
 

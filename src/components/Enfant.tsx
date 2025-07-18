@@ -31,6 +31,7 @@ import Accordion from "./Accordion";
 import InputComments from "./inputComments";
 import ListComments from "./ListComments";
 import InputFile from "./uiComponents/InputFile";
+import { sendEmail, getDossierUserEmails } from "src/lib/queries";
 
 interface Props {
   enfant: Enfant;
@@ -370,7 +371,7 @@ const EnfantComponent: React.FC<Props> = ({
         nom: typeLabel,
         type: currentTypeJustif || 'UNKNOWN',
         statut: null,
-        link: `${process.env.NEXT_PUBLIC_URL_SDP}/api/download/pieces/${upload.pieceId}?view=inline`
+        link: `/api/download/pieces/${upload.pieceId}?view=inline`
       };
 
       setNewlyUploadedDocs(prev => [...prev, newDoc]);
@@ -384,6 +385,39 @@ const EnfantComponent: React.FC<Props> = ({
           )?.typeJustif!,
         ],
       });
+
+      // Send email notification when medical document is uploaded
+      if (session.data?.dbUser?.role === "MEDECIN") {
+        try {
+          // Get user emails
+          const userEmails = await getDossierUserEmails(dossier.id);
+
+          // Prepare enfant name
+          const enfantName = `${enfant.prenom || ""} ${enfant.nom || ""}`.trim();
+
+          // Get document type label
+          const documentTypeLabel = TYPE_CONSULTATION_MEDECIN.find(
+            (type) => type.value === formData.typeConsultationMedecin
+          )?.labelCol2 || 'avis médical';
+
+          // Send email to each user
+          for (const email of userEmails) {
+            sendEmail(
+              "medical_document_uploaded",
+              "", // no attachment
+              dossier,
+              email,
+              "",
+              {
+                enfantName,
+                documentType: documentTypeLabel.toLowerCase()
+              }
+            );
+          }
+        } catch (error) {
+          console.error('Error sending medical document emails:', error);
+        }
+      }
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
