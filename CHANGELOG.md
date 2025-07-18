@@ -1,3 +1,10 @@
+# [1.107.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.17...v1.107.0) (2025-07-18)
+
+
+### Features
+
+* notifs mail ([#776](https://github.com/SocialGouv/enfants-du-spectacle/issues/776)) ([38061ef](https://github.com/SocialGouv/enfants-du-spectacle/commit/38061eff38ae6276bef1ea312d79dcac7ab51931))
+
 ## [1.106.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.16...v1.106.17) (2025-07-18)
 
 
