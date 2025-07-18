@@ -12,6 +12,26 @@ export const config = {
 };
 
 const handler: NextApiHandler = async (req, res) => {
+  // Gérer les CORS
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://enfants-du-spectacle.fabrique.social.gouv.fr",
+    "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr"
+  ];
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method == "POST") {
     await sendDoc(req, res);
   } else {
@@ -51,7 +71,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
   //@ts-ignore
   res
     .status(200)
-    .json({ filePath: upload.s3Key });
+    .json({ filePath: upload.s3Key, pieceId: pieceEnfant.id });
 };
 
 export default withSentry(handler);

@@ -119,6 +119,13 @@ const EnfantComponent: React.FC<Props> = ({
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
+  const [newlyUploadedDocs, setNewlyUploadedDocs] = React.useState<Array<{
+    id: string;
+    nom: string;
+    type: string;
+    statut: null;
+    link: string;
+  }>>([]);
 
   useEffect(() => {
     const matchingEnfant = localDataLinks?.enfants?.find(
@@ -347,6 +354,26 @@ const EnfantComponent: React.FC<Props> = ({
           (type) => type.value === formData.typeConsultationMedecin
         )?.typeJustif
       );
+
+      // Récupérer le libellé du type de consultation
+      const typeLabel = TYPE_CONSULTATION_MEDECIN.find(
+        (type) => type.value === formData.typeConsultationMedecin
+      )?.labelCol2 || 'Document médical';
+
+      const currentTypeJustif = TYPE_CONSULTATION_MEDECIN.find(
+        (type) => type.value === formData.typeConsultationMedecin
+      )?.typeJustif;
+
+      // Ajouter le nouveau document à l'état local
+      const newDoc = {
+        id: upload.pieceId.toString(),
+        nom: typeLabel,
+        type: currentTypeJustif || 'UNKNOWN',
+        statut: null,
+        link: `${process.env.NEXT_PUBLIC_URL_SDP}/api/download/pieces/${upload.pieceId}?view=inline`
+      };
+
+      setNewlyUploadedDocs(prev => [...prev, newDoc]);
 
       setFormData({
         ...formData,
@@ -743,27 +770,35 @@ const EnfantComponent: React.FC<Props> = ({
                               : enfant.id)
                         );
 
-                        if (!matchingEnfant) return [];
+                        // Documents existants
+                        let existingDocs = [];
+                        if (matchingEnfant) {
+                          existingDocs = matchingEnfant.piecesDossier
+                            .filter((piece) =>
+                              [
+                                "AVIS_MEDICAL_THALIE",
+                                "BON_PRISE_EN_CHARGE",
+                                "AUTORISATION_PRISE_EN_CHARGE",
+                              ].includes(piece.type)
+                            )
+                            .map((piece) => ({
+                              id: String(piece.id),
+                              nom:
+                                piece.nom ||
+                                piece.type.replace(/_/g, " ").toLowerCase(),
+                              type: piece.type,
+                              statut: piece.statut,
+                              link: piece.link,
+                            }));
+                        }
 
-                        const filteredDocs = matchingEnfant.piecesDossier
-                          .filter((piece) =>
-                            [
-                              "AVIS_MEDICAL_THALIE",
-                              "BON_PRISE_EN_CHARGE",
-                              "AUTORISATION_PRISE_EN_CHARGE",
-                            ].includes(piece.type)
-                          )
-                          .map((piece) => ({
-                            id: String(piece.id),
-                            nom:
-                              piece.nom ||
-                              piece.type.replace(/_/g, " ").toLowerCase(),
-                            type: piece.type,
-                            statut: piece.statut,
-                            link: piece.link,
-                          }));
+                        // Filtrer les nouveaux documents pour éviter les doublons
+                        const filteredNewDocs = newlyUploadedDocs.filter(newDoc => 
+                          !existingDocs.some(existingDoc => existingDoc.link === newDoc.link)
+                        );
 
-                        return filteredDocs;
+                        // Combiner avec les nouveaux documents filtrés
+                        return [...existingDocs, ...filteredNewDocs];
                       })()}
                       allowChanges={false}
                       label={`${
@@ -796,26 +831,35 @@ const EnfantComponent: React.FC<Props> = ({
                             : enfant.id)
                       );
 
-                      if (!matchingEnfant) return [];
+                      // Documents existants
+                      let existingDocs = [];
+                      if (matchingEnfant) {
+                        existingDocs = matchingEnfant.piecesDossier
+                          .filter((piece) =>
+                            [
+                              "AVIS_MEDICAL",
+                              "BON_PRISE_EN_CHARGE",
+                              "AUTORISATION_PRISE_EN_CHARGE",
+                            ].includes(piece.type)
+                          )
+                          .map((piece) => ({
+                            id: String(piece.id),
+                            nom:
+                              piece.nom ||
+                              piece.type.replace(/_/g, " ").toLowerCase(),
+                            type: piece.type,
+                            statut: piece.statut,
+                            link: piece.link,
+                          }));
+                      }
 
-                      const filteredDocs = matchingEnfant.piecesDossier
-                        .filter((piece) =>
-                          [
-                            "AVIS_MEDICAL",
-                            "BON_PRISE_EN_CHARGE",
-                            "AUTORISATION_PRISE_EN_CHARGE",
-                          ].includes(piece.type)
-                        )
-                        .map((piece) => ({
-                          id: String(piece.id),
-                          nom:
-                            piece.nom ||
-                            piece.type.replace(/_/g, " ").toLowerCase(),
-                          type: piece.type,
-                          statut: piece.statut,
-                          link: piece.link,
-                        }));
-                      return filteredDocs;
+                      // Filtrer les nouveaux documents pour éviter les doublons
+                      const filteredNewDocs = newlyUploadedDocs.filter(newDoc => 
+                        !existingDocs.some(existingDoc => existingDoc.link === newDoc.link)
+                      );
+
+                      // Combiner avec les nouveaux documents filtrés
+                      return [...existingDocs, ...filteredNewDocs];
                     })()}
                     allowChanges={true}
                     label={`Avis médical`}
