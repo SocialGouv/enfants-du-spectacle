@@ -29,13 +29,19 @@ export async function uploadFileToS3(
   originalName: string
 ): Promise<UploadResult> {
   
+  // Nettoyer le nom de fichier pour les métadonnées S3
+  const cleanedOriginalName = originalName
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9.-]/g, "_");
+  
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
     Body: file,
     ContentType: contentType,
     Metadata: {
-      originalName: originalName,
+      originalName: cleanedOriginalName,
     },
   });
 

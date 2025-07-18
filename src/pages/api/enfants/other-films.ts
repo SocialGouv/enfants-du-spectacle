@@ -54,6 +54,11 @@ const getOtherFilms: NextApiHandler = async (req, res) => {
             }
           }
         }
+      },
+      orderBy: {
+        dossier: {
+          dateDebut: 'desc'
+        }
       }
     });
 

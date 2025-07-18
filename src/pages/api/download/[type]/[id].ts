@@ -1,34 +1,14 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { s3Client, getSignedUrlForFile } from "../../../../lib/s3Client";
+import { s3Client, getSignedUrlForFile } from "src/lib/s3Client";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
-import prisma from "../../../../lib/prismaClient";
+import prisma from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
-  // Gérer les CORS
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://enfants-du-spectacle.fabrique.social.gouv.fr",
-    "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr"
-  ];
-  
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
   if (req.method !== "GET") {
-    res.setHeader("Allow", ["GET", "OPTIONS"]);
+    res.setHeader("Allow", ["GET"]);
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
@@ -38,8 +18,6 @@ const handler: NextApiHandler = async (req, res) => {
     if (!type || !id) {
       return res.status(400).json({ error: "Type et ID requis" });
     }
-
-    const isInlineView = view === "inline";
 
     if (type === "documents-publics") {
       return await handleDocumentPublic(req, res, id as string);
@@ -82,7 +60,7 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   const { view } = req.query;
   const isInlineView = view === "inline";
   
-  // Vérifier l'authentification pour les pièces cryptées
+  // Vérifier l'authentification simple pour l'app principale
   const session = await getSession({ req });
   if (!session) {
     return res.status(401).json({ error: "Non authentifié" });
@@ -91,26 +69,18 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   // Récupérer la pièce depuis la base de données (dossier ou enfant)
   let piece = await prisma.pieceDossier.findUnique({
     where: { id: parseInt(id) },
-    include: { dossier: true }
   });
 
   let pieceEnfant = null;
   if (!piece) {
     pieceEnfant = await prisma.pieceDossierEnfant.findUnique({
       where: { id: parseInt(id) },
-      include: { enfant: { include: { dossier: true } } }
     });
   }
 
   const documentPiece = piece || pieceEnfant;
   if (!documentPiece) {
     return res.status(404).json({ error: "Document non trouvé" });
-  }
-
-  // Vérifier que l'utilisateur a accès au dossier
-  const dossier = piece ? piece.dossier : pieceEnfant?.enfant?.dossier;
-  if (!dossier) {
-    return res.status(404).json({ error: "Dossier non trouvé" });
   }
 
   if (!documentPiece?.link) {
@@ -199,7 +169,7 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
 
   const disposition = isInlineView ? "inline" : "attachment";
 
-  // ✅ Nouvelle logique sécurisée pour Content-Disposition
+  // Nouvelle logique sécurisée pour Content-Disposition
   const encodeRFC5987ValueChars = (str: string) =>
     encodeURIComponent(str)
       .replace(/'/g, '%27')

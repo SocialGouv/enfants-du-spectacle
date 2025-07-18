@@ -6,5 +6,6 @@ data:
   NODE_ENV: "production"
   EMAIL_FROM: "Enfants du Spectacle [DEV] <enfantsduspectacle@diffusion.fabrique.social.gouv.fr>"
   DEMARCHE_NUMBER: "55315"
+  NEXT_PUBLIC_URL_SDP: "http://localhost:3001"
   NEXT_PUBLIC_PATH_S3: ""
   PATH_S3: ""

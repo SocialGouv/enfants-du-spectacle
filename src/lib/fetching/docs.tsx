@@ -5,7 +5,7 @@ const uploadDoc = async (
   dossierId: number,
   enfantId: number,
   typeJustif?: JustificatifEnfant
-): Promise<{ filePath: string }> => {
+): Promise<{ filePath: string; pieceId: number }> => {
   //const url = `/api/sync/out/docs?dossierId=${dossierId}&typeJustif=${typeJustif}&enfantId=${enfantId}`;
   const url = `${process.env.NEXT_PUBLIC_API_URL_SDP}/inc/upload?id=${dossierId}&typeJustif=${typeJustif}&enfantId=${enfantId}`;
   const fetching = await fetch(url, {
