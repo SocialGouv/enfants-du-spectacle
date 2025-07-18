@@ -208,58 +208,66 @@ const generateDA = async (dossiers: DossierData[], binary = false, enfantId?: nu
             // Accès aux rémunérations de l'enfant de manière sécurisée
             // @ts-ignore - La propriété remuneration existe dans la DB mais n'est pas dans le type
             const remEnfant = typedEnfant.remuneration || [];
+            
+            // Calculer le total des rémunérations
+            const totalRemuneration = dossier.source === 'FORM_EDS' 
+              ? remEnfant.reduce((acc: any, cur: any) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0)
+              : typedEnfant.remunerationTotale || 0;
+
+            // Bloc séparé pour le nom de l'enfant en gras
             blocs.push([
               {
-                content: `${typedEnfant.nom?.toUpperCase()} ${typedEnfant.prenom?.toUpperCase()}, ${birthDateToFrenchAge(
+                content: `\n${typedEnfant.nom?.toUpperCase()} ${typedEnfant.prenom?.toUpperCase()}, ${birthDateToFrenchAge(
                   typedEnfant.dateNaissance || new Date()
-                )} ${
-                  typedEnfant.nomPersonnage
-                    ? ", incarne " + typedEnfant.nomPersonnage
-                    : ""
-                }${
-                  typedEnfant.adresseEnfant
-                    ? "\n  Domicile : " + typedEnfant.adresseEnfant
-                    : ""
-                }${
-                  typedEnfant.nomRepresentant1
-                    ? `\n  Représentant légal 1 : ${typedEnfant.nomRepresentant1} ${typedEnfant.prenomRepresentant1} - ${typedEnfant.adresseRepresentant1}`
-                    : ""
-                }${
-                  typedEnfant.nomRepresentant2
-                    ? `\n  Représentant légal 2 : ${typedEnfant.nomRepresentant2} ${typedEnfant.prenomRepresentant2} - ${typedEnfant.adresseRepresentant2}`
-                    : ""
-                }
-
-  NOMBRE DE JOURS TRAVAILLÉS : ${typedEnfant.nombreJours}
-
-  ${typedEnfant.periodeTravail ? `PÉRIODE DE TRAVAIL: ${typedEnfant.periodeTravail}` : ""}
-
-  ${typedEnfant.contexteTravail ? `TEMPS ET LIEU DE TRAVAIL: ${typedEnfant.contexteTravail}` : ""}
-
-  ${dossier.source === 'FORM_EDS' ? 
-  `RÉMUNÉRATIONS GARANTIES : 
-  ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat: any) => {
-    let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ${remFound.totalDadr ? `Montant total DADR : ${remFound.totalDadr} Euros, ` : ''}` : ''
-  }).join(' ')}
-
-  RÉMUNÉRATIONS ADDITIONNELLES : 
-  ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat: any) => {
-    let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
-  }).join(' ')}
-  TOTAL : ${remEnfant.reduce((acc: any, cur: any) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0)} Euros`
-  : 
-  `${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet} Euros ${
-    typedEnfant.remunerationsAdditionnelles
-      ? `\n  Rémunérations additionnelles : ${typedEnfant.remunerationsAdditionnelles}`
-      : ""
-  }
-  
-  TOTAL RÉMUNÉRATIONS: ${typedEnfant.remunerationTotale} Euros` }
-  Part CDC : ${typedEnfant.cdc ? typedEnfant.cdc : "0"}%`,
+                )}${
+                  typedEnfant.nomPersonnage ? `, incarne ${typedEnfant.nomPersonnage}` : ""
+                }`,
                 styles: {
                   fontSize: 11,
+                  halign: "left",
+                  fontStyle: "bold",
+                },
+              },
+            ]);
+            
+            // Bloc séparé pour les informations détaillées
+            blocs.push([
+              {
+                content: `
+• INFORMATIONS PERSONNELLES
+${typedEnfant.adresseEnfant ? `  Domicile : ${typedEnfant.adresseEnfant}` : ""}
+${typedEnfant.nomRepresentant1 ? `  Représentant légal 1 : ${typedEnfant.nomRepresentant1} ${typedEnfant.prenomRepresentant1}` : ""}
+${typedEnfant.adresseRepresentant1 ? `    ${typedEnfant.adresseRepresentant1}` : ""}
+${typedEnfant.nomRepresentant2 ? `  Représentant légal 2 : ${typedEnfant.nomRepresentant2} ${typedEnfant.prenomRepresentant2}` : ""}
+${typedEnfant.adresseRepresentant2 ? `    ${typedEnfant.adresseRepresentant2}` : ""}
+
+• CONDITIONS DE TRAVAIL
+  Nombre de jours : ${typedEnfant.nombreJours || 'Non spécifié'}
+${typedEnfant.periodeTravail ? `  Période : ${typedEnfant.periodeTravail}` : ""}
+${typedEnfant.contexteTravail ? `  Contexte : ${typedEnfant.contexteTravail}` : ""}
+
+• RÉMUNÉRATIONS
+${dossier.source === 'FORM_EDS' ? 
+  `  Rémunérations garanties :
+${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat: any) => {
+  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
+  return remFound ? `    ${remFound.nombre} ${cat.label} : ${remFound.montant}€` : null
+}).filter(Boolean).join('\n') || '    Aucune'}
+  
+  Rémunérations additionnelles :
+${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat: any) => {
+  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
+  return remFound ? `    ${remFound.nombre} ${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label} : ${remFound.montant}€` : null
+}).filter(Boolean).join('\n') || '    Aucune'}`
+:
+`  ${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet}€
+${typedEnfant.remunerationsAdditionnelles ? `  Additionnelles : ${typedEnfant.remunerationsAdditionnelles}` : ""}`
+}
+
+  TOTAL : ${totalRemuneration}€
+  Part CDC : ${typedEnfant.cdc || 0}%`,
+                styles: {
+                  fontSize: 10,
                   halign: "left",
                 },
               },
