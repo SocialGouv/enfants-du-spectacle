@@ -15,6 +15,7 @@ import justifStyles from "./DossierJustificatifs.module.scss";
 import logoAccepted from "src/images/accepted.svg";
 import logoRefused from "src/images/refused.svg";
 import { frenchDateHour } from "src/lib/helpers";
+import { sendEmail, getDossierUserEmails } from "src/lib/queries";
 
 // Define piece structure
 interface PieceDoc {
@@ -87,6 +88,7 @@ interface JustificatifItemProps {
   showValidation: boolean;
   documentType: string;
   dossierId: number;
+  enfantInfo?: { nom: string; prenom: string };
 }
 
 const JustificatifItem: React.FC<JustificatifItemProps> = ({
@@ -95,6 +97,7 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
   showValidation,
   documentType,
   dossierId,
+  enfantInfo,
 }) => {
   const [pieces, setPieces] = React.useState<PieceDoc[]>(docPieces);
 
@@ -132,6 +135,42 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
 
       // Invalidate SWR cache to sync with database
       mutate(`/api/dossiers/${dossierId}`);
+
+      // Send email notification if piece is refused
+      if (newStatus === "REFUSE") {
+        try {
+          // Get dossier info
+          const dossierResponse = await fetch(`/api/dossiers/${dossierId}`);
+          if (!dossierResponse.ok) {
+            throw new Error(`Failed to fetch dossier: ${dossierResponse.status}`);
+          }
+          const dossierInfo = await dossierResponse.json();
+
+          // Get user emails
+          const userEmails = await getDossierUserEmails(dossierId);
+
+          // Prepare enfant name if applicable
+          const enfantName = enfantInfo ? `${enfantInfo.prenom} ${enfantInfo.nom}` : undefined;
+
+          // Send email to each user
+          for (const email of userEmails) {
+            sendEmail(
+              "piece_refused",
+              "", // no attachment
+              dossierInfo,
+              email,
+              "",
+              {
+                pieceName: label,
+                enfantName,
+                documentType
+              }
+            );
+          }
+        } catch (error) {
+          console.error('Error sending refusal emails:', error);
+        }
+      }
     } catch (error) {
       console.error("Failed to update document status:", error);
       // Revert the state if the API call fails
@@ -331,6 +370,7 @@ const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
               showValidation={showValidation}
               documentType="enfant"
               dossierId={dossier.id}
+              enfantInfo={{ nom: enfant.nom || "", prenom: enfant.prenom || "" }}
             />
           </li>
         );
