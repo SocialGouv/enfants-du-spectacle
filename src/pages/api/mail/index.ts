@@ -71,7 +71,7 @@ const sendMail: NextApiHandler = async (req, res) => {
       `${statut.replace("_", " ")}`.toLocaleLowerCase()
     ).replace(
       "__WARNING__",
-      statut === "CONSTRUCTION" ? "Vous pouvez apporter les deniers éléments necessaires à la complétion de votre dossier." : "Il n'est plus modifiable d'ici la commission.");
+      statut === "CONSTRUCTION" ? "Vous pouvez apporter les derniers éléments nécessaires à la complétion de votre dossier." : "Il n'est plus modifiable d'ici la commission.");
   }
 
   if (type === "piece_refused") {
