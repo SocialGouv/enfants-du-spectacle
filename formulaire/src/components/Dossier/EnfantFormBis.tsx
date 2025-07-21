@@ -1339,20 +1339,6 @@ const EnfantFormBis: React.FC<Props> = ({
       ) : (
         <></>
       )}
-      <div className={styles.blocForm}>
-        <InputFile
-          id={"DECLARATION_HONNEUR"}
-          docs={enfantTmp.piecesDossier || []}
-          docsTokenized={contextDossier.docs.enfants.find(
-            (enfant) => enfant.id === enfantTmp.id
-          )}
-          allowChanges={!allowChanges}
-          label={`Déclaration sur l’honneur de l’enfant âgé de plus de 13 ans`}
-          handleFile={handleFile}
-          handleDelete={handleDelete}
-          text={`Veuillez fournir un document présentant de manière précise et détaillée, la déclaration sur l’honneur de l’enfant âgé de plus de 13 ans.`}
-        />
-      </div>
       <InputComments
         title={"Commentaires liés à l'enfant"}
         dossierId={contextDossier.dossier.id}
