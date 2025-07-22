@@ -1,3 +1,10 @@
+## [1.107.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.1...v1.107.2) (2025-07-22)
+
+
+### Bug Fixes
+
+* remove pg form ([#771](https://github.com/SocialGouv/enfants-du-spectacle/issues/771)) ([2199299](https://github.com/SocialGouv/enfants-du-spectacle/commit/21992992116197cc6635f1a7ed6b3c582117bd70))
+
 ## [1.107.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.0...v1.107.1) (2025-07-21)
 
 
