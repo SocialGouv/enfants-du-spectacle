@@ -1,3 +1,10 @@
+## [1.107.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.2...v1.107.3) (2025-07-22)
+
+
+### Bug Fixes
+
+* increase containers resources ([#781](https://github.com/SocialGouv/enfants-du-spectacle/issues/781)) ([35efdb7](https://github.com/SocialGouv/enfants-du-spectacle/commit/35efdb7f309a34b8730881251a241fc3378b57fe))
+
 ## [1.107.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.1...v1.107.2) (2025-07-22)
 
 
