@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import { s3Client, getSignedUrlForFile } from "src/lib/s3Client";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
-import prisma from "src/lib/prismaClient";
+import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {
@@ -21,8 +21,10 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (type === "documents-publics") {
       return await handleDocumentPublic(req, res, id as string);
-    } else if (type === "pieces") {
-      return await handlePieceCryptee(req, res, id as string);
+    } else if (type === "pieces-dossier") {
+      return await handlePieceDossier(req, res, id as string);
+    } else if (type === "pieces-enfant") {
+      return await handlePieceEnfant(req, res, id as string);
     } else {
       return res.status(400).json({ error: "Type de document non supporté" });
     }
@@ -38,8 +40,8 @@ const handler: NextApiHandler = async (req, res) => {
  */
 async function handleDocumentPublic(req: any, res: any, id: string) {
   // Récupérer le document depuis la base de données
-  const document = await prisma.documentPublic.findUnique({
-    where: { id: parseInt(id) },
+  const document = await client.documentPublic.findUnique({
+    where: { id: parseInt(id) }
   });
 
   if (!document) {
@@ -54,9 +56,9 @@ async function handleDocumentPublic(req: any, res: any, id: string) {
 }
 
 /**
- * Gère le téléchargement des pièces cryptées (dossiers/enfants)
+ * Gère le téléchargement des pièces cryptées de dossier
  */
-async function handlePieceCryptee(req: any, res: any, id: string) {
+async function handlePieceDossier(req: any, res: any, id: string) {
   const { view } = req.query;
   const isInlineView = view === "inline";
   
@@ -66,27 +68,55 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     return res.status(401).json({ error: "Non authentifié" });
   }
 
-  // Récupérer la pièce depuis la base de données (dossier ou enfant)
-  let piece = await prisma.pieceDossier.findUnique({
-    where: { id: parseInt(id) },
+  // Récupérer la pièce de dossier depuis la base de données
+  const piece = await client.pieceDossier.findUnique({
+    where: { id: parseInt(id) }
   });
 
-  let pieceEnfant = null;
   if (!piece) {
-    pieceEnfant = await prisma.pieceDossierEnfant.findUnique({
-      where: { id: parseInt(id) },
-    });
-  }
-
-  const documentPiece = piece || pieceEnfant;
-  if (!documentPiece) {
     return res.status(404).json({ error: "Document non trouvé" });
   }
 
-  if (!documentPiece?.link) {
+  if (!piece.link) {
     return res.status(404).json({ error: "Fichier non trouvé" });
   }
 
+  return await downloadAndDecryptFile(req, res, piece, isInlineView);
+}
+
+/**
+ * Gère le téléchargement des pièces cryptées d'enfant
+ */
+async function handlePieceEnfant(req: any, res: any, id: string) {
+  const { view } = req.query;
+  const isInlineView = view === "inline";
+  
+  // Vérifier l'authentification simple pour l'app principale
+  const session = await getSession({ req });
+  if (!session) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  // Récupérer la pièce d'enfant depuis la base de données
+  const pieceEnfant = await client.pieceDossierEnfant.findUnique({
+    where: { id: parseInt(id) }
+  });
+
+  if (!pieceEnfant) {
+    return res.status(404).json({ error: "Document non trouvé" });
+  }
+
+  if (!pieceEnfant.link) {
+    return res.status(404).json({ error: "Fichier non trouvé" });
+  }
+
+  return await downloadAndDecryptFile(req, res, pieceEnfant, isInlineView);
+}
+
+/**
+ * Fonction commune pour télécharger et déchiffrer un fichier
+ */
+async function downloadAndDecryptFile(req: any, res: any, documentPiece: any, isInlineView: boolean) {
   // Télécharger et déchiffrer le fichier
   let encryptedBuffer: Buffer;
   

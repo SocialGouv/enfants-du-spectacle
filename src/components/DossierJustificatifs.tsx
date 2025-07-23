@@ -142,7 +142,9 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
           // Get dossier info
           const dossierResponse = await fetch(`/api/dossiers/${dossierId}`);
           if (!dossierResponse.ok) {
-            throw new Error(`Failed to fetch dossier: ${dossierResponse.status}`);
+            throw new Error(
+              `Failed to fetch dossier: ${dossierResponse.status}`
+            );
           }
           const dossierInfo = await dossierResponse.json();
 
@@ -150,7 +152,9 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
           const userEmails = await getDossierUserEmails(dossierId);
 
           // Prepare enfant name if applicable
-          const enfantName = enfantInfo ? `${enfantInfo.prenom} ${enfantInfo.nom}` : undefined;
+          const enfantName = enfantInfo
+            ? `${enfantInfo.prenom} ${enfantInfo.nom}`
+            : undefined;
 
           // Send email to each user
           for (const email of userEmails) {
@@ -163,12 +167,12 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
               {
                 pieceName: label,
                 enfantName,
-                documentType
+                documentType,
               }
             );
           }
         } catch (error) {
-          console.error('Error sending refusal emails:', error);
+          console.error("Error sending refusal emails:", error);
         }
       }
     } catch (error) {
@@ -213,7 +217,9 @@ const JustificatifItem: React.FC<JustificatifItemProps> = ({
               ✓
             </span>
             <a
-              href={piece.link}
+              href={`/api/download/${
+                documentType === "enfant" ? "pieces-enfant" : "pieces-dossier"
+              }/${piece.id}?view=inline`}
               target="_blank"
               rel="noreferrer"
               className={justifStyles.documentLink}
@@ -370,7 +376,10 @@ const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
               showValidation={showValidation}
               documentType="enfant"
               dossierId={dossier.id}
-              enfantInfo={{ nom: enfant.nom || "", prenom: enfant.prenom || "" }}
+              enfantInfo={{
+                nom: enfant.nom || "",
+                prenom: enfant.prenom || "",
+              }}
             />
           </li>
         );
