@@ -24,25 +24,6 @@ const getCommentsByDossier = async (externalId: string) => {
   return fetching as Comments[];
 };
 
-const getCommentsNotificationsByDossierIds = async (externalIds: string[]) => {
-  const url = `/api/sync/out/commentaires/dossiers${
-    externalIds.length > 0 ? "?" : ""
-  }${externalIds.map((id, index) => {
-    return `${index !== 0 ? "&" : ""}externalId=${id}`;
-  })}`
-    .split(",")
-    .join("");
-  const fetching = await fetch(url, {
-    method: "GET",
-  }).then(async (r) => {
-    if (!r.ok) {
-      throw Error(`got status ${r.status}`);
-    }
-    return r.json();
-  });
-  return fetching as CommentaireNotifications[];
-};
-
 const createComment = async (comment: Omit<Comments, "id">) => {
   const url = `/api/sync/out/commentaires`;
   const fetching = await fetch(url, {
@@ -57,8 +38,4 @@ const createComment = async (comment: Omit<Comments, "id">) => {
   return fetching as Comments;
 };
 
-export {
-  createComment,
-  getCommentsByDossier,
-  getCommentsNotificationsByDossierIds,
-};
+export { createComment, getCommentsByDossier };
