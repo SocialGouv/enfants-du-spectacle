@@ -1,3 +1,10 @@
+## [1.107.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.5...v1.107.6) (2025-07-23)
+
+
+### Bug Fixes
+
+* better handling of pieces justificatives ([#786](https://github.com/SocialGouv/enfants-du-spectacle/issues/786)) ([094bf6f](https://github.com/SocialGouv/enfants-du-spectacle/commit/094bf6f5efd91c2730356c8e2f23d07adc12685b))
+
 ## [1.107.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.4...v1.107.5) (2025-07-23)
 
 
