@@ -1,3 +1,10 @@
+## [1.107.5](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.4...v1.107.5) (2025-07-23)
+
+
+### Bug Fixes
+
+* remove volumes ([#772](https://github.com/SocialGouv/enfants-du-spectacle/issues/772)) ([b782af4](https://github.com/SocialGouv/enfants-du-spectacle/commit/b782af46191781ddb440f865099ae01b4fccc934))
+
 ## [1.107.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.3...v1.107.4) (2025-07-23)
 
 
