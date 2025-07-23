@@ -26,18 +26,11 @@ bucketValues: &bucketValues
         key: bucket_secret_key
 
 app:
-  strategyType: Recreate
-  addVolumes:
-    - docs
   securityContext:
     fsGroup: 1000
   env: *bucketValues
-    
 
 form:
-  strategyType: Recreate
-  addVolumes:
-    - docs-form
   securityContext:
     fsGroup: 1000
   env: *bucketValues
