@@ -103,7 +103,13 @@ const InputFile: React.FC<Props> = ({
 
                     {docsTokenized && (
                       <a
-                        href={`/api/download/pieces/${doc.id}?view=inline`}
+                        href={`/api/download/${
+                          Object.values(JustificatifEnfant).includes(
+                            id as JustificatifEnfant
+                          )
+                            ? "pieces-enfant"
+                            : "pieces-dossier"
+                        }/${doc.id}?view=inline`}
                         target="_blank"
                         rel="noreferrer"
                         key={`piece_justificative_${id}_${index}`}

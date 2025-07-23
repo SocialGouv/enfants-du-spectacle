@@ -44,8 +44,10 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (type === "documents-publics") {
       return await handleDocumentPublic(req, res, id as string);
-    } else if (type === "pieces") {
-      return await handlePieceCryptee(req, res, id as string);
+    } else if (type === "pieces-dossier") {
+      return await handlePieceDossier(req, res, id as string);
+    } else if (type === "pieces-enfant") {
+      return await handlePieceEnfant(req, res, id as string);
     } else {
       return res.status(400).json({ error: "Type de document non supporté" });
     }
@@ -77,9 +79,9 @@ async function handleDocumentPublic(req: any, res: any, id: string) {
 }
 
 /**
- * Gère le téléchargement des pièces cryptées (dossiers/enfants)
+ * Gère le téléchargement des pièces cryptées de dossier
  */
-async function handlePieceCryptee(req: any, res: any, id: string) {
+async function handlePieceDossier(req: any, res: any, id: string) {
   const { view } = req.query;
   const isInlineView = view === "inline";
   
@@ -89,28 +91,18 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     return res.status(401).json({ error: "Non authentifié" });
   }
 
-  // Récupérer la pièce depuis la base de données (dossier ou enfant)
-  let piece = await prisma.pieceDossier.findUnique({
+  // Récupérer la pièce de dossier depuis la base de données
+  const piece = await prisma.pieceDossier.findUnique({
     where: { id: parseInt(id) },
     include: { dossier: true }
   });
 
-  let pieceEnfant = null;
   if (!piece) {
-    pieceEnfant = await prisma.pieceDossierEnfant.findUnique({
-      where: { id: parseInt(id) },
-      include: { enfant: { include: { dossier: true } } }
-    });
-  }
-
-  const documentPiece = piece || pieceEnfant;
-  if (!documentPiece) {
     return res.status(404).json({ error: "Document non trouvé" });
   }
 
   // Vérifier que l'utilisateur a accès au dossier
-  const dossier = piece ? piece.dossier : pieceEnfant?.enfant?.dossier;
-  if (!dossier) {
+  if (!piece.dossier) {
     return res.status(404).json({ error: "Dossier non trouvé" });
   }
 
@@ -120,17 +112,72 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
     return res.status(401).json({ error: "Utilisateur non identifié" });
   }
   
-  const hasAccess = dossier.creatorId === userId || 
-                   (dossier.collaboratorIds && dossier.collaboratorIds.includes(userId));
+  const hasAccess = piece.dossier.creatorId === userId || 
+                   (piece.dossier.collaboratorIds && piece.dossier.collaboratorIds.includes(userId));
   
   if (!hasAccess) {
     return res.status(403).json({ error: "Accès non autorisé à ce document" });
   }
 
-  if (!documentPiece?.link) {
+  if (!piece.link) {
     return res.status(404).json({ error: "Fichier non trouvé" });
   }
 
+  return await downloadAndDecryptFile(req, res, piece, isInlineView);
+}
+
+/**
+ * Gère le téléchargement des pièces cryptées d'enfant
+ */
+async function handlePieceEnfant(req: any, res: any, id: string) {
+  const { view } = req.query;
+  const isInlineView = view === "inline";
+  
+  // Vérifier l'authentification pour les pièces cryptées
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  // Récupérer la pièce d'enfant depuis la base de données
+  const pieceEnfant = await prisma.pieceDossierEnfant.findUnique({
+    where: { id: parseInt(id) },
+    include: { enfant: { include: { dossier: true } } }
+  });
+
+  if (!pieceEnfant) {
+    return res.status(404).json({ error: "Document non trouvé" });
+  }
+
+  // Vérifier que l'utilisateur a accès au dossier
+  if (!pieceEnfant.enfant?.dossier) {
+    return res.status(404).json({ error: "Dossier non trouvé" });
+  }
+
+  // Vérifier les permissions : l'utilisateur doit être le créateur ou collaborateur
+  const userId = session.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Utilisateur non identifié" });
+  }
+  
+  const hasAccess = pieceEnfant.enfant.dossier.creatorId === userId || 
+                   (pieceEnfant.enfant.dossier.collaboratorIds && pieceEnfant.enfant.dossier.collaboratorIds.includes(userId));
+  
+  if (!hasAccess) {
+    return res.status(403).json({ error: "Accès non autorisé à ce document" });
+  }
+
+  if (!pieceEnfant.link) {
+    return res.status(404).json({ error: "Fichier non trouvé" });
+  }
+
+  return await downloadAndDecryptFile(req, res, pieceEnfant, isInlineView);
+}
+
+/**
+ * Fonction commune pour télécharger et déchiffrer un fichier
+ */
+async function downloadAndDecryptFile(req: any, res: any, documentPiece: any, isInlineView: boolean) {
   // Télécharger et déchiffrer le fichier
   let encryptedBuffer: Buffer;
   
