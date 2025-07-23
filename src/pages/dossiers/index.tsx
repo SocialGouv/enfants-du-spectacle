@@ -45,13 +45,9 @@ const Page: React.FC = () => {
   const session = useSession();
   if (
     session.status === "authenticated" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "ADMIN" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "INSTRUCTEUR" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "MEMBRE" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({

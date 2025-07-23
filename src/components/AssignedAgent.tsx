@@ -11,13 +11,9 @@ interface Props {
     instructeur?: User | null;
     medecin?: User | null;
   };
-  useReactiveMode?: boolean;
 }
 
-const AssignedAgent: React.FC<Props> = ({
-  dossier,
-  useReactiveMode = false,
-}) => {
+const AssignedAgent: React.FC<Props> = ({ dossier }) => {
   const session = useSession();
   const role = session.data?.dbUser?.role;
   const agentType = role !== "MEDECIN" ? "instructeur" : "medecin";
@@ -27,10 +23,7 @@ const AssignedAgent: React.FC<Props> = ({
     <>
       {!agent && role !== "MEMBRE" && (
         <span className={styles.na}>
-          <AssignedAgentSelect
-            dossier={useReactiveMode ? undefined : dossier}
-            dossierId={useReactiveMode ? dossier.id : undefined}
-          />
+          <AssignedAgentSelect dossier={dossier} />
         </span>
       )}
       {agent && (

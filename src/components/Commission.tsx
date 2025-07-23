@@ -72,7 +72,7 @@ const Dossier: React.FC<DossierProps> = ({ dossier, commentsInfo }) => {
         &nbsp;enfants
       </div>
       <div>
-        <AssignedAgent dossier={dossier} useReactiveMode={true} />
+        <AssignedAgent dossier={dossier} />
       </div>
       <div>
         <CategorieDossierTag dossier={dossier} onlyGrandeCategorie={true} />
