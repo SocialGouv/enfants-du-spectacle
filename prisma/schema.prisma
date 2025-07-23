@@ -65,10 +65,10 @@ model PieceDossier {
   statut     STATUT_PIECE?
   nom        String?
   dossier    Dossier             @relation(fields: [dossierId], references: [id], onDelete: Cascade)
-
-  @@index([dossierId], name: "idx_pieceDossier_dossierId")
   createdAt  DateTime?
   updatedAt  DateTime?
+
+  @@index([dossierId], name: "idx_pieceDossier_dossierId")
 }
 
 model Dossier {
@@ -114,16 +114,16 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+  createdAt                 DateTime?
+  updatedAt                 DateTime?
 
   @@index([commissionId], name: "idx_dossier_commissionId")
-  @@index([societeProductionId], name: "idx_dossier_societeProductionId") 
+  @@index([societeProductionId], name: "idx_dossier_societeProductionId")
   @@index([demandeurId], name: "idx_dossier_demandeurId")
   @@index([creatorId], name: "idx_dossier_creatorId")
   @@index([instructeurId], name: "idx_dossier_instructeurId")
   @@index([medecinId], name: "idx_dossier_medecinId")
   @@index([nom], name: "idx_dossier_nom")
-  createdAt                 DateTime?
-  updatedAt                 DateTime?
 }
 
 model Commentaire {
@@ -170,11 +170,11 @@ model PieceDossierEnfant {
   statut     STATUT_PIECE?
   nom        String?
   enfant     Enfant             @relation(fields: [enfantId], references: [id], onDelete: Cascade)
+  createdAt  DateTime?
+  updatedAt  DateTime?
 
   @@index([dossierId], name: "idx_pieceDossierEnfant_dossierId")
   @@index([enfantId], name: "idx_pieceDossierEnfant_enfantId")
-  createdAt  DateTime?
-  updatedAt  DateTime?
 }
 
 model Remuneration {
@@ -243,13 +243,13 @@ model Enfant {
   remuneration                Remuneration[]
   numeroSequence              Int?
   nameId                      String?
+  createdAt                   DateTime?
+  updatedAt                   DateTime?
 
   @@index([dossierId], name: "idx_enfant_dossierId")
   @@index([populatedByUserId], name: "idx_enfant_populatedById")
   @@index([nom], name: "idx_enfant_nom")
   @@index([prenom], name: "idx_enfant_prenom")
-  createdAt                   DateTime?
-  updatedAt                   DateTime?
 }
 
 model ContenuPdf {
@@ -277,11 +277,11 @@ model SendList {
 }
 
 model User {
-  id                    Int             @id @default(autoincrement())
+  id                    Int              @id @default(autoincrement())
   name                  String?
   nom                   String?
   prenom                String?
-  email                 String?         @unique
+  email                 String?          @unique
   emailVerified         DateTime?
   image                 String?
   role                  Role?
@@ -289,19 +289,20 @@ model User {
   departements          String[]
   telephone             String?
   fonction              String?
-  createdAt             DateTime?       @default(now()) @map("created_at")
-  updatedAt             DateTime?       @updatedAt @map("updated_at")
+  createdAt             DateTime?        @default(now()) @map("created_at")
+  updatedAt             DateTime?        @updatedAt @map("updated_at")
   accounts              Account[]
   commentaires          Commentaire[]
   comments              Comments[]
   contenusPdf           ContenuPdf[]
   documentsPublics      DocumentPublic[]
-  dossiersCreated       Dossier[]       @relation("creator")
-  dossiersAsInstructeur Dossier[]       @relation("instructeur")
-  dossiersMedecin       Dossier[]       @relation("medecin")
-  enfantsPopulated      Enfant[]        @relation("populatedBy")
+  dossiersCreated       Dossier[]        @relation("creator")
+  dossiersAsInstructeur Dossier[]        @relation("instructeur")
+  dossiersMedecin       Dossier[]        @relation("medecin")
+  enfantsPopulated      Enfant[]         @relation("populatedBy")
   SendList              SendList[]
   sessions              Session[]
+  userLogs              UserLogs[]
 }
 
 model Session {
@@ -506,6 +507,30 @@ model DocumentPublic {
   @@index([uploadedBy], name: "idx_documentPublic_uploadedBy")
 }
 
+model UserLogs {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  userEmail String?
+  userRole  Role?
+  method    String // GET, POST, PUT, DELETE, etc.
+  path      String // URL path
+  query     String? // Query parameters (JSON string)
+  userAgent String?
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  // Champs spécifiques selon le type d'accès
+  accessType AccessType
+  resourceId Int? // ID du dossier, de la pièce, etc.
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "idx_userLogs_userId")
+  @@index([accessType], name: "idx_userLogs_accessType")
+  @@index([timestamp], name: "idx_userLogs_timestamp")
+  @@index([resourceId], name: "idx_userLogs_resourceId")
+}
+
 enum CategorieDocument {
   CALENDRIER_COMMISSION_92
   CALENDRIER_COMMISSION_HORS_92
@@ -513,4 +538,11 @@ enum CategorieDocument {
   MODELE_DASEN
   GUIDE_ENFANT_SPECTACLE
   CIRCULAIRE
+}
+
+enum AccessType {
+  DOSSIER_LIST // Accès aux listes de dossiers (commissions)
+  DOSSIER_VIEW // Accès à un dossier spécifique
+  PIECE_DOSSIER_DOWNLOAD // Téléchargement de pièce de dossier
+  PIECE_ENFANT_DOWNLOAD // Téléchargement de pièce d'enfant
 }
