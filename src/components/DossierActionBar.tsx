@@ -14,6 +14,7 @@ import AssignCommissionSelect from "./AssignCommissionSelect";
 
 interface ItemProps {
   label: string;
+  children: React.ReactNode;
 }
 
 const Item: React.FC<ItemProps> = ({ label, children }) => {
@@ -46,20 +47,25 @@ const DossierActionBar: React.FC<Props> = ({ dossierId }) => {
         demandeur={dossier.demandeur}
       />
       <Item label="Département">
-        {frenchDepartementName(dossier.commission.departement)}
+        {dossier.commission
+          ? frenchDepartementName(dossier.commission.departement)
+          : "N/A"}
       </Item>
-      {session.dbUser.role !== "ADMIN" && (
+      {session?.dbUser.role !== "ADMIN" && (
         <Item label="Commission">
-          {frenchDateText(dossier.commission.date)}
+          {dossier.commission ? frenchDateText(dossier.commission.date) : "N/A"}
         </Item>
       )}
-      {session.dbUser.role === "ADMIN" && (
+      {session?.dbUser.role === "ADMIN" && (
         <Item label="Commission">
-          <AssignCommissionSelect dossierId={dossierId} commission={dossier.commission} />
+          <AssignCommissionSelect
+            dossierId={dossierId}
+            commission={dossier.commission}
+          />
         </Item>
       )}
       <Item label="Suivi par">
-        <AssignedAgentSelect dossierId={dossierId} />
+        <AssignedAgentSelect dossier={dossier} />
       </Item>
       <Item label="Commentaires">
         <Link href={`/dossiers/commentaires/${dossier.id}`}>

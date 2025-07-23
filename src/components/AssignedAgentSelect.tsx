@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { User, Dossier } from "@prisma/client";
 import { Icon, Select } from "@dataesr/react-dsfr";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -11,23 +11,43 @@ import { useSWRConfig } from "swr";
 import styles from "./AssignedAgentSelect.module.scss";
 
 interface Props {
-  dossierId: number;
+  dossier?: Dossier & {
+    instructeur?: User | null;
+    medecin?: User | null;
+  };
+  dossierId?: number;
 }
 
-const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
+const AssignedAgentSelect: React.FC<Props> = ({
+  dossier: propDossier,
+  dossierId,
+}) => {
+  // Si on a un dossierId, on utilise useDossier pour la réactivité (page /dossiers)
+  // Sinon on utilise les props (page /dossiers/[id])
+  const {
+    dossier: swrDossier,
+    isLoading: swrLoading,
+    isError: swrError,
+  } = useDossier(dossierId || null);
+  const dossier = propDossier || swrDossier;
   const { mutate } = useSWRConfig();
   const session = useSession();
   const role = session.data?.dbUser?.role;
-  const { dossier, ...swrDossier } = useDossier(dossierId);
-  const { allUsers, ...swrUsers } = useAllUsers(role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
+  const { allUsers, ...swrUsers } = useAllUsers(
+    role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN"
+  );
 
-  if (swrDossier.isLoading || swrUsers.isLoading) return <IconLoader />;
-  if (swrDossier.isError || swrUsers.isError || !allUsers || !dossier)
+  if (swrUsers.isLoading) return <IconLoader />;
+  if (swrUsers.isError || !allUsers || !dossier)
     return <Icon name="ri-error" />;
 
   return (
     <Select
-      selected={dossier[role !== "MEDECIN" ? 'instructeurId' : 'medecinId'] ? String(dossier[role !== "MEDECIN" ? 'instructeurId' : 'medecinId']) : ""}
+      selected={
+        dossier[role !== "MEDECIN" ? "instructeurId" : "medecinId"]
+          ? String(dossier[role !== "MEDECIN" ? "instructeurId" : "medecinId"])
+          : ""
+      }
       options={[{ label: "Choisir", value: "" }].concat(
         allUsers.map((u: User) => ({
           label: shortUserName(u),
@@ -38,11 +58,10 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
         const rawUserId = event.target.value;
         const instructeurId = rawUserId ? Number(rawUserId) : null;
         const medecinId = rawUserId ? Number(rawUserId) : null;
-        
-        const updatedFields = role !== "MEDECIN" 
-          ? { instructeurId } 
-          : { medecinId };
-          
+
+        const updatedFields =
+          role !== "MEDECIN" ? { instructeurId } : { medecinId };
+
         mutate(
           `/api/dossiers/${dossier.id}`,
           { ...dossier, ...updatedFields },
@@ -50,9 +69,17 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossierId }) => {
         ).catch((e) => {
           throw e;
         });
-        
+
         updateDossier(dossier, updatedFields, () => {
           mutate(`/api/dossiers/${dossier.id}`).catch((e) => {
+            throw e;
+          });
+
+          // Forcer la revalidation complète des commissions
+          mutate(
+            (key: any) =>
+              typeof key === "string" && key.startsWith("/api/commissions")
+          ).catch((e) => {
             throw e;
           });
         });
