@@ -16,10 +16,8 @@ import IconLoader from "src/components/IconLoader";
 import Layout from "src/components/Layout";
 import SearchBar from "src/components/SearchBar";
 import SearchResults from "src/components/SearchResults";
-import SearchDebug from "src/components/SearchDebug";
 import { ButtonLink } from "src/components/uiComponents/button";
 import { useCommissions } from "src/lib/api";
-import { getCommentsNotificationsByDossierIds } from "src/lib/fetching/comments";
 import {
   compact,
   filterCommissions,
@@ -36,11 +34,7 @@ import type {
   DossiersFilters,
   SearchResultsType,
 } from "src/lib/queries";
-import type {
-  CommentaireNotifications,
-  DossierData,
-  statusGroup,
-} from "src/lib/types";
+import type { DossierData, statusGroup } from "src/lib/types";
 import { parse as superJSONParse } from "superjson";
 import { useDebounce } from "use-debounce";
 
@@ -51,13 +45,9 @@ const Page: React.FC = () => {
   const session = useSession();
   if (
     session.status === "authenticated" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "ADMIN" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "INSTRUCTEUR" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "MEMBRE" &&
-    //@ts-expect-error
     session.data.dbUser.role !== "MEDECIN"
   ) {
     signOut({
@@ -89,7 +79,6 @@ const Page: React.FC = () => {
               session.data.dbUser.departements
         )
       : { commissions: [] };
-
 
   const { ...commissionsPast } =
     status === "past"
@@ -155,20 +144,20 @@ const Page: React.FC = () => {
   // Trigger search for word (server-side)
   useEffect(() => {
     if (!routerIsReady || searchValueEffective === undefined) return;
-    
+
     // Update URL query string
     updateQuerystring({ search: searchValueEffective });
-    
+
     // Handle empty search
     if (!searchValueEffective) {
       setSearchResults(null);
       setLoading(false);
       return;
     }
-    
+
     // Start loading
     setLoading(true);
-    
+
     // Fetch search results
     window
       .fetch(
@@ -176,10 +165,10 @@ const Page: React.FC = () => {
           search: searchValueEffective,
         })}`,
         {
-          credentials: 'include', // Include credentials for authentication
+          credentials: "include", // Include credentials for authentication
           headers: {
-            'Accept': 'application/json'
-          }
+            Accept: "application/json",
+          },
         }
       )
       .then(async (res) => {
@@ -219,28 +208,6 @@ const Page: React.FC = () => {
       updateQuerystring({ societeProductionId: undefined });
     }
   }, [filters, filterableSocietesProductions]);
-
-  const [commentsInfo, setCommentsInfo] = React.useState<
-    CommentaireNotifications[]
-  >([]);
-
-  const fetchComments = async () => {
-    if (commissions && commissions.length > 0) {
-      const dossiersIds = commissions
-        .flatMap((commission: CommissionData) => commission.dossiers)
-        .filter((dossier) => dossier.source === "FORM_EDS")
-        .map((dossier: DossierData) => dossier.externalId);
-
-      const res = await getCommentsNotificationsByDossierIds(
-        dossiersIds as string[]
-      );
-      setCommentsInfo(res);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchComments();
-  }, [commissions]);
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -550,27 +517,14 @@ const Page: React.FC = () => {
             )}
           </div>
           {status === "futur" &&
-            filteredCommissions?.map((commission: CommissionData) => {
-              const commissionDossierIds = commission.dossiers.map(
-                (dossier: Dossier) => dossier.externalId
-              );
-
-              const commentsCountInfo = commentsInfo.filter((commentInfo) =>
-                commissionDossierIds.includes(
-                  JSON.stringify(commentInfo.dossierId)
-                )
-              );
-              return (
-                <div
-                  key={commission.date.toString()}
-                  className={styles.commissionBloc}
-                >
-                  <CommissionBloc
-                    commission={commission}
-                  />
-                </div>
-              );
-            })}
+            filteredCommissions?.map((commission: CommissionData) => (
+              <div
+                key={commission.date.toString()}
+                className={styles.commissionBloc}
+              >
+                <CommissionBloc commission={commission} />
+              </div>
+            ))}
           {status === "past" &&
             commissionsPast.commissions?.map((commission: CommissionData) => (
               <div
@@ -582,9 +536,12 @@ const Page: React.FC = () => {
             ))}
         </>
       )}
-      {!isLoading && !isError && searchValueEffective && filteredSearchResults && (
-        <SearchResults searchResults={filteredSearchResults} />
-      )}
+      {!isLoading &&
+        !isError &&
+        searchValueEffective &&
+        filteredSearchResults && (
+          <SearchResults searchResults={filteredSearchResults} />
+        )}
     </Layout>
   );
 };

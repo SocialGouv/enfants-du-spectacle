@@ -1,3 +1,45 @@
+## [1.107.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.3...v1.107.4) (2025-07-23)
+
+
+### Bug Fixes
+
+* optimize requests ([#785](https://github.com/SocialGouv/enfants-du-spectacle/issues/785)) ([0211ecb](https://github.com/SocialGouv/enfants-du-spectacle/commit/0211ecbc135bb53ba61805117d8978e8aeb00b3c))
+
+## [1.107.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.2...v1.107.3) (2025-07-22)
+
+
+### Bug Fixes
+
+* increase containers resources ([#781](https://github.com/SocialGouv/enfants-du-spectacle/issues/781)) ([35efdb7](https://github.com/SocialGouv/enfants-du-spectacle/commit/35efdb7f309a34b8730881251a241fc3378b57fe))
+
+## [1.107.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.1...v1.107.2) (2025-07-22)
+
+
+### Bug Fixes
+
+* remove pg form ([#771](https://github.com/SocialGouv/enfants-du-spectacle/issues/771)) ([2199299](https://github.com/SocialGouv/enfants-du-spectacle/commit/21992992116197cc6635f1a7ed6b3c582117bd70))
+
+## [1.107.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.0...v1.107.1) (2025-07-21)
+
+
+### Bug Fixes
+
+* fix form ([#779](https://github.com/SocialGouv/enfants-du-spectacle/issues/779)) ([8ef8aa3](https://github.com/SocialGouv/enfants-du-spectacle/commit/8ef8aa381dae6a29dc17e02e5eabcd4b1aa45575))
+
+# [1.107.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.17...v1.107.0) (2025-07-18)
+
+
+### Features
+
+* notifs mail ([#776](https://github.com/SocialGouv/enfants-du-spectacle/issues/776)) ([38061ef](https://github.com/SocialGouv/enfants-du-spectacle/commit/38061eff38ae6276bef1ea312d79dcac7ab51931))
+
+## [1.106.17](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.16...v1.106.17) (2025-07-18)
+
+
+### Bug Fixes
+
+* thalie pieces ([#775](https://github.com/SocialGouv/enfants-du-spectacle/issues/775)) ([47a4d5f](https://github.com/SocialGouv/enfants-du-spectacle/commit/47a4d5fbc0e3a9ff9faa5728b44a9aaf03b5741c))
+
 ## [1.106.16](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.106.15...v1.106.16) (2025-07-03)
 
 

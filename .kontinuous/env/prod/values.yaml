@@ -1,11 +1,11 @@
 app:
   resources:
     requests:
-      cpu: 300m
-      memory: 1Gi
+      cpu: 700m
+      memory: 3Gi
     limits:
       cpu: 1100m
-      memory: 2Gi
+      memory: 3Gi
   securityContext:
     fsGroup: 1000
   env:
@@ -40,8 +40,8 @@ app:
 form:
   resources:
     requests:
-      cpu: 200m
-      memory: 768Mi
+      cpu: 500m
+      memory: 1.5Gi
     limits:
       cpu: 700m
       memory: 1.5Gi
@@ -82,10 +82,11 @@ pg:
   cnpg-cluster:
     resources:
       requests:
-        memory: 1Gi
+        cpu: "1"
+        memory: 2Gi
       limits:
         cpu: "1"
-        memory: 1Gi
+        memory: 2Gi
     recovery:
       enabled: false
       ~tpl~database: "{{ .Values.global.pgDatabase }}"
@@ -106,30 +107,3 @@ pg:
   backup:
     name: "202403062019" # backup on a new folder
 
-pg-form:
-  cnpg-cluster:
-    resources:
-      requests:
-        memory: 1Gi
-      limits:
-        cpu: "1"
-        memory: 1Gi
-    recovery:
-      enabled: false
-      ~tpl~database: "{{ .Values.global.pgDatabase }}"
-      ~tpl~owner: "{{ .Values.global.pgUser }}"
-      secretName: "pg-db"
-      barmanObjectStore:
-        ~tpl~destinationPath: "s3://enfants-du-spectacle-prod-backups/enfants-du-spectacle"
-        s3Credentials:
-          accessKeyId:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_access_key
-          secretAccessKey:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_secret_key
-          region:
-            ~tpl~name: "enfants-du-spectacle-prod-backups-access-key"
-            key: bucket_region
-  backup:
-    name: "202407291146" # backup on a new folder

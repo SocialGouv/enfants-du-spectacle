@@ -6,7 +6,7 @@ import EmailAuthProvider from "next-auth/providers/email";
 import { sendVerificationRequest } from "src/lib/emailAuth";
 import prisma from "src/lib/prismaClient";
 
-export default NextAuth({
+const handler = NextAuth({
   adapter: customPrismaAdapter(prisma),
   callbacks: {
     // Use type assertion to work around the type mismatch
@@ -54,3 +54,11 @@ export default NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
 });
+
+export default handler;
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};

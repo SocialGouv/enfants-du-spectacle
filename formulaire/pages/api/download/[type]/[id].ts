@@ -84,10 +84,10 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   const isInlineView = view === "inline";
   
   // Vérifier l'authentification pour les pièces cryptées
-  // const session = await getServerSession(req, res, authOptions);
-  // if (!session) {
-  //   return res.status(401).json({ error: "Non authentifié" });
-  // }
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
 
   // Récupérer la pièce depuis la base de données (dossier ou enfant)
   let piece = await prisma.pieceDossier.findUnique({
@@ -112,6 +112,19 @@ async function handlePieceCryptee(req: any, res: any, id: string) {
   const dossier = piece ? piece.dossier : pieceEnfant?.enfant?.dossier;
   if (!dossier) {
     return res.status(404).json({ error: "Dossier non trouvé" });
+  }
+
+  // Vérifier les permissions : l'utilisateur doit être le créateur ou collaborateur
+  const userId = session.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Utilisateur non identifié" });
+  }
+  
+  const hasAccess = dossier.creatorId === userId || 
+                   (dossier.collaboratorIds && dossier.collaboratorIds.includes(userId));
+  
+  if (!hasAccess) {
+    return res.status(403).json({ error: "Accès non autorisé à ce document" });
   }
 
   if (!documentPiece?.link) {

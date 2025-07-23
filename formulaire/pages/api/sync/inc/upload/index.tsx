@@ -12,6 +12,26 @@ export const config = {
 };
 
 const handler: NextApiHandler = async (req, res) => {
+  // Gérer les CORS
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://enfants-du-spectacle.fabrique.social.gouv.fr",
+    "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr"
+  ];
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method == "POST") {
     await sendDoc(req, res);
   } else {
@@ -32,14 +52,18 @@ const sendDoc: NextApiHandler = async (req, res) => {
   } catch (error) {
     await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
   }
-  const upload = await uploadFile(req, true);
+  const upload = await uploadFile(req);
+
+  // Extraire le nom du fichier original
+  const file = Array.isArray(upload.files.justificatif) ? upload.files.justificatif[0] : upload.files.justificatif;
+  const originalFilename = file?.originalFilename || "document";
 
   const data = {
-    nom: upload.files.justificatif.originalFilename,
+    nom: originalFilename,
     enfantId: parseInt(req.query.enfantId as string),
     type: req.query.typeJustif as JustificatifEnfant,
     externalId: "",
-    link: upload.files.justificatif.filepath + ".encrypted",
+    link: upload.s3Key,
     statut: null,
   };
 
@@ -47,7 +71,7 @@ const sendDoc: NextApiHandler = async (req, res) => {
   //@ts-ignore
   res
     .status(200)
-    .json({ filePath: upload.files.justificatif.filepath + ".encrypted" });
+    .json({ filePath: upload.s3Key, pieceId: pieceEnfant.id });
 };
 
 export default withSentry(handler);
