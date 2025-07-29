@@ -6,7 +6,7 @@
 */
 -- AlterEnum
 BEGIN;
-CREATE TYPE "AccessType_new" AS ENUM ('DOSSIER_LIST', 'DOSSIER_VIEW', 'PIECE_DOSSIER_DOWNLOAD', 'PIECE_ENFANT_DOWNLOAD');
+CREATE TYPE "AccessType_new" AS ENUM ('DOSSIER_LIST', 'DOSSIER_VIEW', 'PIECE_DOSSIER_DOWNLOAD', 'PIECE_ENFANT_DOWNLOAD', 'COMMISSION_LIST');
 ALTER TABLE "UserLogs" ALTER COLUMN "accessType" TYPE "AccessType_new" USING ("accessType"::text::"AccessType_new");
 ALTER TYPE "AccessType" RENAME TO "AccessType_old";
 ALTER TYPE "AccessType_new" RENAME TO "AccessType";

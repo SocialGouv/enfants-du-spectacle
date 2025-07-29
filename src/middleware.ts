@@ -8,7 +8,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Headers JSON communs
 const jsonHeaders = {
   'Content-Type': 'application/json'
 };
@@ -24,12 +23,13 @@ async function logUserAccess(request: NextRequest): Promise<void> {
     if (!userInfo) return;
     
     const { pathname, search } = request.nextUrl;
-    const { accessType, resourceId } = determineAccessType(pathname);
+    const queryString = search ? search.substring(1) : '';
+    const { accessType, resourceId } = determineAccessType(pathname, queryString);
     if (!accessType) return;
     
     const userAgent = request.headers.get('user-agent') || undefined;
     const ipAddress = getClientIP(request);
-    const query = search ? search.substring(1) : undefined;
+    const query = queryString;
     
     const logData = {
       userId: userInfo.userId,
@@ -51,18 +51,40 @@ async function logUserAccess(request: NextRequest): Promise<void> {
   }
 }
 
-function determineAccessType(pathname: string): { accessType: string | null, resourceId: number | null } {
+function determineAccessType(pathname: string, queryString: string): { accessType: string | null, resourceId: number | null } {
+  // Helper function pour parser les paramètres de query
+  const getQueryParam = (queryString: string, paramName: string): string | null => {
+    if (!queryString) return null;
+    const params = queryString.split('&');
+    for (const param of params) {
+      const [key, value] = param.split('=');
+      if (key === paramName) {
+        return decodeURIComponent(value || '');
+      }
+    }
+    return null;
+  };
+
   const routeMatchers = [
-    { pattern: /^\/api\/commissions$/, accessType: 'DOSSIER_LIST' },
+    { 
+      pattern: /^\/api\/commissions$/, 
+      accessType: (pathname: string, queryString: string) => {
+        const withChild = getQueryParam(queryString, 'withChild');
+        return withChild === 'false' ? 'COMMISSION_LIST' : 'DOSSIER_LIST';
+      }
+    },
     { pattern: /^\/api\/dossiers\/(\d+)/, accessType: 'DOSSIER_VIEW' },
     { pattern: /^\/api\/download\/pieces-dossier\/(\d+)/, accessType: 'PIECE_DOSSIER_DOWNLOAD' },
     { pattern: /^\/api\/download\/pieces-enfant\/(\d+)/, accessType: 'PIECE_ENFANT_DOWNLOAD' }
   ];
 
-  for (const { pattern, accessType } of routeMatchers) {
-    const match = pathname.match(pattern);
+  for (const matcher of routeMatchers) {
+    const match = pathname.match(matcher.pattern);
     if (match) {
       const resourceId = match[1] ? parseInt(match[1], 10) : null;
+      const accessType = typeof matcher.accessType === 'function' 
+        ? matcher.accessType(pathname, queryString)
+        : matcher.accessType;
       return { accessType, resourceId };
     }
   }
@@ -111,7 +133,7 @@ async function saveUserLog(logData: any): Promise<void> {
       throw new Error(`API Error: ${response.status} - ${errorData.error}`);
     }
 
-    await response.json(); // Pour ne pas laisser un warning de promesse non awaitée
+    await response.json();
 
   } catch (error) {
     console.error('[MIDDLEWARE] saveUserLog - erreur lors de l\'insertion:', error);

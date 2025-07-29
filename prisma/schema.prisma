@@ -541,8 +541,9 @@ enum CategorieDocument {
 }
 
 enum AccessType {
-  DOSSIER_LIST // Accès aux listes de dossiers (commissions)
-  DOSSIER_VIEW // Accès à un dossier spécifique
-  PIECE_DOSSIER_DOWNLOAD // Téléchargement de pièce de dossier
-  PIECE_ENFANT_DOWNLOAD // Téléchargement de pièce d'enfant
+  DOSSIER_LIST
+  DOSSIER_VIEW
+  PIECE_DOSSIER_DOWNLOAD
+  PIECE_ENFANT_DOWNLOAD
+  COMMISSION_LIST
 }
