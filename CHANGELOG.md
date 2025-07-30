@@ -1,3 +1,10 @@
+## [1.107.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.10...v1.107.11) (2025-07-30)
+
+
+### Bug Fixes
+
+* Trigger Build ([#793](https://github.com/SocialGouv/enfants-du-spectacle/issues/793)) ([250eeea](https://github.com/SocialGouv/enfants-du-spectacle/commit/250eeea3696790572f2631c8cda82541c3f4ab29))
+
 ## [1.107.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.9...v1.107.10) (2025-07-30)
 
 
