@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  logUserAccess(request).catch(error => {
+  try {
+    await logUserAccess(request);
+  } catch (error) {
     console.error('[MIDDLEWARE] Erreur lors du logging:', error);
-  });
+  }
 
   return NextResponse.next();
 }
@@ -98,11 +100,18 @@ async function determineAccessType(pathname: string, queryString: string, method
         
         if (method === 'PUT') {
           const body = await getRequestBody(request);
-          const modifications = body?.statut ? { statut: body.statut } : undefined;
+          // Capturer toutes les modifications du dossier
+          const modifications = body ? Object.keys(body).reduce((acc: any, key: string) => {
+            if (body[key] !== undefined && body[key] !== null) {
+              acc[key] = body[key];
+            }
+            return acc;
+          }, {}) : undefined;
+          
           return {
             accessType: 'DOSSIER_UPDATE',
             resourceId,
-            modifications
+            modifications: modifications && Object.keys(modifications).length > 0 ? modifications : undefined
           };
         }
         
@@ -207,12 +216,22 @@ async function getUserFromSession(sessionToken: string): Promise<{ userId: numbe
 
 function getClientIP(request: NextRequest): string | undefined {
   const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) return forwarded.split(',')[0].trim();
-  
-  const realIP = request.headers.get('x-real-ip');
-  if (realIP) return realIP;
-  
-  return request.ip || undefined;
+  const ip = forwarded?.split(',')[0].trim()
+    || request.headers.get('x-real-ip')
+    || request.ip
+    || undefined;
+
+  return anonymizeIP(ip);
+}
+
+function anonymizeIP(ip?: string): string | undefined {
+  if (!ip) return undefined;
+  const parts = ip.split('.');
+  if (parts.length === 4) {
+    parts[3] = '0'; // masque le dernier octet
+    return parts.join('.');
+  }
+  return ip; // ne modifie pas IPv6 ou format inconnu
 }
 
 async function saveUserLog(logData: any): Promise<void> {

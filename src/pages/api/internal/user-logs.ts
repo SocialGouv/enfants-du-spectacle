@@ -31,6 +31,7 @@ const handler: NextApiHandler = async (req, res) => {
         ipAddress: logData.ipAddress || null,
         accessType: logData.accessType,
         resourceId: logData.resourceId || null,
+        modifications: logData.modifications || null,
       }
     });
 
