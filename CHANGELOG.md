@@ -1,3 +1,10 @@
+## [1.107.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.7...v1.107.8) (2025-07-30)
+
+
+### Bug Fixes
+
+* fix upload docs médecins ([#791](https://github.com/SocialGouv/enfants-du-spectacle/issues/791)) ([773a416](https://github.com/SocialGouv/enfants-du-spectacle/commit/773a41647ce0bb06a88772cf082bab04f67dad93))
+
 ## [1.107.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.6...v1.107.7) (2025-07-30)
 
 
