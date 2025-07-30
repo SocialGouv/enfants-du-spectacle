@@ -22,7 +22,7 @@ const AssignedAgentSelect: React.FC<Props> = ({ dossier }) => {
   const session = useSession();
   const role = session.data?.dbUser?.role;
   const { allUsers, ...swrUsers } = useAllUsers(
-    role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN"
+    role !== "MEDECIN" ? "INSTRUCTEUR,ADMIN" : "MEDECIN"
   );
 
   if (swrUsers.isLoading) return <IconLoader />;

@@ -76,15 +76,28 @@ const update: NextApiHandler = async (req, res) => {
 
 const get: NextApiHandler = async (req, res) => {
   const role: string = req.query.role as string;
-  const allUsers =
-    role == "all"
-      ? await client.user.findMany({
-          orderBy: { name: "asc" },
-        })
-      : await client.user.findMany({
-          orderBy: { name: "asc" },
-          where: { role: role.toUpperCase() as Role },
-        });
+  
+  let allUsers;
+  
+  if (role === "all") {
+    allUsers = await client.user.findMany({
+      orderBy: { name: "asc" },
+    });
+  } else if (role.includes(",")) {
+    // Gérer plusieurs rôles séparés par des virgules
+    const roles = role.split(",").map(r => r.trim().toUpperCase() as Role);
+    allUsers = await client.user.findMany({
+      orderBy: { name: "asc" },
+      where: { role: { in: roles } },
+    });
+  } else {
+    // Un seul rôle
+    allUsers = await client.user.findMany({
+      orderBy: { name: "asc" },
+      where: { role: role.toUpperCase() as Role },
+    });
+  }
+  
   res.status(200).json(allUsers);
 };
 
