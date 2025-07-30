@@ -515,6 +515,7 @@ model UserLogs {
   method    String // GET, POST, PUT, DELETE, etc.
   path      String // URL path
   query     String? // Query parameters (JSON string)
+  modifications String?
   userAgent String?
   ipAddress String?
   timestamp DateTime @default(now())
@@ -546,4 +547,8 @@ enum AccessType {
   PIECE_DOSSIER_DOWNLOAD
   PIECE_ENFANT_DOWNLOAD
   COMMISSION_LIST
+  DOSSIER_UPDATE
+  ENFANT_UPDATE
+  PIECE_DOSSIER_UPDATE
+  PIECE_ENFANT_UPDATE
 }

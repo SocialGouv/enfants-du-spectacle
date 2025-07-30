@@ -24,7 +24,7 @@ async function logUserAccess(request: NextRequest): Promise<void> {
     
     const { pathname, search } = request.nextUrl;
     const queryString = search ? search.substring(1) : '';
-    const { accessType, resourceId } = determineAccessType(pathname, queryString);
+    const { accessType, resourceId, modifications } = await determineAccessType(pathname, queryString, request.method, request);
     if (!accessType) return;
     
     const userAgent = request.headers.get('user-agent') || undefined;
@@ -41,7 +41,8 @@ async function logUserAccess(request: NextRequest): Promise<void> {
       userAgent,
       ipAddress,
       accessType,
-      resourceId
+      resourceId,
+      modifications: modifications ? JSON.stringify(modifications) : undefined
     };
     
     await saveUserLog(logData);
@@ -51,7 +52,7 @@ async function logUserAccess(request: NextRequest): Promise<void> {
   }
 }
 
-function determineAccessType(pathname: string, queryString: string): { accessType: string | null, resourceId: number | null } {
+async function determineAccessType(pathname: string, queryString: string, method: string, request: NextRequest): Promise<{ accessType: string | null, resourceId: number | null, modifications?: any }> {
   // Helper function pour parser les paramètres de query
   const getQueryParam = (queryString: string, paramName: string): string | null => {
     if (!queryString) return null;
@@ -65,27 +66,121 @@ function determineAccessType(pathname: string, queryString: string): { accessTyp
     return null;
   };
 
+  // Helper function pour parser le body pour les routes pièces
+  const getRequestBody = async (request: NextRequest): Promise<any> => {
+    try {
+      // Clone la requête pour ne pas consommer le body original
+      const clonedRequest = request.clone();
+      const body = await clonedRequest.text();
+      return body ? JSON.parse(body) : null;
+    } catch (error) {
+      console.error('[MIDDLEWARE] Erreur parsing body:', error);
+      return null;
+    }
+  };
+
   const routeMatchers = [
     { 
       pattern: /^\/api\/commissions$/, 
-      accessType: (pathname: string, queryString: string) => {
+      handler: (pathname: string, queryString: string, method: string) => {
         const withChild = getQueryParam(queryString, 'withChild');
-        return withChild === 'false' ? 'COMMISSION_LIST' : 'DOSSIER_LIST';
+        return {
+          accessType: withChild === 'false' ? 'COMMISSION_LIST' : 'DOSSIER_LIST',
+          resourceId: null,
+          modifications: undefined
+        };
       }
     },
-    { pattern: /^\/api\/dossiers\/(\d+)/, accessType: 'DOSSIER_VIEW' },
-    { pattern: /^\/api\/download\/pieces-dossier\/(\d+)/, accessType: 'PIECE_DOSSIER_DOWNLOAD' },
-    { pattern: /^\/api\/download\/pieces-enfant\/(\d+)/, accessType: 'PIECE_ENFANT_DOWNLOAD' }
+    { 
+      pattern: /^\/api\/dossiers\/(\d+)/, 
+      handler: async (pathname: string, queryString: string, method: string, request: NextRequest, match: RegExpMatchArray) => {
+        const resourceId = match[1] ? parseInt(match[1], 10) : null;
+        
+        if (method === 'PUT') {
+          const body = await getRequestBody(request);
+          const modifications = body?.statut ? { statut: body.statut } : undefined;
+          return {
+            accessType: 'DOSSIER_UPDATE',
+            resourceId,
+            modifications
+          };
+        }
+        
+        return {
+          accessType: 'DOSSIER_VIEW',
+          resourceId,
+          modifications: undefined
+        };
+      }
+    },
+    { 
+      pattern: /^\/api\/enfant\/(\d+)/, 
+      handler: async (pathname: string, queryString: string, method: string, request: NextRequest, match: RegExpMatchArray) => {
+        if (method !== 'PUT') return { accessType: null, resourceId: null };
+        
+        const resourceId = match[1] ? parseInt(match[1], 10) : null;
+        const body = await getRequestBody(request);
+        const modifications = body?.cdc !== undefined ? { cdc: body.cdc } : undefined;
+        
+        return {
+          accessType: 'ENFANT_UPDATE',
+          resourceId,
+          modifications
+        };
+      }
+    },
+    { 
+      pattern: /^\/api\/sync\/out\/pieces$/, 
+      handler: async (pathname: string, queryString: string, method: string, request: NextRequest) => {
+        if (method !== 'PUT') return { accessType: null, resourceId: null };
+        
+        const body = await getRequestBody(request);
+        if (!body || !body.type) return { accessType: null, resourceId: null };
+        
+        const resourceId = body.id ? parseInt(body.id, 10) : null;
+        const modifications = body.statut ? { statut: body.statut } : undefined;
+        const accessType = body.type === 'Enfant' ? 'PIECE_ENFANT_UPDATE' : 'PIECE_DOSSIER_UPDATE';
+        
+        return {
+          accessType,
+          resourceId,
+          modifications
+        };
+      }
+    },
+    { 
+      pattern: /^\/api\/download\/pieces-dossier\/(\d+)/, 
+      handler: (pathname: string, queryString: string, method: string, request: NextRequest, match: RegExpMatchArray) => {
+        const resourceId = match[1] ? parseInt(match[1], 10) : null;
+        return {
+          accessType: 'PIECE_DOSSIER_DOWNLOAD',
+          resourceId,
+          modifications: undefined
+        };
+      }
+    },
+    { 
+      pattern: /^\/api\/download\/pieces-enfant\/(\d+)/, 
+      handler: (pathname: string, queryString: string, method: string, request: NextRequest, match: RegExpMatchArray) => {
+        const resourceId = match[1] ? parseInt(match[1], 10) : null;
+        return {
+          accessType: 'PIECE_ENFANT_DOWNLOAD',
+          resourceId,
+          modifications: undefined
+        };
+      }
+    }
   ];
 
   for (const matcher of routeMatchers) {
     const match = pathname.match(matcher.pattern);
     if (match) {
-      const resourceId = match[1] ? parseInt(match[1], 10) : null;
-      const accessType = typeof matcher.accessType === 'function' 
-        ? matcher.accessType(pathname, queryString)
-        : matcher.accessType;
-      return { accessType, resourceId };
+      const result = matcher.handler(pathname, queryString, method, request, match);
+      const resolvedResult = result instanceof Promise ? await result : result;
+      
+      if (resolvedResult.accessType) {
+        return resolvedResult;
+      }
     }
   }
 
@@ -145,6 +240,8 @@ export const config = {
   matcher: [
     '/api/commissions',
     '/api/dossiers/:path*',
+    '/api/enfant/:path*',
+    '/api/sync/out/pieces',
     '/api/download/pieces-dossier/:path*',
     '/api/download/pieces-enfant/:path*'
   ],

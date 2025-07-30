@@ -10,6 +10,7 @@ CREATE TABLE "UserLogs" (
     "method" TEXT NOT NULL,
     "path" TEXT NOT NULL,
     "query" TEXT,
+    "modifications" TEXT,
     "userAgent" TEXT,
     "ipAddress" TEXT,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
