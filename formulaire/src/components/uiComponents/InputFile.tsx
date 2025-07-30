@@ -103,13 +103,22 @@ const InputFile: React.FC<Props> = ({
 
                     {docsTokenized && (
                       <a
-                        href={`/api/download/${
-                          Object.values(JustificatifEnfant).includes(
-                            id as JustificatifEnfant
-                          )
-                            ? "pieces-enfant"
-                            : "pieces-dossier"
-                        }/${doc.id}?view=inline`}
+                        href={`/api/download/${(() => {
+                          try {
+                            return JustificatifEnfant &&
+                              Object.values(JustificatifEnfant).includes(
+                                id as JustificatifEnfant
+                              )
+                              ? "pieces-enfant"
+                              : "pieces-dossier";
+                          } catch (error) {
+                            console.error(
+                              "Error checking JustificatifEnfant:",
+                              error
+                            );
+                            return "pieces-dossier";
+                          }
+                        })()}/${doc.id}?view=inline`}
                         target="_blank"
                         rel="noreferrer"
                         key={`piece_justificative_${id}_${index}`}
