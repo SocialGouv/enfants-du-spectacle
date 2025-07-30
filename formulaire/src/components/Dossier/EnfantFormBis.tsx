@@ -479,7 +479,7 @@ const EnfantFormBis: React.FC<Props> = ({
         statut: null,
         dossierId: contextDossier.dossier.id,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
       setEnfant({
         ...enfantTmp,
@@ -1090,7 +1090,7 @@ const EnfantFormBis: React.FC<Props> = ({
               </div>
             )}
             {[
-              { label: "Avis médical", value: "AVIS_MEDICAL" },
+              { label: "Avis médical", value: "AVIS_MEDICAL_THALIE" },
               { label: "Bon de prise en charge", value: "BON_PRISE_EN_CHARGE" },
               {
                 label: "Autorisation de prise en charge",
