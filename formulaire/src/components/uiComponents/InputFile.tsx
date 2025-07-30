@@ -9,6 +9,23 @@ import React from "react";
 import CountPieces from "../CountPieces";
 import styles from "./InputFile.module.scss";
 
+// Liste des justificatifs enfants pour déterminer le type de document
+const JUSTIFICATIFS_ENFANTS_VALUES: JustificatifEnfant[] = [
+  "LIVRET_FAMILLE",
+  "AUTORISATION_PARENTALE",
+  "SITUATION_PARTICULIERE",
+  "CONTRAT",
+  "CERTIFICAT_SCOLARITE",
+  "AVIS_PEDAGOGIQUE_1ER_DEGRE",
+  "AVIS_PEDAGOGIQUE_2ND_DEGRE",
+  "AVIS_DASEN",
+  "AVIS_MEDICAL",
+  "DECLARATION_HONNEUR",
+  "AVIS_MEDICAL_THALIE",
+  "BON_PRISE_EN_CHARGE",
+  "AUTORISATION_PRISE_EN_CHARGE",
+];
+
 type Doc = {
   id: number;
   nom: string | null;
@@ -103,22 +120,13 @@ const InputFile: React.FC<Props> = ({
 
                     {docsTokenized && (
                       <a
-                        href={`/api/download/${(() => {
-                          try {
-                            return JustificatifEnfant &&
-                              Object.values(JustificatifEnfant).includes(
-                                id as JustificatifEnfant
-                              )
-                              ? "pieces-enfant"
-                              : "pieces-dossier";
-                          } catch (error) {
-                            console.error(
-                              "Error checking JustificatifEnfant:",
-                              error
-                            );
-                            return "pieces-dossier";
-                          }
-                        })()}/${doc.id}?view=inline`}
+                        href={`/api/download/${
+                          JUSTIFICATIFS_ENFANTS_VALUES.includes(
+                            id as JustificatifEnfant
+                          )
+                            ? "pieces-enfant"
+                            : "pieces-dossier"
+                        }/${doc.id}?view=inline`}
                         target="_blank"
                         rel="noreferrer"
                         key={`piece_justificative_${id}_${index}`}
