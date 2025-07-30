@@ -1,3 +1,10 @@
+## [1.107.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.9...v1.107.10) (2025-07-30)
+
+
+### Bug Fixes
+
+* display admin user in assignAgent ([224060e](https://github.com/SocialGouv/enfants-du-spectacle/commit/224060ed129c8ccd5ec7848f216a01c64cb1da34))
+
 ## [1.107.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.8...v1.107.9) (2025-07-30)
 
 
