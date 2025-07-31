@@ -61,6 +61,8 @@ const sendDoc: NextApiHandler = async (req, res) => {
     externalId: "",
     link: upload.s3Key,
     statut: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const pieceEnfant = await prisma.pieceDossierEnfant.create({ data });
