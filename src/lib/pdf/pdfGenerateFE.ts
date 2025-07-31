@@ -11,6 +11,7 @@ import {
 import {
   birthDateToFrenchAge,
   frenchDateText,
+  frenchDepartementName,
   getRemsByDossier,
   REMUNERATIONS,
   STATUS_ODJ,
@@ -182,6 +183,22 @@ const generateFE = async (dossiers: DossierData[], enfantId?: number) => {
           content: "FICHE EMPLOI",
           styles: {
             fontSize: 15,
+            halign: "center",
+          },
+        },
+      ],
+    ],
+    margin: { top: 70 },
+    theme: "plain",
+  });
+
+  autoTable(doc, {
+    body: [
+      [
+        {
+          content: `Commission du ${frenchDateText(dossiers[0].commission.date)} pour ${frenchDepartementName(dossiers[0].commission.departement)}`,
+          styles: {
+            fontSize: 14,
             halign: "center",
           },
         },

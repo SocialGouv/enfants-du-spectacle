@@ -32,7 +32,9 @@ const FilterBar: React.FC<Props> = ({
   onChangeFilters,
 }) => {
   const session = useSession();
-  const { allUsers, isLoading, isError } = useAllUsers(session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR" : "MEDECIN");
+  const { allUsers, isLoading, isError } = useAllUsers(
+    session.data?.dbUser.role !== "MEDECIN" ? "INSTRUCTEUR,ADMIN" : "MEDECIN"
+  );
 
   React.useEffect(() => {
     if (session.data?.dbUser.role === "INSTRUCTEUR")
@@ -47,7 +49,9 @@ const FilterBar: React.FC<Props> = ({
   const onChangeInstructeurId: React.ChangeEventHandler<HTMLOptionElement> = (
     event
   ) => {
-    onChangeFilters({ instructeurId: stringToNumberOrNull(event.target.value) });
+    onChangeFilters({
+      instructeurId: stringToNumberOrNull(event.target.value),
+    });
   };
 
   const onChangeSocieteProductionId: React.ChangeEventHandler<
@@ -101,7 +105,7 @@ const FilterBar: React.FC<Props> = ({
             onChange={onChangeDepartement}
           />
         </span>
-        {session.data?.dbUser.role !== "MEDECIN" &&
+        {session.data?.dbUser.role !== "MEDECIN" && (
           <span className={styles.filterContainer || ""}>
             <Select
               id="instructeurId"
@@ -115,7 +119,7 @@ const FilterBar: React.FC<Props> = ({
               onChange={onChangeInstructeurId}
             />
           </span>
-        }
+        )}
         <span className={styles.filterContainer}>
           <Select
             id="societeId"
