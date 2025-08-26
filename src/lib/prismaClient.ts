@@ -9,7 +9,7 @@ const client =
   new PrismaClient({
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: process.env.DATABASE_URL || "postgresql://dummy:dummy@dummy:5432/dummy",
       },
     },
     log: ["info", "warn", "error"],
