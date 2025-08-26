@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { EnfantData } from "src/fetching/dossiers";
 import styles from "./DossierForm.module.scss";
 import InputAutocomplete from "../uiComponents/InputAutocomplete";
@@ -179,6 +179,9 @@ const EnfantFormBis: React.FC<Props> = ({
   const contextDossier = { ...useStateContext() };
 
   const [senderComment, setSenderComment] = React.useState<string>("");
+  
+  // Créer un objet Map pour stocker les références des inputs file par ID
+  const fileInputRefs = useRef<Map<string, HTMLInputElement | null>>(new Map());
 
   const fetchUser = async () => {
     if (session) {
@@ -467,40 +470,49 @@ const EnfantFormBis: React.FC<Props> = ({
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const data = new FormData();
-      data.append(e.target.name, e.target.files[0]);
-      let upload = await uploadDoc(data, enfantTmp.dossierId);
-      let res = await createPieceEnfant({
-        nom: e.target.files[0].name,
-        enfantId: enfantTmp.id,
-        type: e.target.id as JustificatifEnfant,
-        externalId: "",
-        link: upload.filePath,
-        statut: null,
-        dossierId: contextDossier.dossier.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      setEnfant({
-        ...enfantTmp,
-        piecesDossier: enfantTmp.piecesDossier
-          ? [...enfantTmp.piecesDossier, res.pieceDossier]
-          : [res.pieceDossier],
-      });
-      contextDossier.processInput("docs", "enfants", [
-        {
-          id: enfantTmp.id,
-          piecesDossier: [
-            ...(contextDossier.docs.enfants.find(
-              (enf) => enf.id === enfantTmp.id
-            )?.piecesDossier ?? []),
-            res.tokenizedLink,
-          ],
-        },
-        ...contextDossier.docs.enfants.filter(
-          (docEnfant) => docEnfant.id !== enfantTmp.id
-        ),
-      ]);
+      try {
+        const data = new FormData();
+        data.append(e.target.name, e.target.files[0]);
+        let upload = await uploadDoc(data, enfantTmp.dossierId);
+        let res = await createPieceEnfant({
+          nom: e.target.files[0].name,
+          enfantId: enfantTmp.id,
+          type: e.target.id as JustificatifEnfant,
+          externalId: "",
+          link: upload.filePath,
+          statut: null,
+          dossierId: contextDossier.dossier.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        setEnfant({
+          ...enfantTmp,
+          piecesDossier: enfantTmp.piecesDossier
+            ? [...enfantTmp.piecesDossier, res.pieceDossier]
+            : [res.pieceDossier],
+        });
+        contextDossier.processInput("docs", "enfants", [
+          {
+            id: enfantTmp.id,
+            piecesDossier: [
+              ...(contextDossier.docs.enfants.find(
+                (enf) => enf.id === enfantTmp.id
+              )?.piecesDossier ?? []),
+              res.tokenizedLink,
+            ],
+          },
+          ...contextDossier.docs.enfants.filter(
+            (docEnfant) => docEnfant.id !== enfantTmp.id
+          ),
+        ]);
+        
+        // Reset l'input file après upload réussi
+        e.target.value = '';
+      } catch (error) {
+        console.error('Erreur lors de l\'upload:', error);
+        // Reset l'input file même en cas d'erreur
+        e.target.value = '';
+      }
     }
   };
 

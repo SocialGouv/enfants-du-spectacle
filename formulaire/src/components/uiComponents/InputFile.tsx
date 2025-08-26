@@ -45,6 +45,7 @@ interface Props {
   allowChanges: Boolean;
   handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete: (id: string) => void;
+  inputRef?: React.RefObject<HTMLInputElement>;
 }
 
 const InputFile: React.FC<Props> = ({

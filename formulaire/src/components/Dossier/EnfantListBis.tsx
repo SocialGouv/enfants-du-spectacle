@@ -18,7 +18,6 @@ import CountPieces from "../CountPieces";
 import { CommentaireNotifications } from "src/lib/types";
 import IconLoader from "../IconLoader";
 import Image from "next/image";
-import EnfantForm from "./EnfantForm";
 import EnfantFormBis from "./EnfantFormBis";
 import { RxCross2 } from "react-icons/rx";
 import { useRouter } from "next/router";
