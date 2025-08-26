@@ -114,6 +114,7 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+  decisonS3Link             String?
 
   @@index([commissionId], name: "idx_dossier_commissionId")
   @@index([societeProductionId], name: "idx_dossier_societeProductionId") 
