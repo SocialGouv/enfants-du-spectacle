@@ -48,6 +48,8 @@ const handler: NextApiHandler = async (req, res) => {
       return await handlePieceDossier(req, res, id as string);
     } else if (type === "pieces-enfant") {
       return await handlePieceEnfant(req, res, id as string);
+    } else if (type === "decision") {
+      return await handleDecision(req, res, id as string, isInlineView);
     } else {
       return res.status(400).json({ error: "Type de document non supporté" });
     }
@@ -172,6 +174,68 @@ async function handlePieceEnfant(req: any, res: any, id: string) {
   }
 
   return await downloadAndDecryptFile(req, res, pieceEnfant, isInlineView);
+}
+
+/**
+ * Gère le téléchargement des décisions (non cryptées)
+ */
+async function handleDecision(req: any, res: any, id: string, isInlineView: boolean) {
+  // Vérifier l'authentification
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  // Récupérer le dossier depuis la base de données
+  const dossier = await prisma.dossier.findUnique({
+    where: { id: parseInt(id) }
+  });
+
+  if (!dossier) {
+    return res.status(404).json({ error: "Dossier non trouvé" });
+  }
+
+  // Vérifier que le dossier est accepté et a un lien S3
+  // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+  if (dossier.statut !== "ACCEPTE" || !dossier.decisonS3Link) {
+    return res.status(404).json({ error: "Décision non disponible" });
+  }
+
+  // Vérifier les permissions : l'utilisateur doit être le créateur ou collaborateur
+  const userId = session.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Utilisateur non identifié" });
+  }
+  
+  const hasAccess = dossier.creatorId === userId || 
+                   (dossier.collaboratorIds && dossier.collaboratorIds.includes(userId));
+  
+  if (!hasAccess) {
+    return res.status(403).json({ error: "Accès non autorisé à ce document" });
+  }
+
+  try {
+    // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+    const fullUrl = dossier.decisonS3Link;
+    
+    // Extraire la clé S3 depuis l'URL complète
+    // Format: https://s3.gra.io.cloud.ovh.net/enfants-du-spectacle-dev-app/documents/decisions/...
+    // Clé attendue: documents/decisions/...
+    const bucketName = process.env.BUCKET_NAME || 'enfants-du-spectacle-dev-app';
+    const s3Key = fullUrl.substring(fullUrl.indexOf(`/${bucketName}/`) + bucketName.length + 2);
+    
+    console.log("URL complète:", fullUrl);
+    console.log("Clé S3 extraite:", s3Key);
+    
+    // Générer une URL signée pour accéder au fichier S3 (non crypté)
+    const signedUrl = await getSignedUrlForFile(s3Key, 3600); // 1 heure
+
+    // Rediriger vers l'URL signée
+    res.redirect(302, signedUrl);
+  } catch (error) {
+    console.error("Erreur lors de la génération de l'URL signée:", error);
+    return res.status(500).json({ error: "Erreur lors de l'accès au document" });
+  }
 }
 
 /**

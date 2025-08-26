@@ -27,6 +27,7 @@ import {
   TYPES_EMPLOI,
 } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import { generateAndUploadDA } from "src/lib/pdf/pdfGenerateAndUploadDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 import {
   deleteDossier,
@@ -482,13 +483,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         <div>
                           <button
                             className="postButton"
-                            onClick={() => {
-                              const attachment = generateDA([dossier], true);
+                            onClick={async () => {
+                              const result = await generateAndUploadDA([dossier], true);
                               sendEmail(
                                 "auth_access",
-                                attachment as string,
+                                result.pdfBase64 as string,
                                 dossier,
-                                dossier.demandeur.email
+                                dossier.demandeur.email || undefined
                               );
                             }}
                           >

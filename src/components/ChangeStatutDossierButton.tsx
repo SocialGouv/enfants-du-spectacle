@@ -2,7 +2,7 @@ import { Icon } from "@dataesr/react-dsfr";
 import type { Demandeur, Dossier } from "@prisma/client";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import { generateAndUploadDA } from "src/lib/pdf/pdfGenerateAndUploadDA";
 import type { DossierData } from "src/lib/queries";
 import { sendEmail, updateDossier } from "src/lib/queries";
 import {
@@ -69,15 +69,15 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                 });
               });
               if (transition.name === "passerAccepte") {
-                const attachment = await generateDA([dossier as DossierData], true);
+                const result = await generateAndUploadDA([dossier as DossierData], true);
                 sendEmail(
                   "auth_access",
-                  attachment as string,
+                  result.pdfBase64 as string,
                   dossier,
-                  demandeur.email
+                  demandeur.email || undefined
                 );
               } else {
-                sendEmail("status_changed", "", dossier, demandeur.email, transition.to);
+                sendEmail("status_changed", "", dossier, demandeur.email || undefined, transition.to);
               }
             }}
           >
