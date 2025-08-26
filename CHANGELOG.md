@@ -1,3 +1,10 @@
+## [1.108.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.0...v1.108.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* fix build ([#800](https://github.com/SocialGouv/enfants-du-spectacle/issues/800)) ([10ec12d](https://github.com/SocialGouv/enfants-du-spectacle/commit/10ec12d15c07c611f803f24f8064bdd543de22c1))
+
 # [1.108.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.13...v1.108.0) (2025-08-26)
 
 
