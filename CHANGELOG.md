@@ -1,3 +1,15 @@
+# [1.108.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.13...v1.108.0) (2025-08-26)
+
+
+### Bug Fixes
+
+* fix build ([#799](https://github.com/SocialGouv/enfants-du-spectacle/issues/799)) ([7c33e8d](https://github.com/SocialGouv/enfants-du-spectacle/commit/7c33e8db92bb9aa9a26e3d44092b9ca0e915472b))
+
+
+### Features
+
+* decision upload on S3 ([#798](https://github.com/SocialGouv/enfants-du-spectacle/issues/798)) ([b005e76](https://github.com/SocialGouv/enfants-du-spectacle/commit/b005e76fdbf26eff82629e6ec5f4de2bbf6a73ce))
+
 ## [1.107.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.12...v1.107.13) (2025-08-26)
 
 
