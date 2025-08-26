@@ -42,11 +42,11 @@ ENV NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=$NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID
 ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
+# Generate Prisma client before building
+RUN npx prisma generate
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
   npm run build
 RUN yarn workspaces focus --production && yarn cache clean
-# this should remove dev node module dependencies
-RUN npx prisma generate
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
