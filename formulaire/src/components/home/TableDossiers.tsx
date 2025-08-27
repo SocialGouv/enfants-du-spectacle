@@ -289,7 +289,7 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                         {dossier.statut === "ACCEPTE" && (dossier as any).decisonS3Link && (
                           <li
                             onClick={() => {
-                              window.open(`/api/download/decision/${dossier.id}`, '_blank');
+                              window.open(`/api/download/decision/${dossier.id}?view=inline`, '_blank');
                               setDropdownVisible(false);
                             }}
                           >
