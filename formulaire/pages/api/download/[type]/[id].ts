@@ -190,7 +190,7 @@ async function handleDecision(req: any, res: any, id: string, isInlineView: bool
   }
 
   // Récupérer le dossier depuis la base de données
-  const dossier = await prisma.dossier.findUnique({
+  let dossier = await prisma.dossier.findUnique({
     where: { id: parseInt(id) }
   });
 
@@ -198,10 +198,9 @@ async function handleDecision(req: any, res: any, id: string, isInlineView: bool
     return res.status(404).json({ error: "Dossier non trouvé" });
   }
 
-  // Vérifier que le dossier est accepté et a un lien S3
-  // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
-  if (dossier.statut !== "ACCEPTE" || !dossier.decisonS3Link) {
-    return res.status(404).json({ error: "Décision non disponible" });
+  // Vérifier que le dossier est accepté
+  if (dossier.statut !== "ACCEPTE") {
+    return res.status(404).json({ error: "Le dossier doit être accepté pour télécharger la décision" });
   }
 
   // Vérifier les permissions : l'utilisateur doit être le créateur ou collaborateur
@@ -217,9 +216,65 @@ async function handleDecision(req: any, res: any, id: string, isInlineView: bool
     return res.status(403).json({ error: "Accès non autorisé à ce document" });
   }
 
+  // Si le lien S3 n'existe pas, appeler l'application principale pour générer la décision
+  // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+  if (!dossier.decisonS3Link) {
+    try {
+      console.log(`Génération de la décision pour le dossier ${id}...`);
+      
+      const response = await fetch(`${process.env.URL_INSTRUCTEUR}/api/decision/generate-and-upload/${id}`, {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.API_KEY_INSTRUCTEUR!,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Erreur lors de la génération de la décision:", errorData);
+        return res.status(500).json({ 
+          error: "Erreur lors de la génération de la décision", 
+          details: errorData.error || "Erreur inconnue"
+        });
+      }
+
+      const result = await response.json();
+      if (!result.success) {
+        console.error("Échec de la génération de la décision:", result);
+        return res.status(500).json({ 
+          error: "Échec de la génération de la décision", 
+          details: result.error || "Erreur inconnue"
+        });
+      }
+
+      // Récupérer le dossier mis à jour avec le nouveau lien S3
+      dossier = await prisma.dossier.findUnique({
+        where: { id: parseInt(id) }
+      });
+
+      if (!dossier) {
+        return res.status(404).json({ error: "Dossier non trouvé après génération" });
+      }
+
+      console.log(`Décision générée avec succès pour le dossier ${id}`);
+
+    } catch (error) {
+      console.error("Erreur lors de l'appel à l'application principale:", error);
+      return res.status(500).json({ 
+        error: "Erreur lors de la génération de la décision",
+        details: error instanceof Error ? error.message : "Erreur de réseau"
+      });
+    }
+  }
+
   try {
     // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
     const fullUrl = dossier.decisonS3Link;
+    
+    if (!fullUrl) {
+      return res.status(500).json({ error: "Lien S3 manquant après génération" });
+    }
     
     // Extraire la clé S3 depuis l'URL complète
     // Format: https://s3.gra.io.cloud.ovh.net/enfants-du-spectacle-dev-app/documents/decisions/...
