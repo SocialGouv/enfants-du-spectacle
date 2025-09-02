@@ -80,39 +80,4 @@ pg:
 
 scheduler:
   ~chart: raw
-  manifests:
-    - apiVersion: batch/v1
-      kind: CronJob
-      metadata:
-        name: scheduler
-        labels:
-          app: scheduler
-      spec:
-        schedule: "*/5 * * * *"
-        concurrencyPolicy: Forbid
-        successfulJobsHistoryLimit: 3
-        failedJobsHistoryLimit: 3
-        jobTemplate:
-          spec:
-            backoffLimit: 1
-            template:
-              spec:
-                restartPolicy: Never
-                securityContext:
-                  fsGroup: 1000
-                  runAsUser: 1000
-                  runAsGroup: 1000
-                containers:
-                  - name: scheduler
-                    image: "{{ .Values.global.registry }}/{{ .Values.global.imageProject }}/{{ .Values.global.imageRepository }}/scheduler:{{ .Values.global.imageTag }}"
-                    command: ["/scheduler.sh"]
-                    env:
-                      - name: TARGET_URL
-                        value: "https://{{ $.Values.global.host }}/api/healthz"
-                    resources:
-                      requests:
-                        cpu: 10m
-                        memory: 32Mi
-                      limits:
-                        cpu: 50m
-                        memory: 64Mi
+  manifests: manifests.yaml
