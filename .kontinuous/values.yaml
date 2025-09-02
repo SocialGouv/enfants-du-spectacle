@@ -81,24 +81,12 @@ pg:
 scheduler:
   ~chart: app
   imagePackage: scheduler
-  annotations:
-    oblik.socialgouv.io/min-request-cpu: "10m"
-    oblik.socialgouv.io/min-request-memory: "32Mi"
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 50m
-      memory: 64Mi
-  env:
-    - name: TARGET_URL
-      value: "https://{{ $.Values.global.host }}/api/healthz"
+  enabled: false
   extraManifests:
     - apiVersion: batch/v1
       kind: CronJob
       metadata:
-        name: '{{ include "app.fullname" . }}-scheduler'
+        name: scheduler
         labels:
           app: scheduler
       spec:
