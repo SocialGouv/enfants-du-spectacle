@@ -227,32 +227,40 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
       // 6. Envoyer les notifications
       for (const email of validEmails) {
         try {
-          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/mail`, {
+          const mailPayload = {
+            type: 'new_comments_notification',
+            dossier: {
+              id: dossier.id,
+              nom: dossier.nom
+            },
+            to: email,
+            extraData: {
+              commentCount: commentCount
+            }
+          };
+
+          console.log(`[SCHEDULER] Attempting to send mail to ${email} with payload:`, JSON.stringify(mailPayload));
+          console.log(`[SCHEDULER] Using URL: ${process.env.NEXTAUTH_URL}/api/mail/scheduler`);
+
+          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/mail/scheduler`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              type: 'new_comments_notification',
-              dossier: {
-                id: dossier.id,
-                nom: dossier.nom
-              },
-              to: email,
-              extraData: {
-                commentCount: commentCount
-              }
-            })
+            body: JSON.stringify(mailPayload)
           });
+
+          const responseText = await response.text();
+          console.log(`[SCHEDULER] Mail API response status: ${response.status}, body: ${responseText}`);
 
           if (response.ok) {
             totalNotifications++;
-            console.log(`[SCHEDULER] Notification sent to ${email} for dossier ${dossier.nom} (${commentCount} comments)`);
+            console.log(`[SCHEDULER] ✅ Notification sent successfully to ${email} for dossier ${dossier.nom} (${commentCount} comments)`);
           } else {
-            console.error(`[SCHEDULER] Failed to send notification to ${email} for dossier ${dossierId}: ${response.status}`);
+            console.error(`[SCHEDULER] ❌ Failed to send notification to ${email} for dossier ${dossierId}: ${response.status} - ${responseText}`);
           }
         } catch (emailError) {
-          console.error(`[SCHEDULER] Error sending email to ${email}:`, emailError);
+          console.error(`[SCHEDULER] ❌ Error sending email to ${email}:`, emailError);
         }
       }
 
