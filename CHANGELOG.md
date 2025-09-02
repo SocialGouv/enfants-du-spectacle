@@ -1,3 +1,10 @@
+## [1.111.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.0...v1.111.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* modify frequency scheduler ([#813](https://github.com/SocialGouv/enfants-du-spectacle/issues/813)) ([2423df0](https://github.com/SocialGouv/enfants-du-spectacle/commit/2423df0db8ed934ec9e6024cf2b266bec4703a35))
+
 # [1.111.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.110.0...v1.111.0) (2025-09-02)
 
 
