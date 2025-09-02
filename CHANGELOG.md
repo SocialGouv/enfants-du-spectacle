@@ -1,3 +1,10 @@
+# [1.109.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.3...v1.109.0) (2025-09-02)
+
+
+### Features
+
+* scheduler test ([#808](https://github.com/SocialGouv/enfants-du-spectacle/issues/808)) ([253f304](https://github.com/SocialGouv/enfants-du-spectacle/commit/253f30453ac02d5ca25cc05f8a0ead5c17147e67))
+
 ## [1.108.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.2...v1.108.3) (2025-09-02)
 
 
