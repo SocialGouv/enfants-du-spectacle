@@ -81,7 +81,7 @@ pg:
 scheduler:
   ~chart: app
   imagePackage: scheduler
-  enabled: true
+  enabled: false
   extraManifests:
     - apiVersion: batch/v1
       kind: CronJob
