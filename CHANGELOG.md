@@ -1,3 +1,10 @@
+## [1.108.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.1...v1.108.2) (2025-09-02)
+
+
+### Bug Fixes
+
+* correct handle of download decisions ([#804](https://github.com/SocialGouv/enfants-du-spectacle/issues/804)) ([f90a848](https://github.com/SocialGouv/enfants-du-spectacle/commit/f90a848787b74f4725ec1ce69e83a7c80dfeda0d))
+
 ## [1.108.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.0...v1.108.1) (2025-08-26)
 
 
