@@ -1,3 +1,10 @@
+# [1.110.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.109.0...v1.110.0) (2025-09-02)
+
+
+### Features
+
+* archive dossiers ([#811](https://github.com/SocialGouv/enfants-du-spectacle/issues/811)) ([b21c1a3](https://github.com/SocialGouv/enfants-du-spectacle/commit/b21c1a3454104d190c9473585ef1106716a9ea71))
+
 # [1.109.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.3...v1.109.0) (2025-09-02)
 
 
