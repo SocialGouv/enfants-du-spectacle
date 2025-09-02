@@ -440,6 +440,14 @@ const WORDING_MAILING = [
     title: "Bonjour,",
     type: "medical_document_uploaded",
   },
+  {
+    button: "Consulter le dossier",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Nouveaux commentaires - Dossier ___DOSSIER_NAME___",
+    text: "___COMMENT_COUNT___ nouveau(x) commentaire(s) ont été ajouté(s) à votre dossier \"___DOSSIER_NAME___\". Connectez-vous pour les consulter.",
+    title: "Bonjour,",
+    type: "new_comments_notification",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
