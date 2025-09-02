@@ -285,11 +285,11 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           />
                           Éditer
                         </li>
-                        {/* Option téléchargement décision S3 - disponible si dossier ACCEPTE avec lien S3 */}
-                        {dossier.statut === "ACCEPTE" && (dossier as any).decisonS3Link && (
+                        {/* Option téléchargement décision - disponible dès que le dossier est accepté */}
+                        {dossier.statut === "ACCEPTE" && (
                           <li
                             onClick={() => {
-                              window.open(`/api/download/decision/${dossier.id}`, '_blank');
+                              window.open(`/api/download/decision/${dossier.id}?view=inline`, '_blank');
                               setDropdownVisible(false);
                             }}
                           >
