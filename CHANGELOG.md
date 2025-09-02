@@ -1,3 +1,10 @@
+## [1.111.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.3...v1.111.4) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix scheduler mail ([#815](https://github.com/SocialGouv/enfants-du-spectacle/issues/815)) ([9d5def4](https://github.com/SocialGouv/enfants-du-spectacle/commit/9d5def4ce6f6785cb4a9b2134061894c796d1ffc))
+
 ## [1.111.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.2...v1.111.3) (2025-09-02)
 
 
