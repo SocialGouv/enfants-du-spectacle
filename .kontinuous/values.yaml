@@ -79,5 +79,54 @@ pg:
     max_connections: "1000"
 
 scheduler:
-  ~chart: raw
-  manifests: ../manifests.yaml
+  ~chart: app
+  imagePackage: scheduler
+  annotations:
+    oblik.socialgouv.io/min-request-cpu: "10m"
+    oblik.socialgouv.io/min-request-memory: "32Mi"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 50m
+      memory: 64Mi
+  env:
+    - name: TARGET_URL
+      value: "https://{{ $.Values.global.host }}/api/healthz"
+  extraManifests:
+    - apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: '{{ include "app.fullname" . }}-scheduler'
+        labels:
+          app: scheduler
+      spec:
+        schedule: "*/5 * * * *"
+        concurrencyPolicy: Forbid
+        successfulJobsHistoryLimit: 3
+        failedJobsHistoryLimit: 3
+        jobTemplate:
+          spec:
+            backoffLimit: 1
+            template:
+              spec:
+                restartPolicy: Never
+                securityContext:
+                  fsGroup: 1000
+                  runAsUser: 1000
+                  runAsGroup: 1000
+                containers:
+                  - name: scheduler
+                    image: "{{ .Values.global.registry }}/{{ .Values.global.imageProject }}/{{ .Values.global.imageRepository }}/scheduler:{{ .Values.global.imageTag }}"
+                    command: ["/scheduler.sh"]
+                    env:
+                      - name: TARGET_URL
+                        value: "https://{{ $.Values.global.host }}/api/healthz"
+                    resources:
+                      requests:
+                        cpu: 10m
+                        memory: 32Mi
+                      limits:
+                        cpu: 50m
+                        memory: 64Mi
