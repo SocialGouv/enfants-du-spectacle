@@ -1,3 +1,10 @@
+## [1.111.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.2...v1.111.3) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix cronjob ([7496c79](https://github.com/SocialGouv/enfants-du-spectacle/commit/7496c791427b752d264acf49a58385e5c49f54ea))
+
 ## [1.111.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.1...v1.111.2) (2025-09-02)
 
 
