@@ -108,6 +108,17 @@ const sendMail: NextApiHandler = async (req, res) => {
       .replace("___DOCUMENT_TYPE___", documentType || "avis médical");
   }
 
+  if (type === "new_comments_notification") {
+    const { commentCount } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+      
+    wording.text = wording.text
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___COMMENT_COUNT___", commentCount?.toString() || "0");
+  }
+
   const templateSignin = (
     await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();
