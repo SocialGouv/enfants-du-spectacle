@@ -81,7 +81,7 @@ pg:
 scheduler:
   ~chart: app
   imagePackage: scheduler
-  enabled: false
+  enabled: true
   extraManifests:
     - apiVersion: batch/v1
       kind: CronJob
@@ -90,7 +90,7 @@ scheduler:
         labels:
           app: scheduler
       spec:
-        schedule: "*/5 * * * *"
+        schedule: "0 */12 * * *"
         concurrencyPolicy: Forbid
         successfulJobsHistoryLimit: 3
         failedJobsHistoryLimit: 3
@@ -110,7 +110,7 @@ scheduler:
                     command: ["/scheduler.sh"]
                     env:
                       - name: TARGET_URL
-                        value: "https://{{ $.Values.global.host }}/api/healthz"
+                        value: "https://{{ $.Values.global.host }}/api/scheduler"
                     resources:
                       requests:
                         cpu: 10m
