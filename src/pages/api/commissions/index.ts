@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
-import superjson from "superjson";
+import { Prisma } from "@prisma/client";
 
 import client from "src/lib/prismaClient";
 
@@ -33,9 +33,10 @@ const get: NextApiHandler = async (req, res) => {
   const { datePeriod } = req.query;
   const { departements } = req.query;
   const { withChild } = req.query;
+  const session = await getSession({ req });
   const commissions =
     datePeriod == "past"
-      ? await getPastCommissions()
+      ? await getPastCommissions(session?.dbUser.role === "ADMIN")
       : departements == "all"
       ? withChild == "true"
         ? await getUpcomingCommissionsNotEmpty(req)
@@ -189,23 +190,26 @@ const getUpcomingCommissionsByDepartement = async (departements: string) => {
   });
 };
 
-const getPastCommissions = async () => {
+const getPastCommissions = async (isAdmin: boolean) => {
+  const where: Prisma.CommissionWhereInput = {
+    date: { lt: new Date() },
+    dossiers: { some: {} },
+    // Pour les non-admins, on exclut les commissions archivées
+    ...(isAdmin ? {} : { archived: { not: true } }),
+  };
+
   return client.commission.findMany({
     include: {
       dossiers: {
         include: {
           _count: { select: { enfants: true } },
           societeProduction: true,
-          demandeur: {
-            include: {
-              societeProduction: true
-            }
-          },
+          demandeur: { include: { societeProduction: true } },
         },
       },
     },
     orderBy: { date: "desc" },
-    where: { date: { lt: new Date() }, dossiers: { some: {} }, archived: false },
+    where,
   });
 };
 

@@ -28,6 +28,15 @@ const Page: React.FC = () => {
       {!isLoading && !isError && commission && (
         <CommissionBloc commission={commission} />
       )}
+      {!commission && (
+        <>
+          <h2>Commission innaccessible</h2>
+          <p>
+            Vous n'avez pas les droits nécessaires ou bien cette commission a
+            été archivée.
+          </p>
+        </>
+      )}
     </Layout>
   );
 };

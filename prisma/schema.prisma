@@ -15,7 +15,7 @@ model Commission {
   date            DateTime
   dateLimiteDepot DateTime
   lastSent        DateTime?
-  archived        Boolean?
+  archived        Boolean?   @default(false)
   dossiers        Dossier[]
   SendList        SendList[]
 }

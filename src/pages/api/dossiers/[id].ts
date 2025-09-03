@@ -4,15 +4,20 @@ import type { NextApiHandler, NextApiRequest } from "next";
 import { getSession } from "next-auth/react";
 import type { TransitionEvent } from "src/lib/statutDossierStateMachine";
 import { factory as statutDossierStateMachineFactory } from "src/lib/statutDossierStateMachine";
-import superjson from "superjson";
+import { Prisma } from "@prisma/client";
 
 import client from "src/lib/prismaClient"
 import { generateToken } from "src/lib/utils";
-import societeProduction from "../diagnostic/societe-production";
 
 const handler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
-  if (!session) {
+  if (
+    !session ||
+    (session.dbUser.role !== "ADMIN" &&
+      session.dbUser.role !== "INSTRUCTEUR" &&
+      session.dbUser.role !== "MEMBRE" &&
+      session.dbUser.role !== "MEDECIN")
+  ) {
     res.status(401).end();
     return;
   }
@@ -41,6 +46,11 @@ function getId(req: NextApiRequest): number {
 const get: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });
   const dossierId = getId(req);
+  const isAdmin = session?.dbUser.role === "ADMIN"
+  const where: Prisma.DossierWhereInput = {
+    id: dossierId,
+    ...(isAdmin ? {} : { archived: { not: true } }),
+  };
 
   const dossier = await client.dossier.findUnique({
     include: {
@@ -75,7 +85,7 @@ const get: NextApiHandler = async (req, res) => {
       medecin: true,
       // Cast to any to bypass type checking during schema transition
     } as any,
-    where: { id: dossierId },
+    where
   });
 
   
