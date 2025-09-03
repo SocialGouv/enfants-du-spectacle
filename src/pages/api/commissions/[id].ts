@@ -1,11 +1,23 @@
 import { withSentry } from "@sentry/nextjs";
 import type { NextApiHandler, NextApiRequest } from "next";
-import superjson from "superjson";
+import { getSession } from "next-auth/react";
+import { Prisma } from "@prisma/client";
 
 import client from "src/lib/prismaClient";
 
 const handler: NextApiHandler = async (req, res) => {
   const { id: commissionIdStr } = req.query;
+  const session = await getSession({ req });
+  if (
+    !session ||
+    (session.dbUser.role !== "ADMIN" &&
+      session.dbUser.role !== "INSTRUCTEUR" &&
+      session.dbUser.role !== "MEMBRE" &&
+      session.dbUser.role !== "MEDECIN")
+  ) {
+    res.status(401).end();
+    return;
+  }
   if (typeof commissionIdStr !== "string") {
     res.status(404).send(`not a valid commission id`);
     return;
@@ -27,6 +39,12 @@ function getId(req: NextApiRequest): number {
 
 const get: NextApiHandler = async (req, res) => {
   const id = getId(req);
+  const session = await getSession({ req });
+  const isAdmin = session?.dbUser.role === "ADMIN"
+  const where: Prisma.CommissionWhereInput = {
+    id: id,
+    ...(isAdmin ? {} : { archived: { not: true } }),
+  };
   // Query commission data with included relations
   // TypeScript doesn't recognize all the fields, so we need to cast
   const commission = await (client.commission.findUnique as any)({
@@ -53,7 +71,7 @@ const get: NextApiHandler = async (req, res) => {
         orderBy: { id: "desc" },
       },
     },
-    where: { id },
+    where
   });
 
   // Log the fetched commission data to help debug
