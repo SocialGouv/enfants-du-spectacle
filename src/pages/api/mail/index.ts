@@ -119,6 +119,18 @@ const sendMail: NextApiHandler = async (req, res) => {
       .replace("___COMMENT_COUNT___", commentCount?.toString() || "0");
   }
 
+  if (type === "parent_notification") {
+    const { enfantName } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+      
+    wording.text = wording.text
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+  }
+
   const templateSignin = (
     await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();

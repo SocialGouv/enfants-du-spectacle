@@ -2,9 +2,13 @@ import { Icon } from "@dataesr/react-dsfr";
 import type { Demandeur, Dossier } from "@prisma/client";
 import React, { useState } from "react";
 import StatutDossierTag from "src/components/StatutDossierTag";
-import { generateAndUploadDA } from "src/lib/pdf/pdfGenerateAndUploadDA";
+import {
+  generateAndUploadDA,
+  generateAndUploadDAForEnfant,
+} from "src/lib/pdf/pdfGenerateAndUploadDA";
 import type { DossierData } from "src/lib/queries";
 import { sendEmail, updateDossier } from "src/lib/queries";
+import { getParentEmailsForEnfant } from "src/lib/helpers";
 import {
   factory as statutDossierFSMFactory,
   statutDossierEventToFrench,
@@ -69,15 +73,59 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                 });
               });
               if (transition.name === "passerAccepte") {
-                const result = await generateAndUploadDA([dossier as DossierData], true);
+                // Email au demandeur avec décision complète
+                const result = await generateAndUploadDA(
+                  [dossier as DossierData],
+                  true
+                );
                 sendEmail(
                   "auth_access",
                   result.pdfBase64 as string,
                   dossier,
                   demandeur.email || undefined
                 );
+
+                // Générer les décisions individuelles et envoyer aux parents
+                const dossierData = dossier as DossierData;
+
+                if (dossierData.enfants && dossierData.enfants.length > 0) {
+                  for (const enfant of dossierData.enfants) {
+                    try {
+                      // Générer et sauvegarder la décision individuelle (toujours)
+                      const individualResult =
+                        await generateAndUploadDAForEnfant(
+                          dossierData,
+                          enfant.id
+                        );
+
+                      // Envoyer aux parents seulement s'ils ont des emails valides
+                      const parentEmails = getParentEmailsForEnfant(enfant);
+
+                      if (parentEmails.length > 0) {
+                        parentEmails.forEach((parentEmail) => {
+                          sendEmail(
+                            "parent_notification",
+                            individualResult.pdfBase64,
+                            dossier,
+                            parentEmail,
+                            "",
+                            { enfantName: `${enfant.prenom} ${enfant.nom}` }
+                          );
+                        });
+                      }
+                    } catch (error) {
+                      // Erreur lors de la génération de la décision pour l'enfant
+                    }
+                  }
+                }
               } else {
-                sendEmail("status_changed", "", dossier, demandeur.email || undefined, transition.to);
+                sendEmail(
+                  "status_changed",
+                  "",
+                  dossier,
+                  demandeur.email || undefined,
+                  transition.to
+                );
               }
             }}
           >

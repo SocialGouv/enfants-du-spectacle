@@ -1,7 +1,7 @@
 import { generateDA } from "./pdfGenerateDA";
 import { uploadDecisionToS3 } from "../fetching/docs";
 import type { DossierData } from "../types";
-import prisma from "../prismaClient";
+import prismaClient from "../prismaClient";
 
 /**
  * Génère une décision administrative PDF et l'upload vers S3
@@ -50,6 +50,53 @@ export const generateAndUploadDA = async (
 };
 
 /**
+ * Génère une décision individuelle pour un enfant et met à jour la base de données
+ * @param dossier - Les données du dossier
+ * @param enfantId - ID de l'enfant
+ * @returns Objet contenant l'URL S3, la clé S3 et le base64
+ */
+export const generateAndUploadDAForEnfant = async (
+  dossier: DossierData,
+  enfantId: number
+): Promise<{
+  s3Url: string;
+  s3Key: string;
+  pdfBase64: string;
+}> => {
+  // Générer et uploader la décision individuelle
+  const result = await generateAndUploadDA([dossier], true, enfantId);
+  
+  // Mettre à jour l'enfant avec le lien S3 en base de données
+  try {
+    const response = await fetch('/api/enfants/update-decision-link', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        enfantId: enfantId,
+        decisonS3Link: result.s3Url
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Erreur lors de la mise à jour du lien S3:', errorData);
+    } else {
+      console.log(`Lien S3 sauvegardé avec succès pour l'enfant ${enfantId}: ${result.s3Url}`);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du lien S3 pour l\'enfant:', error);
+  }
+  
+  return {
+    s3Url: result.s3Url,
+    s3Key: result.s3Key,
+    pdfBase64: result.pdfBase64 as string
+  };
+};
+
+/**
  * Version simplifiée qui génère et upload, puis met à jour la base de données
  * @param dossierId - ID du dossier
  * @param enfantId - ID de l'enfant si c'est une décision individuelle
@@ -60,7 +107,7 @@ export const generateAndUploadDAById = async (
   enfantId?: number
 ): Promise<string> => {
   // Récupérer les données du dossier avec toutes les relations nécessaires
-  const dossier = await prisma.dossier.findUnique({
+  const dossier = await prismaClient.dossier.findUnique({
     where: { id: dossierId },
     include: {
       commission: true,
