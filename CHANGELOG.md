@@ -1,3 +1,10 @@
+# [1.113.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.112.0...v1.113.0) (2025-09-05)
+
+
+### Features
+
+* send decision to relatives ([#825](https://github.com/SocialGouv/enfants-du-spectacle/issues/825)) ([4a322e9](https://github.com/SocialGouv/enfants-du-spectacle/commit/4a322e9ad89aeb04f8e24704003f2417df4da763))
+
 # [1.112.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.4...v1.112.0) (2025-09-03)
 
 
