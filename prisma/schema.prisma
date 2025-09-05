@@ -238,6 +238,7 @@ model Enfant {
   certificat                  String?
   avis                        String?
   populatedByUserId           Int?
+  decisonS3Link               String?
   comments                    Comments[]
   dossier                     Dossier                  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
