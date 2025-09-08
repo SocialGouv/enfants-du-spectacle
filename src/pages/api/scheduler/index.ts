@@ -14,7 +14,6 @@ interface ArchiveResults {
 interface NotificationResults {
   notifiedDossiers: number;
   totalNotifications: number;
-  markedComments: number;
 }
 
 const handler: NextApiHandler = async (req, res) => {
@@ -144,12 +143,30 @@ async function archiveOldCommissions(): Promise<ArchiveResults> {
 async function notifyUnseenComments(): Promise<NotificationResults> {
   console.log(`[SCHEDULER] ${new Date().toISOString()} - Starting comment notification process`);
 
-  // 1. Récupérer tous les commentaires non vus
+  // Calculer le début et la fin de la journée courante
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+
+  // 1. Récupérer tous les commentaires non vus, avec source INSTRUCTEUR et postés aujourd'hui
   const unseenComments = await client.comments.findMany({
     where: {
-      OR: [
-        { seen: null },
-        { seen: false }
+      AND: [
+        {
+          OR: [
+            { seen: null },
+            { seen: false }
+          ]
+        },
+        { source: 'INSTRUCTEUR' },
+        {
+          date: {
+            gte: startOfToday,
+            lte: endOfToday
+          }
+        }
       ]
     },
     include: {
@@ -168,8 +185,7 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
     console.log(`[SCHEDULER] ${new Date().toISOString()} - No unseen comments found`);
     return {
       notifiedDossiers: 0,
-      totalNotifications: 0,
-      markedComments: 0
+      totalNotifications: 0
     };
   }
 
@@ -180,7 +196,6 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
 
   let notifiedDossiers = 0;
   let totalNotifications = 0;
-  let markedComments = 0;
 
   // 3. Traiter chaque dossier
   for (const [dossierId, comments] of Object.entries(commentsByDossier)) {
@@ -263,19 +278,6 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
           console.error(`[SCHEDULER] ❌ Error sending email to ${email}:`, emailError);
         }
       }
-
-      // 7. Marquer les commentaires comme vus
-      const commentIds = comments.map(c => c.id);
-      await client.comments.updateMany({
-        where: {
-          id: { in: commentIds }
-        },
-        data: {
-          seen: true
-        }
-      });
-
-      markedComments += commentIds.length;
       notifiedDossiers++;
 
       console.log(`[SCHEDULER] Processed dossier ${dossier.nom}: ${commentCount} comments, ${validEmails.length} notifications sent`);
@@ -285,13 +287,12 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
     }
   }
 
-  const logMessage = `[SCHEDULER] ${new Date().toISOString()} - Comment notifications: ${notifiedDossiers} dossiers, ${totalNotifications} emails sent, ${markedComments} comments marked as seen`;
+  const logMessage = `[SCHEDULER] ${new Date().toISOString()} - Comment notifications: ${notifiedDossiers} dossiers, ${totalNotifications} emails sent`;
   console.log(logMessage);
 
   return {
     notifiedDossiers,
-    totalNotifications,
-    markedComments
+    totalNotifications
   };
 }
 
