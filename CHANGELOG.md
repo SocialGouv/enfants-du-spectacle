@@ -1,3 +1,10 @@
+## [1.113.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.0...v1.113.1) (2025-09-08)
+
+
+### Bug Fixes
+
+* fix notif comments ([#826](https://github.com/SocialGouv/enfants-du-spectacle/issues/826)) ([2b0ac26](https://github.com/SocialGouv/enfants-du-spectacle/commit/2b0ac265c6664d6552048bb247d3c65e16348bad))
+
 # [1.113.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.112.0...v1.113.0) (2025-09-05)
 
 
