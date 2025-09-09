@@ -1,3 +1,10 @@
+## [1.113.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.1...v1.113.2) (2025-09-09)
+
+
+### Bug Fixes
+
+* fix ODJ ([#828](https://github.com/SocialGouv/enfants-du-spectacle/issues/828)) ([d8887a6](https://github.com/SocialGouv/enfants-du-spectacle/commit/d8887a6da3a01a3d2d738e8f4696b6421cdda28b))
+
 ## [1.113.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.0...v1.113.1) (2025-09-08)
 
 
