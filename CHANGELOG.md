@@ -1,3 +1,10 @@
+# [1.114.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.2...v1.114.0) (2025-09-10)
+
+
+### Features
+
+* add types docs publics ([#829](https://github.com/SocialGouv/enfants-du-spectacle/issues/829)) ([fac16fb](https://github.com/SocialGouv/enfants-du-spectacle/commit/fac16fbb4eb4b4f06b5cb60373137fee1605df7e))
+
 ## [1.113.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.1...v1.113.2) (2025-09-09)
 
 
