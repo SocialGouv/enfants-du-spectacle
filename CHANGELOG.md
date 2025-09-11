@@ -1,3 +1,10 @@
+## [1.114.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.3...v1.114.4) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix secrets preprod ([d577d47](https://github.com/SocialGouv/enfants-du-spectacle/commit/d577d47661af4fbbedd6574996e2288d91115974))
+
 ## [1.114.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.2...v1.114.3) (2025-09-11)
 
 
