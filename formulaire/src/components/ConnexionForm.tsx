@@ -25,17 +25,41 @@ const ConnexionForm: React.FC = () => {
   const { protocol, host } = window.location;
   const defaultCallbackUrl = `${protocol}//${host}/dossiers`;
 
-  const submitSigninForm: FormEventHandler<HTMLFormElement> = (event) => {
+  const submitSigninForm: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    signIn("email", {
-      callbackUrl: (callbackUrl as string) || defaultCallbackUrl,
-      email,
-    }).catch((err) => {
+    
+    try {
+      // Étape 1 : Préparer le nonce et le cookie
+      const prepareResponse = await fetch('/api/auth/prepare-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!prepareResponse.ok) {
+        throw new Error('Erreur lors de la préparation de la connexion');
+      }
+
+      const { nonce } = await prepareResponse.json();
+
+      // Étape 2 : Déclencher NextAuth
+      await signIn("email", {
+        callbackUrl: (callbackUrl as string) || defaultCallbackUrl,
+        email,
+        // On stocke le nonce temporairement pour que sendVerificationRequest puisse l'utiliser
+        redirect: false,
+      });
+
+      // Rediriger vers la page de vérification après succès
+      router.push('/verifyRequest');
+    } catch (err) {
       setSubmitting(false);
+      console.error('Erreur lors de la connexion:', err);
       window.alert("Une erreur est survenue lors de votre connexion");
-      throw err;
-    });
+    }
   };
 
   return (

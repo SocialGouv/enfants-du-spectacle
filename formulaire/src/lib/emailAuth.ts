@@ -1,21 +1,8 @@
 import fsp from "fs/promises";
 import _ from "lodash";
 import nodemailer from "nodemailer";
-import { randomUUID } from "crypto";
 import { WORDING_MAILING } from "../../src/lib/helpers";
-
-// Cache temporaire pour les nonces (en production, utiliser Redis ou une DB)
-const nonceStore = new Map<string, { expires: number; email: string }>();
-
-// Nettoyer les nonces expirés toutes les 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  nonceStore.forEach((data, nonce) => {
-    if (now > data.expires) {
-      nonceStore.delete(nonce);
-    }
-  });
-}, 5 * 60 * 1000);
+import { emailNonceStore } from "../../pages/api/auth/prepare-login";
 
 function text({ url }: { url: string }) {
   return `Connectez-vous au formulaire Enfants du Spectacle en suivant ce lien\n${url}\n`;
@@ -32,17 +19,27 @@ async function sendVerificationRequest({
   provider: any;
   // token: string;
 }): Promise<void> {
-  // Générer un nonce unique pour cette tentative de connexion
-  const nonce = randomUUID();
+  // Récupérer le nonce depuis le store temporaire
+  const nonce = emailNonceStore.get(email);
   
-  // Stocker le nonce avec expiration dans 1 heure
-  const expirationTime = Date.now() + (60 * 60 * 1000); // 1 heure
-  nonceStore.set(nonce, { expires: expirationTime, email });
+  console.log(`[SEND VERIFICATION] Email: ${email}, Nonce trouvé: ${nonce ? 'OUI' : 'NON'}`);
+  console.log(`[SEND VERIFICATION] Store contient:`, Array.from(emailNonceStore.keys()));
   
-  // Ajouter le nonce à l'URL du lien magic
-  const urlWithNonce = new URL(url);
-  urlWithNonce.searchParams.set('nonce', nonce);
-  const secureUrl = urlWithNonce.toString();
+  // Si pas de nonce, on envoie un email classique (sans protection)
+  let secureUrl = url;
+  if (nonce) {
+    // Ajouter le nonce à l'URL du lien magic
+    const urlWithNonce = new URL(url);
+    urlWithNonce.searchParams.set('nonce', nonce);
+    secureUrl = urlWithNonce.toString();
+    
+    console.log(`[SEND VERIFICATION] URL avec nonce: ${secureUrl}`);
+    
+    // Supprimer le nonce du store après utilisation
+    emailNonceStore.delete(email);
+  } else {
+    console.log(`[SEND VERIFICATION] Aucun nonce trouvé pour ${email}, URL classique: ${secureUrl}`);
+  }
 
   const templateSignin = (
     await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
@@ -104,4 +101,4 @@ async function sendVerificationRequest({
   });
 }
 
-export { sendVerificationRequest, nonceStore };
+export { sendVerificationRequest };
