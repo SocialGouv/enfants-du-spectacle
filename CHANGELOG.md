@@ -1,3 +1,10 @@
+# [1.116.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.115.1...v1.116.0) (2025-09-11)
+
+
+### Features
+
+* protection connexion against scanners ([#834](https://github.com/SocialGouv/enfants-du-spectacle/issues/834)) ([9a042b2](https://github.com/SocialGouv/enfants-du-spectacle/commit/9a042b2c5b30100a9064add4d4f9ff0feab526b2))
+
 ## [1.115.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.115.0...v1.115.1) (2025-09-11)
 
 
