@@ -1,3 +1,197 @@
+## [1.114.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.3...v1.114.4) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix secrets preprod ([d577d47](https://github.com/SocialGouv/enfants-du-spectacle/commit/d577d47661af4fbbedd6574996e2288d91115974))
+
+## [1.114.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.2...v1.114.3) (2025-09-11)
+
+
+### Bug Fixes
+
+* use new service sirene, refresh secrets ([#833](https://github.com/SocialGouv/enfants-du-spectacle/issues/833)) ([539d03f](https://github.com/SocialGouv/enfants-du-spectacle/commit/539d03fe4e0704483330546e43a852339de9341c))
+
+## [1.114.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.1...v1.114.2) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix numéros sequence and display on instructeur interface ([#831](https://github.com/SocialGouv/enfants-du-spectacle/issues/831)) ([ef5b87d](https://github.com/SocialGouv/enfants-du-spectacle/commit/ef5b87dd1d5fddc6372d5134496db1b900a1343d))
+
+## [1.114.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.0...v1.114.1) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix numeros sequence to string ([#830](https://github.com/SocialGouv/enfants-du-spectacle/issues/830)) ([57c33c1](https://github.com/SocialGouv/enfants-du-spectacle/commit/57c33c17761c8f6c58c61f350200c21d074a1e06))
+
+# [1.114.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.2...v1.114.0) (2025-09-10)
+
+
+### Features
+
+* add types docs publics ([#829](https://github.com/SocialGouv/enfants-du-spectacle/issues/829)) ([fac16fb](https://github.com/SocialGouv/enfants-du-spectacle/commit/fac16fbb4eb4b4f06b5cb60373137fee1605df7e))
+
+## [1.113.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.1...v1.113.2) (2025-09-09)
+
+
+### Bug Fixes
+
+* fix ODJ ([#828](https://github.com/SocialGouv/enfants-du-spectacle/issues/828)) ([d8887a6](https://github.com/SocialGouv/enfants-du-spectacle/commit/d8887a6da3a01a3d2d738e8f4696b6421cdda28b))
+
+## [1.113.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.0...v1.113.1) (2025-09-08)
+
+
+### Bug Fixes
+
+* fix notif comments ([#826](https://github.com/SocialGouv/enfants-du-spectacle/issues/826)) ([2b0ac26](https://github.com/SocialGouv/enfants-du-spectacle/commit/2b0ac265c6664d6552048bb247d3c65e16348bad))
+
+# [1.113.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.112.0...v1.113.0) (2025-09-05)
+
+
+### Features
+
+* send decision to relatives ([#825](https://github.com/SocialGouv/enfants-du-spectacle/issues/825)) ([4a322e9](https://github.com/SocialGouv/enfants-du-spectacle/commit/4a322e9ad89aeb04f8e24704003f2417df4da763))
+
+# [1.112.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.4...v1.112.0) (2025-09-03)
+
+
+### Features
+
+* archive dossiers ([#820](https://github.com/SocialGouv/enfants-du-spectacle/issues/820)) ([83476ba](https://github.com/SocialGouv/enfants-du-spectacle/commit/83476ba067526a40aaaee68406072ee8915f8846))
+
+## [1.111.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.3...v1.111.4) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix scheduler mail ([#815](https://github.com/SocialGouv/enfants-du-spectacle/issues/815)) ([9d5def4](https://github.com/SocialGouv/enfants-du-spectacle/commit/9d5def4ce6f6785cb4a9b2134061894c796d1ffc))
+
+## [1.111.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.2...v1.111.3) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix cronjob ([7496c79](https://github.com/SocialGouv/enfants-du-spectacle/commit/7496c791427b752d264acf49a58385e5c49f54ea))
+
+## [1.111.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.1...v1.111.2) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix cronjob ([#814](https://github.com/SocialGouv/enfants-du-spectacle/issues/814)) ([9dd5551](https://github.com/SocialGouv/enfants-du-spectacle/commit/9dd55517d301af82307c0953efe614293ce401ef))
+
+## [1.111.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.111.0...v1.111.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* modify frequency scheduler ([#813](https://github.com/SocialGouv/enfants-du-spectacle/issues/813)) ([2423df0](https://github.com/SocialGouv/enfants-du-spectacle/commit/2423df0db8ed934ec9e6024cf2b266bec4703a35))
+
+# [1.111.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.110.0...v1.111.0) (2025-09-02)
+
+
+### Features
+
+* notif commentaires ([#812](https://github.com/SocialGouv/enfants-du-spectacle/issues/812)) ([20203be](https://github.com/SocialGouv/enfants-du-spectacle/commit/20203be92f803b2d6d318764448c729a39a92784))
+
+# [1.110.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.109.0...v1.110.0) (2025-09-02)
+
+
+### Features
+
+* archive dossiers ([#811](https://github.com/SocialGouv/enfants-du-spectacle/issues/811)) ([b21c1a3](https://github.com/SocialGouv/enfants-du-spectacle/commit/b21c1a3454104d190c9473585ef1106716a9ea71))
+
+# [1.109.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.3...v1.109.0) (2025-09-02)
+
+
+### Features
+
+* scheduler test ([#808](https://github.com/SocialGouv/enfants-du-spectacle/issues/808)) ([253f304](https://github.com/SocialGouv/enfants-du-spectacle/commit/253f30453ac02d5ca25cc05f8a0ead5c17147e67))
+
+## [1.108.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.2...v1.108.3) (2025-09-02)
+
+
+### Bug Fixes
+
+* fix public documents ([#807](https://github.com/SocialGouv/enfants-du-spectacle/issues/807)) ([282480c](https://github.com/SocialGouv/enfants-du-spectacle/commit/282480c66bdd970b9146fcbce87906fd0758b0a0))
+
+## [1.108.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.1...v1.108.2) (2025-09-02)
+
+
+### Bug Fixes
+
+* correct handle of download decisions ([#804](https://github.com/SocialGouv/enfants-du-spectacle/issues/804)) ([f90a848](https://github.com/SocialGouv/enfants-du-spectacle/commit/f90a848787b74f4725ec1ce69e83a7c80dfeda0d))
+
+## [1.108.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.108.0...v1.108.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* fix build ([#800](https://github.com/SocialGouv/enfants-du-spectacle/issues/800)) ([10ec12d](https://github.com/SocialGouv/enfants-du-spectacle/commit/10ec12d15c07c611f803f24f8064bdd543de22c1))
+
+# [1.108.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.13...v1.108.0) (2025-08-26)
+
+
+### Bug Fixes
+
+* fix build ([#799](https://github.com/SocialGouv/enfants-du-spectacle/issues/799)) ([7c33e8d](https://github.com/SocialGouv/enfants-du-spectacle/commit/7c33e8db92bb9aa9a26e3d44092b9ca0e915472b))
+
+
+### Features
+
+* decision upload on S3 ([#798](https://github.com/SocialGouv/enfants-du-spectacle/issues/798)) ([b005e76](https://github.com/SocialGouv/enfants-du-spectacle/commit/b005e76fdbf26eff82629e6ec5f4de2bbf6a73ce))
+
+## [1.107.13](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.12...v1.107.13) (2025-08-26)
+
+
+### Bug Fixes
+
+* fix docs wrongly added ([#797](https://github.com/SocialGouv/enfants-du-spectacle/issues/797)) ([271c343](https://github.com/SocialGouv/enfants-du-spectacle/commit/271c3438a7b104e50b4a3528923bf408d6e2a302))
+
+## [1.107.12](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.11...v1.107.12) (2025-07-31)
+
+
+### Bug Fixes
+
+* minor improvements for admins ([#794](https://github.com/SocialGouv/enfants-du-spectacle/issues/794)) ([a4184c9](https://github.com/SocialGouv/enfants-du-spectacle/commit/a4184c9215f73b02051beecb9af94e9b360a4206))
+
+## [1.107.11](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.10...v1.107.11) (2025-07-30)
+
+
+### Bug Fixes
+
+* Trigger Build ([#793](https://github.com/SocialGouv/enfants-du-spectacle/issues/793)) ([250eeea](https://github.com/SocialGouv/enfants-du-spectacle/commit/250eeea3696790572f2631c8cda82541c3f4ab29))
+
+## [1.107.10](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.9...v1.107.10) (2025-07-30)
+
+
+### Bug Fixes
+
+* display admin user in assignAgent ([224060e](https://github.com/SocialGouv/enfants-du-spectacle/commit/224060ed129c8ccd5ec7848f216a01c64cb1da34))
+
+## [1.107.9](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.8...v1.107.9) (2025-07-30)
+
+
+### Bug Fixes
+
+* fix justifs ([#792](https://github.com/SocialGouv/enfants-du-spectacle/issues/792)) ([8c55429](https://github.com/SocialGouv/enfants-du-spectacle/commit/8c554294867176116de6ad09c9beda69bbdb5cee))
+
+## [1.107.8](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.7...v1.107.8) (2025-07-30)
+
+
+### Bug Fixes
+
+* fix upload docs médecins ([#791](https://github.com/SocialGouv/enfants-du-spectacle/issues/791)) ([773a416](https://github.com/SocialGouv/enfants-du-spectacle/commit/773a41647ce0bb06a88772cf082bab04f67dad93))
+
+## [1.107.7](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.6...v1.107.7) (2025-07-30)
+
+
+### Bug Fixes
+
+* fix upload doc ([#790](https://github.com/SocialGouv/enfants-du-spectacle/issues/790)) ([6d7ace8](https://github.com/SocialGouv/enfants-du-spectacle/commit/6d7ace8c15895c61f8cdda619ea30a4d4911f4e8))
+
 ## [1.107.6](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.107.5...v1.107.6) (2025-07-23)
 
 

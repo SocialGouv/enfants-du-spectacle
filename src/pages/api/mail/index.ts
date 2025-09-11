@@ -108,6 +108,29 @@ const sendMail: NextApiHandler = async (req, res) => {
       .replace("___DOCUMENT_TYPE___", documentType || "avis médical");
   }
 
+  if (type === "new_comments_notification") {
+    const { commentCount } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+      
+    wording.text = wording.text
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___COMMENT_COUNT___", commentCount?.toString() || "0");
+  }
+
+  if (type === "parent_notification") {
+    const { enfantName } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+      
+    wording.text = wording.text
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___DOSSIER_NAME___", dossier.nom || "");
+  }
+
   const templateSignin = (
     await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();

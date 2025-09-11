@@ -12,7 +12,7 @@ import TableCard from "../TableCard";
 import OrderableItem from "./OrderableItem";
 import styles from "./TableDossiers.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { HiOutlineDocumentDuplicate } from "react-icons/hi";
+import { HiOutlineDocumentDuplicate, HiOutlineDocumentDownload } from "react-icons/hi";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import { FiUsers } from "react-icons/fi";
 import { deleteDossier, duplicateDossierEds } from "../../fetching/dossiers";
@@ -285,7 +285,22 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                           />
                           Éditer
                         </li>
-                        {session?.dbUser.id === dossier.creatorId && (
+                        {/* Option téléchargement décision - disponible dès que le dossier est accepté */}
+                        {dossier.statut === "ACCEPTE" && (
+                          <li
+                            onClick={() => {
+                              window.open(`/api/download/decision/${dossier.id}?view=inline`, '_blank');
+                              setDropdownVisible(false);
+                            }}
+                          >
+                            <HiOutlineDocumentDownload
+                              size={"20px"}
+                              style={{ marginRight: "10px" }}
+                            />
+                            Télécharger décision
+                          </li>
+                        )}
+                        {session?.dbUser?.id === dossier.creatorId && (
                           <>
                             <li
                               onClick={async () => {
@@ -333,7 +348,6 @@ const TableDossiers: React.FC<Props> = ({ search, action, status }) => {
                 <div className={styles.itemDossier}>
                   <CountPieces
                     commentsNotifications={commentsNotifications}
-                    dossier={dossier}
                     piecesJustif={dossier.piecesDossier
                       .map((piece) => piece.statut)
                       .concat(

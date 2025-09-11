@@ -18,9 +18,9 @@ const handler: NextApiHandler = async (req, res) => {
     "http://localhost:3000",
     "http://localhost:3001",
     "https://enfants-du-spectacle.fabrique.social.gouv.fr",
-    "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr"
+    "https://enfants-du-spectacle-preprod.ovh.fabrique.social.gouv.fr",
   ];
-  
+
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -45,17 +45,13 @@ function getId(req: NextApiRequest): number {
 }
 
 const sendDoc: NextApiHandler = async (req, res) => {
-
   const dossierId = getId(req);
-  try {
-    await fsp.readdir(`/mnt/docs-form/${dossierId}`);
-  } catch (error) {
-    await fsp.mkdir(`/mnt/docs-form/${dossierId}`);
-  }
   const upload = await uploadFile(req);
 
   // Extraire le nom du fichier original
-  const file = Array.isArray(upload.files.justificatif) ? upload.files.justificatif[0] : upload.files.justificatif;
+  const file = Array.isArray(upload.files.justificatif)
+    ? upload.files.justificatif[0]
+    : upload.files.justificatif;
   const originalFilename = file?.originalFilename || "document";
 
   const data = {
@@ -65,13 +61,13 @@ const sendDoc: NextApiHandler = async (req, res) => {
     externalId: "",
     link: upload.s3Key,
     statut: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const pieceEnfant = await prisma.pieceDossierEnfant.create({ data });
   //@ts-ignore
-  res
-    .status(200)
-    .json({ filePath: upload.s3Key, pieceId: pieceEnfant.id });
+  res.status(200).json({ filePath: upload.s3Key, pieceId: pieceEnfant.id });
 };
 
 export default withSentry(handler);

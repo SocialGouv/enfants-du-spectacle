@@ -24,7 +24,9 @@ const CATEGORIES = {
   CALENDRIER_COMMISSION_92: "Calendrier des commissions 92",
   CALENDRIER_COMMISSION_HORS_92: "Calendrier des commissions Hors 92",
   MODELE_AUTORISATION: "Modèle d'autorisation",
-  MODELE_DASEN: "Modèle DASEN",
+  MODELE_DASEN: "Lettre type avis DASEN",
+  AVIS_1ER_DEGRE: "Avis pédagogique 1er degré",
+  AVIS_2EME_DEGRE: "Avis pédagogique 2ème degré",
   GUIDE_ENFANT_SPECTACLE: "Guide enfant du spectacle",
   CIRCULAIRE: "Circulaire",
 };

@@ -120,13 +120,15 @@ const EnfantComponent: React.FC<Props> = ({
   const session = useSession();
   const [localDataLinks, setLocalDataLinks] =
     React.useState<DataLinks>(dataLinks);
-  const [newlyUploadedDocs, setNewlyUploadedDocs] = React.useState<Array<{
-    id: string;
-    nom: string;
-    type: string;
-    statut: null;
-    link: string;
-  }>>([]);
+  const [newlyUploadedDocs, setNewlyUploadedDocs] = React.useState<
+    Array<{
+      id: string;
+      nom: string;
+      type: string;
+      statut: null;
+      link: string;
+    }>
+  >([]);
 
   useEffect(() => {
     const matchingEnfant = localDataLinks?.enfants?.find(
@@ -357,9 +359,10 @@ const EnfantComponent: React.FC<Props> = ({
       );
 
       // Récupérer le libellé du type de consultation
-      const typeLabel = TYPE_CONSULTATION_MEDECIN.find(
-        (type) => type.value === formData.typeConsultationMedecin
-      )?.labelCol2 || 'Document médical';
+      const typeLabel =
+        TYPE_CONSULTATION_MEDECIN.find(
+          (type) => type.value === formData.typeConsultationMedecin
+        )?.labelCol2 || "Document médical";
 
       const currentTypeJustif = TYPE_CONSULTATION_MEDECIN.find(
         (type) => type.value === formData.typeConsultationMedecin
@@ -369,12 +372,12 @@ const EnfantComponent: React.FC<Props> = ({
       const newDoc = {
         id: upload.pieceId.toString(),
         nom: typeLabel,
-        type: currentTypeJustif || 'UNKNOWN',
+        type: currentTypeJustif || "UNKNOWN",
         statut: null,
-        link: `/api/download/pieces/${upload.pieceId}?view=inline`
+        link: `/api/download/pieces-enfant/${upload.pieceId}?view=inline`,
       };
 
-      setNewlyUploadedDocs(prev => [...prev, newDoc]);
+      setNewlyUploadedDocs((prev) => [...prev, newDoc]);
 
       setFormData({
         ...formData,
@@ -393,12 +396,15 @@ const EnfantComponent: React.FC<Props> = ({
           const userEmails = await getDossierUserEmails(dossier.id);
 
           // Prepare enfant name
-          const enfantName = `${enfant.prenom || ""} ${enfant.nom || ""}`.trim();
+          const enfantName = `${enfant.prenom || ""} ${
+            enfant.nom || ""
+          }`.trim();
 
           // Get document type label
-          const documentTypeLabel = TYPE_CONSULTATION_MEDECIN.find(
-            (type) => type.value === formData.typeConsultationMedecin
-          )?.labelCol2 || 'avis médical';
+          const documentTypeLabel =
+            TYPE_CONSULTATION_MEDECIN.find(
+              (type) => type.value === formData.typeConsultationMedecin
+            )?.labelCol2 || "avis médical";
 
           // Send email to each user
           for (const email of userEmails) {
@@ -410,12 +416,12 @@ const EnfantComponent: React.FC<Props> = ({
               "",
               {
                 enfantName,
-                documentType: documentTypeLabel.toLowerCase()
+                documentType: documentTypeLabel.toLowerCase(),
               }
             );
           }
         } catch (error) {
-          console.error('Error sending medical document emails:', error);
+          console.error("Error sending medical document emails:", error);
         }
       }
     } catch (error) {
@@ -571,16 +577,6 @@ const EnfantComponent: React.FC<Props> = ({
                 dangerouslySetInnerHTML={{
                   __html: enfant.contexteTravail
                     ? enfant.contexteTravail.replace(/\n/g, "<br />")
-                    : "n/a",
-                }}
-              />
-            </div>
-            <div>
-              Numéro de la séquence :{" "}
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: enfant.numeroSequence
-                    ? enfant.numeroSequence.toString()
                     : "n/a",
                 }}
               />
@@ -827,8 +823,11 @@ const EnfantComponent: React.FC<Props> = ({
                         }
 
                         // Filtrer les nouveaux documents pour éviter les doublons
-                        const filteredNewDocs = newlyUploadedDocs.filter(newDoc => 
-                          !existingDocs.some(existingDoc => existingDoc.link === newDoc.link)
+                        const filteredNewDocs = newlyUploadedDocs.filter(
+                          (newDoc) =>
+                            !existingDocs.some(
+                              (existingDoc) => existingDoc.link === newDoc.link
+                            )
                         );
 
                         // Combiner avec les nouveaux documents filtrés
@@ -888,8 +887,11 @@ const EnfantComponent: React.FC<Props> = ({
                       }
 
                       // Filtrer les nouveaux documents pour éviter les doublons
-                      const filteredNewDocs = newlyUploadedDocs.filter(newDoc => 
-                        !existingDocs.some(existingDoc => existingDoc.link === newDoc.link)
+                      const filteredNewDocs = newlyUploadedDocs.filter(
+                        (newDoc) =>
+                          !existingDocs.some(
+                            (existingDoc) => existingDoc.link === newDoc.link
+                          )
                       );
 
                       // Combiner avec les nouveaux documents filtrés

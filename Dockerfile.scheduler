@@ -1,0 +1,13 @@
+FROM alpine:latest
+
+# Installation de curl pour faire les appels HTTP
+RUN apk add --no-cache curl bash
+
+# Copie du script de scheduler
+COPY scheduler.sh /scheduler.sh
+
+# Rendre le script exécutable
+RUN chmod +x /scheduler.sh
+
+# Définir le script comme point d'entrée
+CMD ["/scheduler.sh"]

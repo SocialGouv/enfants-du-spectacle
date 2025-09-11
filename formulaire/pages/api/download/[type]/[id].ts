@@ -48,6 +48,8 @@ const handler: NextApiHandler = async (req, res) => {
       return await handlePieceDossier(req, res, id as string);
     } else if (type === "pieces-enfant") {
       return await handlePieceEnfant(req, res, id as string);
+    } else if (type === "decision") {
+      return await handleDecision(req, res, id as string, isInlineView);
     } else {
       return res.status(400).json({ error: "Type de document non supporté" });
     }
@@ -62,6 +64,9 @@ const handler: NextApiHandler = async (req, res) => {
  * Gère le téléchargement des documents publics (non cryptés)
  */
 async function handleDocumentPublic(req: any, res: any, id: string) {
+  const { view } = req.query;
+  const isInlineView = view === "inline";
+  
   // Récupérer le document depuis la base de données
   const document = await prisma.documentPublic.findUnique({
     where: { id: parseInt(id) },
@@ -71,11 +76,11 @@ async function handleDocumentPublic(req: any, res: any, id: string) {
     return res.status(404).json({ error: "Document non trouvé" });
   }
 
-  // Générer une URL signée pour accéder au fichier S3
-  const signedUrl = await getSignedUrlForFile(document.path, 3600); // 1 heure
+  if (!document.path) {
+    return res.status(404).json({ error: "Fichier non trouvé" });
+  }
 
-  // Rediriger vers l'URL signée
-  res.redirect(302, signedUrl);
+  return await downloadAndServeFile(req, res, document, isInlineView);
 }
 
 /**
@@ -172,6 +177,126 @@ async function handlePieceEnfant(req: any, res: any, id: string) {
   }
 
   return await downloadAndDecryptFile(req, res, pieceEnfant, isInlineView);
+}
+
+/**
+ * Gère le téléchargement des décisions (non cryptées)
+ */
+async function handleDecision(req: any, res: any, id: string, isInlineView: boolean) {
+  // Vérifier l'authentification
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ error: "Non authentifié" });
+  }
+
+  // Récupérer le dossier depuis la base de données
+  let dossier = await prisma.dossier.findUnique({
+    where: { id: parseInt(id) }
+  });
+
+  if (!dossier) {
+    return res.status(404).json({ error: "Dossier non trouvé" });
+  }
+
+  // Vérifier que le dossier est accepté
+  if (dossier.statut !== "ACCEPTE") {
+    return res.status(404).json({ error: "Le dossier doit être accepté pour télécharger la décision" });
+  }
+
+  // Vérifier les permissions : l'utilisateur doit être le créateur ou collaborateur
+  const userId = session.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Utilisateur non identifié" });
+  }
+  
+  const hasAccess = dossier.creatorId === userId || 
+                   (dossier.collaboratorIds && dossier.collaboratorIds.includes(userId));
+  
+  if (!hasAccess) {
+    return res.status(403).json({ error: "Accès non autorisé à ce document" });
+  }
+
+  // Si le lien S3 n'existe pas, appeler l'application principale pour générer la décision
+  // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+  if (!dossier.decisonS3Link) {
+    try {
+      console.log(`Génération de la décision pour le dossier ${id}...`);
+      
+      const response = await fetch(`${process.env.URL_INSTRUCTEUR}/api/decision/generate-and-upload/${id}`, {
+        method: 'POST',
+        headers: {
+          'x-api-key': process.env.API_KEY_INSTRUCTEUR!,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Erreur lors de la génération de la décision:", errorData);
+        return res.status(500).json({ 
+          error: "Erreur lors de la génération de la décision", 
+          details: errorData.error || "Erreur inconnue"
+        });
+      }
+
+      const result = await response.json();
+      if (!result.success) {
+        console.error("Échec de la génération de la décision:", result);
+        return res.status(500).json({ 
+          error: "Échec de la génération de la décision", 
+          details: result.error || "Erreur inconnue"
+        });
+      }
+
+      // Récupérer le dossier mis à jour avec le nouveau lien S3
+      dossier = await prisma.dossier.findUnique({
+        where: { id: parseInt(id) }
+      });
+
+      if (!dossier) {
+        return res.status(404).json({ error: "Dossier non trouvé après génération" });
+      }
+
+      console.log(`Décision générée avec succès pour le dossier ${id}`);
+
+    } catch (error) {
+      console.error("Erreur lors de l'appel à l'application principale:", error);
+      return res.status(500).json({ 
+        error: "Erreur lors de la génération de la décision",
+        details: error instanceof Error ? error.message : "Erreur de réseau"
+      });
+    }
+  }
+
+  try {
+    // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+    const fullUrl = dossier.decisonS3Link;
+    
+    if (!fullUrl) {
+      return res.status(500).json({ error: "Lien S3 manquant après génération" });
+    }
+    
+    // Extraire la clé S3 depuis l'URL complète
+    // Format: https://s3.gra.io.cloud.ovh.net/enfants-du-spectacle-dev-app/documents/decisions/...
+    // Clé attendue: documents/decisions/...
+    const bucketName = process.env.BUCKET_NAME || 'enfants-du-spectacle-dev-app';
+    const s3Key = fullUrl.substring(fullUrl.indexOf(`/${bucketName}/`) + bucketName.length + 2);
+    
+    console.log("URL complète:", fullUrl);
+    console.log("Clé S3 extraite:", s3Key);
+    
+    // Créer un objet avec les propriétés nécessaires pour downloadAndServeFile
+    const decisionDocument = {
+      path: s3Key,
+      nom: `Decision_dossier_${id}.pdf`,
+      link: s3Key
+    };
+    
+    return await downloadAndServeFile(req, res, decisionDocument, isInlineView);
+  } catch (error) {
+    console.error("Erreur lors de l'accès au document:", error);
+    return res.status(500).json({ error: "Erreur lors de l'accès au document" });
+  }
 }
 
 /**
@@ -288,6 +413,113 @@ async function downloadAndDecryptFile(req: any, res: any, documentPiece: any, is
   });
 
   res.end(decryptedBuffer);
+}
+
+/**
+ * Fonction commune pour télécharger et servir un fichier non crypté
+ */
+async function downloadAndServeFile(req: any, res: any, documentPiece: any, isInlineView: boolean) {
+  // Télécharger le fichier depuis S3
+  let fileBuffer: Buffer;
+  
+  try {
+    // Utiliser le SDK S3 direct
+    const command = new GetObjectCommand({
+      Bucket: process.env.BUCKET_NAME!,
+      Key: documentPiece.path || documentPiece.link,
+    });
+
+    const s3Response = await s3Client.send(command);
+    if (!s3Response.Body) {
+      return res.status(404).json({ error: "Fichier non trouvé sur S3" });
+    }
+
+    // Lire le contenu
+    const chunks: any[] = [];
+    const reader = s3Response.Body as any;
+    
+    if (reader.read) {
+      for await (const chunk of reader) {
+        chunks.push(chunk);
+      }
+    } else {
+      chunks.push(reader);
+    }
+    
+    fileBuffer = Buffer.concat(chunks as any);
+    
+  } catch (s3Error: any) {
+    console.error("Erreur lors du téléchargement depuis S3:", s3Error);
+    // Fallback : utiliser curl avec URL signée
+    const { spawn } = require('child_process');
+    const signedUrl = await getSignedUrlForFile(documentPiece.path || documentPiece.link, 300);
+    
+    fileBuffer = await new Promise<Buffer>((resolve, reject) => {
+      const curl = spawn('curl', ['-s', '-L', signedUrl]);
+      const chunks: any[] = [];
+      
+      curl.stdout.on('data', (chunk: any) => chunks.push(chunk));
+      curl.on('close', (code: any) => {
+        if (code === 0) {
+          resolve(Buffer.concat(chunks as any));
+        } else {
+          reject(new Error(`curl exited with code ${code}`));
+        }
+      });
+    });
+  }
+
+  // Déterminer le type MIME
+  const mimes: Record<string, string> = {
+    'bmp': 'image/bmp',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'jpe': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'jpg': 'image/jpeg',
+    'json': 'application/json',
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'svg': 'image/svg+xml',
+    'svgz': 'image/svg+xml',
+    'txt': 'text/plain',
+    'xls': 'application/vnd.ms-excel'
+  };
+
+  const originalName = documentPiece.nom || documentPiece.name || "document";
+  const extension = originalName.substring(originalName.lastIndexOf('.') + 1).toLowerCase();
+  const contentType = mimes[extension] || "application/octet-stream";
+
+  const disposition = isInlineView ? "inline" : "attachment";
+
+  // Logique sécurisée pour Content-Disposition
+  const encodeRFC5987ValueChars = (str: string) =>
+    encodeURIComponent(str)
+      .replace(/'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/\*/g, '%2A')
+      .replace(/,/g, '%2C')
+      .replace(/;/g, '%3B')
+      .replace(/\\/g, '%5C');
+
+  // Fallback ASCII sans accents
+  const fallbackFilename = originalName
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // enlève les accents
+    .replace(/[^\x20-\x7E]+/g, '')   // enlève tout caractère non-ASCII
+    || 'document';
+
+  // Encodage du nom de fichier selon RFC5987
+  const encodedFilename = encodeRFC5987ValueChars(originalName);
+
+  res.writeHead(200, {
+    "Content-Length": fileBuffer.length,
+    "Content-Type": contentType,
+    "Content-Disposition": `${disposition}; filename="${fallbackFilename}"; filename*=UTF-8''${encodedFilename}`,
+  });
+
+  res.end(fileBuffer);
 }
 
 export default withSentry(handler);

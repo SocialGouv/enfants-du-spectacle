@@ -9,6 +9,23 @@ import React from "react";
 import CountPieces from "../CountPieces";
 import styles from "./InputFile.module.scss";
 
+// Liste des justificatifs enfants pour déterminer le type de document
+const JUSTIFICATIFS_ENFANTS_VALUES: JustificatifEnfant[] = [
+  "LIVRET_FAMILLE",
+  "AUTORISATION_PARENTALE",
+  "SITUATION_PARTICULIERE",
+  "CONTRAT",
+  "CERTIFICAT_SCOLARITE",
+  "AVIS_PEDAGOGIQUE_1ER_DEGRE",
+  "AVIS_PEDAGOGIQUE_2ND_DEGRE",
+  "AVIS_DASEN",
+  "AVIS_MEDICAL",
+  "DECLARATION_HONNEUR",
+  "AVIS_MEDICAL_THALIE",
+  "BON_PRISE_EN_CHARGE",
+  "AUTORISATION_PRISE_EN_CHARGE",
+];
+
 type Doc = {
   id: number;
   nom: string | null;
@@ -28,6 +45,7 @@ interface Props {
   allowChanges: Boolean;
   handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete: (id: string) => void;
+  inputRef?: React.RefObject<HTMLInputElement>;
 }
 
 const InputFile: React.FC<Props> = ({
@@ -104,7 +122,7 @@ const InputFile: React.FC<Props> = ({
                     {docsTokenized && (
                       <a
                         href={`/api/download/${
-                          Object.values(JustificatifEnfant).includes(
+                          JUSTIFICATIFS_ENFANTS_VALUES.includes(
                             id as JustificatifEnfant
                           )
                             ? "pieces-enfant"

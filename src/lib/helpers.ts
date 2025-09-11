@@ -440,6 +440,22 @@ const WORDING_MAILING = [
     title: "Bonjour,",
     type: "medical_document_uploaded",
   },
+  {
+    button: "Consulter le dossier",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Nouveaux commentaires - Dossier ___DOSSIER_NAME___",
+    text: "___COMMENT_COUNT___ nouveau(x) commentaire(s) ont été ajouté(s) à votre dossier \"___DOSSIER_NAME___\". Connectez-vous pour les consulter.",
+    title: "Bonjour,",
+    type: "new_comments_notification",
+  },
+  {
+    button: "Accéder au portail",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Décision d'autorisation pour ___ENFANT_NAME___ - Dossier ___DOSSIER_NAME___",
+    text: "La décision d'autorisation concernant votre enfant ___ENFANT_NAME___ pour le projet ___DOSSIER_NAME___ est disponible en pièce jointe.",
+    title: "Bonjour,",
+    type: "parent_notification",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [
@@ -546,6 +562,32 @@ async function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Valide si un email respecte un format correct
+ */
+function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Récupère les emails valides des parents d'un enfant
+ */
+function getParentEmailsForEnfant(enfant: any): string[] {
+  const emails: string[] = [];
+  
+  if (enfant.mailRepresentant1 && validateEmail(enfant.mailRepresentant1)) {
+    emails.push(enfant.mailRepresentant1);
+  }
+  
+  if (enfant.mailRepresentant2 && validateEmail(enfant.mailRepresentant2)) {
+    emails.push(enfant.mailRepresentant2);
+  }
+  
+  // Retourner les emails uniques pour éviter les doublons
+  return Array.from(new Set(emails));
+}
+
 export {
   ALL_DEPARTEMENTS,
   BINDING_DS_STATUS,
@@ -560,6 +602,7 @@ export {
   frenchDepartementName,
   getFilterableSocietesProductions,
   getFormatedTypeDossier,
+  getParentEmailsForEnfant,
   getRemunerations,
   getRemsByDossier,
   INFOS_REPRESENTANTS,
@@ -577,5 +620,6 @@ export {
   typeEmploiValue,
   TYPES_EMPLOI,
   uniqueById,
+  validateEmail,
   WORDING_MAILING,
 };

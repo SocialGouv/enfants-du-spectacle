@@ -15,7 +15,7 @@ model Commission {
   date            DateTime
   dateLimiteDepot DateTime
   lastSent        DateTime?
-  archived        Boolean?
+  archived        Boolean?   @default(false)
   dossiers        Dossier[]
   SendList        SendList[]
 }
@@ -114,6 +114,8 @@ model Dossier {
   societeProduction         SocieteProduction?    @relation(fields: [societeProductionId], references: [id])
   enfants                   Enfant[]
   piecesDossier             PieceDossier[]
+  decisonS3Link             String?
+  archived                  Boolean?              @default(false)
   createdAt                 DateTime?
   updatedAt                 DateTime?
 
@@ -236,12 +238,14 @@ model Enfant {
   certificat                  String?
   avis                        String?
   populatedByUserId           Int?
+  decisonS3Link               String?
   comments                    Comments[]
   dossier                     Dossier                  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
   populatedBy                 User?                    @relation("populatedBy", fields: [populatedByUserId], references: [id])
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
   numeroSequence              Int?
+  numerosSequence             String?
   nameId                      String?
   createdAt                   DateTime?
   updatedAt                   DateTime?
@@ -537,6 +541,8 @@ enum CategorieDocument {
   CALENDRIER_COMMISSION_HORS_92
   MODELE_AUTORISATION
   MODELE_DASEN
+  AVIS_1ER_DEGRE
+  AVIS_2EME_DEGRE
   GUIDE_ENFANT_SPECTACLE
   CIRCULAIRE
 }

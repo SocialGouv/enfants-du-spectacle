@@ -2,7 +2,6 @@ import type { Enfant, TypeEmploi } from "@prisma/client";
 import { jsPDF } from "jspdf";
 import type { RowInput } from "jspdf-autotable";
 import autoTable from "jspdf-autotable";
-import logoPrefet from "src/images/logo_prefet.png";
 import { 
   frenchDateText, 
   getRemsByDossier, 
@@ -470,65 +469,68 @@ ${typedEnfant.remunerationsAdditionnelles ? `  Additionnelles : ${typedEnfant.re
       doc.text("Direction Régionale et Interdépartementale", 85, 18);
       doc.text("de l'Economie, de l'Emploi, du Travail", 98, 25);
       doc.text("et des Solidarités d'Ile-de-France", 110, 32);
-      const imgData = new Image();
-      imgData.src = logoPrefet.src;
+      // Ajouter l'image avec approche hybride serveur/client
       doc.setFontSize(40);
-      // @ts-ignore - La méthode addImage existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
-      doc.addImage(imgData, "png", 15, 15, 50, 45);
+      try {
+        if (typeof window === 'undefined') {
+          // Serveur : lire depuis le système de fichiers
+          const fs = require('fs');
+          const path = require('path');
+          const logoPath = path.join(process.cwd(), 'public', 'images', 'logo_prefet.png');
+          const logoBuffer = fs.readFileSync(logoPath);
+          const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+          doc.addImage(logoBase64, 'PNG', 15, 15, 50, 40);
+        } else {
+          // Client : URL directe (fonctionne)
+          doc.addImage('/images/logo_prefet.png', 'PNG', 15, 15, 50, 25);
+        }
+      } catch (error) {
+        console.warn("Erreur lors de l'ajout de l'image:", error);
+      }
     }
     doc.setFontSize(10);
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
       "Page " + String(i) + " sur " + String(pageCount),
-      220 - 20,
-      317 - 30,
-      null,
-      null,
-      "right"
+      200,
+      287,
+      { align: "right" }
     );
     doc.setFontSize(6);
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
       "Direction Régionale et interdépartementale de l'Economie, de l'Emploi, du Travail et des solidarités (Drieets) d'Ile-de-France",
-      60 - 20,
-      317 - 30,
-      null,
-      null,
-      "left"
+      40,
+      287,
+      { align: "left" }
     );
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
       "Service enfants du spectacle et agences de mannequins (ESAM) ",
-      90 - 20,
-      320 - 30,
-      null,
-      null,
-      "left"
+      70,
+      290,
+      { align: "left" }
     );
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
       "21-23 rue Miollis - 75015 Paris ",
-      110 - 20,
-      323 - 30,
-      null,
-      null,
-      "left"
+      90,
+      293,
+      { align: "left" }
     );
     // @ts-ignore - La méthode text existe dans jsPDF mais TypeScript ne reconnaît pas tous les paramètres
     doc.text(
       "https://idf.drieets.gouv.fr",
-      115 - 20,
-      326 - 30,
-      null,
-      null,
-      "left"
+      95,
+      296,
+      { align: "left" }
     );
   }
 
   // Générer un nom de fichier adapté selon qu'il s'agit d'une décision individuelle ou complète
   const fileName = enfantId && dossiers[0].enfants.length > 0
-    ? `DECISION_AUTORISATION_${dossiers[0].enfants[0]?.nom || 'ENFANT'}_${dossiers[0].enfants[0]?.prenom || 'PRENOM'}_${dossiers[0].nom.replaceAll(".", "_")}`
-    : `DECISION_AUTORISATION_${dossiers[0].nom.replaceAll(".", "_")}`;
+    ? `DECISION_AUTORISATION_${dossiers[0].enfants[0]?.nom || 'ENFANT'}_${dossiers[0].enfants[0]?.prenom || 'PRENOM'}_${dossiers[0].nom?.replaceAll(".", "_") || 'DOSSIER'}`
+    : `DECISION_AUTORISATION_${dossiers[0].nom?.replaceAll(".", "_") || 'DOSSIER'}`;
   
   return binary
     ? "data:application/pdf;base64," + btoa(doc.output())

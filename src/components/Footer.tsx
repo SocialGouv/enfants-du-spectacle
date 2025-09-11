@@ -59,7 +59,7 @@ export default function Footer(): ReactElement {
         </FooterLink>
         <FooterLink href="/politique">Politique de confidentialité</FooterLink>
         <FooterLink href="https://metabase-enfants-du-spectacle.fabrique.social.gouv.fr/public/dashboard/70ae0640-d606-419a-83c9-fe6b0069049d">
-          Statistique
+          Statistiques
         </FooterLink>
         <FooterLink href="/accessibilite">
           Accessibilité : non conforme

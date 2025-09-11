@@ -343,12 +343,8 @@ const EnfantJustificatifs: React.FC<EnfantJustificatifsProps> = ({
 }) => {
   if (!enfant || !dossier) return null;
 
-  // Sort justificatifs to show present ones first
-  const sortedJustificatifs = [...JUSTIFICATIFS_ENFANTS].sort(
-    (a, b) =>
-      (enfant.justificatifs.includes(b.value) ? 1 : 0) -
-      (enfant.justificatifs.includes(a.value) ? 1 : 0)
-  );
+  // Keep original order of justificatifs
+  const sortedJustificatifs = [...JUSTIFICATIFS_ENFANTS];
 
   return (
     <ul className={styles.justificatifs}>

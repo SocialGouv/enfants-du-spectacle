@@ -27,6 +27,7 @@ import {
   TYPES_EMPLOI,
 } from "src/lib/helpers";
 import { generateDA } from "src/lib/pdf/pdfGenerateDA";
+import { generateAndUploadDA } from "src/lib/pdf/pdfGenerateAndUploadDA";
 import { generateFE } from "src/lib/pdf/pdfGenerateFE";
 import {
   deleteDossier,
@@ -298,7 +299,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   if (isLoading) return <IconLoader />;
   if (isError || !dossier) return <Icon name="ri-error" />;
 
-  return (
+  return !dossier.id ? (
+    <>
+      <h2>Dossier innaccessible</h2>
+      <p>
+        Vous n'avez pas les droits nécessaires ou bien ce dossier a été archivé.
+      </p>
+    </>
+  ) : (
     <>
       {session?.dbUser.role !== "MEMBRE" &&
         session?.dbUser.role !== "MEDECIN" && (
@@ -482,13 +490,16 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         <div>
                           <button
                             className="postButton"
-                            onClick={() => {
-                              const attachment = generateDA([dossier], true);
+                            onClick={async () => {
+                              const result = await generateAndUploadDA(
+                                [dossier],
+                                true
+                              );
                               sendEmail(
                                 "auth_access",
-                                attachment as string,
+                                result.pdfBase64 as string,
                                 dossier,
-                                dossier.demandeur.email
+                                dossier.demandeur.email || undefined
                               );
                             }}
                           >
@@ -669,7 +680,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       (${birthDateToFrenchAge(
                         enfant.dateNaissance
                       )}) - Personnage:
-                      ${enfant.nomPersonnage}`;
+                      ${enfant.nomPersonnage} - numéros séquence : 
+                      ${enfant.numerosSequence}`;
                     return (
                       <div
                         id={enfant.id.toString()}
@@ -718,7 +730,8 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                                       generateDA([dossier], false, enfant.id);
                                     }}
                                   >
-                                    Télécharger Décision autorisation individuelle
+                                    Télécharger Décision autorisation
+                                    individuelle
                                   </button>
                                 )}
                               </div>
