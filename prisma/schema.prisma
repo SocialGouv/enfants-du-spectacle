@@ -306,6 +306,7 @@ model User {
   enfantsPopulated      Enfant[]         @relation("populatedBy")
   SendList              SendList[]
   sessions              Session[]
+  userLogs              UserLogs[]
 }
 
 model Session {
@@ -510,6 +511,31 @@ model DocumentPublic {
   @@index([uploadedBy], name: "idx_documentPublic_uploadedBy")
 }
 
+model UserLogs {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  userEmail String?
+  userRole  Role?
+  method    String // GET, POST, PUT, DELETE, etc.
+  path      String // URL path
+  query     String? // Query parameters (JSON string)
+  modifications String?
+  userAgent String?
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  // Champs spécifiques selon le type d'accès
+  accessType AccessType
+  resourceId Int? // ID du dossier, de la pièce, etc.
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "idx_userLogs_userId")
+  @@index([accessType], name: "idx_userLogs_accessType")
+  @@index([timestamp], name: "idx_userLogs_timestamp")
+  @@index([resourceId], name: "idx_userLogs_resourceId")
+}
+
 enum CategorieDocument {
   CALENDRIER_COMMISSION_92
   CALENDRIER_COMMISSION_HORS_92
@@ -519,4 +545,16 @@ enum CategorieDocument {
   AVIS_2EME_DEGRE
   GUIDE_ENFANT_SPECTACLE
   CIRCULAIRE
+}
+
+enum AccessType {
+  DOSSIER_LIST
+  DOSSIER_VIEW
+  PIECE_DOSSIER_DOWNLOAD
+  PIECE_ENFANT_DOWNLOAD
+  COMMISSION_LIST
+  DOSSIER_UPDATE
+  ENFANT_UPDATE
+  PIECE_DOSSIER_UPDATE
+  PIECE_ENFANT_UPDATE
 }
