@@ -1,3 +1,10 @@
+## [1.116.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.116.0...v1.116.1) (2025-09-11)
+
+
+### Bug Fixes
+
+* use cookie for nonce ([#835](https://github.com/SocialGouv/enfants-du-spectacle/issues/835)) ([94d2896](https://github.com/SocialGouv/enfants-du-spectacle/commit/94d289612c815cdb92645b1f26e991328dace227))
+
 # [1.116.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.115.1...v1.116.0) (2025-09-11)
 
 
