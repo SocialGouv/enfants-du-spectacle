@@ -247,6 +247,8 @@ model Enfant {
   numeroSequence              Int?
   numerosSequence             String?
   nameId                      String?
+  hasDateConflict             Boolean?  @default(false)
+  dateConflictDetectedAt      DateTime?
   createdAt                   DateTime?
   updatedAt                   DateTime?
 

@@ -143,6 +143,21 @@ const sendMail: NextApiHandler = async (req, res) => {
       .replace("___COMMENT_COUNT___", commentCount?.toString() || "0");
   }
 
+  if (type === "date_conflict_alert") {
+    const { enfantName, enfantBirth, otherDossierName, conflictStart, conflictEnd } = extraData || {};
+    
+    wording.subject = wording.subject
+      .replace("___ENFANT_NAME___", enfantName || "");
+      
+    wording.text = wording.text
+      .replace("___ENFANT_NAME___", enfantName || "")
+      .replace("___ENFANT_BIRTH___", enfantBirth || "")
+      .replace("___DOSSIER_NAME___", dossier.nom || "")
+      .replace("___OTHER_DOSSIER_NAME___", otherDossierName || "")
+      .replace("___CONFLICT_START___", conflictStart || "")
+      .replace("___CONFLICT_END___", conflictEnd || "");
+  }
+
   const templateSignin = (
     await fsp.readFile(`${process.cwd()}/src/mails/mailgeneric.html`)
   ).toString();
