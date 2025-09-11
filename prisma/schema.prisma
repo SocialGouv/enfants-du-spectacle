@@ -245,6 +245,7 @@ model Enfant {
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
   numeroSequence              Int?
+  numerosSequence             String?
   nameId                      String?
   createdAt                   DateTime?
   updatedAt                   DateTime?
