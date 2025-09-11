@@ -21,10 +21,10 @@ const get: NextApiHandler = async (req, res) => {
 
     const siret = req.query.siret || ''
 
-    let fetching = await fetch(`https://api.insee.fr/entreprises/sirene/V3.11/siret/${siret}`,{
+    let fetching = await fetch(`https://api.insee.fr/api-sirene/3.11/siret/${siret}`,{
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${process.env.TOKEN_SIRENE}`,
+            'X-INSEE-Api-Key-Integration': `${process.env.TOKEN_SIRENE}`,
             'Accept': 'application/json'
         }
     }).then(async (r) => {
