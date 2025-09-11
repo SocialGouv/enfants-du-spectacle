@@ -1,3 +1,10 @@
+# [1.115.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.4...v1.115.0) (2025-09-11)
+
+
+### Features
+
+* logs access ([#787](https://github.com/SocialGouv/enfants-du-spectacle/issues/787)) ([fec7eb3](https://github.com/SocialGouv/enfants-du-spectacle/commit/fec7eb32b6100dcdb922022ad79551a47f42e93f))
+
 ## [1.114.4](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.3...v1.114.4) (2025-09-11)
 
 
