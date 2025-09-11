@@ -1,3 +1,10 @@
+# [1.117.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.116.1...v1.117.0) (2025-09-11)
+
+
+### Features
+
+* alert enfants ([#836](https://github.com/SocialGouv/enfants-du-spectacle/issues/836)) ([791c57a](https://github.com/SocialGouv/enfants-du-spectacle/commit/791c57a06f46ae4af6f8ea3547bd71554bf2c33a))
+
 ## [1.116.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.116.0...v1.116.1) (2025-09-11)
 
 
