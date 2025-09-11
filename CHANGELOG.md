@@ -1,3 +1,10 @@
+## [1.114.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.1...v1.114.2) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix numéros sequence and display on instructeur interface ([#831](https://github.com/SocialGouv/enfants-du-spectacle/issues/831)) ([ef5b87d](https://github.com/SocialGouv/enfants-du-spectacle/commit/ef5b87dd1d5fddc6372d5134496db1b900a1343d))
+
 ## [1.114.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.0...v1.114.1) (2025-09-11)
 
 
