@@ -1,3 +1,10 @@
+## [1.114.3](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.2...v1.114.3) (2025-09-11)
+
+
+### Bug Fixes
+
+* use new service sirene, refresh secrets ([#833](https://github.com/SocialGouv/enfants-du-spectacle/issues/833)) ([539d03f](https://github.com/SocialGouv/enfants-du-spectacle/commit/539d03fe4e0704483330546e43a852339de9341c))
+
 ## [1.114.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.1...v1.114.2) (2025-09-11)
 
 
