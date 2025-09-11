@@ -1,3 +1,10 @@
+## [1.114.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.114.0...v1.114.1) (2025-09-11)
+
+
+### Bug Fixes
+
+* fix numeros sequence to string ([#830](https://github.com/SocialGouv/enfants-du-spectacle/issues/830)) ([57c33c1](https://github.com/SocialGouv/enfants-du-spectacle/commit/57c33c17761c8f6c58c61f350200c21d074a1e06))
+
 # [1.114.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.113.2...v1.114.0) (2025-09-10)
 
 
