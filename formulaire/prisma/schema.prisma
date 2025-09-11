@@ -243,6 +243,7 @@ model Enfant {
   piecesDossier               PieceDossierEnfant[]
   remuneration                Remuneration[]
   numeroSequence              Int?
+  numerosSequence             String?
   nameId                      String?
 
   @@index([dossierId], name: "idx_enfant_dossierId")
