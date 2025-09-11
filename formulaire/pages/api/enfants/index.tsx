@@ -113,7 +113,6 @@ const update: NextApiHandler = async (req, res) => {
   }
 
   parsed.nombreJours = parseInt(parsed.nombreJours?.toString() || "0");
-  parsed.numeroSequence = parseInt(parsed.numeroSequence?.toString() || "0")
   parsed.montantCachet = parseFloat(parsed.montantCachet?.toString() || "0");
   parsed.nombreCachets = parseInt(parsed.nombreCachets?.toString() || "0");
   parsed.nombreLignes = parseInt(parsed.nombreLignes?.toString() || "0");
@@ -157,7 +156,7 @@ const update: NextApiHandler = async (req, res) => {
     nombreLignes: parsed.nombreLignes,
     remunerationsAdditionnelles: parsed.remunerationsAdditionnelles,
     remunerationTotale: parsed.remunerationTotale,
-    numeroSequence: parsed.numeroSequence,
+    numerosSequence: parsed.numerosSequence,
     dossierId: parsed.dossierId,
     cdc: parsed.cdc,
     adresseEnfant: parsed.adresseEnfant,
