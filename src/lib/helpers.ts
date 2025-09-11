@@ -456,6 +456,14 @@ const WORDING_MAILING = [
     title: "Bonjour,",
     type: "parent_notification",
   },
+  {
+    button: "Consulter le dossier",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Conflit de dates détecté - Enfant ___ENFANT_NAME___",
+    text: "L'enfant ___ENFANT_NAME___ (né le ___ENFANT_BIRTH___) de votre dossier \"___DOSSIER_NAME___\" travaille également sur le projet \"___OTHER_DOSSIER_NAME___\" avec des dates qui se chevauchent : du ___CONFLICT_START___ au ___CONFLICT_END___.",
+    title: "Bonjour,",
+    type: "date_conflict_alert",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [

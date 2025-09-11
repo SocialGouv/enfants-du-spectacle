@@ -2,6 +2,7 @@ import { withSentry } from "@sentry/nextjs";
 import _ from "lodash";
 import type { NextApiHandler } from "next";
 import client from "src/lib/prismaClient";
+import { frenchDateText } from "src/lib/helpers";
 
 // Interface pour les résultats d'archivage
 interface ArchiveResults {
@@ -16,6 +17,13 @@ interface NotificationResults {
   totalNotifications: number;
 }
 
+// Interface pour les résultats de détection de conflits
+interface ConflictResults {
+  newConflictsDetected: number;
+  conflictsResolved: number;
+  emailsSent: number;
+}
+
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "GET") {
     res.status(405).json({ error: "Method not allowed" });
@@ -27,8 +35,10 @@ const handler: NextApiHandler = async (req, res) => {
 
   let archiveResults: ArchiveResults | null = null;
   let notificationResults: NotificationResults | null = null;
+  let conflictResults: ConflictResults | null = null;
   let archiveError: string | null = null;
   let notificationError: string | null = null;
+  let conflictError: string | null = null;
 
   // 1. Processus d'archivage
   try {
@@ -46,8 +56,16 @@ const handler: NextApiHandler = async (req, res) => {
     console.error(`[SCHEDULER] ${timestamp} - ${notificationError}`, error);
   }
 
-  // 3. Retourner le résumé global
-  const hasErrors = archiveError || notificationError;
+  // 3. Processus de détection des conflits de dates
+  try {
+    conflictResults = await detectDateConflicts();
+  } catch (error) {
+    conflictError = `Error during date conflicts detection process: ${error instanceof Error ? error.message : 'Unknown error'}`;
+    console.error(`[SCHEDULER] ${timestamp} - ${conflictError}`, error);
+  }
+
+  // 4. Retourner le résumé global
+  const hasErrors = archiveError || notificationError || conflictError;
   
   res.status(hasErrors ? 207 : 200).json({
     success: !hasErrors,
@@ -65,6 +83,13 @@ const handler: NextApiHandler = async (req, res) => {
     } : {
       success: false,
       error: notificationError
+    },
+    conflicts: conflictResults ? {
+      success: true,
+      ...conflictResults
+    } : {
+      success: false,
+      error: conflictError
     }
   });
 };
@@ -294,6 +319,258 @@ async function notifyUnseenComments(): Promise<NotificationResults> {
     notifiedDossiers,
     totalNotifications
   };
+}
+
+/**
+ * Détecte et gère les conflits de dates pour les enfants
+ */
+async function detectDateConflicts(): Promise<ConflictResults> {
+  console.log(`[SCHEDULER] ${new Date().toISOString()} - Starting date conflicts detection process`);
+
+  let newConflictsDetected = 0;
+  let conflictsResolved = 0;
+  let emailsSent = 0;
+
+  // 1. Nettoyer d'abord les conflits existants qui pourraient être résolus
+  const existingConflicts = await client.enfant.findMany({
+    where: {
+      hasDateConflict: true
+    },
+    include: {
+      dossier: {
+        include: {
+          commission: true,
+          creator: {
+            select: {
+              id: true,
+              email: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  console.log(`[SCHEDULER] Found ${existingConflicts.length} existing conflicts to verify`);
+
+  // Vérifier si les conflits existants sont toujours valides
+  for (const enfant of existingConflicts) {
+    if (!enfant.nameId || !enfant.dossier.commission || !enfant.dossier.dateDebut || !enfant.dossier.dateFin) {
+      continue;
+    }
+
+    const now = new Date();
+    if (enfant.dossier.commission.date <= now || enfant.dossier.commission.archived) {
+      // Commission passée ou archivée, plus de conflit
+      await client.enfant.update({
+        where: { id: enfant.id },
+        data: {
+          hasDateConflict: false,
+          dateConflictDetectedAt: null
+        }
+      });
+      conflictsResolved++;
+      continue;
+    }
+
+    // Vérifier s'il y a encore un conflit réel
+    const otherEnfants = await client.enfant.findMany({
+      where: {
+        nameId: enfant.nameId,
+        id: { not: enfant.id },
+        dossier: {
+          commission: {
+            date: { gt: now },
+            NOT: { archived: true }
+          },
+          dateDebut: { not: null },
+          dateFin: { not: null }
+        }
+      },
+      include: {
+        dossier: true
+      }
+    });
+
+    let stillInConflict = false;
+    for (const otherEnfant of otherEnfants) {
+      if (datesOverlap(
+        enfant.dossier.dateDebut!,
+        enfant.dossier.dateFin!,
+        otherEnfant.dossier.dateDebut!,
+        otherEnfant.dossier.dateFin!
+      )) {
+        stillInConflict = true;
+        break;
+      }
+    }
+
+    if (!stillInConflict) {
+      await client.enfant.update({
+        where: { id: enfant.id },
+        data: {
+          hasDateConflict: false,
+          dateConflictDetectedAt: null
+        }
+      });
+      conflictsResolved++;
+    }
+  }
+
+  // 2. Récupérer toutes les commissions futures avec leurs dossiers et enfants
+  const futureCommissions = await client.commission.findMany({
+    where: {
+      date: { gt: new Date() },
+      NOT: { archived: true }
+    },
+    include: {
+      dossiers: {
+        where: {
+          dateDebut: { not: null },
+          dateFin: { not: null },
+          NOT: { archived: true }
+        },
+        include: {
+          enfants: {
+            where: {
+              nameId: { not: null }
+            }
+          },
+          creator: {
+            select: {
+              id: true,
+              email: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // 3. Récupérer tous les enfants des commissions futures
+  const allEnfants: any[] = [];
+  for (const commission of futureCommissions) {
+    for (const dossier of commission.dossiers) {
+      for (const enfant of dossier.enfants) {
+        allEnfants.push({
+          ...enfant,
+          dossier: dossier,
+          commission: commission
+        });
+      }
+    }
+  }
+
+  console.log(`[SCHEDULER] Found ${allEnfants.length} children in future commissions`);
+
+  // 4. Grouper par nameId
+  const enfantsByNameId = _.groupBy(allEnfants, 'nameId');
+
+  // 5. Détecter les conflits
+  for (const [nameId, enfants] of Object.entries(enfantsByNameId)) {
+    if (!nameId || enfants.length < 2) continue;
+
+    // Comparer chaque paire d'enfants avec le même nameId
+    for (let i = 0; i < enfants.length; i++) {
+      for (let j = i + 1; j < enfants.length; j++) {
+        const enfant1 = enfants[i];
+        const enfant2 = enfants[j];
+
+        // Si même dossier, pas de conflit
+        if (enfant1.dossierId === enfant2.dossierId) continue;
+
+        // Vérifier si les dates se chevauchent
+        if (datesOverlap(
+          enfant1.dossier.dateDebut,
+          enfant1.dossier.dateFin,
+          enfant2.dossier.dateDebut,
+          enfant2.dossier.dateFin
+        )) {
+          console.log(`[SCHEDULER] Conflict detected for child ${nameId} between dossiers ${enfant1.dossier.nom} and ${enfant2.dossier.nom}`);
+
+          // Traiter les deux enfants en conflit
+          for (const enfant of [enfant1, enfant2]) {
+            // Vérifier si ce conflit n'est pas déjà marqué
+            if (!enfant.hasDateConflict) {
+              await client.enfant.update({
+                where: { id: enfant.id },
+                data: {
+                  hasDateConflict: true,
+                  dateConflictDetectedAt: new Date()
+                }
+              });
+
+              newConflictsDetected++;
+
+              // Envoyer email au créateur du dossier
+              if (enfant.dossier.creator?.email) {
+                try {
+                  const otherEnfant = enfant === enfant1 ? enfant2 : enfant1;
+                  const conflictStart = new Date(Math.max(
+                    enfant.dossier.dateDebut.getTime(),
+                    otherEnfant.dossier.dateDebut.getTime()
+                  ));
+                  const conflictEnd = new Date(Math.min(
+                    enfant.dossier.dateFin.getTime(),
+                    otherEnfant.dossier.dateFin.getTime()
+                  ));
+
+                  const mailPayload = {
+                    type: 'date_conflict_alert',
+                    dossier: {
+                      id: enfant.dossier.id,
+                      nom: enfant.dossier.nom
+                    },
+                    to: enfant.dossier.creator.email,
+                    extraData: {
+                      enfantName: `${enfant.prenom || ''} ${enfant.nom || ''}`.trim(),
+                      enfantBirth: enfant.dateNaissance ? frenchDateText(enfant.dateNaissance) : '',
+                      otherDossierName: otherEnfant.dossier.nom,
+                      conflictStart: frenchDateText(conflictStart),
+                      conflictEnd: frenchDateText(conflictEnd)
+                    }
+                  };
+
+                  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/mail/scheduler`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(mailPayload)
+                  });
+
+                  if (response.ok) {
+                    emailsSent++;
+                    console.log(`[SCHEDULER] ✅ Conflict alert sent to ${enfant.dossier.creator.email} for child ${nameId}`);
+                  } else {
+                    console.error(`[SCHEDULER] ❌ Failed to send conflict alert for child ${nameId}: ${response.status}`);
+                  }
+                } catch (emailError) {
+                  console.error(`[SCHEDULER] ❌ Error sending conflict alert for child ${nameId}:`, emailError);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const logMessage = `[SCHEDULER] ${new Date().toISOString()} - Date conflicts: ${newConflictsDetected} new conflicts, ${conflictsResolved} resolved, ${emailsSent} emails sent`;
+  console.log(logMessage);
+
+  return {
+    newConflictsDetected,
+    conflictsResolved,
+    emailsSent
+  };
+}
+
+/**
+ * Vérifie si deux périodes de dates se chevauchent
+ */
+function datesOverlap(start1: Date, end1: Date, start2: Date, end2: Date): boolean {
+  return start1 <= end2 && start2 <= end1;
 }
 
 export default withSentry(handler);
