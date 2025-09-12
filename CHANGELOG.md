@@ -1,3 +1,10 @@
+## [1.117.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.117.0...v1.117.1) (2025-09-12)
+
+
+### Bug Fixes
+
+* numéros sequence ([#837](https://github.com/SocialGouv/enfants-du-spectacle/issues/837)) ([3f5fbda](https://github.com/SocialGouv/enfants-du-spectacle/commit/3f5fbdad86731f9ad3784114ee1140848cfc0d13))
+
 # [1.117.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.116.1...v1.117.0) (2025-09-11)
 
 
