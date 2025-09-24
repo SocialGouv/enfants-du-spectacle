@@ -1,3 +1,10 @@
+## [1.118.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.118.0...v1.118.1) (2025-09-24)
+
+
+### Bug Fixes
+
+* temporarily dactivate middleware on formulaire ([#843](https://github.com/SocialGouv/enfants-du-spectacle/issues/843)) ([6d4d696](https://github.com/SocialGouv/enfants-du-spectacle/commit/6d4d696b67668966e93e0cd351bdc912eb10ac7c))
+
 # [1.118.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.117.1...v1.118.0) (2025-09-24)
 
 
