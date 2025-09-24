@@ -23,7 +23,7 @@ const post: NextApiHandler = async (req, res) => {
   
   try {
     // Préparer toutes les données avant la transaction
-    const preparedEnfants = dataList.enfants.map((data: any) => {
+    const preparedData = dataList.enfants.map((data: any) => {
       // Transformer typeConsultation
       if (data.typeConsultation === "Un médecin Thalie Santé") {
         data.typeConsultation = "THALIE";
@@ -32,12 +32,20 @@ const post: NextApiHandler = async (req, res) => {
         data.typeConsultation = "GENERALISTE";
       }
 
-      // Construire contexteTravail
-      data.contexteTravail = data.tempsTravail
-        ? data.tempsTravail + " - " + data.lieuTravail
-        : data.lieuTravail;
+      // Construire contexteTravail avec titres et sauts de ligne
+      const contexteParts = [];
+      if (data.tempsTravail) {
+        contexteParts.push(`Temps de travail :\n${data.tempsTravail}`);
+      }
+      if (data.planningTravail) {
+        contexteParts.push(`Planning de travail :\n${data.planningTravail}`);
+      }
+      if (data.lieuTravail) {
+        contexteParts.push(`Lieu de travail :\n${data.lieuTravail}`);
+      }
+      data.contexteTravail = contexteParts.join("\n\n");
 
-      // Construire adresses
+      // Construire adresses des représentants
       data.adresseRepresentant1 = [
         data.roadNumber,
         data.streetName, 
@@ -52,78 +60,143 @@ const post: NextApiHandler = async (req, res) => {
         data.cityTwo
       ].filter(Boolean).join(" ");
 
-      // Gérer remunerationsAdditionnelles
-      if (data.remunerationsAdditionnelles || data.remunerationsAdditionnelles === 0) {
-        data.remunerationsAdditionnelles = JSON.stringify(data.remunerationsAdditionnelles);
-      }
-
-      // Calculer remunerationTotale
-      const montant = data.montantCachet || 0;
-      const cachets = data.nombreCachets || 0;
-      const additionnelles = data.remunerationsAdditionnelles 
-        ? JSON.parse(data.remunerationsAdditionnelles) : 0;
-      
-      data.remunerationTotale = (montant * cachets) + additionnelles;
+      // Gérer travail de nuit
+      data.checkTravailNuit = data.travailNuit === "Oui" || data.travailNuit === true;
+      data.textTravailNuit = data.precisionsTravailNuit || "";
 
       // Stringifier les téléphones
-      data.telRepresentant1 = JSON.stringify(data.telRepresentant1);
-      data.telRepresentant2 = JSON.stringify(data.telRepresentant2);
+      data.telRepresentant1 = data.telRepresentant1 ? JSON.stringify(data.telRepresentant1) : "";
+      data.telRepresentant2 = data.telRepresentant2 ? JSON.stringify(data.telRepresentant2) : "";
+      
       data.dossierId = dataList.dossierId;
+      
+      // Ajouter les dates de création/mise à jour
+      const currentDate = new Date();
+      data.dateDerniereModification = currentDate;
+      data.createdAt = currentDate;
+      data.updatedAt = currentDate;
 
-      // Nettoyer les champs temporaires
-      const cleanedData = { ...data };
-      delete cleanedData.date;
-      delete cleanedData.repQuality;
-      delete cleanedData.roadNumber;
-      delete cleanedData.streetName;
-      delete cleanedData.postalCode;
-      delete cleanedData.city;
-      delete cleanedData.repQualityTwo;
-      delete cleanedData.roadNumberTwo;
-      delete cleanedData.streetNameTwo;
-      delete cleanedData.postalCodeTwo;
-      delete cleanedData.cityTwo;
-      delete cleanedData.school;
-      delete cleanedData.tempsTravail;
-      delete cleanedData.lieuTravail;
+      // === EXTRAIRE LES RÉMUNÉRATIONS ===
+      const remunerations = [];
+      
+      // Mapping des types de rémunération vers les enums Prisma
+      const remunerationMappings = [
+        { montant: 'montantCachetTournage', nombre: 'nombreCachetsTournage', nature: 'CACHET_TOURNAGE', type: 'cachet' },
+        { montant: 'montantCachetDoublage', nombre: 'nombreCachetsDoublage', nature: 'CACHET_DOUBLAGE', type: 'cachet', lignes: 'nombreLignesDoublage', dadr: 'montantTotalDadr' },
+        { montant: 'montantCachetRepresentation', nombre: 'nombreCachetsRepresentation', nature: 'CACHET_REPRESENTATION', type: 'cachet' },
+        { montant: 'montantCachetRepetition', nombre: 'nombreCachetsRepetition', nature: 'CACHET_REPETITION', type: 'cachet' },
+        { montant: 'montantCachetHoraire', nombre: 'nombreCachetsHoraire', nature: 'CACHET_HORAIRE', type: 'cachet' },
+        { montant: 'montantCachetSecurite', nombre: 'nombreCachetsSecurite', nature: 'CACHET_SECURITE', type: 'cachet' },
+        { montant: 'montantCachetPostSynchro', nombre: 'nombreCachetsPostSynchro', nature: 'CACHET_POST_SYNCHRO', type: 'cachet' },
+        { montant: 'montantCachetCaptation', nombre: 'nombreCachetsCaptation', nature: 'CACHET_CAPTATION', type: 'cachet' },
+        { montant: 'montantCachetSpectacleVivant', nombre: 'nombreCachetsSpectacleVivant', nature: 'CACHET_SPECTACLE_VIVANT', type: 'cachet' },
+        { montant: 'montantCachetRetake', nombre: 'nombreCachetsRetake', nature: 'CACHET_RETAKE', type: 'cachet' },
+        { montant: 'montantForfait', nombre: 'nombreForfait', nature: 'AUTRE_GARANTIE', type: 'forfait', comment: 'Rémunération forfaitaire' },
+      ];
 
-      return cleanedData;
+      for (const mapping of remunerationMappings) {
+        const montant = data[mapping.montant];
+        const nombre = data[mapping.nombre];
+        
+        if ((montant && montant > 0) || (nombre && nombre > 0)) {
+          const remuneration: any = {
+            typeRemuneration: mapping.type,
+            natureCachet: mapping.nature,
+            montant: montant || 0,
+            nombre: nombre || 0,
+            nombreLignes: mapping.lignes ? (data[mapping.lignes] || 0) : 0,
+            totalDadr: mapping.dadr ? (data[mapping.dadr] || 0) : null,
+            comment: mapping.comment || null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+          
+          remunerations.push(remuneration);
+        }
+      }
+
+      // Calculer remunerationTotale à partir des rémunérations détaillées
+      let totalRemuneration = 0;
+      remunerations.forEach(rem => {
+        totalRemuneration += (rem.montant || 0) * (rem.nombre || 1);
+        if (rem.totalDadr) totalRemuneration += rem.totalDadr;
+      });
+      data.remunerationTotale = totalRemuneration;
+
+      // Nettoyer les champs temporaires de l'enfant
+      const cleanedEnfantData = { ...data };
+      
+      // Supprimer tous les champs de rémunération détaillés de l'objet enfant
+      const fieldsToRemove = [
+        'date', 'repQuality', 'roadNumber', 'streetName', 'postalCode', 'city',
+        'repQualityTwo', 'roadNumberTwo', 'streetNameTwo', 'postalCodeTwo', 'cityTwo',
+        'school', 'tempsTravail', 'lieuTravail', 'planningTravail', 'travailNuit', 'precisionsTravailNuit',
+        'montantCachetTournage', 'nombreCachetsTournage',
+        'montantCachetDoublage', 'nombreCachetsDoublage', 'nombreLignesDoublage', 'montantTotalDadr',
+        'montantCachetRepresentation', 'nombreCachetsRepresentation',
+        'montantCachetRepetition', 'nombreCachetsRepetition',
+        'montantCachetHoraire', 'nombreCachetsHoraire',
+        'montantCachetSecurite', 'nombreCachetsSecurite',
+        'montantCachetPostSynchro', 'nombreCachetsPostSynchro',
+        'montantCachetCaptation', 'nombreCachetsCaptation',
+        'montantCachetSpectacleVivant', 'nombreCachetsSpectacleVivant',
+        'montantCachetRetake', 'nombreCachetsRetake',
+        'montantForfait', 'nombreForfait'
+      ];
+      
+      fieldsToRemove.forEach(field => delete cleanedEnfantData[field]);
+
+      return { enfantData: cleanedEnfantData, remunerations };
     });
 
     // ✨ TRANSACTION ATOMIQUE
     const result = await prisma.$transaction(async (tx) => {
       const operations = [];
       
-      for (const data of preparedEnfants) {
+      for (const { enfantData, remunerations } of preparedData) {
         // Vérifier si l'enfant existe déjà
         const existingEnfants = await tx.enfant.findMany({
           where: {
             dossierId: dataList.dossierId,
-            nom: data.nom,
-            prenom: data.prenom,
-            dateNaissance: data.dateNaissance,
+            nom: enfantData.nom,
+            prenom: enfantData.prenom,
+            dateNaissance: enfantData.dateNaissance,
           },
         });
 
+        let enfantId: number;
+
         if (existingEnfants.length === 0) {
           // Créer nouvel enfant
-          const enfant = await tx.enfant.create({ data });
+          const enfant = await tx.enfant.create({ data: enfantData });
+          enfantId = enfant.id;
           operations.push({ action: 'created', enfant: enfant.id });
         } else {
-          // Mettre à jour enfant(s) existant(s)
-          await tx.enfant.updateMany({
-            where: {
-              nom: data.nom,
-              prenom: data.prenom,
-              dateNaissance: data.dateNaissance,
-              dossierId: data.dossierId,
-            },
-            data: data,
+          // Mettre à jour enfant existant
+          enfantId = existingEnfants[0].id;
+          await tx.enfant.update({
+            where: { id: enfantId },
+            data: enfantData,
           });
+          
+          // Supprimer les anciennes rémunérations pour les remplacer
+          await tx.remuneration.deleteMany({
+            where: { enfantId: enfantId }
+          });
+          
           operations.push({ 
             action: 'updated', 
-            count: existingEnfants.length,
-            enfant: existingEnfants[0].id 
+            enfant: enfantId 
+          });
+        }
+
+        // Créer les nouvelles rémunérations
+        for (const remuneration of remunerations) {
+          await tx.remuneration.create({
+            data: {
+              ...remuneration,
+              enfantId: enfantId
+            }
           });
         }
       }
@@ -133,7 +206,7 @@ const post: NextApiHandler = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `${preparedEnfants.length} enfants traités avec succès`,
+      message: `${preparedData.length} enfants traités avec succès`,
       operations: result
     });
 
