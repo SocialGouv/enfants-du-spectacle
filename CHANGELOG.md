@@ -1,3 +1,10 @@
+# [1.118.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.117.1...v1.118.0) (2025-09-24)
+
+
+### Features
+
+* new feature import enfants ([#842](https://github.com/SocialGouv/enfants-du-spectacle/issues/842)) ([bf5bb34](https://github.com/SocialGouv/enfants-du-spectacle/commit/bf5bb3474e5c391eb6b152a4204ac7ceab239869))
+
 ## [1.117.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.117.0...v1.117.1) (2025-09-12)
 
 
