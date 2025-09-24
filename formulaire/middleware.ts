@@ -57,5 +57,5 @@ function redirectToLogin(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ['/api/auth/callback/email'],
+  matcher: [], // TEMPORAIRE : désactiver le middleware pour test
 };
