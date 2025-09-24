@@ -23,7 +23,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useRouter } from "next/router";
 import ProgressBar from "../ProgressBar";
 import readXlsxFile from "read-excel-file";
-import { SCHEMA_ENFANTS as schema } from "src/lib/helpers";
+import { SCHEMA_ENFANTS_V2 as schema } from "src/lib/helpers";
 import { FaFileDownload, FaUserPlus } from "react-icons/fa";
 import { updateCommentairesNotifications } from "src/fetching/commentaires";
 
@@ -137,13 +137,13 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
       : "Ce champ est obligatoire";
   };
   const handleDownload = () => {
-    fetch("/template/template-enfants-v1.xlsx")
+    fetch("/template/template-enfants.xlsx")
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(new Blob([blob]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "template-enfants-v1.xlsx");
+        link.setAttribute("download", "template-enfants.xlsx");
         document.body.appendChild(link);
         link.click();
       });
@@ -269,7 +269,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
               Ajouter un enfant
             </ButtonLink>
           </div>
-          {/* <div>
+          <div>
             <ButtonLink onClick={handleFileSelectClick}>
               <FaUserPlus style={{ marginRight: "8px" }} />
               {`Importer le fichier d'enfants`}
@@ -288,7 +288,7 @@ const EnfantListBis: React.FC<Props> = ({ allowChanges }) => {
               <FaFileDownload style={{ marginRight: "8px" }} /> Télécharger le
               modèle (csv excel)
             </ButtonLink>
-          </div> */}
+          </div>
         </div>
       )}
       {showModal && <div className={styles.overlay} />}
