@@ -32,10 +32,10 @@ function birthDateToFrenchAge(birthDate: Date): string {
 }
 
 const useDebouncedCallback = (func: Function, wait: number) => {
-  const timeout = React.useRef();
+  const timeout = React.useRef<NodeJS.Timeout | undefined>();
 
   return React.useCallback(
-    (...args) => {
+    (...args: any[]) => {
       const later = () => {
         clearTimeout(timeout.current);
         func(...args);
@@ -467,6 +467,246 @@ const SCHEMA_ENFANTS = {
   },
 }
 
+// Nouveau schéma pour le template V2 avec gestion détaillée des rémunérations
+const SCHEMA_ENFANTS_V2 = {
+  'Date de création': {
+    prop: 'date',
+    type: Date,
+    required: true
+  },
+  'Prénom(s)': {
+    prop: 'prenom',
+    type: String,
+    required: true
+  },
+  'Nom': {
+    prop: 'nom',
+    type: String,
+    required: true
+  },
+  'Né(e) le': {
+    prop: 'dateNaissance',
+    type: Date,
+    required: true
+  },
+  "Type d'emploi": {
+    prop: 'typeEmploi',
+    type: String
+  },
+  'Nom du personnage incarné': {
+    prop: 'nomPersonnage',
+    type: String
+  },
+  'Nombre de jours de travail': {
+    prop: 'nombreJours',
+    type: Number
+  },
+  'Période de travail': {
+    prop: 'periodeTravail',
+    type: String
+  },
+  'Temps de travail': {
+    prop: 'tempsTravail',
+    type: String
+  },
+  'Planning de travail': {
+    prop: 'planningTravail',
+    type: String
+  },
+  'Lieu de travail': {
+    prop: 'lieuTravail',
+    type: String
+  },
+  // === RÉMUNÉRATIONS DÉTAILLÉES ===
+  'Montant cachet de tournage': {
+    prop: 'montantCachetTournage',
+    type: Number
+  },
+  'Nombre cachets de tournage': {
+    prop: 'nombreCachetsTournage',
+    type: Number
+  },
+  'Montant cachet de doublage': {
+    prop: 'montantCachetDoublage',
+    type: Number
+  },
+  'Nombre cachets de doublage': {
+    prop: 'nombreCachetsDoublage',
+    type: Number
+  },
+  'Nombre de lignes (cachet doublage)': {
+    prop: 'nombreLignesDoublage',
+    type: Number
+  },
+  'Montant total DADR (cachet doublage)': {
+    prop: 'montantTotalDadr',
+    type: Number
+  },
+  'Montant cachet de représentation': {
+    prop: 'montantCachetRepresentation',
+    type: Number
+  },
+  'Nombre cachets de représentation': {
+    prop: 'nombreCachetsRepresentation',
+    type: Number
+  },
+  'Montant cachet de répétition': {
+    prop: 'montantCachetRepetition',
+    type: Number
+  },
+  'Nombre cachets de répétition': {
+    prop: 'nombreCachetsRepetition',
+    type: Number
+  },
+  'Montant cachet de horaire': {
+    prop: 'montantCachetHoraire',
+    type: Number
+  },
+  'Nombre cachets de horaire': {
+    prop: 'nombreCachetsHoraire',
+    type: Number
+  },
+  'Montant cachet de sécurité': {
+    prop: 'montantCachetSecurite',
+    type: Number
+  },
+  'Nombre cachets de sécurité': {
+    prop: 'nombreCachetsSecurite',
+    type: Number
+  },
+  'Montant cachet de post-synchro': {
+    prop: 'montantCachetPostSynchro',
+    type: Number
+  },
+  'Nombre cachets de post-synchro': {
+    prop: 'nombreCachetsPostSynchro',
+    type: Number
+  },
+  'Montant cachet de captation': {
+    prop: 'montantCachetCaptation',
+    type: Number
+  },
+  'Nombre cachets de captation': {
+    prop: 'nombreCachetsCaptation',
+    type: Number
+  },
+  'Montant cachet de spectacle vivant': {
+    prop: 'montantCachetSpectacleVivant',
+    type: Number
+  },
+  'Nombre cachets de spectacle vivant': {
+    prop: 'nombreCachetsSpectacleVivant',
+    type: Number
+  },
+  'Montant cachet RETAKE': {
+    prop: 'montantCachetRetake',
+    type: Number
+  },
+  'Nombre cachets RETAKE': {
+    prop: 'nombreCachetsRetake',
+    type: Number
+  },
+  'Montant du forfait': {
+    prop: 'montantForfait',
+    type: Number
+  },
+  'Nombre de forfait': {
+    prop: 'nombreForfait',
+    type: Number
+  },
+  // === TRAVAIL DE NUIT ===
+  'Travail de nuit': {
+    prop: 'travailNuit',
+    type: String
+  },
+  'Préciser le nombre de nuits de travail et les horaires associés.': {
+    prop: 'precisionsTravailNuit',
+    type: String
+  },
+  // === CONSULTATION MÉDICALE ===
+  "L'enfant doit consulter": {
+    prop: "typeConsultation",
+    type: String
+  },
+  // === REPRÉSENTANTS LÉGAUX ===
+  'Qualité du représentant légal 1': {
+    prop: 'repQuality',
+    type: String
+  },
+  'Nom du représentant légal 1': {
+    prop: "nomRepresentant1",
+    type: String
+  },
+  'Prénom du représentant légal 1': {
+    prop: "prenomRepresentant1",
+    type: String
+  },
+  'N° de rue du représentant légal 1': {
+    prop: 'roadNumber',
+    type: Number
+  },
+  'Libellé de voie du représentant légal 1': {
+    prop: 'streetName',
+    type: String
+  },
+  'Code postal du représentant légal 1': {
+    prop: 'postalCode',
+    type: Number
+  },
+  'Ville du représentant légal 1': {
+    prop: 'city',
+    type: String
+  },
+  'Email du représentant légal 1': {
+    prop: "mailRepresentant1",
+    type: Email
+  },
+  'Téléphone du réprésentant légal 1': {
+    prop: "telRepresentant1",
+    type: String
+  },
+  'Qualité du représentant légal 2': {
+    prop: 'repQualityTwo',
+    type: String
+  },
+  'Nom du représentant légal 2': {
+    prop: "nomRepresentant2",
+    type: String
+  },
+  'Prénom du représentant légal 2': {
+    prop: "prenomRepresentant2",
+    type: String
+  },
+  'N° de rue du représentant légal 2': {
+    prop: 'roadNumberTwo',
+    type: Number
+  },
+  'Libellé de voie du représentant légal 2': {
+    prop: 'streetNameTwo',
+    type: String
+  },
+  'Code postal du représentant légal 2': {
+    prop: 'postalCodeTwo',
+    type: Number
+  },
+  'Ville du représentant légal 2': {
+    prop: 'cityTwo',
+    type: String
+  },
+  'Email du représentant légal 2': {
+    prop: "mailRepresentant2",
+    type: Email
+  },
+  'Téléphone du réprésentant légal 2': {
+    prop: "telRepresentant2",
+    type: String
+  },
+  'Etablissement scolaire': {
+    prop: 'school',
+    type: String
+  },
+}
+
 export {
     frenchDateText,
     frenchDateHour,
@@ -481,5 +721,6 @@ export {
     CONVENTIONS,
     SCENES_SENSIBLES,
     REMUNERATIONS,
-    SCHEMA_ENFANTS
+    SCHEMA_ENFANTS,
+    SCHEMA_ENFANTS_V2
   };

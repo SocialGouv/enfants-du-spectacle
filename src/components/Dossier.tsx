@@ -680,7 +680,13 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                       (${birthDateToFrenchAge(
                         enfant.dateNaissance
                       )}) - Personnage:
-                      ${enfant.nomPersonnage}`;
+                      ${enfant.nomPersonnage}
+                      ${
+                        enfant.numerosSequence
+                          ? ` - numéros séquence : 
+                      ${enfant.numerosSequence}`
+                          : ""
+                      }`;
                     return (
                       <div
                         id={enfant.id.toString()}

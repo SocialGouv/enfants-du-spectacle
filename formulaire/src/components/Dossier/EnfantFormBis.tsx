@@ -631,17 +631,17 @@ const EnfantFormBis: React.FC<Props> = ({
         </div>
 
         <div className={styles.blocForm}>
-          <label htmlFor="numeroSequence" className="mb-2 italic">
-            Numéro de la séquence
+          <label htmlFor="numerosSequence" className="mb-2 italic">
+            Numéros des séquences
           </label>
           <input
             onChange={handleFormEnfant}
-            value={enfantTmp?.numeroSequence || 0}
+            value={enfantTmp?.numerosSequence || ''}
             disabled={!allowChanges}
-            type="number"
+            type="text"
             min="0"
-            id="numeroSequence"
-            name="numeroSequence"
+            id="numerosSequence"
+            name="numerosSequence"
             className="inputText"
             onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) =>
               handleFocus(e)
