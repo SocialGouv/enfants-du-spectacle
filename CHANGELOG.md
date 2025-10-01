@@ -1,3 +1,10 @@
+## [1.118.2](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.118.1...v1.118.2) (2025-10-01)
+
+
+### Bug Fixes
+
+* remove name other film ([#845](https://github.com/SocialGouv/enfants-du-spectacle/issues/845)) ([e4844c0](https://github.com/SocialGouv/enfants-du-spectacle/commit/e4844c01bf77510397cae8291b331d92791fdd43))
+
 ## [1.118.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.118.0...v1.118.1) (2025-09-24)
 
 
