@@ -47,12 +47,8 @@ const Header: React.FC<Props> = ({
 
   const calendar_list: { name: string; value: string }[] = [
     {
-      name: "Île-de-France (hors 92)",
-      value: "calendrier_commission_2025",
-    },
-    {
-      name: "Hauts-de-Seine",
-      value: "calendrier_commission_2025_92",
+      name: "Île-de-France",
+      value: "calendrier_commission_2025_2026",
     },
   ];
 
@@ -163,7 +159,7 @@ const Header: React.FC<Props> = ({
                           setShowDropdown(!showDropdown);
                         }}
                       >
-                        <a href={"/"}>Calendrier des commissions 2025</a>
+                        <a href={"/"}>Calendrier des commissions 2025-2026</a>
                         {!showDropdown ? (
                           <TiArrowSortedDown style={{ margin: "4px" }} />
                         ) : (
