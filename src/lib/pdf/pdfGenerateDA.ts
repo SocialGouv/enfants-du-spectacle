@@ -249,14 +249,14 @@ ${typedEnfant.contexteTravail ? `  Contexte : ${typedEnfant.contexteTravail}` : 
 ${dossier.source === 'FORM_EDS' ? 
   `  Rémunérations garanties :
 ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat: any) => {
-  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
-  return remFound ? `    ${remFound.nombre} ${cat.label} : ${remFound.montant}€` : null
+  let remsFound = remEnfant.filter((rem: any) => rem.natureCachet === cat.value)
+  return remsFound.map((rem: any) => `    ${rem.nombre} ${cat.label} : ${rem.montant}€`).join('\n')
 }).filter(Boolean).join('\n') || '    Aucune'}
   
   Rémunérations additionnelles :
 ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat: any) => {
-  let remFound = remEnfant.find((rem: any) => rem.natureCachet === cat.value)
-  return remFound ? `    ${remFound.nombre} ${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label} : ${remFound.montant}€` : null
+  let remsFound = remEnfant.filter((rem: any) => rem.natureCachet === cat.value)
+  return remsFound.map((rem: any) => `    ${rem.nombre} ${cat.label === 'Autre' ? rem.autreNatureCachet : cat.label} : ${rem.montant}€`).join('\n')
 }).filter(Boolean).join('\n') || '    Aucune'}`
 :
 `  ${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet}€
