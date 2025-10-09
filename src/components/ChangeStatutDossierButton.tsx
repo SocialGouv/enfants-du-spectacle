@@ -79,9 +79,6 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                   true
                 );
                 
-                // Sauvegarder le lien de la décision complète
-                const decisionCompleteUrl = result.s3Url;
-                
                 sendEmail(
                   "auth_access",
                   result.pdfBase64 as string,
@@ -121,23 +118,6 @@ const ChangeStatutDossierButton: React.FC<Props> = ({ dossier, demandeur }) => {
                       console.error(`Erreur lors de la génération de la décision pour l'enfant ${enfant.id}:`, error);
                     }
                   }
-                }
-                
-                // Restaurer le lien de la décision COMPLÈTE dans le dossier
-                // car les décisions individuelles ont pu l'écraser
-                try {
-                  await fetch(`/api/dossiers/${dossier.id}/update-decision-link`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      decisonS3Link: decisionCompleteUrl
-                    })
-                  });
-                  console.log(`Lien de décision complète restauré pour le dossier ${dossier.id}`);
-                } catch (error) {
-                  console.error('Erreur lors de la restauration du lien de décision complète:', error);
                 }
               } else {
                 sendEmail(
