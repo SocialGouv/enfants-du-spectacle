@@ -139,15 +139,15 @@ const generateFE = async (dossiers: DossierData[], enfantId?: number) => {
   ${dossier.source === 'FORM_EDS' ? 
   `RÉMUNÉRATIONS GARANTIES : 
   ${REMUNERATIONS[0]["Rémunérations garanties"]?.map((cat) => {
-    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label}' de ${remFound.montant} Euros, ${remFound.totalDadr ? `Montant total DADR : ${remFound.totalDadr} Euros, ` : ''}` : ''
-  }).join(' ')}
+    let remsFound = remEnfant.filter(rem => rem.natureCachet === cat.value)
+    return remsFound.map(rem => `${rem.nombre} '${cat.label}' de ${rem.montant} Euros${rem.totalDadr ? `, Montant total DADR : ${rem.totalDadr} Euros` : ''}`).join(', ')
+  }).filter(Boolean).join(', ')}
 
   RÉMUNÉRATIONS ADDITIONNELLES : 
   ${REMUNERATIONS[1]["Rémunérations additionnelles"]?.map((cat) => {
-    let remFound = remEnfant.find(rem => rem.natureCachet === cat.value)
-    return remFound ? `${remFound.nombre} '${cat.label === 'Autre' ? remFound.autreNatureCachet : cat.label}' de ${remFound.montant} Euros` : ''
-  }).join(' ')}
+    let remsFound = remEnfant.filter(rem => rem.natureCachet === cat.value)
+    return remsFound.map(rem => `${rem.nombre} '${cat.label === 'Autre' ? rem.autreNatureCachet : cat.label}' de ${rem.montant} Euros`).join(', ')
+  }).filter(Boolean).join(', ')}
   TOTAL : ${remEnfant.reduce((acc, cur) => cur.montant && cur.nombre ? acc + (cur.montant * cur.nombre) + (cur.totalDadr ? cur.totalDadr : 0) : acc, 0)} Euros` 
   : 
   `${typedEnfant.nombreCachets} cachets de ${typedEnfant.montantCachet} Euros ${
