@@ -36,7 +36,8 @@ const deleteDoc = async (docId: number) => {
 const uploadDecisionToS3 = async (
   pdfBase64: string,
   dossierId: number,
-  fileName: string
+  fileName: string,
+  enfantId?: number
 ): Promise<{ s3Url: string; s3Key: string }> => {
   const url = `${process.env.NEXT_PUBLIC_API_URL_SDP}/inc/upload-decision`;
   
@@ -49,6 +50,7 @@ const uploadDecisionToS3 = async (
       pdfBase64,
       dossierId,
       fileName,
+      enfantId, // Passer enfantId pour que l'API sache si c'est une décision individuelle
     }),
   }).then(async (r) => {
     if (!r.ok) {

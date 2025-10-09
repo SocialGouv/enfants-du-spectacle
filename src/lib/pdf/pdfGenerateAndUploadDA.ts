@@ -34,8 +34,8 @@ export const generateAndUploadDA = async (
     : `DECISION_AUTORISATION_${dossiers[0].nom?.replaceAll(".", "_") || 'DOSSIER'}`;
 
   try {
-    // Upload vers S3
-    const uploadResult = await uploadDecisionToS3(pdfBase64, dossierId, fileName);
+    // Upload vers S3 en passant enfantId pour que l'API sache si c'est une décision individuelle
+    const uploadResult = await uploadDecisionToS3(pdfBase64, dossierId, fileName, enfantId);
 
     // Retourner les informations avec optionnellement le base64 pour l'email
     return {

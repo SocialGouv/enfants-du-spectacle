@@ -42,7 +42,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 const uploadDecision: NextApiHandler = async (req, res) => {
   try {
-    const { pdfBase64, dossierId, fileName } = req.body;
+    const { pdfBase64, dossierId, fileName, enfantId } = req.body;
 
     if (!pdfBase64 || !dossierId || !fileName) {
       return res.status(400).json({ error: "Paramètres manquants" });
@@ -65,12 +65,18 @@ const uploadDecision: NextApiHandler = async (req, res) => {
       `${fileName}.pdf`
     );
 
-    // Mettre à jour le lien S3 dans le dossier
-    await prisma.dossier.update({
-      where: { id: parseInt(dossierId) },
-      // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
-      data: { decisonS3Link: uploadResult.url }
-    });
+    // Mettre à jour le lien S3 dans le dossier UNIQUEMENT si c'est une décision COMPLÈTE
+    // (pas une décision individuelle pour un enfant)
+    if (!enfantId) {
+      await prisma.dossier.update({
+        where: { id: parseInt(dossierId) },
+        // @ts-ignore - Le champ decisonS3Link existe dans le schéma mais le client n'a pas encore été régénéré
+        data: { decisonS3Link: uploadResult.url }
+      });
+      console.log(`[UPLOAD-DECISION] Lien de décision COMPLÈTE mis à jour pour le dossier ${dossierId}: ${uploadResult.url}`);
+    } else {
+      console.log(`[UPLOAD-DECISION] Décision INDIVIDUELLE pour enfant ${enfantId} du dossier ${dossierId} uploadée, pas de mise à jour du lien du dossier`);
+    }
 
     res.status(200).json({ 
       s3Url: uploadResult.url, 
