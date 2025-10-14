@@ -301,7 +301,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
 
   return !dossier.id ? (
     <>
-      <h2>Dossier innaccessible</h2>
+      <h2>Dossier inaccessible</h2>
       <p>
         Vous n'avez pas les droits nécessaires ou bien ce dossier a été archivé.
       </p>
