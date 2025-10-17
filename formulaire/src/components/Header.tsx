@@ -48,11 +48,11 @@ const Header: React.FC<Props> = ({
   const calendar_list: { name: string; value: string }[] = [
     {
       name: "Île-de-France (hors 92)",
-      value: "calendrier_commission_2025",
+      value: "CALENDRIER_COMMISSION_HORS_92",
     },
     {
       name: "Hauts-de-Seine",
-      value: "calendrier_commission_2025_92",
+      value: "CALENDRIER_COMMISSION_92",
     },
   ];
 
@@ -155,9 +155,10 @@ const Header: React.FC<Props> = ({
                       {calendar_list.map((calendar, index) => {
                         return (
                           <a
-                            href={`./calendar_commission/${calendar.value}.pdf`}
+                            href={`/api/calendrier/${calendar.value}`}
                             key={index}
-                            target="blank"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             onClick={() => {
                               setShowDropdown(false);
                             }}
