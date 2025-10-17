@@ -3,7 +3,7 @@ import _ from "lodash";
 import Link from "next/link";
 import React from "react";
 import { MultiSelect } from "react-multi-select-component";
-import AddUser from "src/components/AddUtilisateur";
+import AddUserModal from "src/components/AddUserModal";
 import { ALL_DEPARTEMENTS, frenchDepartementName } from "src/lib/helpers";
 import { trpc } from "src/lib/trpc";
 import styles from "src/styles/commissions.module.scss";
@@ -23,7 +23,11 @@ interface RowProps {
   updateUserMutation: any;
 }
 
-const UserRow: React.FC<RowProps> = ({ user, deleteUser, updateUserMutation }) => {
+const UserRow: React.FC<RowProps> = ({
+  user,
+  deleteUser,
+  updateUserMutation,
+}) => {
   const [changeDep, setDepartementChange] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState(
     user.departements.map((departement) => {
@@ -90,7 +94,9 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser, updateUserMutation }) =
             }))}
             value={selected}
             hasSelectAll={false}
-            onChange={(value: { key: string; label: string; value: string }[]) => {
+            onChange={(
+              value: { key: string; label: string; value: string }[]
+            ) => {
               setSelected(value);
               setDepartementChange(!changeDep);
             }}
@@ -133,42 +139,54 @@ const UserRow: React.FC<RowProps> = ({ user, deleteUser, updateUserMutation }) =
   );
 };
 
-const Utilisateurs: React.FC<Props> = ({ allUsers, onUserUpdate, onPageChange, page, total, totalPages }) => {
+const Utilisateurs: React.FC<Props> = ({
+  allUsers,
+  onUserUpdate,
+  onPageChange,
+  page,
+  total,
+  totalPages,
+}) => {
   const [userList, setUserList] = React.useState<User[]>(allUsers);
-  
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState<string>("");
+
+  // Synchroniser userList avec allUsers
+  React.useEffect(() => {
+    setUserList(allUsers);
+  }, [allUsers]);
+
   // Mutations tRPC
   const createUserMutation = trpc.users.createUser.useMutation({
     onSuccess: async () => {
       // Rediriger vers la première page pour voir le nouvel utilisateur
       onPageChange?.(1);
       // Petit délai pour laisser le temps à la DB de se mettre à jour
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       // Refetch la liste après création
       await onUserUpdate?.();
     },
   });
-  
+
   const deleteUserMutation = trpc.users.deleteUser.useMutation({
     onSuccess: async () => {
       // Refetch la liste après suppression
       await onUserUpdate?.();
     },
   });
-  
+
   const updateUserMutation = trpc.users.updateUser.useMutation();
 
   const deleteUser = (id: number) => {
     // Optimistic update
     const userListTmp: User[] = userList.filter((user: User) => user.id !== id);
     setUserList(userListTmp);
-    
+
     // API call
     deleteUserMutation.mutate({ id });
   };
 
-  const addUser = (e: React.FormEvent, formData: Partial<User>) => {
-    e.preventDefault();
-    
+  const addUser = (formData: Partial<User>) => {
     const userData = {
       nom: formData.nom || null,
       prenom: formData.prenom || null,
@@ -179,16 +197,62 @@ const Utilisateurs: React.FC<Props> = ({ allUsers, onUserUpdate, onPageChange, p
       telephone: formData.telephone || null,
       fonction: formData.fonction || null,
     };
-    
-    createUserMutation.mutate(userData);
+
+    createUserMutation.mutate(userData, {
+      onSuccess: () => {
+        setSuccessMessage("Utilisateur ajouté avec succès !");
+        setTimeout(() => setSuccessMessage(""), 3000);
+      },
+      onError: () => {
+        setSuccessMessage("Erreur lors de l'ajout de l'utilisateur");
+        setTimeout(() => setSuccessMessage(""), 3000);
+      },
+    });
   };
 
   return (
     <>
-      <AddUser saveUser={addUser} />
-      <p>Page {page} sur {totalPages} - {total} utilisateur(s) au total</p>
+      <div style={{ marginBottom: "20px" }}>
+        <button className="postButton" onClick={() => setIsModalOpen(true)}>
+          Ajouter un utilisateur
+        </button>
+      </div>
+
+      {successMessage && (
+        <div
+          style={{
+            padding: "10px",
+            marginBottom: "20px",
+            backgroundColor: successMessage.includes("succès")
+              ? "#d4edda"
+              : "#f8d7da",
+            color: successMessage.includes("succès") ? "#155724" : "#721c24",
+            border: `1px solid ${
+              successMessage.includes("succès") ? "#c3e6cb" : "#f5c6cb"
+            }`,
+            borderRadius: "4px",
+          }}
+        >
+          {successMessage}
+        </div>
+      )}
+
+      <AddUserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={addUser}
+      />
+
+      <p>
+        Page {page} sur {totalPages} - {total} utilisateur(s) au total
+      </p>
       {userList.map((user) => (
-        <UserRow key={user.id} user={user} deleteUser={deleteUser} updateUserMutation={updateUserMutation} />
+        <UserRow
+          key={user.id}
+          user={user}
+          deleteUser={deleteUser}
+          updateUserMutation={updateUserMutation}
+        />
       ))}
     </>
   );
