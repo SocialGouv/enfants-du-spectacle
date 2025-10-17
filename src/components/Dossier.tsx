@@ -42,6 +42,7 @@ import InputComments from "./inputComments";
 import ListComments from "./ListComments";
 import Table from "./Table";
 import { getUsersById } from "src/lib/fetching/users";
+import ShareDossierModal from "./ShareDossierModal";
 
 interface Props {
   dossierId: number;
@@ -73,6 +74,7 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
   const [openEnfantAccordionIds, setOpenEnfantAccordionIds] = React.useState<
     string[]
   >([]);
+  const [showShareModal, setShowShareModal] = React.useState<boolean>(false);
 
   // Functions to manage accordion states for children
   const toggleAccordion = (enfantId: number) => {
@@ -485,6 +487,14 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
                         📞 {dossier.demandeur.phone}
                       </a>
                     </div>
+                    <div style={{ marginTop: "10px" }}>
+                      <button
+                        className="postButton"
+                        onClick={() => setShowShareModal(true)}
+                      >
+                        Partager le dossier
+                      </button>
+                    </div>
                     {dossier.statut == "ACCEPTE" &&
                       session?.dbUser.role !== "MEMBRE" && (
                         <div>
@@ -759,6 +769,11 @@ const Dossier: React.FC<Props> = ({ dossierId, dataLinks }) => {
           </Link>
         </div>
       )}
+      <ShareDossierModal
+        dossier={dossier}
+        showDialogue={showShareModal}
+        setShowDialogue={setShowShareModal}
+      />
     </>
   );
 };
