@@ -464,6 +464,14 @@ const WORDING_MAILING = [
     title: "Bonjour,",
     type: "date_conflict_alert",
   },
+  {
+    button: "Consulter le dossier",
+    bye: "N'hésitez pas à nous contacter pour toute information complémentaire.<br><br>Des suggestions d'améliorations à nous partager ? Dites-le nous 👉 <a href=\"https://tally.so/r/3NyqWj\" target=\"_blank\" style=\"color: #0070f3; text-decoration: none;\">https://tally.so/r/3NyqWj</a>",
+    subject: "Partage de dossier - ___DOSSIER_NAME___",
+    text: "Le dossier \"___DOSSIER_NAME___\" a été partagé avec vous. Vous pouvez désormais y accéder et le consulter.",
+    title: "Bonjour,",
+    type: "share_dossier",
+  },
 ];
 
 const JUSTIFS_DOSSIER: { label: string; value: string }[] = [

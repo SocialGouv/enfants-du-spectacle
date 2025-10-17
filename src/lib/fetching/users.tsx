@@ -1,4 +1,18 @@
-import { User } from "@prisma/client";
+import { Dossier, User } from "@prisma/client";
+
+const getUserByEmail = async (email: string, dossier: Dossier) => {
+  const url = `/api/users/${email}`;
+  const fetching = await fetch(url.split(",").join(""), {
+    method: "POST",
+    body: JSON.stringify(dossier),
+  }).then(async (r) => {
+    if (!r.ok) {
+      throw Error(`got status ${r.status}`);
+    }
+    return r.json();
+  });
+  return fetching as number;
+};
 
 const getUsersById = async (ids: number[]) => {
   const url = `/api/users/id${ids.length > 0 ? "?" : ""}${ids.map(
@@ -19,4 +33,4 @@ const getUsersById = async (ids: number[]) => {
   return fetching as User[];
 };
 
-export { getUsersById };
+export { getUserByEmail, getUsersById };

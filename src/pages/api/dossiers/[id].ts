@@ -164,6 +164,7 @@ const update: NextApiHandler = async (req, res) => {
     cdc?: number;
     commissionId?: number;
     statusNotification?: string | null;
+    collaboratorIds?: number[];
   } = {};
   const dossierId = getId(req);
 
@@ -227,6 +228,10 @@ const update: NextApiHandler = async (req, res) => {
     parsed.statusNotification === null
   ) {
     updates.statusNotification = parsed.statusNotification;
+  }
+
+  if (Array.isArray(parsed.collaboratorIds)) {
+    updates.collaboratorIds = parsed.collaboratorIds;
   }
 
   console.log("updates : ", updates);
