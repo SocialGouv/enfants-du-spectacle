@@ -1,3 +1,10 @@
+# [1.123.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.122.0...v1.123.0) (2025-10-17)
+
+
+### Features
+
+* validation when add user ([#859](https://github.com/SocialGouv/enfants-du-spectacle/issues/859)) ([4276c18](https://github.com/SocialGouv/enfants-du-spectacle/commit/4276c1834900c3ef762d53be8e6b3ac42f9fa6d6))
+
 # [1.122.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.121.0...v1.122.0) (2025-10-17)
 
 
