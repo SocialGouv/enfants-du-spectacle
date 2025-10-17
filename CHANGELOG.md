@@ -1,3 +1,10 @@
+# [1.124.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.123.0...v1.124.0) (2025-10-17)
+
+
+### Features
+
+* link calendars ([#860](https://github.com/SocialGouv/enfants-du-spectacle/issues/860)) ([06c8a01](https://github.com/SocialGouv/enfants-du-spectacle/commit/06c8a0129ce2197320dfcfc6a70545e0e91a37f0))
+
 # [1.123.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.122.0...v1.123.0) (2025-10-17)
 
 
