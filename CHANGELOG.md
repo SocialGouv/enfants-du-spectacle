@@ -1,3 +1,10 @@
+# [1.122.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.121.0...v1.122.0) (2025-10-17)
+
+
+### Features
+
+* add collaborator ([#858](https://github.com/SocialGouv/enfants-du-spectacle/issues/858)) ([42640f2](https://github.com/SocialGouv/enfants-du-spectacle/commit/42640f20712d8abd5cf70d5b5bb88d452d37e586))
+
 # [1.121.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.120.1...v1.121.0) (2025-10-09)
 
 
