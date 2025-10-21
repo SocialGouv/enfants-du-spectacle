@@ -21,7 +21,7 @@
     "@sentry/nextjs": "^7.22.0",
     "@sentry/node": "^7.22.0",
     "@socialgouv/matomo-next": "^1.6.1",
-    "@types/node": "18.11.9",
+    "@types/node": "18.19.130",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "DatePicker": "^2.0.0",
