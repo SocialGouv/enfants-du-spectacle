@@ -1,3 +1,10 @@
+# [1.125.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.124.1...v1.125.0) (2025-11-18)
+
+
+### Features
+
+* change mails ([#863](https://github.com/SocialGouv/enfants-du-spectacle/issues/863)) ([d0ad16b](https://github.com/SocialGouv/enfants-du-spectacle/commit/d0ad16b266e042928c578d7dd594bd1c19351b4e))
+
 ## [1.124.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.124.0...v1.124.1) (2025-10-27)
 
 
