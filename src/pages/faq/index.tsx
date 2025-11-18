@@ -291,8 +291,8 @@ const Faq: React.FC = () => {
             <li>
               Vous n’avez pas trouvé de réponse à votre question dans ce FAQ ?
               Vous pouvez écrire à l’adresse suivante :{" "}
-              <a href="mailto:enfantsduspectacle@fabrique.social.gouv.fr">
-                enfantsduspectacle@fabrique.social.gouv.fr
+              <a href="mailto:drieets-idf-ud75.eesam@drieets.gouv.fr">
+                drieets-idf-ud75.eesam@drieets.gouv.fr
               </a>
             </li>
           </ul>
