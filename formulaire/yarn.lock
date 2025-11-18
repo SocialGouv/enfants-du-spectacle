@@ -808,21 +808,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codegouvfr/react-dsfr@npm:^0.0.60":
-  version: 0.0.60
-  resolution: "@codegouvfr/react-dsfr@npm:0.0.60"
+"@codegouvfr/react-dsfr@npm:^0.78.0":
+  version: 0.78.7
+  resolution: "@codegouvfr/react-dsfr@npm:0.78.7"
   dependencies:
-    tsafe: ^1.4.0
-  peerDependencies:
-    "@types/react": ^16.0.0 || ^17.0.0 || ^18.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
+    tsafe: ^1.6.3
   bin:
     copy-dsfr-to-public: bin/copy-dsfr-to-public.js
     only-include-used-icons: bin/only-include-used-icons.js
-  checksum: 040e52881f6c142c4650544fd3f8495da19048461e6e6c2e211bd39a1a52d94629c2504050f8a9c56a46c3fa81e8b7d8172393b920737b63278727e18898f6f1
+  checksum: e8e2a373df9eddf68f49b15a9f8ed4941e0edcc3a64240e3eec7a81bd5e554de0626aef97cec39fcede5d68b6890bf7a03a993157888d57a0b7872f43bf72aa3
   languageName: node
   linkType: hard
 
@@ -3508,7 +3502,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": ^3.837.0
     "@aws-sdk/s3-request-presigner": ^3.837.0
-    "@codegouvfr/react-dsfr": ^0.0.60
+    "@codegouvfr/react-dsfr": ^0.78.0
     "@dataesr/react-dsfr": ^3.4.8
     "@next-auth/prisma-adapter": ^1.0.5
     "@prisma/client": 6.10.1
@@ -6797,21 +6791,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5":
+"semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.4, semver@npm:^7.6.3":
   version: 7.7.2
   resolution: "semver@npm:7.7.2"
   bin:
     semver: bin/semver.js
   checksum: dd94ba8f1cbc903d8eeb4dd8bf19f46b3deb14262b6717d0de3c804b594058ae785ef2e4b46c5c3b58733c99c83339068203002f9e37cfe44f7e2cc5e3d2f621
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.3.7, semver@npm:^7.5.4, semver@npm:^7.6.3":
-  version: 7.7.1
-  resolution: "semver@npm:7.7.1"
-  bin:
-    semver: bin/semver.js
-  checksum: 586b825d36874007c9382d9e1ad8f93888d8670040add24a28e06a910aeebd673a2eb9e3bf169c6679d9245e66efb9057e0852e70d9daa6c27372aab1dda7104
   languageName: node
   linkType: hard
 
@@ -7311,10 +7296,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsafe@npm:^1.4.0":
-  version: 1.8.5
-  resolution: "tsafe@npm:1.8.5"
-  checksum: 2bd0490681e86f00d3d21ed2c42a2294ed816c84d861bf5cbf2c3535ad67aa99dbd025804e40c0bba846c8cdcb6d5ab6fc64a3a82bd8ec3728ee8919b7275d85
+"tsafe@npm:^1.6.3":
+  version: 1.8.12
+  resolution: "tsafe@npm:1.8.12"
+  checksum: 98d75209f9374a5c57a035d62fba6acb6c521ec403d085840920a2159f58a045dd4f21af3592020485f7a58dceea6d346afc6fe3942703f895aea732a28ad83c
   languageName: node
   linkType: hard
 
