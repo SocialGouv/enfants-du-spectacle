@@ -32,24 +32,24 @@ const Conditions: React.FC = () => {
           <h2>État de conformité</h2>
           <p>
             <strong>Enfants du spectacle</strong> est{" "}
-            <strong>non conforme</strong> avec le RGAA. Le site n&apos;a encore pas
-            été audité.
+            <strong>non conforme</strong> avec le RGAA. Le site n&apos;a encore
+            pas été audité.
           </p>
 
           <h2>Contenus non accessibles</h2>
 
           <h2>Amélioration et contact</h2>
           <p>
-            Si vous n&apos;arrivez pas à accéder à un contenu ou à un service, vous
-            pouvez contacter le responsable de Enfants du spectacle pour être
-            orienté vers une alternative accessible ou obtenir le contenu sous
-            une autre forme.
+            Si vous n&apos;arrivez pas à accéder à un contenu ou à un service,
+            vous pouvez contacter le responsable de Enfants du spectacle pour
+            être orienté vers une alternative accessible ou obtenir le contenu
+            sous une autre forme.
           </p>
 
           <p>
             E-mail :{" "}
-            <a href="mailto:enfantsduspectacle@fabrique.social.gouv.fr">
-              enfantsduspectacle@fabrique.social.gouv.fr
+            <a href="mailto:drieets-idf-ud75.eesam@drieets.gouv.fr">
+              drieets-idf-ud75.eesam@drieets.gouv.fr
             </a>
           </p>
           <p>

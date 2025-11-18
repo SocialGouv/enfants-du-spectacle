@@ -48,8 +48,8 @@ const Conditions: React.FC = () => {
 
           <p>
             E-mail :{" "}
-            <a href="mailto:enfantsduspectacle@fabrique.social.gouv.fr">
-              enfantsduspectacle@fabrique.social.gouv.fr
+            <a href="mailto:drieets-idf-ud75.eesam@drieets.gouv.fr">
+              drieets-idf-ud75.eesam@drieets.gouv.fr
             </a>
           </p>
           <p>
