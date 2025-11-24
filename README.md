@@ -34,9 +34,9 @@ Les seeds permettent de restaurer simplement des bases de données avec des donn
 
 Des CSV ont été créés manuellement dans `prisma/seeds/` à partir de données plus ou moins réelles pour les noms de films et de sociétés de productions.
 
-`npx prisma db seed` restaure la base de données grace aux seeds. Ce script tronque entièrement la base, lit les fichiers CSVs et insère de nouvelles lignes.
+`npx prisma@^6 db seed` restaure la base de données grace aux seeds. Ce script tronque entièrement la base, lit les fichiers CSVs et insère de nouvelles lignes.
 
-Des scripts permettent de dumper et restaurer la db dans `src/scripts` au format pg_dump. Ce dump est versionné et restauré par les review apps. Cela permet de contourner l'absence des dépendences de développement sur ces environnements : `npx prisma db seed` ne peut en effet pas être lancé.
+Des scripts permettent de dumper et restaurer la db dans `src/scripts` au format pg_dump. Ce dump est versionné et restauré par les review apps. Cela permet de contourner l'absence des dépendences de développement sur ces environnements : `npx prisma@^6 db seed` ne peut en effet pas être lancé.
 
 ## Mails
 

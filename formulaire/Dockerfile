@@ -50,7 +50,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
 RUN yarn workspaces focus --production || echo "Focus failed, continuing anyway" && yarn cache clean || true
 
 # Generate Prisma client with resilience
-RUN npx prisma generate || echo "Prisma generate failed, continuing anyway"
+RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
