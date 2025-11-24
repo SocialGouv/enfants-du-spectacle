@@ -1,3 +1,10 @@
+## [1.125.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.125.0...v1.125.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **deps:** lock prisma version to 6 ([dd6dc40](https://github.com/SocialGouv/enfants-du-spectacle/commit/dd6dc4040e3d35268a0dd3914e72325c00697624))
+
 # [1.125.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.124.1...v1.125.0) (2025-11-18)
 
 
