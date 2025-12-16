@@ -84,8 +84,7 @@ ENV NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=$NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma /app/node_modules/@prisma
+# Note: .prisma and @prisma are already included in node_modules with pnpm
 COPY --from=builder /app/next.config.js .
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/src ./src
