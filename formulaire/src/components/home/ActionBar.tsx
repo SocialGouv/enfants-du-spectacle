@@ -79,13 +79,26 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
           </div>
         </div>
       )}
-      <div className={styles.infoMessageWrapper}>
-        <div className={styles.iconInfoWrapper}>
+      <div className={styles.warningMessageWrapper}>
+        <div className={styles.iconWrapper}>
           <FiAlertCircle className={styles.alertIcon} size={24} />
         </div>
         <div>
-          Des changements ont été apportés à la plateforme. Désormais, vous n'avez besoin d'appuyer qu'une seule fois sur le bouton "Déposer". <br />
-          Une fois le dossier transmis aux services d'instruction, toutes les modifications apportées seront automatiquement enregistrées.
+          <strong>Nouveauté :</strong>
+          <p style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+            A partir du 5 janvier 2026, un nouveau service sera disponible sur la plateforme Démarche Numérique.
+          </p>
+          <p>
+            Le lien sera disponible sur le site internet DRIEETS à partir du 5 janvier 2026 : A toutes fins utiles, voici le lien vers le site de la DRIEETS dédié aux enfants du spectacle et l'information qui y est indiquée :{" "}
+            <a
+              href="https://idf.drieets.gouv.fr/Enfants-du-spectacle-le-service-passe-au-numerique"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.formLink}
+            >
+              Enfants du spectacle : le service passe au numérique - Direction régionale interdépartementale de l'économie, de l'emploi, du travail et des solidarités (DREETS)
+            </a>
+          </p>
         </div>
       </div>
       <div className={styles.button}>
