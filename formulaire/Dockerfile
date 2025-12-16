@@ -2,17 +2,20 @@
 FROM node:20-alpine3.18 AS deps
 # Add necessary build dependencies for native modules
 RUN apk add --no-cache libc6-compat python3 make g++ git
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
 COPY package.json ./
-COPY yarn.lock .yarnrc.yml ./
-COPY .yarn .yarn
-# Use frozen lockfile to ensure exact dependencies are installed, and add CI=true to avoid interactive prompts
-RUN yarn install --frozen-lockfile --network-timeout 300000 && yarn cache clean
+COPY ../pnpm-lock.yaml ../pnpm-workspace.yaml ./
+# Use frozen lockfile to ensure exact dependencies are installed
+RUN pnpm install --frozen-lockfile
 
 # 2. Rebuild the source code only when needed
 FROM node:20-alpine3.18 AS builder
 # Add necessary build dependencies
 RUN apk add --no-cache libc6-compat python3 make g++ git
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -42,19 +45,20 @@ ENV NEXT_PUBLIC_PATH_S3=$NEXT_PUBLIC_PATH_S3
 ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
+# Generate Prisma client with resilience
+RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
 # Handle Sentry CLI issue
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token || echo "dummy-token") \
-    npm run build || (echo "Build failed, continuing anyway" && mkdir -p .next)
-# Make the cleanup resilient to failures
-RUN yarn workspaces focus --production || echo "Focus failed, continuing anyway" && yarn cache clean || true
-
-# Generate Prisma client with resilience
-RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
+    pnpm run build || (echo "Build failed, continuing anyway" && mkdir -p .next)
+# Prune devDependencies
+RUN pnpm prune --prod || echo "Prune failed, continuing anyway"
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider
@@ -93,4 +97,4 @@ USER 1000
 EXPOSE 3000
 ARG START_SCRIPT=start-prod
 ENV START_SCRIPT=$START_SCRIPT
-CMD ["sh", "-c", "yarn run $START_SCRIPT"]
+CMD ["sh", "-c", "pnpm run $START_SCRIPT"]

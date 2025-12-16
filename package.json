@@ -33,7 +33,7 @@
     "@aws-sdk/s3-request-presigner": "^3.837.0",
     "@dataesr/react-dsfr": "^0.9.2",
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.19.1",
     "@sentry/nextjs": "^6.15.0",
     "@socialgouv/matomo-next": "^1.6.1",
     "@tanstack/react-query": "^4.36.1",
@@ -54,14 +54,14 @@
     "javascript-state-machine": "^3.1.0",
     "js-base64": "^3.7.2",
     "jsonwebtoken": "^9.0.0",
-    "jspdf": "^2.5.1",
-    "jspdf-autotable": "^3.5.23",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.2",
     "jszip": "^3.9.1",
     "lodash": "^4.17.21",
-    "multer": "^1.4.4",
+    "multer": "^2.0.2",
     "next": "12",
-    "next-auth": "4.0.2",
-    "nodemailer": "^6.7.2",
+    "next-auth": "4.24.13",
+    "nodemailer": "^7.0.11",
     "react": "17.0.2",
     "react-chartjs-2": "^4.3.1",
     "react-cookie-consent": "^8.0.1",
@@ -109,8 +109,20 @@
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "@parcel/watcher",
+      "@sentry/cli",
+      "unrs-resolver",
+      "core-js",
+      "core-js-pure"
+    ]
+  },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "npx eslint --cache"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "pnpm@9.15.1"
 }
