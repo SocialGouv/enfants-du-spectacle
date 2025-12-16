@@ -5,8 +5,8 @@ RUN apk add --no-cache libc6-compat python3 make g++ git
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY formulaire/package.json ./package.json
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY formulaire/package.json ./formulaire/package.json
 # Use frozen lockfile to ensure exact dependencies are installed
 RUN pnpm install --frozen-lockfile --filter enfants-du-spectacle-formulaire
 
