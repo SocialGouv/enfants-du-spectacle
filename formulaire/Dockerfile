@@ -5,10 +5,10 @@ RUN apk add --no-cache libc6-compat python3 make g++ git
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
-COPY package.json ./
-COPY ../pnpm-lock.yaml ../pnpm-workspace.yaml ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY formulaire/package.json ./package.json
 # Use frozen lockfile to ensure exact dependencies are installed
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --filter enfants-du-spectacle-formulaire
 
 # 2. Rebuild the source code only when needed
 FROM node:20-alpine3.18 AS builder
@@ -18,7 +18,10 @@ RUN apk add --no-cache libc6-compat python3 make g++ git
 RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Copy all formulaire files (context is repo root)
+COPY formulaire/ .
+# Copy prisma from root for schema access
+COPY prisma ./prisma
 # cf https://github.com/webpack/webpack/issues/14532
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NODE_ENV=production
@@ -46,7 +49,7 @@ ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
 # Generate Prisma client with resilience
-RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
+RUN pnpm exec prisma generate || echo "Prisma generate failed, continuing anyway"
 # Handle Sentry CLI issue
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token || echo "dummy-token") \

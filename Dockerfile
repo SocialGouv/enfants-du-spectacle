@@ -45,7 +45,7 @@ ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
 ENV SENTRY_PROJECT=app-enfants-du-spectacle
 ENV SENTRY_ORG=incubateur
 # Generate Prisma client before building
-RUN pnpm exec prisma@^6 generate
+RUN pnpm exec prisma generate
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
   pnpm run build
 RUN pnpm prune --prod
