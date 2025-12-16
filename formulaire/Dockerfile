@@ -3,7 +3,7 @@ FROM node:20-alpine3.18 AS deps
 # Add necessary build dependencies for native modules
 RUN apk add --no-cache libc6-compat python3 make g++ git
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY formulaire/package.json ./formulaire/package.json
@@ -15,7 +15,7 @@ FROM node:20-alpine3.18 AS builder
 # Add necessary build dependencies
 RUN apk add --no-cache libc6-compat python3 make g++ git
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 # Copy all formulaire files (context is repo root)
@@ -60,8 +60,8 @@ RUN pnpm prune --prod || echo "Prune failed, continuing anyway"
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+# Install pnpm via corepack
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider

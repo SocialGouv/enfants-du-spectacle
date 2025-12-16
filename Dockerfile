@@ -4,7 +4,7 @@
 FROM node:20-alpine3.18 AS deps
 RUN apk add --no-cache libc6-compat
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
@@ -12,7 +12,7 @@ RUN pnpm install --frozen-lockfile
 # 2. Rebuild the source code only when needed
 FROM node:20-alpine3.18 AS builder
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -53,8 +53,8 @@ RUN pnpm prune --prod
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+# Install pnpm via corepack
+RUN corepack enable && corepack prepare pnpm@10.24.0 --activate
 WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=8192"
