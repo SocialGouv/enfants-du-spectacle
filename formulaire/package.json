@@ -60,5 +60,5 @@
     "@types/multer": "^1.4.7",
     "prisma": "^6.6.0"
   },
-  "packageManager": "pnpm@10.24.0"
+  "packageManager": "pnpm@9.15.1"
 }
