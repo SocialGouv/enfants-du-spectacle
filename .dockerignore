@@ -4,7 +4,7 @@
 *.md
 **/node_modules
 **/.next/cache
-/formulaire
+# /formulaire - Commenté car nécessaire pour build formulaire depuis contexte racine
 .dockerignore
 Dockerfile
 .gitignore
