@@ -15,16 +15,34 @@ Stack:
 - [Prisma](https://www.prisma.io/docs)
 - [@dataesr/react-dsfr - Composants React pour le Système de Design de l'État.](https://github.com/dataesr/react-dsfr)
 
+## 🔒 Gestionnaire de paquets
+
+**Ce projet utilise pnpm pour des raisons de sécurité et de performance.**
+
+⚠️ **N'utilisez pas npm ou yarn** - utilisez exclusivement pnpm pour gérer les dépendances.
+
+```bash
+# ✅ Correct
+pnpm install
+pnpm dev
+
+# ❌ Incorrect - Ne pas utiliser
+npm install   # ❌
+yarn install  # ❌
+```
+
+Pour plus de détails sur la migration, consultez [MIGRATION_PNPM.md](./MIGRATION_PNPM.md).
+
 ## Local environment
 
-- `npm install`
+- `pnpm install`
 
 puis:
 
 - installer [overmind](https://github.com/DarthSim/overmind)
-- `npm run dev-procfile`
+- `pnpm run dev-procfile`
 
-- ou alors: `npm run dev & npx maildev`
+- ou alors: `pnpm dev & npx maildev`
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
 
