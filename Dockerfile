@@ -56,8 +56,6 @@ RUN apk add --no-cache postgresql-client
 # Enable corepack and prepare pnpm to avoid signature verification issues at runtime
 RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
-# Copier pnpm depuis le builder (déjà installé, évite re-téléchargement)
-COPY --from=builder /root/.cache/node/corepack /root/.cache/node/corepack
 ENV NODE_ENV production
 ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED 1
