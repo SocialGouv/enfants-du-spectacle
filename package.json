@@ -21,14 +21,15 @@
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build --no-lint",
     "start": "next start",
-    "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && next start",
-    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && source src/scripts/restore_seeds.sh && next start",
+    "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && pnpm exec prisma migrate deploy && next start",
+    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && pnpm exec prisma migrate deploy && source src/scripts/restore_seeds.sh && next start",
     "check-types": "tsc --noemit",
     "lint": "next lint",
     "prepare": "husky install",
     "send-test-mail": "node scripts/sendTestMail.js"
   },
   "dependencies": {
+    "prisma": "^6.19.1",
     "@aws-sdk/client-s3": "^3.837.0",
     "@aws-sdk/s3-request-presigner": "^3.837.0",
     "@dataesr/react-dsfr": "^0.9.2",
@@ -101,7 +102,6 @@
     "maildev": "^2.2.1",
     "mjml": "^4.11.0",
     "prettier": "^2.5.1",
-    "prisma": "^6.6.0",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
     "typescript": "latest"

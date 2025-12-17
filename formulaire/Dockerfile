@@ -60,8 +60,15 @@ RUN pnpm prune --prod || echo "Prune failed, continuing anyway"
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
-# Install pnpm directly via npm to avoid Corepack signature verification issues
-RUN npm install -g pnpm@9.15.1
+
+# Runtime: avoid Corepack shims (they can fail signature verification at startup)
+# and install pnpm via npm.
+RUN corepack disable || true \
+ && rm -f /usr/local/bin/pnpm /usr/local/bin/pnpx \
+ && npm install -g pnpm@9.15.1 \
+ && pnpm --version \
+ && ls -l "$(command -v pnpm)"
+
 WORKDIR /app
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider
