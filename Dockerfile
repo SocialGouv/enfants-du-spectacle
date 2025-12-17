@@ -53,8 +53,8 @@ RUN pnpm prune --prod
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
 RUN apk add --no-cache postgresql-client
-# Enable corepack uniquement
-RUN corepack enable
+# Enable corepack and prepare pnpm to avoid signature verification issues at runtime
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 WORKDIR /app
 # Copier pnpm depuis le builder (déjà installé, évite re-téléchargement)
 COPY --from=builder /root/.cache/node/corepack /root/.cache/node/corepack
