@@ -113,7 +113,8 @@ ARG NEXT_PUBLIC_PATH_S3
 ENV NEXT_PUBLIC_PATH_S3=$NEXT_PUBLIC_PATH_S3
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder /app/node_modules ./node_modules
+# Ensure runtime user (UID 1000) can access node_modules (Prisma may chmod/write in @prisma/engines).
+COPY --from=builder --chown=1000:1000 /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.js .
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/src ./src

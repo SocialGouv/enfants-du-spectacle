@@ -8,6 +8,8 @@ app:
   env:
     - name: APP_BASE_URL
       value: "https://{{ $.Values.global.host }}"
+    - name: NEXTAUTH_URL
+      value: "https://{{ $.Values.global.host }}"
   envFrom:
     - secretRef:
         name: pg-app
@@ -44,6 +46,8 @@ form:
     oblik.socialgouv.io/min-request-memory: "512Mi"
   env:
     - name: APP_BASE_URL
+      value: "https://formulaire-{{ $.Values.global.host }}"
+    - name: NEXTAUTH_URL
       value: "https://formulaire-{{ $.Values.global.host }}"
     - name: START_SCRIPT
       value: "start-prod"
