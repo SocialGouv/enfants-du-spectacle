@@ -63,18 +63,18 @@ ENV NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=$NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID
 ARG NEXT_PUBLIC_PATH_S3
 ENV NEXT_PUBLIC_PATH_S3=$NEXT_PUBLIC_PATH_S3
 ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
-ENV SENTRY_PROJECT=app-enfants-du-spectacle
-ENV SENTRY_ORG=incubateur
-# Handle Sentry CLI issue
-RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token || echo "dummy-token") \
-    pnpm run build || (echo "Build failed, continuing anyway" && mkdir -p .next)
-# Make the cleanup resilient to failures
-# Pruning should not run lifecycle scripts (eg husky's prepare)
-RUN pnpm prune --prod --ignore-scripts || echo "Prune failed, continuing anyway"
+  ENV SENTRY_PROJECT=app-enfants-du-spectacle
+  ENV SENTRY_ORG=incubateur
+  # Generate Prisma client before building.
+  # (Must be present so Next build/runtime can import @prisma/client correctly.)
+  RUN pnpm exec prisma generate
 
-# Generate Prisma client with resilience
-RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
+  # Build must succeed; never ship an image without a valid `.next/BUILD_ID`.
+  RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+      pnpm run build
+
+  # Pruning should not run lifecycle scripts (eg husky's prepare)
+  RUN pnpm prune --prod --ignore-scripts
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner

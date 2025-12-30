@@ -21,8 +21,8 @@
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
     "build": "next build",
     "start": "next start",
-    "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && next start",
-    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && source src/scripts/restore_seeds.sh && next start",
+    "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && pnpm exec prisma migrate deploy && next start",
+    "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && pnpm exec prisma migrate deploy && source src/scripts/restore_seeds.sh && next start",
     "check-types": "tsc --noemit",
     "lint": "next lint",
     "prepare": "husky install",
@@ -78,7 +78,8 @@
     "superjson": "^1.8.0",
     "swr": "^1.1.0",
     "use-debounce": "^7.0.1",
-    "zod": "^3.20.2"
+    "zod": "^3.20.2",
+    "prisma": "^6.6.0"
   },
   "devDependencies": {
     "@socialgouv/eslint-config-react": "^1.100.0",
@@ -102,7 +103,6 @@
     "maildev": "^2.2.1",
     "mjml": "^4.11.0",
     "prettier": "^2.5.1",
-    "prisma": "^6.6.0",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
     "typescript": "4.9.5"
