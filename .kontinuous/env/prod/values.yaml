@@ -1,3 +1,46 @@
+bucketEndpoint: &bucketEndpoint
+  name: BUCKET_ENDPOINT
+  valueFrom:
+    secretKeyRef:
+      name: enfants-du-spectacle-prod-app-access-key
+      key: bucket_endpoint
+
+bucketName: &bucketName
+  name: BUCKET_NAME
+  valueFrom:
+    secretKeyRef:
+      name: enfants-du-spectacle-prod-app-access-key
+      key: bucket_name
+
+bucketRegion: &bucketRegion
+  name: BUCKET_REGION
+  valueFrom:
+    secretKeyRef:
+      name: enfants-du-spectacle-prod-app-access-key
+      key: bucket_region
+
+bucketAccessKey: &bucketAccessKey
+  name: BUCKET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: enfants-du-spectacle-prod-app-access-key
+      key: bucket_access_key
+
+bucketSecretKey: &bucketSecretKey
+  name: BUCKET_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: enfants-du-spectacle-prod-app-access-key
+      key: bucket_secret_key
+
+appBaseUrlApp: &appBaseUrlApp
+  name: APP_BASE_URL
+  value: "https://{{ $.Values.global.host }}"
+
+appBaseUrlForm: &appBaseUrlForm
+  name: APP_BASE_URL
+  value: "https://formulaire-{{ $.Values.global.host }}"
+
 app:
   resources:
     requests:
@@ -9,33 +52,12 @@ app:
   securityContext:
     fsGroup: 1000
   env:
-    - name: BUCKET_ENDPOINT
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_endpoint
-    - name: BUCKET_NAME
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_name
-    - name: BUCKET_REGION
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_region
-    - name: BUCKET_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_access_key
-    - name: BUCKET_SECRET_KEY
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_secret_key
-    - name: APP_BASE_URL
-      value: "https://{{ $.Values.global.host }}"
+    - *bucketEndpoint
+    - *bucketName
+    - *bucketRegion
+    - *bucketAccessKey
+    - *bucketSecretKey
+    - *appBaseUrlApp
 
 form:
   resources:
@@ -48,33 +70,12 @@ form:
   securityContext:
     fsGroup: 1000
   env:
-    - name: BUCKET_ENDPOINT
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_endpoint
-    - name: BUCKET_NAME
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_name
-    - name: BUCKET_REGION
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_region
-    - name: BUCKET_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_access_key
-    - name: BUCKET_SECRET_KEY
-      valueFrom:
-        secretKeyRef:
-          name: enfants-du-spectacle-prod-app-access-key
-          key: bucket_secret_key
-    - name: APP_BASE_URL
-      value: "https://formulaire-{{ $.Values.global.host }}"
+    - *bucketEndpoint
+    - *bucketName
+    - *bucketRegion
+    - *bucketAccessKey
+    - *bucketSecretKey
+    - *appBaseUrlForm
     - name: START_SCRIPT
       value: "start-prod"
 
@@ -106,4 +107,3 @@ pg:
             key: bucket_region
   backup:
     name: "202403062019" # backup on a new folder
-
