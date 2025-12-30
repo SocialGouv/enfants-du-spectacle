@@ -11,7 +11,14 @@ import {
 import Layout from "src/components/Layout";
 
 // Type pour les sections PDF
-type SectionPdf = "TEXTES_LEGAUX" | "CONSIDERANTS" | "ARTICLE_2" | "ARTICLE_3" | "ARTICLE_4" | "SIGNATURE" | "RECOURS";
+type SectionPdf =
+  | "TEXTES_LEGAUX"
+  | "CONSIDERANTS"
+  | "ARTICLE_2"
+  | "ARTICLE_3"
+  | "ARTICLE_4"
+  | "SIGNATURE"
+  | "RECOURS";
 
 interface ContenuPdf {
   id: string;
@@ -50,11 +57,18 @@ const SECTIONS = [
 
 const ContenusPdfPage: React.FC = () => {
   const [departementSelectionne, setDepartementSelectionne] = useState("75");
-  const [sectionActive, setSectionActive] = useState<SectionPdf>("TEXTES_LEGAUX");
+  const [sectionActive, setSectionActive] = useState<SectionPdf>(
+    "TEXTES_LEGAUX"
+  );
   const [contenus, setContenus] = useState<ContenuPdf[]>([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [formData, setFormData] = useState<{ [key in SectionPdf]?: { titre: string; contenu: string } }>({});
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+  const [formData, setFormData] = useState<{
+    [key in SectionPdf]?: { titre: string; contenu: string };
+  }>({});
 
   // Chargement initial des contenus
   useEffect(() => {
@@ -66,13 +80,17 @@ const ContenusPdfPage: React.FC = () => {
   const chargerContenus = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/contenus-pdf?departement=${departementSelectionne}`);
+      const response = await fetch(
+        `/api/admin/contenus-pdf?departement=${departementSelectionne}`
+      );
       const data = await response.json();
 
       if (response.ok) {
         setContenus(data);
         // Initialiser le formulaire avec les données existantes
-        const newFormData: { [key in SectionPdf]?: { titre: string; contenu: string } } = {};
+        const newFormData: {
+          [key in SectionPdf]?: { titre: string; contenu: string };
+        } = {};
         data.forEach((contenu: ContenuPdf) => {
           newFormData[contenu.section] = {
             titre: contenu.titre,
@@ -81,10 +99,16 @@ const ContenusPdfPage: React.FC = () => {
         });
         setFormData(newFormData);
       } else {
-        setMessage({ type: "error", text: data.error || "Erreur lors du chargement" });
+        setMessage({
+          type: "error",
+          text: data.error || "Erreur lors du chargement",
+        });
       }
     } catch (error) {
-      setMessage({ type: "error", text: "Erreur lors du chargement des contenus" });
+      setMessage({
+        type: "error",
+        text: "Erreur lors du chargement des contenus",
+      });
     } finally {
       setLoading(false);
     }
@@ -92,7 +116,7 @@ const ContenusPdfPage: React.FC = () => {
 
   const sauvegarderContenu = async () => {
     const contenuActuel = formData[sectionActive];
-    
+
     if (!contenuActuel?.titre || !contenuActuel?.contenu) {
       setMessage({ type: "error", text: "Le titre et le contenu sont requis" });
       return;
@@ -119,7 +143,10 @@ const ContenusPdfPage: React.FC = () => {
         setMessage({ type: "success", text: "Contenu sauvegardé avec succès" });
         await chargerContenus(); // Recharger pour avoir les dernières données
       } else {
-        setMessage({ type: "error", text: data.error || "Erreur lors de la sauvegarde" });
+        setMessage({
+          type: "error",
+          text: data.error || "Erreur lors de la sauvegarde",
+        });
       }
     } catch (error) {
       setMessage({ type: "error", text: "Erreur lors de la sauvegarde" });
@@ -128,7 +155,11 @@ const ContenusPdfPage: React.FC = () => {
     }
   };
 
-  const updateFormData = (section: SectionPdf, field: "titre" | "contenu", value: string) => {
+  const updateFormData = (
+    section: SectionPdf,
+    field: "titre" | "contenu",
+    value: string
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [section]: {

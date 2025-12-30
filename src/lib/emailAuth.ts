@@ -27,12 +27,11 @@ function sendVerificationRequest({
 
   const wording = _.find(WORDING_MAILING, { type: type });
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  function html({ url }: { url: string }): string {
+  function html({ url: buttonUrl }: { url: string }): string {
     return templateSignin
       .replace("__TEXT__", wording.text as string)
       .replace("__TITLE__", wording?.title as string)
-      .replace("__URL__", url)
+      .replace("__URL__", buttonUrl)
       .replace("__BUTTON__", wording.button as string)
       .replace("__BYE__", wording.bye as string);
   }

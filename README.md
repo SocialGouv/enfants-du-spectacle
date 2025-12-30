@@ -17,14 +17,19 @@ Stack:
 
 ## Local environment
 
-- `npm install`
+- `corepack enable`
+- `pnpm install`
+
+Notes:
+- This repository uses pnpm (not yarn). Do not commit `yarn.lock` or `package-lock.json`.
+- Root app scripts run from the repo root. The `formulaire` app can be run with `pnpm -C formulaire <script>`.
 
 puis:
 
 - installer [overmind](https://github.com/DarthSim/overmind)
-- `npm run dev-procfile`
+- `pnpm run dev-procfile`
 
-- ou alors: `npm run dev & npx maildev`
+- ou alors: `pnpm run dev & npx maildev`
 
 Une interface web est disponible sur [localhost:1080](http://localhost:1080/) qui affiche tous les mails intercéptés.
 

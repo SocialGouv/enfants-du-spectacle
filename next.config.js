@@ -2,29 +2,23 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
 
-module.exports = withSentryConfig(
-  {
-    typescript: {
-      // !! WARN !!
-      // Dangerously allow production builds to successfully complete even if
-      // your project has type errors.
-      // !! WARN !!
-      ignoreBuildErrors: true,
-    },
-    sentry: {
-      disableClientWebpackPlugin: true,
-      disableServerWebpackPlugin: true,
-    },
-  }
-  , {
-    // Additional config options for the Sentry Webpack plugin. Keep in mind that
-    // the following options are set automatically, and overriding them is not
-    // recommended:
-    //   release, url, org, project, authToken, configFile, stripPrefix,
-    //   urlPrefix, include, ignore
+const nextConfig = {
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+};
 
-    silent: true, // Suppresses all logs
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options.
-  }
-)
+// Only enable Sentry's webpack plugin when all required env vars are present.
+// Otherwise, local/dev builds can fail with `sentry-cli` errors.
+const hasSentry =
+  !!process.env.SENTRY_AUTH_TOKEN &&
+  !!process.env.SENTRY_ORG &&
+  !!process.env.SENTRY_PROJECT;
+
+module.exports = hasSentry
+  ? withSentryConfig(nextConfig, { silent: true })
+  : nextConfig;

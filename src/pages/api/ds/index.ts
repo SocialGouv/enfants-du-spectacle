@@ -94,7 +94,6 @@ const checkNeedUpdate = async (
   let needUpdate = forceUpdateIds.length > 0;
   const dossiersToUpdate = forceUpdateIds;
 
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < data.data.demarche.dossiers.nodes.length; i++) {
     const dossier = data.data.demarche.dossiers.nodes[i];
     const intDossier = await searchDossierByExternalId(

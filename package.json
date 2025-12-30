@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "next dev",
     "dev-procfile": "OVERMIND_NO_PORT=1 overmind start -f Procfile.dev",
-    "build": "next build --no-lint",
+    "build": "next build",
     "start": "next start",
     "start-prod": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && next start",
     "start-review": "export NEXTAUTH_URL=$APP_BASE_URL && npx --yes prisma@^6 migrate deploy && source src/scripts/restore_seeds.sh && next start",
@@ -58,7 +58,7 @@
     "jspdf-autotable": "^3.5.23",
     "jszip": "^3.9.1",
     "lodash": "^4.17.21",
-    "multer": "^1.4.4",
+    "multer": "^1.4.4-lts.1",
     "next": "12",
     "next-auth": "4.0.2",
     "nodemailer": "^6.7.2",
@@ -87,13 +87,14 @@
     "@types/faker": "^5.5.9",
     "@types/formidable": "^2.0.5",
     "@types/lodash": "^4.17.16",
+    "@types/node": "^18.0.0",
     "@types/react": "latest",
     "@types/react-datepicker": "^4.10.0",
     "@types/uuid": "^10.0.0",
     "csv-parse": "^5.0.3",
     "csv-stringify": "^6.0.3",
     "eslint": "^7.32.0",
-    "eslint-config-next": "^14.0.1",
+    "eslint-config-next": "12.3.7",
     "faker": "^5.5.3",
     "husky": "^7.0.4",
     "jest": "^27.4.3",
@@ -104,7 +105,13 @@
     "prisma": "^6.6.0",
     "slugify": "^1.6.3",
     "ts-node": "^10.4.0",
-    "typescript": "latest"
+    "typescript": "4.9.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "prisma"
+    ]
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -112,5 +119,5 @@
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "npx eslint --cache"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "pnpm@10.26.2"
 }

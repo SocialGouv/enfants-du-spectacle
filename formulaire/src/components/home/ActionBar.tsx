@@ -86,10 +86,10 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
         <div>
           <strong>Nouveauté :</strong>
           <p style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-            A partir du 5 janvier 2026, un nouveau service sera disponible sur la plateforme Démarche Numérique.
+            À partir du 5 janvier 2026, un nouveau service sera disponible sur la plateforme Démarche Numérique.
           </p>
           <p>
-            Le lien sera disponible sur le site internet DRIEETS à partir du 5 janvier 2026 : A toutes fins utiles, voici le lien vers le site de la DRIEETS dédié aux enfants du spectacle et l'information qui y est indiquée :{" "}
+            Le lien sera disponible sur le site internet DRIEETS à partir du 5 janvier 2026 : À toutes fins utiles, voici le lien vers le site de la DRIEETS dédié aux enfants du spectacle et l'information qui y est indiquée :{" "}
             <a
               href="https://idf.drieets.gouv.fr/Enfants-du-spectacle-le-service-passe-au-numerique"
               target="_blank"
