@@ -1,3 +1,10 @@
+# [1.130.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.129.0...v1.130.0) (2026-01-05)
+
+
+### Features
+
+* adjustments messages ([#871](https://github.com/SocialGouv/enfants-du-spectacle/issues/871)) ([0651b0c](https://github.com/SocialGouv/enfants-du-spectacle/commit/0651b0c14ba17ad01044399023676057a6017c7c))
+
 # [1.129.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.128.0...v1.129.0) (2026-01-05)
 
 
