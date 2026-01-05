@@ -1,3 +1,10 @@
+# [1.128.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.127.0...v1.128.0) (2026-01-05)
+
+
+### Features
+
+* trigger deploy ([#869](https://github.com/SocialGouv/enfants-du-spectacle/issues/869)) ([f34618d](https://github.com/SocialGouv/enfants-du-spectacle/commit/f34618dd028726ea96159b4c2cabf3ab6118172f))
+
 # [1.127.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.126.0...v1.127.0) (2026-01-05)
 
 
