@@ -41,7 +41,7 @@ const Intro: React.FC = () => {
             <p style={{ marginBottom: "0.5rem" }}>
               Depuis le 5 janvier 2026, un nouveau service est disponible sur la plateforme Démarche Numérique.
             </p>
-            <p style={{ marginBottom: 0 }}>
+            <p style={{ marginBottom: "0.5rem" }}>
               Le service pour déposer vos dossiers est désormais acccessible via le lien suivant :{" "}
               <a 
                 href="https://demarche.numerique.gouv.fr/commencer/enfants-du-spectacle-2026"
