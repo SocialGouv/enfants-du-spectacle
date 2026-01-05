@@ -342,7 +342,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         {(dossier.statut === "BROUILLON" ||
           dossier.statut === "CONSTRUCTION") && (
           <div className={styles.saveBar}>
-            <div className={styles.textSaveBar}>
+            {/* <div className={styles.textSaveBar}>
               {dossier.statut === "BROUILLON" ? (
                 <p>
                   Votre dossier est automatiquement enregistré sur votre
@@ -359,7 +359,7 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                   transmises aux services d'instruction. <br />
                 </p>
               )}
-            </div>
+            </div> */}
             {dossier.statut === "BROUILLON" && (
               <div className={styles.buttonSaveBar}>
                 {/* <ButtonLink
