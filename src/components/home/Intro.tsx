@@ -39,10 +39,21 @@ const Intro: React.FC = () => {
         <div style={{ width: "100%", backgroundColor: "#f5f5fe", borderLeft: "4px solid #000091", padding: "1.5rem", marginTop: "2rem" }}>
             <p style={{ fontWeight: "bold", marginBottom: "0.5rem", marginTop: 0 }}>Nouveauté :</p>
             <p style={{ marginBottom: "0.5rem" }}>
-              A partir du 5 janvier 2026, un nouveau service sera disponible sur la plateforme Démarche Numérique.
+              Depuis le 5 janvier 2026, un nouveau service est disponible sur la plateforme Démarche Numérique.
             </p>
             <p style={{ marginBottom: 0 }}>
-              Le lien sera disponible sur le site internet DRIEETS à partir du 5 janvier 2026 : A toutes fins utiles, voici le lien vers le site de la DRIEETS dédié aux enfants du spectacle et l&apos;information qui y est indiquée :{" "}
+              Le service pour déposer vos dossiers est désormais acccessible via le lien suivant :{" "}
+              <a 
+                href="https://demarche.numerique.gouv.fr/commencer/enfants-du-spectacle-2026"
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "#000091", textDecorationSkipInk: "auto" }}
+              >
+                Enfants du Spectacle : Dépôt de dossier
+              </a>
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              A toutes fins utiles, voici le lien vers le site de la DRIEETS dédié aux enfants du spectacle et l&apos;information qui y est indiquée :{" "}
               <a 
                 href="https://idf.drieets.gouv.fr/Enfants-du-spectacle-le-service-passe-au-numerique" 
                 target="_blank" 
