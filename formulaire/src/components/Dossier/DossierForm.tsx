@@ -362,14 +362,14 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
             </div>
             {dossier.statut === "BROUILLON" && (
               <div className={styles.buttonSaveBar}>
-                <ButtonLink
+                {/* <ButtonLink
                   href={`#menu-dossier`}
                   onClick={async () => {
                     handleDepotDossier();
                   }}
                 >
                   Déposer
-                </ButtonLink>
+                </ButtonLink> */}
               </div>
             )}
           </div>
