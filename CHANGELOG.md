@@ -1,3 +1,10 @@
+# [1.129.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.128.0...v1.129.0) (2026-01-05)
+
+
+### Features
+
+* message new service, disable depot dossiers ([#870](https://github.com/SocialGouv/enfants-du-spectacle/issues/870)) ([9b49804](https://github.com/SocialGouv/enfants-du-spectacle/commit/9b498043d0a9569fc12d8ae486bee830de82c2d0))
+
 # [1.128.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.127.0...v1.128.0) (2026-01-05)
 
 
