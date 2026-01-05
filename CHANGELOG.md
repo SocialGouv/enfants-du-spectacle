@@ -1,3 +1,15 @@
+# [1.126.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.125.1...v1.126.0) (2026-01-05)
+
+
+### Bug Fixes
+
+* pnpm migration ([#868](https://github.com/SocialGouv/enfants-du-spectacle/issues/868)) ([ed790c3](https://github.com/SocialGouv/enfants-du-spectacle/commit/ed790c3172f61625f8ccb945917932de6f78f25a))
+
+
+### Features
+
+* message new platform ([#864](https://github.com/SocialGouv/enfants-du-spectacle/issues/864)) ([98a590f](https://github.com/SocialGouv/enfants-du-spectacle/commit/98a590fd0142870fded9240539143ca7d75c4f0a))
+
 ## [1.125.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.125.0...v1.125.1) (2025-11-24)
 
 
