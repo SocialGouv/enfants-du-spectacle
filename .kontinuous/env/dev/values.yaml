@@ -1,32 +1,59 @@
-bucketValues: &bucketValues
-  - name: BUCKET_ENDPOINT
-    valueFrom:
-      secretKeyRef:
-        name: enfants-du-spectacle-dev-app-access-key
-        key: bucket_endpoint
-  - name: BUCKET_NAME
-    valueFrom:
-      secretKeyRef:
-        name: enfants-du-spectacle-dev-app-access-key
-        key: bucket_name
-  - name: BUCKET_REGION
-    valueFrom:
-      secretKeyRef:
-        name: enfants-du-spectacle-dev-app-access-key
-        key: bucket_region
-  - name: BUCKET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: enfants-du-spectacle-dev-app-access-key
-        key: bucket_access_key
-  - name: BUCKET_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: enfants-du-spectacle-dev-app-access-key
-        key: bucket_secret_key
-
 app:
-  env: *bucketValues
+  env:
+    - name: APP_BASE_URL
+      value: "https://{{ $.Values.global.host }}"
+    - name: BUCKET_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_endpoint
+    - name: BUCKET_NAME
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_name
+    - name: BUCKET_REGION
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_region
+    - name: BUCKET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_access_key
+    - name: BUCKET_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_secret_key
 
 form:
-  env: *bucketValues
+  env:
+    - name: APP_BASE_URL
+      value: "https://formulaire-{{ $.Values.global.host }}"
+    - name: BUCKET_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_endpoint
+    - name: BUCKET_NAME
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_name
+    - name: BUCKET_REGION
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_region
+    - name: BUCKET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_access_key
+    - name: BUCKET_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: enfants-du-spectacle-dev-app-access-key
+          key: bucket_secret_key

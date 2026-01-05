@@ -19,8 +19,8 @@ const ButtonList: React.FC<Props> = ({ action }) => {
         <ButtonLink
           light={!(status === "futur")}
           onClick={() => {
-            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/no-unused-expressions
-            setStatus("futur"), action("futur");
+            setStatus("futur");
+            action("futur");
           }}
         >
           <BsCalendar4Event style={{ marginRight: "6px" }} />
@@ -35,8 +35,8 @@ const ButtonList: React.FC<Props> = ({ action }) => {
         <ButtonLink
           light={!(status === "past")}
           onClick={() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/no-confusing-void-expression
-            setStatus("past"), action("past");
+            setStatus("past");
+            action("past");
           }}
         >
           <TbBadge style={{ marginRight: "6px" }} />

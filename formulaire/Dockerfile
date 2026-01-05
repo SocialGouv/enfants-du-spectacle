@@ -3,17 +3,40 @@ FROM node:20-alpine3.18 AS deps
 # Add necessary build dependencies for native modules
 RUN apk add --no-cache libc6-compat python3 make g++ git
 WORKDIR /app
+
+# Enable pnpm.
+# Note: Corepack signature verification can fail in some CI/build environments.
+# We install pnpm directly to keep Docker builds deterministic.
+ARG PNPM_VERSION=10.26.2
+RUN npm i -g pnpm@${PNPM_VERSION} && pnpm --version
+
+# Leverage pnpm fetch: only pnpm-lock.yaml affects the dependency download cache.
+# Harden network settings: Docker/CI environments sometimes have slow or flaky egress.
+RUN pnpm config set store-dir /pnpm/store \
+ && pnpm config set network-timeout 600000 \
+ && pnpm config set fetch-retries 5 \
+ && pnpm config set fetch-retry-mintimeout 10000 \
+ && pnpm config set fetch-retry-maxtimeout 600000
+COPY pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm-store-formulaire,target=/pnpm/store pnpm fetch
+
+# package.json can change without invalidating the download cache
 COPY package.json ./
-COPY yarn.lock .yarnrc.yml ./
-COPY .yarn .yarn
-# Use frozen lockfile to ensure exact dependencies are installed, and add CI=true to avoid interactive prompts
-RUN yarn install --frozen-lockfile --network-timeout 300000 && yarn cache clean
+RUN --mount=type=cache,id=pnpm-store-formulaire,target=/pnpm/store pnpm install --frozen-lockfile --offline
 
 # 2. Rebuild the source code only when needed
 FROM node:20-alpine3.18 AS builder
 # Add necessary build dependencies
 RUN apk add --no-cache libc6-compat python3 make g++ git
+ARG PNPM_VERSION=10.26.2
+RUN npm i -g pnpm@${PNPM_VERSION} && pnpm --version
 WORKDIR /app
+# Keep pnpm store-dir and network settings consistent with deps stage.
+RUN pnpm config set store-dir /pnpm/store \
+ && pnpm config set network-timeout 600000 \
+ && pnpm config set fetch-retries 5 \
+ && pnpm config set fetch-retry-mintimeout 10000 \
+ && pnpm config set fetch-retry-maxtimeout 600000
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # cf https://github.com/webpack/webpack/issues/14532
@@ -40,22 +63,31 @@ ENV NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID=$NEXT_PUBLIC_MATOMO_SITE_FORMULAIRE_ID
 ARG NEXT_PUBLIC_PATH_S3
 ENV NEXT_PUBLIC_PATH_S3=$NEXT_PUBLIC_PATH_S3
 ENV SENTRY_URL=https://sentry.fabrique.social.gouv.fr
-ENV SENTRY_PROJECT=app-enfants-du-spectacle
-ENV SENTRY_ORG=incubateur
-# Handle Sentry CLI issue
-RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token || echo "dummy-token") \
-    npm run build || (echo "Build failed, continuing anyway" && mkdir -p .next)
-# Make the cleanup resilient to failures
-RUN yarn workspaces focus --production || echo "Focus failed, continuing anyway" && yarn cache clean || true
+  ENV SENTRY_PROJECT=app-enfants-du-spectacle
+  ENV SENTRY_ORG=incubateur
+  # Generate Prisma client before building.
+  # (Must be present so Next build/runtime can import @prisma/client correctly.)
+  RUN pnpm exec prisma generate
 
-# Generate Prisma client with resilience
-RUN npx prisma@^6 generate || echo "Prisma generate failed, continuing anyway"
+  # Build must succeed; never ship an image without a valid `.next/BUILD_ID`.
+  RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+      pnpm run build
+
+  # Pruning should not run lifecycle scripts (eg husky's prepare)
+  RUN pnpm prune --prod --ignore-scripts
 
 # Production image, copy all the files and run next
 FROM node:20-alpine3.18 AS runner
+ARG PNPM_VERSION=10.26.2
+RUN npm i -g pnpm@${PNPM_VERSION} && pnpm --version
 RUN apk add --no-cache postgresql-client
 WORKDIR /app
+# Keep pnpm store-dir and network settings consistent with deps/builder stages.
+RUN pnpm config set store-dir /pnpm/store \
+ && pnpm config set network-timeout 600000 \
+ && pnpm config set fetch-retries 5 \
+ && pnpm config set fetch-retry-mintimeout 10000 \
+ && pnpm config set fetch-retry-maxtimeout 600000
 ENV NODE_ENV production
 ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -81,7 +113,8 @@ ARG NEXT_PUBLIC_PATH_S3
 ENV NEXT_PUBLIC_PATH_S3=$NEXT_PUBLIC_PATH_S3
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder /app/node_modules ./node_modules
+# Ensure runtime user (UID 1000) can access node_modules (Prisma may chmod/write in @prisma/engines).
+COPY --from=builder --chown=1000:1000 /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.js .
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/src ./src
@@ -93,4 +126,4 @@ USER 1000
 EXPOSE 3000
 ARG START_SCRIPT=start-prod
 ENV START_SCRIPT=$START_SCRIPT
-CMD ["sh", "-c", "yarn run $START_SCRIPT"]
+CMD ["sh", "-c", "pnpm run $START_SCRIPT"]

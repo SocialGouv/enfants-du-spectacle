@@ -59,38 +59,23 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { isReady: routerIsReady, query } = router;
   const [showTable, setShowTable] = React.useState<boolean>(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = React.useState<statusGroup>("futur");
   const [loadingPdf, setLoadingPdf] = React.useState<string>("");
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const handleStatus = (status: statusGroup) => {
-    setStatus(status);
+  const handleStatus = (newStatus: statusGroup) => {
+    setStatus(newStatus);
   };
 
-  const { commissions, ...swrCommissions } =
-    status === "futur"
-      ? useCommissions(
-          "upcoming",
-          //@ts-expect-error
-          session.data.dbUser.role !== "MEMBRE"
-            ? "all"
-            : //@ts-expect-error
-              session.data.dbUser.departements
-        )
-      : { commissions: [] };
+  const datePeriod = status === "futur" ? "upcoming" : "past";
+  const departements =
+    session.status === "authenticated" && session.data.dbUser.role === "MEMBRE"
+      ? session.data.dbUser.departements
+      : "all";
 
-  const { ...commissionsPast } =
-    status === "past"
-      ? useCommissions(
-          "past",
-          //@ts-expect-error
-          session.data.dbUser.role !== "MEMBRE"
-            ? "all"
-            : //@ts-expect-error
-              session.data.dbUser.departements
-        )
-      : { commissions: [] };
+  const { commissions, ...swrCommissions } = useCommissions(
+    datePeriod,
+    departements
+  );
 
   const [searchValueInput, setSearchValueInput] = useState<string | undefined>(
     undefined
@@ -281,11 +266,11 @@ const Page: React.FC = () => {
     );
   };
 
-  const currentCommissions =
-    status === "futur" ? filteredCommissions : commissionsPast.commissions;
+  const currentCommissions = status === "futur" ? filteredCommissions : commissions;
 
   const isLoading = swrCommissions.isLoading || loading;
-  const isError = !isLoading && (swrCommissions.isError || !commissions);
+  const isError =
+    !isLoading && (swrCommissions.isError || commissions === undefined);
 
   return (
     <Layout
@@ -525,15 +510,15 @@ const Page: React.FC = () => {
                 <CommissionBloc commission={commission} />
               </div>
             ))}
-          {status === "past" &&
-            commissionsPast.commissions?.map((commission: CommissionData) => (
-              <div
-                key={commission.date.toString()}
-                className={styles.commissionBloc}
-              >
-                <CommissionRow key={commission.id} commission={commission} />
-              </div>
-            ))}
+           {status === "past" &&
+             commissions?.map((commission: CommissionData) => (
+               <div
+                 key={commission.date.toString()}
+                 className={styles.commissionBloc}
+               >
+                 <CommissionRow key={commission.id} commission={commission} />
+               </div>
+             ))}
         </>
       )}
       {!isLoading &&

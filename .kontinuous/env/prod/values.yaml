@@ -106,4 +106,3 @@ pg:
             key: bucket_region
   backup:
     name: "202403062019" # backup on a new folder
-

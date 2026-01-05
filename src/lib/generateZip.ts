@@ -65,30 +65,25 @@ Convention collective: ${
         } (${getConventionLabel(
           dossier.conventionCollectiveCode ?? "missing"
         )}) \r\n
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ ${
   dossier.demandeur
     ? `Nom demandeur : ${dossier.demandeur.prenom} ${dossier.demandeur.prenom} \r\n`
     : ""
-}
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ }
+ ${
   dossier.demandeur ? `Email demandeur : ${dossier.demandeur.email} \r\n` : ""
-}
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ }
+ ${
   dossier.demandeur
     ? `Téléphone demandeur : ${dossier.demandeur.phone} \r\n`
     : ""
-}
-${
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ }
+ ${
   dossier.demandeur
     ? `Fonction demandeur : ${dossier.demandeur.fonction} \r\n`
     : ""
-}
-Présentation: ${dossier.presentation} \r\n${
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ }
+ Présentation: ${dossier.presentation} \r\n${
           dossier.scenesSensibles.length > 0 &&
           dossier.scenesSensibles[0] !== ""
             ? `Scènes sensibles: ${dossier.scenesSensibles} \r\n`
@@ -109,7 +104,6 @@ Date de fin: ${new Date(dossier.dateFin).toLocaleDateString("fr")} \r\n
             .replace(/[\W]+/g, "_")}.${file.file.filename
             .replace("..", ".")
             .substring(indexChar)}`,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           file?.doc
         );
       });
@@ -154,7 +148,6 @@ ${
 Rémunération totale: ${enfant.remunerationTotale}
 `
               );
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               if (enfant.files !== undefined) {
                 enfant.files.map((file) => {
                   if (file.doc !== null) {
@@ -169,7 +162,6 @@ Rémunération totale: ${enfant.remunerationTotale}
                         .replace(/[\W]+/g, "_")}.${file.file.filename
                         .replace("..", ".")
                         .substring(indexChar)}`,
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                       file?.doc
                     );
                   }

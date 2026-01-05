@@ -8,6 +8,7 @@
     }
   },
   "rules": {
-    "@typescript-eslint/naming-convention": "off" // TS linter suggests camelCase for React Components
+    "@typescript-eslint/naming-convention": "off", // TS linter suggests camelCase for React Components
+    "react/no-unescaped-entities": "off" // We prefer typographic punctuation in content; JSX expressions would be noisy.
   }
 }
