@@ -30,7 +30,7 @@ const Page: React.FC = () => {
       )}
       {!commission && (
         <>
-          <h2>Commission innaccessible</h2>
+          <h2>Commission inaccessible</h2>
           <p>
             Vous n'avez pas les droits nécessaires ou bien cette commission a
             été archivée.
