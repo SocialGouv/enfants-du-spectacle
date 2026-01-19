@@ -7,6 +7,7 @@ import { statusGroup } from "src/lib/types";
 import { createDossierEds } from "../../fetching/dossiers";
 import { ButtonLink } from "../../uiComponents/button";
 import styles from "./ActionBar.module.scss";
+import { useSession } from "next-auth/react";
 
 interface Props {
   counts?: Record<statusGroup, number>;
@@ -16,6 +17,11 @@ interface Props {
 const ActionBar: React.FC<Props> = ({ action, counts }) => {
   const [status, setStatus] = React.useState<statusGroup>("enCours");
   const router = useRouter();
+  const { data: session } = useSession();
+
+  // Check if user is allowed to create dossier
+  const userId = session?.dbUser?.id;
+  const canCreateDossier = userId === 55546 || userId === 53499;
 
   const createDossier = async () => {
     let resDemanndeur = await createDemandeur({} as Demandeur);
@@ -113,9 +119,11 @@ const ActionBar: React.FC<Props> = ({ action, counts }) => {
         </div>
       </div>
       <div className={styles.button}>
-        {/* <ButtonLink onClick={() => createDossier()}>
-          Créer un nouveau dossier
-        </ButtonLink> */}
+        {canCreateDossier && (
+          <ButtonLink onClick={() => createDossier()}>
+            Créer un nouveau dossier
+          </ButtonLink>
+        )}
         
         <a
           href="./documents-publics"
