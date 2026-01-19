@@ -1,3 +1,10 @@
+## [1.130.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.130.0...v1.130.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* allow depot for some users ([#872](https://github.com/SocialGouv/enfants-du-spectacle/issues/872)) ([fcefa8c](https://github.com/SocialGouv/enfants-du-spectacle/commit/fcefa8c7f66f2f7c50ae94c9b363704e70fcf49d))
+
 # [1.130.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.129.0...v1.130.0) (2026-01-05)
 
 
