@@ -23,6 +23,7 @@ import { updateCommentairesNotifications } from "src/fetching/commentaires";
 import { sendEmail } from "src/fetching/email";
 import EnfantListBis from "./EnfantListBis";
 import { getEnfantsByDossierId } from "src/fetching/enfant";
+import { useSession } from "next-auth/react";
 
 interface Props {
   dossier: DossierData;
@@ -32,6 +33,7 @@ interface Props {
 
 const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [toDisplay, setTodisplay] = React.useState<
     "Demandeur" | "Projet" | "Enfants"
@@ -39,6 +41,9 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
   const [messageError, setMessageError] = React.useState<string>("");
   const [messageSuccess, setMessageSuccess] = React.useState<string>("");
   const contextDossier = { ...useStateContext() };
+
+  // Check if user is allowed to submit dossier
+  const canSubmitDossier = session?.dbUser?.id === 55546 || session?.dbUser?.id === 53499;
 
   const saveDossier = useDebouncedCallback(() => {
     updateDossier(contextDossier.dossier);
@@ -342,15 +347,19 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
         {(dossier.statut === "BROUILLON" ||
           dossier.statut === "CONSTRUCTION") && (
           <div className={styles.saveBar}>
-            {/* <div className={styles.textSaveBar}>
+            <div className={styles.textSaveBar}>
               {dossier.statut === "BROUILLON" ? (
                 <p>
                   Votre dossier est automatiquement enregistré sur votre
                   interface. <br />
-                  Le bouton "Déposer" vous permet de transmettre votre dossier aux
-                  services d'instruction de la DRIEETS avant la date limite de
-                  dépôt et de transmettre toutes les mises à jour que vous seriez
-                  amené à faire par la suite.
+                  {canSubmitDossier && (
+                    <>
+                      Le bouton "Déposer" vous permet de transmettre votre dossier aux
+                      services d'instruction de la DRIEETS avant la date limite de
+                      dépôt et de transmettre toutes les mises à jour que vous seriez
+                      amené à faire par la suite.
+                    </>
+                  )}
                 </p>
               ) : (
                 <p>
@@ -359,17 +368,17 @@ const DossierForm: React.FC<Props> = ({ dossier, docs, comments }) => {
                   transmises aux services d'instruction. <br />
                 </p>
               )}
-            </div> */}
-            {dossier.statut === "BROUILLON" && (
+            </div>
+            {dossier.statut === "BROUILLON" && canSubmitDossier && (
               <div className={styles.buttonSaveBar}>
-                {/* <ButtonLink
+                <ButtonLink
                   href={`#menu-dossier`}
                   onClick={async () => {
                     handleDepotDossier();
                   }}
                 >
                   Déposer
-                </ButtonLink> */}
+                </ButtonLink>
               </div>
             )}
           </div>
