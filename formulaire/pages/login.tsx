@@ -29,20 +29,19 @@ const Home: React.FC = () => {
     <Layout windowTitle="">
       <Container>
         <div className="card">
-          <Title as="h2">Connexion</Title>
+          {/* <Title as="h2">Connexion</Title> */}
           {loading && (
             <div style={{ padding: "2rem" }}>
               <IconLoader />
             </div>
           )}
-          {!loading && !session && <ConnexionForm />}
-          <Callout>
-            <CalloutTitle as="h3">Interface demandeurs</CalloutTitle>
+          {/* {!loading && !session && <ConnexionForm />} */}
+            {/* <CalloutTitle as="h3">Interface demandeurs</CalloutTitle>
             <CalloutText>
               Ce site est destiné aux personnes souhaitant déposer un dossier de
               demande d'autorisations pour des mineurs de moins de 16 ans dans
               le secteur du spectacle.
-            </CalloutText>
+            </CalloutText> */}
             <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "#ffe9e6", borderLeft: "4px solid #ce0500" }}>
               <p style={{ fontWeight: "bold", marginBottom: "0.5rem", color: "#ce0500" }}>Nouveauté :</p>
               <p style={{ marginBottom: "0.5rem" }}>
@@ -66,7 +65,6 @@ const Home: React.FC = () => {
                 Plus d'informations sur le service ↗
               </Link>
             </div>
-          </Callout>
         </div>
       </Container>
     </Layout>
