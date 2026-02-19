@@ -1,3 +1,10 @@
+## [1.131.1](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.131.0...v1.131.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* remove connexion formulaire ([ec2a83f](https://github.com/SocialGouv/enfants-du-spectacle/commit/ec2a83ffc8a405bf1a3d7b230e391299ce298778))
+
 # [1.131.0](https://github.com/SocialGouv/enfants-du-spectacle/compare/v1.130.1...v1.131.0) (2026-01-19)
 
 
