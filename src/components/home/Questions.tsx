@@ -89,69 +89,6 @@ const Questions: React.FC = () => {
               </AccordionItem>
             </Accordion>
             <Accordion className={styles.accordion}>
-              <AccordionItem title="Quelles sont les pièces que je dois fournir pour déposer mon dossier ?">
-                <p>
-                  <ul>
-                    <li>
-                      scenario ou script (sur lequel les séquences où
-                      interviennent les enfants seront clairement identifiées)
-                    </li>
-                    <li>
-                      note précisant les mesures de sécurité (document
-                      présentant de manière précise et détaillée la façon dont
-                      seront réalisées les scènes susceptibles d&apos;exposer
-                      les enfants à un ou plusieurs risques, ainsi que les
-                      mesures prises pour les éviter)
-                    </li>
-                  </ul>
-                  <br />
-                  <b>Pour chaque enfant concerné :</b>
-                  <ul>
-                    <li>livret de famille à jour</li>
-                    <li>projet de contrat de travail</li>
-                    <li>autorisation parentale</li>
-                  </ul>
-                </p>
-              </AccordionItem>
-            </Accordion>
-            <Accordion className={styles.accordion}>
-              <AccordionItem title="Quelles sont les pièces que je dois fournir pour compléter mon dossier ?">
-                <p>
-                  <ul>
-                    <li>synopsis</li>
-                    <li>plan de travail</li>
-                  </ul>
-                  <br />
-                  <b>Pour chaque enfant concerné :</b>
-                  <ul>
-                    <li>
-                      le certificat de scolarité est obligatoire à partir de 3
-                      ans, quelle que soit la durée du tournage. L’avis
-                      pédagogique est à fournir à partir de 4 jours d’absence
-                      scolaire. Pour les dossiers relevant de la commission de
-                      Paris, si l’enfant est scolarisé en dehors de l’académie
-                      de Paris, l’avis pédagogique doit être accompagné de
-                      l’avis du « Directeur académique concerné
-                    </li>
-                    <li>
-                      avis médical d’aptitude d&apos;un médecin du travail de
-                      Thalie Santé (ex-CMB) ou, a minima, un document justifiant
-                      d&apos;une prise de rdv. Pour les figurants et les
-                      silhouettes, un avis d&apos;un médecin généraliste (enfant
-                      à partir de 3 ans) ou d&apos;un pédiatre (enfant de moins
-                      de 3 ans) est accepté
-                    </li>
-                    <li>
-                      dans le cas d&apos;une situation particulière relative à
-                      l&apos;exercice de l&apos;autorité parentale (retrait
-                      d&apos;autorité parentale, tutelle, etc.), tout document
-                      justifiant de cette situation
-                    </li>
-                  </ul>
-                </p>
-              </AccordionItem>
-            </Accordion>
-            <Accordion className={styles.accordion}>
               <AccordionItem title="Les pièces doivent-elles répondre à un formalisme particulier ?">
                 <p>
                   <ul>
@@ -222,32 +159,32 @@ const Questions: React.FC = () => {
                 </p>
               </AccordionItem>
             </Accordion>
-          </div>
-          <div className={styles.rowRight}>
             <Accordion className={styles.accordion}>
               <AccordionItem title="Que dois-je faire si je ne suis pas concerné par certaines pièces ?">
                 <p>
-                  Si dans mon secteur d’activité artistique, il n’est pas
-                  d’usage d’établir un scenario ou script, je dépose un fichier
+                  Si dans mon secteur d'activité artistique, il n'est pas
+                  d'usage d'établir un scenario ou script, je dépose un fichier
                   mentionnant que je ne suis pas concerné
                 </p>
                 <p>
-                  Si dans mon secteur d’activité artistique, il n’est pas
-                  d’usage d’établir un synopsis, je ne dépose pas de fichier
+                  Si dans mon secteur d'activité artistique, il n'est pas
+                  d'usage d'établir un synopsis, je ne dépose pas de fichier
                 </p>
                 <p>
-                  Si dans mon secteur d’activité artistique, il n’est pas
-                  d’usage d’établir un plan de travail, je ne dépose pas de
+                  Si dans mon secteur d'activité artistique, il n'est pas
+                  d'usage d'établir un plan de travail, je ne dépose pas de
                   fichier
                 </p>
                 <p>
-                  Si je n’ai identifié aucun risque pour le(s) enfant(s) dans
+                  Si je n'ai identifié aucun risque pour le(s) enfant(s) dans
                   les conditions envisagées de réalisation du projet, je dépose
-                  un fichier mentionnant qu’il n’existe aucun risque pour le(s)
+                  un fichier mentionnant qu'il n'existe aucun risque pour le(s)
                   enfant(s)
                 </p>
               </AccordionItem>
             </Accordion>
+          </div>
+          <div className={styles.rowRight}>
             <Accordion className={styles.accordion}>
               <AccordionItem title="Quelle est la durée quotidienne du travail à respecter ?">
                 <p>La durée quotidienne de travail ne peut excéder :</p>
